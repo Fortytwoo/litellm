@@ -18,6 +18,7 @@ import { cn } from "@/lib/cva.config";
 import { NotificationsBell } from "./Navbar/NotificationsBell/NotificationsBell";
 import UserDropdown from "./Navbar/UserDropdown/UserDropdown";
 import ThemeToggle from "./ThemeToggle/ThemeToggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import ViewSwitcher from "./Navbar/ViewSwitcher";
 import WorkerDropdown from "./Navbar/WorkerDropdown/WorkerDropdown";
 
@@ -136,6 +137,7 @@ const Navbar: React.FC<NavbarProps> = ({
             >
               <DocsLink />
               <BlogDropdown />
+              <LanguageSwitcher />
             </nav>
 
             {!hideCommunityLinks && (
