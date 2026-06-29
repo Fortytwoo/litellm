@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-r
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/cva.config";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const DEFAULT_PAGE_SIZE_OPTIONS = [25, 50, 100];
 
@@ -29,6 +30,7 @@ export function DataTablePagination({
   isLoading = false,
   className,
 }: DataTablePaginationProps) {
+  const { t } = useLanguage();
   const pageCount = pageSize > 0 ? Math.ceil(rowCount / pageSize) : 0;
   const start = rowCount === 0 ? 0 : page * pageSize + 1;
   const end = Math.min((page + 1) * pageSize, rowCount);
@@ -83,7 +85,7 @@ export function DataTablePagination({
             variant="outline"
             size="icon-sm"
             data-testid="pagination-prev"
-            aria-label="Go to previous page"
+            aria-label={t("common.previous")}
             disabled={!canPrev}
             onClick={() => onPageChange(page - 1)}
           >
@@ -93,7 +95,7 @@ export function DataTablePagination({
             variant="outline"
             size="icon-sm"
             data-testid="pagination-next"
-            aria-label="Go to next page"
+            aria-label={t("common.next")}
             disabled={!canNext}
             onClick={() => onPageChange(page + 1)}
           >
