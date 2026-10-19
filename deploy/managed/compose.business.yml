@@ -1,0 +1,30 @@
+# Apply after compose.yml and compose.gateway.yml. Generate the private env
+# from the verified business runtime; never copy credentials into this file.
+services:
+  gateway:
+    entrypoint: [python, -m, mcp_gateway.server]
+    env_file: gateway.business.env
+    environment:
+      MCP_MODEL_BACKEND: litellm
+      MCP_MODEL_GATEWAY_ENABLED: '1'
+      MCP_LITELLM_DELIVERY_DB_PATH: /state/delivery.sqlite3
+      MCP_MODEL_GATEWAY_CLIENT_IDS: mediec-harness-desktop-e2e
+      MCP_GATEWAY_DEPARTMENT_SYNC_ENABLED: '0'
+      MCP_GATEWAY_DEPARTMENT_SYNC_INTERVAL_SECONDS: '60'
+      MCP_ACCOUNT_POOL_FINALIZE_OUTBOX_TABLE: mcp_gateway_native_finalize_20261019
+      MCP_SKILL_DOWNLOAD_ENABLED: '0'
+    volumes:
+      - ${BUSINESS_POLICY_DIR:?required}:/gateway-policy
+      - ${BUSINESS_AFFINITY_DIR:?required}:/gateway-affinity
+      - ${BUSINESS_DATABASE_CONFIG_DIR:?required}:/run/mediec-database:ro
+      - ${BUSINESS_DATABASE_AUDIT_DIR:?required}:/database-audit
+      - ${BUSINESS_SKILL_STATE_DIR:?required}:/skill-state:ro
+      - ${BUSINESS_SEMANTIC_MODEL_DIR:?required}:/opt/models/console-discovery:ro
+    networks:
+      - default
+      - business
+    mem_limit: 3g
+networks:
+  business:
+    external: true
+    name: ${BUSINESS_NETWORK:?required}
