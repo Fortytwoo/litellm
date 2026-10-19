@@ -112,7 +112,7 @@ const SettingValueEditor: React.FC<{
       <Input
         key={String(setting.stored_in_db)}
         aria-label={setting.field_name}
-        placeholder="Comma-separated values"
+        placeholder={uiT("ui.77fc609b86d0caaf")}
         defaultValue={fromListValue(setting.field_value)}
         onChange={(event) => onChange(setting.field_name, toListValue(event.target.value))}
       />
@@ -175,7 +175,7 @@ export const PromptCachingPanel: React.FC<{
 
         <div className="mt-6 flex items-start justify-between gap-8">
           <div className="min-w-0 max-w-2xl">
-            <p className="font-medium">Automatic Anthropic prompt caching</p>
+            <p className="font-medium">{uiT("ui.9bf2a82ac20bc9b5")}</p>
             <p className="mt-1 break-words text-xs text-muted-foreground">{enableSetting.field_description}</p>
           </div>
           <Switch checked={enabled} onCheckedChange={(checked) => persist(ENABLE_ANTHROPIC_PROMPT_CACHING, checked)} />
@@ -184,7 +184,7 @@ export const PromptCachingPanel: React.FC<{
         {ttlSetting && (
           <div className="mt-6 flex items-start justify-between gap-8">
             <div className="min-w-0 max-w-2xl">
-              <p className={`font-medium ${enabled ? "" : "text-muted-foreground"}`}>Cache lifetime (TTL)</p>
+              <p className={`font-medium ${enabled ? "" : "text-muted-foreground"}`}>{uiT("ui.71184538312c5e68")}</p>
               <p className="mt-1 break-words text-xs text-muted-foreground">{ttlSetting.field_description}</p>
             </div>
             <Select
@@ -193,10 +193,10 @@ export const PromptCachingPanel: React.FC<{
               onValueChange={(newValue) => persist(ANTHROPIC_PROMPT_CACHING_TTL, newValue)}
             >
               <SelectTrigger className="min-w-40">
-                <SelectValue placeholder="5m (default)" />
+                <SelectValue placeholder={uiT("ui.ab52bd4214a112db")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={null}>5m (default)</SelectItem>
+                <SelectItem value={null}>{uiT("ui.ab52bd4214a112db")}</SelectItem>
                 {(ttlSetting.field_options ?? []).map((option) => (
                   <SelectItem key={option} value={option}>
                     {option}
@@ -210,11 +210,11 @@ export const PromptCachingPanel: React.FC<{
         {systemFirstSetting && (
           <div className="mt-6 flex items-start justify-between gap-8">
             <div className="min-w-0 max-w-2xl">
-              <p className="font-medium">System messages first for OpenAI</p>
+              <p className="font-medium">{uiT("ui.e2ba217fb3868254")}</p>
               <p className="mt-1 break-words text-xs text-muted-foreground">{systemFirstSetting.field_description}</p>
             </div>
             <Switch
-              aria-label="System messages first for OpenAI"
+              aria-label={uiT("ui.e2ba217fb3868254")}
               checked={isOn(systemFirstSetting.field_value)}
               onCheckedChange={(checked) => persist(OPENAI_SYSTEM_MESSAGES_FIRST, checked)}
             />
@@ -301,11 +301,11 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
     <div className="w-full">
       <Tabs defaultValue="loadbalancing" className="h-[75vh] w-full">
         <TabsList variant="line" className="mx-8 mt-4">
-          <TabsTrigger value="loadbalancing">Loadbalancing</TabsTrigger>
-          <TabsTrigger value="routing-groups">Routing Groups</TabsTrigger>
-          <TabsTrigger value="fallbacks">Fallbacks</TabsTrigger>
+          <TabsTrigger value="loadbalancing">{uiT("ui.7ac6931cdab7d4dd")}</TabsTrigger>
+          <TabsTrigger value="routing-groups">{uiT("ui.dc2ea665b70036b2")}</TabsTrigger>
+          <TabsTrigger value="fallbacks">{uiT("ui.7a508ceac71e07fa")}</TabsTrigger>
           <TabsTrigger value="prompt-caching">{uiT("ui.1823d9572582")}</TabsTrigger>
-          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="general">{uiT("ui.c910d474dcd724bf")}</TabsTrigger>
         </TabsList>
         <TabsContent value="loadbalancing" className="px-8 py-6" keepMounted>
           <RouterSettings accessToken={accessToken} userRole={userRole} userID={userID} />
@@ -325,8 +325,8 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Setting</TableHead>
-                    <TableHead>Value</TableHead>
+                    <TableHead>{uiT("ui.818cd8d91aea3a16")}</TableHead>
+                    <TableHead>{uiT("ui.8e37953d23daca5f")}</TableHead>
                     <TableHead>{uiT("ui.920e413c7d41")}</TableHead>
                     <TableHead>{uiT("ui.64cff1319d2f")}</TableHead>
                   </TableRow>
@@ -354,15 +354,17 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
                         </TableCell>
                         <TableCell>
                           {value.stored_in_db == true ? (
-                            <StatusBadge tone="success" label="In DB" />
+                            <StatusBadge tone="success" label={uiT("ui.e2a51ddd8b384864")} />
                           ) : value.stored_in_db == false ? (
-                            <StatusBadge tone="neutral" label="In Config" />
+                            <StatusBadge tone="neutral" label={uiT("ui.9c3258818eeba1b0")} />
                           ) : (
                             <StatusBadge tone="neutral" label={uiT("ui.8290035d4cf4")} />
                           )}
                         </TableCell>
                         <TableCell>
-                          <Button onClick={() => handleUpdateField(value.field_name)}>Update</Button>
+                          <Button onClick={() => handleUpdateField(value.field_name)}>
+                            {uiT("ui.c1c1009d3f37ec05")}
+                          </Button>
                           <span
                             onClick={() => handleResetField(value.field_name)}
                             className="inline-flex shrink-0 cursor-pointer items-center justify-center px-1.5 py-1.5 text-destructive"

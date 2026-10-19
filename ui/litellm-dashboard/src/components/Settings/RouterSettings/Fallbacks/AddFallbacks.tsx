@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Parent component for adding fallbacks to the proxy router config
@@ -85,7 +87,7 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
     // Validation
     const invalidGroups = groups.filter((g) => !g.primaryModel || g.fallbackModels.length === 0);
     if (invalidGroups.length > 0) {
-      toast.error(`Please complete configuration for all groups. ${invalidGroups.length} group(s) incomplete.`);
+      toast.error(translateUi("ui.159c64c13b60e635", undefined, { v0: String(invalidGroups.length) }));
       return;
     }
 
@@ -105,7 +107,7 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
       setIsSaving(true);
       try {
         await onChange(updatedFallbacks);
-        toast.success(`${groups.length} fallback configuration(s) added successfully!`);
+        toast.success(translateUi("ui.2bdd86217d4b8242", undefined, { v0: String(groups.length) }));
         handleCancel();
       } catch (error) {
         // Error handling is done in handleFallbacksChange, so we don't need to show another notification here
@@ -122,7 +124,7 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
     <div>
       <Button className="mx-auto" onClick={() => setIsModalVisible(true)}>
         <span>+</span>
-        Add Fallbacks
+        {uiT("ui.d5e0d3f4d0e6ec1c")}
       </Button>
       <AddFallbacksModal open={isModalVisible} onCancel={handleCancel}>
         <FallbackSelectionForm
@@ -141,7 +143,7 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
             </Button>
             <Button variant="outline" onClick={handleSaveAll} disabled={groups.length === 0 || isSaving}>
               {isSaving && <UiLoadingSpinner className="size-4" />}
-              {isSaving ? "Saving Configuration..." : "Save All Configurations"}
+              {isSaving ? uiT("ui.bf97987001d013b7") : uiT("ui.7e9058a974c868d4")}
             </Button>
           </div>
         )}

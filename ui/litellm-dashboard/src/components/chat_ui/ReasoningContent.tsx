@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -13,6 +15,8 @@ interface ReasoningContentProps {
 }
 
 const ReasoningContent: React.FC<ReasoningContentProps> = ({ reasoningContent }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const syntaxTheme = useSyntaxTheme(coy);
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -32,7 +36,7 @@ const ReasoningContent: React.FC<ReasoningContentProps> = ({ reasoningContent })
           }
         >
           <Lightbulb className="size-3.5" />
-          {isExpanded ? "Hide reasoning" : "Show reasoning"}
+          {isExpanded ? uiT("ui.d1ba69a2a277f26d") : uiT("ui.179cf7f6d9355730")}
           {isExpanded ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
         </CollapsibleTrigger>
 

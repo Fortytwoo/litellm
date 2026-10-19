@@ -80,9 +80,8 @@ const TEAM_ROLE_OPTIONS = [
   },
 ] as const;
 
-const MODEL_SENTINEL_LABELS: ReadonlyMap<string, string> = new Map(
-  MODEL_SENTINEL_OPTIONS.map(({ value, label }) => [value, label]),
-);
+const modelSentinelLabel = (model: string): string =>
+  MODEL_SENTINEL_OPTIONS.find((option) => option.value === model)?.label ?? model;
 
 const TEAMS_PAGE_SIZE = 50;
 
@@ -255,9 +254,7 @@ const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
       </ViewRow>
       <ViewRow label={uiT("ui.66b0753db929")}>{durationLabel}</ViewRow>
       <ViewRow label={uiT("ui.fbe494fbd195")}>
-        {values.models.length === 0
-          ? uiT("ui.4895f73177ab")
-          : values.models.map((model) => MODEL_SENTINEL_LABELS.get(model) ?? model).join(", ")}
+        {values.models.length === 0 ? uiT("ui.4895f73177ab") : values.models.map(modelSentinelLabel).join(", ")}
       </ViewRow>
       <div>
         <p className="text-sm font-medium">{uiT("ui.05e6997e8076")}</p>
@@ -300,7 +297,7 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
   const mutation = useMutation({
     mutationFn: (values: DefaultUserSettingsSubmitValues) => updateSettings(buildBody(values)),
     onSuccess: (_result, values) => {
-      toast.success(uiT("ui.eba41e0a1b7b"));
+      toast.success(translateUi("ui.eba41e0a1b7b"));
       queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY });
       form.reset(values);
       onSaved();

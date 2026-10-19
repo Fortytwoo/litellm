@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import Image from "next/image";
 import { FileText } from "lucide-react";
@@ -9,6 +11,8 @@ interface ChatImageRendererProps {
 }
 
 const ChatImageRenderer: React.FC<ChatImageRendererProps> = ({ message }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!shouldShowChatAttachedImage(message)) {
     return null;
   }
@@ -19,12 +23,12 @@ const ChatImageRenderer: React.FC<ChatImageRendererProps> = ({ message }) => {
     <div className="mb-2">
       {isPdf ? (
         <div className="flex h-32 w-64 items-center justify-center rounded-md border border-border bg-destructive/10">
-          <FileText className="size-12 text-destructive" aria-label="PDF attachment" />
+          <FileText className="size-12 text-destructive" aria-label={uiT("ui.7fe178020ac942ed")} />
         </div>
       ) : (
         <Image
           src={message.imagePreviewUrl || ""}
-          alt="User uploaded image"
+          alt={uiT("ui.f5de92e139102890")}
           width={256}
           height={200}
           className="max-w-64 rounded-md border border-border shadow-xs"

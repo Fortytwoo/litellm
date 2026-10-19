@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useMemo, useState } from "react";
@@ -33,8 +35,18 @@ const MAX_MODELS = 100;
 const RECOMMENDED_JUDGE_MODELS = ["anthropic/claude-sonnet-5", "openai/gpt-4o", "gemini/gemini-2.5-pro"] as const;
 
 const DIRECTION_OPTIONS: readonly { value: ShadowEvalDirection; label: string }[] = [
-  { value: "forward", label: "Adoption check: key's traffic vs the router" },
-  { value: "reverse", label: "Regression check: router's picks vs a baseline" },
+  {
+    value: "forward",
+    get label() {
+      return translateUi("ui.4cf020c5b5fc288b");
+    },
+  },
+  {
+    value: "reverse",
+    get label() {
+      return translateUi("ui.b6c702f6c936b357");
+    },
+  },
 ] as const;
 
 const START_FORM_DESCRIPTION: Record<ShadowEvalDirection, string> = {
@@ -45,11 +57,36 @@ const START_FORM_DESCRIPTION: Record<ShadowEvalDirection, string> = {
 };
 
 const DURATION_OPTIONS = [
-  { value: "1", label: "1 day" },
-  { value: "3", label: "3 days" },
-  { value: "7", label: "7 days" },
-  { value: "14", label: "14 days" },
-  { value: "30", label: "30 days" },
+  {
+    value: "1",
+    get label() {
+      return translateUi("ui.fa665d95d29e83bc");
+    },
+  },
+  {
+    value: "3",
+    get label() {
+      return translateUi("ui.360719440e92c924");
+    },
+  },
+  {
+    value: "7",
+    get label() {
+      return translateUi("ui.7f920bb639c93075");
+    },
+  },
+  {
+    value: "14",
+    get label() {
+      return translateUi("ui.60acc36e5d51315d");
+    },
+  },
+  {
+    value: "30",
+    get label() {
+      return translateUi("ui.ffd7280513ce285e");
+    },
+  },
 ] as const;
 
 const Field: React.FC<{ label: string; htmlFor?: string; className?: string; children: React.ReactNode }> = ({
@@ -67,6 +104,8 @@ const Field: React.FC<{ label: string; htmlFor?: string; className?: string; chi
 );
 
 const KeySelect: React.FC<{ value: string[]; onChange: (tokens: string[]) => void }> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [search, setSearch] = useState("");
   const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteKeys(50, {
     selectedKeyAlias: search || null,
@@ -93,14 +132,16 @@ const KeySelect: React.FC<{ value: string[]; onChange: (tokens: string[]) => voi
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       isLoading={isPending}
-      placeholder="Search keys by alias"
-      emptyText="No matching keys"
-      errorText={isError ? "Keys could not be loaded. Refresh the page to retry." : undefined}
+      placeholder={uiT("ui.3983ab99edef46f3")}
+      emptyText={uiT("ui.e7c5fa5b3dcc175a")}
+      errorText={isError ? uiT("ui.de709b3dc138a363") : undefined}
     />
   );
 };
 
 const UserSelect: React.FC<{ value: string[]; onChange: (ids: string[]) => void }> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [search, setSearch] = useState("");
   const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteUsers(
     50,
@@ -128,9 +169,9 @@ const UserSelect: React.FC<{ value: string[]; onChange: (ids: string[]) => void 
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       isLoading={isPending}
-      placeholder="Search users by email"
-      emptyText="No matching users"
-      errorText={isError ? "Users could not be loaded. Refresh the page to retry." : undefined}
+      placeholder={uiT("ui.872c68953b10e5b3")}
+      emptyText={uiT("ui.4d2b8a8498f19b72")}
+      errorText={isError ? uiT("ui.a97673e6d28cb132") : undefined}
     />
   );
 };
@@ -140,28 +181,31 @@ const RouterField: React.FC<{
   routerNames: string[];
   onChange: (names: string[]) => void;
   direction: ShadowEvalDirection;
-}> = ({ options, routerNames, onChange, direction }) => (
-  <Field label="Auto-routers">
-    <MultiSelect
-      options={options}
-      value={routerNames}
-      onValueChange={onChange}
-      placeholder="Select up to 4 auto-routers"
-      emptyText="No auto-routers configured"
-    />
-    {routerNames.length > MAX_ROUTERS && (
-      <p className="text-xs text-destructive">Pick at most {MAX_ROUTERS} auto-routers</p>
-    )}
-    {direction === "reverse" && routerNames.length > 1 && (
-      <p className="text-xs text-destructive">A regression check compares one router to its baseline</p>
-    )}
-    {direction === "forward" && routerNames.length > 1 && (
-      <p className="text-xs text-muted-foreground">
-        Every router sees the same sampled requests, judged against the same live responses
-      </p>
-    )}
-  </Field>
-);
+}> = ({ options, routerNames, onChange, direction }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Field label={uiT("ui.fefb951fca9bf901")}>
+      <MultiSelect
+        options={options}
+        value={routerNames}
+        onValueChange={onChange}
+        placeholder={uiT("ui.dcd73dac9fcbc08e")}
+        emptyText={uiT("ui.daafa46dd8e33c35")}
+      />
+      {routerNames.length > MAX_ROUTERS && (
+        <p className="text-xs text-destructive">
+          {uiT("ui.39662e2c14a92ffc")} {MAX_ROUTERS} auto-routers
+        </p>
+      )}
+      {direction === "reverse" && routerNames.length > 1 && (
+        <p className="text-xs text-destructive">{uiT("ui.d201abb9a9155ba9")}</p>
+      )}
+      {direction === "forward" && routerNames.length > 1 && (
+        <p className="text-xs text-muted-foreground">{uiT("ui.b030b31c4baee14e")}</p>
+      )}
+    </Field>
+  );
+};
 
 interface StartFormValidityInputs {
   accessToken: string | null | undefined;
@@ -309,12 +353,12 @@ export const StartForm: React.FC = () => {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-sm font-medium text-foreground">Start a shadow eval</CardTitle>
+        <CardTitle className="text-sm font-medium text-foreground">{uiT("ui.3c25fe474bd4f943")}</CardTitle>
         <p className="text-xs text-muted-foreground">{START_FORM_DESCRIPTION[direction]}</p>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Direction">
+          <Field label={uiT("ui.9c8a9579abe55bdc")}>
             <Select
               value={direction}
               onValueChange={(v: string | null) => setDirection(v === "reverse" ? "reverse" : "forward")}
@@ -331,28 +375,30 @@ export const StartForm: React.FC = () => {
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Keys to shadow" htmlFor="shadow-eval-key">
+          <Field label={uiT("ui.d6f4579bcfd70689")} htmlFor="shadow-eval-key">
             <KeySelect value={apiKeyIds} onChange={setApiKeyIds} />
           </Field>
-          <Field label="Teams to shadow">
-            <TeamMultiSelect value={teamIds} onChange={setTeamIds} placeholder="Search teams by alias" />
+          <Field label={uiT("ui.32db026a28364029")}>
+            <TeamMultiSelect value={teamIds} onChange={setTeamIds} placeholder={uiT("ui.8f700e9ccdc8d122")} />
           </Field>
-          <Field label="Users to shadow" htmlFor="shadow-eval-user">
+          <Field label={uiT("ui.6f993b588497f6b6")} htmlFor="shadow-eval-user">
             <UserSelect value={userIds} onChange={setUserIds} />
           </Field>
           {direction === "forward" && (
-            <Field label="Only on models">
+            <Field label={uiT("ui.829d961d04da68a3")}>
               <MultiSelect
                 options={modelOptions}
                 value={models}
                 onValueChange={setModels}
-                placeholder="Every model the targets use"
-                emptyText="No models configured"
+                placeholder={uiT("ui.94f1a1453e63e26c")}
+                emptyText={uiT("ui.fb2770bd40fd14ba")}
               />
               {models.length > MAX_MODELS ? (
-                <p className="text-xs text-destructive">Pick at most {MAX_MODELS} models</p>
+                <p className="text-xs text-destructive">
+                  {uiT("ui.39662e2c14a92ffc")} {MAX_MODELS} {uiT("ui.8edcc26c0f6c7256")}
+                </p>
               ) : (
-                <p className="text-xs text-muted-foreground">Narrows every target above to requests for these models</p>
+                <p className="text-xs text-muted-foreground">{uiT("ui.e2087a4aa6446c86")}</p>
               )}
             </Field>
           )}
@@ -362,7 +408,7 @@ export const StartForm: React.FC = () => {
             onChange={setRouterNames}
             direction={direction}
           />
-          <Field label="Traffic sampled" htmlFor="shadow-eval-pct">
+          <Field label={uiT("ui.01e2971717d54d95")} htmlFor="shadow-eval-pct">
             <div className="flex items-center gap-2">
               <Input
                 id="shadow-eval-pct"
@@ -374,11 +420,11 @@ export const StartForm: React.FC = () => {
                 value={percentage}
                 onChange={(e) => setPercentage(e.target.value)}
               />
-              <span className="text-sm text-muted-foreground">% of traffic</span>
+              <span className="text-sm text-muted-foreground">{uiT("ui.499977bddecffe0e")}</span>
             </div>
             <div>
               {percentage.trim() !== "" && !percentageValid && (
-                <p className="text-xs text-destructive">Enter a value from 0.1 to 100</p>
+                <p className="text-xs text-destructive">{uiT("ui.1e3bdcd4609a051f")}</p>
               )}
             </div>
           </Field>
@@ -396,7 +442,7 @@ export const StartForm: React.FC = () => {
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Spend budget">
+          <Field label={uiT("ui.3c54f765f71ffae6")}>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">$</span>
               <Input
@@ -408,35 +454,35 @@ export const StartForm: React.FC = () => {
                 value={maxBudget}
                 onChange={(e) => setMaxBudget(e.target.value)}
               />
-              <span className="text-sm text-muted-foreground">max shadow + judge spend, per target</span>
+              <span className="text-sm text-muted-foreground">{uiT("ui.fd1e0e178e105f8c")}</span>
             </div>
             {maxBudget.trim() !== "" && !maxBudgetValid && (
-              <p className="text-xs text-destructive">Enter a value from 0.01 to 10000</p>
+              <p className="text-xs text-destructive">{uiT("ui.b7a96511ff0bac31")}</p>
             )}
           </Field>
           {direction === "reverse" && (
-            <Field label="Baseline model">
+            <Field label={uiT("ui.91e44ce0eb5df720")}>
               <SearchSelect
                 options={chatOptions}
                 value={baselineModel}
                 onValueChange={setBaselineModel}
-                placeholder="Select a baseline model"
-                emptyText="No chat models available"
+                placeholder={uiT("ui.7a1e61f977438cbb")}
+                emptyText={uiT("ui.f6656605958fc94c")}
               />
             </Field>
           )}
-          <Field label="Judge model" className="sm:col-span-2">
+          <Field label={uiT("ui.2b566109cfdfd661")} className="sm:col-span-2">
             <SearchSelect
               options={judgeOptions}
               value={judgeModel}
               onValueChange={setJudgeModel}
-              placeholder="Select a judge model"
-              emptyText="No chat models available"
+              placeholder={uiT("ui.250cf8a36e5b1455")}
+              emptyText={uiT("ui.f6656605958fc94c")}
             />
           </Field>
         </div>
         <Button disabled={!valid || start.isPending} onClick={handleStart}>
-          {start.isPending ? "Starting..." : "Start shadow eval"}
+          {start.isPending ? uiT("ui.82b93630a921dddf") : uiT("ui.dc5e96ac332f4c42")}
         </Button>
       </CardContent>
     </Card>

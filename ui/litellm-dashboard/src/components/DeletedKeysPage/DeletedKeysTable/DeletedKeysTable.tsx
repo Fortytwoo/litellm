@@ -41,6 +41,8 @@ export function DeletedKeysTable({
   pagination,
   onPaginationChange,
 }: DeletedKeysTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
 
   const columns = useMemo(() => getDeletedKeysTableColumns(), []);
@@ -59,7 +61,7 @@ export function DeletedKeysTable({
       onPaginationChange={onPaginationChange}
       rowCount={totalCount}
       isLoading={isLoading}
-      loadingMessage="Loading deleted keys…"
+      loadingMessage={uiT("ui.a2626777c562c1d3")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

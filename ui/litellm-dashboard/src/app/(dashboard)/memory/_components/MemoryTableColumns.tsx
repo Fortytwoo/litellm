@@ -31,7 +31,7 @@ function MemoryRowActions({ row, onViewClick, onEditClick, onDeleteClick }: Memo
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open memory actions"
+        aria-label={uiT("ui.9834f00962cba0a0")}
         data-testid={`memory-actions-${row.memory_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -104,8 +104,14 @@ export const getMemoryTableColumns = ({
   {
     id: "value",
     accessorKey: "value",
-    meta: { title: "Preview" },
-    header: "Preview",
+    meta: {
+      get title() {
+        return translateUi("ui.324b134f57c70c72");
+      },
+    },
+    get header() {
+      return translateUi("ui.324b134f57c70c72");
+    },
     enableSorting: false,
     cell: ({ row }) => (
       <span className="block max-w-72 truncate text-sm text-muted-foreground" title={row.original.value}>

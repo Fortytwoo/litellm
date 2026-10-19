@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 
@@ -34,6 +35,8 @@ export function LiveRun({
   name: string;
   queue?: QueueContext;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const reason = useQueueReason(job, queue);
   const [stripOpen, setStripOpen] = useStripOpen();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -72,7 +75,7 @@ export function LiveRun({
           onClick={() => setStripOpen(true)}
           className="self-start text-xs text-muted-foreground hover:text-foreground"
         >
-          Show live trace results
+          {uiT("ui.9e5e473ff2ee9c94")}
         </button>
       )}
       <LiveDrawer

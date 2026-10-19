@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { ComplexityTier } from "./KeywordTierRules";
 import type { ModelGroup } from "@/components/llm_calls/fetch_models";
 import { ALL_BUILT_IN_TIERS, TIER_ORDER } from "./tier_rows";
@@ -154,11 +155,21 @@ export const pruneTierModelParams = (
 };
 
 export const DEFAULT_TIER_LABELS: Record<ComplexityTier, string> = {
-  NON_REASONING: "Non-reasoning",
-  SIMPLE: "Simple",
-  MEDIUM: "Medium",
-  COMPLEX: "Complex",
-  REASONING: "Reasoning",
+  get NON_REASONING() {
+    return translateUi("ui.17441e57ddb47629");
+  },
+  get SIMPLE() {
+    return translateUi("ui.3fee95da5ab69ebf");
+  },
+  get MEDIUM() {
+    return translateUi("ui.8e588cd187741f1c");
+  },
+  get COMPLEX() {
+    return translateUi("ui.cd75063b613ddfc6");
+  },
+  get REASONING() {
+    return translateUi("ui.d8211e24e83d1600");
+  },
 };
 
 const isBuiltInTier = (tier: string): tier is ComplexityTier => (ALL_BUILT_IN_TIERS as string[]).includes(tier);

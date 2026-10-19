@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { $api } from "@/lib/http/api";
@@ -23,9 +25,15 @@ const catalogQueryOptions = {
 };
 
 const profileLabels: Readonly<Record<FuseProfileField, string>> = {
-  efficient_profile: "Efficient solver profile",
-  capable_profile: "Capable solver profile",
-  harness: "Harness and budget",
+  get efficient_profile() {
+    return translateUi("ui.cc48321f3f5c312b");
+  },
+  get capable_profile() {
+    return translateUi("ui.f01383e61c4ff1ce");
+  },
+  get harness() {
+    return translateUi("ui.e48f46cecd04f639");
+  },
 };
 
 type FusePresetEntry = {
@@ -102,10 +110,12 @@ function FuseProfilePresetField({
 
   return (
     <div className="space-y-2 min-w-0">
-      <Label htmlFor={`${id}-${field}-preset`}>{label} preset</Label>
+      <Label htmlFor={`${id}-${field}-preset`}>
+        {label} {uiT("ui.d410850fd5f4e0a3")}
+      </Label>
       <SearchSelect
         inputId={`${id}-${field}-preset`}
-        aria-label={`${label} preset`}
+        aria-label={uiT("ui.e9b5cdb928621cf1", { v0: String(label) })}
         value={custom ? "custom" : presetId}
         allowClear={false}
         options={[
@@ -128,10 +138,10 @@ function FuseProfilePresetField({
           type="button"
           variant="outline"
           size="sm"
-          aria-label={`Keep saved ${label.toLowerCase()} preset`}
+          aria-label={uiT("ui.06a5e2389df5444c", { v0: String(label.toLowerCase()) })}
           onClick={keepSavedPreset}
         >
-          Keep saved preset
+          {uiT("ui.6c94f4e4ef97bbab")}
         </Button>
       )}
       {presetId && (
@@ -141,18 +151,24 @@ function FuseProfilePresetField({
           </p>
           {preset ? (
             <>
-              <p>Catalog version: {catalogVersion}</p>
-              {preset.model && <p>Model: {preset.model}</p>}
+              <p>
+                {uiT("ui.ce809fc2982ddd90")} {catalogVersion}
+              </p>
+              {preset.model && (
+                <p>
+                  {uiT("ui.11a931060dad5d13")} {preset.model}
+                </p>
+              )}
               <div className="flex flex-wrap gap-x-3 gap-y-1">
                 {preset.sources.map((source, index) => (
                   <a key={source} href={source} target="_blank" rel="noopener noreferrer" className="underline">
-                    Source {index + 1}
+                    {uiT("ui.0e570ca6fabe24f9")} {index + 1}
                   </a>
                 ))}
               </div>
             </>
           ) : (
-            <p>Preset preview unavailable. The saved reference is preserved</p>
+            <p>{uiT("ui.6657d86482902947")}</p>
           )}
         </div>
       )}
@@ -167,6 +183,8 @@ export default function FuseProfilePresets({
   value: FuseSettings;
   onChange: (value: FuseSettings) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = React.useId();
   const [customWithoutPreview, setCustomWithoutPreview] = React.useState<ReadonlySet<FuseProfileField>>(
     () => new Set(),
@@ -179,19 +197,15 @@ export default function FuseProfilePresets({
   );
   return (
     <div className="space-y-4 min-w-0">
-      <p className="text-xs text-muted-foreground">
-        Choose profiles that match every deployment in each solver group and its actual settings. Profile selection is
-        independent of routing model names. Presets describe the solvers and runtime; they do not set a quality gap or
-        calibration. Validate those separately for your workload, judge, and exact profile versions.
-      </p>
+      <p className="text-xs text-muted-foreground">{uiT("ui.bbcaec79f92e6cb3")}</p>
       {isPending && (
         <p role="status" className="text-xs text-muted-foreground">
-          Loading profile presets. Custom editing is available
+          {uiT("ui.7ae283801c67a735")}
         </p>
       )}
       {isError && (
         <p role="status" className="text-xs text-muted-foreground">
-          Profile presets could not be loaded. Saved references are preserved and Custom editing is available
+          {uiT("ui.4a4185f38bdd0d3f")}
         </p>
       )}
       {fuseProfileFields.map((field) => (

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
 import { Inbox } from "lucide-react";
@@ -21,13 +22,15 @@ interface SearchToolTableProps {
 const DEFAULT_SORTING: SortingState = [{ id: "created_at", desc: true }];
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No search tools configured</div>
-      <div className="text-sm text-muted-foreground">Add a search tool to enable web search for your models.</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.f30de1a450b820f2")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.aa6a3612cb47e4e7")}</div>
     </div>
   );
 }
@@ -40,6 +43,8 @@ const SearchToolTable: React.FC<SearchToolTableProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
 
   const columns = useMemo(() => {
@@ -57,7 +62,7 @@ const SearchToolTable: React.FC<SearchToolTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading search tools…"
+      loadingMessage={uiT("ui.fdfb4551060117ee")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

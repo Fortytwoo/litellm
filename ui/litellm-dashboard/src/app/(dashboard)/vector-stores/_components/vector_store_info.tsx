@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, CircleHelp, Lock } from "lucide-react";
@@ -66,10 +70,12 @@ const toFormValues = (vectorStore: VectorStore): VectorStoreEditValues => ({
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -159,7 +165,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
       };
 
       await vectorStoreUpdateCall(accessToken, updateData);
-      toast.success("Vector store updated successfully");
+      toast.success(translateUi("ui.3382a05c8299df14"));
       setIsEditing(false);
       fetchVectorStoreDetails();
     } catch (error) {
@@ -173,11 +179,11 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
       <div className="p-4 max-w-full">
         <Button variant="ghost" className="mb-4" onClick={onClose}>
           <ArrowLeft />
-          Back to Vector Stores
+          {uiT("ui.d18a8c6ee3638395")}
         </Button>
-        <h1 className="text-xl font-semibold">Vector store not found</h1>
+        <h1 className="text-xl font-semibold">{uiT("ui.f5137b74645c2874")}</h1>
         <p className="text-sm text-muted-foreground">
-          Vector store {vectorStoreId} could not be loaded. It may have been deleted.
+          {uiT("ui.5856520c6a060ac6")} {vectorStoreId} {uiT("ui.7dbcdbbebb04fea7")}
         </p>
       </div>
     );
@@ -196,7 +202,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
         <div>
           <Button variant="ghost" className="mb-4" onClick={onClose}>
             <ArrowLeft />
-            Back to Vector Stores
+            {uiT("ui.d18a8c6ee3638395")}
           </Button>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold">
@@ -204,24 +210,21 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
             </h1>
             <StatusBadge
               tone={vectorStoreDetails.is_config ? "neutral" : "info"}
-              label={vectorStoreDetails.is_config ? "Config" : "DB"}
+              label={vectorStoreDetails.is_config ? uiT("ui.87e89abb4c1c551f") : uiT("ui.cf3abc8326646b99")}
             />
           </div>
           <p className="text-sm text-muted-foreground">
-            {vectorStoreDetails.vector_store_description || "No description"}
+            {vectorStoreDetails.vector_store_description || uiT("ui.bcd8cc53f40e3d4e")}
           </p>
         </div>
-        {canEdit && !isEditing && <Button onClick={startEditing}>Edit Vector Store</Button>}
+        {canEdit && !isEditing && <Button onClick={startEditing}>{uiT("ui.9cbbf925a11f2d68")}</Button>}
       </div>
 
       {vectorStoreDetails.is_config && (
         <Alert variant="info" className="mb-4">
           <Lock className="size-4" aria-hidden />
-          <AlertTitle>Read only: defined in the config file</AlertTitle>
-          <AlertDescription>
-            This vector store comes from the proxy config YAML, so it cannot be edited or deleted on the dashboard.
-            Change or remove it in the config file and restart the proxy.
-          </AlertDescription>
+          <AlertTitle>{uiT("ui.d0cd039c09598a7a")}</AlertTitle>
+          <AlertDescription>{uiT("ui.dcd64ce5b258fb97")}</AlertDescription>
         </Alert>
       )}
 
@@ -231,7 +234,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
             {uiT("ui.45989de49fb7")}
           </TabsTrigger>
           <TabsTrigger value="test" className="flex-none rounded-none px-4 py-2">
-            Test Vector Store
+            {uiT("ui.42ba9f7276c9fe49")}
           </TabsTrigger>
         </TabsList>
 
@@ -239,18 +242,18 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
           {showEditForm ? (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium">Edit Vector Store</h3>
+                <h3 className="text-lg font-medium">{uiT("ui.9cbbf925a11f2d68")}</h3>
               </div>
               <Card>
                 <CardContent>
                   <TooltipProvider>
                     <form onSubmit={form.handleSubmit(handleSave)}>
                       <FieldGroup>
-                        <FormField control={form.control} name="vector_store_id" label="Vector Store ID">
+                        <FormField control={form.control} name="vector_store_id" label={uiT("ui.16df8a63caec40c3")}>
                           {({ ref, ...field }) => <Input {...field} ref={ref} disabled />}
                         </FormField>
 
-                        <FormField control={form.control} name="vector_store_name" label="Vector Store Name">
+                        <FormField control={form.control} name="vector_store_name" label={uiT("ui.9f68a478bf8ca7ea")}>
                           {({ ref, value, ...field }) => <Input {...field} ref={ref} value={value ?? ""} />}
                         </FormField>
 
@@ -307,15 +310,17 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
                           )}
                         </FormField>
 
-                        <p className="text-sm text-muted-foreground">
-                          Either select existing credentials OR enter provider credentials below
-                        </p>
+                        <p className="text-sm text-muted-foreground">{uiT("ui.3bfb2b17380926d9")}</p>
 
-                        <FormField control={form.control} name="litellm_credential_name" label="Existing Credentials">
+                        <FormField
+                          control={form.control}
+                          name="litellm_credential_name"
+                          label={uiT("ui.c6939b110b6549ac")}
+                        >
                           {({ id, value, onChange }) => (
                             <SearchSelect
                               inputId={id}
-                              placeholder="Select or search for existing credentials"
+                              placeholder={uiT("ui.1c1bd81a646a1fc6")}
                               options={credentialOptions(credentials)}
                               value={value ?? ""}
                               onValueChange={(selected) =>
@@ -327,7 +332,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
 
                         <div className="flex items-center">
                           <div className="grow border-t border-border"></div>
-                          <span className="px-4 text-muted-foreground text-sm">OR</span>
+                          <span className="px-4 text-muted-foreground text-sm">{uiT("ui.829e5b28af38ab33")}</span>
                           <div className="grow border-t border-border"></div>
                         </div>
 
@@ -358,8 +363,8 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
           ) : (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium">Vector Store Details</h3>
-                {canEdit && <Button onClick={startEditing}>Edit Vector Store</Button>}
+                <h3 className="text-lg font-medium">{uiT("ui.cc5a770ec082177c")}</h3>
+                {canEdit && <Button onClick={startEditing}>{uiT("ui.9cbbf925a11f2d68")}</Button>}
               </div>
               <Card>
                 <CardContent>

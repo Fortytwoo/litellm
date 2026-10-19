@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { StatusTone } from "@/components/shared/table_cells/status_badge";
 import {
   COORDINATION_FIELDS,
@@ -121,25 +122,41 @@ export interface SourceBadgeDescriptor {
 const SOURCE_BADGES: Readonly<Record<CoordinationRedisSource, SourceBadgeDescriptor>> = {
   coordination_redis: {
     tone: "success",
-    label: "Configured here",
-    tooltip: "general_settings.coordination_redis is set, so coordination uses its own Redis connection.",
+    get label() {
+      return translateUi("ui.3e283ac390537298");
+    },
+    get tooltip() {
+      return translateUi("ui.a85ccdeb747d5be7");
+    },
   },
   cache_backend: {
     tone: "info",
-    label: "Borrowed from response cache",
-    tooltip: "No coordination Redis is configured; the proxy reuses the response cache's Redis connection.",
+    get label() {
+      return translateUi("ui.f5bc7e5dd75febe3");
+    },
+    get tooltip() {
+      return translateUi("ui.05b8d38aed95f319");
+    },
   },
   environment: {
     tone: "info",
-    label: "From REDIS_* environment",
-    tooltip: "No coordination Redis is configured; the proxy falls back to the REDIS_* environment variables.",
+    get label() {
+      return translateUi("ui.fd81cf9db25288e3");
+    },
+    get tooltip() {
+      return translateUi("ui.03a2dabcc1e37c02");
+    },
   },
 };
 
 const NOT_CONFIGURED_BADGE: SourceBadgeDescriptor = {
   tone: "neutral",
-  label: "Not configured",
-  tooltip: "Cross-pod rate limits, spend tracking, and the pod lock manager have no Redis to coordinate through.",
+  get label() {
+    return translateUi("ui.dd1841d295024256");
+  },
+  get tooltip() {
+    return translateUi("ui.baccf6d11d483c0a");
+  },
 };
 
 export const sourceBadge = (source: string | null | undefined): SourceBadgeDescriptor => {

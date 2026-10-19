@@ -1,6 +1,8 @@
 "use client";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
-/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,9 +19,24 @@ import { Logo } from "@/components/molecules/logo/Logo";
 import NumericalInput from "../shared/numerical_input";
 
 const CALLBACK_TYPE_ITEMS = [
-  { value: "success", label: "Success Only" },
-  { value: "failure", label: "Failure Only" },
-  { value: "success_and_failure", label: "Success & Failure" },
+  {
+    value: "success",
+    get label() {
+      return translateUi("ui.95b2b25dbd34a04c");
+    },
+  },
+  {
+    value: "failure",
+    get label() {
+      return translateUi("ui.b728be4033363090");
+    },
+  },
+  {
+    value: "success_and_failure",
+    get label() {
+      return translateUi("ui.7028681f70a3cb83");
+    },
+  },
 ];
 
 const CallbackVarInput: React.FC<{
@@ -28,6 +45,8 @@ const CallbackVarInput: React.FC<{
   value: string;
   onValueChange: (value: string) => void;
 }> = ({ sensitive, placeholder, value, onValueChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [revealed, setRevealed] = React.useState(false);
 
   if (!sensitive) {
@@ -46,7 +65,7 @@ const CallbackVarInput: React.FC<{
         <InputGroupButton
           size="icon-xs"
           onClick={() => setRevealed(!revealed)}
-          aria-label={revealed ? "Hide password" : "Show password"}
+          aria-label={revealed ? uiT("ui.a60a56c584b3") : uiT("ui.6aeaa6a53d09")}
         >
           {revealed ? <EyeOff /> : <Eye />}
         </InputGroupButton>
@@ -170,7 +189,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
           onValueChange={(selected: string | null) => updateCallbackVar(configIndex, paramName, selected ?? "")}
         >
           <SelectTrigger aria-label={label} className="w-full">
-            <SelectValue placeholder={`Select ${label}`} />
+            <SelectValue placeholder={uiT("ui.58661820dfdc4c9f", { v0: String(label) })} />
           </SelectTrigger>
           <SelectContent>
             {options.map((option) => (
@@ -187,7 +206,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
         <NumericalInput
           step={0.01}
           width={400}
-          placeholder={`os.environ/${paramName.toUpperCase()}`}
+          placeholder={translateUi("ui.0c9fa00718e525a8", undefined, { v0: String(paramName.toUpperCase()) })}
           value={config.callback_vars[paramName] || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             updateCallbackVar(configIndex, paramName, e.target.value)
@@ -198,7 +217,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
     return (
       <CallbackVarInput
         sensitive={paramType === "password"}
-        placeholder={`os.environ/${paramName.toUpperCase()}`}
+        placeholder={translateUi("ui.0c9fa00718e525a8", undefined, { v0: String(paramName.toUpperCase()) })}
         value={config.callback_vars[paramName] || ""}
         onValueChange={(newValue) => updateCallbackVar(configIndex, paramName, newValue)}
       />
@@ -228,7 +247,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
           <div className="w-3 h-3 bg-muted rounded-full flex items-center justify-center">
             <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
           </div>
-          <span className="text-sm font-medium text-foreground">Integration Parameters</span>
+          <span className="text-sm font-medium text-foreground">{uiT("ui.d8ee9acb663d7115")}</span>
         </div>
         <div className="grid grid-cols-1 gap-4">
           {Object.entries(dynamicParams)
@@ -237,11 +256,11 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
               <div key={paramName} className="space-y-2">
                 <label className="text-sm font-medium text-foreground capitalize flex items-center space-x-1">
                   <span>{paramName.replace(/_/g, " ")}</span>
-                  {paramType === "password" && <Badge variant="secondary">Sensitive</Badge>}
-                  {paramType === "number" && <Badge variant="secondary">Number</Badge>}
+                  {paramType === "password" && <Badge variant="secondary">{uiT("ui.2c64c030d4952080")}</Badge>}
+                  {paramType === "number" && <Badge variant="secondary">{uiT("ui.bd82cf16699be29e")}</Badge>}
                 </label>
                 {paramType === "number" && (
-                  <span className="text-xs text-muted-foreground">Value must be between 0 and 1</span>
+                  <span className="text-xs text-muted-foreground">{uiT("ui.fe79bafef39ba8bd")}</span>
                 )}
                 {renderParamControl(config, configIndex, paramName, {
                   type: paramType,
@@ -261,7 +280,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
         <div className="flex items-center space-x-2">
           <BanIcon className="w-5 h-5 text-destructive" />
           <span className="text-base font-semibold text-foreground">{uiT("ui.0394db0d5502")}</span>
-          <SimpleTooltip content="Select callbacks to disable for this key. Disabled callbacks will not receive any logging data.">
+          <SimpleTooltip content={uiT("ui.b2329eddbb198e53")}>
             <Info className="size-4 text-muted-foreground cursor-help" />
           </SimpleTooltip>
         </div>
@@ -270,7 +289,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
           <label className="text-sm font-medium text-foreground">{uiT("ui.0394db0d5502")}</label>
           <Select multiple value={disabledCallbacks} onValueChange={handleDisabledCallbacksChange}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select callbacks to disable">
+              <SelectValue placeholder={uiT("ui.d1166e4abc0f2f9e")}>
                 {(selected: string[]) => (selected.length === 0 ? "Select callbacks to disable" : selected.join(", "))}
               </SelectValue>
             </SelectTrigger>
@@ -294,9 +313,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
               })}
             </SelectContent>
           </Select>
-          <div className="text-xs text-muted-foreground">
-            Select callbacks that should be disabled for this key. These callbacks will not receive any logging data.
-          </div>
+          <div className="text-xs text-muted-foreground">{uiT("ui.dee6ad9747fd83c3")}</div>
         </div>
       </div>
 
@@ -307,13 +324,13 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
         <div className="flex items-center space-x-2">
           <CogIcon className="w-5 h-5 text-foreground" />
           <span className="text-base font-semibold text-foreground">{uiT("ui.4267c017a8f6")}</span>
-          <SimpleTooltip content="Configure callback logging integrations for this team.">
+          <SimpleTooltip content={uiT("ui.3b862ec8b6b9e000")}>
             <Info className="size-4 text-muted-foreground cursor-help" />
           </SimpleTooltip>
         </div>
         <Button variant="secondary" onClick={addLoggingConfig} size="sm" type="button">
           <Plus />
-          Add Integration
+          {uiT("ui.e3b6e3d945faa384")}
         </Button>
       </div>
 
@@ -337,7 +354,9 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
                       className="w-5 h-5 object-contain"
                     />
                   )}
-                  <span className="text-sm font-medium">{callbackDisplayName || "New Integration"} Configuration</span>
+                  <span className="text-sm font-medium">
+                    {callbackDisplayName || uiT("ui.d62395fd52cda322")} {uiT("ui.b332c3492d5eb10a")}
+                  </span>
                 </div>
                 <Button
                   variant="ghost"
@@ -353,7 +372,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Integration Type</label>
+                    <label className="text-sm font-medium text-foreground">{uiT("ui.36c223a43eb163ba")}</label>
                     <Select
                       value={callbackDisplayName ?? null}
                       onValueChange={(value: string | null) =>
@@ -361,7 +380,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
                       }
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select integration" />
+                        <SelectValue placeholder={uiT("ui.530e3ff3747aaff6")} />
                       </SelectTrigger>
                       <SelectContent>
                         {supportedCallbacks.map((callbackName) => {
@@ -386,7 +405,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Event Type</label>
+                    <label className="text-sm font-medium text-foreground">{uiT("ui.9c85b75fdf0bf48c")}</label>
                     <Select
                       items={CALLBACK_TYPE_ITEMS}
                       value={config.callback_type}
@@ -394,7 +413,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
                         value && updateLoggingConfig(index, "callback_type", value)
                       }
                     >
-                      <SelectTrigger aria-label="Event Type" className="w-full">
+                      <SelectTrigger aria-label={uiT("ui.9c85b75fdf0bf48c")} className="w-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -419,9 +438,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
         <div className="text-center py-12 text-muted-foreground border-2 border-dashed border-border rounded-lg bg-muted/30">
           <CogIcon className="w-12 h-12 text-muted-foreground mb-3 mx-auto" />
           <div className="text-base font-medium mb-1">{uiT("ui.baab64189c19")}</div>
-          <div className="text-sm text-muted-foreground">
-            Click "Add Integration" to configure logging for this team
-          </div>
+          <div className="text-sm text-muted-foreground">{uiT("ui.46b642bca5f120b0")}</div>
         </div>
       )}
     </div>

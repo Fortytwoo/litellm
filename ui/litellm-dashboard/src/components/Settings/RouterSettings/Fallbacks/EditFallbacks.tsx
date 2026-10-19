@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Modal for editing an existing fallback entry
@@ -73,7 +75,7 @@ export default function EditFallbacks({
     setIsSaving(true);
     try {
       await onChange(updatedFallbacks);
-      toast.success(`Fallbacks for ${primaryModel} updated successfully!`);
+      toast.success(translateUi("ui.c534b863aa215b40", undefined, { v0: String(primaryModel) }));
       onClose();
     } catch (error) {
       console.error("Error updating fallbacks:", error);
@@ -97,7 +99,7 @@ export default function EditFallbacks({
         </Button>
         <Button onClick={handleSave} disabled={isSaving || group.fallbackModels.length === 0}>
           {isSaving ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Pencil className="w-4 h-4" />}
-          {isSaving ? "Saving Changes..." : uiT("ui.35322b5bb5a2")}
+          {isSaving ? uiT("ui.07f2d216c9580d42") : uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </AddFallbacksModal>

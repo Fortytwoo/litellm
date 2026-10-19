@@ -83,7 +83,7 @@ export default function DeleteResourceModal({
             <div className="mb-6 mt-4 pt-4 border-t border-border">
               <p className="block text-base font-medium text-foreground mb-2">
                 {uiT("ui.baaddf70fb5d")} <span className="font-semibold text-destructive">{requiredConfirmation}</span>{" "}
-                to confirm deletion:
+                {uiT("ui.e3314fbb620d54d2")}
               </p>
               <InputGroup className="rounded-md">
                 <InputGroupAddon>
@@ -108,7 +108,7 @@ export default function DeleteResourceModal({
             onClick={onOk}
             disabled={(!!requiredConfirmation && requiredConfirmationInput !== requiredConfirmation) || confirmLoading}
           >
-            {confirmLoading ? "Deleting..." : uiT("ui.e2d0a54968ea")}
+            {confirmLoading ? uiT("ui.685ecb984ac29ce8") : uiT("ui.e2d0a54968ea")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -219,7 +219,7 @@ export default function UserInfoView({
         user_id: userId,
       };
       await teamMemberAddCall(accessToken, selectedTeamId, member);
-      toast.success(uiT("ui.3cd1d89e20ee"));
+      toast.success(translateUi("ui.3cd1d89e20ee"));
       setIsAddTeamModalOpen(false);
       // Re-fetch user data to refresh teams
       const data = await userGetInfoV2(accessToken, userId);
@@ -259,7 +259,7 @@ export default function UserInfoView({
         user_id: userId,
       };
       await teamMemberDeleteCall(accessToken, teamToRemove.team_id, member);
-      toast.success(uiT("ui.3000f3cf1d3c"));
+      toast.success(translateUi("ui.3000f3cf1d3c"));
       setIsRemoveTeamModalOpen(false);
       setTeamToRemove(null);
       // Re-fetch user data to refresh teams
@@ -301,7 +301,7 @@ export default function UserInfoView({
       return;
     }
     try {
-      toast.success(uiT("ui.4410d9c39839"));
+      toast.success(translateUi("ui.4410d9c39839"));
       const data = await invitationCreateCall(accessToken, userId);
       setInvitationLinkData(data);
       setIsInvitationLinkModalVisible(true);
@@ -315,7 +315,7 @@ export default function UserInfoView({
       if (!accessToken) return;
       setIsDeletingUser(true);
       await userDeleteCall(accessToken, [userId]);
-      toast.success(uiT("ui.0886a0785854"));
+      toast.success(translateUi("ui.0886a0785854"));
       if (onDelete) {
         onDelete();
       }
@@ -368,7 +368,7 @@ export default function UserInfoView({
           : userData.object_permission,
       });
 
-      toast.success(uiT("ui.bdadd472d21f"));
+      toast.success(translateUi("ui.bdadd472d21f"));
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating user:", error);

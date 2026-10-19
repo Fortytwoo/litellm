@@ -82,16 +82,13 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
   return (
     <div className="space-y-3 border-t border-border pt-4">
       <div className="space-y-1">
-        <FieldLabel>Test</FieldLabel>
-        <p className="m-0 text-xs text-muted-foreground">
-          Try your questions on a sample input before you save. Uses the thresholds above. Each run is a real decision
-          model call, so it is billed and shows up in Logs.
-        </p>
+        <FieldLabel>{uiT("ui.532eaabd9574880d")}</FieldLabel>
+        <p className="m-0 text-xs text-muted-foreground">{uiT("ui.fd778e7c01e7937f")}</p>
       </div>
       <Textarea
-        aria-label="Test input"
+        aria-label={uiT("ui.1d9fa4186aa682f2")}
         rows={3}
-        placeholder="Paste a sample input to score against your questions"
+        placeholder={uiT("ui.2fd615dc7ab7f115")}
         className="w-full resize-none"
         value={input}
         onChange={(event) => setInput(event.target.value)}
@@ -104,16 +101,14 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
       />
       <div className="flex items-center gap-2">
         <Button type="button" onClick={runTest} disabled={!canRun}>
-          {running ? "Running…" : "Run test"}
+          {running ? uiT("ui.46c541363b0253b1") : uiT("ui.e031e0df30c9898f")}
         </Button>
         {!running && disabledReason && <p className="m-0 text-xs text-muted-foreground">{disabledReason}</p>}
         {!running && !disabledReason && <p className="m-0 text-xs text-muted-foreground">{runTestShortcutLabel()}</p>}
       </div>
       {runs.length > 0 && (
         <>
-          <p className="m-0 text-xs text-muted-foreground">
-            Latest first. Each run keeps its input so you can compare.
-          </p>
+          <p className="m-0 text-xs text-muted-foreground">{uiT("ui.48487fd7218f8280")}</p>
           <div className="space-y-2" data-slot="decision-test-history">
             {runs.map((run) => {
               const visible = "error" in run ? [] : visibleTestResults(run, checks, model);
@@ -126,15 +121,15 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
                     {visible.length > 0 && (
                       <StatusBadge
                         tone={DECISION_TEST_CHIP_TONE[decisionTestOverall(visible)]}
-                        label={decisionTestOverall(visible) === "block" ? uiT("ui.211d0bb8cf4f") : "Pass"}
+                        label={
+                          decisionTestOverall(visible) === "block" ? uiT("ui.211d0bb8cf4f") : uiT("ui.ebdf8cc00bc4d9ce")
+                        }
                       />
                     )}
                   </div>
                   {"error" in run && <p className="m-0 mt-1.5 text-xs text-destructive">{run.error}</p>}
                   {!("error" in run) && visible.length === 0 && (
-                    <p className="m-0 mt-1.5 text-xs text-muted-foreground">
-                      The model or questions changed since this run. Run it again to score them.
-                    </p>
+                    <p className="m-0 mt-1.5 text-xs text-muted-foreground">{uiT("ui.923dbfdd46dc1e71")}</p>
                   )}
                   {visible.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-1.5">

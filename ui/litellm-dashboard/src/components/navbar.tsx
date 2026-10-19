@@ -86,7 +86,11 @@ const Navbar: React.FC<NavbarProps> = ({
               <Link href={uiHref("")} className="flex items-center">
                 <div className="relative">
                   <div className="flex h-10 max-w-48 items-center justify-center overflow-hidden">
-                    <img src={imageUrl} alt="LiteLLM Brand" className={cn(NAV_LOGO_CLASS_NAME, "dark:hidden")} />
+                    <img
+                      src={imageUrl}
+                      alt={uiT("ui.cc3bdbd777c8072d")}
+                      className={cn(NAV_LOGO_CLASS_NAME, "dark:hidden")}
+                    />
                     <img
                       src={darkImageUrl}
                       alt=""
@@ -136,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({
             )}
 
             <nav
-              aria-label="Product documentation"
+              aria-label={uiT("ui.2e646170b8660c09")}
               className={`flex min-w-0 items-center gap-2 ${showWorkerSwitch ? "border-l border-border pl-4" : ""}`}
             >
               <DocsLink />

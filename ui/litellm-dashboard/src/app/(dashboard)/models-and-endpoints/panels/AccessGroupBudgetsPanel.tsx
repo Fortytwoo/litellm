@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
@@ -22,15 +24,15 @@ import { getAccessGroupBudgetColumns } from "@/app/(dashboard)/models-and-endpoi
 const DEFAULT_SORTING: SortingState = [{ id: "access_group", desc: false }];
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No model access groups yet</div>
-      <div className="text-sm text-muted-foreground">
-        Put a deployment in an access group from its model settings, then give the group a shared budget here.
-      </div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.e207d76b9a206e88")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.5bd5a305f293d9a4")}</div>
     </div>
   );
 }
@@ -60,7 +62,7 @@ export default function AccessGroupBudgetsPanel() {
       { accessGroup, params },
       {
         onSuccess: () => {
-          toast.success(`Budget saved for "${accessGroup}"`);
+          toast.success(translateUi("ui.41898b8d056b7b87", undefined, { v0: String(accessGroup) }));
           setEditing(null);
         },
       },
@@ -72,7 +74,7 @@ export default function AccessGroupBudgetsPanel() {
     const accessGroup = clearing.access_group;
     clearBudget.mutate(accessGroup, {
       onSuccess: () => {
-        toast.success(`Budget cleared for "${accessGroup}"`);
+        toast.success(translateUi("ui.d3ab962b9ff6aad9", undefined, { v0: String(accessGroup) }));
         setClearing(null);
       },
     });
@@ -80,10 +82,7 @@ export default function AccessGroupBudgetsPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground">
-        A model access group can carry one budget that every key granted the group by name draws from together. Keys
-        that reach the group&apos;s models through a wildcard or all-proxy-models are not charged against it.
-      </p>
+      <p className="text-sm text-muted-foreground">{uiT("ui.7e814eac3533e412")}</p>
 
       <DataTable
         data={accessGroups ?? []}
@@ -94,7 +93,7 @@ export default function AccessGroupBudgetsPanel() {
         sorting={sorting}
         onSortingChange={setSorting}
         isLoading={isLoading}
-        loadingMessage="Loading model access groups…"
+        loadingMessage={uiT("ui.d096d05c4705cbd3")}
         noDataMessage={<EmptyState />}
         size="compact"
       />
@@ -108,11 +107,11 @@ export default function AccessGroupBudgetsPanel() {
 
       <DeleteResourceModal
         isOpen={clearing !== null}
-        title="Clear Budget"
-        message="Are you sure you want to clear this access group's budget? The recorded shared spend is cleared with it, and the group's models stay available."
+        title={uiT("ui.764f34f885b8a856")}
+        message={uiT("ui.d139d6c77494f82f")}
         resourceInformationTitle="Access Group"
         resourceInformation={[
-          { label: "Access Group", value: clearing?.access_group ?? null, code: true },
+          { label: uiT("ui.de2abd6b489e37a2"), value: clearing?.access_group ?? null, code: true },
           { label: uiT("ui.3e20f0a04b21"), value: clearing?.budget?.max_budget?.toString() ?? null },
         ]}
         onCancel={() => setClearing(null)}

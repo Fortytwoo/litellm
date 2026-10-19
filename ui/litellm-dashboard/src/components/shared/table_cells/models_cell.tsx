@@ -33,7 +33,7 @@ export function ModelsCell({ models, maxVisible = 3, allowedRoutes, keyType }: M
     if (!scope.hasModelAccess) {
       return (
         <CellTooltip
-          content={`Scoped to ${scope.label} routes; this key cannot call any models`}
+          content={uiT("ui.5254286816a971dd", { v0: String(scope.label) })}
           trigger={
             <Badge variant="secondary" className="cursor-default">
               {uiT("ui.47bff7723801")}

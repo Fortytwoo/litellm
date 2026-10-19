@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +31,8 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
   routerName,
   teamId,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [prompt, setPrompt] = React.useState<string>("");
   const [state, setState] = React.useState<TestState>({ status: "idle" });
   const configError = getHeuristicV2SuccessThresholdError(config.heuristic_v2_success_threshold);
@@ -48,15 +52,12 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">
-        Send a prompt through this router&apos;s classifier to see which model it would pick, and why. The prompt is
-        only classified: nothing is sent to the model it routes to.
-      </p>
+      <p className="text-sm text-muted-foreground">{uiT("ui.32cce363c57e54f0")}</p>
 
       <Textarea
         value={prompt}
         onChange={(event) => setPrompt(event.target.value)}
-        placeholder="Paste a prompt an end user would send"
+        placeholder={uiT("ui.4cd7e2429ce1e5ae")}
         rows={4}
         data-testid="auto-router-routing-test-prompt"
       />
@@ -67,7 +68,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
           disabled={prompt.trim().length === 0 || state.status === "running" || Boolean(configError)}
           data-testid="auto-router-routing-test-send"
         >
-          {state.status === "running" ? "Routing..." : "Send Test Prompt"}
+          {state.status === "running" ? uiT("ui.9dc1c9a54d099323") : uiT("ui.ce68e5be42ed7a7f")}
         </Button>
       </div>
 
@@ -78,7 +79,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
           className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive"
           data-testid="auto-router-routing-test-error"
         >
-          <p className="font-medium">Could not route this prompt</p>
+          <p className="font-medium">{uiT("ui.b0044c16ec902ab9")}</p>
           <p>{state.error}</p>
         </div>
       )}
@@ -86,7 +87,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
       {state.status === "done" && (
         <div data-testid="auto-router-routing-test-result">
           <div className="flex items-center gap-2 py-2 text-sm">
-            <span className="text-muted-foreground">Routed to</span>
+            <span className="text-muted-foreground">{uiT("ui.a3e3b5c2b0a3")}</span>
             <Badge variant="secondary" data-testid="auto-router-routing-test-routed-model">
               {state.result.routed_model}
             </Badge>
@@ -96,7 +97,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
                 data-testid="auto-router-routing-test-unconfigured"
               >
                 <TriangleAlert className="size-3.5" />
-                This proxy has no model group by that name
+                {uiT("ui.ba4dc74e26555f9b")}
               </span>
             )}
           </div>

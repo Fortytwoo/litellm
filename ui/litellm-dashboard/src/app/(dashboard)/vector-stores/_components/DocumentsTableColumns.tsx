@@ -18,15 +18,30 @@ import { cn } from "@/lib/cva.config";
 import { copyToClipboard } from "@/utils/dataUtils";
 
 const STATUS_CONFIG: Record<DocumentUpload["status"], { tone: StatusTone; label: string }> = {
-  uploading: { tone: "info", label: "Uploading" },
-  done: { tone: "success", label: "Ready" },
+  uploading: {
+    tone: "info",
+    get label() {
+      return translateUi("ui.8b898ca34ce71371");
+    },
+  },
+  done: {
+    tone: "success",
+    get label() {
+      return translateUi("ui.5fa7aac5375c5815");
+    },
+  },
   error: {
     tone: "error",
     get label() {
       return translateUi("ui.54a0e8c17ebb");
     },
   },
-  removed: { tone: "neutral", label: "Removed" },
+  removed: {
+    tone: "neutral",
+    get label() {
+      return translateUi("ui.4118fb4fed0ecec9");
+    },
+  },
 };
 
 function formatFileSize(bytes?: number): string {
@@ -42,7 +57,7 @@ function DocumentRowActions({ document, onRemove }: { document: DocumentUpload; 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open document actions"
+        aria-label={uiT("ui.6d00dc1d2fea0851")}
         data-testid={`document-actions-${document.uid}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -54,7 +69,7 @@ function DocumentRowActions({ document, onRemove }: { document: DocumentUpload; 
           onClick={() => void copyToClipboard(document.uid, "Document ID copied to clipboard")}
         >
           <Copy />
-          Copy document ID
+          {uiT("ui.cd80b47ab62939a8")}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"

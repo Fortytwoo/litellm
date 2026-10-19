@@ -1,3 +1,7 @@
+"use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { type FC } from "react";
 import { TriangleAlert } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -26,12 +30,16 @@ export const TransportSelectItems: FC<{ stdioEnabled: boolean }> = ({ stdioEnabl
   </>
 );
 
-export const StdioDisabledBanner: FC = () => (
-  <Alert variant="warning" className="mb-4 rounded-lg">
-    <TriangleAlert />
-    <AlertTitle>stdio is disabled on this proxy</AlertTitle>
-    <AlertDescription>
-      {STDIO_DISABLED_MESSAGE}. Until then this server cannot start or be saved as stdio.
-    </AlertDescription>
-  </Alert>
-);
+export const StdioDisabledBanner: FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Alert variant="warning" className="mb-4 rounded-lg">
+      <TriangleAlert />
+      <AlertTitle>{uiT("ui.e9c427af3716e655")}</AlertTitle>
+      <AlertDescription>
+        {translateText(STDIO_DISABLED_MESSAGE)}
+        {uiT("ui.f35a09f2e68f1208")}
+      </AlertDescription>
+    </Alert>
+  );
+};

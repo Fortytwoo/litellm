@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +10,8 @@ interface FilePreviewCardProps {
 }
 
 function FilePreviewCard({ file, previewUrl, onRemove }: FilePreviewCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isPdf = file.name.toLowerCase().endsWith(".pdf");
 
   return (
@@ -21,20 +25,22 @@ function FilePreviewCard({ file, previewUrl, onRemove }: FilePreviewCardProps) {
           ) : (
             <img
               src={previewUrl || ""}
-              alt="Upload preview"
+              alt={uiT("ui.6f777abbd5339a6e")}
               className="w-10 h-10 rounded-md border border-border object-cover"
             />
           )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-foreground truncate">{file.name}</div>
-          <div className="text-xs text-muted-foreground">{isPdf ? "PDF" : "Image"}</div>
+          <div className="text-xs text-muted-foreground">
+            {isPdf ? uiT("ui.1d393b0081b632c5") : uiT("ui.1aa4cb0bcca76e92")}
+          </div>
         </div>
         <Button
           type="button"
           variant="ghost"
           size="icon-xs"
-          aria-label={`Remove ${file.name}`}
+          aria-label={uiT("ui.86790c6d4f116494", { v0: String(file.name) })}
           className="text-muted-foreground hover:text-foreground hover:bg-accent"
           onClick={onRemove}
         >

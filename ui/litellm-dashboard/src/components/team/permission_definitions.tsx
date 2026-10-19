@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export interface PermissionInfo {
   method: string;
   endpoint: string;
@@ -9,21 +10,48 @@ export interface PermissionInfo {
  * Map of permission endpoint patterns to their descriptions
  */
 export const PERMISSION_DESCRIPTIONS: Record<string, string> = {
-  "/auto_router/manage": "Member can create auto routers for this team and edit their own router configurations",
-  "/key/generate": "Member can generate a virtual key for this team",
-  "/key/service-account/generate":
-    "Member can generate a service account key (not belonging to any user) for this team",
-  "/key/update": "Member can update a virtual key belonging to this team",
-  "/key/delete": "Member can delete a virtual key belonging to this team",
-  "/key/info": "Member can get info about a virtual key belonging to this team",
-  "/key/regenerate": "Member can regenerate a virtual key belonging to this team",
-  "/key/{key_id}/regenerate": "Member can regenerate a virtual key belonging to this team",
-  "/key/list": "Member can list virtual keys belonging to this team",
-  "/key/block": "Member can block a virtual key belonging to this team",
-  "/key/unblock": "Member can unblock a virtual key belonging to this team",
-  "/key/access_group_assignment": "Member can assign access groups to virtual keys for this team",
-  "/team/daily/activity": "Member can view all team usage data (not just their own)",
-  "/spend/logs": "Member can view spend logs for the entire team (not just their own)",
+  get "/auto_router/manage"() {
+    return translateUi("ui.d3db5e0d94185ec6");
+  },
+  get "/key/generate"() {
+    return translateUi("ui.8503a9114f8df542");
+  },
+  get "/key/service-account/generate"() {
+    return translateUi("ui.fa92a7944f8db741");
+  },
+  get "/key/update"() {
+    return translateUi("ui.ef8e36fdd450bddc");
+  },
+  get "/key/delete"() {
+    return translateUi("ui.90fc2336e6f84b49");
+  },
+  get "/key/info"() {
+    return translateUi("ui.1a197ad58c7f160b");
+  },
+  get "/key/regenerate"() {
+    return translateUi("ui.e2b9ff1e85543980");
+  },
+  get "/key/{key_id}/regenerate"() {
+    return translateUi("ui.e2b9ff1e85543980");
+  },
+  get "/key/list"() {
+    return translateUi("ui.887926875abea5e5");
+  },
+  get "/key/block"() {
+    return translateUi("ui.6b0572d9d58f120f");
+  },
+  get "/key/unblock"() {
+    return translateUi("ui.e899db60c24d7d12");
+  },
+  get "/key/access_group_assignment"() {
+    return translateUi("ui.0418a46d43557ae1");
+  },
+  get "/team/daily/activity"() {
+    return translateUi("ui.68fc9e8cf41d6b4e");
+  },
+  get "/spend/logs"() {
+    return translateUi("ui.d9351c80d897af52");
+  },
 };
 
 /**

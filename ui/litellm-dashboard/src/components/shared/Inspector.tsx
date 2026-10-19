@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { mergeProps } from "@base-ui/react/merge-props";
@@ -87,6 +88,8 @@ function Root<T>({
   onFullScreenChange,
   children,
 }: InspectorRootProps<T>) {
+  const { t: uiT } = useDashboardLanguage();
+
   const parent = useContext(InspectorContext) as InspectorState<never> | null;
   const [claims, setClaims] = useState(0);
   const claim = useCallback(() => {
@@ -111,7 +114,7 @@ function Root<T>({
   };
   const close = () => onSelectedChange(null);
   const toggle = (item: T) => onSelectedChange(itemKey(item) === selectedKey ? null : item);
-  useShortcut("escape", close, { enabled: keys, description: "close" });
+  useShortcut("escape", close, { enabled: keys, description: uiT("ui.310ff200149b44a3") });
   useShortcut("j", () => step(1), { enabled: keys, description: noun });
   useShortcut("k", () => step(-1), { enabled: keys, description: noun });
   const state: InspectorState<T> = {

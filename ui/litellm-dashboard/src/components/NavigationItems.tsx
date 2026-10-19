@@ -223,65 +223,67 @@ export const menuGroups: MenuGroup[] = [
     get groupLabel() {
       return translateUi("ui.c2fd58c653bb");
     },
-    items: [
-      {
-        key: "new_usage",
-        page: "new_usage",
-        route: "usage",
-        icon: <BarChart3 {...ICON} />,
-        roles: [...all_admin_roles, ...internalUserRoles],
-        get label() {
-          return translateUi("ui.8d59829c1e15");
+    get items() {
+      return [
+        {
+          key: "new_usage",
+          page: "new_usage",
+          route: "usage",
+          icon: <BarChart3 {...ICON} />,
+          roles: [...all_admin_roles, ...internalUserRoles],
+          get label() {
+            return translateUi("ui.8d59829c1e15");
+          },
         },
-      },
-      {
-        key: "model-insights",
-        page: "model-insights",
-        icon: <Trophy {...ICON} />,
-        roles: all_admin_roles,
-        label: (
-          <span className="flex items-center gap-2">
-            <LocalizedText text="Model Leaderboard" /> <BetaBadge />
-          </span>
-        ),
-      },
-      {
-        key: "cost-optimization",
-        page: "cost-optimization",
-        icon: <PiggyBank {...ICON} />,
-        roles: [...all_admin_roles, ...internalUserRoles],
-        get label() {
-          return translateUi("ui.b32e75776536");
+        {
+          key: "model-insights",
+          page: "model-insights",
+          icon: <Trophy {...ICON} />,
+          roles: all_admin_roles,
+          label: (
+            <span className="flex items-center gap-2">
+              <LocalizedText text={translateUi("ui.da4b87541cc2703b")} /> <BetaBadge />
+            </span>
+          ),
         },
-      },
-      {
-        key: "logs",
-        page: "logs",
-        get label() {
-          return translateUi("ui.ea2100dc89ae");
+        {
+          key: "cost-optimization",
+          page: "cost-optimization",
+          icon: <PiggyBank {...ICON} />,
+          roles: [...all_admin_roles, ...internalUserRoles],
+          get label() {
+            return translateUi("ui.b32e75776536");
+          },
         },
-        icon: <Activity {...ICON} />,
-      },
-      {
-        key: "lens",
-        page: "lens",
-        label: (
-          <span className="flex items-center gap-2">
-            Lens <BetaBadge />
-          </span>
-        ),
-        icon: <Aperture {...ICON} />,
-      },
-      {
-        key: "guardrails-monitor",
-        page: "guardrails-monitor",
-        get label() {
-          return translateUi("ui.896cc56be8d7");
+        {
+          key: "logs",
+          page: "logs",
+          get label() {
+            return translateUi("ui.ea2100dc89ae");
+          },
+          icon: <Activity {...ICON} />,
         },
-        icon: <HeartPulse {...ICON} />,
-        roles: rolesWithCapability("viewGuardrailUsage"),
-      },
-    ],
+        {
+          key: "lens",
+          page: "lens",
+          label: (
+            <span className="flex items-center gap-2">
+              Lens <BetaBadge />
+            </span>
+          ),
+          icon: <Aperture {...ICON} />,
+        },
+        {
+          key: "guardrails-monitor",
+          page: "guardrails-monitor",
+          get label() {
+            return translateUi("ui.896cc56be8d7");
+          },
+          icon: <HeartPulse {...ICON} />,
+          roles: rolesWithCapability("viewGuardrailUsage"),
+        },
+      ];
+    },
   },
   {
     get groupLabel() {

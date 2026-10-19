@@ -248,7 +248,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
       <DialogContent className="sm:max-w-175">
         <DialogHeader>
           <DialogTitle className="text-lg">{template?.title}</DialogTitle>
-          <DialogDescription>Configure competitor blocking for your brand</DialogDescription>
+          <DialogDescription>{uiT("ui.23788a755bf92714")}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
@@ -257,18 +257,19 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
           {hasEnrichment && (
             <>
               <div>
-                <label className="mb-2 block text-sm font-medium">Competitor Discovery</label>
+                <label className="mb-2 block text-sm font-medium">{uiT("ui.7caf14e708532c5e")}</label>
                 <RadioGroup
                   value={competitorMode}
                   onValueChange={(value) => setCompetitorMode(value as "ai" | "manual")}
                   className="grid-cols-2"
                 >
                   <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-input px-3 py-2 text-sm">
-                    <RadioGroupItem value="ai" />✨ Use AI
+                    <RadioGroupItem value="ai" />
+                    {uiT("ui.2fca3e4e8b7d6d01")}
                   </label>
                   <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-input px-3 py-2 text-sm">
                     <RadioGroupItem value="manual" />
-                    Enter Manually
+                    {uiT("ui.e1dac62adc5652be")}
                   </label>
                 </RadioGroup>
               </div>
@@ -276,11 +277,11 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
               {/* Brand Name */}
               <div>
                 <label className="mb-1 block text-sm font-medium">
-                  Your Brand Name
+                  {uiT("ui.04f86e77a6f29436")}
                   <span className="ml-1 text-destructive">*</span>
                 </label>
                 <Input
-                  placeholder="e.g. Acme Airlines"
+                  placeholder={uiT("ui.dd89c4864b8e0d0e")}
                   value={parameterValues[enrichmentParam || "brand_name"] || ""}
                   onChange={(e) =>
                     setParameterValues((prev) => ({
@@ -295,14 +296,14 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                 <>
                   <div>
                     <label className="mb-1 block text-sm font-medium">
-                      Select Model
+                      {uiT("ui.e4813fd58ccf5e81")}
                       <span className="ml-1 text-destructive">*</span>
                     </label>
                     <SearchSelect
                       options={availableModels.map((m) => ({ label: m, value: m }))}
                       value={selectedModel}
                       onValueChange={setSelectedModel}
-                      placeholder={isLoadingModels ? "Loading models..." : "Select a model to generate names"}
+                      placeholder={isLoadingModels ? uiT("ui.802435241f0ac4f5") : uiT("ui.0066b143223550cc")}
                       emptyText={uiT("ui.a650c298cf44")}
                       disabled={isLoadingModels}
                     />
@@ -313,7 +314,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                     disabled={!selectedModel || !brandNameFilled || isGenerating}
                     className="w-full"
                   >
-                    {isGenerating ? "✨ Generating names..." : "✨ Generate Competitor Names"}
+                    {isGenerating ? uiT("ui.b8c2b1d89d2f55f4") : uiT("ui.cd72050fbb496510")}
                   </Button>
                 </>
               )}
@@ -321,7 +322,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
               {/* Competitor Tags */}
               <div>
                 <label className="mb-1 block text-sm font-medium">
-                  Competitor Names
+                  {uiT("ui.064f823cd890e4b1")}
                   {competitorTags.length > 0 && (
                     <span className="ml-2 font-normal text-muted-foreground">({competitorTags.length})</span>
                   )}
@@ -332,7 +333,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                       {tag}
                       <button
                         type="button"
-                        aria-label={`Remove ${tag}`}
+                        aria-label={uiT("ui.86790c6d4f116494", { v0: String(tag) })}
                         onClick={() => setCompetitorTags(competitorTags.filter((t) => t !== tag))}
                       >
                         <X className="size-3" />
@@ -341,15 +342,13 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                   ))}
                   <input
                     className="min-w-40 flex-1 bg-transparent text-sm outline-none"
-                    placeholder="Type a name and press Enter to add"
+                    placeholder={uiT("ui.0dab226f8c0f1cb7")}
                     value={tagDraft}
                     onChange={(e) => setTagDraft(e.target.value)}
                     onKeyDown={handleTagDraftKeyDown}
                   />
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Type a name and press Enter to add. Click ✕ to remove.
-                </p>
+                <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.13d454f16888b7cb")}</p>
                 {statusMessage && (
                   <div className="mt-2 flex items-center gap-2 rounded-sm border border-border bg-muted p-2">
                     <UiLoadingSpinner className="size-3" />
@@ -358,8 +357,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                 )}
                 {Object.keys(variationsMap).length > 0 && !statusMessage && (
                   <p className="mt-1 text-xs text-success">
-                    ✓ {Object.values(variationsMap).flat().length} alternate spellings &amp; variations auto-generated
-                    for guardrail matching
+                    ✓ {Object.values(variationsMap).flat().length} {uiT("ui.99716e400b29b374")}
                   </p>
                 )}
               </div>
@@ -367,10 +365,10 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
               {/* Refinement input — shown after initial generation in AI mode */}
               {competitorMode === "ai" && hasGenerated && competitorTags.length > 0 && (
                 <div>
-                  <label className="mb-1 block text-sm font-medium">Refine List</label>
+                  <label className="mb-1 block text-sm font-medium">{uiT("ui.b4cce49737af6432")}</label>
                   <div className="flex gap-2">
                     <Input
-                      placeholder="e.g. add 10 more from Asia, increase to 50 total..."
+                      placeholder={uiT("ui.3e0013c2b18aab96")}
                       value={refinementInput}
                       onChange={(e) => setRefinementInput(e.target.value)}
                       onKeyDown={(e) => {
@@ -381,12 +379,10 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                       disabled={isRefining}
                     />
                     <Button onClick={handleRefine} disabled={!refinementInput.trim() || isRefining} size="sm">
-                      {isRefining ? "..." : "Send"}
+                      {isRefining ? "..." : uiT("ui.f6f4688ff23d50c6")}
                     </Button>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Give instructions to add, remove, or change competitors. Press Enter to send.
-                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.ffe4362b8cb5b652")}</p>
                 </div>
               )}
             </>
@@ -398,7 +394,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
             {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={handleConfirm} disabled={!canContinue || isLoading}>
-            {isLoading ? "Creating guardrails..." : "Continue"}
+            {isLoading ? uiT("ui.ce65297fff19a03b") : uiT("ui.31fbef162594de01")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -29,6 +30,8 @@ interface IndexesTabProps {
 }
 
 const IndexesTab: React.FC<IndexesTabProps> = ({ accessToken, vectorStores, onViewVectorStore }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [indexes, setIndexes] = useState<VectorStoreIndex[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -66,26 +69,25 @@ const IndexesTab: React.FC<IndexesTabProps> = ({ accessToken, vectorStores, onVi
   return (
     <div className="w-full">
       <p className="mb-4 text-sm text-muted-foreground">
-        Vector store indexes registered on this proxy via the <code>/v1/indexes</code> API. See the{" "}
+        {uiT("ui.55b51431aadb0ab9")} <code>/v1/indexes</code> {uiT("ui.8c99c418ba8c5cb5")}{" "}
         <a
           href="https://docs.litellm.ai/docs/providers/azure_ai/azure_ai_vector_stores_passthrough"
           target="_blank"
           rel="noopener noreferrer"
           className="text-info hover:underline"
         >
-          vector store index docs
+          {uiT("ui.42b71efc25f60784")}
         </a>{" "}
-        for how this works. Index passthrough is supported for Azure AI Search and Milvus today; support for more
-        providers can be added, so please{" "}
+        {uiT("ui.626a2bb9b0299f61")}{" "}
         <a
           href="https://github.com/BerriAI/litellm/issues"
           target="_blank"
           rel="noopener noreferrer"
           className="text-info hover:underline"
         >
-          file a GitHub issue
+          {uiT("ui.a776f85800ebf3a6")}
         </a>{" "}
-        if you want your provider supported.
+        {uiT("ui.8b8cfdcd3e4f2dd5")}
       </p>
       <div className="grid grid-cols-1 gap-2 pt-2 pb-2 w-full">
         <IndexesTable

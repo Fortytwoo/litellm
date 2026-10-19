@@ -101,7 +101,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             <TableCell>
               <Button className="flex items-center justify-center">
                 <a href="https://forms.gle/W3U4PZpJGFHWtHyA9" target="_blank">
-                  ✨ Enterprise Feature
+                  {uiT("ui.98f0d5b56c9308a6")}
                 </a>
               </Button>
             </TableCell>
@@ -112,10 +112,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             {value.stored_in_db == true ? (
               <Badge variant="secondary">
                 <CircleCheck />
-                In DB
+                {uiT("ui.e2a51ddd8b384864")}
               </Badge>
             ) : value.stored_in_db == false ? (
-              <Badge variant="outline">In Config</Badge>
+              <Badge variant="outline">{uiT("ui.9c3258818eeba1b0")}</Badge>
             ) : (
               <Badge variant="outline">{uiT("ui.8290035d4cf4")}</Badge>
             )}
@@ -125,7 +125,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               type="button"
               variant="ghost"
               size="icon-sm"
-              aria-label={`Reset ${value.field_name}`}
+              aria-label={uiT("ui.48d6c5e49d01be93", { v0: String(value.field_name) })}
               onClick={() => handleResetField(value.field_name, index)}
               className="text-destructive"
             >
@@ -135,7 +135,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         </TableRow>
       ))}
       <div>
-        <Button type="submit">Update Settings</Button>
+        <Button type="submit">{uiT("ui.374acbf332742ecb")}</Button>
       </div>
     </form>
   );

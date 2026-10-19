@@ -157,12 +157,14 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
     <div>
       {rubricSummary && (
         <p className="mb-1 text-xs text-muted-foreground">
-          {isOverridden ? `Custom opening on the ${rubricSummary.label} rubric` : `${rubricSummary.label} rubric`}
+          {isOverridden
+            ? uiT("ui.a402900287e87b98", { v0: String(rubricSummary.label) })
+            : uiT("ui.221e112ffdc3994b", { v0: String(rubricSummary.label) })}
         </p>
       )}
       <div className="flex items-center gap-2">
         <Button type="button" size="sm" variant="outline" onClick={openEditor}>
-          {isOverridden ? "Edit custom prompt" : "Customize prompt"}
+          {isOverridden ? uiT("ui.b8f5cfa3e119dbbc") : uiT("ui.0893bfb5221a94ed")}
         </Button>
         {isOverridden && (
           <Button
@@ -177,7 +179,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
               })
             }
           >
-            Reset to default
+            {uiT("ui.bc5b45ae7b60692a")}
           </Button>
         )}
       </div>
@@ -186,13 +188,13 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle>Classifier prompt</DialogTitle>
+            <DialogTitle>{uiT("ui.6e1294edf5448dfd")}</DialogTitle>
           </DialogHeader>
 
           {tierSource.kind === "builtIn" && (
             <div>
               <label className="text-sm font-medium" htmlFor="base-classification-rubric">
-                Base rubric
+                {uiT("ui.cb250ff4e41d7d50")}
               </label>
               <Select
                 items={Object.entries(CLASSIFICATION_RUBRIC_DESCRIPTIONS).map(([rubric, description]) => ({
@@ -203,7 +205,11 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
                 onValueChange={(rubric: ClassificationRubric | null) => rubric && setRubricDraft(rubric)}
                 disabled={Boolean(tierSource.rubricRestriction)}
               >
-                <SelectTrigger id="base-classification-rubric" aria-label="Base rubric" className="mt-1 w-full">
+                <SelectTrigger
+                  id="base-classification-rubric"
+                  aria-label={uiT("ui.cb250ff4e41d7d50")}
+                  className="mt-1 w-full"
+                >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent
@@ -229,51 +235,44 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
           <div className="mt-3 space-y-4">
             <div>
               <label className="text-sm font-medium" htmlFor="classification-instructions">
-                Classification instructions
+                {uiT("ui.d9d44db16fa5f1d9")}
               </label>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Explain what the classifier should judge. Tier definitions are managed separately below.
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.2b793ec7c25bf5ac")}</p>
               <Textarea
                 id="classification-instructions"
                 value={instructionDraft}
                 onChange={(e) => setInstructionDraft(e.target.value)}
                 rows={5}
                 placeholder={copy.placeholder}
-                aria-label="Classification instructions"
+                aria-label={uiT("ui.d9d44db16fa5f1d9")}
                 className="mt-2 font-mono text-xs"
               />
             </div>
 
             <div>
               <label className="text-sm font-medium" htmlFor="calibration-examples">
-                Calibration examples
+                {uiT("ui.f2137889c2c4f7cf")}
               </label>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Show representative requests and the tier they should receive. The router adds these after its tier
-                definitions.
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.146a023513c554d9")}</p>
               <Textarea
                 id="calibration-examples"
                 value={exampleDraft}
                 onChange={(e) => setExampleDraft(e.target.value)}
                 rows={6}
-                placeholder={'- "what is the capital of France?" -> SIMPLE'}
-                aria-label="Calibration examples"
+                placeholder={uiT("ui.1a1a039355f5d41c")}
+                aria-label={uiT("ui.f2137889c2c4f7cf")}
                 className="mt-2 font-mono text-xs"
               />
             </div>
           </div>
 
           <div className="mt-3">
-            <p className="text-xs font-medium">What this router sends</p>
+            <p className="text-xs font-medium">{uiT("ui.fbb08b478649765a")}</p>
             {preview.status === "loading" && (
-              <p className="mt-1 text-xs text-muted-foreground">Loading the assembled prompt…</p>
+              <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.c0cbc132f8b9b83c")}</p>
             )}
             {preview.status === "error" && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                Could not load the assembled prompt. Your text is still saved as written.
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.852747687515ea76")}</p>
             )}
             {preview.status === "ready" && (
               <pre
@@ -290,7 +289,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="button" onClick={handleSave}>
-              Save prompt
+              {uiT("ui.7462a09b0f4c31bb")}
             </Button>
           </DialogFooter>
         </DialogContent>

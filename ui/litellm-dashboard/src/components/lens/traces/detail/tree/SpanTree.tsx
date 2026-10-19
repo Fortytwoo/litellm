@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ChartGantt, ListTree, MoreHorizontal, PanelRightOpen, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
@@ -44,13 +46,31 @@ interface SpanTreeProps {
 }
 
 const LAYOUTS: readonly { id: TreeLayout; label: string; icon: typeof ListTree }[] = [
-  { id: "tree", label: "Tree", icon: ListTree },
-  { id: "waterfall", label: "Waterfall", icon: ChartGantt },
+  {
+    id: "tree",
+    get label() {
+      return translateUi("ui.b85f5fabf97d3b18");
+    },
+    icon: ListTree,
+  },
+  {
+    id: "waterfall",
+    get label() {
+      return translateUi("ui.6b53bc225e0aae1d");
+    },
+    icon: ChartGantt,
+  },
 ];
 
 function LayoutSwitch({ layout, onChange }: { layout: TreeLayout; onChange: (layout: TreeLayout) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <div role="radiogroup" aria-label="Step layout" className="flex items-center rounded-md bg-muted p-0.5">
+    <div
+      role="radiogroup"
+      aria-label={uiT("ui.55c01f456e187029")}
+      className="flex items-center rounded-md bg-muted p-0.5"
+    >
       {LAYOUTS.map(({ id, label, icon: Icon }) => (
         <button
           key={id}
@@ -136,6 +156,8 @@ export function SpanTree({
   onClearFilters,
   onCollapseAll,
 }: SpanTreeProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const guides = useMemo(() => treeGuides(rows.map((row) => row.depth)), [rows]);
   const traceStartMs = Date.parse(summary.start_time);
@@ -149,12 +171,12 @@ export function SpanTree({
   return (
     <section
       className="flex h-full min-h-0 min-w-0 flex-col border-r border-border bg-background"
-      aria-label="Run spans"
+      aria-label={uiT("ui.874a8b2495652ca5")}
     >
       <div className="flex shrink-0 flex-col gap-2 border-b px-3 py-2.5">
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold text-foreground">
-            Steps{" "}
+            {uiT("ui.1de3df70ddf4faab")}{" "}
             <span className="ml-0.5 text-xs font-normal text-muted-foreground tabular-nums">
               {filtering && `${rows.length.toLocaleString()} of `}
               {summary.span_count.toLocaleString()}
@@ -163,19 +185,21 @@ export function SpanTree({
           <div className="ml-auto flex items-center gap-1">
             <LayoutSwitch layout={layout} onChange={onLayoutChange} />
             <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" size="icon-xs" aria-label="Step display options" />}>
+              <DropdownMenuTrigger
+                render={<Button variant="ghost" size="icon-xs" aria-label={uiT("ui.ca0f9ca539ace10c")} />}
+              >
                 <MoreHorizontal className="size-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuCheckboxItem checked={hideFramework} onCheckedChange={onToggleHideFramework}>
-                  Hide framework spans
+                  {uiT("ui.12d6ddfea47eedea")}
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onCollapseAll}>Collapse branches</DropdownMenuItem>
+                <DropdownMenuItem onClick={onCollapseAll}>{uiT("ui.7f38ca88a5a17ee6")}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             {onOpenDetails && (
-              <Button variant="ghost" size="icon-xs" onClick={onOpenDetails} aria-label="Show details">
+              <Button variant="ghost" size="icon-xs" onClick={onOpenDetails} aria-label={uiT("ui.1af77ee273cbdaae")}>
                 <PanelRightOpen className="size-4" />
               </Button>
             )}
@@ -185,8 +209,8 @@ export function SpanTree({
           <div className="relative min-w-0 flex-1">
             <Search className="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
-              aria-label="Search steps"
-              placeholder="Filter steps"
+              aria-label={uiT("ui.53268ee37ec16821")}
+              placeholder={uiT("ui.2427ab72d7148690")}
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
               className="h-7 pr-7 pl-7 text-xs shadow-none md:text-xs"
@@ -195,7 +219,7 @@ export function SpanTree({
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Clear step search"
+                aria-label={uiT("ui.cc5ca2a304d08535")}
                 className="absolute top-1/2 right-0.5 -translate-y-1/2"
                 onClick={() => onQueryChange("")}
               >
@@ -204,10 +228,10 @@ export function SpanTree({
             )}
           </div>
           <FilterChip pressed={!errorsOnly} onClick={() => onErrorsOnlyChange(false)}>
-            All
+            {uiT("ui.a52ace420f21")}
           </FilterChip>
           <FilterChip pressed={errorsOnly} onClick={() => onErrorsOnlyChange(true)}>
-            Errors
+            {uiT("ui.cb702378f31507ef")}
             <span
               className={cn("tabular-nums", summary.error_count > 0 ? "text-destructive" : "text-muted-foreground")}
             >
@@ -216,7 +240,7 @@ export function SpanTree({
           </FilterChip>
           {filtering && (
             <span role="status" className="sr-only">
-              {rows.length} found
+              {rows.length} {uiT("ui.bcc649cfdb8cc557")}
             </span>
           )}
         </div>
@@ -225,13 +249,13 @@ export function SpanTree({
         {layout === "waterfall" && rows.length > 0 && <TimeAxis totalMs={summary.duration_ms} />}
         {rows.length === 0 && (
           <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-            <p>No matching steps</p>
+            <p>{uiT("ui.dc5fd200953aaea5")}</p>
             <Button variant="link" size="sm" onClick={onClearFilters}>
-              Clear filters
+              {uiT("ui.7179ea0035fc")}
             </Button>
           </div>
         )}
-        <div role="tree" aria-label="Spans in time order" className="pt-1">
+        <div role="tree" aria-label={uiT("ui.feda07002147803f")} className="pt-1">
           {rows.map((row, i) => {
             if (row.kind === "load-more")
               return <LoadMoreRow key={row.id} row={row} guide={guides[i]} onLoadMore={onLoadMore} />;

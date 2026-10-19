@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 import type { ClassifierType } from "./classifier_types";
 
@@ -49,7 +50,7 @@ export const jevClassifierConfigSchema = z
   .refine(
     (config) => config.deployment_name !== undefined || isSupportedClassifierModel(config.provider, config.model),
     {
-      error: "Select a supported classifier model, or enter the bare Databricks serving endpoint name",
+      error: () => translateUi("ui.73e620d9532f3729"),
       path: ["model"],
     },
   );

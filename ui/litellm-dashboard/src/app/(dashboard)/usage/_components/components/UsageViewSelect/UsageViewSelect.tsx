@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { BarChart3, Bot, Building2, Globe, LineChart, ShoppingCart, Tags, User, Users } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
@@ -40,66 +43,102 @@ interface OptionConfig {
 const OPTIONS: OptionConfig[] = [
   {
     value: "global",
-    label: "Global Usage",
+    get label() {
+      return translateUi("ui.14f27c673e3ee58d");
+    },
     showForAdmin: "Global Usage",
     showForNonAdmin: "Your Usage",
-    description: "View usage across all resources",
+    get description() {
+      return translateUi("ui.1cee5cd479cf22a1");
+    },
     descriptionForAdmin: "View usage across all resources",
     descriptionForNonAdmin: "View your usage",
     icon: <Globe className="size-4" />,
   },
   {
     value: "my-usage",
-    label: "Your Usage",
-    description: "View your own usage",
+    get label() {
+      return translateUi("ui.d95886b19fe9423d");
+    },
+    get description() {
+      return translateUi("ui.d56e9d199448833d");
+    },
     icon: <User className="size-4" />,
     adminOnly: true,
   },
   {
     value: "organization",
-    label: "Organization Usage",
-    description: "View usage across all organizations",
+    get label() {
+      return translateUi("ui.6d72b0ca2ae8cce8");
+    },
+    get description() {
+      return translateUi("ui.8a3447cea40d4ee4");
+    },
     icon: <Building2 className="size-4" />,
     capability: "viewOrganizationUsage",
   },
   {
     value: "team",
-    label: "Team Usage",
-    description: "View usage by team",
+    get label() {
+      return translateUi("ui.f9989642a5c6e674");
+    },
+    get description() {
+      return translateUi("ui.eac5e2363930e82d");
+    },
     icon: <Users className="size-4" />,
   },
   {
     value: "customer",
-    label: "Customer Usage",
-    description: "View usage by customer accounts",
+    get label() {
+      return translateUi("ui.7f0b3f8aa696bdff");
+    },
+    get description() {
+      return translateUi("ui.c67d4ae1a18592ec");
+    },
     icon: <ShoppingCart className="size-4" />,
     adminOnly: true,
   },
   {
     value: "tag",
-    label: "Tag Usage",
-    description: "View usage grouped by tags",
+    get label() {
+      return translateUi("ui.ed09f955510a0342");
+    },
+    get description() {
+      return translateUi("ui.fca8bfc489a2af3f");
+    },
     icon: <Tags className="size-4" />,
     adminOnly: true,
   },
   {
     value: "agent",
-    label: "Agent Usage (A2A)",
-    description: "View usage by AI agents",
+    get label() {
+      return translateUi("ui.610f974291f8a496");
+    },
+    get description() {
+      return translateUi("ui.ea2cef77da674a97");
+    },
     icon: <Bot className="size-4" />,
     capability: "viewAgentUsage",
   },
   {
     value: "user",
-    label: "User Usage",
-    description: "View usage by individual users",
+    get label() {
+      return translateUi("ui.04f6c8591b42ba29");
+    },
+    get description() {
+      return translateUi("ui.43847c21df35bb7a");
+    },
     icon: <User className="size-4" />,
     adminOnly: true,
   },
   {
     value: "user-agent-activity",
-    label: "User Agent Activity",
-    description: "View detailed user agent activity logs",
+    get label() {
+      return translateUi("ui.279564c6a6a7007c");
+    },
+    get description() {
+      return translateUi("ui.1fdbd175372c7dad");
+    },
     icon: <LineChart className="size-4" />,
     adminOnly: true,
   },
@@ -110,10 +149,12 @@ export const UsageViewSelect: React.FC<UsageViewSelectProps> = ({
   userRole,
   canViewTagUsage = false,
   isOrgAdmin = false,
-  title = "Usage",
-  description = "Select the usage data you want to view",
+  title = translateUi("ui.8d59829c1e15"),
+  description = translateUi("ui.6378e9856f0d817e"),
   "data-id": dataId,
 }) => {
+  useDashboardLanguage();
+
   const isAdmin = all_admin_roles.includes(userRole ?? "");
   const getFilteredOptions = () => {
     return OPTIONS.filter((option) => {

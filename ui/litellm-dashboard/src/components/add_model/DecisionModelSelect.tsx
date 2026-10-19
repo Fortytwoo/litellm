@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Label } from "@/components/ui/label";
@@ -19,6 +21,8 @@ export default function DecisionModelSelect({
   modelInfo: ModelGroup[];
   deployments: AutoRouterDeployment[] | undefined;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = React.useId();
   const { data: modelCostMapData } = useModelCostMap(true, true);
   const decisionCatalog = React.useMemo(() => buildDecisionCatalog(modelCostMapData), [modelCostMapData]);
@@ -38,13 +42,13 @@ export default function DecisionModelSelect({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>Decision model</Label>
+      <Label htmlFor={id}>{uiT("ui.1e7a941a0dab1722")}</Label>
       <SearchSelect
         inputId={id}
-        aria-label="Decision model"
+        aria-label={uiT("ui.1e7a941a0dab1722")}
         options={decisionModels.map((model) => ({ value: model.model_group, label: model.model_group }))}
         value={value.jev_classifier_config?.deployment_name ?? ""}
-        placeholder="Select the decision model"
+        placeholder={uiT("ui.55b872f0b83fb258")}
         allowClear={false}
         onValueChange={(deploymentName) => {
           if (!deploymentName) return;

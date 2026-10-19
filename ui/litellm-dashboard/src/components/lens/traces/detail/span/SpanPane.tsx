@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import CopyButton from "@/components/shared/CopyButton";
 
@@ -16,7 +19,17 @@ import { PaneHeader } from "./PaneHeader";
 import { RequestTab } from "./RequestTab";
 import { SpendLogLink } from "./SpendLogLink";
 
-const TAB_LABELS: Record<SpanTab, string> = { content: "Content", request: "Request", attributes: "Attributes" };
+const TAB_LABELS: Record<SpanTab, string> = {
+  get content() {
+    return translateUi("ui.47bd29075f8b8019");
+  },
+  get request() {
+    return translateUi("ui.59f03d642b41");
+  },
+  get attributes() {
+    return translateUi("ui.4b0ed88f7d99420f");
+  },
+};
 
 export interface SpanTabProps {
   spanTab: SpanTab;
@@ -45,12 +58,17 @@ export function SpanPane({
   onSpanTabChange,
   onClose,
 }: SpanTabProps & { trace: Trace; span: Span; accessToken: string; onClose: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { trace_id: traceId, trace_ref: traceRef, start_time: startTime } = trace.summary;
   const handoff = useTracesApi(accessToken).handoff(traceId, span.span_id, traceRef);
   const traceStartMs = Date.parse(startTime);
   const detailQuery = useSpanDetail(accessToken, traceId, tab === "attributes" ? span.span_id : null, traceRef);
   return (
-    <aside className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground" aria-label="Span details">
+    <aside
+      className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground"
+      aria-label={uiT("ui.52823b71c224ad8b")}
+    >
       <PaneHeader
         type={span.type}
         model={span.model}
@@ -65,18 +83,23 @@ export function SpanPane({
               <AddToDatasetButton
                 sources={[{ kind: "trace", trace_id: traceId, trace_ref: traceRef ?? "", span_id: span.span_id }]}
                 agentName={span.agent}
-                label="Add this turn to dataset"
+                label={uiT("ui.93963e7bd96af3dc")}
                 className="h-6"
               />
             )}
-            <CopyButton variant="action" value={handoff.text} label="Copy step" copiedLabel={handoff.copied} />
+            <CopyButton
+              variant="action"
+              value={handoff.text}
+              label={uiT("ui.d774ef6f3a257232")}
+              copiedLabel={handoff.copied}
+            />
           </>
         }
         onClose={onClose}
       />
       <Tabs value={tab} onValueChange={(value) => onSpanTabChange(value as SpanTab)} className="min-h-0 flex-1 gap-0">
         <div className="shrink-0 border-b px-4">
-          <TabsList variant="line" aria-label="Span detail sections" className="h-9 gap-4 px-0">
+          <TabsList variant="line" aria-label={uiT("ui.bcb78bedb142d526")} className="h-9 gap-4 px-0">
             {SPAN_TABS.map((id) => (
               <TabsTrigger key={id} value={id} className="flex-none px-0 text-sm">
                 {TAB_LABELS[id]}

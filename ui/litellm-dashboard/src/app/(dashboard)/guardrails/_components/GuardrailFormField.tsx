@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { CircleHelp } from "lucide-react";
 import React, { useEffect, useId } from "react";
@@ -71,10 +75,12 @@ export const readRecord = (source: unknown, key: string): unknown =>
 
 export const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent className="max-w-xs">{hint}</TooltipContent>
+      <TooltipContent className="max-w-xs">
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -113,27 +119,52 @@ export const GuardrailField: React.FC<GuardrailFieldProps> = ({
 
   return (
     <Field data-invalid={invalid || undefined} className={className}>
-      {label !== undefined && <FieldLabel htmlFor={controlId}>{label}</FieldLabel>}
+      {label !== undefined && (
+        <FieldLabel htmlFor={controlId}>
+          <LocalizedText>{label}</LocalizedText>
+        </FieldLabel>
+      )}
       {children({ ...field, id: controlId, "aria-invalid": invalid || undefined, "aria-describedby": describedBy })}
-      {description !== undefined && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
+      {description !== undefined && (
+        <FieldDescription id={descriptionId}>
+          <LocalizedText>{description}</LocalizedText>
+        </FieldDescription>
+      )}
       <FieldError id={errorId} errors={[fieldState.error]} />
     </Field>
   );
 };
 
 const SKIP_MESSAGE_ITEMS = [
-  { label: "Use global default", value: "inherit" },
-  { label: "Yes — exclude from guardrail scan", value: "yes" },
-  { label: "No — always include in scan", value: "no" },
+  {
+    get label() {
+      return translateUi("ui.a83c91e463b30df3");
+    },
+    value: "inherit",
+  },
+  {
+    get label() {
+      return translateUi("ui.fa0bc4232f1ea899");
+    },
+    value: "yes",
+  },
+  {
+    get label() {
+      return translateUi("ui.1c7220c4cc34b31d");
+    },
+    value: "no",
+  },
 ];
 
 export const SkipMessageSelect: React.FC<{ control: GuardrailFieldControlProps }> = ({ control }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy } = control;
 
   return (
     <Select items={SKIP_MESSAGE_ITEMS} value={asText(value) || null} onValueChange={onChange}>
       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-        <SelectValue placeholder="Select an option" />
+        <SelectValue placeholder={uiT("ui.fb1cbc38fb4060f4")} />
       </SelectTrigger>
       <SelectContent>
         {SKIP_MESSAGE_ITEMS.map((item) => (
@@ -150,6 +181,8 @@ export const LoggingOnlyScopeSelect: React.FC<{
   control: GuardrailFieldControlProps;
   directionalScopeSupported: boolean;
 }> = ({ control, directionalScopeSupported }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy } = control;
   const items = getLoggingOnlyScopeOptions(directionalScopeSupported);
 
@@ -162,7 +195,7 @@ export const LoggingOnlyScopeSelect: React.FC<{
   return (
     <Select items={items} value={asText(value) || "default"} onValueChange={onChange}>
       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-        <SelectValue placeholder="Select an option" />
+        <SelectValue placeholder={uiT("ui.fb1cbc38fb4060f4")} />
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (
@@ -180,6 +213,8 @@ export const LoggingOnlyScopeField: React.FC<{
   mode: unknown;
   directionalScopeSupported: boolean;
 }> = ({ control, mode, directionalScopeSupported }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const scopeChoice = useWatch({ control, name: "logging_only_scope_choice" });
   const continueDisabled = scopeChoice === "input" || scopeChoice === "output";
   if (!modeIncludesLoggingOnly(mode)) return null;
@@ -214,7 +249,7 @@ export const LoggingOnlyScopeField: React.FC<{
             onCheckedChange={fieldControl.onChange}
             aria-invalid={fieldControl["aria-invalid"]}
             aria-describedby={fieldControl["aria-describedby"]}
-            aria-label="Continue observing the response after a flagged request"
+            aria-label={uiT("ui.14894801a2bf4e6b")}
           />
         )}
       </GuardrailField>

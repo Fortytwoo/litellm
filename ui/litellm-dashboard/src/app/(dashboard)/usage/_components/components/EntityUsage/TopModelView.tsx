@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { BarChart } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -29,8 +31,18 @@ type ViewMode = "chart" | "table";
 
 const LIMIT_OPTIONS = TOP_MODEL_LIMITS.map((limit) => ({ value: String(limit), label: String(limit) }));
 const VIEW_OPTIONS = [
-  { value: "table", label: "Table View" },
-  { value: "chart", label: "Chart View" },
+  {
+    value: "table",
+    get label() {
+      return translateUi("ui.e8636d7c556110e5");
+    },
+  },
+  {
+    value: "chart",
+    get label() {
+      return translateUi("ui.aa29c78fe01e47dd");
+    },
+  },
 ] as const satisfies readonly { value: ViewMode; label: string }[];
 
 const BAR_COLOR = "#2b3fd6";
@@ -94,13 +106,13 @@ export default function TopModelView({ topModels, topModelsLimit, setTopModelsLi
     <>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <Segmented
-          label="Number of models to show"
+          label={uiT("ui.4553b3ae8d169fd1")}
           value={String(topModelsLimit)}
           options={LIMIT_OPTIONS}
           onChange={(limit) => setTopModelsLimit(Number(limit))}
         />
         <Segmented
-          label="Top model view mode"
+          label={uiT("ui.85a6a4a7545d92cb")}
           value={modelViewMode}
           options={VIEW_OPTIONS}
           onChange={setModelViewMode}

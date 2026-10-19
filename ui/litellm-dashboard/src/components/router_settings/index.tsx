@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -172,7 +174,7 @@ const RouterSettings: React.FC<RouterSettingsProps> = ({ accessToken, userRole, 
 
     try {
       await setCallbacksCall(accessToken, payload);
-      toast.success("router settings updated successfully");
+      toast.success(translateUi("ui.fe1dc2a1bc9994ba"));
     } catch (error) {
       toast.fromError("Failed to update router settings: " + error);
     }

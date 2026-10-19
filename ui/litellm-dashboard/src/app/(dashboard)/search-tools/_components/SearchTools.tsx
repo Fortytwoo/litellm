@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { isAdminRole } from "@/utils/roles";
 import { useQuery } from "@tanstack/react-query";
@@ -116,13 +118,13 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
     setIsDeleting(true);
     try {
       await deleteSearchTool(accessToken, toolIdToDelete);
-      toast.success("Deleted search tool successfully");
+      toast.success(translateUi("ui.b7f391169abd95c4"));
       setIsDeleteModalOpen(false);
       setToolToDelete(null);
       refetch();
     } catch (error) {
       console.error("Error deleting the search tool:", error);
-      toast.error("Failed to delete search tool");
+      toast.error(translateUi("ui.7cdd584c9a75b6c2"));
     } finally {
       setIsDeleting(false);
     }
@@ -149,19 +151,19 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
 
       try {
         await updateSearchTool(accessToken, selectedToolId, buildSearchToolPayload(values));
-        toast.success("Search tool updated successfully");
+        toast.success(translateUi("ui.dbe48cd788fe4c42"));
         setEditModalVisible(false);
         form.reset(EMPTY_EDIT_VALUES);
         setSelectedToolId(null);
         refetch();
       } catch (error) {
         console.error("Failed to update search tool:", error);
-        toast.error("Failed to update search tool");
+        toast.error(translateUi("ui.64fe86a46db760ba"));
       }
     },
     (errors) => {
       console.error("Failed to update search tool:", errors);
-      toast.error("Failed to update search tool");
+      toast.error(translateUi("ui.64fe86a46db760ba"));
     },
   );
 
@@ -173,11 +175,11 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
   const renderEditForm = () => (
     <form onSubmit={(event) => event.preventDefault()}>
       <FieldGroup>
-        <FormField control={form.control} name="search_tool_name" label="Search Tool Name">
-          {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g., my-perplexity-search" />}
+        <FormField control={form.control} name="search_tool_name" label={uiT("ui.ca6db75b18c7f193")}>
+          {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.41080289f745047f")} />}
         </FormField>
 
-        <FormField control={form.control} name="search_provider" label="Search Provider">
+        <FormField control={form.control} name="search_provider" label={uiT("ui.c03e91ab962612e9")}>
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
               items={availableProviders.map((provider) => ({
@@ -188,7 +190,7 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
               onValueChange={(provider: string | null) => onChange(provider ?? "")}
             >
               <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-                <SelectValue placeholder="Select a search provider" />
+                <SelectValue placeholder={uiT("ui.08e8cf60e8e94486")} />
                 {isLoadingProviders && <UiLoadingSpinner className="size-4" />}
               </SelectTrigger>
               <SelectContent>
@@ -206,16 +208,16 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
           control={form.control}
           name="api_key"
           label={uiT("ui.23189d55f697")}
-          description="API key for the search provider"
+          description={uiT("ui.323a0df095773b83")}
         >
           {({ ref, value, ...field }) => (
-            <PasswordInput {...field} ref={ref} value={value ?? ""} placeholder="Enter API key" />
+            <PasswordInput {...field} ref={ref} value={value ?? ""} placeholder={uiT("ui.100903efdd819b0f")} />
           )}
         </FormField>
 
         <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
           {({ ref, value, ...field }) => (
-            <Textarea {...field} ref={ref} value={value ?? ""} rows={3} placeholder="Description of this search tool" />
+            <Textarea {...field} ref={ref} value={value ?? ""} rows={3} placeholder={uiT("ui.170bbc8f2a27c881")} />
           )}
         </FormField>
       </FieldGroup>
@@ -223,7 +225,7 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
   );
 
   if (!accessToken || !userRole || !userID) {
-    return <div className="p-6 text-center text-muted-foreground">Missing required authentication parameters.</div>;
+    return <div className="p-6 text-center text-muted-foreground">{uiT("ui.0ad862db295a887b")}</div>;
   }
 
   const ToolsTab = () =>
@@ -264,8 +266,8 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
     <div className="w-full h-full p-6">
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete Search Tool"
-        message="Are you sure you want to delete this search tool? This action cannot be undone."
+        title={uiT("ui.16b113cfe10717dc")}
+        message={uiT("ui.a8b6dd8f0117e90d")}
         resourceInformationTitle="Search Tool Information"
         resourceInformation={
           toolToDelete
@@ -305,7 +307,7 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
       >
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Edit Search Tool</DialogTitle>
+            <DialogTitle>{uiT("ui.f6ba30ec05a23972")}</DialogTitle>
           </DialogHeader>
           {renderEditForm()}
           <DialogFooter>
@@ -325,10 +327,10 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
       </Dialog>
 
       <h1 className="text-lg font-semibold text-foreground">{uiT("ui.fe89927555f6")}</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Configure and manage your search providers</p>
+      <p className="mt-2 text-sm text-muted-foreground">{uiT("ui.91f030835a385239")}</p>
       {isAdminRole(userRole) && (
         <Button className="mt-4 mb-4" variant="outline" onClick={() => setCreateModalVisible(true)}>
-          + Add New Search Tool
+          {uiT("ui.b7f402074d1de364")}
         </Button>
       )}
 

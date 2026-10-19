@@ -1,4 +1,8 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -170,7 +174,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                 return {
                   rowNumber: index + 2,
                   isValid: false,
-                  error: `Row ${index + 2} has fewer columns than the header row. Please ensure all data is properly formatted.`,
+                  error: uiT("ui.2611ee6a187789a3", { v0: String(index + 2) }),
                   user_email: "",
                   user_role: "",
                 } as UserData;
@@ -259,7 +263,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
               `Found ${userData.length - validData.length} row(s) with errors out of ${userData.length} total rows. Please correct them before proceeding.`,
             );
           } else {
-            toast.success(`Successfully parsed ${validData.length} users`);
+            toast.success(translateUi("ui.5860edc9e98a206b", undefined, { v0: String(validData.length) }));
           }
         } catch (error: unknown) {
           const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -420,7 +424,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       ...u,
                       status: "success",
                       key: response.key || response.user_id,
-                      error: "User created but failed to generate invitation link",
+                      error: translateUi("ui.f246e1a31eebd6a1"),
                     }
                   : u,
               ),
@@ -497,7 +501,10 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
             <div className="mt-1">
               <div className="flex items-center">
                 <span className="text-xs text-muted-foreground truncate max-w-[150px]">{record.invitation_link}</span>
-                <CopyToClipboard text={record.invitation_link} onCopy={() => toast.success("Invitation link copied!")}>
+                <CopyToClipboard
+                  text={record.invitation_link}
+                  onCopy={() => toast.success(translateUi("ui.8e9687e045bf5a99"))}
+                >
                   <button className="ml-1 text-info text-xs hover:text-info/80">{uiT("ui.e21f935f11d7")}</button>
                 </CopyToClipboard>
               </div>
@@ -547,7 +554,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   <p className="mb-4">{uiT("ui.337f322c043c")}</p>
                   <ol className="list-decimal list-inside space-y-2 ml-2 mb-4">
                     <li>{uiT("ui.72c1c18fea86")}</li>
-                    <li>Add your users&apos; information to the spreadsheet</li>
+                    <li>{uiT("ui.981ebc08642e")}</li>
                     <li>{uiT("ui.f3c8d422f2c0")}</li>
                     <li>{uiT("ui.63869c6ef185")}</li>
                   </ol>
@@ -559,53 +566,42 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         <div className="w-3 h-3 rounded-full bg-destructive mt-1.5 mr-2 shrink-0"></div>
                         <div>
                           <p className="font-medium">user_email</p>
-                          <p className="text-sm text-muted-foreground">User&apos;s email address (required)</p>
+                          <p className="text-sm text-muted-foreground">{uiT("ui.bc5f1ce7125f")}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-destructive mt-1.5 mr-2 shrink-0"></div>
                         <div>
                           <p className="font-medium">user_role</p>
-                          <p className="text-sm text-muted-foreground">
-                            User&apos;s role (one of: &quot;proxy_admin&quot;, &quot;proxy_admin_viewer&quot;,
-                            &quot;internal_user&quot;, &quot;internal_user_viewer&quot;)
-                          </p>
+                          <p className="text-sm text-muted-foreground">{uiT("ui.f5d68098ae7d8b16")}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
                         <div>
-                          <p className="font-medium">teams</p>
-                          <p className="text-sm text-muted-foreground">
-                            Comma-separated team IDs (e.g., &quot;team-1,team-2&quot;)
-                          </p>
+                          <p className="font-medium">{uiT("ui.fadff6cf8575b7b1")}</p>
+                          <p className="text-sm text-muted-foreground">{uiT("ui.d765029b8a1e")}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
                         <div>
                           <p className="font-medium">max_budget</p>
-                          <p className="text-sm text-muted-foreground">
-                            Maximum budget as a number (e.g., &quot;100&quot;)
-                          </p>
+                          <p className="text-sm text-muted-foreground">{uiT("ui.ff62b9625732")}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
                         <div>
                           <p className="font-medium">budget_duration</p>
-                          <p className="text-sm text-muted-foreground">
-                            Budget reset period (e.g., &quot;30d&quot;, &quot;1mo&quot;)
-                          </p>
+                          <p className="text-sm text-muted-foreground">{uiT("ui.d504ee0e7a68")}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
                         <div>
-                          <p className="font-medium">models</p>
-                          <p className="text-sm text-muted-foreground">
-                            Comma-separated allowed models (e.g., &quot;gpt-3.5-turbo,gpt-4&quot;)
-                          </p>
+                          <p className="font-medium">{uiT("ui.8edcc26c0f6c7256")}</p>
+                          <p className="text-sm text-muted-foreground">{uiT("ui.e6acd0518d63")}</p>
                         </div>
                       </div>
                     </div>
@@ -641,7 +637,8 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                               {selectedFile.name}
                             </strong>
                             <span className={`block text-xs ${fileError ? "text-destructive" : "text-info"}`}>
-                              {(selectedFile.size / 1024).toFixed(1)} KB • {new Date().toLocaleDateString()}
+                              {(selectedFile.size / 1024).toFixed(1)} {uiT("ui.d2745b8f252531cc")}{" "}
+                              {new Date().toLocaleDateString(getFormattingLocale())}
                             </span>
                           </div>
                         </div>
@@ -687,7 +684,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         />
                         <Upload className="size-[30px] text-muted-foreground mb-2" />
                         <p className="mb-1">{uiT("ui.77dfb2466f23")}</p>
-                        <p className="text-sm text-muted-foreground mb-3">or</p>
+                        <p className="text-sm text-muted-foreground mb-3">{uiT("ui.7175517a370b5cd2")}</p>
                         <span className={buttonVariants({ variant: "outline", size: "sm" })}>
                           {uiT("ui.c8bb105f0101")}
                         </span>
@@ -760,7 +757,8 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         <div className="flex items-center">
                           <p className="text-lg font-medium mr-3">{uiT("ui.c870b94bc6fa")}</p>
                           <p className="text-sm bg-info/15 text-info px-2 py-1 rounded-sm">
-                            {parsedData.filter((d) => d.isValid).length} of {parsedData.length} users valid
+                            {parsedData.filter((d) => d.isValid).length} {uiT("ui.28391d3bc64ec15c")}{" "}
+                            {parsedData.length} {uiT("ui.b2b99437522522da")}
                           </p>
                         </div>
                       )}
@@ -777,7 +775,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         >
                           {isProcessing
                             ? uiT("ui.def70944c9bb")
-                            : `Create ${parsedData.filter((d) => d.isValid).length} Users`}
+                            : uiT("ui.0d58e7cee99df5fa", { v0: String(parsedData.filter((d) => d.isValid).length) })}
                         </Button>
                       </div>
                     )}
@@ -792,9 +790,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         <div>
                           <p className="font-medium text-info">{uiT("ui.7a85e7d483b6")}</p>
                           <p className="block text-sm text-info mt-1">
-                            <span className="font-medium">{uiT("ui.707b05c5e5c7")}</span> Download the credentials file
-                            containing Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM
-                            requests through LiteLLM.
+                            <span className="font-medium">{uiT("ui.707b05c5e5c7")}</span> {uiT("ui.d3957f5a35802335")}
                           </p>
                         </div>
                       </div>
@@ -831,7 +827,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   {pageCount > 1 && (
                     <div className="flex items-center justify-end gap-3 mt-2">
                       <span className="text-sm text-muted-foreground">
-                        Page {currentPage + 1} of {pageCount}
+                        {uiT("ui.0a30a815d67d7dd2")} {currentPage + 1} {uiT("ui.28391d3bc64ec15c")} {pageCount}
                       </span>
                       <Button
                         variant="outline"
@@ -863,7 +859,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       >
                         {isProcessing
                           ? uiT("ui.def70944c9bb")
-                          : `Create ${parsedData.filter((d) => d.isValid).length} Users`}
+                          : uiT("ui.0d58e7cee99df5fa", { v0: String(parsedData.filter((d) => d.isValid).length) })}
                       </Button>
                     </div>
                   )}

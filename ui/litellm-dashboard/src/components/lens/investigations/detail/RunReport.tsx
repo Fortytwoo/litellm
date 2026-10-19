@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   ChevronRight,
@@ -194,18 +196,24 @@ function RunDuration({ job }: { job: Job }) {
 }
 
 function RunStats({ job, findings }: { job: Job; findings: readonly Finding[] | null | undefined }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const calls = (job.steps ?? []).filter((step) => step.kind === "model").length;
   const { screened = 0, selected = 0 } = job.coverage ?? {};
   return (
     <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
-      <Stat label="Cost" value={money(job.cost ?? 0)} note={plural(calls, "model call")} />
-      <Stat label="Duration" value={<RunDuration job={job} />} note={`Started ${shortTime(job.created_at)}`} />
+      <Stat label={uiT("ui.204a5eb2cd28")} value={money(job.cost ?? 0)} note={plural(calls, "model call")} />
       <Stat
-        label="Runs reviewed"
+        label={uiT("ui.4fc52a3c4c55")}
+        value={<RunDuration job={job} />}
+        note={`Started ${shortTime(job.created_at)}`}
+      />
+      <Stat
+        label={uiT("ui.e757aa3c9fb7e665")}
         value={`${screened.toLocaleString()} / ${selected.toLocaleString()}`}
         note={coverageNote(job)}
       />
-      <Stat label="Issues" {...issueStat(job, findings)} />
+      <Stat label={uiT("ui.666067dd376e5d45")} {...issueStat(job, findings)} />
     </dl>
   );
 }
@@ -219,6 +227,8 @@ function RunFailure({ job, connected }: { job: Job; connected: boolean }) {
 }
 
 function RunError({ job, connected }: { job: Job; connected: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <>
       <pre
@@ -229,23 +239,30 @@ function RunError({ job, connected }: { job: Job; connected: boolean }) {
       </pre>
       <p className="flex flex-wrap gap-x-3 text-xs text-muted-foreground">
         <span>
-          Run <span className="font-mono">{job.id}</span>
+          {uiT("ui.00d60e31a4e6b834")} <span className="font-mono">{job.id}</span>
         </span>
         <span>
-          Model <span>{job.settings.model}</span>
+          {uiT("ui.5e2c614c23f0")} <span>{job.settings.model}</span>
         </span>
-        <span>Worker {connected ? "connected now" : "not connected"}</span>
+        <span>
+          {uiT("ui.a67b04cd5c491d4d")} {connected ? uiT("ui.2f0b77eab927afda") : uiT("ui.98b1024757dbd75d")}
+        </span>
       </p>
     </>
   );
 }
 
 function RunPartial({ job, connected }: { job: Job; connected: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div role="status" className="space-y-2 rounded-md bg-warning/5 p-3 text-sm">
-      <p>{failedTaskSummary(job)}. Valid results are preserved.</p>
+      <p>
+        {translateText(failedTaskSummary(job))}
+        {uiT("ui.08f94e1d0a4715f9")}
+      </p>
       <details>
-        <summary className="cursor-pointer text-xs text-muted-foreground">Run details</summary>
+        <summary className="cursor-pointer text-xs text-muted-foreground">{uiT("ui.7bbc36905270774e")}</summary>
         <div className="mt-2 space-y-2">
           <RunError job={job} connected={connected} />
         </div>
@@ -255,16 +272,18 @@ function RunPartial({ job, connected }: { job: Job; connected: boolean }) {
 }
 
 function RunLog({ job }: { job: Job }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const models = modelsUsed(job.steps ?? []);
   return (
     <Collapsible className="border-t pt-3">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-muted-foreground">
         <CollapsibleTrigger className="group flex items-center gap-1 font-medium text-foreground hover:underline">
           <ChevronRight className="size-3.5 transition-transform group-data-[panel-open]:rotate-90" />
-          Activity log
+          {uiT("ui.a9d562d6b494c89c")}
         </CollapsibleTrigger>
         <span className="truncate">
-          {job.trigger === "manual" ? "Manual" : "Scheduled"} · {windowLabel(job)}
+          {job.trigger === "manual" ? uiT("ui.b0b9fe24ffa9") : uiT("ui.4724f344c1c0e4a1")} · {windowLabel(job)}
           {models.length > 0 && ` · ${models.join(", ")}`}
         </span>
       </div>
@@ -303,13 +322,15 @@ function nextAction(lens: Lens, job: Job | undefined, situation: RunSituation): 
 }
 
 export function RunReport({ lens, job, findings, connected, ready, busy, picker, actions, queue }: RunReportProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const input: SituationInput = { lens, job, findings, connected };
   const situation = runSituation(input);
   const view = SITUATIONS[situation];
   const known = facts(job, findings);
   const action = nextAction(lens, job, situation);
   return (
-    <section aria-label="Run report" className="space-y-4 rounded-lg border p-4">
+    <section aria-label={uiT("ui.6b5c209e013badfb")} className="space-y-4 rounded-lg border p-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className={cn("text-xs font-medium", TONE_CLASS[view.tone])}>{view.status}</p>

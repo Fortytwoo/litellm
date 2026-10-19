@@ -1,4 +1,8 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -93,21 +97,29 @@ const jobModelScope = (job: ShadowEvalJob): React.ReactNode =>
   job.models && job.models.length > 0 ? (
     <>
       {" "}
-      on <span className="font-mono text-xs">{job.models.join(", ")}</span>
+      {translateUi("ui.b8d31e852725afb1")} <span className="font-mono text-xs">{job.models.join(", ")}</span>
     </>
   ) : null;
 
 const jobHeadline = (job: ShadowEvalJob): React.ReactNode =>
   job.direction === "reverse" ? (
     <>
-      Comparing <span className="font-mono text-xs">{jobRouters(job)}</span> {translateUi("ui.663ea1bfffe5")}{" "}
-      <span className="font-mono text-xs">{job.baseline_model}</span> on {job.shadow_percentage}% of{" "}
-      <span className="font-mono text-xs">{shadowedTargetsLabel(job)}</span> traffic{jobModelScope(job)}
+      {translateUi("ui.1fa1aad0f20bf2a1")} <span className="font-mono text-xs">{jobRouters(job)}</span>{" "}
+      {translateUi("ui.663ea1bfffe5")} <span className="font-mono text-xs">{job.baseline_model}</span>{" "}
+      {translateUi("ui.b8d31e852725afb1")} {job.shadow_percentage}
+      {translateUi("ui.5471b06a0e5ab6ac")}{" "}
+      <span className="font-mono text-xs">{translateText(shadowedTargetsLabel(job))}</span>{" "}
+      {translateUi("ui.075f4ab854e2a33c")}
+      {jobModelScope(job)}
     </>
   ) : (
     <>
-      Shadowing {job.shadow_percentage}% of <span className="font-mono text-xs">{shadowedTargetsLabel(job)}</span>{" "}
-      traffic{jobModelScope(job)} via <span className="font-mono text-xs">{jobRouters(job)}</span>
+      {translateUi("ui.1b298c7cd4ced9dd")} {job.shadow_percentage}
+      {translateUi("ui.5471b06a0e5ab6ac")}{" "}
+      <span className="font-mono text-xs">{translateText(shadowedTargetsLabel(job))}</span>{" "}
+      {translateUi("ui.075f4ab854e2a33c")}
+      {jobModelScope(job)} {translateUi("ui.4d327af41f96c23c")}{" "}
+      <span className="font-mono text-xs">{jobRouters(job)}</span>
     </>
   );
 
@@ -138,58 +150,63 @@ const SliceTable: React.FC<{
   groupHeader: string;
   direction: ShadowEvalDirection;
   slices: readonly ShadowEvalSlice[];
-}> = ({ groupHeader, direction, slices }) => (
-  <Table>
-    <TableHeader>
-      <TableRow>
-        <TableHead>{groupHeader}</TableHead>
-        {[
-          "Judged turns",
-          "Router wins",
-          `${otherArmLabel(direction)} wins`,
-          "Ties",
-          "Judge confidence",
-          "Router cost",
-          `${otherArmLabel(direction)} cost`,
-        ].map((label) => (
-          <TableHead key={label} className="text-right">
-            {label}
-          </TableHead>
-        ))}
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      {slices.map((slice) => (
-        <TableRow key={slice.group}>
-          <TableCell className="font-medium text-foreground">
-            {slice.group}
-            {slice.turn_count < MIN_TURNS_FOR_CONFIDENCE && (
-              <span className="ml-2 text-xs font-normal text-muted-foreground">(low sample)</span>
-            )}
-          </TableCell>
-          <TableCell className="text-right tabular-nums">{slice.turn_count.toLocaleString()}</TableCell>
-          <TableCell className="text-right font-medium tabular-nums text-foreground">
-            {pct(routerWinRate(direction, slice))}
-          </TableCell>
-          <TableCell className="text-right tabular-nums">{pct(otherArmWinRate(direction, slice))}</TableCell>
-          <TableCell className="text-right tabular-nums">{pct(slice.tie_rate_pct)}</TableCell>
-          <TableCell className="text-right tabular-nums">{slice.avg_judge_confidence.toFixed(2)}</TableCell>
-          <TableCell className="text-right tabular-nums">
-            {routerSliceSpend(direction, slice) > 0 ? usd(routerSliceSpend(direction, slice)) : "-"}
-          </TableCell>
-          <TableCell className="text-right tabular-nums">
-            {otherSliceSpend(direction, slice) > 0 ? usd(otherSliceSpend(direction, slice)) : "-"}
-          </TableCell>
+}> = ({ groupHeader, direction, slices }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{groupHeader}</TableHead>
+          {[
+            "Judged turns",
+            "Router wins",
+            `${otherArmLabel(direction)} wins`,
+            "Ties",
+            "Judge confidence",
+            "Router cost",
+            `${otherArmLabel(direction)} cost`,
+          ].map((label) => (
+            <TableHead key={label} className="text-right">
+              {translateText(label)}
+            </TableHead>
+          ))}
         </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-);
+      </TableHeader>
+      <TableBody>
+        {slices.map((slice) => (
+          <TableRow key={slice.group}>
+            <TableCell className="font-medium text-foreground">
+              {slice.group}
+              {slice.turn_count < MIN_TURNS_FOR_CONFIDENCE && (
+                <span className="ml-2 text-xs font-normal text-muted-foreground">{uiT("ui.306508a424e46365")}</span>
+              )}
+            </TableCell>
+            <TableCell className="text-right tabular-nums">{slice.turn_count.toLocaleString()}</TableCell>
+            <TableCell className="text-right font-medium tabular-nums text-foreground">
+              {pct(routerWinRate(direction, slice))}
+            </TableCell>
+            <TableCell className="text-right tabular-nums">{pct(otherArmWinRate(direction, slice))}</TableCell>
+            <TableCell className="text-right tabular-nums">{pct(slice.tie_rate_pct)}</TableCell>
+            <TableCell className="text-right tabular-nums">{slice.avg_judge_confidence.toFixed(2)}</TableCell>
+            <TableCell className="text-right tabular-nums">
+              {routerSliceSpend(direction, slice) > 0 ? usd(routerSliceSpend(direction, slice)) : "-"}
+            </TableCell>
+            <TableCell className="text-right tabular-nums">
+              {otherSliceSpend(direction, slice) > 0 ? usd(otherSliceSpend(direction, slice)) : "-"}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
 
 const CostComparison: React.FC<{
   direction: ShadowEvalDirection;
   results: NonNullable<ShadowEvalJob["results"]>;
 }> = ({ direction, results }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const routerSpend = routerArmSpend(direction, results);
   const otherSpend = otherArmSpend(direction, results);
   if (routerSpend <= 0 || otherSpend <= 0) return null;
@@ -198,14 +215,11 @@ const CostComparison: React.FC<{
   return (
     <div className="flex min-w-[240px] flex-1 flex-col gap-1 border-t px-6 py-4 sm:border-l sm:border-t-0">
       <p className="flex items-center gap-1 text-[11px] uppercase tracking-wide text-muted-foreground">
-        Router cost vs {direction === "reverse" ? "the baseline" : "your current model"}
+        {uiT("ui.d9ea52790c3d3197")} {direction === "reverse" ? uiT("ui.38eda9007652a038") : uiT("ui.3a851ec0171cfc0d")}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help" />} />
-            <TooltipContent>
-              Each arm is priced as its completion plus its own routing classifier call, measured on the same judged
-              turns; the judge&apos;s cost is excluded from both arms
-            </TooltipContent>
+            <TooltipContent>{uiT("ui.80e422559471ecf1")}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </p>
@@ -215,8 +229,8 @@ const CostComparison: React.FC<{
         {savingsPct != null ? `${savingsPct > 0 ? "-" : "+"}${Math.abs(savingsPct).toFixed(1)}%` : "n/a"}
       </p>
       <p className="text-xs text-muted-foreground">
-        {usd(routerSpend)} vs {usd(otherSpend)} on the same judged turns
-        {cacheHits > 0 ? `; ${cacheHits.toLocaleString()} cache-served turns excluded` : ""}
+        {usd(routerSpend)} {uiT("ui.f130559f0e7ff9f8")} {usd(otherSpend)} {uiT("ui.8b807a0a345e7b9d")}
+        {cacheHits > 0 ? uiT("ui.b1ba027ed29b6096", { v0: String(cacheHits.toLocaleString()) }) : ""}
       </p>
     </div>
   );
@@ -226,23 +240,25 @@ const VerdictBar: React.FC<{ direction: ShadowEvalDirection; results: NonNullabl
   direction,
   results,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const ties = results.overall_tie_rate_pct;
   const routerWins =
     direction === "reverse"
       ? Math.max(0, 100 - results.overall_shadow_win_rate_pct - ties)
       : results.overall_shadow_win_rate_pct;
   const segments = [
-    { label: "Router won", value: routerWins, fill: "bg-success" },
-    { label: "Tie", value: ties, fill: "bg-success/20" },
+    { label: uiT("ui.f0c8b5eaa8a2ecba"), value: routerWins, fill: "bg-success" },
+    { label: uiT("ui.a66eab2f9c529bfe"), value: ties, fill: "bg-success/20" },
     {
-      label: `${otherArmLabel(direction)} won`,
+      label: uiT("ui.5766dd750312e0c8", { v0: String(otherArmLabel(direction)) }),
       value: Math.max(0, 100 - routerWins - ties),
       fill: "bg-muted-foreground/30",
     },
   ];
   return (
     <div className="space-y-2 border-b px-6 py-4">
-      <div className="flex h-2 w-full overflow-hidden rounded-full" role="img" aria-label="Verdict breakdown">
+      <div className="flex h-2 w-full overflow-hidden rounded-full" role="img" aria-label={uiT("ui.2a1380741636430d")}>
         {segments
           .filter((segment) => segment.value > 0)
           .map((segment) => (
@@ -268,11 +284,11 @@ const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Target</TableHead>
+          <TableHead>{uiT("ui.978354db0c00fc78")}</TableHead>
           <TableHead>{uiT("ui.920e413c7d41")}</TableHead>
           {["Budget used", "Router wins", `${otherArmLabel(job.direction)} wins`].map((label) => (
             <TableHead key={label} className="text-right">
-              {label}
+              {translateText(label)}
             </TableHead>
           ))}
         </TableRow>
@@ -294,7 +310,10 @@ const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
               <TableCell className="text-right tabular-nums">
                 {target.max_budget != null
                   ? `${usd(target.spend ?? 0)} / ${usd(target.max_budget)}`
-                  : `${(target.attempt_count ?? slice?.turn_count ?? 0).toLocaleString()} / ${target.max_turns.toLocaleString()} turns`}
+                  : uiT("ui.3ba45b3985da71ac", {
+                      v0: String((target.attempt_count ?? slice?.turn_count ?? 0).toLocaleString()),
+                      v1: String(target.max_turns.toLocaleString()),
+                    })}
               </TableCell>
               {slice ? (
                 <>
@@ -307,7 +326,7 @@ const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
                 </>
               ) : (
                 <TableCell colSpan={2} className="text-right text-muted-foreground">
-                  No verdicts yet
+                  {uiT("ui.d35e12bf66271da9")}
                 </TableCell>
               )}
             </TableRow>
@@ -326,6 +345,8 @@ const emptyResultsText = (job: ShadowEvalJob, resultsError: boolean): string => 
 };
 
 const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({ job, resultsError = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const results = job.results;
   const hasVerdicts = results != null && (results.by_tier.length > 0 || results.by_current_model.length > 0);
   return (
@@ -337,19 +358,22 @@ const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({
       )}
       {/* results == null re-stated for TS narrowing; hasVerdicts alone cannot narrow it */}
       {!hasVerdicts || results == null ? (
-        <p className="px-6 py-8 text-center text-sm text-muted-foreground">{emptyResultsText(job, resultsError)}</p>
+        <p className="px-6 py-8 text-center text-sm text-muted-foreground">
+          {translateText(emptyResultsText(job, resultsError))}
+        </p>
       ) : (
         <>
           <div className="flex flex-wrap border-b">
             <div className="flex min-w-[240px] flex-1 flex-col gap-1 px-6 py-4">
               <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                Router matched or beat {job.direction === "reverse" ? "the baseline" : "your current model"}
+                {uiT("ui.fde39c7aeb4fe8b5")}{" "}
+                {job.direction === "reverse" ? uiT("ui.38eda9007652a038") : uiT("ui.3a851ec0171cfc0d")}
               </p>
               <p className="text-3xl font-semibold text-foreground">
                 {pct(routerMatchedOrBeatPct(job.direction, results))}
               </p>
               <p className="text-xs text-muted-foreground">
-                of {(job.judged_count ?? 0).toLocaleString()} judged responses
+                {uiT("ui.28391d3bc64ec15c")} {(job.judged_count ?? 0).toLocaleString()} {uiT("ui.d90b63ca2f8a6a73")}
               </p>
             </div>
             <CostComparison direction={job.direction} results={results} />
@@ -385,6 +409,8 @@ const JobResults: React.FC<{
   resultsError?: boolean;
   readOnly?: boolean;
 }> = ({ job, onStop, stopPending, resultsError = false, readOnly = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const active = isActive(job);
   const remaining = endsIn(job.ends_at);
   return (
@@ -395,22 +421,25 @@ const JobResults: React.FC<{
           <div>
             <p className="text-sm font-medium text-foreground">{jobHeadline(job)}</p>
             <p className="text-xs text-muted-foreground">
-              {(job.judged_count ?? 0).toLocaleString()} turns judged · {(job.error_count ?? 0).toLocaleString()}{" "}
-              errored · {usd(totalSpend(job))}
-              {totalBudget(job) !== null ? ` of ${usd(totalBudget(job) ?? 0)}` : ""} eval spend
+              {(job.judged_count ?? 0).toLocaleString()} {uiT("ui.d534ca7ca4e5fed2")}{" "}
+              {(job.error_count ?? 0).toLocaleString()} {uiT("ui.2f5ac58cb5de0aec")} {usd(totalSpend(job))}
+              {totalBudget(job) !== null
+                ? uiT("ui.e2b323d661b75767", { v0: String(usd(totalBudget(job) ?? 0)) })
+                : ""}{" "}
+              {uiT("ui.eed8a7977ec38714")}
               {active && remaining ? ` · ${remaining}` : ""}
             </p>
           </div>
         </div>
         {active && !readOnly && (
           <Button variant="outline" size="sm" onClick={onStop} disabled={stopPending}>
-            {stopPending ? "Stopping..." : "Stop"}
+            {stopPending ? uiT("ui.6f68db105f37fff1") : uiT("ui.cae7d57bc067a514")}
           </Button>
         )}
       </div>
       {(job.error_count ?? 0) > 0 && job.last_error != null && (
         <p className="border-b bg-destructive/10 px-6 py-2 text-xs text-destructive">
-          Last failure: <span className="font-mono">{job.last_error}</span>
+          {uiT("ui.d30a297e38c3d189")} <span className="font-mono">{job.last_error}</span>
         </p>
       )}
       <ResultsBody job={job} resultsError={resultsError} />
@@ -443,7 +472,7 @@ const PreviousJob: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
             <p className="text-xs text-muted-foreground">
               {shown.judged_count != null &&
                 `${shown.judged_count.toLocaleString()} judged · ${(shown.error_count ?? 0).toLocaleString()} errored · ${usd(totalSpend(shown))} eval spend · `}
-              {new Date(shown.created_at).toLocaleDateString()}
+              {new Date(shown.created_at).toLocaleDateString(getFormattingLocale())}
             </p>
           </div>
         </div>
@@ -471,8 +500,13 @@ const PreviousJobs: React.FC<{ jobs: readonly ShadowEvalJob[] }> = ({ jobs }) =>
         onClick={() => setOpen((prev) => !prev)}
         className="flex w-full items-center justify-between gap-3 px-6 py-3 text-left hover:bg-muted/50"
       >
-        <span className="text-sm font-medium text-foreground">Previous evaluations ({jobs.length})</span>
-        <span className="text-xs text-muted-foreground">{open ? uiT("ui.ac20a57bfde0") : "Show"}</span>
+        <span className="text-sm font-medium text-foreground">
+          {uiT("ui.333770584894edc5")}
+          {jobs.length})
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {open ? uiT("ui.ac20a57bfde0") : uiT("ui.0df6f1cad36c49da")}
+        </span>
       </button>
       {open && (
         <div className="border-t">
@@ -501,6 +535,8 @@ const JobCard: React.FC<{ job: ShadowEvalJob; readOnly: boolean }> = ({ job, rea
 };
 
 const ShadowEvalSection: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: jobs, error, isPending } = useShadowEvalJobs();
   const { isViewOnly } = useAuthorized();
   const { showcased, listed } = useMemo(() => {
@@ -515,19 +551,13 @@ const ShadowEvalSection: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline gap-2">
-        <h2 className="text-xl font-semibold text-foreground">Shadow eval</h2>
-        <p className="text-sm text-muted-foreground">
-          Blind-judge the auto-router on the real traffic of a key, team, or user (teams and users cover
-          JWT-authenticated traffic): against the models they use today before switching, or against a fixed baseline
-          after they have switched.
-        </p>
+        <h2 className="text-xl font-semibold text-foreground">{uiT("ui.548970060eb702c1")}</h2>
+        <p className="text-sm text-muted-foreground">{uiT("ui.9dfcc2a120c33745")}</p>
       </div>
 
-      {error != null && (
-        <p className="text-sm text-destructive">Existing evaluations could not be loaded. Refresh the page to retry.</p>
-      )}
+      {error != null && <p className="text-sm text-destructive">{uiT("ui.661cc377053898c1")}</p>}
 
-      {isPending && error == null && <p className="text-sm text-muted-foreground">Loading evaluations...</p>}
+      {isPending && error == null && <p className="text-sm text-muted-foreground">{uiT("ui.36ad3193d417d3fb")}</p>}
 
       {showcased.map((job) => (
         <JobCard key={job.job_id} job={job} readOnly={isViewOnly} />

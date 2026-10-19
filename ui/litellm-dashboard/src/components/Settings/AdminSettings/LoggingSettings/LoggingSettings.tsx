@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
@@ -41,39 +45,59 @@ const OPTIONAL_FIELDS: readonly OptionalField[] = [
   {
     name: GeneralSettingsFieldName.MAXIMUM_SPEND_LOGS_RETENTION_PERIOD,
     kind: "duration",
-    label: "Maximum Spend Logs Retention Period (Optional)",
-    placeholder: "e.g., 7d, 30d",
+    get label() {
+      return translateUi("ui.d96dddb4c902fc76");
+    },
+    get placeholder() {
+      return translateUi("ui.768a82d55c88c650");
+    },
     fallbackTooltip:
       "Set the maximum retention period for spend logs (e.g., '7d' for 7 days, '30d' for 30 days). Leave empty for no limit.",
   },
   {
     name: GeneralSettingsFieldName.MAXIMUM_SPEND_LOGS_CLEANUP_BATCH_SIZE,
     kind: "count",
-    label: "Spend Logs Cleanup Batch Size (Optional)",
-    placeholder: "e.g., 1000",
+    get label() {
+      return translateUi("ui.b5e6f07e08e3e3a6");
+    },
+    get placeholder() {
+      return translateUi("ui.f87dd5c37f226be6");
+    },
     fallbackTooltip: "Rows deleted per DELETE statement during cleanup. Leave empty to use the default of 1000.",
   },
   {
     name: GeneralSettingsFieldName.MAXIMUM_SPEND_LOGS_CLEANUP_MAX_BATCHES,
     kind: "count",
-    label: "Spend Logs Cleanup Max Batches (Optional)",
-    placeholder: "e.g., 500",
+    get label() {
+      return translateUi("ui.70bc6054a6efa62f");
+    },
+    get placeholder() {
+      return translateUi("ui.a7c6c31a964a84be");
+    },
     fallbackTooltip:
       "Maximum number of DELETE statements run per table per cleanup run. Leave empty to use the default of 500.",
   },
   {
     name: GeneralSettingsFieldName.MAXIMUM_SPEND_LOGS_CLEANUP_RUN_BUDGET,
     kind: "duration",
-    label: "Spend Logs Cleanup Run Budget (Optional)",
-    placeholder: "e.g., 5m",
+    get label() {
+      return translateUi("ui.5aa4630b0badac3c");
+    },
+    get placeholder() {
+      return translateUi("ui.31559f6b9e4b7854");
+    },
     fallbackTooltip:
       "Wall-clock budget for a whole cleanup run, shared across every table it cleans (e.g., '5m'). Leave empty to use the default of 5m.",
   },
   {
     name: GeneralSettingsFieldName.MAXIMUM_SPEND_LOGS_CLEANUP_BATCH_TIMEOUT,
     kind: "duration",
-    label: "Spend Logs Cleanup Batch Timeout (Optional)",
-    placeholder: "e.g., 30s",
+    get label() {
+      return translateUi("ui.e3e6abdcdb949649");
+    },
+    get placeholder() {
+      return translateUi("ui.8396d2de8d1cd0e1");
+    },
     fallbackTooltip:
       "Postgres statement and lock timeout applied to each cleanup batch, so cleanup never monopolizes a connection (e.g., '30s'). Leave empty to use the default of 30s.",
   },
@@ -138,10 +162,12 @@ const omittedFieldNames = (
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -223,8 +249,8 @@ const LoggingSettingsForm: React.FC<LoggingSettingsFormProps> = ({
         </FieldGroup>
 
         <Button type="submit" className="mt-6" disabled={isSaving}>
-          {isSaving && <UiLoadingSpinner role="img" aria-label="loading" className="size-4" />}
-          {isSaving ? uiT("ui.dc85af8f2b1d") : "Save Settings"}
+          {isSaving && <UiLoadingSpinner role="img" aria-label={uiT("ui.b4a070a2d341940c")} className="size-4" />}
+          {isSaving ? uiT("ui.dc85af8f2b1d") : uiT("ui.ec92e1dc9bb3bf7b")}
         </Button>
       </form>
     </TooltipProvider>
@@ -300,7 +326,7 @@ const LoggingSettings: React.FC = () => {
     const updateParams = buildUpdateParams(formValues);
     const submitUpdate = () =>
       mutate(updateParams, {
-        onSuccess: () => toast.success("Spend logs settings updated successfully"),
+        onSuccess: () => toast.success(translateUi("ui.a284e4c6a6a1ed4a")),
         onError: (error) => toast.fromError("Failed to save spend logs settings: " + parseErrorMessage(error)),
       });
 
@@ -328,9 +354,7 @@ const LoggingSettings: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="flex w-full flex-col gap-6">
-          <p className="mb-0 text-muted-foreground">
-            Proxy-wide settings that control how request and response data are written to spend logs.
-          </p>
+          <p className="mb-0 text-muted-foreground">{uiT("ui.10ff470d73b5ec4f")}</p>
 
           {isLoadingConfig ? (
             <div className="flex flex-col gap-3">

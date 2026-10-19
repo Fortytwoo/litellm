@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useEffect, useState } from "react";
@@ -124,7 +126,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
         </div>
         <div>
           <p className="text-sm text-muted-foreground">{uiT("ui.3e20f0a04b21")}</p>
-          <p className="text-2xl font-semibold text-foreground">{displayMaxBudget}</p>
+          <p className="text-2xl font-semibold text-foreground">{translateText(displayMaxBudget)}</p>
         </div>
       </div>
       {/* <div className="ml-auto">

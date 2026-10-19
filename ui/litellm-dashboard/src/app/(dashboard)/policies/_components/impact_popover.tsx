@@ -59,19 +59,19 @@ const ImpactPopover: React.FC<{ attachment: PolicyAttachment; accessToken: strin
             render={
               <PopoverTrigger
                 render={
-                  <Button variant="ghost" size="icon-xs" aria-label="View blast radius">
+                  <Button variant="ghost" size="icon-xs" aria-label={uiT("ui.f0aab371f2ca1a86")}>
                     <Eye />
                   </Button>
                 }
               />
             }
           />
-          <TooltipContent>View blast radius</TooltipContent>
+          <TooltipContent>{uiT("ui.f0aab371f2ca1a86")}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
       <PopoverContent className="w-72 gap-2">
-        <PopoverTitle>Blast Radius</PopoverTitle>
+        <PopoverTitle>{uiT("ui.1148f78cd6a8748b")}</PopoverTitle>
         {loading ? (
           <div className="flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground">
             <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
@@ -80,17 +80,18 @@ const ImpactPopover: React.FC<{ attachment: PolicyAttachment; accessToken: strin
         ) : impact ? (
           <div className="text-xs">
             {impact.affected_keys_count === -1 ? (
-              <p className="font-medium text-foreground">Global scope — affects all keys and teams</p>
+              <p className="font-medium text-foreground">{uiT("ui.a263016ecad884fd")}</p>
             ) : (
               <>
                 <p className="mb-1">
-                  <strong>{impact.affected_keys_count}</strong> key{impact.affected_keys_count !== 1 ? "s" : ""},{" "}
-                  <strong>{impact.affected_teams_count}</strong> team{impact.affected_teams_count !== 1 ? "s" : ""}{" "}
-                  affected
+                  <strong>{impact.affected_keys_count}</strong> {uiT("ui.2c70e12b7a0646f9")}
+                  {impact.affected_keys_count !== 1 ? "s" : ""}, <strong>{impact.affected_teams_count}</strong>{" "}
+                  {uiT("ui.ca8b22d0db83a22d")}
+                  {impact.affected_teams_count !== 1 ? "s" : ""} {uiT("ui.19b6357dad532cc2")}
                 </p>
                 {impact.sample_keys.length > 0 && (
                   <div className="mb-1 flex flex-wrap items-center gap-1">
-                    <span className="text-muted-foreground">Keys:</span>
+                    <span className="text-muted-foreground">{uiT("ui.800e29b5b047c593")}</span>
                     {impact.sample_keys.map((key: string) => (
                       <Badge key={key} variant="secondary" className="px-1.5 py-0 text-[10px] font-normal">
                         {key}
@@ -100,7 +101,7 @@ const ImpactPopover: React.FC<{ attachment: PolicyAttachment; accessToken: strin
                 )}
                 {impact.sample_teams.length > 0 && (
                   <div className="flex flex-wrap items-center gap-1">
-                    <span className="text-muted-foreground">Teams:</span>
+                    <span className="text-muted-foreground">{uiT("ui.386cd881effae57d")}</span>
                     {impact.sample_teams.map((team: string) => (
                       <Badge key={team} variant="secondary" className="px-1.5 py-0 text-[10px] font-normal">
                         {team}
@@ -109,13 +110,13 @@ const ImpactPopover: React.FC<{ attachment: PolicyAttachment; accessToken: strin
                   </div>
                 )}
                 {impact.affected_keys_count === 0 && impact.affected_teams_count === 0 && (
-                  <p className="text-muted-foreground">No keys or teams currently affected</p>
+                  <p className="text-muted-foreground">{uiT("ui.829698e326f7d174")}</p>
                 )}
               </>
             )}
           </div>
         ) : (
-          <p className="text-xs text-muted-foreground">Click to load</p>
+          <p className="text-xs text-muted-foreground">{uiT("ui.ba6ea79bf7452cae")}</p>
         )}
       </PopoverContent>
     </Popover>

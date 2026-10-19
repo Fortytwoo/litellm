@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
@@ -38,7 +39,7 @@ export function InputCard({ messages, promptTokens, inputCost }: InputCardProps)
   const handleCopy = () => {
     const content = lastMessage?.content || "";
     navigator.clipboard.writeText(content);
-    toast.success(uiT("ui.d22471573fac"));
+    toast.success(translateUi("ui.d22471573fac"));
   };
 
   return (

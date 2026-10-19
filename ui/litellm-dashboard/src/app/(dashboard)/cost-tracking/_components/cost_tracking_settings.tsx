@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
@@ -30,13 +32,33 @@ import { fetchAvailableModels, ModelGroup } from "@/components/llm_calls/fetch_m
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const DOCS_LINKS = [
-  { label: "Custom pricing for models", href: "https://docs.litellm.ai/docs/proxy/custom_pricing" },
-  { label: "Spend tracking", href: "https://docs.litellm.ai/docs/proxy/cost_tracking" },
+  {
+    get label() {
+      return translateUi("ui.bf529fcb50e93ce8");
+    },
+    href: "https://docs.litellm.ai/docs/proxy/custom_pricing",
+  },
+  {
+    get label() {
+      return translateUi("ui.9c11d0d6a39716d2");
+    },
+    href: "https://docs.litellm.ai/docs/proxy/cost_tracking",
+  },
 ];
 
 const REMOVAL_COPY = {
-  discount: { title: "Remove Provider Discount", noun: "discount" },
-  margin: { title: "Remove Provider Margin", noun: "margin" },
+  discount: {
+    get title() {
+      return translateUi("ui.743174c1f35ac7e3");
+    },
+    noun: "discount",
+  },
+  margin: {
+    get title() {
+      return translateUi("ui.3dc0f1e878e82244");
+    },
+    noun: "margin",
+  },
 } as const;
 
 interface PendingRemoval {
@@ -190,12 +212,10 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <p className="text-xl font-medium text-foreground">Cost Tracking Settings</p>
+            <p className="text-xl font-medium text-foreground">{uiT("ui.f1526c496dec412c")}</p>
             <DocsMenu items={DOCS_LINKS} />
           </div>
-          <p className="text-muted-foreground mt-1">
-            Configure cost discounts and margins for different LLM providers. Changes are saved automatically.
-          </p>
+          <p className="text-muted-foreground mt-1">{uiT("ui.c31dfee8ba9611ff")}</p>
         </div>
       </div>
 
@@ -204,28 +224,25 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {/* Accordion 1: Provider Discounts - Only for proxy admins */}
         {isProxyAdmin && (
           <Collapsible className="rounded-lg border">
-            <SectionHeader
-              title="Provider Discounts"
-              description="Apply percentage-based discounts to reduce costs for specific providers"
-            />
+            <SectionHeader title={uiT("ui.2b235b597f4d94f8")} description={uiT("ui.6365b521645bf5dd")} />
             <CollapsibleContent className="px-0">
               <Tabs defaultValue="discounts">
                 <TabsList variant="line" className="mx-6 mt-4 h-auto justify-start rounded-none border-b p-0">
                   <TabsTrigger value="discounts" className="flex-none rounded-none px-4 py-2">
-                    Discounts
+                    {uiT("ui.bbf45efe4f37dcd6")}
                   </TabsTrigger>
                   <TabsTrigger value="test-it" className="flex-none rounded-none px-4 py-2">
-                    Test It
+                    {uiT("ui.4e8888677ef82c33")}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="discounts" keepMounted>
                   <div className="p-6">
                     <div className="flex justify-end mb-4">
-                      <Button onClick={() => setIsModalVisible(true)}>+ Add Provider Discount</Button>
+                      <Button onClick={() => setIsModalVisible(true)}>{uiT("ui.4dab8f8738b0a762")}</Button>
                     </div>
                     {isFetching ? (
                       <div className="py-12 text-center">
-                        <p className="text-muted-foreground">Loading configuration...</p>
+                        <p className="text-muted-foreground">{uiT("ui.457bcd55bcceba8d")}</p>
                       </div>
                     ) : Object.keys(discountConfig).length > 0 ? (
                       <ProviderDiscountTable
@@ -248,10 +265,8 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg>
-                        <p className="text-foreground font-medium mb-2">No provider discounts configured</p>
-                        <p className="text-muted-foreground text-sm">
-                          Click &quot;Add Provider Discount&quot; to get started
-                        </p>
+                        <p className="text-foreground font-medium mb-2">{uiT("ui.9f2aa17519d6c39c")}</p>
+                        <p className="text-muted-foreground text-sm">{uiT("ui.4f7fb9668d1f945d")}</p>
                       </div>
                     )}
                   </div>
@@ -269,18 +284,15 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {/* Accordion 2: Fee/Price Margin - Only for proxy admins */}
         {isProxyAdmin && (
           <Collapsible className="rounded-lg border">
-            <SectionHeader
-              title="Fee/Price Margin"
-              description="Add fees or margins to LLM costs for internal billing and cost recovery"
-            />
+            <SectionHeader title={uiT("ui.c891b74d3f10ed9c")} description={uiT("ui.00663f54817b99bc")} />
             <CollapsibleContent className="px-0">
               <div className="p-6">
                 <div className="flex justify-end mb-4">
-                  <Button onClick={() => setIsMarginModalVisible(true)}>+ Add Provider Margin</Button>
+                  <Button onClick={() => setIsMarginModalVisible(true)}>{uiT("ui.4f461d0f35259040")}</Button>
                 </div>
                 {isFetching ? (
                   <div className="py-12 text-center">
-                    <p className="text-muted-foreground">Loading configuration...</p>
+                    <p className="text-muted-foreground">{uiT("ui.457bcd55bcceba8d")}</p>
                   </div>
                 ) : Object.keys(marginConfig).length > 0 ? (
                   <ProviderMarginTable
@@ -303,10 +315,8 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
                         d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <p className="text-foreground font-medium mb-2">No provider margins configured</p>
-                    <p className="text-muted-foreground text-sm">
-                      Click &quot;Add Provider Margin&quot; to get started
-                    </p>
+                    <p className="text-foreground font-medium mb-2">{uiT("ui.4c774f9ba10f5e48")}</p>
+                    <p className="text-muted-foreground text-sm">{uiT("ui.b868233c5c8eac9d")}</p>
                   </div>
                 )}
               </div>
@@ -317,19 +327,13 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {/* Accordion 3: Block Unpriced Models - Only for proxy admins */}
         {isProxyAdmin && (
           <Collapsible className="rounded-lg border">
-            <SectionHeader
-              title="Block Unpriced Models"
-              description="Reject requests for models that have no pricing in the cost map instead of logging them as $0 spend"
-            />
+            <SectionHeader title={uiT("ui.da723f2dc00576ae")} description={uiT("ui.fd921e39ef2752db")} />
             <CollapsibleContent className="px-0">
               <div className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="pr-6">
-                    <p className="text-foreground font-medium">Block requests for models without pricing</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      When enabled, a request whose resolved model has no cost mapping is rejected with a 403 so an
-                      admin can add pricing for it. Off by default
-                    </p>
+                    <p className="text-foreground font-medium">{uiT("ui.5d0fb815f540d2dd")}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{uiT("ui.094fba6abc80c8ac")}</p>
                   </div>
                   <Switch
                     checked={blockUnpriced}
@@ -344,10 +348,7 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
 
         {/* Accordion 4: Pricing Calculator - Available to all roles */}
         <Collapsible defaultOpen={true} className="rounded-lg border">
-          <SectionHeader
-            title="Pricing Calculator"
-            description="Estimate LLM costs based on expected token usage and request volume"
-          />
+          <SectionHeader title={uiT("ui.8f5b62b1c01be570")} description={uiT("ui.e9cf1764957a1b35")} />
           <CollapsibleContent className="px-0">
             <div className="p-6">
               <PricingCalculator accessToken={accessToken} models={models} />
@@ -362,14 +363,14 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
             <AlertDialogHeader>
               <AlertDialogTitle>{REMOVAL_COPY[pendingRemoval.kind].title}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to remove the {REMOVAL_COPY[pendingRemoval.kind].noun} for{" "}
+                {uiT("ui.dfcc174348e835c9")} {REMOVAL_COPY[pendingRemoval.kind].noun} {uiT("ui.10c22bcf4c768b51")}{" "}
                 {pendingRemoval.displayName}?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel disabled={isRemoving}>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
               <Button variant="destructive" onClick={handleConfirmRemoval} disabled={isRemoving}>
-                {isRemoving ? "Removing…" : uiT("ui.c3812fc4acb8")}
+                {isRemoving ? uiT("ui.d4b09919ec929f15") : uiT("ui.c3812fc4acb8")}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -380,14 +381,11 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         <DialogContent className="top-8 max-h-[calc(100dvh-4rem)] translate-y-0 overflow-y-auto sm:max-w-[1000px]">
           <DialogHeader>
             <div className="flex items-center space-x-3 pb-4 border-b border-border">
-              <DialogTitle className="text-xl font-semibold text-foreground">Add Provider Discount</DialogTitle>
+              <DialogTitle className="text-xl font-semibold text-foreground">{uiT("ui.32448ac8dbf4c5e2")}</DialogTitle>
             </div>
           </DialogHeader>
           <div className="mt-6">
-            <p className="text-sm text-muted-foreground mb-6">
-              Select a provider and set its discount percentage. Enter a value between 0% and 100% (e.g., 5 for a 5%
-              discount).
-            </p>
+            <p className="text-sm text-muted-foreground mb-6">{uiT("ui.426b24b32412e900")}</p>
             <form onSubmit={(event) => event.preventDefault()} className="space-y-6">
               <AddProviderForm
                 discountConfig={discountConfig}
@@ -406,14 +404,11 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         <DialogContent className="top-8 max-h-[calc(100dvh-4rem)] translate-y-0 overflow-y-auto sm:max-w-[1000px]">
           <DialogHeader>
             <div className="flex items-center space-x-3 pb-4 border-b border-border">
-              <DialogTitle className="text-xl font-semibold text-foreground">Add Provider Margin</DialogTitle>
+              <DialogTitle className="text-xl font-semibold text-foreground">{uiT("ui.a72815e73bf59bc3")}</DialogTitle>
             </div>
           </DialogHeader>
           <div className="mt-6">
-            <p className="text-sm text-muted-foreground mb-6">
-              Select a provider (or &quot;Global&quot; for all providers) and configure the margin. You can use
-              percentage-based or fixed amount.
-            </p>
+            <p className="text-sm text-muted-foreground mb-6">{uiT("ui.0e56f9c494d0b86f")}</p>
             <form onSubmit={(event) => event.preventDefault()} className="space-y-6">
               <AddMarginForm
                 marginConfig={marginConfig}

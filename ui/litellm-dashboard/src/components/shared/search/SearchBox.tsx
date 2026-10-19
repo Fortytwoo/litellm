@@ -1,5 +1,5 @@
 "use client";
-import { t as translateUi } from "@/i18n";
+import { t as translateUi, translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
@@ -383,6 +383,7 @@ const copyLabel = (last: CopyOutcome, command: string): string => {
 
 /** Puts the current query on the clipboard as an API call, from the suggestions footer. */
 function CopyCommand<F extends string>({ title, command }: SearchBoxCopyCommandProps<F>) {
+  const { locale } = useDashboardLanguage();
   const { clauses } = useSearchBox();
   const [last, setLast] = useState<CopyOutcome>(null);
   const current = useMemo(() => command(toSearchQuery(clauses as readonly QueryClause<F>[])), [command, clauses]);
@@ -404,7 +405,7 @@ function CopyCommand<F extends string>({ title, command }: SearchBoxCopyCommandP
       onClick={() => void copy()}
     >
       {label === "Copied" ? <Check /> : <Copy />}
-      {label}
+      {translateText(label, locale)}
     </Button>
   );
 }

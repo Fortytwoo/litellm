@@ -83,7 +83,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
           },
         },
         {
-          header: "Discount Percentage",
+          header: uiT("ui.49528081ec636689"),
           numeric: true,
           cell: (row) => {
             const { displayName } = getProviderLogoAndName(row.provider);
@@ -103,7 +103,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Save discount for ${displayName}`}
+                      aria-label={uiT("ui.ac72006e804d0954", { v0: String(displayName) })}
                       onClick={() => handleSaveEdit(row.provider)}
                       className="cursor-pointer text-success hover:text-success/80"
                     >
@@ -112,7 +112,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Cancel editing discount for ${displayName}`}
+                      aria-label={uiT("ui.84222089e0c59105", { v0: String(displayName) })}
                       onClick={handleCancelEdit}
                       className="cursor-pointer text-muted-foreground hover:text-foreground"
                     >
@@ -125,7 +125,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Edit discount for ${displayName}`}
+                      aria-label={uiT("ui.a2ce59bc0d91fd2c", { v0: String(displayName) })}
                       onClick={() => handleStartEdit(row.provider, row.discount)}
                       className="cursor-pointer text-info hover:text-info/80"
                     >
@@ -146,7 +146,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                aria-label={`Remove discount for ${displayName}`}
+                aria-label={uiT("ui.a1362c76cfe3a967", { v0: String(displayName) })}
                 onClick={() => onRemoveProvider(row.provider, displayName)}
                 className="cursor-pointer hover:text-destructive"
               >
@@ -158,7 +158,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
         },
       ]}
       getRowKey={(row) => row.provider}
-      emptyMessage="No provider discounts configured"
+      emptyMessage={uiT("ui.9f2aa17519d6c39c")}
     />
   );
 };

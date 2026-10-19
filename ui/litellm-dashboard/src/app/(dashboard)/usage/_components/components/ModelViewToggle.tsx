@@ -1,8 +1,19 @@
+import { t as translateUi } from "@/i18n";
 export type ModelViewType = "groups" | "individual";
 
 const MODEL_VIEW_OPTIONS: readonly { value: ModelViewType; label: string }[] = [
-  { value: "groups", label: "Public Model Name" },
-  { value: "individual", label: "Litellm Model Name" },
+  {
+    value: "groups",
+    get label() {
+      return translateUi("ui.dbff03874de84d83");
+    },
+  },
+  {
+    value: "individual",
+    get label() {
+      return translateUi("ui.f732ed651c49a494");
+    },
+  },
 ];
 
 interface ModelViewToggleProps {

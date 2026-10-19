@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { getTeamPermissionsCall, teamPermissionsUpdateCall } from "@/components/networking";
 import { Button } from "@/components/ui/button";
@@ -60,7 +62,7 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
       if (!accessToken) return;
       setSaving(true);
       await teamPermissionsUpdateCall(accessToken, teamId, selectedPermissions);
-      toast.success("Permissions updated successfully");
+      toast.success(translateUi("ui.f0db4fb0a72b051d"));
       setHasChanges(false);
     } catch (error) {
       toast.fromError("Failed to update permissions");
@@ -75,7 +77,7 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
   };
 
   if (loading) {
-    return <div className="p-6 text-center">Loading permissions...</div>;
+    return <div className="p-6 text-center">{uiT("ui.859d411ccd344107")}</div>;
   }
 
   const hasPermissions = permissions.length > 0;
@@ -98,9 +100,7 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
         )}
       </div>
 
-      <p className="mb-6 text-sm text-muted-foreground">
-        Control what team members can do when they are not team admins.
-      </p>
+      <p className="mb-6 text-sm text-muted-foreground">{uiT("ui.c9def3d2af883760")}</p>
 
       {hasPermissions ? (
         <div className="overflow-x-auto">
@@ -108,10 +108,10 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
             <TableHeader>
               <TableRow>
                 <TableHead>{uiT("ui.52a0f9b65b27")}</TableHead>
-                <TableHead>Endpoint</TableHead>
+                <TableHead>{uiT("ui.3df9726c68ba76d6")}</TableHead>
                 <TableHead>{uiT("ui.526e0087cc3f")}</TableHead>
                 <TableHead className="sticky right-0 bg-card shadow-[-4px_0_4px_-4px_rgba(0,0,0,0.1)] text-center">
-                  Allow Access
+                  {uiT("ui.1030f780171e4991")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -149,7 +149,7 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
         </div>
       ) : (
         <div className="py-12">
-          <p className="text-center text-sm text-muted-foreground">No permissions available</p>
+          <p className="text-center text-sm text-muted-foreground">{uiT("ui.edbcbad4185fa6b7")}</p>
         </div>
       )}
     </Card>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useId, useRef } from "react";
 import { Paperclip } from "lucide-react";
 import { toast } from "@/lib/toast";
@@ -18,6 +20,8 @@ const ResponsesImageUpload: React.FC<ResponsesImageUploadProps> = ({
   onImageUpload,
   disabled = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
 
@@ -59,7 +63,7 @@ const ResponsesImageUpload: React.FC<ResponsesImageUploadProps> = ({
               variant="ghost"
               size="icon-sm"
               disabled={disabled}
-              aria-label="Attach image or PDF"
+              aria-label={uiT("ui.d59bfe29619a9eaa")}
               className="text-muted-foreground hover:text-foreground"
               onClick={() => inputRef.current?.click()}
             />
@@ -67,7 +71,7 @@ const ResponsesImageUpload: React.FC<ResponsesImageUploadProps> = ({
         >
           <Paperclip className="size-4" />
         </TooltipTrigger>
-        <TooltipContent>Attach image or PDF</TooltipContent>
+        <TooltipContent>{uiT("ui.d59bfe29619a9eaa")}</TooltipContent>
       </Tooltip>
     </>
   );

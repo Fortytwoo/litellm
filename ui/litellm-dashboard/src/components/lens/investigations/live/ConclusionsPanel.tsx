@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { memo, useEffect, useRef, useState } from "react";
 
@@ -35,11 +36,13 @@ export const ConclusionsPanel = memo(function ConclusionsPanel({
   selected: string | null;
   onSelect: (key: string | null) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const flashing = useFlashing(groups);
-  if (!groups.length) return <p className="text-xs text-muted-foreground">No observations flagged yet.</p>;
+  if (!groups.length) return <p className="text-xs text-muted-foreground">{uiT("ui.597e65f06002b8bf")}</p>;
   return (
     <div className="flex flex-col gap-1.5">
-      <ol aria-label="Observations by check" className="flex flex-col gap-1.5">
+      <ol aria-label={uiT("ui.2b7adb3a769795f1")} className="flex flex-col gap-1.5">
         {groups.map((group) => {
           const active = selected === group.key;
           return (
@@ -81,7 +84,9 @@ export const ConclusionsPanel = memo(function ConclusionsPanel({
                       {group.count}
                     </span>
                     {group.noted > 0 && (
-                      <span className="text-xs tabular-nums text-muted-foreground">{group.noted} noted</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">
+                        {group.noted} {uiT("ui.41954b2a68ec0170")}
+                      </span>
                     )}
                   </span>
                 </span>

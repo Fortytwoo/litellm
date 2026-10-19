@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
@@ -60,7 +62,7 @@ export default function UpdateModelCredentialsModal({
         { litellm_params: { api_key: apiKey }, model_info: { id: modelId } },
         modelId,
       );
-      toast.success("API key updated");
+      toast.success(translateUi("ui.abf784b9d79a6d7c"));
       form.reset(EMPTY_VALUES);
       onUpdated();
       onCancel();
@@ -76,25 +78,23 @@ export default function UpdateModelCredentialsModal({
     <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && close()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Update API Key</DialogTitle>
+          <DialogTitle>{uiT("ui.3cb3f696572cff3d")}</DialogTitle>
         </DialogHeader>
-        <span className="block mb-4 text-sm text-muted-foreground">
-          Update this model&apos;s API key. Only the new key is sent; the rest of the deployment configuration is left
-          untouched.
-        </span>
+        <span className="block mb-4 text-sm text-muted-foreground">{uiT("ui.74c154758f2c61f4")}</span>
         <Alert variant="warning" className="mb-4">
           <TriangleAlert />
-          <AlertTitle>
-            Only the API key is rotated here. Models that authenticate with an Azure AD token, AWS credentials, or a
-            Vertex service-account JSON aren&apos;t supported yet; update those from the model&apos;s LiteLLM Params for
-            now.
-          </AlertTitle>
+          <AlertTitle>{uiT("ui.89f642e3e0bbad0d")}</AlertTitle>
         </Alert>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
-            <FormField control={form.control} name="api_key" label="New API Key">
+            <FormField control={form.control} name="api_key" label={uiT("ui.431b43ab89e7a6a7")}>
               {({ ref, ...field }) => (
-                <PasswordInput {...field} ref={ref} placeholder="Enter the new API key" autoComplete="new-password" />
+                <PasswordInput
+                  {...field}
+                  ref={ref}
+                  placeholder={uiT("ui.29eacc356152dd76")}
+                  autoComplete="new-password"
+                />
               )}
             </FormField>
           </FieldGroup>
@@ -104,7 +104,7 @@ export default function UpdateModelCredentialsModal({
             </Button>
             <Button type="submit" disabled={isSaving}>
               {isSaving && <UiLoadingSpinner className="size-4" />}
-              Update API Key
+              {uiT("ui.3cb3f696572cff3d")}
             </Button>
           </div>
         </form>

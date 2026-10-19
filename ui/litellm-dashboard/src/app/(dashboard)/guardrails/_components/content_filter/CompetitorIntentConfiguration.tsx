@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useId, useState } from "react";
 
@@ -52,24 +54,81 @@ const DEFAULT_CONFIG: CompetitorIntentConfig = {
 };
 
 const INTENT_TYPES = [
-  { value: "airline", label: "Airline (auto-load competitors from IATA)" },
-  { value: "generic", label: "Generic (specify competitors manually)" },
+  {
+    value: "airline",
+    get label() {
+      return translateUi("ui.a1b9aa8147cfe98a");
+    },
+  },
+  {
+    value: "generic",
+    get label() {
+      return translateUi("ui.d7c071065bf9492e");
+    },
+  },
 ] as const;
 
 const COMPETITOR_COMPARISON_POLICIES = [
-  { value: "refuse", label: "Refuse (block request)" },
-  { value: "reframe", label: "Reframe (suggest alternative)" },
+  {
+    value: "refuse",
+    get label() {
+      return translateUi("ui.94af3bb52844031d");
+    },
+  },
+  {
+    value: "reframe",
+    get label() {
+      return translateUi("ui.985e26a40bcb88b8");
+    },
+  },
 ] as const;
 
 const POSSIBLE_COMPETITOR_COMPARISON_POLICIES = [
-  { value: "refuse", label: "Refuse (block request)" },
-  { value: "reframe", label: "Reframe (suggest alternative to backend LLM)" },
+  {
+    value: "refuse",
+    get label() {
+      return translateUi("ui.94af3bb52844031d");
+    },
+  },
+  {
+    value: "reframe",
+    get label() {
+      return translateUi("ui.e44e2c6a48648e0e");
+    },
+  },
 ] as const;
 
 const THRESHOLDS = [
-  { field: "threshold_high", label: "High", hint: "e.g. 0.7", fallback: 0.7 },
-  { field: "threshold_medium", label: "Medium", hint: "e.g. 0.45", fallback: 0.45 },
-  { field: "threshold_low", label: "Low", hint: "e.g. 0.3", fallback: 0.3 },
+  {
+    field: "threshold_high",
+    get label() {
+      return translateUi("ui.c4ebc6d4a5832cd9");
+    },
+    get hint() {
+      return translateUi("ui.780af472c10120ec");
+    },
+    fallback: 0.7,
+  },
+  {
+    field: "threshold_medium",
+    get label() {
+      return translateUi("ui.8e588cd187741f1c");
+    },
+    get hint() {
+      return translateUi("ui.25f06bb5376d7e2a");
+    },
+    fallback: 0.45,
+  },
+  {
+    field: "threshold_low",
+    get label() {
+      return translateUi("ui.f793de205ead5ac3");
+    },
+    get hint() {
+      return translateUi("ui.a7835bb421a3f24f");
+    },
+    fallback: 0.3,
+  },
 ] as const;
 
 const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps> = ({
@@ -143,7 +202,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
 
   const header = (
     <CardHeader className="gap-0">
-      <CardTitle className="text-base">Competitor Intent Filter</CardTitle>
+      <CardTitle className="text-base">{uiT("ui.b59a4548f9b3a3d1")}</CardTitle>
       <CardAction>
         <Switch checked={enabled} onCheckedChange={handleEnabledChange} />
       </CardAction>
@@ -155,10 +214,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
       <Card>
         {header}
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Block or reframe competitor comparison questions. When enabled, airline type auto-loads competitors from
-            IATA; generic type requires manual competitor list.
-          </p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.46cf6727c520d21a")}</p>
         </CardContent>
       </Card>
     );
@@ -183,10 +239,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
     <Card>
       {header}
       <CardContent>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Block or reframe competitor comparison questions. Airline type uses major airlines (excluding your brand);
-          generic requires manual competitor list.
-        </p>
+        <p className="mb-4 text-sm text-muted-foreground">{uiT("ui.bf0542bc45eac5f9")}</p>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor={`${fieldId}-type`}>{uiT("ui.baaddf70fb5d")}</FieldLabel>
@@ -209,7 +262,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
           </Field>
 
           <Field>
-            <FieldLabel htmlFor={`${fieldId}-brand-self`}>Your Brand (brand_self)</FieldLabel>
+            <FieldLabel htmlFor={`${fieldId}-brand-self`}>{uiT("ui.4807420ba020c8ba")}</FieldLabel>
             <TagsInput
               id={`${fieldId}-brand-self`}
               value={effectiveConfig.brand_self}
@@ -223,47 +276,47 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
               loading={loadingAirlines}
               placeholder={
                 effectiveConfig.competitor_intent_type === "airline"
-                  ? "Search or select airline, or type to add custom"
-                  : "Type and press Enter to add"
+                  ? uiT("ui.5380b0b4da910ba5")
+                  : uiT("ui.8667fa98e64e7568")
               }
             />
             <FieldDescription>
               {effectiveConfig.competitor_intent_type === "airline"
-                ? "Select your airline from the list (excluded from competitors) or type to add a custom term"
-                : "Names/codes users use for your brand"}
+                ? uiT("ui.0375ea933561ae94")
+                : uiT("ui.0dec2513167e65f0")}
             </FieldDescription>
           </Field>
 
           {effectiveConfig.competitor_intent_type === "airline" && (
             <Field>
-              <FieldLabel htmlFor={`${fieldId}-locations`}>Locations (optional)</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-locations`}>{uiT("ui.d769e5e0b0d7edc6")}</FieldLabel>
               <TagsInput
                 id={`${fieldId}-locations`}
                 value={effectiveConfig.locations ?? []}
                 onValueChange={(v) => handleNestedArrayChange("locations", v)}
                 tokenSeparators={[","]}
-                placeholder="Type and press Enter to add"
+                placeholder={uiT("ui.8667fa98e64e7568")}
               />
-              <FieldDescription>Countries, cities, airports for disambiguation (e.g. qatar, doha)</FieldDescription>
+              <FieldDescription>{uiT("ui.207ad105e0609ad1")}</FieldDescription>
             </Field>
           )}
 
           {effectiveConfig.competitor_intent_type === "generic" && (
             <Field>
-              <FieldLabel htmlFor={`${fieldId}-competitors`}>Competitors</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-competitors`}>{uiT("ui.e699b0b54366257f")}</FieldLabel>
               <TagsInput
                 id={`${fieldId}-competitors`}
                 value={effectiveConfig.competitors ?? []}
                 onValueChange={(v) => handleNestedArrayChange("competitors", v)}
                 tokenSeparators={[","]}
-                placeholder="Type and press Enter to add"
+                placeholder={uiT("ui.8667fa98e64e7568")}
               />
-              <FieldDescription>Competitor names to detect (required for generic type)</FieldDescription>
+              <FieldDescription>{uiT("ui.675acf450d2702c2")}</FieldDescription>
             </Field>
           )}
 
           <Field>
-            <FieldLabel htmlFor={`${fieldId}-competitor-comparison`}>Policy: Competitor comparison</FieldLabel>
+            <FieldLabel htmlFor={`${fieldId}-competitor-comparison`}>{uiT("ui.67ec85bce309fdb7")}</FieldLabel>
             <Select
               items={COMPETITOR_COMPARISON_POLICIES}
               value={effectiveConfig.policy?.competitor_comparison ?? "refuse"}
@@ -283,9 +336,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
           </Field>
 
           <Field>
-            <FieldLabel htmlFor={`${fieldId}-possible-competitor-comparison`}>
-              Policy: Possible competitor comparison
-            </FieldLabel>
+            <FieldLabel htmlFor={`${fieldId}-possible-competitor-comparison`}>{uiT("ui.c603ded85965686d")}</FieldLabel>
             <Select
               items={POSSIBLE_COMPETITOR_COMPARISON_POLICIES}
               value={effectiveConfig.policy?.possible_competitor_comparison ?? "reframe"}
@@ -307,7 +358,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
           </Field>
 
           <Field>
-            <FieldLabel>Confidence thresholds</FieldLabel>
+            <FieldLabel>{uiT("ui.b41fa3a3981525d2")}</FieldLabel>
             <div className="flex flex-wrap gap-4">
               {THRESHOLDS.map((threshold) => (
                 <Field key={threshold.field} className="w-20">
@@ -325,21 +376,22 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
               ))}
             </div>
             <FieldDescription>
-              Classify competitor intent by confidence (0–1). Higher confidence -&gt; stronger intent.
+              {uiT("ui.9453c2b53f90240f")}
               <ul className="mt-1 mb-0 list-disc pl-5">
                 <li>
-                  <strong>High (≥)</strong>: Treat as full competitor comparison -&gt; uses &quot;Competitor
-                  comparison&quot; policy
+                  <strong>{uiT("ui.35ecf0a25373374b")}</strong>
+                  {uiT("ui.e4a5c6f823f27cb1")}
                 </li>
                 <li>
-                  <strong>Medium (≥)</strong>: Treat as possible comparison -&gt; uses &quot;Possible competitor
-                  comparison&quot; policy
+                  <strong>{uiT("ui.1d63a3f06b040604")}</strong>
+                  {uiT("ui.70afe59967a74047")}
                 </li>
                 <li>
-                  <strong>Low (≥)</strong>: Log only; allow request. Below Low -&gt; allow with no action
+                  <strong>{uiT("ui.d582c907ed6cb246")}</strong>
+                  {uiT("ui.d3876f11e81e402d")}
                 </li>
               </ul>
-              Raise thresholds to be more permissive; lower them to be stricter.
+              {uiT("ui.ba4d168c2a392619")}
             </FieldDescription>
           </Field>
         </FieldGroup>

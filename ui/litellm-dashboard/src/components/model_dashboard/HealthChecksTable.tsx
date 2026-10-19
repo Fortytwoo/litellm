@@ -36,7 +36,7 @@ function EmptyState() {
         <HeartPulse className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">{uiT("ui.a650c298cf44")}</div>
-      <div className="text-sm text-muted-foreground">Models added to this proxy will show their health here.</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.d6f6f46f2a643771")}</div>
     </div>
   );
 }
@@ -57,6 +57,8 @@ export function HealthChecksTable({
   onSelectModel,
   teams,
 }: HealthChecksTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns = useMemo(() => {
@@ -87,7 +89,7 @@ export function HealthChecksTable({
       rowSelection={rowSelection}
       onRowSelectionChange={onRowSelectionChange}
       isLoading={isLoading}
-      loadingMessage="Loading models…"
+      loadingMessage={uiT("ui.cc8b4624f7659c68")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

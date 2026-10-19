@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React, { useEffect, useState } from "react";
 import { VectorStore } from "./types";
 import { vectorStoreListCall } from "../networking";
@@ -16,9 +19,11 @@ const VectorStoreSelector: React.FC<VectorStoreSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select vector stores",
+  placeholder = translateUi("ui.9b0282c14af0"),
   disabled = false,
 }) => {
+  useDashboardLanguage();
+
   const [vectorStores, setVectorStores] = useState<VectorStore[]>([]);
   const [loading, setLoading] = useState(false);
 

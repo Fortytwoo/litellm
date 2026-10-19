@@ -97,9 +97,9 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
     return (
       <Card>
         <CardContent>
-          <p className="text-destructive">Policy not found</p>
+          <p className="text-destructive">{uiT("ui.cb871a720dcb3101")}</p>
           <Button variant="secondary" onClick={onClose} className="mt-4">
-            Go Back
+            {uiT("ui.b8d99df1066e6562")}
           </Button>
         </CardContent>
       </Card>
@@ -113,12 +113,12 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
           <div className="flex items-center justify-between">
             <Button variant="secondary" onClick={onClose}>
               <ArrowLeft />
-              Back to Policies
+              {uiT("ui.6ae07650cbaea219")}
             </Button>
             {isAdmin && (
               <Button onClick={() => onEdit(policy)}>
                 <Pencil />
-                Edit Policy
+                {uiT("ui.d536d31ff80754a8")}
               </Button>
             )}
           </div>
@@ -126,11 +126,13 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
           <h4 className="text-lg font-semibold">{policy.policy_name}</h4>
 
           <dl className="rounded-md border border-border">
-            <DetailRow label="Policy ID">
+            <DetailRow label={uiT("ui.68f045fa30dc98ca")}>
               <code className="rounded-sm bg-muted px-2 py-1 text-xs">{policy.policy_id}</code>
             </DetailRow>
-            <DetailRow label={uiT("ui.526e0087cc3f")}>{policy.description || <Muted>No description</Muted>}</DetailRow>
-            <DetailRow label="Inherits From">
+            <DetailRow label={uiT("ui.526e0087cc3f")}>
+              {policy.description || <Muted>{uiT("ui.bcd8cc53f40e3d4e")}</Muted>}
+            </DetailRow>
+            <DetailRow label={uiT("ui.4e5ba090a8f14877")}>
               {policy.inherit ? (
                 <Badge variant="secondary">{policy.inherit}</Badge>
               ) : (
@@ -147,11 +149,13 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
 
           {policy.pipeline && (
             <>
-              <SectionHeading>Pipeline Flow</SectionHeading>
+              <SectionHeading>{uiT("ui.9bc6353c7d8e348e")}</SectionHeading>
               <Alert className="mb-4">
                 <Info />
                 <AlertTitle>
-                  Pipeline ({policy.pipeline.mode} mode, {policy.pipeline.steps.length} step
+                  {uiT("ui.ebe9e893cbe9932f")}
+                  {policy.pipeline.mode} {uiT("ui.45c918c37522d220")} {policy.pipeline.steps.length}{" "}
+                  {uiT("ui.3e64cc41cf8e07b4")}
                   {policy.pipeline.steps.length !== 1 ? "s" : ""})
                 </AlertTitle>
               </Alert>
@@ -159,14 +163,14 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
             </>
           )}
 
-          <SectionHeading>Guardrails Configuration</SectionHeading>
+          <SectionHeading>{uiT("ui.ec499bbfb486d228")}</SectionHeading>
 
           {resolvedGuardrails.length > 0 && (
             <Alert className="mb-4">
               <Info />
-              <AlertTitle>Resolved Guardrails</AlertTitle>
+              <AlertTitle>{uiT("ui.ab21f03c03ad2db3")}</AlertTitle>
               <AlertDescription>
-                <span className="mb-2 block">Final guardrails that will be applied (including inheritance):</span>
+                <span className="mb-2 block">{uiT("ui.f23d2eb5cf79a640")}</span>
                 <div className="flex flex-wrap gap-1">
                   {resolvedGuardrails.map((g) => (
                     <Badge key={g} variant="secondary">
@@ -179,7 +183,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
           )}
 
           <dl className="rounded-md border border-border">
-            <DetailRow label="Guardrails to Add">
+            <DetailRow label={uiT("ui.02026a3d7f3a1661")}>
               <div className="flex flex-wrap gap-1">
                 {policy.guardrails_add && policy.guardrails_add.length > 0 ? (
                   policy.guardrails_add.map((g) => (
@@ -192,7 +196,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                 )}
               </div>
             </DetailRow>
-            <DetailRow label="Guardrails to Remove">
+            <DetailRow label={uiT("ui.74ddbf5a8a94b478")}>
               <div className="flex flex-wrap gap-1">
                 {policy.guardrails_remove && policy.guardrails_remove.length > 0 ? (
                   policy.guardrails_remove.map((g) => (
@@ -207,10 +211,10 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
             </DetailRow>
           </dl>
 
-          <SectionHeading>Conditions</SectionHeading>
+          <SectionHeading>{uiT("ui.97d4be8960698f97")}</SectionHeading>
 
           <dl className="rounded-md border border-border">
-            <DetailRow label="Model Condition">
+            <DetailRow label={uiT("ui.1297d22806d36256")}>
               {policy.condition?.model ? (
                 <Badge variant="secondary">
                   {typeof policy.condition.model === "string"
@@ -218,7 +222,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                     : JSON.stringify(policy.condition.model)}
                 </Badge>
               ) : (
-                <Muted>No model condition (applies to all models)</Muted>
+                <Muted>{uiT("ui.469adc4082130e77")}</Muted>
               )}
             </DetailRow>
           </dl>

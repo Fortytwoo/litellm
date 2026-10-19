@@ -1,3 +1,4 @@
+import { getFormattingLocale } from "@/i18n";
 export type LicenseExpiryTier = "none" | "warning" | "critical" | "expired";
 
 export const LICENSE_EXPIRY_WARNING_DAYS = 30;
@@ -47,7 +48,7 @@ export const formatExpiryDate = (expirationDate: string): string => {
   if (Number.isNaN(date.getTime())) {
     return expirationDate;
   }
-  return date.toLocaleDateString("en-US", EXPIRY_DATE_FORMAT);
+  return date.toLocaleDateString(getFormattingLocale(), EXPIRY_DATE_FORMAT);
 };
 
 export const formatExpirationStatus = (expirationDate: string | null, now: Date = new Date()): string => {

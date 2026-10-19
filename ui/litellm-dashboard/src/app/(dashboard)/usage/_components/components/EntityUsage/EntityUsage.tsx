@@ -77,8 +77,18 @@ const GRANULARITY_OPTIONS = [
   },
 ] as const satisfies readonly { value: Granularity; label: string }[];
 const SCALE_OPTIONS = [
-  { value: "linear", label: "Linear" },
-  { value: "log", label: "Log" },
+  {
+    value: "linear",
+    get label() {
+      return translateUi("ui.e6950b45d25c2027");
+    },
+  },
+  {
+    value: "log",
+    get label() {
+      return translateUi("ui.21e49eb2b299c9f7");
+    },
+  },
 ] as const satisfies readonly { value: StackedUsageScale; label: string }[];
 const QUIET_HEADER = { headerClassName: "font-normal" };
 const FLAT_COST_KEY = "flat_cost";
@@ -380,7 +390,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         cell: ({ row }) => <span className="font-medium text-foreground">{row.original.metadata.alias}</span>,
       },
       {
-        header: "Share",
+        header: uiT("ui.29887a5ff9846ccc"),
         id: "share",
         meta: { ...QUIET_HEADER, className: "w-40" },
         cell: ({ row }) => <ShareBar value={row.original.metrics.spend} max={maxEntitySpend} />,
@@ -474,7 +484,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   ) : (
     <div className="grid gap-3">
       <section className="grid gap-2">
-        <h2 className="text-sm font-medium text-foreground">{capitalizedEntityLabel} Spend Overview</h2>
+        <h2 className="text-sm font-medium text-foreground">
+          {capitalizedEntityLabel} {uiT("ui.dd7dba9dd984aab7")}
+        </h2>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-border lg:grid-cols-5">
           {summaryTiles.map(renderSummaryTile)}
         </div>
@@ -493,23 +505,24 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         <header className="flex flex-wrap items-start justify-between gap-3 px-5 pt-4">
           <div>
             <h3 className="text-sm font-medium text-foreground">
-              {METRIC_TITLE[breakdown.metric]} by {modelViewType === "groups" ? "model" : "deployment"}
+              {METRIC_TITLE[breakdown.metric]} {uiT("ui.a7e2d26e8d15814d")}{" "}
+              {modelViewType === "groups" ? uiT("ui.9372c470eeadd5ec") : uiT("ui.aee50b18a03c89e4")}
             </h3>
             <p className="text-xs text-muted-foreground">
-              {granularity === "day" ? uiT("ui.b36c2611dcdf") : uiT("ui.2975132481a7")} {breakdown.metric}, top 8
-              stacked
-              {stackFlatCost ? ", flat cost on top" : ""}
+              {granularity === "day" ? uiT("ui.b36c2611dcdf") : uiT("ui.2975132481a7")} {breakdown.metric}
+              {uiT("ui.2faced53c8da0349")}
+              {stackFlatCost ? uiT("ui.b9c370b3fc89977a") : ""}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <BreakdownControls state={breakdown} onChange={setBreakdown} showDimension={false} />
             <Segmented
-              label="Bucket size"
+              label={uiT("ui.663b1cb2b6b696ff")}
               value={granularity}
               options={GRANULARITY_OPTIONS}
               onChange={setGranularity}
             />
-            <Segmented label="Scale" value={scale} options={SCALE_OPTIONS} onChange={setScale} />
+            <Segmented label={uiT("ui.f102986b39effb31")} value={scale} options={SCALE_OPTIONS} onChange={setScale} />
           </div>
         </header>
         <div className="px-3 pt-4 pb-2">
@@ -540,13 +553,13 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
 
       <Panel
         icon={Layers}
-        title={`Spend Per ${capitalizedEntityLabel}`}
+        title={uiT("ui.33955c941f687a8e", { v0: String(capitalizedEntityLabel) })}
         action={
           <a
             href="https://docs.litellm.ai/docs/proxy/enterprise#spend-tracking"
             className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
-            Track cost per {entityType}
+            {uiT("ui.a1c0a172b4e22332")} {entityType}
             <ExternalLink aria-hidden="true" className="size-3" />
           </a>
         }
@@ -556,7 +569,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
           data={entityRows}
           getRowId={(row) => row.metadata.id}
           maxBodyHeight={280}
-          noDataMessage={`No ${entityType} spend data`}
+          noDataMessage={uiT("ui.c4e118f32a8a2d7b", { v0: String(entityType) })}
           size="compact"
         />
       </Panel>
@@ -571,7 +584,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       )}
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <Panel icon={KeyRound} title="Top Virtual Keys">
+        <Panel icon={KeyRound} title={uiT("ui.4ed9e11cbdc764dc")}>
           <TopKeyView
             topKeys={getTopAPIKeys(spendData.results, topKeysLimit)}
             teams={null}
@@ -582,7 +595,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         </Panel>
         <Panel
           icon={Boxes}
-          title={entityType === "agent" ? "Top Agents" : modelViewTitle}
+          title={entityType === "agent" ? uiT("ui.078a5214ffb35216") : modelViewTitle}
           action={<ModelViewToggle value={modelViewType} onChange={setModelViewType} />}
         >
           <TopModelView
@@ -594,7 +607,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       </div>
 
       {showAgentBreakdown && (
-        <Panel icon={Bot} title="Top Agents Driving Spend">
+        <Panel icon={Bot} title={uiT("ui.dc65441595b333e8")}>
           {agentLoading ? (
             <ChartLoader />
           ) : (
@@ -607,7 +620,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         </Panel>
       )}
 
-      <Panel icon={Server} title="Provider Usage">
+      <Panel icon={Server} title={uiT("ui.cff77ccacd13645f")}>
         <ProviderSpendBreakdown rows={providerSpend} />
       </Panel>
     </div>
@@ -617,7 +630,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
     { key: "cost", label: uiT("ui.204a5eb2cd28"), content: costPanel },
     {
       key: "models",
-      label: entityType === "agent" ? "Request / Token Consumption" : "Model Activity",
+      label: entityType === "agent" ? uiT("ui.58e7e5fe4f8ce0af") : uiT("ui.5d951018f1965aea"),
       content: (
         <>
           <div className="mb-3 flex justify-end">
@@ -635,14 +648,14 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       ? [
           {
             key: "agents",
-            label: "Agent Activity",
+            label: uiT("ui.4be985f9b3e33598"),
             content: <ActivityMetrics modelMetrics={agentMetrics} />,
           },
         ]
       : []),
     {
       key: "keys",
-      label: "Key Activity",
+      label: uiT("ui.34ec83da8a639a49"),
       content: (
         <KeyActivityPanel
           summary={summaryMetrics}
@@ -655,25 +668,19 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         />
       ),
     },
-    { key: "endpoints", label: "Endpoint Activity", content: <EndpointUsage userSpendData={spendData} /> },
+    { key: "endpoints", label: uiT("ui.2ce27aaefeca3aa3"), content: <EndpointUsage userSpendData={spendData} /> },
   ];
 
   return (
     <div className="relative grid w-full gap-3">
       {failed && (
         <Alert variant="error">
-          <AlertDescription className="text-inherit">
-            Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try
-            again.
-          </AlertDescription>
+          <AlertDescription className="text-inherit">{uiT("ui.0f14ea9e179b2ff8")}</AlertDescription>
         </Alert>
       )}
       {showAgentBreakdown && agentFailed && (
         <Alert variant="error">
-          <AlertDescription className="text-inherit">
-            Fetching agent data failed, so the totals below may be empty rather than final. Reload the page to try
-            again.
-          </AlertDescription>
+          <AlertDescription className="text-inherit">{uiT("ui.4e51be54a3923bbf")}</AlertDescription>
         </Alert>
       )}
       <div className="max-w-full [&>div:first-child]:mb-0 [&>div:first-child_label]:sr-only">

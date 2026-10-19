@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Copy, Info } from "lucide-react";
@@ -39,11 +41,11 @@ export function GuardrailTestPanel({
     try {
       const parsed = JSON.parse(raw);
       if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
-        return { metadata: null, error: "Metadata must be a JSON object" };
+        return { metadata: null, error: uiT("ui.3aceded1bd787457") };
       }
       return { metadata: parsed, error: null };
     } catch {
-      return { metadata: null, error: "Invalid JSON" };
+      return { metadata: null, error: uiT("ui.f60c824125e6408e") };
     }
   };
 
@@ -102,7 +104,7 @@ export function GuardrailTestPanel({
   const handleCopyInput = async () => {
     const success = await copyToClipboard(inputText);
     if (success) {
-      toast.success("Input copied to clipboard");
+      toast.success(translateUi("ui.c6c366fe39787a67"));
     } else {
       toast.fromError("Failed to copy input");
     }
@@ -115,7 +117,7 @@ export function GuardrailTestPanel({
         <div className="flex items-center space-x-3">
           <div className="flex-1 min-w-0">
             <div className="mb-1 flex items-center space-x-2">
-              <h2 className="text-lg font-semibold">Test Guardrails:</h2>
+              <h2 className="text-lg font-semibold">{uiT("ui.ba98a02e1218d121")}</h2>
               <div className="flex flex-wrap gap-2">
                 {guardrailNames.map((name) => (
                   <div
@@ -128,7 +130,9 @@ export function GuardrailTestPanel({
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Test {guardrailNames.length > 1 ? "guardrails" : "guardrail"} and compare results
+              {uiT("ui.532eaabd9574880d")}{" "}
+              {guardrailNames.length > 1 ? uiT("ui.5dc897f81321d2ba") : uiT("ui.2f0a9e4fec74e596")}{" "}
+              {uiT("ui.cc18befb72dd10d9")}
             </p>
           </div>
         </div>
@@ -140,7 +144,7 @@ export function GuardrailTestPanel({
           <div>
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <label className="text-sm font-medium">Input Text</label>
+                <label className="text-sm font-medium">{uiT("ui.28f88397a74b662d")}</label>
                 <Tooltip>
                   <TooltipTrigger
                     render={
@@ -149,13 +153,13 @@ export function GuardrailTestPanel({
                       </span>
                     }
                   />
-                  <TooltipContent>Press Enter to submit. Use Shift+Enter for new line.</TooltipContent>
+                  <TooltipContent>{uiT("ui.d134f0043d643da2")}</TooltipContent>
                 </Tooltip>
               </div>
               {inputText && (
                 <Button size="sm" variant="secondary" onClick={handleCopyInput}>
                   <Copy />
-                  Copy Input
+                  {uiT("ui.c9d25596c1fafefe")}
                 </Button>
               )}
             </div>
@@ -163,24 +167,29 @@ export function GuardrailTestPanel({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter text to test with guardrails..."
+              placeholder={uiT("ui.6014d5ad4be5d9ca")}
               rows={8}
               className="font-mono text-sm field-sizing-fixed"
             />
             <div className="mt-1 flex items-center justify-between">
               <span className="text-xs text-muted-foreground">
                 {uiT("ui.9ed1273e9b5a")}{" "}
-                <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Enter</kbd> to submit •{" "}
-                <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Shift+Enter</kbd> for new
-                line
+                <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Enter</kbd>{" "}
+                {uiT("ui.253d96c6e1ac57b0")}{" "}
+                <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">
+                  {uiT("ui.5f5cb2093969715d")}
+                </kbd>{" "}
+                {uiT("ui.0cff0f06556e5320")}
               </span>
-              <span className="text-xs text-muted-foreground">Characters: {inputText.length}</span>
+              <span className="text-xs text-muted-foreground">
+                {uiT("ui.84c6ca51dcc768db")} {inputText.length}
+              </span>
             </div>
           </div>
 
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <label className="text-sm font-medium">Metadata (optional)</label>
+              <label className="text-sm font-medium">{uiT("ui.27d408fe04597231")}</label>
               <Tooltip>
                 <TooltipTrigger
                   render={
@@ -189,10 +198,7 @@ export function GuardrailTestPanel({
                     </span>
                   }
                 />
-                <TooltipContent>
-                  JSON object forwarded to the guardrail as request_data[&apos;metadata&apos;]. Custom guardrails can
-                  read per-request configuration from it.
-                </TooltipContent>
+                <TooltipContent>{uiT("ui.4a8c331d4e85be4c")}</TooltipContent>
               </Tooltip>
             </div>
             <Textarea
@@ -220,8 +226,14 @@ export function GuardrailTestPanel({
             >
               {isLoading && <UiLoadingSpinner className="size-4" />}
               {isLoading
-                ? `Testing ${guardrailNames.length} guardrail${guardrailNames.length > 1 ? "s" : ""}...`
-                : `Test ${guardrailNames.length} guardrail${guardrailNames.length > 1 ? "s" : ""}`}
+                ? uiT("ui.cf2699877538cb95", {
+                    v0: String(guardrailNames.length),
+                    v1: String(guardrailNames.length > 1 ? uiT("inflections.s") : ""),
+                  })
+                : uiT("ui.dc58e88e7500caef", {
+                    v0: String(guardrailNames.length),
+                    v1: String(guardrailNames.length > 1 ? uiT("inflections.s") : ""),
+                  })}
             </Button>
           </div>
         </div>

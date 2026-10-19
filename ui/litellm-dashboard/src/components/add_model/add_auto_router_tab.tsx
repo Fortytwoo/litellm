@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { AutoRouterAvailabilityContext, useAutoRouterAvailability } from "./AutoRouterAvailability";
 import { decisionDeploymentName } from "./jev_classifier_config";
@@ -337,9 +339,9 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
   const templateItems = React.useMemo(
     () => [
       ...sortedPresetOptions.map(({ preset }) => ({ value: preset.key, label: preset.label })),
-      { value: "custom", label: "Start from scratch" },
+      { value: "custom", label: uiT("ui.a4822ffed15b5e7d") },
     ],
-    [sortedPresetOptions],
+    [sortedPresetOptions, uiT],
   );
 
   const applyPrefill = (prefill: PresetPrefill) => {
@@ -552,8 +554,8 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
           value={selectedPreset ?? null}
           onValueChange={(presetKey: string | null) => handlePresetChange(presetKey ?? undefined)}
         >
-          <SelectTrigger aria-label="Use a template" data-testid="template-selector" className="w-full">
-            <SelectValue placeholder="Use a template" />
+          <SelectTrigger aria-label={uiT("ui.d7942d2821a317be")} data-testid="template-selector" className="w-full">
+            <SelectValue placeholder={uiT("ui.d7942d2821a317be")} />
           </SelectTrigger>
           <SelectContent className="[&_[data-slot=select-item]>div]:min-w-0 [&_[data-slot=select-item]>div]:shrink [&_[data-slot=select-item]>div]:whitespace-normal [&_[data-slot=select-item]>div]:break-words">
             {sortedPresetOptions.map(({ preset, availability: presetState }) => {
@@ -573,31 +575,29 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                   <div>
                     <div className="font-medium">{preset.label}</div>
                     <div className="text-xs text-muted-foreground">{preset.description}</div>
-                    <div className="text-xs text-muted-foreground">Replaces classifier and model choices</div>
+                    <div className="text-xs text-muted-foreground">{uiT("ui.d54d0eada7877aad")}</div>
                     {disabledHint && <div className={`text-xs mt-1 ${hintClass}`}>{disabledHint}</div>}
-                    {matchedHint && <div className="text-xs mt-1 text-success">{matchedHint}</div>}
+                    {matchedHint && <div className="text-xs mt-1 text-success">{translateText(matchedHint)}</div>}
                   </div>
                 </SelectItem>
               );
             })}
             <SelectSeparator className="mx-0" />
-            <SelectItem value="custom" label="Start from scratch">
+            <SelectItem value="custom" label={uiT("ui.a4822ffed15b5e7d")}>
               <div>
-                <div className="font-medium">Start from scratch</div>
-                <div className="text-xs text-muted-foreground">
-                  Clears tier models, switches to Heuristics, and resets routing settings
-                </div>
+                <div className="font-medium">{uiT("ui.a4822ffed15b5e7d")}</div>
+                <div className="text-xs text-muted-foreground">{uiT("ui.21a0150f8e603660")}</div>
               </div>
             </SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-xs text-muted-foreground">Replaces classifier and model choices</p>
-        {presetsPending && <div className="text-xs mt-1 text-muted-foreground">Loading templates...</div>}
+        <p className="text-xs text-muted-foreground">{uiT("ui.d54d0eada7877aad")}</p>
+        {presetsPending && <div className="text-xs mt-1 text-muted-foreground">{uiT("ui.8b31692427def1ca")}</div>}
         {presetsUnavailable && (
           <div className="text-xs mt-1 text-destructive">
-            Could not load templates, so only Start from scratch is shown.{" "}
+            {uiT("ui.99338f156a8004e0")}{" "}
             <button type="button" className="underline" onClick={() => void refetchPresets()}>
-              Retry
+              {uiT("ui.942087cc2d41e013")}
             </button>
           </div>
         )}
@@ -645,9 +645,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                   name="auto_router_name"
                   label={labelWithHint("Auto Router Name", "Unique name for this auto router configuration")}
                 >
-                  {({ ref, ...field }) => (
-                    <Input {...field} ref={ref} placeholder="e.g., smart_router, auto_router_1" />
-                  )}
+                  {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.07b295b57ffe134c")} />}
                 </FormField>
               </div>
               <div className="mb-6 border-b pb-6">
@@ -721,9 +719,9 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                 <FieldGroup>
                   {modelsUnverifiable && (
                     <p className="text-sm text-destructive">
-                      Could not load available models.{" "}
+                      {uiT("ui.480dec057d91bc8d")}{" "}
                       <button type="button" className="underline" onClick={() => void refetchModels()}>
-                        Retry
+                        {uiT("ui.942087cc2d41e013")}
                       </button>
                     </p>
                   )}
@@ -737,11 +735,11 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                             href="https://github.com/BerriAI/litellm/issues"
                             className="text-sm text-primary underline-offset-4 hover:underline"
                           >
-                            Need Help?
+                            {uiT("ui.5c799f5aa8a75879")}
                           </a>
                         }
                       />
-                      <TooltipContent>Get help on our github</TooltipContent>
+                      <TooltipContent>{uiT("ui.432f534e73f8eb9f")}</TooltipContent>
                     </Tooltip>
                     <div className="flex flex-wrap gap-2">
                       <BlockedReasonTooltip reason={submitBlockedReason}>
@@ -752,7 +750,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                           disabled={submitBlockedReason !== null || isSubmitting}
                           onClick={() => setIsRoutingTestVisible(true)}
                         >
-                          Test Routing
+                          {uiT("ui.f1c53a3fa3cd5976")}
                         </Button>
                       </BlockedReasonTooltip>
                       <Button
@@ -763,7 +761,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                         disabled={isTestingConnection}
                       >
                         {isTestingConnection && <UiLoadingSpinner className="size-4" />}
-                        Test Connection
+                        {uiT("ui.c02977b07ec93816")}
                       </Button>
                       <BlockedReasonTooltip reason={saveBlockedReason}>
                         <Button
@@ -773,7 +771,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                             void handleAutoRouterSubmit();
                           }}
                         >
-                          Add Auto Router
+                          {uiT("ui.8fdd8218c7e9d5bd")}
                         </Button>
                       </BlockedReasonTooltip>
                     </div>
@@ -787,7 +785,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
         <Dialog open={isRoutingTestVisible} onOpenChange={(open) => !open && setIsRoutingTestVisible(false)}>
           <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[760px]">
             <DialogHeader>
-              <DialogTitle>Test Routing</DialogTitle>
+              <DialogTitle>{uiT("ui.f1c53a3fa3cd5976")}</DialogTitle>
             </DialogHeader>
             {isRoutingTestVisible && (
               <AutoRouterRoutingTest

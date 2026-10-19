@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
@@ -57,8 +59,8 @@ export function MultiSelect({
   options,
   value = [],
   onValueChange,
-  placeholder = "Select options",
-  emptyText = "No options found",
+  placeholder = translateUi("ui.e0ee36381c498dc4"),
+  emptyText = translateUi("ui.051fc485fc05be30"),
   disabled = false,
   loading = false,
   allowCustomValues = false,

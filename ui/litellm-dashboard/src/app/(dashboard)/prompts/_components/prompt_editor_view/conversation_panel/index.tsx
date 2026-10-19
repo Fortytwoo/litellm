@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +11,8 @@ import VariableWarning from "./VariableWarning";
 import MessageInput from "./MessageInput";
 
 const ConversationPanel: React.FC<ConversationPanelProps> = ({ prompt, accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     isLoading,
     messages,
@@ -40,7 +44,7 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({ prompt, accessTok
         <div className="p-3 border-b border-border bg-background flex justify-end">
           <Button type="button" variant="outline" size="sm" onClick={handleClearConversation}>
             <Trash2 aria-hidden="true" />
-            Clear Chat
+            {uiT("ui.98361af38386db61")}
           </Button>
         </div>
       )}

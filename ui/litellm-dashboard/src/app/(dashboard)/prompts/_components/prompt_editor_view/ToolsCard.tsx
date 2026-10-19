@@ -26,7 +26,7 @@ const ToolsCard: React.FC<ToolsCardProps> = ({ tools, onAddTool, onEditTool, onR
         </Button>
       </div>
       {tools.length === 0 ? (
-        <p className="text-muted-foreground text-xs">No tools added</p>
+        <p className="text-muted-foreground text-xs">{uiT("ui.9f77f007ff3316d3")}</p>
       ) : (
         <div className="space-y-2">
           {tools.map((tool, index) => (
@@ -42,7 +42,7 @@ const ToolsCard: React.FC<ToolsCardProps> = ({ tools, onAddTool, onEditTool, onR
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label={`Remove ${tool.name}`}
+                  aria-label={uiT("ui.86790c6d4f116494", { v0: String(tool.name) })}
                   onClick={() => onRemoveTool(index)}
                 >
                   <TrashIcon size={14} aria-hidden="true" />

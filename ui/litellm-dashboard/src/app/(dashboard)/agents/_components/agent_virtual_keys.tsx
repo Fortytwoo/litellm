@@ -21,13 +21,13 @@ const AgentVirtualKeys: React.FC<AgentVirtualKeysProps> = ({ keys, isLoading, on
       {isLoading ? (
         <p className="mt-2 text-sm text-muted-foreground">{uiT("ui.e0c65255e48f")}</p>
       ) : keys.length === 0 ? (
-        <p className="mt-2 text-sm text-muted-foreground">No virtual key assigned to this agent.</p>
+        <p className="mt-2 text-sm text-muted-foreground">{uiT("ui.831a31a19864de83")}</p>
       ) : (
         <div className="mt-3 flex flex-col gap-2">
           {keys.map((key) => (
             <div key={key.token} className="flex items-center gap-3 rounded-sm border border-border px-3 py-2">
               <KeyRound className="size-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-foreground">{key.key_alias || "Unnamed key"}</span>
+              <span className="text-sm font-medium text-foreground">{key.key_alias || uiT("ui.ff75eadaa830f082")}</span>
               {key.key_name && <span className="font-mono text-xs text-muted-foreground">{key.key_name}</span>}
               <TooltipProvider delay={300}>
                 <Tooltip>

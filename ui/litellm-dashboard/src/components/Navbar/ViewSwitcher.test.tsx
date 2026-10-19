@@ -31,7 +31,10 @@ vi.mock("@/contexts/PluginModeContext", () => ({ usePluginMode: mockUsePluginMod
 vi.mock("@/app/(dashboard)/hooks/uiSettings/useUISettings", () => ({ useUISettings: mockUseUISettings }));
 vi.mock("next/navigation", () => ({ usePathname: mockUsePathname }));
 // Deterministic hrefs so navigation assertions don't depend on server_root_path.
-vi.mock("@/utils/uiHref", () => ({ uiHref: (seg: string) => `/ui/${seg}` }));
+vi.mock("@/utils/uiHref", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/utils/uiHref")>()),
+  uiHref: (seg: string) => `/ui/${seg}`,
+}));
 
 describe("ViewSwitcher", () => {
   let assignSpy: ReturnType<typeof vi.fn>;
@@ -52,6 +55,15 @@ describe("ViewSwitcher", () => {
     state.pathname = "/ui/";
     state.setMode.mockClear();
   });
+
+  it.each(["/moyai", "/moyai/anything", "/ui/moyai/", "/ui/moyai/anything"])(
+    "keeps the same active label at the static export and mounted route %s",
+    (pathname) => {
+      state.pathname = pathname;
+      render(<ViewSwitcher />);
+      expect(screen.getByRole("button")).toHaveTextContent("Moyai");
+    },
+  );
 
   it("still renders the selector with a disabled Chat hint when there are no plugins and chat is off", async () => {
     render(<ViewSwitcher />);

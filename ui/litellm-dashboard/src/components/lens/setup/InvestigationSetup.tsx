@@ -1,5 +1,8 @@
 "use client";
 
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi, translateText } from "@/i18n";
+
 import { FormProvider, useWatch, type UseFormReturn } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
@@ -34,25 +37,37 @@ import { type Settings } from "../model/types";
 type SetupMode = "new" | "edit" | "duplicate";
 
 const TITLES: Record<SetupMode, string> = {
-  new: "New investigation",
-  edit: "Edit investigation",
-  duplicate: "Duplicate investigation",
+  get new() {
+    return translateUi("ui.c11364d7598c3309");
+  },
+  get edit() {
+    return translateUi("ui.1cdde080223f387f");
+  },
+  get duplicate() {
+    return translateUi("ui.0c6a6cdfce0013b3");
+  },
 };
 
 function saveLabelFor(mode: SetupMode, repeat: boolean): string {
-  if (mode === "edit") return "Save changes";
-  return repeat ? "Run and monitor" : "Run investigation";
+  if (mode === "edit") return translateText("Save changes");
+  return translateText(repeat ? "Run and monitor" : "Run investigation");
 }
 
 function activitySummary(selection: InvestigationInput["selection"]): string {
-  const who = selection.agent_name || selection.service || "All activity";
-  const conditions = selection.filters.length ? ` · ${selection.filters.length} conditions` : "";
-  return `${who} · Last ${durationLabel(selection.lookback_hours ?? 24, "hours")}${conditions}`;
+  const who = selection.agent_name || selection.service || translateText("All activity");
+  const conditions = selection.filters.length
+    ? translateUi("supplement.selectionConditions", undefined, { count: selection.filters.length })
+    : "";
+  return translateUi("supplement.selectionLookback", undefined, {
+    who,
+    duration: durationLabel(selection.lookback_hours ?? 24, "hours"),
+    conditions,
+  });
 }
 
 function criteriaSummary(values: Pick<InvestigationInput, "context" | "watching" | "questions">): string {
   const checks = values.watching.length + values.questions.filter((q) => q.instruction.trim()).length;
-  const checksLabel = `${checks} ${checks === 1 ? "check" : "checks"}`;
+  const checksLabel = `${checks} ${translateText(checks === 1 ? "check" : "checks")}`;
   const headline = values.context.split("\n")[0]?.trim();
   return headline ? `${headline} · ${checksLabel}` : checksLabel;
 }
@@ -88,6 +103,8 @@ function SetupEditor({
   onSave,
   form,
 }: SetupProps & { form: UseFormReturn<InvestigationInput, unknown, InvestigationOutput> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const analysis = useAnalysisModels();
   const [step, setStep] = useState<SetupStepId>("activity");
   const [error, setError] = useState("");
@@ -144,7 +161,7 @@ function SetupEditor({
             variant="ghost"
             size="icon-sm"
             className="-ml-2 shrink-0 text-muted-foreground"
-            aria-label="Back to investigations"
+            aria-label={uiT("ui.c8ff00c26da1a0d2")}
             disabled={formState.isSubmitting}
             onClick={onClose}
           >
@@ -152,50 +169,48 @@ function SetupEditor({
           </Button>
           <div>
             <h2 className="text-lg font-semibold tracking-tight">{TITLES[mode]}</h2>
-            <p className="text-xs text-muted-foreground">
-              Matching activity on the right updates as you change the setup.
-            </p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.b15e0ef1b3e3679f")}</p>
           </div>
         </div>
         <Button variant="outline" disabled={formState.isSubmitting} onClick={onClose}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
       </header>
       {offline && (
         <p role="status" className="text-sm text-warning">
-          The worker or trace storage is unavailable. Your draft is safe; you can start when it reconnects.
+          {uiT("ui.9e0742bd02fdeb58")}
         </p>
       )}
       <div className="grid min-w-0 gap-8 lg:grid-cols-2">
-        <SetupSteps aria-label="Investigation setup" current={step} onOpen={setStep}>
+        <SetupSteps aria-label={uiT("ui.755e6c44292f8cdd")} current={step} onOpen={setStep}>
           <SetupStep
             id="activity"
             heading="Activity"
-            description="Which traces or requests to review"
-            summary={activitySummary(selection)}
+            description={uiT("ui.47a678605a55f289")}
+            summary={translateText(activitySummary(selection))}
           >
             <label className="grid gap-2 text-sm font-medium">
-              Investigation name
-              <Input {...register("name")} placeholder="e.g. Support quality" />
+              {uiT("ui.22912e8a3e8c08ca")}
+              <Input {...register("name")} placeholder={uiT("ui.059f5f569680a30e")} />
             </label>
             <ScopeFields {...activity.scope} />
             <SampleFields />
             <div className="flex justify-end pt-1">
-              <Button onClick={() => void next()}>Continue</Button>
+              <Button onClick={() => void next()}>{uiT("ui.31fbef162594de01")}</Button>
             </div>
           </SetupStep>
           <SetupStep
             id="criteria"
             heading="Criteria"
-            description="What the agent should do and what to watch for"
-            summary={criteriaSummary({ context, watching, questions })}
+            description={uiT("ui.25ac4c9b095c0c26")}
+            summary={translateText(criteriaSummary({ context, watching, questions }))}
           >
             <ExpectationsFields />
             <div className="flex justify-end pt-1">
-              <Button onClick={() => void next()}>Continue</Button>
+              <Button onClick={() => void next()}>{uiT("ui.31fbef162594de01")}</Button>
             </div>
           </SetupStep>
-          <SetupStep id="run" heading="Run" description="Schedule, analysis model, and budget" summary="">
+          <SetupStep id="run" heading="Run" description={uiT("ui.c81348c5190bee2b")} summary="">
             <RunFields models={analysis} gate={gate} />
             {error && (
               <p role="alert" className="text-sm text-destructive">
@@ -204,7 +219,7 @@ function SetupEditor({
             )}
             <div className="flex justify-end pt-1">
               <Button disabled={!canSave} onClick={() => void save()}>
-                {formState.isSubmitting ? "Saving…" : saveLabel}
+                {formState.isSubmitting ? uiT("ui.23e39291d6135814") : saveLabel}
               </Button>
             </div>
           </SetupStep>
@@ -218,7 +233,7 @@ function SetupEditor({
           storageKey={FINDING_PANEL_WIDTH_KEY}
         >
           <MatchingActivityPreview {...activity.preview} className="min-w-0 lg:sticky lg:top-0" onOpen={setTrace} />
-          <Inspector.Panel label="Run details" testId="run-panel">
+          <Inspector.Panel label={uiT("ui.7bbc36905270774e")} testId="run-panel">
             {(run: Execution) => (
               <TraceEvidence
                 traceId={run.trace_id}

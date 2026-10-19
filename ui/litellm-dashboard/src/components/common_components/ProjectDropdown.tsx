@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { ProjectResponse } from "@/app/(dashboard)/hooks/projects/useProjects";
@@ -22,6 +24,8 @@ const ProjectDropdown: React.FC<ProjectDropdownProps> = ({
   teamId,
   id,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const filtered = teamId ? projects?.filter((p) => p.team_id === teamId) : projects;
 
   return (
@@ -37,8 +41,8 @@ const ProjectDropdown: React.FC<ProjectDropdownProps> = ({
       }
       value={value}
       onValueChange={(projectId) => onChange?.(projectId)}
-      placeholder="Search or select a project"
-      emptyText={loading ? "Loading projects…" : "No projects found"}
+      placeholder={uiT("ui.f119c3cd262fa645")}
+      emptyText={loading ? uiT("ui.6970a1ced73ddb58") : uiT("ui.960acc933ef395d2")}
       disabled={disabled}
       inputId={id}
     />

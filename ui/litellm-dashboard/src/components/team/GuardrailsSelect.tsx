@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Globe } from "lucide-react";
 import React, { useState } from "react";
@@ -51,9 +54,11 @@ export const GuardrailsSelect: React.FC<GuardrailsSelectProps> = ({
   globalGuardrails,
   otherGuardrails,
   globalGuardrailNames,
-  placeholder = "Select guardrails",
-  emptyText = "No guardrails found",
+  placeholder = translateUi("ui.2a6961064d004427"),
+  emptyText = translateUi("ui.8cdd5f5fbb0f2781"),
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [query, setQuery] = useState("");
 
@@ -62,8 +67,8 @@ export const GuardrailsSelect: React.FC<GuardrailsSelectProps> = ({
   const grouped = globalGuardrails.length > 0 && otherGuardrails.length > 0;
   const groups: GuardrailGroup[] = grouped
     ? [
-        { label: "Global", icon: true, items: [...globalGuardrails] },
-        { label: "Other", icon: false, items: [...otherGuardrails] },
+        { label: uiT("ui.a258b30f88c30650"), icon: true, items: [...globalGuardrails] },
+        { label: uiT("ui.f97e9da0e3b879f0"), icon: false, items: [...otherGuardrails] },
       ]
     : [{ label: "", icon: false, items: known }];
 
@@ -89,7 +94,9 @@ export const GuardrailsSelect: React.FC<GuardrailsSelectProps> = ({
             <>
               {chips.map((option) => (
                 <ComboboxChip key={option.name} aria-label={option.name}>
-                  {globalGuardrailNames.has(option.name) && <Globe className="size-3" aria-label="Global guardrail" />}
+                  {globalGuardrailNames.has(option.name) && (
+                    <Globe className="size-3" aria-label={uiT("ui.cdd8465f91f95cb1")} />
+                  )}
                   {option.name}
                 </ComboboxChip>
               ))}

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { FlaskConical, Search } from "lucide-react";
@@ -111,7 +113,12 @@ const GuardrailTestPlayground: React.FC<GuardrailTestPlaygroundProps> = ({
     setIsTesting(false);
 
     if (results.length > 0) {
-      toast.success(`${results.length} guardrail${results.length > 1 ? "s" : ""} applied successfully`);
+      toast.success(
+        translateUi("ui.e3a79d32386d88ea", undefined, {
+          v0: String(results.length),
+          v1: String(results.length > 1 ? translateUi("inflections.s") : ""),
+        }),
+      );
     }
     if (errors.length > 0) {
       toast.fromError(`${errors.length} guardrail${errors.length > 1 ? "s" : ""} failed`);
@@ -133,7 +140,7 @@ const GuardrailTestPlayground: React.FC<GuardrailTestPlaygroundProps> = ({
                       <Search className="size-4 text-muted-foreground" />
                     </InputGroupAddon>
                     <InputGroupInput
-                      placeholder="Search guardrails..."
+                      placeholder={uiT("ui.965213f4c71289ea")}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -148,7 +155,7 @@ const GuardrailTestPlayground: React.FC<GuardrailTestPlaygroundProps> = ({
                   </div>
                 ) : filteredGuardrails.length === 0 ? (
                   <div className="p-4 text-center text-muted-foreground">
-                    {searchQuery ? "No guardrails match your search" : "No guardrails available"}
+                    {searchQuery ? uiT("ui.2fda68b946cbe1be") : uiT("ui.86369d6ed01a76ad")}
                   </div>
                 ) : (
                   <ul className="m-0 list-none p-0">
@@ -172,11 +179,11 @@ const GuardrailTestPlayground: React.FC<GuardrailTestPlaygroundProps> = ({
                         </div>
                         <div className="mt-1 space-y-1 text-xs">
                           <div>
-                            <span className="font-medium">Type: </span>
+                            <span className="font-medium">{uiT("ui.6cc5ad2e47e3be35")} </span>
                             <span className="text-muted-foreground">{guardrail.litellm_params.guardrail}</span>
                           </div>
                           <div>
-                            <span className="font-medium">Mode: </span>
+                            <span className="font-medium">{uiT("ui.7ce1afa3f281b07b")} </span>
                             <span className="text-muted-foreground">
                               {formatGuardrailMode(guardrail.litellm_params.mode)}
                             </span>
@@ -190,7 +197,8 @@ const GuardrailTestPlayground: React.FC<GuardrailTestPlaygroundProps> = ({
 
               <div className="border-t border-border bg-muted/40 p-3">
                 <span className="text-xs text-muted-foreground">
-                  {selectedGuardrails.size} of {filteredGuardrails.length} selected
+                  {selectedGuardrails.size} {uiT("ui.28391d3bc64ec15c")} {filteredGuardrails.length}{" "}
+                  {uiT("ui.d7cbbb688b2e506c")}
                 </span>
               </div>
             </div>
@@ -198,17 +206,15 @@ const GuardrailTestPlayground: React.FC<GuardrailTestPlaygroundProps> = ({
             {/* Right Panel - Test Area */}
             <div className="flex w-3/4 flex-col">
               <div className="flex items-center justify-between border-b border-border p-4">
-                <h2 className="mb-0 text-xl font-semibold">Guardrail Testing Playground</h2>
+                <h2 className="mb-0 text-xl font-semibold">{uiT("ui.2a08d678b7b7e9b2")}</h2>
               </div>
 
               <div className="flex-1 overflow-auto p-4">
                 {selectedGuardrails.size === 0 ? (
                   <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
                     <FlaskConical className="mb-4 size-12" />
-                    <p className="mb-2 text-lg font-medium">Select Guardrails to Test</p>
-                    <p className="max-w-md text-center">
-                      Choose one or more guardrails from the left sidebar to start testing and comparing results.
-                    </p>
+                    <p className="mb-2 text-lg font-medium">{uiT("ui.0f2d0f8df35e8ddc")}</p>
+                    <p className="max-w-md text-center">{uiT("ui.fcc043cec0849614")}</p>
                   </div>
                 ) : (
                   <div className="h-full">

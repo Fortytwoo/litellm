@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { SearchSelect, SearchSelectOption } from "@/components/shared/SearchSelect";
 import { Label } from "@/components/ui/label";
@@ -16,9 +19,16 @@ interface CompressionControlsProps {
   onChange: (state: AutoRouterCompressionState) => void;
 }
 
-const NONE_OPTION: SearchSelectOption = { label: "None (no compression)", value: NO_COMPRESSION };
+const NONE_OPTION: SearchSelectOption = {
+  get label() {
+    return translateUi("ui.7cdfedcc5aa42a43");
+  },
+  value: NO_COMPRESSION,
+};
 
 const CompressionControls: React.FC<CompressionControlsProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { routing, sameAsRouting, model } = value;
   const onRoutingChange = (newRouting: string | undefined) => onChange({ ...value, routing: newRouting });
   const onSameAsRoutingChange = (newSameAsRouting: boolean) => onChange({ ...value, sameAsRouting: newSameAsRouting });
@@ -34,8 +44,8 @@ const CompressionControls: React.FC<CompressionControlsProps> = ({ value, onChan
     <div className="space-y-4">
       <div>
         <div className="mb-1 flex items-center gap-2">
-          <span className="text-sm font-medium">Routing decision</span>
-          <SimpleTooltip content="Compression applied to the classifier's own call that picks a tier, separate from the model the request routes to.">
+          <span className="text-sm font-medium">{uiT("ui.1850dfc6f1f49a05")}</span>
+          <SimpleTooltip content={uiT("ui.cb9f44ad02d546af")}>
             <Info className="size-4 text-muted-foreground" />
           </SimpleTooltip>
         </div>
@@ -43,15 +53,15 @@ const CompressionControls: React.FC<CompressionControlsProps> = ({ value, onChan
           options={options}
           value={routing}
           onValueChange={(value) => onRoutingChange(value ?? undefined)}
-          placeholder="Inherit from the request's own compression guardrails"
-          emptyText="No compression guardrails found"
-          aria-label="Routing decision compression"
+          placeholder={uiT("ui.4e9350cdaf0cc316")}
+          emptyText={uiT("ui.38b4c6e0b4163c17")}
+          aria-label={uiT("ui.ea2dabd9e1f74d3d")}
         />
       </div>
 
       {routing !== undefined && (
         <div>
-          <span className="mb-2 block text-sm font-medium">Model call</span>
+          <span className="mb-2 block text-sm font-medium">{uiT("ui.1eeda0f7103f9ac4")}</span>
           <RadioGroup
             value={sameAsRouting ? "same" : "different"}
             onValueChange={(value: unknown) => onSameAsRoutingChange(value === "same")}
@@ -60,11 +70,11 @@ const CompressionControls: React.FC<CompressionControlsProps> = ({ value, onChan
             <div className="flex w-full flex-col items-start gap-2">
               <Label className="items-start font-normal leading-normal">
                 <RadioGroupItem value="same" className="mt-0.5" />
-                <span>Same as the routing decision</span>
+                <span>{uiT("ui.1027b5deac393942")}</span>
               </Label>
               <Label className="items-start font-normal leading-normal">
                 <RadioGroupItem value="different" className="mt-0.5" />
-                <span>Use a different compression</span>
+                <span>{uiT("ui.e89946060aead7dd")}</span>
               </Label>
             </div>
           </RadioGroup>
@@ -75,9 +85,9 @@ const CompressionControls: React.FC<CompressionControlsProps> = ({ value, onChan
                 options={options}
                 value={model}
                 onValueChange={(value) => onModelChange(value ?? undefined)}
-                placeholder="None (no compression)"
-                emptyText="No compression guardrails found"
-                aria-label="Model call compression"
+                placeholder={uiT("ui.7cdfedcc5aa42a43")}
+                emptyText={uiT("ui.38b4c6e0b4163c17")}
+                aria-label={uiT("ui.faf20e01e579ef1c")}
               />
             </div>
           )}

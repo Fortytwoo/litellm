@@ -27,9 +27,7 @@ export default function DeletedTeamsPage() {
         <Alert className="shrink-0">
           <Info />
           <AlertTitle>{uiT("ui.04ed5d8219ac")}</AlertTitle>
-          <AlertDescription>
-            Deleted team auditing is graduating from beta into our Enterprise audit &amp; compliance suite.
-          </AlertDescription>
+          <AlertDescription>{uiT("ui.f81271cb61db")}</AlertDescription>
         </Alert>
       )}
       <DeletedTeamsTable

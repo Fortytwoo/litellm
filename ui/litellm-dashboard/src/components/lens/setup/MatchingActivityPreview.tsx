@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 
 import { useEffect, useState, type ComponentProps } from "react";
 import { ChevronRight, RotateCw } from "lucide-react";
@@ -14,12 +16,15 @@ const PREFETCH_MARGIN = "0px 0px 240px 0px";
 type RunRowProps = ComponentProps<"div"> & { run: Execution };
 
 function RunRow({ run, className, ...props }: RunRowProps) {
-  const steps = `${run.span_count} ${run.span_count === 1 ? "step" : "steps"}`;
+  const { t: uiT } = useDashboardLanguage();
+
+  const steps = `${run.span_count} ${translateText(run.span_count === 1 ? "step" : "steps")}`;
   return (
     <div data-slot="run-row" className={cn("min-w-0 py-3", className)} {...props}>
       <p className="text-sm font-medium">{run.name}</p>
       <p className="mt-1 text-xs text-muted-foreground">
-        {runTime(run.start_time)} · {run.source === "traces" ? steps : "LLM request"}
+        <span title={run.start_time}>{runTime(run.start_time)}</span> ·{" "}
+        {run.source === "traces" ? steps : uiT("ui.4d6d7686bb4e0ab0")}
       </p>
     </div>
   );
@@ -29,6 +34,8 @@ type PreviewFooterProps = ComponentProps<"div"> & Pick<MatchingPreview, "page" |
 
 /** Selection count and a way to undo manual picks; hidden while every match is simply going to be analyzed. */
 function PreviewFooter({ page, selection, className, ...props }: PreviewFooterProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const partial = page.eligible != null && page.executions.length < page.eligible;
   const count = selection?.count ?? page.selected;
   const picked = selection?.ids.length ?? 0;
@@ -41,17 +48,17 @@ function PreviewFooter({ page, selection, className, ...props }: PreviewFooterPr
       {...props}
     >
       <p className="text-xs text-muted-foreground">
-        {count} selected for analysis
+        {count} {uiT("ui.292ea316d63b198a")}
         {partial && (
           <>
             {" "}
-            · Showing {page.executions.length} of {page.eligible}
+            {uiT("ui.9d5f4bc3305895da")} {page.executions.length} {uiT("ui.28391d3bc64ec15c")} {page.eligible}
           </>
         )}
       </p>
       {selection && picked > 0 && (
         <Button variant="outline" size="sm" onClick={selection.clear}>
-          Clear {picked} selected runs
+          {uiT("ui.83b12c2216ef")} {picked} {uiT("ui.3e6413833790ba84")}
         </Button>
       )}
     </div>
@@ -71,6 +78,8 @@ export function MatchingActivityPreview({
   className,
   ...props
 }: MatchingActivityPreviewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
   const { ref: tailRef, inView: nearTail } = useInView({ root: scroller, rootMargin: PREFETCH_MARGIN });
   const { loadMore, loadingMore } = page;
@@ -80,7 +89,7 @@ export function MatchingActivityPreview({
   }, [nearTail, canContinue, loadingMore, loadMore]);
   return (
     <section
-      aria-label="Matching activity"
+      aria-label={uiT("ui.090ddd3b62ff05b1")}
       data-slot="matching-activity-preview"
       className={cn("self-start rounded-lg border", className)}
       {...props}
@@ -93,29 +102,28 @@ export function MatchingActivityPreview({
           <Button
             variant="ghost"
             size="icon-xs"
-            aria-label="Refresh matching activity"
+            aria-label={uiT("ui.588098177c110b76")}
             onClick={status.refresh}
             disabled={!status.ready}
           >
             <RotateCw className="size-3" />
           </Button>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">{status.windowLabel} · No analysis cost</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          {status.windowLabel} {uiT("ui.4be3fbe21686e6f1")}
+        </p>
       </div>
       <div ref={setScroller} aria-busy={loadingMore} className="max-h-[60dvh] overflow-y-auto px-4">
         {status.ready && status.error && (
           <p role="alert" className="py-3 text-sm text-destructive">
             {status.error.message}{" "}
             <Button variant="link" onClick={status.refresh}>
-              Retry preview
+              {uiT("ui.ceba352728693758")}
             </Button>
           </p>
         )}
         {status.ready && page.eligible === 0 && (
-          <p className="py-4 text-sm text-muted-foreground">
-            No matches. Try removing a condition or check that your agent records this metadata. Recent trace updates
-            need two minutes to settle.
-          </p>
+          <p className="py-4 text-sm text-muted-foreground">{uiT("ui.0d539b9b23666917")}</p>
         )}
         {status.ready &&
           page.executions.map((run) => (
@@ -123,14 +131,19 @@ export function MatchingActivityPreview({
               {selection && (
                 <input
                   type="checkbox"
-                  aria-label={`Select ${run.name}`}
+                  aria-label={uiT("ui.58661820dfdc4c9f", { v0: String(run.name) })}
                   checked={selection.ids.includes(run.id)}
                   onChange={(e) => selection.toggle(run.id, e.target.checked)}
                 />
               )}
               <RunRow run={run} />
               {run.source === "traces" && (
-                <Button variant="ghost" size="icon-sm" aria-label={`Open ${run.name}`} onClick={() => onOpen(run)}>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={uiT("ui.afaef5c34f443c02", { v0: String(run.name) })}
+                  onClick={() => onOpen(run)}
+                >
                   <ChevronRight className="size-4" />
                 </Button>
               )}
@@ -138,7 +151,7 @@ export function MatchingActivityPreview({
           ))}
         {canContinue && (
           <p ref={tailRef} data-testid="preview-placeholder" className="py-3 text-xs text-muted-foreground">
-            Loading more…
+            {uiT("ui.964e5f88d03630de")}
           </p>
         )}
       </div>

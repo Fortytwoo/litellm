@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -271,7 +272,7 @@ export const getRequestLogsTableColumns = ({
       return (
         <div className="flex flex-col items-end">
           <CellTooltip
-            content={`${ms}ms`}
+            content={translateUi("ui.7b9b98b759ff033c", undefined, { v0: String(ms) })}
             trigger={<span className="max-w-[15ch] truncate inline-block">{(ms / 1000).toFixed(2)}</span>}
           />
           {sessionTotalMs != null && (
@@ -298,7 +299,7 @@ export const getRequestLogsTableColumns = ({
       if (ttftMs <= 0) return <span>-</span>;
       return (
         <CellTooltip
-          content={`${ttftMs}ms`}
+          content={translateUi("ui.7b9b98b759ff033c", undefined, { v0: String(ttftMs) })}
           trigger={<span className="max-w-[15ch] truncate inline-block">{(ttftMs / 1000).toFixed(2)}</span>}
         />
       );

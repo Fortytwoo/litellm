@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -72,10 +74,12 @@ function AutoRouterRowActions({
   row: AutoRouterRow;
   onDeleteClick: (row: AutoRouterRow) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open actions for ${row.name}`}
+        aria-label={uiT("ui.45ad2792453510ba", { v0: String(row.name) })}
         data-testid={`auto-router-actions-${row.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -88,7 +92,7 @@ function AutoRouterRowActions({
           onClick={() => onDeleteClick(row)}
         >
           <Trash2 />
-          Delete auto router
+          {uiT("ui.9812a2aa8c19bcc4")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -136,8 +140,14 @@ export const getAutoRoutersTableColumns = ({
   },
   {
     id: "targets",
-    meta: { title: "Routes to" },
-    header: "Routes to",
+    meta: {
+      get title() {
+        return translateUi("ui.55c11a99fb6ca52f");
+      },
+    },
+    get header() {
+      return translateUi("ui.55c11a99fb6ca52f");
+    },
     size: 320,
     enableSorting: false,
     cell: ({ row }) => <TargetsCell targets={row.original.targets} />,
@@ -145,8 +155,14 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "defaultModel",
     accessorKey: "defaultModel",
-    meta: { title: "Default model" },
-    header: "Default model",
+    meta: {
+      get title() {
+        return translateUi("ui.3840d9d29421c46c");
+      },
+    },
+    get header() {
+      return translateUi("ui.3840d9d29421c46c");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) =>

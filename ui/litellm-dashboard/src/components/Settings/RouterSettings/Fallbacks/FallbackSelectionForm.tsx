@@ -1,3 +1,9 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Form component for selecting and configuring fallback groups
  * Manages groups state internally, but does not handle submission
@@ -26,6 +32,8 @@ export function FallbackSelectionForm({
   maxFallbacks = 10,
   maxGroups = 5,
 }: FallbackSelectionFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [activeKey, setActiveKey] = useState(groups.length > 0 ? groups[0].id : "1");
 
   // Reset activeKey when groups change (e.g., when modal reopens)
@@ -61,7 +69,7 @@ export function FallbackSelectionForm({
 
   const handleRemoveGroup = (targetId: string) => {
     if (groups.length === 1) {
-      toast.warning("At least one group is required");
+      toast.warning(translateUi("ui.ad5489caf419bb20"));
       return;
     }
     const newGroups = groups.filter((g) => g.id !== targetId);
@@ -82,10 +90,10 @@ export function FallbackSelectionForm({
   if (groups.length === 0) {
     return (
       <div className="text-center py-12 bg-muted rounded-lg border border-dashed border-border">
-        <p className="text-muted-foreground mb-4">No fallback groups configured</p>
+        <p className="text-muted-foreground mb-4">{uiT("ui.bed8f36775f562b1")}</p>
         <Button onClick={handleAddGroup}>
           <Plus className="w-4 h-4" />
-          Create First Group
+          {uiT("ui.deffe698b484b442")}
         </Button>
       </div>
     );
@@ -101,14 +109,14 @@ export function FallbackSelectionForm({
                 value={group.id}
                 className={`flex-none rounded-none py-2 pl-4 ${groups.length > 1 ? "pr-9" : "pr-4"}`}
               >
-                {groupLabel(group, index)}
+                {translateText(groupLabel(group, index))}
               </TabsTrigger>
               {groups.length > 1 && (
                 <Button
                   variant="ghost"
                   size="icon-xs"
                   className="absolute right-1"
-                  aria-label={`Remove ${groupLabel(group, index)}`}
+                  aria-label={uiT("ui.86790c6d4f116494", { v0: String(groupLabel(group, index)) })}
                   onClick={() => handleRemoveGroup(group.id)}
                 >
                   <X />
@@ -118,7 +126,7 @@ export function FallbackSelectionForm({
           ))}
         </TabsList>
         {groups.length < maxGroups && (
-          <Button variant="ghost" size="icon-sm" aria-label="Add fallback group" onClick={handleAddGroup}>
+          <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.f8531f3ec8c4d6a8")} onClick={handleAddGroup}>
             <Plus />
           </Button>
         )}

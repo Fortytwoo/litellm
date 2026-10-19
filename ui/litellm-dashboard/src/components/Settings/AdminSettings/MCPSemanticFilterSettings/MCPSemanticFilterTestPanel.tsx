@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Code, CircleAlert, CirclePlay, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Button } from "@/components/ui/button";
@@ -34,22 +36,24 @@ export default function MCPSemanticFilterTestPanel({
   testError,
   curlCommand,
 }: MCPSemanticFilterTestPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const canRunTest = testQuery && testModel && filterEnabled;
   const testDisabled = isTesting || !canRunTest;
 
   return (
     <Card className="mb-4">
       <CardHeader>
-        <CardTitle>Test Configuration</CardTitle>
+        <CardTitle>{uiT("ui.6135706d1f477a64")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="test">
           <TabsList>
             <TabsTrigger value="test" className="flex-none">
-              Test
+              {uiT("ui.532eaabd9574880d")}
             </TabsTrigger>
             <TabsTrigger value="api" className="flex-none">
-              API Usage
+              {uiT("ui.ab70b7ebd732a14c")}
             </TabsTrigger>
           </TabsList>
 
@@ -57,11 +61,11 @@ export default function MCPSemanticFilterTestPanel({
             <div className="flex w-full flex-col gap-6">
               <div>
                 <p className="mb-2 flex items-center gap-1.5 font-medium">
-                  <CirclePlay className="size-4" /> Test Query
+                  <CirclePlay className="size-4" /> {uiT("ui.3d717d326a9b7715")}
                 </p>
                 <Textarea
                   className="field-sizing-fixed"
-                  placeholder="Enter a test query to see which tools would be selected..."
+                  placeholder={uiT("ui.926f2a978070b11c")}
                   value={testQuery}
                   onChange={(e) => setTestQuery(e.target.value)}
                   rows={4}
@@ -82,39 +86,40 @@ export default function MCPSemanticFilterTestPanel({
 
               <Button className="w-full" onClick={onTest} disabled={testDisabled}>
                 <CirclePlay />
-                Test Filter
+                {uiT("ui.0029e9b270d697d2")}
               </Button>
 
               {!filterEnabled && (
                 <Alert>
                   <Info />
-                  <AlertTitle>Semantic filtering is disabled</AlertTitle>
-                  <AlertDescription>Enable semantic filtering and save settings to test the filter.</AlertDescription>
+                  <AlertTitle>{uiT("ui.9c6da2211b4bf170")}</AlertTitle>
+                  <AlertDescription>{uiT("ui.6e45a81dbc63be21")}</AlertDescription>
                 </Alert>
               )}
 
               {testError && (
                 <Alert variant="destructive" className="mb-4">
                   <CircleAlert />
-                  <AlertTitle>Semantic filtering did not run</AlertTitle>
+                  <AlertTitle>{uiT("ui.a149e7c27ac65992")}</AlertTitle>
                   <AlertDescription>{testError}</AlertDescription>
                 </Alert>
               )}
 
               {testResult && (
                 <div>
-                  <h5 className="mb-2 text-base font-medium">Results</h5>
+                  <h5 className="mb-2 text-base font-medium">{uiT("ui.219c4a6c86a716e9")}</h5>
                   <Alert className="mb-4">
                     <Info />
                     <AlertTitle>
-                      {testResult.selectedTools} of {testResult.totalTools} tools selected
+                      {testResult.selectedTools} {uiT("ui.28391d3bc64ec15c")} {testResult.totalTools}{" "}
+                      {uiT("ui.f57e3e0261a3aa4d")}
                     </AlertTitle>
                     <AlertDescription>
-                      {testResult.totalTools - testResult.selectedTools} tools filtered out
+                      {testResult.totalTools - testResult.selectedTools} {uiT("ui.04eaa3e661c663a4")}
                     </AlertDescription>
                   </Alert>
                   <div>
-                    <p className="mb-2 block font-medium">Selected Tools:</p>
+                    <p className="mb-2 block font-medium">{uiT("ui.bc5ad0fbb8776158")}</p>
                     <ul className="m-0 list-disc pl-5">
                       {testResult.tools.map((tool, index) => (
                         <li key={index} className="mb-1">
@@ -124,7 +129,7 @@ export default function MCPSemanticFilterTestPanel({
                     </ul>
                     {testResult.selectedTools > testResult.tools.length && (
                       <p className="mt-2 block text-sm text-muted-foreground">
-                        +{testResult.selectedTools - testResult.tools.length} more selected tools not shown
+                        +{testResult.selectedTools - testResult.tools.length} {uiT("ui.8f602b23ee2b0dfe")}
                       </p>
                     )}
                   </div>
@@ -137,22 +142,18 @@ export default function MCPSemanticFilterTestPanel({
             <div>
               <div className="mb-2 flex items-center gap-2">
                 <Code className="size-4" />
-                <p className="font-medium">API Usage</p>
+                <p className="font-medium">{uiT("ui.ab70b7ebd732a14c")}</p>
               </div>
-              <p className="mb-2 block text-sm text-muted-foreground">
-                Use this curl command to test the semantic filter with your current configuration.
-              </p>
-              <p className="mb-2 block font-medium">Response headers to check:</p>
+              <p className="mb-2 block text-sm text-muted-foreground">{uiT("ui.2274414da846ac1f")}</p>
+              <p className="mb-2 block font-medium">{uiT("ui.4698d86c97ef7dff")}</p>
               <ul className="mt-0 mr-0 mb-3 ml-0 list-disc pl-5">
                 <li>
-                  <span>x-litellm-semantic-filter: shows total tools → selected tools</span>
-                  <span className="block text-sm text-muted-foreground">Example: 10→3</span>
+                  <span>{uiT("ui.431f9ad1c4ed66f6")}</span>
+                  <span className="block text-sm text-muted-foreground">{uiT("ui.c87086c0286ea6a8")}</span>
                 </li>
                 <li>
-                  <span>x-litellm-semantic-filter-tools: CSV of selected tool names</span>
-                  <span className="block text-sm text-muted-foreground">
-                    Example: wikipedia-fetch,github-search,slack-post
-                  </span>
+                  <span>{uiT("ui.bc46450d2ba13a5b")}</span>
+                  <span className="block text-sm text-muted-foreground">{uiT("ui.44e947c4e54f418f")}</span>
                 </li>
               </ul>
               <pre className="m-0 overflow-auto rounded-sm bg-muted p-3 text-xs">{curlCommand}</pre>

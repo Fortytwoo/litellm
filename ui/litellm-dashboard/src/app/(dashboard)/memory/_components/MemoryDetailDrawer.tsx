@@ -43,7 +43,7 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
           <div className="flex flex-col gap-4 px-4 pb-4">
             <div className="flex flex-wrap gap-x-8 gap-y-3">
               <div>
-                <span className={`block ${LABEL_CLASS}`}>Memory ID</span>
+                <span className={`block ${LABEL_CLASS}`}>{uiT("ui.56f76171dc6eeace")}</span>
                 <code className={CODE_CLASS}>{row.memory_id}</code>
               </div>
               <div>
@@ -60,7 +60,7 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
               </div>
             </div>
             <div>
-              <span className={LABEL_CLASS}>Value</span>
+              <span className={LABEL_CLASS}>{uiT("ui.8e37953d23daca5f")}</span>
               <p className={`${BLOCK_CLASS} text-[13px]`}>{row.value}</p>
             </div>
             {row.metadata !== undefined && row.metadata !== null && (
@@ -72,12 +72,12 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span>
                 {uiT("ui.d70b9e24bca2")} {formatTimestamp(row.created_at)}
-                {row.created_by ? ` by ${row.created_by}` : ""}
+                {row.created_by ? uiT("ui.c66bf4d522a7d8fc", { v0: String(row.created_by) }) : ""}
               </span>
               <span aria-hidden="true">·</span>
               <span>
                 {uiT("ui.3a5ecca188c0")} {formatTimestamp(row.updated_at)}
-                {row.updated_by ? ` by ${row.updated_by}` : ""}
+                {row.updated_by ? uiT("ui.c66bf4d522a7d8fc", { v0: String(row.updated_by) }) : ""}
               </span>
             </div>
           </div>

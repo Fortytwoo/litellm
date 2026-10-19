@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Info } from "lucide-react";
 import React from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -18,6 +20,8 @@ const AUTH_HEADER_FORMATS: Readonly<Record<string, string>> = {
 };
 
 const OpenApiByokFields: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isByok = Boolean(useWatch({ name: "is_byok" }));
   const authType = useWatch({ name: "auth_type" }) as string | undefined;
   const hasAuthType = Boolean(authType) && authType !== "none";
@@ -27,8 +31,8 @@ const OpenApiByokFields: React.FC = () => {
       <MountedFormField
         label={
           <span className="text-sm font-medium text-foreground flex items-center gap-2">
-            BYOK (Bring Your Own Key)
-            <SimpleTooltip content="When enabled, each user provides their own API key for this service. Keys are stored per-user and never shared.">
+            {uiT("ui.d2785200b5225788")}
+            <SimpleTooltip content={uiT("ui.f18461316f2af849")}>
               <Info className="size-4 text-info hover:text-info/80 cursor-help" />
             </SimpleTooltip>
           </span>
@@ -44,7 +48,7 @@ const OpenApiByokFields: React.FC = () => {
             <div className="mb-4 p-3 bg-info/10 rounded-lg text-sm text-info flex items-start gap-2">
               <Info className="mt-0.5 size-4 shrink-0" />
               <span>
-                User keys will be sent as:{" "}
+                {uiT("ui.945e42fcc4dc1e41")}{" "}
                 <code className="font-mono bg-info/15 px-1 rounded-sm">
                   {authType === undefined ? "" : AUTH_HEADER_FORMATS[authType]}
                 </code>
@@ -55,16 +59,15 @@ const OpenApiByokFields: React.FC = () => {
             <div className="mb-4 p-3 bg-warning/10 rounded-lg text-sm text-warning flex items-start gap-2">
               <Info className="mt-0.5 size-4 shrink-0" />
               <span>
-                Set the <strong>Authentication Type</strong> below to specify how user keys are sent (e.g., Bearer
-                Token, API Key header).
+                {uiT("ui.0c4aef9f2fba18cf")} <strong>{uiT("ui.53c90adec54ba399")}</strong> {uiT("ui.07ba8fc1150f590b")}
               </span>
             </div>
           )}
           <MountedFormField
             label={
               <span className="text-sm font-medium text-foreground">
-                Access Description
-                <SimpleTooltip content="List of permissions shown to users in the connection modal (e.g. 'Create and manage Jira issues')">
+                {uiT("ui.a45621819df344a5")}
+                <SimpleTooltip content={uiT("ui.1d35a5b765b76255")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
               </span>
@@ -72,19 +75,15 @@ const OpenApiByokFields: React.FC = () => {
             name="byok_description"
           >
             {(control) => (
-              <MultiSelect
-                {...tagsControl(control)}
-                placeholder="Add access description items (press Enter after each)"
-                className="w-full"
-              />
+              <MultiSelect {...tagsControl(control)} placeholder={uiT("ui.009e1b576c77ea9c")} className="w-full" />
             )}
           </MountedFormField>
 
           <MountedFormField
             label={
               <span className="text-sm font-medium text-foreground">
-                API Key Help URL
-                <SimpleTooltip content="Optional link shown to users to help them find their API key">
+                {uiT("ui.cbb883424f0cd3dc")}
+                <SimpleTooltip content={uiT("ui.ad4a6e9e708f808b")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
               </span>

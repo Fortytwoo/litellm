@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import arizeLogo from "../../public/assets/logos/arize.png";
 import awsLogo from "../../public/assets/logos/aws.svg";
 import braintrustLogo from "../../public/assets/logos/braintrust.png";
@@ -41,7 +42,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       arize_otlp_protocol: ["grpc", "http/protobuf"],
     },
     success_event_params: ["arize_otlp_protocol"],
-    description: "Arize Logging Integration",
+    get description() {
+      return translateUi("ui.ed1440f92772efd9");
+    },
   },
   {
     id: "braintrust",
@@ -52,7 +55,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       braintrust_api_key: "password",
       braintrust_project_name: "text",
     },
-    description: "Braintrust Logging Integration",
+    get description() {
+      return translateUi("ui.ddf904041073513c");
+    },
   },
   {
     id: "custom_callback_api",
@@ -62,7 +67,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       custom_callback_api_url: "text",
       custom_callback_api_headers: "text",
     },
-    description: "Custom Callback API Logging Integration",
+    get description() {
+      return translateUi("ui.17d511736ec01d90");
+    },
   },
   {
     id: "galileo",
@@ -77,7 +84,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       GALILEO_USERNAME: "text",
       GALILEO_PASSWORD: "password",
     },
-    description: "Galileo AI Observability Integration",
+    get description() {
+      return translateUi("ui.a442dbd56fd05e14");
+    },
   },
   {
     id: "datadog",
@@ -88,7 +97,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       dd_api_key: "password",
       dd_site: "text",
     },
-    description: "Datadog Logging Integration",
+    get description() {
+      return translateUi("ui.e706bfb3c55037a3");
+    },
   },
   {
     id: "newrelic",
@@ -99,7 +110,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       newrelic_api_key: "password",
       newrelic_region: "text",
     },
-    description: "New Relic Logging Integration",
+    get description() {
+      return translateUi("ui.c3e7e193895ca83f");
+    },
   },
   {
     id: "lago",
@@ -110,7 +123,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       lago_api_url: "text",
       lago_api_key: "password",
     },
-    description: "Lago Billing Logging Integration",
+    get description() {
+      return translateUi("ui.2cf5a9ea419f65e1");
+    },
   },
   {
     id: "langfuse",
@@ -123,7 +138,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       langfuse_host: "text",
       langfuse_environment: "text",
     },
-    description: "Langfuse v2 Logging Integration",
+    get description() {
+      return translateUi("ui.c97161f14e2bae27");
+    },
   },
   {
     id: "langfuse_otel",
@@ -140,7 +157,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
     dynamic_param_options: {
       langfuse_span_scope: ["full", "llm_only"],
     },
-    description: "Langfuse v3 OTEL Logging Integration",
+    get description() {
+      return translateUi("ui.4398c3326f159961");
+    },
   },
   {
     id: "langsmith",
@@ -153,7 +172,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       langsmith_base_url: "text",
       langsmith_sampling_rate: "number",
     },
-    description: "Langsmith Logging Integration",
+    get description() {
+      return translateUi("ui.9c6a04928651a8b8");
+    },
   },
   {
     id: "openmeter",
@@ -164,7 +185,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       openmeter_api_key: "password",
       openmeter_base_url: "text",
     },
-    description: "OpenMeter Logging Integration",
+    get description() {
+      return translateUi("ui.4ebbbee6edd2e067");
+    },
   },
   {
     id: "otel",
@@ -176,7 +199,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       otel_headers: "text",
       otel_exporter_otlp_protocol: "select",
     },
-    description: "OpenTelemetry Logging Integration",
+    get description() {
+      return translateUi("ui.5d2b5ebba7598e35");
+    },
   },
   {
     id: "pointfive",
@@ -187,7 +212,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       POINTFIVE_API_KEY: "password",
       POINTFIVE_API_URL: "text",
     },
-    description: "PointFive Logging Integration",
+    get description() {
+      return translateUi("ui.c444c3c44d538aef");
+    },
   },
   {
     id: "zerobus",
@@ -201,7 +228,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       ZEROBUS_CLIENT_SECRET: "password",
       ZEROBUS_TABLE_NAME: "text",
     },
-    description: "Databricks Zerobus Ingest Logging Integration",
+    get description() {
+      return translateUi("ui.6b7010090a732246");
+    },
   },
   {
     id: "s3",
@@ -214,7 +243,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       aws_secret_access_key: "password",
       aws_region: "text",
     },
-    description: "S3 Bucket (AWS) Logging Integration",
+    get description() {
+      return translateUi("ui.cbf0ee837b7d7ca1");
+    },
   },
   {
     id: "signoz",
@@ -225,7 +256,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       signoz_ingestion_endpoint: "text",
       signoz_ingestion_key: "password",
     },
-    description: "SigNoz Logging Integration. Setup: https://signoz.io/docs/litellm-observability/",
+    get description() {
+      return translateUi("ui.3376d2e11e8c9228");
+    },
   },
   {
     id: "SQS",
@@ -238,7 +271,9 @@ export const CALLBACK_CONFIGS: CallbackConfig[] = [
       aws_secret_access_key: "password",
       aws_region: "text",
     },
-    description: "SQS Queue (AWS) Logging Integration",
+    get description() {
+      return translateUi("ui.81ba43cd65dfe5f8");
+    },
   },
 ];
 

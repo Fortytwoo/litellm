@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { toast } from "@/lib/toast";
@@ -645,13 +648,16 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                 messages[messages.length - 1] = {
                   ...last,
                   content: assistantContent
-                    ? `${assistantContent}\nError fetching response: ${errorMessage}`
-                    : `Error fetching response: ${errorMessage}`,
+                    ? translateUi("ui.aed5fafe4b30e0bb", undefined, {
+                        v0: String(assistantContent),
+                        v1: String(errorMessage),
+                      })
+                    : translateUi("ui.d5f1b25fc32eb9bf", undefined, { v0: String(errorMessage) }),
                 };
               } else {
                 messages.push({
                   role: "assistant",
-                  content: `Error fetching response: ${errorMessage}`,
+                  content: translateUi("ui.d5f1b25fc32eb9bf", undefined, { v0: String(errorMessage) }),
                 });
               }
               return {
@@ -695,18 +701,20 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
         <div className="border-b px-4 py-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Virtual Key Source</span>
+              <span className="text-sm font-medium text-muted-foreground">{uiT("ui.a99cda3a08ccd8c4")}</span>
               <Select
                 value={apiKeySource}
                 onValueChange={(value) => setApiKeySource(value as "session" | "custom")}
                 disabled={disabledPersonalKeyCreation}
               >
-                <SelectTrigger className="w-48" aria-label="Virtual Key Source">
-                  <SelectValue>{apiKeySource === "custom" ? uiT("ui.3af334745cdc") : "Current UI Session"}</SelectValue>
+                <SelectTrigger className="w-48" aria-label={uiT("ui.a99cda3a08ccd8c4")}>
+                  <SelectValue>
+                    {apiKeySource === "custom" ? uiT("ui.3af334745cdc") : uiT("ui.f32327f1cb044761")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="session" disabled={!canUseSessionKey}>
-                    Current UI Session
+                    {uiT("ui.f32327f1cb044761")}
                   </SelectItem>
                   <SelectItem value="custom">{uiT("ui.3af334745cdc")}</SelectItem>
                 </SelectContent>
@@ -716,15 +724,15 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                   type="password"
                   value={customApiKey}
                   onChange={(event) => setCustomApiKey(event.target.value)}
-                  placeholder="Enter Virtual Key"
+                  placeholder={uiT("ui.60d994b23c02f76e")}
                   className="w-56"
                 />
               )}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Endpoint</span>
+              <span className="text-sm font-medium text-muted-foreground">{uiT("ui.3df9726c68ba76d6")}</span>
               <Select value={selectedEndpoint} onValueChange={(value) => setSelectedEndpoint(value as EndpointIdType)}>
-                <SelectTrigger className="w-56" aria-label="Endpoint">
+                <SelectTrigger className="w-56" aria-label={uiT("ui.3df9726c68ba76d6")}>
                   <SelectValue>{endpointConfig.label}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -739,17 +747,17 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
             <div className="flex items-center gap-3">
               <Button variant="outline" onClick={clearAllChats} disabled={!hasMessages}>
                 <Eraser />
-                Clear All Chats
+                {uiT("ui.caa4b7010f945448")}
               </Button>
               <Tooltip>
                 <TooltipTrigger render={<span className="inline-flex" />}>
                   <Button variant="outline" onClick={addComparison} disabled={comparisons.length >= maxComparisons}>
                     <Plus />
-                    Add Comparison
+                    {uiT("ui.7011fb1258923b5c")}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {comparisons.length >= maxComparisons ? "Compare up to 3 models at a time" : "Add another comparison"}
+                  {comparisons.length >= maxComparisons ? uiT("ui.c012ebab7860f2b8") : uiT("ui.3dc17ec848b84faa")}
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -781,7 +789,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
             <div className="border border-border shadow-lg rounded-xl bg-card p-4">
               <div className="flex items-center justify-between gap-4 mb-3 min-h-8">
                 {hasAttachment ? (
-                  <span className="text-sm text-muted-foreground">Attachment ready to send</span>
+                  <span className="text-sm text-muted-foreground">{uiT("ui.bda054635dd8fe08")}</span>
                 ) : showSuggestedPrompts ? (
                   <div className="flex items-center gap-2 overflow-x-auto">
                     {SUGGESTED_PROMPTS.map((prompt) => (
@@ -791,7 +799,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                         onClick={() => handleFollowUpSelect(prompt)}
                         className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent cursor-pointer"
                       >
-                        {prompt}
+                        {translateText(prompt)}
                       </button>
                     ))}
                   </div>
@@ -804,7 +812,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                         onClick={() => handleFollowUpSelect(question)}
                         className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent cursor-pointer"
                       >
-                        {question}
+                        {translateText(question)}
                       </button>
                     ))}
                   </div>
@@ -828,19 +836,21 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                       ) : (
                         <img
                           src={uploadedFilePreviewUrl || ""}
-                          alt="Upload preview"
+                          alt={uiT("ui.6f777abbd5339a6e")}
                           className="w-10 h-10 rounded-md border border-border object-cover"
                         />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-foreground truncate">{uploadedFile.name}</div>
-                      <div className="text-xs text-muted-foreground">{isUploadedFilePdf ? "PDF" : "Image"}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {isUploadedFilePdf ? uiT("ui.1d393b0081b632c5") : uiT("ui.1aa4cb0bcca76e92")}
+                      </div>
                     </div>
                     <button
                       className="flex items-center justify-center w-6 h-6 text-muted-foreground hover:text-foreground hover:bg-accent rounded-full transition-colors"
                       onClick={handleRemoveFile}
-                      aria-label="Remove attachment"
+                      aria-label={uiT("ui.595b066a8838734a")}
                     >
                       <Trash2 className="size-3" />
                     </button>

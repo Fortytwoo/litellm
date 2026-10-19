@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { TriangleAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/shared/Alert";
@@ -74,6 +76,8 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
   onDataChange,
   onUnsavedChanges,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [selectedPatterns, setSelectedPatterns] = useState<Pattern[]>([]);
   const [blockedWords, setBlockedWords] = useState<BlockedWord[]>([]);
   const [selectedContentCategories, setSelectedContentCategories] = useState<SelectedContentCategory[]>([]);
@@ -234,15 +238,13 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
   return (
     <>
       <div className="my-6 flex items-center gap-4">
-        <span className="shrink-0 font-medium">Content Filter Configuration</span>
+        <span className="shrink-0 font-medium">{uiT("ui.0f5937da787e3b50")}</span>
         <Separator className="flex-1" />
       </div>
       {hasUnsavedChanges && (
         <Alert variant="warning" className="mb-4">
           <TriangleAlert />
-          <AlertDescription>
-            You have unsaved changes to patterns or keywords. Remember to click &quot;Save Changes&quot; at the bottom.
-          </AlertDescription>
+          <AlertDescription>{uiT("ui.c32ca8d32421b9a4")}</AlertDescription>
         </Alert>
       )}
       <div className="mb-6">

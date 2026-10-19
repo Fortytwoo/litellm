@@ -111,7 +111,7 @@ export default function AuditLogsPanel({
         <p style={{ display: "block", marginBottom: "20px", fontStyle: "italic" }}>{uiT("ui.05ec52cb3c80")}</p>
         <img
           src={resolveLogoSrc(auditLogsPreviewImg)}
-          alt="Audit Logs Preview"
+          alt={uiT("ui.21d69c33c1d16a28")}
           style={{
             maxWidth: "100%",
             maxHeight: "700px",

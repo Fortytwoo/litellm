@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 
 export type DecisionEndpoint = "/v1/systemone" | "/typesafe/v1/systemone";
@@ -20,7 +21,9 @@ const decisionQuestionSchema = z.discriminatedUnion("type", [
       criteria: z.partialRecord(z.enum(["true", "false"]), decisionsJson.nullable()).nullish(),
     })
     .refine((value) => value.instructions != null || value.criteria != null, {
-      message: "A yes / no question requires instructions or criteria.",
+      get message() {
+        return translateUi("ui.19a0133a951fa248");
+      },
     }),
   z.looseObject({
     type: z.literal("score"),
@@ -59,8 +62,10 @@ const choiceQuestionSchema = z.looseObject({
   type: z.literal("choice"),
   instructions,
   criteria: z
-    .record(z.string(), z.string({ error: "Choice descriptions must be strings." }), {
-      error: "Choice criteria must be an object mapping labels to descriptions.",
+    .record(z.string(), z.string({ error: () => translateUi("ui.b9cd1922ff235dd7") }), {
+      get error() {
+        return translateUi("ui.e284943e88988fc1");
+      },
     })
     .refine((criteria) => {
       const count = Object.keys(criteria).length;
@@ -74,10 +79,14 @@ const noulQuestionSchema = z.looseObject({
   criteria: z
     .looseObject(
       {
-        true: z.string({ error: "Noul true criteria must be a string." }).optional(),
-        false: z.string({ error: "Noul false criteria must be a string." }).optional(),
+        true: z.string({ error: () => translateUi("ui.95dd18c6ba490d4d") }).optional(),
+        false: z.string({ error: () => translateUi("ui.d42124aed05e1004") }).optional(),
       },
-      { error: "Noul criteria, when provided, must be an object." },
+      {
+        get error() {
+          return translateUi("ui.6c9a076572637e0a");
+        },
+      },
     )
     .optional(),
 });
@@ -86,8 +95,8 @@ const scoreQuestionSchema = z.looseObject({
   type: z.literal("score"),
   instructions,
   criteria: z
-    .array(z.string({ error: "Score levels must be strings." }), {
-      error: "Score criteria must be an array of levels.",
+    .array(z.string({ error: () => translateUi("ui.f6b7ae38b2ed9d45") }), {
+      error: () => translateUi("ui.81bcaefbed541bde"),
     })
     .min(2, "Score criteria must contain at least 2 levels."),
 });
@@ -104,7 +113,7 @@ const questionSchema = z.discriminatedUnion("type", [choiceQuestionSchema, noulQ
 export const systemOneRequestSchema = z.looseObject(
   {
     model: nonEmptyString("Model must be a non-empty string.").optional(),
-    state: z.unknown().nonoptional({ error: "Required property 'state' is missing." }),
+    state: z.unknown().nonoptional({ error: () => translateUi("ui.a916718bd3a9b5f7") }),
     questions: z
       .record(z.string(), questionSchema, {
         error: (iss) =>
@@ -114,7 +123,7 @@ export const systemOneRequestSchema = z.looseObject(
       })
       .refine((questions) => Object.keys(questions).length > 0, "At least one question is required."),
   },
-  { error: "Payload must be a JSON object." },
+  { error: () => translateUi("ui.3d213d82ea22c91b") },
 );
 
 const probability = z.number().finite().min(0).max(1);

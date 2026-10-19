@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useHashicorpVaultConfig } from "@/app/(dashboard)/hooks/configOverrides/useHashicorpVaultConfig";
@@ -26,7 +28,9 @@ interface VaultFieldGroup {
 
 const FIELD_GROUPS: VaultFieldGroup[] = [
   {
-    title: "Connection",
+    get title() {
+      return translateUi("ui.639a40e82b9a96f0");
+    },
     fields: [
       "vault_addr",
       "vault_namespace",
@@ -37,18 +41,30 @@ const FIELD_GROUPS: VaultFieldGroup[] = [
     ],
   },
   {
-    title: "Token Authentication",
-    subtitle: "Use a Vault token to authenticate. Only one auth method is required.",
+    get title() {
+      return translateUi("ui.91b1fd726fbf16ad");
+    },
+    get subtitle() {
+      return translateUi("ui.367e396577d896c9");
+    },
     fields: ["vault_token"],
   },
   {
-    title: "AppRole Authentication",
-    subtitle: "Use AppRole credentials to authenticate. Only one auth method is required.",
+    get title() {
+      return translateUi("ui.43d89442c271b24d");
+    },
+    get subtitle() {
+      return translateUi("ui.fa937cfa9191c94a");
+    },
     fields: ["approle_role_id", "approle_secret_id", "approle_mount_path"],
   },
   {
-    title: "TLS",
-    subtitle: "Optional client certificate for mTLS.",
+    get title() {
+      return translateUi("ui.d1c18ec0b1092683");
+    },
+    get subtitle() {
+      return translateUi("ui.774e0a1720d17e01");
+    },
     fields: ["client_cert", "client_key", "vault_cert_role"],
   },
 ];
@@ -62,7 +78,9 @@ const buildSchema = (fields: readonly string[]): z.ZodType<VaultFormValues, Vaul
         name,
         name === "vault_addr"
           ? z.string().refine((value) => value.length === 0 || /^https?:\/\/.+/.test(value), {
-              message: "Must start with http:// or https://",
+              get message() {
+                return translateUi("ui.3ca6e40c7de5fa02");
+              },
             })
           : z.string(),
       ]),
@@ -115,7 +133,7 @@ const EditHashicorpVaultModal: React.FC<EditHashicorpVaultModalProps> = ({ isVis
 
     mutate(config, {
       onSuccess: () => {
-        toast.success("Hashicorp Vault configuration updated successfully");
+        toast.success(translateUi("ui.0c66f5ebba32ad83"));
         onSuccess();
       },
       onError: (err) => {
@@ -155,7 +173,7 @@ const EditHashicorpVaultModal: React.FC<EditHashicorpVaultModalProps> = ({ isVis
     <Dialog open={isVisible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Edit Hashicorp Vault Configuration</DialogTitle>
+          <DialogTitle>{uiT("ui.112a1fcadab319d1")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           {FIELD_GROUPS.map((group, index) => (

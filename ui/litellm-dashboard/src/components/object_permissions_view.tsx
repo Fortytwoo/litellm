@@ -54,11 +54,9 @@ export function ObjectPermissionsView({
         accessToken={accessToken}
       />
       <div className="min-w-0 rounded-md border border-border p-4">
-        <p className="text-sm font-medium text-foreground">Search tools</p>
+        <p className="text-sm font-medium text-foreground">{uiT("ui.fbd165231fa1ce0d")}</p>
         {searchTools.length === 0 ? (
-          <p className="mt-1 block text-xs text-muted-foreground">
-            No restriction — all configured search tools are allowed for this team.
-          </p>
+          <p className="mt-1 block text-xs text-muted-foreground">{uiT("ui.7e623a84ed20131c")}</p>
         ) : (
           <p className="mt-1 block text-xs break-words text-foreground">{searchTools.join(", ")}</p>
         )}
@@ -66,9 +64,7 @@ export function ObjectPermissionsView({
       <div className="min-w-0 rounded-md border border-border p-4">
         <p className="text-sm font-medium text-foreground">{uiT("ui.66d0f523a379")}</p>
         {skills.length === 0 ? (
-          <p className="mt-1 block text-xs text-muted-foreground">
-            No private skills granted. Only enabled (public) Claude Code plugins are visible.
-          </p>
+          <p className="mt-1 block text-xs text-muted-foreground">{uiT("ui.919d6edea1e5c702")}</p>
         ) : (
           <p className="mt-1 block text-xs break-words text-foreground">{skills.join(", ")}</p>
         )}
@@ -81,8 +77,8 @@ export function ObjectPermissionsView({
       <div className={`@container bg-card border border-border rounded-lg p-6 ${className}`}>
         <div className="flex items-center gap-2 mb-6">
           <div>
-            <p className="font-semibold text-foreground">Object Permissions</p>
-            <p className="text-xs text-muted-foreground">Access control for Vector Stores and MCP Servers</p>
+            <p className="font-semibold text-foreground">{uiT("ui.d614e6a34961d24b")}</p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.4d04d8c7d2dbb3d7")}</p>
           </div>
         </div>
         {content}
@@ -92,7 +88,7 @@ export function ObjectPermissionsView({
 
   return (
     <div className={`${className}`}>
-      <p className="font-medium text-foreground mb-3">Object Permissions</p>
+      <p className="font-medium text-foreground mb-3">{uiT("ui.d614e6a34961d24b")}</p>
       {content}
     </div>
   );

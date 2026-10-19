@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 import type { Settings } from "../model/types";
 import { normalizeFilters } from "./filters";
@@ -36,14 +37,18 @@ function validateFilters(draft: InvestigationDraft, ctx: z.RefinementCtx) {
     if (!filter.key.trim()) {
       ctx.addIssue({
         code: "custom",
-        message: "Choose a key and value for every condition, or remove it",
+        get message() {
+          return translateUi("ui.2d1088d07b0728da");
+        },
         path: ["selection", "filters", index, "key"],
       });
     }
     if (!filter.value.trim()) {
       ctx.addIssue({
         code: "custom",
-        message: "Choose a key and value for every condition, or remove it",
+        get message() {
+          return translateUi("ui.2d1088d07b0728da");
+        },
         path: ["selection", "filters", index, "value"],
       });
     }
@@ -54,7 +59,9 @@ function validateManualSelection(draft: InvestigationDraft, ctx: z.RefinementCtx
   if (draft.manualSelection && !draft.selection.execution_ids.length) {
     ctx.addIssue({
       code: "custom",
-      message: "Choose at least one run or turn off individual selection",
+      get message() {
+        return translateUi("ui.63c63d3f1a9db98f");
+      },
       path: ["selection", "execution_ids"],
     });
   }
@@ -66,7 +73,9 @@ function validateSampleWindow(draft: InvestigationDraft, ctx: z.RefinementCtx) {
   if (!Number.isInteger(hours) || hours < 1) {
     ctx.addIssue({
       code: "custom",
-      message: "Choose a time range of at least 1 hour",
+      get message() {
+        return translateUi("ui.6fcb848ad426facc");
+      },
       path: ["selection", "lookback_hours"],
     });
   }
@@ -74,14 +83,18 @@ function validateSampleWindow(draft: InvestigationDraft, ctx: z.RefinementCtx) {
   if (!Number.isFinite(percent) || percent <= 0 || percent > 100) {
     ctx.addIssue({
       code: "custom",
-      message: "Choose a sampling percentage greater than 0 and up to 100",
+      get message() {
+        return translateUi("ui.32eb114f74b79b0e");
+      },
       path: ["selection", "sample_percent"],
     });
   }
   if (selection.sample_size != null && (!Number.isInteger(selection.sample_size) || selection.sample_size < 1)) {
     ctx.addIssue({
       code: "custom",
-      message: "Choose a positive maximum or leave it blank for no limit",
+      get message() {
+        return translateUi("ui.374354c215998b0e");
+      },
       path: ["selection", "sample_size"],
     });
   }
@@ -91,7 +104,9 @@ function validateBudgetAndSchedule(draft: InvestigationDraft, ctx: z.RefinementC
   if (!Number.isFinite(draft.budget) || draft.budget <= 0) {
     ctx.addIssue({
       code: "custom",
-      message: "Choose a monthly limit greater than zero",
+      get message() {
+        return translateUi("ui.35a8254b5e073ddb");
+      },
       path: ["budget"],
     });
   }
@@ -100,7 +115,9 @@ function validateBudgetAndSchedule(draft: InvestigationDraft, ctx: z.RefinementC
   if (draft.repeat && intervalInvalid) {
     ctx.addIssue({
       code: "custom",
-      message: "Choose a repeat interval of at least 1 minute",
+      get message() {
+        return translateUi("ui.5a3ba0851250d855");
+      },
       path: ["interval"],
     });
   }
@@ -111,7 +128,9 @@ function validateExpectations(draft: InvestigationDraft, ctx: z.RefinementCtx) {
   if (!draft.context.trim() && !checks.length && !draft.watching.length) {
     ctx.addIssue({
       code: "custom",
-      message: "Describe the expected behavior or pick something to watch for",
+      get message() {
+        return translateUi("ui.d0d865175ba50cc2");
+      },
       path: ["context"],
     });
   }
@@ -119,7 +138,9 @@ function validateExpectations(draft: InvestigationDraft, ctx: z.RefinementCtx) {
     if (check.instruction.trim() && check.instruction.trim().length < 3) {
       ctx.addIssue({
         code: "custom",
-        message: "Use at least three characters for each check",
+        get message() {
+          return translateUi("ui.934d004d99d24d78");
+        },
         path: ["questions", index, "instruction"],
       });
     }

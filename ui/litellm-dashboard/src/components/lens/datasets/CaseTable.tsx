@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import {
   getCoreRowModel,
@@ -43,10 +45,12 @@ export const caseLabel = (index: number): string => `Case ${index + 1}`;
 type Cell = CellContext<DatasetCase, unknown>;
 
 function IncludeCell({ row }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { editable, onToggle } = useCaseTable();
   return (
     <Checkbox
-      aria-label={`Include ${caseLabel(row.index).toLowerCase()}`}
+      aria-label={uiT("ui.8890b6d6a699740f", { v0: String(caseLabel(row.index).toLowerCase()) })}
       checked={row.original.included}
       disabled={!editable}
       onClick={(event) => event.stopPropagation()}
@@ -57,8 +61,10 @@ function IncludeCell({ row }: Cell) {
 }
 
 function InputText({ item }: { item: DatasetCase }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const input = caseInput(item);
-  if (!input) return <span className={MUTED_ITALIC}>No input</span>;
+  if (!input) return <span className={MUTED_ITALIC}>{uiT("ui.6e69efde182aea68")}</span>;
   return (
     <>
       <span className="text-muted-foreground">{input.role}: </span>
@@ -68,8 +74,10 @@ function InputText({ item }: { item: DatasetCase }) {
 }
 
 function ReplyText({ item }: { item: DatasetCase }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const reply = caseReplyText(item);
-  return reply ? <span>{reply}</span> : <span className={MUTED_ITALIC}>No reply</span>;
+  return reply ? <span>{reply}</span> : <span className={MUTED_ITALIC}>{uiT("ui.0623c0abcd81a5e0")}</span>;
 }
 
 function InputCell({ row: { original: item } }: Cell) {
@@ -94,22 +102,26 @@ function ReplyCell({ row: { original: item } }: Cell) {
 }
 
 function ExpectedCell({ row: { original: item } }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   return item.expected ? (
     <span className="block truncate text-foreground">{item.expected}</span>
   ) : (
-    <span className={MUTED_ITALIC}>Not set</span>
+    <span className={MUTED_ITALIC}>{uiT("ui.4895f73177ab")}</span>
   );
 }
 
 function SourceCell({ row: { original: item } }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   const openSourceTrace = useOpenSourceTrace();
   const { trace_id: traceId, trace_ref: traceRef, span_id: spanId } = item.source;
   if (!traceId) return null;
   return (
     <button
       type="button"
-      aria-label="Open source trace"
-      title="Open source trace"
+      aria-label={uiT("ui.df6a84e8db631dfe")}
+      title={uiT("ui.df6a84e8db631dfe")}
       onClick={(event) => {
         event.stopPropagation();
         openSourceTrace({ traceId, traceRef, spanId });
@@ -122,11 +134,16 @@ function SourceCell({ row: { original: item } }: Cell) {
 }
 
 function ToolCallsCell({ row: { original: item } }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   const count = toolCallCount(item);
   if (count === 0) return null;
   return (
     <span
-      title={`${count} tool ${count === 1 ? "call" : "calls"}`}
+      title={uiT("ui.92078b1b270a6f0b", {
+        v0: String(count),
+        v1: String(count === 1 ? uiT("ui.7edb360f06acaef2") : uiT("ui.f46f5990ebfadcab")),
+      })}
       className="inline-flex min-w-5 justify-center rounded-full bg-muted px-1.5 font-mono text-xs tabular-nums text-foreground"
     >
       {count}
@@ -138,15 +155,51 @@ const COLUMNS: ColumnDef<DatasetCase>[] = [
   {
     id: "include",
     size: 40,
-    header: "Include",
+    get header() {
+      return translateUi("ui.7285576bdacf86fe");
+    },
     cell: IncludeCell,
     meta: { headerClassName: "sr-only", className: "pr-0" },
   },
-  { id: "input", header: "Input", cell: InputCell },
-  { id: "reply", header: "Reply", cell: ReplyCell },
-  { id: "expected", size: 220, header: "Expected", cell: ExpectedCell },
-  { id: "source", size: 72, header: "Source", cell: SourceCell },
-  { id: "tools", size: 104, header: "Tool calls", cell: ToolCallsCell, meta: { numeric: true } },
+  {
+    id: "input",
+    get header() {
+      return translateUi("ui.36ecb4f86691");
+    },
+    cell: InputCell,
+  },
+  {
+    id: "reply",
+    get header() {
+      return translateUi("ui.c253f451bdd56431");
+    },
+    cell: ReplyCell,
+  },
+  {
+    id: "expected",
+    size: 220,
+    get header() {
+      return translateUi("ui.ca99b7f1b14ee2c0");
+    },
+    cell: ExpectedCell,
+  },
+  {
+    id: "source",
+    size: 72,
+    get header() {
+      return translateUi("ui.0e570ca6fabe24f9");
+    },
+    cell: SourceCell,
+  },
+  {
+    id: "tools",
+    size: 104,
+    get header() {
+      return translateUi("ui.da5122dc0f97b158");
+    },
+    cell: ToolCallsCell,
+    meta: { numeric: true },
+  },
 ];
 
 export interface CaseTableProps {
@@ -159,6 +212,8 @@ export interface CaseTableProps {
 }
 
 export function CaseTable({ cases, editable, selectedId, onSelect, onToggle, children }: CaseTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const desktop = useMediaQuery("(min-width: 768px)");
   const tableOptions: TableOptions<DatasetCase> = {
     data: [...cases],
@@ -184,7 +239,7 @@ export function CaseTable({ cases, editable, selectedId, onSelect, onToggle, chi
       <CaseTableContext.Provider value={{ editable, onToggle }}>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card">
           <InspectorTable.Root table={table}>
-            <InspectorTable.Grid aria-label="Cases" className="text-xs md:min-w-[860px]">
+            <InspectorTable.Grid aria-label={uiT("ui.2249bd503ec47d72")} className="text-xs md:min-w-[860px]">
               <InspectorTable.Header />
               <InspectorTable.Body<DatasetCase> rowHeight={() => (desktop ? CASE_HEIGHT : MOBILE_CASE_HEIGHT)}>
                 {(row) => (
@@ -200,11 +255,12 @@ export function CaseTable({ cases, editable, selectedId, onSelect, onToggle, chi
             </InspectorTable.Grid>
           </InspectorTable.Root>
           <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-            {cases.length} {cases.length === 1 ? "case" : "cases"} · {included} included
+            {cases.length} {cases.length === 1 ? uiT("ui.bbfcd4160a1e8674") : uiT("ui.352b84777d8dd96a")} · {included}{" "}
+            {uiT("ui.7f0f70e643bcb02d")}
           </footer>
         </div>
       </CaseTableContext.Provider>
-      <Inspector.Panel<DatasetCase> label="Case details" testId="case-panel">
+      <Inspector.Panel<DatasetCase> label={uiT("ui.01fd608d5cbafca7")} testId="case-panel">
         {children}
       </Inspector.Panel>
     </Inspector.Root>

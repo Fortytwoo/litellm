@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -129,7 +131,7 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
   return (
     <div className="w-full space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-4">
-        <span className="text-sm text-muted-foreground">Spend is bucketed by UTC day</span>
+        <span className="text-sm text-muted-foreground">{uiT("ui.d05724952f09")}</span>
         <AdvancedDatePicker value={dateValue} onValueChange={onDateChange} />
       </div>
 
@@ -145,11 +147,15 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
             <CardTitle>{uiT("ui.ed46218066a7")}</CardTitle>
             <CardDescription>{savingsSubtitle}</CardDescription>
             <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-              <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />
+              <CustomLegend
+                categories={SAVINGS_SERIES}
+                colors={SAVINGS_COLORS}
+                formatLabel={(category) => translateText(category)}
+              />
               <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
                 <TabsList>
-                  <TabsTrigger value="cumulative">Cumulative</TabsTrigger>
-                  <TabsTrigger value="per-interval">{intervalLabel}</TabsTrigger>
+                  <TabsTrigger value="cumulative">{uiT("ui.cecf2aade089")}</TabsTrigger>
+                  <TabsTrigger value="per-interval">{translateText(intervalLabel)}</TabsTrigger>
                 </TabsList>
               </Tabs>
             </CardAction>
@@ -182,7 +188,7 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Savings by driver</CardTitle>
+            <CardTitle>{uiT("ui.c72bc9bd94d81d3a")}</CardTitle>
           </CardHeader>
           <CardContent>
             <DonutChart
@@ -202,22 +208,18 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
       {canViewProxyWideCostData && (
         <Card>
           <CardHeader>
-            <CardTitle>Spend by tool</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Spend on requests that invoked each tool (MCP and client-side tools); declaring a tool without invoking it
-              does not count. A request that invoked multiple tools counts its full spend toward each, so this
-              attributes rather than partitions spend.
-            </p>
+            <CardTitle>{uiT("ui.17132da2186f3386")}</CardTitle>
+            <p className="text-sm text-muted-foreground">{uiT("ui.60d24e6c4387857f")}</p>
           </CardHeader>
           <CardContent>
             {topTools.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
-                {toolSpendLoading ? uiT("ui.47d2a515ef2f") : "No tool usage in this range."}
+                {toolSpendLoading ? uiT("ui.47d2a515ef2f") : uiT("ui.90f2f7dd38bff89a")}
               </p>
             ) : (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div>
-                  <p className="mb-2 text-sm font-medium text-muted-foreground">Total by tool</p>
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">{uiT("ui.ca705b8cfb48b241")}</p>
                   <BarChart
                     data={topToolsChart}
                     index="tool_name"
@@ -232,7 +234,7 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
                   />
                 </div>
                 <div>
-                  <p className="mb-2 text-sm font-medium text-muted-foreground">Daily spend by tool</p>
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">{uiT("ui.b1c6413ed63e8dfa")}</p>
                   <CustomLegend categories={topToolNames} colors={toolColors} />
                   <BarChart
                     data={dailyToolSeries}

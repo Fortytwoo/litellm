@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { z } from "zod";
@@ -109,10 +113,12 @@ const resolveGuardrails = (values: PolicyFormValues, existingPolicies: Policy[])
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -141,51 +147,54 @@ const modeIconClass = (isSelected: boolean) =>
     isSelected ? "bg-info/15 text-info" : "bg-muted text-muted-foreground",
   ].join(" ");
 
-const ModePicker: React.FC<ModePickerProps> = ({ selected, onSelect }) => (
-  <div className="flex gap-4 py-2">
-    <div onClick={() => onSelect("simple")} className={modeCardClass(selected === "simple")}>
-      <div className={modeIconClass(selected === "simple")}>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-          <path d="M8 7h8M8 12h8M8 17h5" />
-        </svg>
+const ModePicker: React.FC<ModePickerProps> = ({ selected, onSelect }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <div className="flex gap-4 py-2">
+      <div onClick={() => onSelect("simple")} className={modeCardClass(selected === "simple")}>
+        <div className={modeIconClass(selected === "simple")}>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M8 7h8M8 12h8M8 17h5" />
+          </svg>
+        </div>
+        <span className="mb-1 block text-[15px] font-semibold text-foreground">{uiT("ui.9d988fd81c289990")}</span>
+        <span className="block text-[13px] text-muted-foreground">{uiT("ui.2b7999d18280b921")}</span>
       </div>
-      <span className="mb-1 block text-[15px] font-semibold text-foreground">Simple Mode</span>
-      <span className="block text-[13px] text-muted-foreground">Pick guardrails from a list. All run in parallel.</span>
-    </div>
 
-    <div onClick={() => onSelect("flow_builder")} className={modeCardClass(selected === "flow_builder")}>
-      <Badge variant="secondary" className="absolute top-3 right-3 text-[10px] font-semibold">
-        NEW
-      </Badge>
-      <div className={modeIconClass(selected === "flow_builder")}>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
+      <div onClick={() => onSelect("flow_builder")} className={modeCardClass(selected === "flow_builder")}>
+        <Badge variant="secondary" className="absolute top-3 right-3 text-[10px] font-semibold">
+          {uiT("ui.a253ff09c5a8678e")}
+        </Badge>
+        <div className={modeIconClass(selected === "flow_builder")}>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <span className="mb-1 block text-[15px] font-semibold text-foreground">{uiT("ui.a6a94ddeb4441739")}</span>
+        <span className="block text-[13px] text-muted-foreground">{uiT("ui.db3164c5c729dd78")}</span>
       </div>
-      <span className="mb-1 block text-[15px] font-semibold text-foreground">Flow Builder</span>
-      <span className="block text-[13px] text-muted-foreground">Define steps, conditions, and error responses.</span>
     </div>
-  </div>
-);
+  );
+};
 
 const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
   visible,
@@ -305,10 +314,10 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
       if (isEditing && editingPolicy) {
         await updatePolicy(accessToken, editingPolicy.policy_id, data as PolicyUpdateRequest);
-        toast.success("Policy updated successfully");
+        toast.success(translateUi("ui.90a491bd0bda0676"));
       } else {
         await createPolicy(accessToken, data as PolicyCreateRequest);
-        toast.success("Policy created successfully");
+        toast.success(translateUi("ui.5ab1e5e029233089"));
       }
 
       form.reset(EMPTY_VALUES);
@@ -340,13 +349,13 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
       <Dialog open={visible} onOpenChange={(open) => !open && handleClose()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[620px]">
           <DialogHeader>
-            <DialogTitle>Create New Policy</DialogTitle>
+            <DialogTitle>{uiT("ui.0a08e5a3f4ea33c0")}</DialogTitle>
           </DialogHeader>
           <ModePicker selected={selectedMode} onSelect={setSelectedMode} />
 
           {selectedMode === "flow_builder" && (
             <Alert variant="info" className="mt-4 border border-info/20 bg-info/10">
-              <AlertTitle>You&apos;ll be taken to the Flow Builder to design your policy logic visually.</AlertTitle>
+              <AlertTitle>{uiT("ui.72bfc8e602b99b4e")}</AlertTitle>
             </Alert>
           )}
 
@@ -355,7 +364,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="button" onClick={handleModeConfirm}>
-              {selectedMode === "flow_builder" ? "Continue to Builder" : "Create Policy"}
+              {selectedMode === "flow_builder" ? uiT("ui.0b2805104cb208d6") : uiT("ui.b631e60feb873d9c")}
             </Button>
           </div>
         </DialogContent>
@@ -368,29 +377,24 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Policy" : "Create New Policy"}</DialogTitle>
+          <DialogTitle>{isEditing ? uiT("ui.d536d31ff80754a8") : uiT("ui.0a08e5a3f4ea33c0")}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
             <FieldGroup>
-              <FormField control={form.control} name="policy_name" label="Policy Name">
+              <FormField control={form.control} name="policy_name" label={uiT("ui.f1a49eb85b7bba2e")}>
                 {({ ref, ...control }) => (
-                  <Input
-                    {...control}
-                    ref={ref}
-                    placeholder="e.g., global-baseline, healthcare-compliance"
-                    disabled={isEditing}
-                  />
+                  <Input {...control} ref={ref} placeholder={uiT("ui.91a4b2dd5c03b8ea")} disabled={isEditing} />
                 )}
               </FormField>
 
               <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
                 {({ ref, ...control }) => (
-                  <Textarea {...control} ref={ref} rows={2} placeholder="Describe what this policy does..." />
+                  <Textarea {...control} ref={ref} rows={2} placeholder={uiT("ui.4b0f60ff228617e1")} />
                 )}
               </FormField>
 
-              <SectionHeading label="Inheritance" />
+              <SectionHeading label={uiT("ui.9f0c392fa6116f32")} />
 
               <FormField
                 control={form.control}
@@ -409,7 +413,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       onChange(selected);
                       refreshResolvedGuardrails({ inherit: selected });
                     }}
-                    placeholder="Select a parent policy (optional)"
+                    placeholder={uiT("ui.8b7b153386b3918d")}
                     className="h-9"
                   />
                 )}
@@ -433,7 +437,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       onChange(selected);
                       refreshResolvedGuardrails({ guardrails_add: selected });
                     }}
-                    placeholder="Select guardrails to add"
+                    placeholder={uiT("ui.1c80eda08c047a1d")}
                   />
                 )}
               </FormField>
@@ -454,7 +458,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       onChange(selected);
                       refreshResolvedGuardrails({ guardrails_remove: selected });
                     }}
-                    placeholder="Select guardrails to remove (from inherited)"
+                    placeholder={uiT("ui.5c0633c169372b91")}
                   />
                 )}
               </FormField>
@@ -462,11 +466,9 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               {resolvedGuardrails.length > 0 && (
                 <Alert variant="info">
                   <Info />
-                  <AlertTitle>Resolved Guardrails</AlertTitle>
+                  <AlertTitle>{uiT("ui.ab21f03c03ad2db3")}</AlertTitle>
                   <AlertDescription>
-                    <span className="mb-2 block text-muted-foreground">
-                      These are the final guardrails that will be applied (including inheritance):
-                    </span>
+                    <span className="mb-2 block text-muted-foreground">{uiT("ui.b22b902ae1fc4c6e")}</span>
                     <div className="flex flex-wrap gap-1">
                       {resolvedGuardrails.map((g) => (
                         <StatusBadge key={g} tone="info" label={g} />
@@ -476,19 +478,16 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 </Alert>
               )}
 
-              <SectionHeading label="Conditions (Optional)" />
+              <SectionHeading label={uiT("ui.9664e584f56bf95d")} />
 
               <Alert variant="info">
                 <Info />
-                <AlertTitle>Model Scope</AlertTitle>
-                <AlertDescription>
-                  By default, this policy will run on all models. You can optionally restrict it to specific models
-                  below.
-                </AlertDescription>
+                <AlertTitle>{uiT("ui.053213da727a1846")}</AlertTitle>
+                <AlertDescription>{uiT("ui.ab3ed2aef92de779")}</AlertDescription>
               </Alert>
 
               <div role="group" className="flex w-full flex-col gap-3">
-                <span className="text-sm leading-snug font-medium text-foreground">Model Condition Type</span>
+                <span className="text-sm leading-snug font-medium text-foreground">{uiT("ui.5cc774aa36027d20")}</span>
                 <RadioGroup
                   value={modelConditionType}
                   onValueChange={(value) => {
@@ -499,11 +498,11 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 >
                   <label className="flex cursor-pointer items-center gap-2 text-sm">
                     <RadioGroupItem value="model" />
-                    Select Model
+                    {uiT("ui.e4813fd58ccf5e81")}
                   </label>
                   <label className="flex cursor-pointer items-center gap-2 text-sm">
                     <RadioGroupItem value="regex" />
-                    Custom Regex Pattern
+                    {uiT("ui.a28577642792f4a0")}
                   </label>
                 </RadioGroup>
               </div>
@@ -525,7 +524,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       options={availableModels.map((model) => ({ label: model, value: model }))}
                       value={value}
                       onValueChange={onChange}
-                      placeholder="Leave empty to apply to all models"
+                      placeholder={uiT("ui.332f8dc02a8da85b")}
                       className="h-9"
                     />
                   ) : (
@@ -535,7 +534,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       ref={ref}
                       value={value ?? ""}
                       onChange={onChange}
-                      placeholder="Leave empty to apply to all models (e.g., gpt-4.* or bedrock/claude-.*)"
+                      placeholder={uiT("ui.fba5a5a4a08d350d")}
                     />
                   )
                 }
@@ -553,7 +552,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 aria-busy={isSubmitting}
               >
                 {isSubmitting && <UiLoadingSpinner className="size-4" />}
-                {isEditing ? "Update Policy" : "Create Policy"}
+                {isEditing ? uiT("ui.829fd2b15750a73f") : uiT("ui.b631e60feb873d9c")}
               </Button>
             </div>
           </form>

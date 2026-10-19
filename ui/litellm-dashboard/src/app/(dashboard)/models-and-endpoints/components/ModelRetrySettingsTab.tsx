@@ -1,4 +1,5 @@
 "use client";
+import { translateText } from "@/i18n";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { LoaderCircle } from "lucide-react";
 import React from "react";
@@ -59,7 +60,7 @@ const ModelRetrySettingsTab = ({
 
   const isGlobalScope = selectedModelGroup === "global";
   const scopeItems = [
-    { value: "global", label: "Global Default" },
+    { value: "global", label: uiT("ui.9395a49f94284d80") },
     ...availableModelGroups.map((group) => ({ value: group, label: group })),
   ];
 
@@ -90,7 +91,7 @@ const ModelRetrySettingsTab = ({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <Label htmlFor="retry-policy-scope">Retry Policy Scope:</Label>
+        <Label htmlFor="retry-policy-scope">{uiT("ui.e2cbb638e9eaec59")}</Label>
         <div className="w-48">
           <Select
             items={scopeItems}
@@ -113,17 +114,15 @@ const ModelRetrySettingsTab = ({
 
       {isGlobalScope ? (
         <div>
-          <h2 className="text-lg font-semibold">Global Retry Policy</h2>
-          <p className="text-sm text-muted-foreground">
-            Default retry settings applied to all model groups unless overridden
-          </p>
+          <h2 className="text-lg font-semibold">{uiT("ui.992b86ba05122641")}</h2>
+          <p className="text-sm text-muted-foreground">{uiT("ui.3a45356f30bdb2f7")}</p>
         </div>
       ) : (
         <div>
-          <h2 className="text-lg font-semibold">Retry Policy for {selectedModelGroup}</h2>
-          <p className="text-sm text-muted-foreground">
-            Model-specific retry settings. Falls back to global defaults if not set.
-          </p>
+          <h2 className="text-lg font-semibold">
+            {uiT("ui.35a2e3e8d830e34c")} {selectedModelGroup}
+          </h2>
+          <p className="text-sm text-muted-foreground">{uiT("ui.f83e4d9aec763995")}</p>
         </div>
       )}
       <table className="w-full">
@@ -136,16 +135,18 @@ const ModelRetrySettingsTab = ({
             return (
               <tr key={retryPolicyKey} className="flex items-center justify-between gap-4 border-b py-2 last:border-0">
                 <td className="text-sm">
-                  <span>{exceptionType}</span>
+                  <span>{translateText(exceptionType)}</span>
                   {!isGlobalScope && (
-                    <span className="ml-2 text-xs text-muted-foreground">(Global: {inheritedValue})</span>
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {uiT("ui.a3068051871091b1")} {inheritedValue})
+                    </span>
                   )}
                 </td>
                 <td className="flex items-center gap-2">
                   <Input
                     className="w-28"
                     type="number"
-                    aria-label={`${exceptionType} retry count`}
+                    aria-label={uiT("ui.06119f4546f0b237", { v0: String(exceptionType) })}
                     min={0}
                     step={1}
                     value={isGlobalScope ? inheritedValue : hasOverride ? override : ""}

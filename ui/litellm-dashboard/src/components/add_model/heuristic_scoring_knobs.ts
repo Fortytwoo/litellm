@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { serializeCustomDimensions, type CustomDimensionRow } from "./custom_dimensions";
 import { heuristicScoringRoleFor, type ClassifierFallback } from "./ComplexityRouterConfig";
 import { isHeuristicChain, type ClassifierType, type LocalHeuristic } from "./classifier_types";
@@ -43,13 +44,27 @@ export const scorerKnobPayload = (knobs: ScorerKnobInputs) => {
  * added backend-side still renders, under its raw key until it is given a label here.
  */
 export const DIMENSION_LABELS: Record<string, string> = {
-  codePresence: "Code presence",
-  reasoningMarkers: "Reasoning markers",
-  technicalTerms: "Technical terms",
-  tokenCount: "Token count",
-  simpleIndicators: "Simple indicators",
-  multiStepPatterns: "Multi-step patterns",
-  questionComplexity: "Question complexity",
+  get codePresence() {
+    return translateUi("ui.e9433ee47ff3f866");
+  },
+  get reasoningMarkers() {
+    return translateUi("ui.cdeabe432e2325a2");
+  },
+  get technicalTerms() {
+    return translateUi("ui.e22c9d6972d6adbf");
+  },
+  get tokenCount() {
+    return translateUi("ui.df87baf24d5606ad");
+  },
+  get simpleIndicators() {
+    return translateUi("ui.ebff6e23e8bc5d80");
+  },
+  get multiStepPatterns() {
+    return translateUi("ui.08e39f12237adc1d");
+  },
+  get questionComplexity() {
+    return translateUi("ui.bbe932b470e1207c");
+  },
 };
 
 export const dimensionLabel = (key: string): string => DIMENSION_LABELS[key] ?? key;
@@ -115,7 +130,12 @@ export const rebalanceDimensionWeights = (
   edit: WeightEdit,
 ): WeightResult => {
   if (!defaults || !Object.keys(defaults).length)
-    return { ok: false, error: "Load the shipped defaults before changing weights" };
+    return {
+      ok: false,
+      get error() {
+        return translateUi("ui.ba2891f4cd558e73");
+      },
+    };
   const builtin = effectiveDimensionWeights(defaults, stored);
   const rows =
     edit.type === "add"
@@ -128,24 +148,43 @@ export const rebalanceDimensionWeights = (
   if (!vector.every(weightValid))
     return {
       ok: false,
-      error: "Existing weights must be finite and nonnegative; custom weights must be greater than 0 and at most 1",
+      get error() {
+        return translateUi("ui.6631fb7c01bae37a");
+      },
     };
   const target = edit.type === "set" ? edit.target : undefined;
   const pinned = (entry: WeightTarget) =>
     edit.type === "add"
       ? entry.kind === "custom" && entry.id === edit.row.id
       : entry.kind === target?.kind && entry.id === target.id;
-  if (edit.type === "set" && !vector.some(pinned)) return { ok: false, error: "The dimension is no longer available" };
+  if (edit.type === "set" && !vector.some(pinned))
+    return {
+      ok: false,
+      get error() {
+        return translateUi("ui.625a552301d9bf25");
+      },
+    };
   const requestedWeight = (): number => {
     if (edit.type === "set") return edit.weight;
     return edit.type === "add" ? edit.row.weight : 0;
   };
   const weight = requestedWeight();
   if (!weightValid({ kind: target?.kind ?? "builtin", weight }))
-    return { ok: false, error: "Use a weight from 0 to 1; custom dimensions must stay greater than 0" };
+    return {
+      ok: false,
+      get error() {
+        return translateUi("ui.9844b7e9c470d453");
+      },
+    };
   const others = vector.filter((entry) => !pinned(entry));
   const total = others.reduce((sum, entry) => sum + entry.weight, 0);
-  if (!Number.isFinite(total)) return { ok: false, error: "Existing weights are too large to rebalance" };
+  if (!Number.isFinite(total))
+    return {
+      ok: false,
+      get error() {
+        return translateUi("ui.90f337a3710d14a2");
+      },
+    };
   const remainder = 1 - weight;
   const builtinCount = others.filter((entry) => entry.kind === "builtin").length;
   const redistributed = (entry: WeightTarget & { weight: number }): number => {
@@ -163,7 +202,12 @@ export const rebalanceDimensionWeights = (
   );
   const offBudget = Math.abs(corrected.reduce((sum, entry) => sum + entry.weight, 0) - 1) > 1e-12;
   if (!corrected.every(weightValid) || offBudget)
-    return { ok: false, error: "Leave a positive share for every custom dimension, or remove it first" };
+    return {
+      ok: false,
+      get error() {
+        return translateUi("ui.244cb5bd6c96c029");
+      },
+    };
   const weights = Object.fromEntries(
     corrected.filter((entry) => entry.kind === "builtin").map(({ id, weight }) => [id, weight]),
   );

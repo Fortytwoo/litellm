@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 /**
  * Single owner of "which auto-router strategy is this deployment, and what can we do with it".
  *
@@ -44,7 +45,9 @@ const startsWith = (params: AutoRouterParams, prefix: string): boolean => params
 export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   {
     kind: "complexity",
-    label: "Complexity",
+    get label() {
+      return translateUi("ui.2dcf78dcabca38ef");
+    },
     configKey: "complexity_router_config",
     defaultModelKey: "complexity_router_default_model",
     hasEditor: true,
@@ -54,7 +57,9 @@ export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   },
   {
     kind: "adaptive",
-    label: "Adaptive",
+    get label() {
+      return translateUi("ui.ceb6931ea57cc999");
+    },
     configKey: "adaptive_router_config",
     defaultModelKey: "adaptive_router_default_model",
     hasEditor: false,
@@ -62,7 +67,9 @@ export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   },
   {
     kind: "quality",
-    label: "Quality",
+    get label() {
+      return translateUi("ui.1b2c08a8733d7ff1");
+    },
     configKey: "quality_router_config",
     defaultModelKey: "quality_router_default_model",
     hasEditor: false,
@@ -70,7 +77,9 @@ export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   },
   {
     kind: "semantic",
-    label: "Semantic",
+    get label() {
+      return translateUi("ui.9c11c99c771fe69a");
+    },
     configKey: "auto_router_config",
     defaultModelKey: "auto_router_default_model",
     hasEditor: true,

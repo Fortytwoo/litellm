@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import * as React from "react";
 import { render, type RenderResult } from "@testing-library/react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -14,6 +16,8 @@ export const McpFormHarness: React.FC<{
   onFinish?: (values: MountedFormValues) => void;
   children: React.ReactNode;
 }> = ({ defaultValues, onFinish, children }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<MountedFormValues>({ mode: "onChange", defaultValues });
   const registry = useMountRegistry();
   return (
@@ -26,7 +30,7 @@ export const McpFormHarness: React.FC<{
           }}
         >
           {children}
-          <button type="submit">Submit</button>
+          <button type="submit">{uiT("ui.155f816c0407310c")}</button>
         </form>
       </MountedFormProvider>
     </FormProvider>

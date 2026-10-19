@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -10,6 +12,8 @@ export default function RedactableField({
   defaultHidden?: boolean;
   value: string | null;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isHidden, setIsHidden] = useState(defaultHidden);
 
   return (
@@ -22,7 +26,7 @@ export default function RedactableField({
             value
           )
         ) : (
-          <span className="text-muted-foreground italic">Not configured</span>
+          <span className="text-muted-foreground italic">{uiT("ui.dd1841d295024256")}</span>
         )}
       </span>
       {value && (
@@ -30,7 +34,7 @@ export default function RedactableField({
           type="button"
           variant="ghost"
           size="icon-sm"
-          aria-label={isHidden ? "Show value" : "Hide value"}
+          aria-label={isHidden ? uiT("ui.fad206e22ec12620") : uiT("ui.381d9c1845cf1bd4")}
           onClick={() => setIsHidden(!isHidden)}
           className="text-muted-foreground"
         >

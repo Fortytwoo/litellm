@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
 import { ArrowRight, Pencil, Play, Trash2 } from "lucide-react";
@@ -89,7 +91,7 @@ async function testFallbackModelResponse(selectedModel: string, accessToken: str
   });
 
   try {
-    toast.info("Testing fallback model response...");
+    toast.info(translateUi("ui.d30b1e7a464f365a"));
 
     const response = await client.chat.completions.create({
       model: selectedModel,
@@ -105,14 +107,17 @@ async function testFallbackModelResponse(selectedModel: string, accessToken: str
 
     toast.success(
       <span>
-        Test model=<strong>{selectedModel}</strong>, received model=
-        <strong>{response.model}</strong>. See{" "}
+        {translateUi("ui.f4c8aa7ac932ab7f")}
+        <strong>{selectedModel}</strong>
+        {translateUi("ui.02dd48c915dfc11b")}
+        <strong>{response.model}</strong>
+        {translateUi("ui.8ae6391739cd0823")}{" "}
         <a
           href="#"
           onClick={() => window.open("https://docs.litellm.ai/docs/proxy/reliability", "_blank")}
           style={{ textDecoration: "underline", color: "blue" }}
         >
-          curl
+          {translateUi("ui.427e4b79b1f0fc90")}
         </a>
       </span>,
     );
@@ -197,7 +202,7 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
     try {
       await setCallbacksCall(accessToken, payload);
       setRouterSettings(updatedSettings);
-      toast.success("Router settings updated successfully");
+      toast.success(translateUi("ui.619a682c93fa8043"));
     } catch (error) {
       toast.fromError("Failed to update router settings: " + error);
     } finally {
@@ -266,16 +271,14 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
       )}
       {!hasFallbacks ? (
         <div className="rounded-lg border border-border bg-muted px-4 py-6 text-center">
-          <span className="text-muted-foreground">
-            No fallbacks configured. Add fallbacks to automatically try another model when the primary fails.
-          </span>
+          <span className="text-muted-foreground">{uiT("ui.ebe0ccbcdec3d26b")}</span>
         </div>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Model Name</TableHead>
-              <TableHead>Fallbacks</TableHead>
+              <TableHead>{uiT("ui.a501a70a42b98bc7")}</TableHead>
+              <TableHead>{uiT("ui.7a508ceac71e07fa")}</TableHead>
               <TableHead>{uiT("ui.ff8059dc6752")}</TableHead>
             </TableRow>
           </TableHeader>
@@ -304,7 +307,7 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
                           >
                             <Play className="h-5 w-5 shrink-0" />
                           </TooltipTrigger>
-                          <TooltipContent>Test fallback</TooltipContent>
+                          <TooltipContent>{uiT("ui.ff2d62345d3ead14")}</TooltipContent>
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger
@@ -321,7 +324,7 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
                           >
                             <Pencil className="h-5 w-5 shrink-0" />
                           </TooltipTrigger>
-                          <TooltipContent>Edit fallback</TooltipContent>
+                          <TooltipContent>{uiT("ui.aafe25a5043e9cd8")}</TooltipContent>
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger
@@ -338,7 +341,7 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
                           >
                             <Trash2 className="h-5 w-5 shrink-0" />
                           </TooltipTrigger>
-                          <TooltipContent>Delete fallback</TooltipContent>
+                          <TooltipContent>{uiT("ui.cf861e2f2a81c136")}</TooltipContent>
                         </Tooltip>
                       </>
                     )}
@@ -361,12 +364,12 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
       )}
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete Fallback?"
-        message="Are you sure you want to delete this fallback? This action cannot be undone."
+        title={uiT("ui.6a9aad28281bbbe7")}
+        message={uiT("ui.ed3b51d608ec2156")}
         resourceInformationTitle="Fallback Information"
         resourceInformation={[
           {
-            label: "Model Name",
+            label: uiT("ui.a501a70a42b98bc7"),
             value: fallbackToDelete ? Object.keys(fallbackToDelete)[0] : "",
             code: true,
           },

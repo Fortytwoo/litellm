@@ -49,7 +49,7 @@ function PresetPicker({ activePreset, onPick }: PresetPickerProps) {
 
   return (
     <Select value={activePreset?.id ?? CUSTOM_PRESET} onValueChange={onPick}>
-      <SelectTrigger className="w-56" aria-label="Example">
+      <SelectTrigger className="w-56" aria-label={uiT("ui.d029f87e3d80f8fd")}>
         <SelectValue>{activePreset?.label ?? uiT("ui.494ca78f7374")}</SelectValue>
       </SelectTrigger>
       <SelectContent>
@@ -171,7 +171,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
           hasResult ? "max-w-7xl xl:grid-cols-2" : "max-w-3xl",
         )}
       >
-        <section className="flex min-h-96 flex-col gap-3 xl:min-h-0" aria-label="Decisions request editor">
+        <section className="flex min-h-96 flex-col gap-3 xl:min-h-0" aria-label={uiT("ui.94e72c925bac71c5")}>
           <div className="flex flex-wrap items-center gap-2">
             <Select
               value={endpoint}
@@ -182,7 +182,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
                 }
               }}
             >
-              <SelectTrigger className="w-44" aria-label="Decision endpoint">
+              <SelectTrigger className="w-44" aria-label={uiT("ui.7b5e12eab3d2799d")}>
                 <SelectValue>{endpoint}</SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -192,18 +192,18 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
             </Select>
             <div className="w-56">
               <SearchSelect
-                aria-label="Decision model"
+                aria-label={uiT("ui.1e7a941a0dab1722")}
                 options={decisionModels.map((model) => ({ label: model, value: model }))}
                 value={payloadModel(rawPayload) ?? null}
                 onValueChange={handleModelPick}
-                placeholder={decisionModels.length > 0 ? "Pick a decision model" : "No decision models yet"}
-                emptyText="No decision models found"
+                placeholder={decisionModels.length > 0 ? uiT("ui.dabbdb29b44a98a2") : uiT("ui.78531ba38dd081b6")}
+                emptyText={uiT("ui.ae598b98e9694e95")}
                 allowClear={false}
               />
             </div>
             {decisionModelsLoaded && decisionModels.length === 0 && (
               <a href={uiHref("models-and-endpoints")} className="text-sm text-primary underline">
-                Add a decision model
+                {uiT("ui.32f1b8bfcc7e728a")}
               </a>
             )}
             <Select
@@ -215,12 +215,14 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
               }}
               disabled={disabledPersonalKeyCreation}
             >
-              <SelectTrigger className="w-44" aria-label="Virtual Key Source">
-                <SelectValue>{apiKeySource === "custom" ? uiT("ui.3af334745cdc") : "Current UI Session"}</SelectValue>
+              <SelectTrigger className="w-44" aria-label={uiT("ui.a99cda3a08ccd8c4")}>
+                <SelectValue>
+                  {apiKeySource === "custom" ? uiT("ui.3af334745cdc") : uiT("ui.f32327f1cb044761")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="session" disabled={!accessToken}>
-                  Current UI Session
+                  {uiT("ui.f32327f1cb044761")}
                 </SelectItem>
                 <SelectItem value="custom">{uiT("ui.3af334745cdc")}</SelectItem>
               </SelectContent>
@@ -231,7 +233,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
                 aria-label={uiT("ui.3af334745cdc")}
                 value={customApiKey}
                 onChange={(event) => setCustomApiKey(event.target.value)}
-                placeholder="Enter Virtual Key"
+                placeholder={uiT("ui.60d994b23c02f76e")}
                 className="w-56"
               />
             )}
@@ -243,18 +245,18 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
             className="min-h-0 flex-1"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <TabsList aria-label="Request editor view">
-                <TabsTrigger value="form">Form</TabsTrigger>
-                <TabsTrigger value="curl">cURL</TabsTrigger>
+              <TabsList aria-label={uiT("ui.55a6b50ef0d33f74")}>
+                <TabsTrigger value="form">{uiT("ui.2e0e960ab3204127")}</TabsTrigger>
+                <TabsTrigger value="curl">{uiT("ui.addc90cfd45b0f45")}</TabsTrigger>
               </TabsList>
               <div className="flex items-center gap-1">
                 <PresetPicker activePreset={activePreset} onPick={handlePresetPick} />
-                <SimpleTooltip content="How to call /v1/decisions and /v1/systemone">
+                <SimpleTooltip content={uiT("ui.82c2abacbb3b4bf0")}>
                   <a
                     href={DECISIONS_DOCS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="How to call /v1/decisions and /v1/systemone"
+                    aria-label={uiT("ui.82c2abacbb3b4bf0")}
                     className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "shrink-0")}
                   >
                     <BookOpen />
@@ -302,7 +304,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
             <div className="ml-auto flex items-center gap-2">
               {isLoading && (
                 <Button variant="outline" onClick={clearRequestState}>
-                  Cancel request
+                  {uiT("ui.56196683592dab4d")}
                 </Button>
               )}
               <Button
@@ -312,14 +314,17 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
                 disabled={!validation.isValid || isLoading || !effectiveApiKey}
               >
                 {isLoading ? <LoaderCircle className="animate-spin" /> : <Send />}
-                Send
+                {uiT("ui.f6f4688ff23d50c6")}
               </Button>
             </div>
           </div>
         </section>
 
         {hasResult && (
-          <section className="grid content-start gap-4 xl:min-h-0 xl:overflow-auto" aria-label="Decisions results">
+          <section
+            className="grid content-start gap-4 xl:min-h-0 xl:overflow-auto"
+            aria-label={uiT("ui.6d1d40897ab6b07d")}
+          >
             <ResponseView
               response={systemOne.data?.response}
               view={view}

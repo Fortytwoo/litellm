@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cva.config";
 import { Filter } from "lucide-react";
@@ -14,8 +17,10 @@ export const FiltersButton: React.FC<FiltersButtonProps> = ({
   onClick,
   active,
   hasActiveFilters,
-  label = "Filters",
+  label = translateUi("ui.546ebb8eb993"),
 }) => {
+  useDashboardLanguage();
+
   return (
     <span className="relative inline-flex">
       <Button variant="outline" onClick={onClick} className={cn(active && "bg-muted")}>

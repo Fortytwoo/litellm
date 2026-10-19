@@ -1,3 +1,7 @@
+"use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleHelp } from "lucide-react";
 
@@ -53,10 +57,12 @@ const selectedProviderOption = (selectedProvider: string | undefined): ProviderO
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -69,6 +75,8 @@ const AddProviderForm: React.FC<AddProviderFormProps> = ({
   onDiscountChange,
   onAddProvider,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const options = providerOptionsWithoutDiscount(discountConfig);
   const selectedOption = selectedProviderOption(selectedProvider);
 
@@ -87,7 +95,7 @@ const AddProviderForm: React.FC<AddProviderFormProps> = ({
               itemToStringLabel={(option: ProviderOption) => option.label}
               isItemEqualToValue={(option: ProviderOption, value: ProviderOption) => option.value === value.value}
             >
-              <ComboboxInput id={PROVIDER_FIELD_ID} placeholder="Select provider" className="w-full">
+              <ComboboxInput id={PROVIDER_FIELD_ID} placeholder={uiT("ui.644c6aae92902516")} className="w-full">
                 {selectedOption && (
                   <InputGroupAddon align="inline-start">
                     <Logo provider={selectedOption.value} label={selectedOption.label} className="w-5 h-5" />
@@ -95,7 +103,7 @@ const AddProviderForm: React.FC<AddProviderFormProps> = ({
                 )}
               </ComboboxInput>
               <ComboboxContent>
-                <ComboboxEmpty>No providers found</ComboboxEmpty>
+                <ComboboxEmpty>{uiT("ui.0bc42eace25559af")}</ComboboxEmpty>
                 <ComboboxList>
                   {(option: ProviderOption) => (
                     <ComboboxItem key={option.value} value={option}>
@@ -129,7 +137,7 @@ const AddProviderForm: React.FC<AddProviderFormProps> = ({
 
         <div className="flex items-center justify-end space-x-3 pt-6 border-t border-border">
           <Button type="submit" onClick={onAddProvider} disabled={!selectedProvider || !newDiscount}>
-            Add Provider Discount
+            {uiT("ui.32448ac8dbf4c5e2")}
           </Button>
         </div>
       </div>

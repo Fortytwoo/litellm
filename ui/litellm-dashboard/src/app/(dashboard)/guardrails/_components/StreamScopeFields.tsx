@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GuardrailField, labelWithHint, type GuardrailFormControl } from "./GuardrailFormField";
 import {
@@ -8,7 +10,9 @@ import {
 } from "./guardrail_info_helpers";
 
 const STREAM_SCOPE_ITEMS = STREAM_SCOPE_OPTIONS.map((option) => ({
-  label: option.label,
+  get label() {
+    return option.label;
+  },
   value: option.value,
 }));
 
@@ -24,6 +28,8 @@ export const StreamScopeFields = ({
   value: Record<string, GuardrailStreamScope>;
   onChange: (next: Record<string, GuardrailStreamScope>) => void;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (modes.length === 0) return null;
 
   return (
@@ -33,7 +39,7 @@ export const StreamScopeFields = ({
         return (
           <div key={mode} className="space-y-1">
             <label htmlFor={`stream-scope-${mode}`} className="block text-sm font-medium text-foreground">
-              {mode} applies to
+              {mode} {uiT("ui.c5b666d28d1b15b7")}
             </label>
             <Select
               items={STREAM_SCOPE_ITEMS}
@@ -44,7 +50,7 @@ export const StreamScopeFields = ({
               }}
             >
               <SelectTrigger id={`stream-scope-${mode}`} className="w-full">
-                <SelectValue placeholder="Streaming and non-streaming" />
+                <SelectValue placeholder={uiT("ui.ca7fbc6c4567a5fa")} />
               </SelectTrigger>
               <SelectContent>
                 {STREAM_SCOPE_OPTIONS.map((option) => (
@@ -84,11 +90,13 @@ export const GuardrailStreamScopeCaption = ({ raw }: { raw: unknown }) => {
 };
 
 export const GuardrailStreamScopeDetail = ({ raw }: { raw: unknown }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const label = formatGuardrailStreamScope(raw);
   if (!label) return null;
   return (
     <div>
-      <p className="font-medium">Request shape</p>
+      <p className="font-medium">{uiT("ui.3dea1e6331337a86")}</p>
       <div>{label}</div>
     </div>
   );

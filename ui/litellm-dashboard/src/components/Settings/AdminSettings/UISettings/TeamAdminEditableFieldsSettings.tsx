@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Controller } from "react-hook-form";
@@ -25,6 +27,8 @@ const editableFieldsSchema = z.object({ team_admin_editable_team_fields: z.array
 type SaveEditableFields = ReturnType<typeof useUpdateUISettings>["mutate"];
 
 export default function TeamAdminEditableFieldsSettings() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const { data, isLoading } = useUISettings();
   const { mutate: saveSettings, isPending } = useUpdateUISettings(accessToken);
@@ -36,16 +40,18 @@ export default function TeamAdminEditableFieldsSettings() {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
-          <CardTitle>Team admin editable fields</CardTitle>
+          <CardTitle>{uiT("ui.a5e26c1065b329f3")}</CardTitle>
           <Badge variant={enabledFields.length > 0 ? "secondary" : "outline"}>
             {enabledFields.length > 0
-              ? `${enabledFields.length} field${enabledFields.length !== 1 ? "s" : ""} enabled`
-              : "Team admins cannot edit team settings"}
+              ? uiT("ui.6f5b7b81bd59d9e7", {
+                  v0: String(enabledFields.length),
+                  v1: String(enabledFields.length !== 1 ? uiT("inflections.s") : ""),
+                })
+              : uiT("ui.f591d8cafd52ce84")}
           </Badge>
         </div>
         <CardDescription>
-          {data?.field_schema?.properties?.team_admin_editable_team_fields?.description ??
-            "Team settings fields a team admin may change on the teams they administer."}
+          {data?.field_schema?.properties?.team_admin_editable_team_fields?.description ?? uiT("ui.ef15173b357a2ec5")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -87,7 +93,7 @@ function TeamAdminEditableFieldsForm({
     saveSettings(values, {
       onSuccess: () => {
         form.reset(values);
-        toast.success("Team admin editable fields updated successfully");
+        toast.success(translateUi("ui.4cec30d4998df0e0"));
       },
       onError: (error) => {
         toast.fromError(error);
@@ -96,11 +102,7 @@ function TeamAdminEditableFieldsForm({
   );
 
   if (supportedFields.length === 0) {
-    return (
-      <p className="text-sm italic text-muted-foreground">
-        This proxy version does not support enabling any team settings fields for team admins yet.
-      </p>
-    );
+    return <p className="text-sm italic text-muted-foreground">{uiT("ui.f9fab3b17dc0eec8")}</p>;
   }
 
   return (

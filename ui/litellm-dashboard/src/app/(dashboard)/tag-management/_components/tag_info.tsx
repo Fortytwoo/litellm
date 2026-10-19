@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState, useEffect } from "react";
@@ -78,7 +80,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
   return (
     <form onSubmit={form.handleSubmit(submitVisibleValues)} noValidate>
       <FieldGroup>
-        <FormField control={form.control} name="name" label="Tag Name">
+        <FormField control={form.control} name="name" label={uiT("ui.077b1b77d3100997")}>
           {({ ref, ...field }) => <Input {...field} ref={ref} />}
         </FormField>
 
@@ -89,11 +91,16 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
         <FormField
           control={form.control}
           name="models"
-          label="Allowed Models"
-          description="Select which models are allowed to process this type of data"
+          label={uiT("ui.bd7237634a25de42")}
+          description={uiT("ui.bd526db90abefe61")}
         >
           {({ value, onChange }) => (
-            <MultiSelect options={modelOptions} value={value} onValueChange={onChange} placeholder="Select Models" />
+            <MultiSelect
+              options={modelOptions}
+              value={value}
+              onValueChange={onChange}
+              placeholder={uiT("ui.05c39c4c5b136419")}
+            />
           )}
         </FormField>
       </FieldGroup>
@@ -104,7 +111,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
         className="mt-4 mb-4 rounded-md border border-border"
       >
         <CollapsibleTrigger className="group flex w-full items-center justify-between px-4 py-3 text-base font-medium text-foreground">
-          Budget & Rate Limits
+          {uiT("ui.a52e6ecdb77855d3")}
           <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
         </CollapsibleTrigger>
         <CollapsibleContent className="px-4 pb-4">
@@ -113,7 +120,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
               control={form.control}
               name="max_budget"
               label={uiT("ui.afa99ea4a8c3")}
-              description="Maximum amount in USD this tag can spend"
+              description={uiT("ui.95e45e35ef7ae8b6")}
             >
               {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
             </FormField>
@@ -122,7 +129,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
               control={form.control}
               name="budget_duration"
               label={uiT("ui.66b0753db929")}
-              description="How often the budget should reset"
+              description={uiT("ui.18fa5d2c2f325340")}
             >
               {({ id, value, onChange }) => (
                 <BudgetDurationDropdown id={id} value={value ?? null} onChange={onChange} />
@@ -132,14 +139,14 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
 
           <div className="mt-4 rounded-md border border-border bg-muted p-3">
             <p className="text-sm text-muted-foreground">
-              TPM/RPM limits for tags are not currently supported. If you need this feature, please{" "}
+              {uiT("ui.67670860de9fb61e")}{" "}
               <a
                 href="https://github.com/BerriAI/litellm/issues/new"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-info underline hover:text-info/80"
               >
-                create a GitHub issue
+                {uiT("ui.f99c06a14931f486")}
               </a>
               .
             </p>
@@ -221,7 +228,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
         rpm_limit: undefined,
         budget_duration: values.budget_duration,
       });
-      toast.success("Tag updated successfully");
+      toast.success(translateUi("ui.038dce1e297c6cd7"));
       setIsEditing(false);
       fetchTagDetails();
     } catch (error) {
@@ -239,10 +246,10 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
       <div className="flex justify-between items-center mb-6">
         <div>
           <Button onClick={onClose} className="mb-4">
-            ← Back to Tags
+            {uiT("ui.3e3cc99813e5578a")}
           </Button>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Tag Name:</span>
+            <span className="text-sm font-medium">{uiT("ui.4a32b016fa3839ad")}</span>
             <span className="font-mono px-2 py-1 bg-muted rounded-sm text-sm border border-border">
               {tagDetails.name}
             </span>
@@ -259,9 +266,9 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
               {copiedStates["tag-name"] ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground">{tagDetails.description || "No description"}</p>
+          <p className="text-sm text-muted-foreground">{tagDetails.description || uiT("ui.bcd8cc53f40e3d4e")}</p>
         </div>
-        {is_admin && !isEditing && <Button onClick={() => setIsEditing(true)}>Edit Tag</Button>}
+        {is_admin && !isEditing && <Button onClick={() => setIsEditing(true)}>{uiT("ui.f2b35137a2f0b63b")}</Button>}
       </div>
 
       {isEditing ? (
@@ -280,7 +287,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
         <div className="space-y-6">
           <Card>
             <CardContent>
-              <CardTitle>Tag Details</CardTitle>
+              <CardTitle>{uiT("ui.1a3a09d085142559")}</CardTitle>
               <div className="space-y-4 mt-4">
                 <div>
                   <p className="font-medium">{uiT("ui.dcd1d5223f73")}</p>
@@ -291,14 +298,14 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                   <p>{tagDetails.description || "-"}</p>
                 </div>
                 <div>
-                  <p className="font-medium">Allowed Models</p>
+                  <p className="font-medium">{uiT("ui.bd7237634a25de42")}</p>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {!tagDetails.models || tagDetails.models.length === 0 ? (
                       <Badge variant="secondary">{uiT("ui.77781174637c")}</Badge>
                     ) : (
                       tagDetails.models.map((modelId) => (
                         <Badge key={modelId} variant="secondary">
-                          <SimpleTooltip content={`ID: ${modelId}`}>
+                          <SimpleTooltip content={uiT("ui.50d7d1fb9a8c81d7", { v0: String(modelId) })}>
                             {tagDetails.model_info?.[modelId] || modelId}
                           </SimpleTooltip>
                         </Badge>
@@ -321,7 +328,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
           {tagDetails.litellm_budget_table && (
             <Card>
               <CardContent>
-                <CardTitle>Budget & Rate Limits</CardTitle>
+                <CardTitle>{uiT("ui.a52e6ecdb77855d3")}</CardTitle>
                 <div className="space-y-4 mt-4">
                   {tagDetails.litellm_budget_table.max_budget !== undefined &&
                     tagDetails.litellm_budget_table.max_budget !== null && (
@@ -332,7 +339,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                     )}
                   {tagDetails.litellm_budget_table.budget_duration && (
                     <div>
-                      <p className="font-medium">Budget Duration</p>
+                      <p className="font-medium">{uiT("ui.fd3e222ff0d53acd")}</p>
                       <p>{tagDetails.litellm_budget_table.budget_duration}</p>
                     </div>
                   )}

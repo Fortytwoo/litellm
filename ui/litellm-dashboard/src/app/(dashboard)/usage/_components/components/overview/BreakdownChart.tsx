@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import React, { useMemo } from "react";
@@ -48,7 +50,12 @@ const DIMENSION_OPTIONS = [
       return translateUi("ui.5e2c614c23f0");
     },
   },
-  { value: "models", label: "Deployment" },
+  {
+    value: "models",
+    get label() {
+      return translateUi("ui.870a8ffd98f4f2bd");
+    },
+  },
   {
     value: "providers",
     get label() {
@@ -77,17 +84,19 @@ export function BreakdownControls({
   onChange: (next: BreakdownState) => void;
   showDimension?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Segmented
-        label="Metric"
+        label={uiT("ui.2d275a74912cca2e")}
         value={state.metric}
         options={METRIC_OPTIONS}
         onChange={(metric) => onChange({ ...state, metric })}
       />
       {showDimension && (
         <Segmented
-          label="Group by"
+          label={uiT("ui.956a51f6b098a41b")}
           value={state.dimension}
           options={DIMENSION_OPTIONS}
           onChange={(dimension) => onChange({ ...state, dimension })}
@@ -149,6 +158,8 @@ export function Leaderboard({
   columns?: 1 | 2;
   dense?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const colorOf = (name: string) => {
     const index = series.labels.indexOf(name);
     return index === -1 ? OTHER_COLOR : series.colors[index];
@@ -156,7 +167,7 @@ export function Leaderboard({
   const value = (row: LeaderRow) => rankValue(row, metric);
   const rows = ranking.slice(0, limit);
   if (rows.length === 0) {
-    return <p className="py-8 text-center text-xs text-muted-foreground">No usage in this range</p>;
+    return <p className="py-8 text-center text-xs text-muted-foreground">{uiT("ui.e9366364ec9c0178")}</p>;
   }
   const half = columns === 2 ? Math.ceil(rows.length / 2) : rows.length;
   const groups = columns === 2 ? [rows.slice(0, half), rows.slice(half)] : [rows];
@@ -182,7 +193,9 @@ export function Leaderboard({
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-medium text-foreground">{row.key}</span>
                   {providerForModel(row.key) && (
-                    <span className="block truncate text-xs text-muted-foreground">by {providerForModel(row.key)}</span>
+                    <span className="block truncate text-xs text-muted-foreground">
+                      {uiT("ui.a7e2d26e8d15814d")} {providerForModel(row.key)}
+                    </span>
                   )}
                 </span>
               </span>

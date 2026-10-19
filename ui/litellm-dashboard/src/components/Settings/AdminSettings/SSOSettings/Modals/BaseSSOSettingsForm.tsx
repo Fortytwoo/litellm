@@ -69,8 +69,18 @@ export const ssoProviderConfigs: Record<string, SSOProviderConfig> = {
       google_client_secret: "GOOGLE_CLIENT_SECRET",
     },
     fields: [
-      { label: "Google Client ID", name: "google_client_id" },
-      { label: "Google Client Secret", name: "google_client_secret" },
+      {
+        get label() {
+          return translateUi("ui.a78e39005aeb8489");
+        },
+        name: "google_client_id",
+      },
+      {
+        get label() {
+          return translateUi("ui.00dfadc86b97d634");
+        },
+        name: "google_client_secret",
+      },
     ],
   },
   microsoft: {
@@ -80,9 +90,24 @@ export const ssoProviderConfigs: Record<string, SSOProviderConfig> = {
       microsoft_tenant: "MICROSOFT_TENANT",
     },
     fields: [
-      { label: "Microsoft Client ID", name: "microsoft_client_id" },
-      { label: "Microsoft Client Secret", name: "microsoft_client_secret" },
-      { label: "Microsoft Tenant", name: "microsoft_tenant" },
+      {
+        get label() {
+          return translateUi("ui.45da5e67af1e0bdb");
+        },
+        name: "microsoft_client_id",
+      },
+      {
+        get label() {
+          return translateUi("ui.f387f3fd465b8941");
+        },
+        name: "microsoft_client_secret",
+      },
+      {
+        get label() {
+          return translateUi("ui.bd044e43c63ab7b4");
+        },
+        name: "microsoft_tenant",
+      },
     ],
   },
   okta: {
@@ -95,20 +120,49 @@ export const ssoProviderConfigs: Record<string, SSOProviderConfig> = {
       generic_scope: "GENERIC_SCOPE",
     },
     fields: [
-      { label: "Generic Client ID", name: "generic_client_id" },
-      { label: "Generic Client Secret", name: "generic_client_secret" },
       {
-        label: "Authorization Endpoint",
+        get label() {
+          return translateUi("ui.d0df10df260c6c99");
+        },
+        name: "generic_client_id",
+      },
+      {
+        get label() {
+          return translateUi("ui.c19f7a953d468c16");
+        },
+        name: "generic_client_secret",
+      },
+      {
+        get label() {
+          return translateUi("ui.b42b956f5a0c7cad");
+        },
         name: "generic_authorization_endpoint",
         placeholder: "https://your-domain/authorize",
       },
-      { label: "Token Endpoint", name: "generic_token_endpoint", placeholder: "https://your-domain/token" },
       {
-        label: "Userinfo Endpoint",
+        get label() {
+          return translateUi("ui.5738a2a41aa46bae");
+        },
+        name: "generic_token_endpoint",
+        placeholder: "https://your-domain/token",
+      },
+      {
+        get label() {
+          return translateUi("ui.592b3c7ff3040229");
+        },
         name: "generic_userinfo_endpoint",
         placeholder: "https://your-domain/userinfo",
       },
-      { label: "Scopes", name: "generic_scope", placeholder: "openid email profile", required: false },
+      {
+        get label() {
+          return translateUi("ui.0d5644ff52ce2ba3");
+        },
+        name: "generic_scope",
+        get placeholder() {
+          return translateUi("ui.9a8090dad4623cf5");
+        },
+        required: false,
+      },
     ],
   },
   generic: {
@@ -121,12 +175,46 @@ export const ssoProviderConfigs: Record<string, SSOProviderConfig> = {
       generic_scope: "GENERIC_SCOPE",
     },
     fields: [
-      { label: "Generic Client ID", name: "generic_client_id" },
-      { label: "Generic Client Secret", name: "generic_client_secret" },
-      { label: "Authorization Endpoint", name: "generic_authorization_endpoint" },
-      { label: "Token Endpoint", name: "generic_token_endpoint" },
-      { label: "Userinfo Endpoint", name: "generic_userinfo_endpoint" },
-      { label: "Scopes", name: "generic_scope", placeholder: "openid email profile", required: false },
+      {
+        get label() {
+          return translateUi("ui.d0df10df260c6c99");
+        },
+        name: "generic_client_id",
+      },
+      {
+        get label() {
+          return translateUi("ui.c19f7a953d468c16");
+        },
+        name: "generic_client_secret",
+      },
+      {
+        get label() {
+          return translateUi("ui.b42b956f5a0c7cad");
+        },
+        name: "generic_authorization_endpoint",
+      },
+      {
+        get label() {
+          return translateUi("ui.5738a2a41aa46bae");
+        },
+        name: "generic_token_endpoint",
+      },
+      {
+        get label() {
+          return translateUi("ui.592b3c7ff3040229");
+        },
+        name: "generic_userinfo_endpoint",
+      },
+      {
+        get label() {
+          return translateUi("ui.0d5644ff52ce2ba3");
+        },
+        name: "generic_scope",
+        get placeholder() {
+          return translateUi("ui.9a8090dad4623cf5");
+        },
+        required: false,
+      },
     ],
   },
   saml: {
@@ -138,26 +226,38 @@ export const ssoProviderConfigs: Record<string, SSOProviderConfig> = {
     },
     fields: [
       {
-        label: "IdP Metadata URL",
+        get label() {
+          return translateUi("ui.4ebe47eb8d93e7a1");
+        },
         name: "saml_idp_metadata_url",
         required: false,
         placeholder: "https://idp.example.com/metadata (use this or the metadata XML below)",
       },
       {
-        label: "IdP Metadata XML",
+        get label() {
+          return translateUi("ui.b0fb4eb3acd7eca2");
+        },
         name: "saml_idp_metadata_xml",
         required: false,
         type: "textarea",
-        placeholder: "Paste the IdP metadata XML here if you do not have a metadata URL",
+        get placeholder() {
+          return translateUi("ui.bbf49775b323ea12");
+        },
       },
       {
-        label: "SP Entity ID",
+        get label() {
+          return translateUi("ui.1994b6869b9702eb");
+        },
         name: "saml_sp_entity_id",
         required: false,
-        placeholder: "Defaults to <proxy base url>/sso/saml/metadata",
+        get placeholder() {
+          return translateUi("ui.3ec26bde37de0b03");
+        },
       },
       {
-        label: "Allow IdP-initiated (unsolicited) responses",
+        get label() {
+          return translateUi("ui.78768d201dd377bb");
+        },
         name: "saml_allow_unsolicited",
         required: false,
         type: "checkbox",
@@ -247,7 +347,9 @@ export const buildSSOSettingsSchema = (variant: SSOFormVariant) =>
       ctx.addIssue({
         code: "custom",
         path: [field.name],
-        message: `Please enter the ${field.label.toLowerCase()}`,
+        get message() {
+          return translateUi("ui.3d1764b14b68f4fe", undefined, { v0: String(field.label.toLowerCase()) });
+        },
       });
     });
 
@@ -260,7 +362,9 @@ export const buildSSOSettingsSchema = (variant: SSOFormVariant) =>
       ctx.addIssue({
         code: "custom",
         path: ["proxy_base_url"],
-        message: "URL must start with http:// or https://",
+        get message() {
+          return translateUi("ui.bd6dcfaaa23f4577");
+        },
       });
       return;
     }
@@ -268,7 +372,9 @@ export const buildSSOSettingsSchema = (variant: SSOFormVariant) =>
       ctx.addIssue({
         code: "custom",
         path: ["proxy_base_url"],
-        message: "URL must not end with a trailing slash",
+        get message() {
+          return translateUi("ui.39d5dc65f81a246c");
+        },
       });
     }
   });
@@ -340,10 +446,12 @@ export const renderProviderFields = (provider: string) => {
 };
 
 export const SSOProviderSelectField = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<SSOSettingsFormValues>();
 
   return (
-    <FormField control={control} name="sso_provider" label="SSO Provider">
+    <FormField control={control} name="sso_provider" label={uiT("ui.c2d1900ec08d5ba3")}>
       {({ value, onChange, onBlur, id, ...rest }) => (
         <Select value={(value as string) ?? ""} onValueChange={onChange}>
           <SelectTrigger
@@ -378,20 +486,24 @@ export const SSOProviderSelectField = () => {
 };
 
 export const ProxyAdminEmailField = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<SSOSettingsFormValues>();
 
   return (
-    <FormField control={control} name="user_email" label="Proxy Admin Email">
+    <FormField control={control} name="user_email" label={uiT("ui.7f2ab196532d9b59")}>
       {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
     </FormField>
   );
 };
 
 export const ProxyBaseUrlField = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<SSOSettingsFormValues>();
 
   return (
-    <FormField control={control} name="proxy_base_url" label="Proxy Base URL">
+    <FormField control={control} name="proxy_base_url" label={uiT("ui.82b56622ef7ec48f")}>
       {({ ref, value, onChange, ...rest }) => (
         <Input
           ref={ref}
@@ -431,24 +543,36 @@ export const MappingToggleField = ({
 };
 
 export const GroupClaimField = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<SSOSettingsFormValues>();
 
   return (
-    <FormField control={control} name="group_claim" label="Group Claim">
+    <FormField control={control} name="group_claim" label={uiT("ui.378aa2871b706de1")}>
       {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
     </FormField>
   );
 };
 
 const DEFAULT_ROLE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
-  { value: "internal_user_viewer", label: "Internal Viewer" },
+  {
+    value: "internal_user_viewer",
+    get label() {
+      return translateUi("ui.fbaff5b3da83dc94");
+    },
+  },
   {
     value: "internal_user",
     get label() {
       return translateUi("ui.4a5a8d129e4b");
     },
   },
-  { value: "proxy_admin_viewer", label: "Admin Viewer" },
+  {
+    value: "proxy_admin_viewer",
+    get label() {
+      return translateUi("ui.fa769b182bc0c61d");
+    },
+  },
   {
     value: "proxy_admin",
     get label() {
@@ -492,19 +616,19 @@ export const RoleMappingTeamFields = () => {
         )}
       </FormField>
 
-      <FormField control={control} name="proxy_admin_teams" label="Proxy Admin Teams">
+      <FormField control={control} name="proxy_admin_teams" label={uiT("ui.515288d6d12415b8")}>
         {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
       </FormField>
 
-      <FormField control={control} name="admin_viewer_teams" label="Admin Viewer Teams">
+      <FormField control={control} name="admin_viewer_teams" label={uiT("ui.66b9e06fbf9f8954")}>
         {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
       </FormField>
 
-      <FormField control={control} name="internal_user_teams" label="Internal User Teams">
+      <FormField control={control} name="internal_user_teams" label={uiT("ui.c101d6aaf12648a7")}>
         {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
       </FormField>
 
-      <FormField control={control} name="internal_viewer_teams" label="Internal Viewer Teams">
+      <FormField control={control} name="internal_viewer_teams" label={uiT("ui.83061f7ae1bfa7aa")}>
         {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
       </FormField>
     </>
@@ -512,16 +636,20 @@ export const RoleMappingTeamFields = () => {
 };
 
 export const TeamIdsJwtFieldField = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<SSOSettingsFormValues>();
 
   return (
-    <FormField control={control} name="team_ids_jwt_field" label="Team IDs JWT Field">
+    <FormField control={control} name="team_ids_jwt_field" label={uiT("ui.5eeac1c989a710a1")}>
       {({ ref, value, ...rest }) => <Input ref={ref} value={(value as string) ?? ""} {...rest} />}
     </FormField>
   );
 };
 
 const BaseSSOSettingsForm: React.FC<BaseSSOSettingsFormProps> = ({ form, onFormSubmit }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const provider = useWatch({ control: form.control, name: "sso_provider" });
   const useRoleMappings = useWatch({ control: form.control, name: "use_role_mappings" });
   const useTeamMappings = useWatch({ control: form.control, name: "use_team_mappings" });
@@ -541,14 +669,14 @@ const BaseSSOSettingsForm: React.FC<BaseSSOSettingsFormProps> = ({ form, onFormS
             {provider ? renderProviderFields(provider) : null}
             <ProxyAdminEmailField />
             <ProxyBaseUrlField />
-            {showMappingToggles && <MappingToggleField name="use_role_mappings" label="Use Role Mappings" />}
+            {showMappingToggles && <MappingToggleField name="use_role_mappings" label={uiT("ui.7eddcdfb17de2879")} />}
             {useRoleMappings && showMappingToggles && (
               <>
                 <GroupClaimField />
                 <RoleMappingTeamFields />
               </>
             )}
-            {showMappingToggles && <MappingToggleField name="use_team_mappings" label="Use Team Mappings" />}
+            {showMappingToggles && <MappingToggleField name="use_team_mappings" label={uiT("ui.1d9e11d3f00e8b59")} />}
             {useTeamMappings && showMappingToggles && <TeamIdsJwtFieldField />}
           </FieldGroup>
         </form>

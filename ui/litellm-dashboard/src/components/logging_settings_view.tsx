@@ -88,7 +88,7 @@ export function LoggingSettingsView({
                     <div>
                       <span className="block font-medium text-info">{displayName}</span>
                       <span className="block text-xs text-info">
-                        {Object.keys(config.callback_vars).length} parameters configured
+                        {Object.keys(config.callback_vars).length} {uiT("ui.6ce541c30e948f02")}
                       </span>
                     </div>
                   </div>

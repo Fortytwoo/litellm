@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Edit, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -161,7 +163,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
       setValues(newValues);
       setEditedValues(newValues);
       setIsEditing(false);
-      toast.success("Default team settings updated successfully");
+      toast.success(translateUi("ui.b7584d75d26a86e3"));
     } catch (error) {
       console.error("Error updating team settings:", error);
       toast.fromError("Failed to update team settings");
@@ -182,7 +184,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center" aria-busy="true">
-        <UiLoadingSpinner aria-label="Loading default team settings" />
+        <UiLoadingSpinner aria-label={uiT("ui.e1322f98ab7b6369")} />
       </div>
     );
   }
@@ -191,7 +193,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
     return (
       <Card>
         <CardContent>
-          <p>No team settings available or you do not have permission to view them.</p>
+          <p>{uiT("ui.dc767ac6f557f513")}</p>
         </CardContent>
       </Card>
     );
@@ -202,11 +204,9 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
       <CardHeader className="gap-4 border-b border-border pb-6">
         <div>
           <CardTitle>
-            <h3 className="text-lg font-semibold text-foreground">Default Team Settings</h3>
+            <h3 className="text-lg font-semibold text-foreground">{uiT("ui.925dafba778ae8d4")}</h3>
           </CardTitle>
-          <CardDescription className="mt-1">
-            These settings will be applied by default when creating new teams.
-          </CardDescription>
+          <CardDescription className="mt-1">{uiT("ui.1f8bb9e8fa62aadc")}</CardDescription>
         </div>
         <CardAction>
           {isEditing ? (
@@ -235,12 +235,12 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
       <CardContent className="pt-8">
         <section className="mb-8">
           <h4 className="mb-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">
-            Budget & Rate Limits
+            {uiT("ui.a52e6ecdb77855d3")}
           </h4>
           <div className="border-t border-border">
             <SettingRow
               label={uiT("ui.3e20f0a04b21")}
-              description="Maximum budget (in USD) for new automatically created teams."
+              description={uiT("ui.6ede4b326fadb16e")}
               isEditing={isEditing}
               viewContent={
                 values.max_budget != null ? <span>${Number(values.max_budget).toLocaleString()}</span> : <NotSet />
@@ -264,8 +264,8 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
             />
 
             <SettingRow
-              label="Budget Duration"
-              description="How frequently the team's budget resets."
+              label={uiT("ui.fd3e222ff0d53acd")}
+              description={uiT("ui.1b48a43e70c02547")}
               isEditing={isEditing}
               viewContent={
                 values.budget_duration ? <span>{getBudgetDurationLabel(values.budget_duration)}</span> : <NotSet />
@@ -281,7 +281,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={uiT("ui.703406a2fc47")}
-              description="Maximum tokens per minute allowed across all models."
+              description={uiT("ui.0d4b073d4ae49b38")}
               isEditing={isEditing}
               viewContent={values.tpm_limit != null ? <span>{values.tpm_limit.toLocaleString()}</span> : <NotSet />}
               editContent={
@@ -302,7 +302,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={uiT("ui.e543e799b809")}
-              description="Maximum requests per minute allowed across all models."
+              description={uiT("ui.7d86a6118b396ecd")}
               isEditing={isEditing}
               viewContent={values.rpm_limit != null ? <span>{values.rpm_limit.toLocaleString()}</span> : <NotSet />}
               editContent={
@@ -325,12 +325,12 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
         <section>
           <h4 className="mb-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">
-            Access & Permissions
+            {uiT("ui.44677d75a9b6970e")}
           </h4>
           <div className="border-t border-border">
             <SettingRow
-              label="Default Organization"
-              description="Teams created without an explicit organization are assigned to this organization."
+              label={uiT("ui.82e724f75c63e865")}
+              description={uiT("ui.0a8fa98e7216e90b")}
               isEditing={isEditing}
               viewContent={
                 values.organization_id ? (
@@ -346,7 +346,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
                     loading={isOrganizationsLoading}
                     value={editedValues.organization_id ?? undefined}
                     onChange={(organizationId) => update("organization_id", organizationId || null)}
-                    placeholder="Select an organization"
+                    placeholder={uiT("ui.48326f521f225d8f")}
                   />
                 </div>
               }
@@ -354,7 +354,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={uiT("ui.d17d2d78d76e")}
-              description="Default list of models that new teams can access."
+              description={uiT("ui.09e2d3caa8f1ed56")}
               isEditing={isEditing}
               viewContent={renderTags(values.models, getModelDisplayName)}
               editContent={
@@ -370,8 +370,8 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
             />
 
             <SettingRow
-              label="Team Member Permissions"
-              description="Default permissions granted to members of newly created teams. /key/info and /key/health are always included."
+              label={uiT("ui.6444a312c696e980")}
+              description={uiT("ui.50b4f2ca1dffa245")}
               isEditing={isEditing}
               viewContent={renderTags(values.team_member_permissions)}
               editContent={
@@ -391,7 +391,10 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
                         ))
                       }
                     </ComboboxValue>
-                    <ComboboxChipsInput placeholder="Select permissions" aria-label="Team Member Permissions" />
+                    <ComboboxChipsInput
+                      placeholder={uiT("ui.07a06ef531ef429c")}
+                      aria-label={uiT("ui.6444a312c696e980")}
+                    />
                   </ComboboxChips>
                   <ComboboxContent anchor={anchor}>
                     <ComboboxList>

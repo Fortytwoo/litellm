@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import {
   getCoreRowModel,
@@ -58,7 +61,14 @@ function useList(): ListContextValue {
 
 type Cell = CellContext<InvestigationRow, unknown>;
 
-const ROW_LABEL = { investigation: "Investigation details", finding: "Finding details" } as const;
+const ROW_LABEL = {
+  get investigation() {
+    return translateUi("ui.bf49a87b32869cf6");
+  },
+  get finding() {
+    return translateUi("ui.0d59110897709f34");
+  },
+} as const;
 
 function NameCell({ row: { original: item } }: Cell) {
   return (
@@ -95,7 +105,7 @@ function StatusCell({ row: { original: item } }: Cell) {
       title={latest ? formatActivityTimestamp(latest.created_at) : undefined}
     >
       <span className={cn(latest?.status === "failed" ? "text-destructive" : "text-muted-foreground")}>
-        {lensStatus(item.lens, connected)}
+        {translateText(lensStatus(item.lens, connected))}
       </span>
       {latest && <span className="text-muted-foreground">· {agoLabel(Date.parse(latest.created_at), now)}</span>}
     </span>
@@ -103,12 +113,17 @@ function StatusCell({ row: { original: item } }: Cell) {
 }
 
 function FindingCount({ row: { original: item } }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (item.kind === "finding") return null;
   const count = openFindings(item.lens).length;
   if (count === 0) return null;
   return (
     <span
-      title={`${count} open ${count === 1 ? "finding" : "findings"}`}
+      title={uiT("ui.d479724c22cc93ec", {
+        v0: String(count),
+        v1: String(count === 1 ? uiT("ui.8bf18252cb6dadd5") : uiT("ui.8aa3c4ce3ccdfe89")),
+      })}
       className="inline-flex min-w-5 justify-center rounded-full bg-muted px-1.5 font-mono text-xs tabular-nums text-foreground"
     >
       {count}
@@ -117,6 +132,8 @@ function FindingCount({ row: { original: item } }: Cell) {
 }
 
 function ActionsCell({ row: { original: item } }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { readOnly, demo, onEdit, onRunNow } = useList();
   if (item.kind === "finding")
     return <ChevronRight aria-hidden="true" className="mr-2 ml-auto size-3.5 text-muted-foreground/60" />;
@@ -126,8 +143,8 @@ function ActionsCell({ row: { original: item } }: Cell) {
     <span className="flex items-center justify-end gap-0.5">
       <button
         type="button"
-        aria-label={`Run ${settings.name} now`}
-        title={demo ? "Turn off Demo data to run an investigation" : "Run now"}
+        aria-label={uiT("ui.bb444f046a8b7246", { v0: String(settings.name) })}
+        title={demo ? uiT("ui.3cac71e3d39929cf") : uiT("ui.0991397702fabb40")}
         disabled={readOnly}
         onClick={(event) => {
           event.stopPropagation();
@@ -139,8 +156,8 @@ function ActionsCell({ row: { original: item } }: Cell) {
       </button>
       <button
         type="button"
-        aria-label={`Edit ${settings.name}`}
-        title={demo ? "Turn off Demo data to edit an investigation" : "Edit"}
+        aria-label={uiT("ui.f1be7e63b84c48df", { v0: String(settings.name) })}
+        title={demo ? uiT("ui.bd9f70d246a07b10") : uiT("ui.464c4ffd019e")}
         disabled={readOnly}
         onClick={(event) => {
           event.stopPropagation();
@@ -155,15 +172,52 @@ function ActionsCell({ row: { original: item } }: Cell) {
 }
 
 const COLUMNS: ColumnDef<InvestigationRow>[] = [
-  { id: "name", header: "Investigation", cell: NameCell },
-  { id: "agent", size: 160, header: "Agent", cell: AgentCell },
-  { id: "schedule", size: 180, header: "Schedule", cell: ScheduleCell },
-  { id: "status", size: 200, header: "Last run", cell: StatusCell },
-  { id: "findings", size: 64, header: "Open", cell: FindingCount, meta: { numeric: true } },
+  {
+    id: "name",
+    get header() {
+      return translateUi("ui.5502719084e4cd5a");
+    },
+    cell: NameCell,
+  },
+  {
+    id: "agent",
+    size: 160,
+    get header() {
+      return translateUi("ui.11b39c93777e");
+    },
+    cell: AgentCell,
+  },
+  {
+    id: "schedule",
+    size: 180,
+    get header() {
+      return translateUi("ui.f4830a1dae298044");
+    },
+    cell: ScheduleCell,
+  },
+  {
+    id: "status",
+    size: 200,
+    get header() {
+      return translateUi("ui.512a48218ba21791");
+    },
+    cell: StatusCell,
+  },
+  {
+    id: "findings",
+    size: 64,
+    get header() {
+      return translateUi("ui.ed077f3d8125");
+    },
+    cell: FindingCount,
+    meta: { numeric: true },
+  },
   {
     id: "actions",
     size: 76,
-    header: "Actions",
+    get header() {
+      return translateUi("ui.ff8059dc6752");
+    },
     cell: ActionsCell,
     meta: { headerClassName: "sr-only", className: "pl-0 pr-3" },
   },
@@ -193,6 +247,8 @@ export function InvestigationList({
   actions,
   children,
 }: InvestigationListProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [search, setSearch] = useListSearchRoute();
   const { demo } = useLensRoute();
   const now = useNow(15000);
@@ -227,16 +283,16 @@ export function InvestigationList({
             values={itemValues(INVESTIGATION_INDEX, lenses)}
             value={search}
             onValueChange={setSearch}
-            label="Search investigations"
+            label={uiT("ui.cdd1539db0d73eff")}
           >
-            <SearchBox.Input className="rounded-md" placeholder="Search investigations" />
+            <SearchBox.Input className="rounded-md" placeholder={uiT("ui.cdd1539db0d73eff")} />
             <SearchBox.Suggestions />
           </SearchBox.Root>
           {actions && <div className="ml-auto flex items-center gap-2">{actions}</div>}
         </div>
         <ListContext.Provider value={{ now, connected, readOnly, demo, onEdit, onRunNow }}>
           <InspectorTable.Root table={table}>
-            <InspectorTable.Grid aria-label="Investigations" className="text-xs md:min-w-[860px]">
+            <InspectorTable.Grid aria-label={uiT("ui.21476f00fdcfab75")} className="text-xs md:min-w-[860px]">
               <InspectorTable.Header />
               <InspectorTable.Body<InvestigationRow> rowHeight={() => (desktop ? INVESTIGATION_HEIGHT : 48)}>
                 {(row) => (
@@ -253,15 +309,13 @@ export function InvestigationList({
               </InspectorTable.Body>
             </InspectorTable.Grid>
             {!shown.length && (
-              <div className="py-16 text-center text-xs text-muted-foreground">
-                No investigations match your search.
-              </div>
+              <div className="py-16 text-center text-xs text-muted-foreground">{uiT("ui.1440b563512d8e6f")}</div>
             )}
           </InspectorTable.Root>
         </ListContext.Provider>
         <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-          {shown.length} {shown.length === 1 ? "investigation" : "investigations"} ·{" "}
-          {shown.filter((lens) => lens.settings.enabled).length} watching
+          {shown.length} {shown.length === 1 ? uiT("ui.57794bdeddd90874") : uiT("ui.d180b942f62929ac")} ·{" "}
+          {shown.filter((lens) => lens.settings.enabled).length} {uiT("ui.19bda4aa00eaf9a1")}
         </footer>
       </div>
       <Inspector.Panel label={ROW_LABEL[noun]} testId="investigation-panel">

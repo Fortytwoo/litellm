@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 import { openAIDecisionsRequestSchema, type OpenAIDecisionsRequest } from "./openAIDecisions";
 import {
@@ -44,7 +45,9 @@ const scoreLevelWarnings = (payload: PlaygroundRequest): SystemOnePayloadIssue[]
     .filter(([, question]) => question.type === "score" && question.criteria.length > RECOMMENDED_MAX_SCORE_LEVELS)
     .map(([id]) => ({
       path: `questions.${id}.criteria`,
-      message: `More than ${RECOMMENDED_MAX_SCORE_LEVELS} score levels may reduce result quality.`,
+      get message() {
+        return translateUi("ui.dec3b54d477dc25f", undefined, { v0: String(RECOMMENDED_MAX_SCORE_LEVELS) });
+      },
       severity: "warning",
     }));
 

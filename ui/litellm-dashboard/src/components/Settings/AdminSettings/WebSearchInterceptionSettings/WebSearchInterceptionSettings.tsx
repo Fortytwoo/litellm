@@ -1,4 +1,9 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useWebSearchInterceptionSettings } from "@/app/(dashboard)/hooks/webSearchInterceptionSettings/useWebSearchInterceptionSettings";
 import { useUpdateWebSearchInterceptionSettings } from "@/app/(dashboard)/hooks/webSearchInterceptionSettings/useUpdateWebSearchInterceptionSettings";
@@ -58,10 +63,12 @@ const PROVIDER_OPTIONS = Object.entries(provider_map)
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -126,6 +133,8 @@ interface WebSearchInterceptionFormProps {
 }
 
 function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchInterceptionFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     mutate: updateSettings,
     isPending: isUpdating,
@@ -139,7 +148,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
     updateSettings(formValues, {
       onSuccess: () => {
         form.reset(formValues);
-        toast.success("Settings updated successfully. Changes will be applied across all pods within 10 seconds.");
+        toast.success(translateUi("ui.cd45e5e5d93f5315"));
       },
       onError: (saveError) => {
         toast.fromError(saveError);
@@ -151,7 +160,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
     <>
       {updateError && (
         <Alert variant="error" className="mb-4">
-          <AlertTitle>Could not update settings</AlertTitle>
+          <AlertTitle>{uiT("ui.bcbefab00e66df05")}</AlertTitle>
           {updateError instanceof Error && <AlertDescription>{updateError.message}</AlertDescription>}
         </Alert>
       )}
@@ -190,7 +199,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                       options={PROVIDER_OPTIONS}
                       value={value}
                       onValueChange={onChange}
-                      placeholder="Select providers (defaults to Bedrock)"
+                      placeholder={uiT("ui.a76bc4017cff5ae3")}
                       allowCustomValues
                       disabled={isUpdating}
                     />
@@ -212,7 +221,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                       options={searchTools.map((name) => ({ label: name, value: name }))}
                       value={value}
                       onValueChange={onChange}
-                      placeholder="Select a search tool (defaults to the first available)"
+                      placeholder={uiT("ui.be7ef259de0f8ecb")}
                       disabled={isUpdating || loadingSearchTools}
                     />
                   )}
@@ -251,7 +260,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
               disabled={!isDirty || isUpdating}
             >
               {isUpdating ? <UiLoadingSpinner className="size-4" /> : <Save />}
-              Save Settings
+              {uiT("ui.ec92e1dc9bb3bf7b")}
             </Button>
           </div>
         </form>
@@ -261,15 +270,13 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
 }
 
 export default function WebSearchInterceptionSettings() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const { data, isLoading, isError, error } = useWebSearchInterceptionSettings();
 
   if (!accessToken) {
-    return (
-      <div className="p-6 text-center text-muted-foreground">
-        Please log in to configure web search interception settings.
-      </div>
-    );
+    return <div className="p-6 text-center text-muted-foreground">{uiT("ui.283d85f955e88115")}</div>;
   }
 
   if (isLoading) {
@@ -286,7 +293,7 @@ export default function WebSearchInterceptionSettings() {
   if (isError) {
     return (
       <Alert variant="error" className="mb-6">
-        <AlertTitle>Could not load web search interception settings</AlertTitle>
+        <AlertTitle>{uiT("ui.a22b767fac7faed7")}</AlertTitle>
         {error instanceof Error && <AlertDescription>{error.message}</AlertDescription>}
       </Alert>
     );
@@ -300,23 +307,15 @@ export default function WebSearchInterceptionSettings() {
       {notAppliedHere && (
         <Alert variant="warning" className="mb-6">
           <TriangleAlert />
-          <AlertTitle>Not running on the proxy that answered this page</AlertTitle>
-          <AlertDescription>
-            Interception is switched on for the cluster, but the proxy serving this page has not applied it. That is
-            expected for about 10 seconds after a change or a restart. If it persists, check that proxy&apos;s logs:
-            requests it handles are not being intercepted.
-          </AlertDescription>
+          <AlertTitle>{uiT("ui.80189391e20fd7b5")}</AlertTitle>
+          <AlertDescription>{uiT("ui.849d6eb83fa2ceda")}</AlertDescription>
         </Alert>
       )}
 
       <Alert variant="info" className="mb-6">
         <Info />
-        <AlertTitle>Web Search Interception</AlertTitle>
-        <AlertDescription>
-          Serve web search tool calls from a configured search tool instead of passing them upstream, so models without
-          native web search can still answer with fresh results. Click &apos;Save Settings&apos; to apply changes across
-          all pods (takes effect within 10 seconds).
-        </AlertDescription>
+        <AlertTitle>{uiT("ui.bda3828192d4d2a1")}</AlertTitle>
+        <AlertDescription>{uiT("ui.64685986837e312b")}</AlertDescription>
       </Alert>
 
       <WebSearchInterceptionForm

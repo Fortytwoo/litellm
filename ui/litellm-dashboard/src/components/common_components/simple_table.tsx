@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import {
   NUMERIC_CELL_CLASS,
@@ -35,9 +38,11 @@ export function SimpleTable<T>({
   columns,
   isLoading = false,
   loadingMessage = "Loading...",
-  emptyMessage = "No data",
+  emptyMessage = translateUi("ui.3b41ba9c7cb8"),
   getRowKey,
 }: SimpleTableProps<T>) {
+  useDashboardLanguage();
+
   return (
     <Table>
       <TableHeader>

@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
@@ -52,9 +55,15 @@ export interface RoutingDecision {
 }
 
 const ROUTER_TYPE_LABELS: Record<string, string> = {
-  complexity: "Auto-Router v2",
-  adaptive: "Adaptive router",
-  quality: "Quality router",
+  get complexity() {
+    return translateUi("ui.faab7169e1ae2161");
+  },
+  get adaptive() {
+    return translateUi("ui.740efff4f57d67b0");
+  },
+  get quality() {
+    return translateUi("ui.ef82c41cae35f5ce");
+  },
 };
 
 /**
@@ -105,26 +114,66 @@ function describeReasoningOverride(tierLabel: string | undefined, floor: number 
 }
 
 const CONSTANT_CAUSE_LABELS: Record<string, string> = {
-  heuristic_scorer: "Heuristic scorer",
-  heuristic_v2: "Heuristic v2",
-  capability_classifier: "Capability",
-  capability_classifier_fallback: "Capable tier, Capability classifier failed",
-  llm_v2_classifier: "FUSE v2",
-  llm_v2_fallback: "Capable tier, FUSE v2 classifier failed",
-  heuristic_first_short_circuit: "Heuristic scorer, classifier skipped",
-  hybrid_short_circuit: "Heuristic scorer, score clear of every boundary",
-  classifier_plugin: "Custom classifier plugin",
-  semantic_keyword_match: "Semantic keyword match",
-  session_affinity_pin: "Pinned to session",
-  session_affinity_escalation: "Escalated from session pin",
-  user_turn_continuation: "Continuation turn, classifier skipped",
-  modality_escalation: "Escalated for image input",
-  modality_pin_override: "Overrode session pin for image input",
-  quality_tier: "Quality tier mapping",
-  bandit: "Adaptive bandit",
-  default_fallback: "Default model, no route matched",
-  classifier_fallback: "Fallback tier, classifier failed",
-  default_model_fallback: "Default model, classifier failed",
+  get heuristic_scorer() {
+    return translateUi("ui.2ec42c3908060267");
+  },
+  get heuristic_v2() {
+    return translateUi("ui.183bc446ae6a17b0");
+  },
+  get capability_classifier() {
+    return translateUi("ui.5faf58a69db59058");
+  },
+  get capability_classifier_fallback() {
+    return translateUi("ui.cdaf79afe10f85df");
+  },
+  get llm_v2_classifier() {
+    return translateUi("ui.91797000a96044a6");
+  },
+  get llm_v2_fallback() {
+    return translateUi("ui.fd9a42504fc2eebb");
+  },
+  get heuristic_first_short_circuit() {
+    return translateUi("ui.ff36e4f99e7b9b60");
+  },
+  get hybrid_short_circuit() {
+    return translateUi("ui.8824601590f28a1a");
+  },
+  get classifier_plugin() {
+    return translateUi("ui.e047f28894106ca9");
+  },
+  get semantic_keyword_match() {
+    return translateUi("ui.8e3060e2bfddf081");
+  },
+  get session_affinity_pin() {
+    return translateUi("ui.775658f204b3776c");
+  },
+  get session_affinity_escalation() {
+    return translateUi("ui.aeb20725e1cfeed3");
+  },
+  get user_turn_continuation() {
+    return translateUi("ui.e8c04e0e4b3934c6");
+  },
+  get modality_escalation() {
+    return translateUi("ui.df18f84e638695a6");
+  },
+  get modality_pin_override() {
+    return translateUi("ui.7d6b5ad2bd9bbad8");
+  },
+  get quality_tier() {
+    return translateUi("ui.7457f9479aae2a50");
+  },
+  get bandit() {
+    return translateUi("ui.824dda5900a2f8c5");
+  },
+  get default_fallback() {
+    return translateUi("ui.f531d70bb09ae1de");
+  },
+  get classifier_fallback() {
+    return translateUi("ui.18d73b7a44ffa47f");
+  },
+  get default_model_fallback() {
+    return translateUi("ui.b881fa4f2255c42b");
+  },
 };
 
 function describeCause(decision: RoutingDecision): string {
@@ -335,7 +384,7 @@ export function RoutingDecisionCard({
         {routedModel && <Row label={uiT("ui.a3e3b5c2b0a3")}>{routedModel}</Row>}
 
         {escalated !== undefined && (
-          <Row label={uiT("ui.b710aaaaa7ba")}>{describeEscalation(escalated, escalationKeyword)}</Row>
+          <Row label={uiT("ui.b710aaaaa7ba")}>{translateText(describeEscalation(escalated, escalationKeyword))}</Row>
         )}
 
         {forecast && (
@@ -345,7 +394,7 @@ export function RoutingDecisionCard({
               <span className="flex flex-wrap gap-1">
                 {["SIMPLE", "MEDIUM", "COMPLEX", "REASONING"].map((predictedTier) => (
                   <Badge key={predictedTier} variant="outline" className="font-normal tabular-nums">
-                    {predictedTier} {(forecast.probabilities[predictedTier] * 100).toFixed(1)}%
+                    {translateText(predictedTier)} {(forecast.probabilities[predictedTier] * 100).toFixed(1)}%
                   </Badge>
                 ))}
               </span>

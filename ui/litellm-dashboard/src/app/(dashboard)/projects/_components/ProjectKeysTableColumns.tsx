@@ -27,8 +27,14 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   {
     id: "key_alias",
     accessorKey: "key_alias",
-    meta: { title: "Key Name" },
-    header: "Key Name",
+    meta: {
+      get title() {
+        return translateUi("ui.750c6798ab7ffc9a");
+      },
+    },
+    get header() {
+      return translateUi("ui.750c6798ab7ffc9a");
+    },
     enableSorting: false,
     cell: ({ row }) => (
       <IdentityCell
@@ -40,8 +46,14 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   },
   {
     id: "owner",
-    meta: { title: "Owner" },
-    header: "Owner",
+    meta: {
+      get title() {
+        return translateUi("ui.4b1b8aa3608a26da");
+      },
+    },
+    get header() {
+      return translateUi("ui.4b1b8aa3608a26da");
+    },
     enableSorting: false,
     cell: ({ row }) => <OwnerCell record={row.original} />,
   },

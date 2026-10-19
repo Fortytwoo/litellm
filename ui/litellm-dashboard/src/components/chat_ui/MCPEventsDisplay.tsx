@@ -89,7 +89,7 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
         {toolsEvent && (
           <MCPEventPanel
             panelKey="list-tools"
-            title="List tools"
+            title={uiT("ui.894733a9267a30cd")}
             open={openKeys.has("list-tools")}
             onOpenChange={(open) => toggleKey("list-tools", open)}
           >
@@ -112,7 +112,7 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
             <MCPEventPanel
               key={key}
               panelKey={key}
-              title={callEvent.item?.name || "Tool call"}
+              title={callEvent.item?.name || uiT("ui.17011048725fe0aa")}
               open={openKeys.has(key)}
               onOpenChange={(open) => toggleKey(key, open)}
             >
@@ -133,7 +133,7 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
                     <span className="mr-1.5 font-bold text-success" aria-hidden="true">
                       ✓
                     </span>
-                    Approved
+                    {uiT("ui.87b42e40c2a290e0")}
                   </div>
                 </div>
 

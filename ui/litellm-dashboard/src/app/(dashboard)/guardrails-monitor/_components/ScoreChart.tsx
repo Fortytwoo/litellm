@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { BarChart } from "@/components/shared/charts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,12 +13,14 @@ interface ScoreChartProps {
 }
 
 export function ScoreChart({ data }: ScoreChartProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const chartData = data && data.length > 0 ? data : [];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base font-semibold">Request Outcomes Over Time</CardTitle>
+        <CardTitle className="text-base font-semibold">{uiT("ui.8d38500de8dbdd85")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-80 min-h-[280px]">
@@ -34,7 +38,7 @@ export function ScoreChart({ data }: ScoreChartProps) {
             />
           ) : (
             <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
-              No chart data for this period
+              {uiT("ui.60e8880bf377f1a0")}
             </div>
           )}
         </div>

@@ -45,15 +45,21 @@ export const AGENT_FORM_CONFIG: {
 } = {
   basic: {
     key: "basic",
-    title: "Basic Information",
+    get title() {
+      return translateUi("ui.d094b334d8099b1e");
+    },
     defaultExpanded: true,
     fields: [
       {
         name: "name",
-        label: "Display Name",
+        get label() {
+          return translateUi("ui.18d67c992b71ce69");
+        },
         type: "text",
         required: true,
-        placeholder: "e.g., Customer Support Agent",
+        get placeholder() {
+          return translateUi("ui.d64fb47b17785cde");
+        },
       },
       {
         name: "description",
@@ -62,7 +68,9 @@ export const AGENT_FORM_CONFIG: {
         },
         type: "textarea",
         required: false,
-        placeholder: "Describe what this agent does...",
+        get placeholder() {
+          return translateUi("ui.5e15ce7fc160ce58");
+        },
         rows: 3,
       },
       {
@@ -71,25 +79,33 @@ export const AGENT_FORM_CONFIG: {
         type: "url",
         required: false,
         placeholder: "http://localhost:9999/",
-        tooltip: "Base URL where the agent is hosted (optional)",
+        get tooltip() {
+          return translateUi("ui.8a2285ba4d4e3213");
+        },
       },
       {
         name: "version",
-        label: "Version",
+        get label() {
+          return translateUi("ui.dd167905de0defca");
+        },
         type: "text",
         placeholder: "1.0.0",
         defaultValue: "1.0.0",
       },
       {
         name: "protocolVersion",
-        label: "Protocol Version",
+        get label() {
+          return translateUi("ui.291267b5e04ce1b5");
+        },
         type: "select",
         options: ["1.0", "0.3"],
         defaultValue: "1.0",
-        tooltip:
-          "The A2A protocol version LiteLLM serves to clients for this agent. LiteLLM converts the upstream agent's responses to this version, so clients always see the version you pick here regardless of the original agent's version.",
-        helpText:
-          "LiteLLM serves this version to clients and converts the upstream agent's responses to match it, regardless of the original agent's version.",
+        get tooltip() {
+          return translateUi("ui.6a99fd7fda6804bf");
+        },
+        get helpText() {
+          return translateUi("ui.97377c4460fccabd");
+        },
       },
     ],
   },
@@ -111,102 +127,144 @@ export const AGENT_FORM_CONFIG: {
   },
   capabilities: {
     key: "capabilities",
-    title: "Capabilities",
+    get title() {
+      return translateUi("ui.9460f16ac9b5171e");
+    },
     fields: [
       {
         name: "streaming",
-        label: "Streaming",
+        get label() {
+          return translateUi("ui.a951c5945635e2d3");
+        },
         type: "switch",
         defaultValue: false,
       },
       {
         name: "pushNotifications",
-        label: "Push Notifications",
+        get label() {
+          return translateUi("ui.3b1776f544c9f4b0");
+        },
         type: "switch",
       },
       {
         name: "stateTransitionHistory",
-        label: "State Transition History",
+        get label() {
+          return translateUi("ui.7cf48623858f12d3");
+        },
         type: "switch",
       },
     ],
   },
   optional: {
     key: "optional",
-    title: "Optional Settings",
+    get title() {
+      return translateUi("ui.22cacf9e2be2ffa0");
+    },
     fields: [
       {
         name: "iconUrl",
-        label: "Icon URL",
+        get label() {
+          return translateUi("ui.5522df36679f818e");
+        },
         type: "url",
         placeholder: "https://example.com/icon.png",
       },
       {
         name: "documentationUrl",
-        label: "Documentation URL",
+        get label() {
+          return translateUi("ui.33db6f919e9e2d29");
+        },
         type: "url",
         placeholder: "https://docs.example.com",
       },
       {
         name: "supportsAuthenticatedExtendedCard",
-        label: "Supports Authenticated Extended Card",
+        get label() {
+          return translateUi("ui.f004595b5dcf413f");
+        },
         type: "switch",
       },
     ],
   },
   litellm: {
     key: "litellm",
-    title: "LiteLLM Parameters",
+    get title() {
+      return translateUi("ui.1898c7d608a9afc1");
+    },
     fields: [
       {
         name: "model",
-        label: "Model (Optional)",
+        get label() {
+          return translateUi("ui.0da3c71f8f09d1b4");
+        },
         type: "text",
       },
       {
         name: "make_public",
-        label: "Make Public",
+        get label() {
+          return translateUi("ui.24139936d627112e");
+        },
         type: "switch",
       },
     ],
   },
   cost: {
     key: "cost",
-    title: "Cost Configuration",
+    get title() {
+      return translateUi("ui.20a90e67e23542a2");
+    },
     fields: [
       {
         name: "cost_per_query",
-        label: "Cost Per Query ($)",
+        get label() {
+          return translateUi("ui.689e32fd9ef7fee6");
+        },
         type: "text",
         placeholder: "0.0",
-        tooltip: "Fixed cost per query",
+        get tooltip() {
+          return translateUi("ui.042bf57b08e6138b");
+        },
       },
       {
         name: "input_cost_per_token",
-        label: "Input Cost Per Token ($)",
+        get label() {
+          return translateUi("ui.0e0681b8302e9b52");
+        },
         type: "text",
         placeholder: "0.000001",
-        tooltip: "Cost per input token",
+        get tooltip() {
+          return translateUi("ui.516d815b578767bb");
+        },
       },
       {
         name: "output_cost_per_token",
-        label: "Output Cost Per Token ($)",
+        get label() {
+          return translateUi("ui.a3ea3cb505b2a617");
+        },
         type: "text",
         placeholder: "0.000002",
-        tooltip: "Cost per output token",
+        get tooltip() {
+          return translateUi("ui.a8355dbd865ff822");
+        },
       },
     ],
   },
   tracing: {
     key: "tracing",
-    title: "Tracing",
+    get title() {
+      return translateUi("ui.69e561abfb584b5e");
+    },
     fields: [
       {
         name: "enable_tracing",
-        label: "Enable Tracing",
+        get label() {
+          return translateUi("ui.d1d1652a1ca4a2a7");
+        },
         type: "switch",
         defaultValue: false,
-        tooltip: "Enable request tracing for this agent",
+        get tooltip() {
+          return translateUi("ui.b44988e4375cf344");
+        },
       },
     ],
   },
@@ -215,15 +273,23 @@ export const AGENT_FORM_CONFIG: {
 export const SKILL_FIELD_CONFIG = {
   id: {
     name: "id",
-    label: "Skill ID",
+    get label() {
+      return translateUi("ui.9f565edfc9f9df77");
+    },
     required: true,
-    placeholder: "e.g., hello_world",
+    get placeholder() {
+      return translateUi("ui.4d82c7210b8b919e");
+    },
   },
   name: {
     name: "name",
-    label: "Skill Name",
+    get label() {
+      return translateUi("ui.72588b0c1d102da3");
+    },
     required: true,
-    placeholder: "e.g., Returns hello world",
+    get placeholder() {
+      return translateUi("ui.b51e4794091a232d");
+    },
   },
   description: {
     name: "description",
@@ -231,7 +297,9 @@ export const SKILL_FIELD_CONFIG = {
       return translateUi("ui.526e0087cc3f");
     },
     required: true,
-    placeholder: "What this skill does",
+    get placeholder() {
+      return translateUi("ui.5279cd30dc9a0e2c");
+    },
     rows: 2,
   },
   tags: {
@@ -240,12 +308,18 @@ export const SKILL_FIELD_CONFIG = {
       return translateUi("ui.1331275bc537");
     },
     required: true,
-    placeholder: "Type a tag and press Enter",
+    get placeholder() {
+      return translateUi("ui.7622936efb45a349");
+    },
   },
   examples: {
     name: "examples",
-    label: "Examples",
-    placeholder: "Type an example and press Enter",
+    get label() {
+      return translateUi("ui.e68ee04dff59551b");
+    },
+    get placeholder() {
+      return translateUi("ui.91b13b5a9febb791");
+    },
   },
 };
 

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { isMaskedSecret } from "@/utils/maskedSecretUtils";
 import { isBlank, type FederationField } from "./federation_field";
 
@@ -25,34 +26,47 @@ const REJECTED_REFERENCE_PREFIX = "oidc/env_path/";
 export const FEDERATION_CORE_FIELDS: readonly FederationField[] = [
   {
     key: "anthropic_federation_rule_id",
-    label: "Federation Rule ID",
-    tooltip:
-      "The fdrl_ id of the federation rule, from Settings > Workload identity in the Claude Console. Leave empty when the proxy sets ANTHROPIC_FEDERATION_RULE_ID in its environment.",
+    get label() {
+      return translateUi("ui.96f516689b6167de");
+    },
+    get tooltip() {
+      return translateUi("ui.b1a593180664247b");
+    },
     placeholder: "fdrl_...",
     required: false,
     control: "text",
   },
   {
     key: "anthropic_organization_id",
-    label: "Organization ID",
-    tooltip:
-      "The Anthropic organization the federation rule belongs to, shown on the rule's detail page. Leave empty when the proxy sets ANTHROPIC_ORGANIZATION_ID in its environment.",
+    get label() {
+      return translateUi("ui.1f466322634e2d85");
+    },
+    get tooltip() {
+      return translateUi("ui.02565e7ebd2fcbea");
+    },
     required: false,
     control: "text",
   },
   {
     key: "anthropic_service_account_id",
-    label: "Service Account ID",
-    tooltip: "The svac_ id the federation rule targets. Anthropic's reference lists it as required.",
+    get label() {
+      return translateUi("ui.bde626c5ca64a2b7");
+    },
+    get tooltip() {
+      return translateUi("ui.58798538aa35a88e");
+    },
     placeholder: "svac_...",
     required: false,
     control: "text",
   },
   {
     key: "anthropic_federation_workspace_id",
-    label: "Workspace ID",
-    tooltip:
-      "Set this when the federation rule is enabled in more than one workspace: the wrkspc_ id to mint tokens for, or 'default'.",
+    get label() {
+      return translateUi("ui.889d892993c3e5f0");
+    },
+    get tooltip() {
+      return translateUi("ui.df3e0f730c3d7e90");
+    },
     placeholder: "wrkspc_...",
     required: false,
     control: "text",
@@ -62,14 +76,19 @@ export const FEDERATION_CORE_FIELDS: readonly FederationField[] = [
 export const IDENTITY_SOURCES: readonly IdentitySource[] = [
   {
     id: "token_file",
-    label: "Identity token file",
+    get label() {
+      return translateUi("ui.2ef829cd71fbffe8");
+    },
     fixedValues: {},
     fields: [
       {
         key: "anthropic_identity_token_file",
-        label: "Identity Token File",
-        tooltip:
-          "Absolute path on the proxy host of a file holding the identity token, for example a projected Kubernetes service account token. It must sit under an allowed credential directory.",
+        get label() {
+          return translateUi("ui.1249f9e43e591cea");
+        },
+        get tooltip() {
+          return translateUi("ui.5eb008993c1d901e");
+        },
         placeholder: "/var/run/secrets/anthropic/token",
         required: true,
         control: "text",
@@ -78,15 +97,22 @@ export const IDENTITY_SOURCES: readonly IdentitySource[] = [
   },
   {
     id: "secret_reference",
-    label: "Identity token secret reference",
+    get label() {
+      return translateUi("ui.5c53c74375c7e5e4");
+    },
     fixedValues: {},
     fields: [
       {
         key: "anthropic_identity_token",
-        label: "Identity Token Reference",
-        tooltip:
-          "An oidc/ secret reference the proxy resolves on each exchange, such as oidc/env/VAR_NAME, oidc/github/<audience>, or oidc/google/<audience>. Raw tokens are not accepted.",
-        placeholder: "oidc/env/ANTHROPIC_IDENTITY_TOKEN",
+        get label() {
+          return translateUi("ui.86c83dea48d1b9ba");
+        },
+        get tooltip() {
+          return translateUi("ui.7823cabf7f7893e0");
+        },
+        get placeholder() {
+          return translateUi("ui.290d737c6b981cf6");
+        },
         required: true,
         control: "text",
       },
@@ -94,43 +120,64 @@ export const IDENTITY_SOURCES: readonly IdentitySource[] = [
   },
   {
     id: "internal_issuer",
-    label: "Token signed by LiteLLM (internal issuer)",
+    get label() {
+      return translateUi("ui.24890fc3eeb97d04");
+    },
     fixedValues: { [IDENTITY_SOURCE_KEY]: "internal_issuer" },
     fields: [
       {
         key: "anthropic_issuer_url",
-        label: "Issuer URL",
-        tooltip: "The issuer registered on the federation rule. The proxy puts it in the token's iss claim.",
+        get label() {
+          return translateUi("ui.4d03ba8a838fb2de");
+        },
+        get tooltip() {
+          return translateUi("ui.2acb6da9afd5be34");
+        },
         placeholder: "https://litellm.example.com",
         required: true,
         control: "text",
       },
       {
         key: "anthropic_issuer_subject",
-        label: "Subject",
-        tooltip: "The sub claim the federation rule matches.",
+        get label() {
+          return translateUi("ui.68971283841aecdf");
+        },
+        get tooltip() {
+          return translateUi("ui.a800aa475b6bbfb0");
+        },
         required: true,
         control: "text",
       },
       {
         key: "anthropic_issuer_audience",
-        label: "Audience",
-        tooltip: "Optional aud claim, when the federation rule checks one.",
+        get label() {
+          return translateUi("ui.545c02357695a6ff");
+        },
+        get tooltip() {
+          return translateUi("ui.3f467a5477eea466");
+        },
         required: false,
         control: "text",
       },
       {
         key: "anthropic_issuer_ttl_seconds",
-        label: "Token Lifetime (seconds)",
-        tooltip: `Optional. How long each signed token is valid, from 1 to ${MAX_ISSUER_TTL_SECONDS} seconds. The proxy uses its default when this is empty.`,
+        get label() {
+          return translateUi("ui.6265f9b6123ce932");
+        },
+        get tooltip() {
+          return translateUi("ui.a5cdc431db5390e2", undefined, { v0: String(MAX_ISSUER_TTL_SECONDS) });
+        },
         required: false,
         control: "integer",
       },
       {
         key: "anthropic_issuer_signing_key_ref",
-        label: "Signing Key Reference",
-        tooltip:
-          "A secret reference to the PEM private key the proxy signs with, such as os.environ/VAR_NAME. Enter the reference, never the key itself.",
+        get label() {
+          return translateUi("ui.1bafc0fb33840f21");
+        },
+        get tooltip() {
+          return translateUi("ui.7e52a277419f73af");
+        },
         placeholder: "os.environ/ANTHROPIC_ISSUER_SIGNING_KEY",
         required: true,
         control: "text",
@@ -139,45 +186,66 @@ export const IDENTITY_SOURCES: readonly IdentitySource[] = [
   },
   {
     id: "keycloak",
-    label: "Keycloak client credentials",
+    get label() {
+      return translateUi("ui.e02d1f63a7bcb7ab");
+    },
     fixedValues: { [IDENTITY_SOURCE_KEY]: "keycloak" },
     fields: [
       {
         key: "anthropic_keycloak_token_url",
-        label: "Keycloak Token URL",
-        tooltip: "The realm's token endpoint the proxy requests an identity token from.",
+        get label() {
+          return translateUi("ui.e8486d1c522a44a0");
+        },
+        get tooltip() {
+          return translateUi("ui.d0722b1482300f50");
+        },
         placeholder: "https://keycloak.example.com/realms/<realm>/protocol/openid-connect/token",
         required: true,
         control: "text",
       },
       {
         key: "anthropic_keycloak_client_id",
-        label: "Keycloak Client ID",
-        tooltip: "The client the proxy authenticates as.",
+        get label() {
+          return translateUi("ui.6d364b1ba8855d35");
+        },
+        get tooltip() {
+          return translateUi("ui.46dab1a0e40a7bd5");
+        },
         required: true,
         control: "text",
       },
       {
         key: "anthropic_keycloak_client_secret_ref",
-        label: "Client Secret Reference",
-        tooltip:
-          "A secret reference to the client secret, such as os.environ/VAR_NAME. Enter the reference, never the secret itself.",
+        get label() {
+          return translateUi("ui.5e4731de7a91a71c");
+        },
+        get tooltip() {
+          return translateUi("ui.4ae01bfda1d3f746");
+        },
         placeholder: "os.environ/KEYCLOAK_CLIENT_SECRET",
         required: true,
         control: "text",
       },
       {
         key: "anthropic_keycloak_auth_method",
-        label: "Client Authentication Method",
-        tooltip: "Optional. How the client secret is sent to Keycloak. The proxy uses client_secret_basic when unset.",
+        get label() {
+          return translateUi("ui.9d1f1da0231b57c4");
+        },
+        get tooltip() {
+          return translateUi("ui.127962c1659a7cbe");
+        },
         required: false,
         control: "select",
         options: ["client_secret_basic", "client_secret_post"],
       },
       {
         key: "anthropic_keycloak_scope",
-        label: "Scope",
-        tooltip: "Optional scope to request with the token.",
+        get label() {
+          return translateUi("ui.b073f6c68ef87211");
+        },
+        get tooltip() {
+          return translateUi("ui.383c67a09f620876");
+        },
         required: false,
         control: "text",
       },
@@ -185,7 +253,9 @@ export const IDENTITY_SOURCES: readonly IdentitySource[] = [
   },
   {
     id: "environment",
-    label: "Proxy environment variables",
+    get label() {
+      return translateUi("ui.c58ee02afdc93d88");
+    },
     fixedValues: {},
     fields: [],
   },
@@ -237,7 +307,16 @@ export const identitySourceOptions = (
   storedValues: Record<string, unknown>,
 ): readonly { value: IdentitySourceId; label: string }[] => [
   ...(inferIdentitySource(storedValues) === "unrecognized"
-    ? [{ value: "unrecognized" as const, label: `Stored: ${String(storedValues[IDENTITY_SOURCE_KEY])}` }]
+    ? [
+        {
+          value: "unrecognized" as const,
+          get label() {
+            return translateUi("ui.caeaf47f1e79848e", undefined, {
+              v0: String(String(storedValues[IDENTITY_SOURCE_KEY])),
+            });
+          },
+        },
+      ]
     : []),
   ...IDENTITY_SOURCES.map((source) => ({ value: source.id, label: source.label })),
 ];

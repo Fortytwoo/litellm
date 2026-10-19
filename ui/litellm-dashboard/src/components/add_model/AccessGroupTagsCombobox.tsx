@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import {
@@ -31,6 +32,8 @@ const AccessGroupTagsCombobox: React.FC<AccessGroupTagsComboboxProps> = ({
   ariaInvalid,
   ariaDescribedBy,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [query, setQuery] = useState("");
   const selected = value ?? [];
@@ -79,14 +82,14 @@ const AccessGroupTagsCombobox: React.FC<AccessGroupTagsComboboxProps> = ({
                 id={id}
                 aria-invalid={ariaInvalid}
                 aria-describedby={ariaDescribedBy}
-                placeholder="Select existing groups or type to create new ones"
+                placeholder={uiT("ui.13a4140b64289431")}
               />
             </>
           )}
         </ComboboxValue>
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>No access groups found</ComboboxEmpty>
+        <ComboboxEmpty>{uiT("ui.a17e39b2a7a82dee")}</ComboboxEmpty>
         <ComboboxList>
           {(group: string) => (
             <ComboboxItem key={group} value={group}>

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Info, Plus } from "lucide-react";
@@ -124,7 +126,7 @@ const AgentsPanel: React.FC<AgentsPanelProps> = ({ accessToken, userRole, teams 
     setIsDeleting(true);
     try {
       await deleteAgentCall(accessToken, agentToDelete.id);
-      toast.success(`Agent "${agentToDelete.name}" deleted successfully`);
+      toast.success(translateUi("ui.2803ef9bf7774732", undefined, { v0: String(agentToDelete.name) }));
       await refetchAgents(healthCheckEnabled);
     } catch (error) {
       console.error("Error deleting agent:", error);
@@ -143,23 +145,17 @@ const AgentsPanel: React.FC<AgentsPanelProps> = ({ accessToken, userRole, teams 
     <div className="w-full mx-auto flex-auto overflow-y-auto m-8 p-2">
       <div className="flex flex-col gap-2 mb-4">
         <h1 className="text-2xl font-bold">{uiT("ui.279b44d2ab4b")}</h1>
-        <p className="text-sm text-muted-foreground">
-          List of A2A-spec agents that are available to be used in your organization. Go to AI Hub, to make agents
-          public.
-        </p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.c757f548c6b4380c")}</p>
         <Alert className="mb-3">
           <Info />
-          <AlertTitle>How do agents authenticate?</AlertTitle>
-          <AlertDescription>
-            Agents can authenticate with a virtual key or a trusted identity provider using JWT. Configure an identity
-            binding when adding or editing an agent. JWT authentication does not require a virtual key.
-          </AlertDescription>
+          <AlertTitle>{uiT("ui.a10efea59a1bfb30")}</AlertTitle>
+          <AlertDescription>{uiT("ui.b578e57ecacfa422")}</AlertDescription>
         </Alert>
         {isAdmin && (
           <div className="mt-2 flex items-center gap-4">
             <Button onClick={handleAddAgent} disabled={!accessToken}>
               <Plus />
-              Add New Agent
+              {uiT("ui.e74718f85447d3f1")}
             </Button>
           </div>
         )}
@@ -202,9 +198,10 @@ const AgentsPanel: React.FC<AgentsPanelProps> = ({ accessToken, userRole, teams 
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Agent</AlertDialogTitle>
+              <AlertDialogTitle>{uiT("ui.b367199c189150d3")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete agent: {agentToDelete.name}? This action cannot be undone.
+                {uiT("ui.a98340eca349a0b4")} {agentToDelete.name}
+                {uiT("ui.30f98589bee45969")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

@@ -36,8 +36,8 @@ const PublishModal: React.FC<PublishModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Publish Prompt</DialogTitle>
-          <DialogDescription>Published prompts are versioned and can be used in API calls.</DialogDescription>
+          <DialogTitle>{uiT("ui.c5d386e43cbe9347")}</DialogTitle>
+          <DialogDescription>{uiT("ui.5b302f2cf32dab95")}</DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <label htmlFor="publish-prompt-name" className="mb-2 block">
@@ -47,13 +47,11 @@ const PublishModal: React.FC<PublishModalProps> = ({
             id="publish-prompt-name"
             value={promptName}
             onChange={(e) => onNameChange(e.target.value)}
-            placeholder="Enter prompt name"
+            placeholder={uiT("ui.435adda15f01b611")}
             onKeyDown={(event) => event.key === "Enter" && onPublish()}
             autoFocus
           />
-          <p className="text-muted-foreground text-xs mt-2">
-            Published prompts can be used in API calls and are versioned for easy tracking.
-          </p>
+          <p className="text-muted-foreground text-xs mt-2">{uiT("ui.31e99bae1e7568c9")}</p>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
@@ -61,7 +59,7 @@ const PublishModal: React.FC<PublishModalProps> = ({
           </Button>
           <Button onClick={onPublish} disabled={isSaving}>
             {isSaving && <LoaderCircleIcon className="animate-spin" />}
-            Publish
+            {uiT("ui.859390eb495b2ead")}
           </Button>
         </DialogFooter>
       </DialogContent>

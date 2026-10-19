@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useEffect } from "react";
 import { z } from "zod";
@@ -53,12 +55,12 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
   const handleSubmit = (values: CloudZeroFormValues) => {
     updateMutation.mutate(buildCloudZeroPayload(values), {
       onSuccess: () => {
-        toast.success("CloudZero integration updated successfully");
+        toast.success(translateUi("ui.ab7f2a093525a95e"));
         form.reset(EMPTY_CLOUDZERO_FORM_VALUES);
         onOk();
       },
       onError: (error: Error) => {
-        toast.error(error.message || "Failed to update CloudZero integration");
+        toast.error(error.message || translateUi("ui.6d4050f4ee6182c1"));
       },
     });
   };
@@ -72,7 +74,7 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
     <Dialog open={open} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit CloudZero Integration</DialogTitle>
+          <DialogTitle>{uiT("ui.5ce42145ad96882c")}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
@@ -83,11 +85,11 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
                 label={labelWithHint("CloudZero API Key", "Leave empty to keep the existing API key")}
               >
                 {({ ref, ...field }) => (
-                  <CloudZeroApiKeyInput {...field} ref={ref} placeholder="Leave empty to keep existing" />
+                  <CloudZeroApiKeyInput {...field} ref={ref} placeholder={uiT("ui.7b1185101ff56048")} />
                 )}
               </FormField>
-              <FormField control={form.control} name="connection_id" label="Connection ID">
-                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="Enter your CloudZero connection ID" />}
+              <FormField control={form.control} name="connection_id" label={uiT("ui.f8ca8ad99b78ad5d")}>
+                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.3d5b23ee264ab0e9")} />}
               </FormField>
               <FormField
                 control={form.control}
@@ -108,7 +110,7 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
             disabled={updateMutation.isPending}
             aria-busy={updateMutation.isPending}
           >
-            {updateMutation.isPending ? "Updating..." : "Update"}
+            {updateMutation.isPending ? uiT("ui.0a4e0b71b7f35837") : uiT("ui.c1c1009d3f37ec05")}
           </Button>
         </DialogFooter>
       </DialogContent>

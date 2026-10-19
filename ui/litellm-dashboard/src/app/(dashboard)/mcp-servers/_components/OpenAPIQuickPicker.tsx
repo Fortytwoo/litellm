@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { cn } from "@/lib/cva.config";
@@ -30,6 +32,8 @@ interface OpenAPIQuickPickerProps {
 }
 
 const OpenAPIQuickPicker: React.FC<OpenAPIQuickPickerProps> = ({ accessToken, selectedName, onSelect }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [apis, setApis] = useState<OpenAPIRegistryEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
@@ -50,7 +54,7 @@ const OpenAPIQuickPicker: React.FC<OpenAPIQuickPickerProps> = ({ accessToken, se
   if (loading) {
     return (
       <div className="mb-4">
-        <span className="text-sm font-medium">Popular APIs</span>
+        <span className="text-sm font-medium">{uiT("ui.b0cb2b9ee0ab1385")}</span>
         <div className="flex justify-center py-6">
           <UiLoadingSpinner className="size-5 text-muted-foreground" />
         </div>
@@ -62,7 +66,7 @@ const OpenAPIQuickPicker: React.FC<OpenAPIQuickPickerProps> = ({ accessToken, se
 
   return (
     <div className="mb-4">
-      <span className="mb-2 block text-sm font-medium">Popular APIs</span>
+      <span className="mb-2 block text-sm font-medium">{uiT("ui.b0cb2b9ee0ab1385")}</span>
 
       <div className="grid grid-cols-5 gap-2">
         {apis.map((api) => {
@@ -97,9 +101,7 @@ const OpenAPIQuickPicker: React.FC<OpenAPIQuickPickerProps> = ({ accessToken, se
         })}
       </div>
 
-      <p className="mt-2 text-xs text-muted-foreground">
-        Select an API to pre-fill the spec URL and OAuth 2.0 settings, or enter your own spec URL below.
-      </p>
+      <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.5cb43f0f6ea19865")}</p>
     </div>
   );
 };

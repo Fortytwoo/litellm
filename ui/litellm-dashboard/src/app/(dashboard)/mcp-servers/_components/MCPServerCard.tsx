@@ -166,7 +166,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     type="button"
                     onClick={stop}
                     onKeyDown={stop}
-                    aria-label="Server actions"
+                    aria-label={uiT("ui.0ed6308b6431a27b")}
                     className="-mr-1 -mt-1 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
                     <Ellipsis className="size-5" />
@@ -183,7 +183,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     }}
                   >
                     <Zap />
-                    Test Connection
+                    {uiT("ui.c02977b07ec93816")}
                   </DropdownMenuItem>
                 )}
                 {onRecheckHealth && onDelete && <DropdownMenuSeparator />}
@@ -233,7 +233,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                 render={
                   <Badge variant="outline">
                     <CircleAlert />
-                    stdio disabled
+                    {uiT("ui.b3dbf1d0675aee23")}
                   </Badge>
                 }
               />
@@ -246,14 +246,11 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                 render={
                   <Badge variant="outline">
                     <CircleAlert />
-                    OAuth flow not set
+                    {uiT("ui.bb8c2c9a0a087d98")}
                   </Badge>
                 }
               />
-              <TooltipContent>
-                This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow
-                Type so LiteLLM authenticates it as you intend.
-              </TooltipContent>
+              <TooltipContent>{uiT("ui.eb9ba2f5b3f5e8e1")}</TooltipContent>
             </Tooltip>
           )}
           <Tooltip>
@@ -298,13 +295,13 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     render={
                       <span className="inline-flex items-center gap-1 font-semibold text-destructive">
                         <CircleAlert className="size-3.5" />
-                        {missing.length} user field
-                        {missing.length === 1 ? "" : "s"} missing
+                        {missing.length} {uiT("ui.549f5b5ab6bb345a")}
+                        {missing.length === 1 ? "" : "s"} {uiT("ui.ffa63583dfa6706b")}
                       </span>
                     }
                   />
                   <TooltipContent>
-                    <div className="mb-1 font-semibold">Missing user fields:</div>
+                    <div className="mb-1 font-semibold">{uiT("ui.f5445e30e6455722")}</div>
                     <ul className="ml-3">
                       {missing.map((m) => (
                         <li key={m}>• {m}</li>
@@ -321,7 +318,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                       onOpenFillFields();
                     }}
                   >
-                    Set
+                    {uiT("ui.b6f6f3ad07b3c05f")}
                   </Button>
                 )}
               </div>
@@ -358,7 +355,7 @@ const HealthChip: FC<HealthChipProps> = ({
     return (
       <Badge variant="outline" className="text-muted-foreground">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted-foreground" />
-        Checking
+        {uiT("ui.0dfe1d63c9d86896")}
       </Badge>
     );
   }
@@ -385,44 +382,53 @@ const HealthChip: FC<HealthChipProps> = ({
         }
       />
       <TooltipContent side="top" className="max-w-xs">
-        <div className="mb-1 font-semibold">Health: {status}</div>
+        <div className="mb-1 font-semibold">
+          {uiT("ui.ac2be4a4248d9be4")} {status}
+        </div>
         {status === "reachable" && <div className="mb-1 text-xs">{MCP_REACHABLE_DESCRIPTION}</div>}
-        {lastCheck && <div className="mb-1 text-xs">Last check: {new Date(lastCheck).toLocaleString()}</div>}
+        {lastCheck && (
+          <div className="mb-1 text-xs">
+            {uiT("ui.49417422964458c6")} {new Date(lastCheck).toLocaleString()}
+          </div>
+        )}
         {error && (
           <div className="text-xs">
             <div className="mb-1 font-medium">{uiT("ui.54a0e8c17ebb")}</div>
             <div className="wrap-break-word">{error}</div>
           </div>
         )}
-        {!hasHealthData && <div className="text-xs">No health data</div>}
-        {onRecheck && <div className="mt-1 text-xs">Click to recheck</div>}
+        {!hasHealthData && <div className="text-xs">{uiT("ui.1c4d5c62e5e42961")}</div>}
+        {onRecheck && <div className="mt-1 text-xs">{uiT("ui.9f255bafa81ad5ff")}</div>}
       </TooltipContent>
     </Tooltip>
   );
 };
 
-const UserFieldsRow: FC<{ onUpdate?: () => void }> = ({ onUpdate }) => (
-  <div className="flex items-center justify-between gap-2 text-xs">
-    <span className="text-muted-foreground">Per-user credentials</span>
-    <div className="flex items-center gap-2">
-      <Badge variant="outline">
-        <Check /> Set
-      </Badge>
-      {onUpdate && (
-        <Button
-          variant="link"
-          size="sm"
-          onClick={(e) => {
-            stop(e);
-            onUpdate();
-          }}
-        >
-          Update
-        </Button>
-      )}
+const UserFieldsRow: FC<{ onUpdate?: () => void }> = ({ onUpdate }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <div className="flex items-center justify-between gap-2 text-xs">
+      <span className="text-muted-foreground">{uiT("ui.27530e4a0faa1b12")}</span>
+      <div className="flex items-center gap-2">
+        <Badge variant="outline">
+          <Check /> {uiT("ui.b6f6f3ad07b3c05f")}
+        </Badge>
+        {onUpdate && (
+          <Button
+            variant="link"
+            size="sm"
+            onClick={(e) => {
+              stop(e);
+              onUpdate();
+            }}
+          >
+            {uiT("ui.c1c1009d3f37ec05")}
+          </Button>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface ByokRowProps {
   connected: boolean;
@@ -430,13 +436,15 @@ interface ByokRowProps {
 }
 
 const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (connected) {
     return (
       <div className="flex items-center justify-between gap-2 text-xs">
-        <span className="text-muted-foreground">BYOK credential</span>
+        <span className="text-muted-foreground">{uiT("ui.43a847d3185b8300")}</span>
         <div className="flex items-center gap-2">
           <Badge variant="outline">
-            <Check /> Connected
+            <Check /> {uiT("ui.22965568d22a14ee")}
           </Badge>
           {onConnect && (
             <Button
@@ -447,7 +455,7 @@ const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
                 onConnect();
               }}
             >
-              Update
+              {uiT("ui.c1c1009d3f37ec05")}
             </Button>
           )}
         </div>
@@ -456,7 +464,7 @@ const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
   }
   return (
     <div className="flex items-center justify-between gap-2 text-xs">
-      <span className="text-muted-foreground">BYOK credential</span>
+      <span className="text-muted-foreground">{uiT("ui.43a847d3185b8300")}</span>
       {onConnect ? (
         <Button
           size="sm"
@@ -465,7 +473,7 @@ const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
             onConnect();
           }}
         >
-          Connect
+          {uiT("ui.1a2303ede07493ac")}
         </Button>
       ) : (
         <span className="text-muted-foreground">—</span>

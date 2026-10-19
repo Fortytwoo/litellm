@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -45,7 +47,12 @@ const ACTION_ITEMS = [
     },
     value: "block",
   },
-  { label: "Log only", value: "log" },
+  {
+    get label() {
+      return translateUi("ui.bf3dda189fc4e542");
+    },
+    value: "log",
+  },
 ];
 
 const ProviderLogo: React.FC<{ provider: string }> = ({ provider }) => (
@@ -53,16 +60,19 @@ const ProviderLogo: React.FC<{ provider: string }> = ({ provider }) => (
 );
 
 const NoDecisionModels: React.FC<{ providerFilter: string | null }> = ({ providerFilter }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const source = providerFilter ? ` from the ${getProviderLogoAndName(providerFilter).displayName} provider` : "";
   return (
-    <Alert variant="info" role="note" aria-label="No decision models">
+    <Alert variant="info" role="note" aria-label={uiT("ui.93a67f24c5c68ae4")}>
       <Info />
-      <AlertTitle>No decision models yet</AlertTitle>
+      <AlertTitle>{uiT("ui.78531ba38dd081b6")}</AlertTitle>
       <AlertDescription>
         <p>
-          Add a decision model{source} to use this guardrail. A model shows up here once its mode is evaluation.{" "}
+          {uiT("ui.32f1b8bfcc7e728a")}
+          {translateText(source)} {uiT("ui.036f9e568c144bd3")}{" "}
           <a href={uiHref("models-and-endpoints")} target="_blank" rel="noopener noreferrer">
-            Add a model
+            {uiT("ui.3690c70b279379c2")}
           </a>
         </p>
       </AlertDescription>
@@ -116,9 +126,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
   return (
     <div className="space-y-5">
       <div className="rounded-md border border-success/20 bg-success/10 px-3.5 py-2.5 text-[13px] text-success">
-        The <strong>Decision Model</strong> answers yes/no questions about each request (pre_call, during_call) or
-        response (post_call). A question whose probability reaches its threshold blocks the call, or is recorded when
-        set to Log only.
+        {uiT("ui.b344d80e24a36799")} <strong>{uiT("ui.9aa9d2dad8ea2a17")}</strong> {uiT("ui.0950014b0661b10a")}
       </div>
 
       <GuardrailField
@@ -143,11 +151,11 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
               id={id}
               aria-invalid={ariaInvalid}
               aria-describedby={ariaDescribedBy}
-              placeholder={decisionModels.length > 0 ? "Select a decision model" : "No decision models yet"}
+              placeholder={decisionModels.length > 0 ? uiT("ui.77e0feebcf249724") : uiT("ui.78531ba38dd081b6")}
               className="w-full"
             />
             <ComboboxContent>
-              <ComboboxEmpty>No matching models</ComboboxEmpty>
+              <ComboboxEmpty>{uiT("ui.5267f5e646a5a193")}</ComboboxEmpty>
               <ComboboxList>
                 {(model: string) => {
                   const provider = providerByModel.get(model);
@@ -169,11 +177,8 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
       {decisionModels.length === 0 && <NoDecisionModels providerFilter={providerFilter} />}
 
       <Field>
-        <FieldLabel>Questions</FieldLabel>
-        <p className="m-0 text-xs text-muted-foreground">
-          Yes/no questions the decision model answers about the text. Block stops the call once a score reaches the
-          threshold, and Log only records it.
-        </p>
+        <FieldLabel>{uiT("ui.9a72221a27476f3e")}</FieldLabel>
+        <p className="m-0 text-xs text-muted-foreground">{uiT("ui.9ca76f98ef1e036b")}</p>
         {checks.map((check, index) => {
           const position = index + 1;
           return (
@@ -181,7 +186,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
               <button
                 type="button"
                 onClick={() => removeCheck(check.id)}
-                aria-label={`Remove question ${position}`}
+                aria-label={uiT("ui.e4db2f5cb2287f10", { v0: String(position) })}
                 className="absolute top-2 right-2 p-1 text-muted-foreground transition-colors hover:text-destructive"
               >
                 <X className="size-4" />
@@ -189,22 +194,24 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
               <div>
                 <span className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.dcd1d5223f73")}</span>
                 <Input
-                  aria-label={`Question ${position} name`}
-                  placeholder="Name (e.g. invoice_policy)"
+                  aria-label={uiT("ui.d5ab02125436dfd0", { v0: String(position) })}
+                  placeholder={uiT("ui.97bff1a748e5e7b4")}
                   className="bg-background"
                   value={check.name}
                   onChange={(event) => updateCheck(check.id, { name: event.target.value })}
                 />
                 {duplicateNames.has(check.name.trim()) && (
-                  <p className="m-0 mt-1 text-xs text-destructive">Another question already uses this name</p>
+                  <p className="m-0 mt-1 text-xs text-destructive">{uiT("ui.dfff0b27e75fa9ac")}</p>
                 )}
               </div>
               <div>
-                <span className="mb-1 block text-xs font-medium text-muted-foreground">Question</span>
+                <span className="mb-1 block text-xs font-medium text-muted-foreground">
+                  {uiT("ui.289aff12b04274cb")}
+                </span>
                 <Textarea
-                  aria-label={`Question ${position}`}
+                  aria-label={uiT("ui.49c0fedf36489ef4", { v0: String(position) })}
                   rows={2}
-                  placeholder="The question the decision model answers, e.g. Does the text ask about invoices?"
+                  placeholder={uiT("ui.dc15d6d65cb436cf")}
                   className="w-full resize-none bg-background"
                   value={check.instructions}
                   onChange={(event) => updateCheck(check.id, { instructions: event.target.value })}
@@ -220,7 +227,10 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
                       next && updateCheck(check.id, { action: next as "block" | "log" })
                     }
                   >
-                    <SelectTrigger className="w-full bg-background" aria-label={`Question ${position} action`}>
+                    <SelectTrigger
+                      className="w-full bg-background"
+                      aria-label={uiT("ui.a91627310790cfb3", { v0: String(position) })}
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -236,7 +246,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
                   <span className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.0da627ada476")}</span>
                   <div className="flex h-9 items-center">
                     <ThresholdSlider
-                      aria-label={`Question ${position} threshold`}
+                      aria-label={uiT("ui.eb049eb4c0c16b5e", { v0: String(position) })}
                       value={check.threshold}
                       onChange={(next) => updateCheck(check.id, { threshold: next })}
                     />
@@ -249,7 +259,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
         <div>
           <Button variant="outline" size="sm" onClick={addCheck}>
             <Plus className="size-3" />
-            Add question
+            {uiT("ui.f9496b764efa5ff2")}
           </Button>
         </div>
       </Field>

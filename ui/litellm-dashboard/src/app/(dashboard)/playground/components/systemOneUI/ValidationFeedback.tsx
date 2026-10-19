@@ -1,30 +1,40 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { CircleAlert, CircleCheck, TriangleAlert } from "lucide-react";
 import { errorCount as countErrors, type PayloadValidation } from "./lib/validatePayload";
 
 export function ValidationStatus({ validation }: { validation: PayloadValidation<unknown> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const errorCount = countErrors(validation);
   if (errorCount > 0) {
     return (
       <Badge variant="destructive">
-        {errorCount} {errorCount === 1 ? "issue" : "issues"}
+        {errorCount} {errorCount === 1 ? uiT("ui.4a502846d070e208") : uiT("ui.02e3fe5aad80ca85")}
       </Badge>
     );
   }
-  return <Badge variant="secondary">Valid payload</Badge>;
+  return <Badge variant="secondary">{uiT("ui.0d0365ae5f8b6e88")}</Badge>;
 }
 
 export function IssueList({ id, validation }: { id: string; validation: PayloadValidation<unknown> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (validation.issues.length === 0) {
     return (
       <p id={id} role="status" className="flex items-center gap-1.5 border-t px-3 py-2 text-xs text-muted-foreground">
         <CircleCheck className="size-3.5 text-emerald-600 dark:text-emerald-400" />
-        Ready to send
+        {uiT("ui.77311249a7d249bf")}
       </p>
     );
   }
   return (
-    <ul id={id} aria-label="Payload validation issues" className="grid max-h-36 gap-1 overflow-auto border-t px-3 py-2">
+    <ul
+      id={id}
+      aria-label={uiT("ui.dc4626e60a8089ce")}
+      className="grid max-h-36 gap-1 overflow-auto border-t px-3 py-2"
+    >
       {validation.issues.map((issue, index) => (
         <li key={`${issue.path}-${index}`} className="flex items-start gap-1.5 text-xs">
           {issue.severity === "error" ? (

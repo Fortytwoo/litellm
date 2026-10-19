@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 
@@ -33,6 +34,8 @@ export function Block({
   defaultOpen = true,
   children,
 }: BlockProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(defaultOpen);
   const foldable = children !== undefined && children !== null && children !== false;
   const expanded = open && foldable;
@@ -64,7 +67,13 @@ export function Block({
         )}
         {meta}
         {copyValue !== undefined && (
-          <CopyButton variant="action" value={copyValue} label={`Copy ${name}`} iconOnly className={COPY} />
+          <CopyButton
+            variant="action"
+            value={copyValue}
+            label={uiT("ui.3f3ebff426db5fa6", { v0: String(name) })}
+            iconOnly
+            className={COPY}
+          />
         )}
       </header>
       {expanded && (

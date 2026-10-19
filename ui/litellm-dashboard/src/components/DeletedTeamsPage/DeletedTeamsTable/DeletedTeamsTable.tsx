@@ -41,6 +41,8 @@ export function DeletedTeamsTable({
   onPaginationChange,
   rowCount,
 }: DeletedTeamsTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
 
   const columns = useMemo(() => getDeletedTeamsTableColumns(), []);
@@ -59,7 +61,7 @@ export function DeletedTeamsTable({
       onPaginationChange={onPaginationChange}
       rowCount={rowCount}
       isLoading={isLoading}
-      loadingMessage="Loading deleted teams…"
+      loadingMessage={uiT("ui.5f68d944e39243a7")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

@@ -91,7 +91,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
         <Button variant="ghost" size="icon" aria-label={uiT("ui.76900f1bfd16")} onClick={onBack} className="mb-4">
           <ArrowLeftIcon className="size-4" />
         </Button>
-        <p className="py-8 text-center text-sm text-muted-foreground">Access group not found</p>
+        <p className="py-8 text-center text-sm text-muted-foreground">{uiT("ui.311388100f0d068c")}</p>
       </div>
     );
   }
@@ -115,20 +115,22 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-foreground">{accessGroup.access_group_name}</h1>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <span>ID: {accessGroup.access_group_id}</span>
-              <CopyButton value={accessGroup.access_group_id} label="Copy access group ID" />
+              <span>
+                {uiT("ui.3ea36adcd1e02c94")} {accessGroup.access_group_id}
+              </span>
+              <CopyButton value={accessGroup.access_group_id} label={uiT("ui.d14f058925c80b80")} />
             </div>
           </div>
         </div>
         <Button onClick={() => setIsEditModalVisible(true)}>
           <EditIcon className="size-4" />
-          Edit Access Group
+          {uiT("ui.aef907bb65e8bce4")}
         </Button>
       </div>
 
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Group Details</CardTitle>
+          <CardTitle>{uiT("ui.37a6a835a224261f")}</CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
@@ -139,7 +141,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
               {new Date(accessGroup.created_at).toLocaleString()}
               {accessGroup.created_by && (
                 <>
-                  <span>by</span>
+                  <span>{uiT("ui.a7e2d26e8d15814d")}</span>
                   <DefaultProxyAdminTag userId={accessGroup.created_by} />
                 </>
               )}
@@ -149,7 +151,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
               {new Date(accessGroup.updated_at).toLocaleString()}
               {accessGroup.updated_by && (
                 <>
-                  <span>by</span>
+                  <span>{uiT("ui.a7e2d26e8d15814d")}</span>
                   <DefaultProxyAdminTag userId={accessGroup.updated_by} />
                 </>
               )}
@@ -163,13 +165,13 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <KeyIcon className="size-4" />
-              Attached Keys
+              {uiT("ui.f528daa5e46b192f")}
               <Badge variant="secondary">{keys.length}</Badge>
             </CardTitle>
             {keys.length > MAX_PREVIEW && (
               <CardAction>
                 <Button variant="link" size="sm" onClick={() => setShowAllKeys(!showAllKeys)}>
-                  {showAllKeys ? uiT("ui.0264d7b0ccb8") : `View All (${keys.length})`}
+                  {showAllKeys ? uiT("ui.0264d7b0ccb8") : uiT("ui.7a62a6f398911803", { v0: String(keys.length) })}
                 </Button>
               </CardAction>
             )}
@@ -182,7 +184,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No keys attached</p>
+              <p className="text-sm text-muted-foreground">{uiT("ui.821d8659df369290")}</p>
             )}
           </CardContent>
         </Card>
@@ -191,13 +193,13 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <UsersIcon className="size-4" />
-              Attached Teams
+              {uiT("ui.65156c5e8dd12000")}
               <Badge variant="secondary">{teams.length}</Badge>
             </CardTitle>
             {teams.length > MAX_PREVIEW && (
               <CardAction>
                 <Button variant="link" size="sm" onClick={() => setShowAllTeams(!showAllTeams)}>
-                  {showAllTeams ? uiT("ui.0264d7b0ccb8") : `View All (${teams.length})`}
+                  {showAllTeams ? uiT("ui.0264d7b0ccb8") : uiT("ui.7a62a6f398911803", { v0: String(teams.length) })}
                 </Button>
               </CardAction>
             )}
@@ -210,7 +212,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No teams attached</p>
+              <p className="text-sm text-muted-foreground">{uiT("ui.c4dd895350af6544")}</p>
             )}
           </CardContent>
         </Card>
@@ -237,13 +239,13 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
               </TabsTrigger>
             </TabsList>
             <TabsContent value="models" className="pt-4">
-              <ResourceList items={models} emptyMessage="No models assigned to this group" />
+              <ResourceList items={models} emptyMessage={uiT("ui.41576033d90db488")} />
             </TabsContent>
             <TabsContent value="mcp" className="pt-4">
-              <ResourceList items={mcpServers} emptyMessage="No MCP servers assigned to this group" />
+              <ResourceList items={mcpServers} emptyMessage={uiT("ui.35f2a853d7f05bd6")} />
             </TabsContent>
             <TabsContent value="agents" className="pt-4">
-              <ResourceList items={agents} emptyMessage="No agents assigned to this group" />
+              <ResourceList items={agents} emptyMessage={uiT("ui.71997d5a4c7c034e")} />
             </TabsContent>
           </Tabs>
         </CardContent>

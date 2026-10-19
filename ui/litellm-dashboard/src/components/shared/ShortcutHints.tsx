@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Fragment, type ReactNode } from "react";
@@ -18,7 +20,9 @@ const KEY_LABELS: Readonly<Record<string, string>> = {
   arrowdown: "↓",
   arrowleft: "←",
   arrowright: "→",
-  escape: "Esc",
+  get escape() {
+    return translateUi("ui.52f878edb34fa14f");
+  },
 };
 const ARROWS: readonly string[] = ["arrowup", "arrowdown", "arrowleft", "arrowright"];
 

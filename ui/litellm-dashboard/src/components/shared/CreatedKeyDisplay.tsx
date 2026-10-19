@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
@@ -21,7 +22,7 @@ const CreatedKeyDisplay: React.FC<CreatedKeyDisplayProps> = ({ apiKey }) => {
 
   const handleCopy = () => {
     setCopied(true);
-    toast.success(uiT("ui.340f5dc832f4"));
+    toast.success(translateUi("ui.340f5dc832f4"));
     setTimeout(() => setCopied(false), 2000);
   };
 

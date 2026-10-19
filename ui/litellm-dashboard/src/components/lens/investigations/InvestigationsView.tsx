@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -58,6 +59,8 @@ function Banners({ error, activityReady, flush, refresh }: BannersProps) {
 }
 
 export function InvestigationsView({ readOnly = false }: InvestigationsViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const api = useLensApi();
   const invalidateLenses = useInvalidateLenses();
   const actions = useInvestigationActions();
@@ -141,7 +144,7 @@ export function InvestigationsView({ readOnly = false }: InvestigationsViewProps
                 <>
                   <WatchAllBanner lenses={current.lenses} />
                   <Button size="sm" className="h-8" disabled={!status.ready} onClick={() => openDialog("new")}>
-                    <Plus className="size-4" /> New investigation
+                    <Plus className="size-4" /> {uiT("ui.c11364d7598c3309")}
                   </Button>
                 </>
               )
@@ -198,7 +201,7 @@ export function InvestigationsView({ readOnly = false }: InvestigationsViewProps
 
   return (
     <section
-      aria-label="Investigations"
+      aria-label={uiT("ui.21476f00fdcfab75")}
       className={cn("flex w-full min-w-0 flex-1 flex-col", !browsing && "gap-3 p-4")}
     >
       <Banners

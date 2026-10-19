@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { AUTH_TYPE, TRANSPORT } from "@/components/mcp_tools/types";
 import { AUTH_TYPES_REQUIRING_AUTH_VALUE, reduceStaticHeaders } from "./createServerPayload";
 
@@ -59,8 +60,9 @@ export const getEditToolPreview = (
   if (changedOrigin && (needsSavedCredential || reusesHeader)) {
     return {
       kind: "incomplete",
-      message:
-        "The server origin changed. Enter credentials and replace or remove saved static headers to preview tools.",
+      get message() {
+        return translateUi("ui.7024413e3c02fd39");
+      },
     };
   }
   return { kind: "preview", config };

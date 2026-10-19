@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useId } from "react";
 import { cn } from "@/lib/cva.config";
 import styles from "./LensIntroduction.module.css";
@@ -26,21 +28,23 @@ const swarmRows = Array.from({ length: 11 }, (_, row) => ({
 const organizedColumns = Array.from({ length: 58 }, (_, column) => column - 8);
 
 export function GatewayFlow() {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = useId();
   return (
     <div className="mt-5 sm:mt-6">
       <div className="grid grid-cols-3 gap-3 text-xs">
         <div>
-          <p className="font-semibold">Agent swarms</p>
-          <p className="mt-0.5 leading-4 text-muted-foreground">Every run, every recorded step</p>
+          <p className="font-semibold">{uiT("ui.019d16dd479b922e")}</p>
+          <p className="mt-0.5 leading-4 text-muted-foreground">{uiT("ui.bc2d74389cb23d5b")}</p>
         </div>
         <div className="text-center">
-          <p className="font-semibold">LiteLLM gateway</p>
-          <p className="mt-0.5 leading-4 text-muted-foreground">One place, your infrastructure</p>
+          <p className="font-semibold">{uiT("ui.8f88a96100565fa6")}</p>
+          <p className="mt-0.5 leading-4 text-muted-foreground">{uiT("ui.d7e5ead3ed0dc2f9")}</p>
         </div>
         <div className="text-right">
           <p className="font-semibold">Lens</p>
-          <p className="mt-0.5 leading-4 text-muted-foreground">Findings to improve your agents</p>
+          <p className="mt-0.5 leading-4 text-muted-foreground">{uiT("ui.59b6e460ff8dfeeb")}</p>
         </div>
       </div>
       <svg

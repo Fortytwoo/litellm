@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleAlert, Info } from "lucide-react";
@@ -42,12 +44,10 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
     <div className="mx-auto w-full max-w-md mt-10">
       <Card>
         <CardContent>
-          <h5 className="text-center mb-5 text-base font-semibold text-foreground">🚅 LiteLLM</h5>
-          <h3 className="text-2xl font-semibold text-foreground">{actionLabel}</h3>
+          <h5 className="text-center mb-5 text-base font-semibold text-foreground">{uiT("ui.118fffb377c529a3")}</h5>
+          <h3 className="text-2xl font-semibold text-foreground">{translateText(actionLabel)}</h3>
           <p className="text-sm text-foreground">
-            {isResetPassword
-              ? "Reset your password to access Admin UI."
-              : "Claim your user account to login to Admin UI."}
+            {isResetPassword ? uiT("ui.91de3a572736fd87") : uiT("ui.0d594ea3979d87cb")}
           </p>
 
           {variant === "signup" && (
@@ -56,14 +56,14 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
               <AlertTitle>SSO</AlertTitle>
               <AlertDescription>
                 <div className="flex justify-between items-center">
-                  <span>SSO is under the Enterprise Tier.</span>
+                  <span>{uiT("ui.28ecefeaef1069e9")}</span>
                   <a
                     className={cn(buttonVariants({ size: "sm" }))}
                     href="https://forms.gle/W3U4PZpJGFHWtHyA9"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Get Free Trial
+                    {uiT("ui.dace4cae407d5a99")}
                   </a>
                 </div>
               </AlertDescription>
@@ -73,7 +73,7 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
           <form className="mt-10 mb-5" onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor={emailFieldId}>Email Address</FieldLabel>
+                <FieldLabel htmlFor={emailFieldId}>{uiT("ui.09bf25ef30833633")}</FieldLabel>
                 <Input id={emailFieldId} type="email" value={userEmail} readOnly disabled />
               </Field>
 
@@ -81,7 +81,7 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
                 control={form.control}
                 name="password"
                 label={uiT("ui.e7cf3ef4f17c")}
-                description={isResetPassword ? "Enter your new password" : "Create a password for your account"}
+                description={isResetPassword ? uiT("ui.606e3c1f2d8ac29a") : uiT("ui.3a64b370a8a4cd09")}
               >
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} />}
               </FormField>
@@ -96,8 +96,10 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
 
             <div className="mt-10">
               <Button type="submit" variant="outline" disabled={isPending}>
-                {isPending && <UiLoadingSpinner className="size-4" role="img" aria-label="loading" />}
-                {actionLabel}
+                {isPending && (
+                  <UiLoadingSpinner className="size-4" role="img" aria-label={uiT("ui.b4a070a2d341940c")} />
+                )}
+                {translateText(actionLabel)}
               </Button>
             </div>
           </form>

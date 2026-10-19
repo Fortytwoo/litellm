@@ -1,12 +1,22 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/cva.config";
 import type { Priority } from "../model/inbox";
 
 export const PRIORITY_ORDER: readonly Priority[] = ["high", "medium", "low"];
 
 export const PRIORITY_LABEL: Readonly<Record<Priority, string>> = {
-  high: "High",
-  medium: "Medium",
-  low: "Low",
+  get high() {
+    return translateUi("ui.c4ebc6d4a5832cd9");
+  },
+  get medium() {
+    return translateUi("ui.8e588cd187741f1c");
+  },
+  get low() {
+    return translateUi("ui.f793de205ead5ac3");
+  },
 };
 
 const DOT: Readonly<Record<Priority, string>> = {
@@ -26,6 +36,8 @@ export function PriorityDot({ priority, className }: { priority: Priority; class
 }
 
 export function PriorityPill({ priority }: { priority: Priority }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <span
       className={cn(
@@ -34,7 +46,7 @@ export function PriorityPill({ priority }: { priority: Priority }) {
       )}
     >
       <PriorityDot priority={priority} />
-      {PRIORITY_LABEL[priority]} priority
+      {PRIORITY_LABEL[priority]} {uiT("ui.3092a5f0dba05ff3")}
     </span>
   );
 }

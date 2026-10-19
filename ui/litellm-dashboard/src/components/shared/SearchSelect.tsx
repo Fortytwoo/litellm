@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import React from "react";
 import {
@@ -42,14 +44,16 @@ export function SearchSelect({
   options,
   value,
   onValueChange,
-  placeholder = "Select…",
-  emptyText = "No results",
+  placeholder = translateUi("ui.731fe041ce28da1b"),
+  emptyText = translateUi("ui.a43619f32117"),
   disabled = false,
   className,
   inputId,
   allowClear = true,
   "aria-label": ariaLabel,
 }: SearchSelectProps) {
+  useDashboardLanguage();
+
   const selected =
     value == null || value === "" ? null : options.find((option) => option.value === value) ?? { label: value, value };
   const items =

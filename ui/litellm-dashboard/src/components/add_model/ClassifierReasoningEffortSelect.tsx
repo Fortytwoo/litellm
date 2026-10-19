@@ -44,8 +44,8 @@ const ClassifierReasoningEffortSelect = ({
   return (
     <div>
       <div className="flex items-center gap-2 mb-1">
-        <strong className="font-semibold">Reasoning Effort</strong>
-        <SimpleTooltip content="Sent only to the classifier call. Default leaves the classifier deployment or provider setting unchanged.">
+        <strong className="font-semibold">{uiT("ui.6f71800c93bd916e")}</strong>
+        <SimpleTooltip content={uiT("ui.85d7eed02b5e15a4")}>
           <Info className="size-4 text-muted-foreground" />
         </SimpleTooltip>
       </div>
@@ -59,7 +59,7 @@ const ClassifierReasoningEffortSelect = ({
           effort && onChange(effort === PROVIDER_DEFAULT ? undefined : (effort as ReasoningEffort))
         }
       >
-        <SelectTrigger aria-label={`Reasoning effort for classifier model ${model}`} className="w-full">
+        <SelectTrigger aria-label={uiT("ui.115bedb33f2eaf00", { v0: String(model) })} className="w-full">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -72,17 +72,9 @@ const ClassifierReasoningEffortSelect = ({
         </SelectContent>
       </Select>
       {status === "unverified" && (
-        <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">
-          This saved effort cannot be verified for the selected model. Choose Default unless you have confirmed provider
-          support.
-        </p>
+        <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">{uiT("ui.5ef7563498bd57be")}</p>
       )}
-      {status === "unsupported" && (
-        <p className="mt-1 text-xs text-destructive">
-          This saved effort is not supported by every deployment in the selected model group. Choose Default or a
-          supported value before saving.
-        </p>
-      )}
+      {status === "unsupported" && <p className="mt-1 text-xs text-destructive">{uiT("ui.7f0515f9d532f224")}</p>}
     </div>
   );
 };

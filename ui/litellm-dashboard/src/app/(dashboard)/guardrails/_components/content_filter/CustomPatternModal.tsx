@@ -36,36 +36,34 @@ const CustomPatternModal: React.FC<CustomPatternModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Add custom regex pattern</DialogTitle>
+          <DialogTitle>{uiT("ui.c54bd164ab410032")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div>
-            <p className="font-semibold">Pattern name</p>
+            <p className="font-semibold">{uiT("ui.7948d837382ac556")}</p>
             <Input
               className="mt-2"
-              placeholder="e.g., internal_id, employee_code"
+              placeholder={uiT("ui.2f4f7ce612ad9da5")}
               value={patternName}
               onChange={(e) => onNameChange(e.target.value)}
             />
           </div>
 
           <div>
-            <p className="font-semibold">Regex pattern</p>
+            <p className="font-semibold">{uiT("ui.c5b46488a11a6f10")}</p>
             <Input
               className="mt-2"
-              placeholder="e.g., ID-[0-9]{6}"
+              placeholder={uiT("ui.675e8cae25cd6a96")}
               value={patternRegex}
               onChange={(e) => onRegexChange(e.target.value)}
             />
-            <p className="text-xs text-muted-foreground">Enter a valid regular expression to match sensitive data</p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.3ac4f006fee169f7")}</p>
           </div>
 
           <div>
             <p className="font-semibold">{uiT("ui.64cff1319d2f")}</p>
-            <p className="mt-1 mb-2 text-muted-foreground">
-              Choose what action the guardrail should take when this pattern is detected
-            </p>
+            <p className="mt-1 mb-2 text-muted-foreground">{uiT("ui.782a2e817d535857")}</p>
             <Select
               items={ACTION_ITEMS}
               value={patternAction}

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -6,11 +8,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export const NEVER_RESETS_BUDGET_DURATION = "none";
 
 const DURATION_LABELS: Record<string, string> = {
-  [NEVER_RESETS_BUDGET_DURATION]: "Never resets",
-  "1h": "hourly",
-  "24h": "daily",
-  "7d": "weekly",
-  "30d": "monthly",
+  get [NEVER_RESETS_BUDGET_DURATION]() {
+    return translateUi("ui.f95c8af3735c");
+  },
+  get "1h"() {
+    return translateUi("ui.2b2a51df70a1");
+  },
+  get "24h"() {
+    return translateUi("ui.6f31304cdfd0");
+  },
+  get "7d"() {
+    return translateUi("ui.8850eced986e");
+  },
+  get "30d"() {
+    return translateUi("ui.9169e3ca73ee");
+  },
 };
 
 interface BudgetDurationDropdownProps {
@@ -44,10 +56,10 @@ const BudgetDurationDropdown: React.FC<BudgetDurationDropdownProps> = ({
         {showNeverResets ? (
           <SelectItem value={NEVER_RESETS_BUDGET_DURATION}>{uiT("ui.f95c8af3735c")}</SelectItem>
         ) : null}
-        <SelectItem value="1h">hourly</SelectItem>
-        <SelectItem value="24h">daily</SelectItem>
-        <SelectItem value="7d">weekly</SelectItem>
-        <SelectItem value="30d">monthly</SelectItem>
+        <SelectItem value="1h">{uiT("ui.2b2a51df70a1")}</SelectItem>
+        <SelectItem value="24h">{uiT("ui.6f31304cdfd0")}</SelectItem>
+        <SelectItem value="7d">{uiT("ui.8850eced986e")}</SelectItem>
+        <SelectItem value="30d">{uiT("ui.9169e3ca73ee")}</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Inbox, Plus } from "lucide-react";
 import React, { useMemo } from "react";
@@ -25,15 +26,15 @@ type LoggingCallbacksProps = {
 };
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No callbacks configured</div>
-      <div className="text-sm text-muted-foreground">
-        Add your first callback to start logging data to external services.
-      </div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.1fc5a09e1a907637")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.c0053d7dd39fb62d")}</div>
     </div>
   );
 }
@@ -47,6 +48,8 @@ export const LoggingCallbacksTable: React.FC<LoggingCallbacksProps> = ({
   onDelete = () => {},
   onAdd = () => {},
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const columns = useMemo(() => {
     const deps = { availableCallbacks, onTest, onEdit, onDelete };
     return getLoggingCallbacksTableColumns(deps);
@@ -54,11 +57,11 @@ export const LoggingCallbacksTable: React.FC<LoggingCallbacksProps> = ({
 
   return (
     <div className="mt-4 flex w-full flex-col gap-4">
-      <h3 className="text-lg font-semibold tracking-tight text-foreground">Active Logging Callbacks</h3>
+      <h3 className="text-lg font-semibold tracking-tight text-foreground">{uiT("ui.6d69be8c30004269")}</h3>
       <div>
         <Button onClick={onAdd}>
           <Plus />
-          Add Callback
+          {uiT("ui.46b3900d24541a88")}
         </Button>
       </div>
       <DataTable
@@ -66,7 +69,7 @@ export const LoggingCallbacksTable: React.FC<LoggingCallbacksProps> = ({
         columns={columns}
         getRowId={(callback, index) => `${callback.name || index}-${callbackRowMode(callback)}`}
         isLoading={isLoading}
-        loadingMessage="Loading callbacks…"
+        loadingMessage={uiT("ui.324383b6b6574a01")}
         noDataMessage={<EmptyState />}
         size="compact"
       />

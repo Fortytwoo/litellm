@@ -1,4 +1,5 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
 
 import { CircleHelp } from "lucide-react";
 import React from "react";
@@ -9,17 +10,19 @@ const hintIconClassName = "size-3.5 shrink-0 cursor-help text-muted-foreground";
 
 export const labelWithHint = (label: React.ReactNode, hint: React.ReactNode): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className={hintIconClassName} />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
 
 export const labelWithDocsHint = (label: React.ReactNode, hint: React.ReactNode, href: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger
         render={
@@ -28,7 +31,9 @@ export const labelWithDocsHint = (label: React.ReactNode, hint: React.ReactNode,
           </a>
         }
       />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );

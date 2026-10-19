@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 import { X } from "lucide-react";
@@ -40,6 +41,8 @@ export const groupErrorBuckets = (buckets: readonly CacheActivityErrorBucket[], 
 };
 
 export const ErrorCodeTooltip = ({ active, payload, label }: ChartTooltipProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!active || !payload || payload.length === 0) return null;
   const datum = payload[0]?.payload as ErrorCodeDatum | undefined;
   if (!datum) return null;
@@ -47,7 +50,8 @@ export const ErrorCodeTooltip = ({ active, payload, label }: ChartTooltipProps) 
   return (
     <div className="min-w-40 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl">
       <p className="mb-1.5 font-medium text-foreground">
-        Error code {String(label)}: {datum[FAILED_REQUESTS_SERIES].toLocaleString()} failed
+        {uiT("ui.0570b384c3cecf81")} {String(label)}: {datum[FAILED_REQUESTS_SERIES].toLocaleString()}{" "}
+        {uiT("ui.5d28a90f4498a814")}
       </p>
       <div className="grid gap-1.5">
         {datum.classes.map((errorClass) => (
@@ -70,27 +74,32 @@ interface ErrorDrilldownCardProps {
   onClose: () => void;
 }
 
-export const ErrorDrilldownCard = ({ callType, buckets, valueFormatter, onClose }: ErrorDrilldownCardProps) => (
-  <Card className="mt-4">
-    <CardHeader className="flex flex-row items-center justify-between">
-      <CardTitle className="text-base font-semibold">Failed requests by error code: {callType}</CardTitle>
-      <Button variant="outline" size="icon-sm" onClick={onClose} aria-label="Close error breakdown">
-        <X />
-      </Button>
-    </CardHeader>
-    <CardContent>
-      <p className="text-sm text-muted-foreground">Hover a bar to see the error classes behind that code.</p>
-      <BarChart
-        data={groupErrorBuckets(buckets, callType)}
-        index="error_code"
-        categories={[FAILED_REQUESTS_SERIES]}
-        colors={["red"]}
-        valueFormatter={valueFormatter}
-        showLegend={false}
-        customTooltip={ErrorCodeTooltip}
-        yAxisWidth={48}
-        className="mt-2"
-      />
-    </CardContent>
-  </Card>
-);
+export const ErrorDrilldownCard = ({ callType, buckets, valueFormatter, onClose }: ErrorDrilldownCardProps) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Card className="mt-4">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-base font-semibold">
+          {uiT("ui.f230c0d433f24a02")} {callType}
+        </CardTitle>
+        <Button variant="outline" size="icon-sm" onClick={onClose} aria-label={uiT("ui.b0d36fee2b098df3")}>
+          <X />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground">{uiT("ui.e8d664eb8489fa44")}</p>
+        <BarChart
+          data={groupErrorBuckets(buckets, callType)}
+          index="error_code"
+          categories={[FAILED_REQUESTS_SERIES]}
+          colors={["red"]}
+          valueFormatter={valueFormatter}
+          showLegend={false}
+          customTooltip={ErrorCodeTooltip}
+          yAxisWidth={48}
+          className="mt-2"
+        />
+      </CardContent>
+    </Card>
+  );
+};

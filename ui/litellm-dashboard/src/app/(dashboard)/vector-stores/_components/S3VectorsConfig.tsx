@@ -1,3 +1,7 @@
+"use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { CircleHelp, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -22,10 +26,12 @@ interface S3VectorsConfigProps {
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -33,6 +39,8 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
 const asText = (value: unknown): string => (typeof value === "string" ? value : "");
 
 const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, providerParams, onParamsChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [embeddingModels, setEmbeddingModels] = useState<ModelGroup[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
 
@@ -74,22 +82,22 @@ const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, provider
     <TooltipProvider>
       <Alert variant="info" className="mb-4">
         <Info />
-        <AlertTitle>AWS S3 Vectors Setup</AlertTitle>
+        <AlertTitle>{uiT("ui.a7d723408e885625")}</AlertTitle>
         <AlertDescription>
           <div>
-            <p>AWS S3 Vectors allows you to store and query vector embeddings directly in S3:</p>
+            <p>{uiT("ui.e94ba310fb88ff3a")}</p>
             <ul style={{ marginLeft: "16px", marginTop: "8px" }}>
-              <li>Vector buckets and indexes will be automatically created if they don&apos;t exist</li>
-              <li>Vector dimensions are auto-detected from your selected embedding model</li>
-              <li>Ensure your AWS credentials have permissions for S3 Vectors operations</li>
+              <li>{uiT("ui.885abc5d75cd21a4")}</li>
+              <li>{uiT("ui.40c068b35f98e7a7")}</li>
+              <li>{uiT("ui.d574ab74bdc92ca4")}</li>
               <li>
-                Learn more:{" "}
+                {uiT("ui.f21fec1c2282ec82")}{" "}
                 <a
                   href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vector-buckets.html"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  AWS S3 Vectors Documentation
+                  {uiT("ui.adb3b3dcf8c7c9d4")}
                 </a>
               </li>
             </ul>
@@ -108,7 +116,7 @@ const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, provider
           id="s3-vector-bucket-name"
           value={bucketName}
           onChange={(e) => handleFieldChange("vector_bucket_name", e.target.value)}
-          placeholder="my-vector-bucket (min 3 chars)"
+          placeholder={uiT("ui.eba8255f00ab9a16")}
           aria-invalid={bucketNameError !== undefined || undefined}
         />
         <FieldError>{bucketNameError}</FieldError>
@@ -125,7 +133,7 @@ const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, provider
           id="s3-index-name"
           value={indexName}
           onChange={(e) => handleFieldChange("index_name", e.target.value)}
-          placeholder="my-vector-index (optional, min 3 chars)"
+          placeholder={uiT("ui.601c9605f6cc3a6d")}
           aria-invalid={indexNameError !== undefined || undefined}
         />
         <FieldError>{indexNameError}</FieldError>
@@ -139,7 +147,7 @@ const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, provider
           id="s3-aws-region-name"
           value={asText(providerParams.aws_region_name)}
           onChange={(e) => handleFieldChange("aws_region_name", e.target.value)}
-          placeholder="us-west-2"
+          placeholder={uiT("ui.d8c0d0637775d579")}
         />
       </Field>
 
@@ -152,9 +160,9 @@ const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, provider
           onValueChange={(value: string | null) => value !== null && handleFieldChange("embedding_model", value)}
           items={embeddingModels.map((model) => model.model_group)}
         >
-          <ComboboxInput id="s3-embedding-model" placeholder="Select an embedding model" />
+          <ComboboxInput id="s3-embedding-model" placeholder={uiT("ui.e2a474683605763b")} />
           <ComboboxContent>
-            <ComboboxEmpty>{isLoadingModels ? "Loading models..." : "No embedding models found."}</ComboboxEmpty>
+            <ComboboxEmpty>{isLoadingModels ? uiT("ui.802435241f0ac4f5") : uiT("ui.157f85ee0afe4124")}</ComboboxEmpty>
             <ComboboxList>
               {(model: string) => (
                 <ComboboxItem key={model} value={model}>

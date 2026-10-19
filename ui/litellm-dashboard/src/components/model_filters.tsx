@@ -130,10 +130,10 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
   const filtersContent = (
     <div className="flex flex-wrap gap-4 items-center">
       <div>
-        <p className="text-sm font-medium mb-2">Search Models:</p>
+        <p className="text-sm font-medium mb-2">{uiT("ui.dce0fc277e714bf4")}</p>
         <input
           type="text"
-          placeholder="Search model names..."
+          placeholder={uiT("ui.c42c2d3a045974a0")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="border rounded-sm px-3 py-2 w-64 h-10 text-sm"
@@ -147,7 +147,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
           className="border rounded-sm px-3 py-2 text-sm text-muted-foreground w-40 h-10"
         >
           <option value="" className="text-sm text-muted-foreground">
-            All Providers
+            {uiT("ui.5d907b7c40c209e2")}
           </option>
           {modelHubData &&
             getUniqueProviders(modelHubData).map((provider) => (
@@ -158,14 +158,14 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
         </select>
       </div>
       <div>
-        <p className="text-sm font-medium mb-2">Mode:</p>
+        <p className="text-sm font-medium mb-2">{uiT("ui.7ce1afa3f281b07b")}</p>
         <select
           value={selectedMode}
           onChange={(e) => setSelectedMode(e.target.value)}
           className="border rounded-sm px-3 py-2 text-sm text-muted-foreground w-32 h-10"
         >
           <option value="" className="text-sm text-muted-foreground">
-            All Modes
+            {uiT("ui.fad6499759382c9a")}
           </option>
           {modelHubData &&
             getUniqueModes(modelHubData).map((mode) => (
@@ -176,14 +176,14 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
         </select>
       </div>
       <div>
-        <p className="text-sm font-medium mb-2">Features:</p>
+        <p className="text-sm font-medium mb-2">{uiT("ui.7b886076f2603682")}</p>
         <select
           value={selectedFeature}
           onChange={(e) => setSelectedFeature(e.target.value)}
           className="border rounded-sm px-3 py-2 text-sm text-muted-foreground w-48 h-10"
         >
           <option value="" className="text-sm text-muted-foreground">
-            All Features
+            {uiT("ui.2cd6ebc8b20b9b48")}
           </option>
           {modelHubData &&
             getUniqueFeatures(modelHubData).map((feature) => (
@@ -201,7 +201,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
             onClick={resetFilters}
             className="text-info hover:text-info/80 text-sm underline h-10 flex items-center"
           >
-            Clear Filters
+            {uiT("ui.5776503c1a52f4fa")}
           </button>
         </div>
       )}

@@ -54,9 +54,9 @@ const addAlias = async (user: ReturnType<typeof userEvent.setup>, name: string, 
 describe("ModelAliasManager dark-mode tokens", () => {
   const source = readFileSync(SOURCE_PATH, "utf8");
 
-  it("reads the component source it is asserting about", () => {
-    expect(source.length).toBeGreaterThan(0);
-    expect(source).toContain("Manage Existing Aliases");
+  it("renders the alias management section", () => {
+    renderInForm();
+    expect(screen.getByText("Manage Existing Aliases")).toBeInTheDocument();
   });
 
   it("uses semantic colour tokens and no hardcoded palette classes", () => {

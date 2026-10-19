@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
@@ -106,7 +108,7 @@ const VectorStoreManagement: React.FC<VectorStoreProps> = ({ accessToken, userID
     setIsDeleting(true);
     try {
       await vectorStoreDeleteCall(accessToken, vectorStoreToDelete);
-      toast.success("Vector store deleted successfully");
+      toast.success(translateUi("ui.06d5fe42579485b1"));
       fetchVectorStores();
     } catch (error) {
       console.error("Error deleting vector store:", error);
@@ -147,35 +149,37 @@ const VectorStoreManagement: React.FC<VectorStoreProps> = ({ accessToken, userID
     <div className="mx-4">
       <div className="gap-2 p-8 w-full mt-2">
         <div className="flex justify-between mt-2 w-full items-center mb-4">
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Vector Store Management</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">{uiT("ui.bbd044cbae2193c8")}</h1>
           <div className="flex items-center space-x-2">
-            {lastRefreshed && <p className="text-sm text-muted-foreground">Last Refreshed: {lastRefreshed}</p>}
+            {lastRefreshed && (
+              <p className="text-sm text-muted-foreground">
+                {uiT("ui.3b98c503fa688b18")} {lastRefreshed}
+              </p>
+            )}
             <Button variant="outline" size="icon-sm" aria-label={uiT("ui.0e9161011702")} onClick={handleRefreshClick}>
               <RefreshCw className="size-4" />
             </Button>
           </div>
         </div>
 
-        <p className="mb-4 text-sm text-muted-foreground">
-          You can use vector stores to store and retrieve LLM embeddings.
-        </p>
+        <p className="mb-4 text-sm text-muted-foreground">{uiT("ui.cb54d2d12413f1e4")}</p>
 
         <Tabs defaultValue={defaultTab} onValueChange={onTabChange}>
           <TabsList variant="line" className="mb-6 h-auto w-full justify-start rounded-none p-0">
             {canCreateVectorStores && (
               <TabsTrigger value="create" className="flex-none rounded-none px-4 py-2">
-                Create Vector Store
+                {uiT("ui.a6c49bad8e1ed70b")}
               </TabsTrigger>
             )}
             <TabsTrigger value="manage" className="flex-none rounded-none px-4 py-2">
-              Manage Vector Stores
+              {uiT("ui.3d0ce393147bab5d")}
             </TabsTrigger>
             <TabsTrigger value="test" className="flex-none rounded-none px-4 py-2">
-              Test Vector Store
+              {uiT("ui.42ba9f7276c9fe49")}
             </TabsTrigger>
             {isProxyAdminRole(userRole || "") && (
               <TabsTrigger value="indexes" className="flex-none rounded-none px-4 py-2">
-                Indexes
+                {uiT("ui.90b901a30c3f089e")}
               </TabsTrigger>
             )}
           </TabsList>
@@ -189,7 +193,7 @@ const VectorStoreManagement: React.FC<VectorStoreProps> = ({ accessToken, userID
           <TabsContent keepMounted={hasVisited("manage")} value="manage">
             {canCreateVectorStores && (
               <Button className="mb-4" onClick={() => setIsCreateModalVisible(true)}>
-                + Add Vector Store
+                {uiT("ui.72d9709d66539d08")}
               </Button>
             )}
 
@@ -227,10 +231,10 @@ const VectorStoreManagement: React.FC<VectorStoreProps> = ({ accessToken, userID
         {/* Delete Confirmation Modal */}
         <DeleteResourceModal
           isOpen={isDeleteModalOpen}
-          title="Delete Vector Store"
-          message="Are you sure you want to delete this vector store? This action cannot be undone."
+          title={uiT("ui.2aab04eeb260a9fc")}
+          message={uiT("ui.cea0ec0e1f04c0bf")}
           resourceInformationTitle="Vector Store Information"
-          resourceInformation={[{ label: "Vector Store ID", value: vectorStoreToDelete, code: true }]}
+          resourceInformation={[{ label: uiT("ui.16df8a63caec40c3"), value: vectorStoreToDelete, code: true }]}
           onCancel={() => setIsDeleteModalOpen(false)}
           onOk={confirmDelete}
           confirmLoading={isDeleting}

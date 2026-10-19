@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import * as React from "react";
 
@@ -48,10 +50,12 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   options,
   allowCustomValues = false,
   tokenSeparators = [],
-  emptyText = "No options found",
+  emptyText = translateUi("ui.051fc485fc05be30"),
   ariaInvalid,
   ariaDescribedBy,
 }) => {
+  useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [query, setQuery] = React.useState("");
   const selected = value ?? [];

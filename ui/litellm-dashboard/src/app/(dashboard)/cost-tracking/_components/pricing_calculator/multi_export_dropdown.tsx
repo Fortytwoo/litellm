@@ -34,11 +34,11 @@ const MultiExportDropdown: React.FC<MultiExportDropdownProps> = ({ multiResult }
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuItem onClick={() => exportMultiToPDF(multiResult)}>
           <FileText />
-          Export as PDF
+          {uiT("ui.1bf7868792f8a4b8")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => exportMultiToCSV(multiResult)}>
           <FileSpreadsheet />
-          Export as CSV
+          {uiT("ui.868da4093e746112")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

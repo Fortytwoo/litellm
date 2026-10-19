@@ -115,19 +115,16 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             id={streamingId}
             checked={streamingEnabled}
             onCheckedChange={(checked) => onStreamingChange(checked === true)}
-            aria-label="Stream responses"
+            aria-label={uiT("ui.0f487712a3caf972")}
           />
           <label htmlFor={streamingId} className="cursor-pointer text-sm font-medium">
-            Stream responses
+            {uiT("ui.0f487712a3caf972")}
           </label>
           <Tooltip>
-            <TooltipTrigger aria-label="Help: Stream responses">
+            <TooltipTrigger aria-label={uiT("ui.9504bad41ee9d401")}>
               <Info className="size-3 shrink-0 cursor-pointer text-muted-foreground hover:text-foreground" />
             </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
-              Streams the answer token by token. Uncheck to send a non-streaming request and render the full response at
-              once.
-            </TooltipContent>
+            <TooltipContent className="max-w-xs">{uiT("ui.63c6a6da56f905f9")}</TooltipContent>
           </Tooltip>
         </div>
       )}
@@ -138,10 +135,10 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             id={advancedId}
             checked={useAdvancedParams}
             onCheckedChange={(checked) => handleUseAdvancedParamsChange(checked === true)}
-            aria-label="Use Advanced Parameters"
+            aria-label={uiT("ui.1e2b3b6d2199c1a9")}
           />
           <label htmlFor={advancedId} className="cursor-pointer text-sm font-medium">
-            Use Advanced Parameters
+            {uiT("ui.1e2b3b6d2199c1a9")}
           </label>
         </div>
       )}
@@ -152,22 +149,19 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             id={fallbacksId}
             checked={mockTestFallbacks ?? false}
             onCheckedChange={(checked) => onMockTestFallbacksChange(checked === true)}
-            aria-label="Simulate failure to test fallbacks"
+            aria-label={uiT("ui.c2ee26a2177aa826")}
           />
           <label htmlFor={fallbacksId} className="cursor-pointer text-sm font-medium">
-            Simulate failure to test fallbacks
+            {uiT("ui.c2ee26a2177aa826")}
           </label>
           <Popover>
-            <PopoverTrigger aria-label="Help: Simulate failure to test fallbacks">
+            <PopoverTrigger aria-label={uiT("ui.d2f3016dc3d634c0")}>
               <Info className="size-3 shrink-0 cursor-pointer text-muted-foreground hover:text-foreground" />
             </PopoverTrigger>
             <PopoverContent side="right" className="max-w-[340px] gap-2 p-3 text-sm">
+              <p>{uiT("ui.a9e448b5418443d7")}</p>
               <p>
-                Causes the first request to fail so the router tries fallbacks (if configured). Use this to verify your
-                fallback setup.
-              </p>
-              <p>
-                Behavior can differ when keys, teams, or router settings are configured.{" "}
+                {uiT("ui.63837bad6c01911f")}{" "}
                 <a
                   href="https://docs.litellm.ai/docs/proxy/keys_teams_router_settings"
                   target="_blank"
@@ -193,19 +187,17 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
                   {uiT("ui.b958ce8b871a")}
                 </label>
                 <Tooltip>
-                  <TooltipTrigger aria-label="Help: Temperature">
+                  <TooltipTrigger aria-label={uiT("ui.dcefe1edac80f5a3")}>
                     <Info className={cn("size-3 cursor-help", disabledTextColor)} />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    Controls randomness. Lower values make output more deterministic, higher values more creative.
-                  </TooltipContent>
+                  <TooltipContent className="max-w-xs">{uiT("ui.fd4d27f5bac71b8b")}</TooltipContent>
                 </Tooltip>
               </div>
               <Input
                 id={`${temperatureId}-number`}
                 type="text"
                 inputMode="decimal"
-                aria-label="Temperature value"
+                aria-label={uiT("ui.0b55700d381f3825")}
                 value={temperatureText}
                 disabled={!useAdvancedParams}
                 className="h-8 w-20"
@@ -236,22 +228,20 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <label htmlFor={maxTokensId} className={cn("text-sm", disabledTextColor)}>
-                  Max Tokens
+                  {uiT("ui.c18e6c7f33c41f22")}
                 </label>
                 <Tooltip>
-                  <TooltipTrigger aria-label="Help: Max Tokens">
+                  <TooltipTrigger aria-label={uiT("ui.88936dca8f1e2a23")}>
                     <Info className={cn("size-3 cursor-help", disabledTextColor)} />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    Maximum number of tokens to generate in the response.
-                  </TooltipContent>
+                  <TooltipContent className="max-w-xs">{uiT("ui.87b83d24749bc5c8")}</TooltipContent>
                 </Tooltip>
               </div>
               <Input
                 id={`${maxTokensId}-number`}
                 type="text"
                 inputMode="numeric"
-                aria-label="Max tokens value"
+                aria-label={uiT("ui.40a8274b51989bb6")}
                 value={maxTokensText}
                 disabled={!useAdvancedParams}
                 className="h-8 w-24"
@@ -267,7 +257,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
               step={1}
               value={localMaxTokens}
               disabled={!useAdvancedParams}
-              aria-label="Max Tokens"
+              aria-label={uiT("ui.c18e6c7f33c41f22")}
               className="w-full accent-primary disabled:cursor-not-allowed"
               onChange={(event) => handleMaxTokensChange(Number(event.target.value))}
             />

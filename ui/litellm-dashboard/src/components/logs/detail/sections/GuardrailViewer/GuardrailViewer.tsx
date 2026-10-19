@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useMemo } from "react";
@@ -150,10 +153,18 @@ const getEntryOutcome = (entry: GuardrailInformation): EntryOutcome => {
 const isEntrySuccess = (entry: GuardrailInformation): boolean => getEntryOutcome(entry) === "passed";
 
 const OUTCOME_LABEL: Record<EntryOutcome, string> = {
-  passed: "PASSED",
-  flagged: "FLAGGED",
-  failed: "FAILED",
-  not_run: "NOT RUN",
+  get passed() {
+    return translateUi("ui.e5a0eb01db90");
+  },
+  get flagged() {
+    return translateUi("ui.4560e24b53b5d24f");
+  },
+  get failed() {
+    return translateUi("ui.02bd34929917");
+  },
+  get not_run() {
+    return translateUi("ui.8a3e212ee9d24bac");
+  },
 };
 
 const OUTCOME_BADGE_CLASS: Record<EntryOutcome, string> = {
@@ -502,7 +513,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
                   </span>
                 )}
                 <span className="text-xs text-muted-foreground font-mono ml-auto shrink-0">
-                  {item.offsetMs === null ? "—" : `T+${item.offsetMs}ms`}
+                  {item.offsetMs === null ? "—" : uiT("ui.c7ddef446029c324", { v0: String(item.offsetMs) })}
                 </span>
               </div>
             </div>
@@ -587,7 +598,7 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
                   : "bg-warning/10 text-warning border border-warning/20"
               }`}
             >
-              {matchCountStr}
+              {translateText(matchCountStr)}
             </span>
           )}
 
@@ -785,7 +796,9 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
             <h3 className="text-lg font-semibold text-foreground">{uiT("ui.166bc7baa569")}</h3>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-sm text-muted-foreground">
-                {uiT("supplement.evaluated", { count: evaluatedCount })}
+                {uiT(evaluatedCount === 1 ? "supplement.evaluatedOne" : "supplement.evaluated", {
+                  count: evaluatedCount,
+                })}
               </span>
               <span className="text-muted-foreground">|</span>
               <span

@@ -1,35 +1,45 @@
+import { t as translateUi } from "@/i18n";
 import { MCPEnvVar, MCPEnvVarScope, type MCPServer } from "@/components/mcp_tools/types";
 
 export const getMCPNetworkAccess = (
   server: Pick<MCPServer, "available_on_public_internet" | "mcp_info">,
 ): {
-  readonly label: "All Networks" | "Internal Only" | "Unknown";
+  readonly label: string;
   readonly dotClassName: string;
   readonly description: string;
 } => {
   const explicitlyPublished = server.mcp_info?.is_public_explicit;
   if (server.available_on_public_internet === true || explicitlyPublished === true) {
     return {
-      label: "All Networks",
+      get label() {
+        return translateUi("ui.944a3c138246ba31");
+      },
       dotClassName: "bg-success",
       description:
         server.available_on_public_internet === true
-          ? "Allows requests from public and internal IPs. Authentication and access permissions still apply"
-          : "Allows requests from public and internal IPs because this server is published in MCP Hub. Authentication and access permissions still apply",
+          ? translateUi("ui.ffc1bfc4f6a3118b")
+          : translateUi("ui.43c57c41d6fc5653"),
     };
   }
   if (server.available_on_public_internet === false && explicitlyPublished === false) {
     return {
-      label: "Internal Only",
+      get label() {
+        return translateUi("ui.f1bd1a602a299cf3");
+      },
       dotClassName: "bg-warning",
-      description:
-        "Allows requests only from internal/private IP ranges. Authentication and access permissions still apply",
+      get description() {
+        return translateUi("ui.017e1947d9fed7e3");
+      },
     };
   }
   return {
-    label: "Unknown",
+    get label() {
+      return translateUi("ui.b764cdc0eab7");
+    },
     dotClassName: "bg-border",
-    description: "The proxy did not report enough network and publication settings to determine allowed client IPs",
+    get description() {
+      return translateUi("ui.941948c5bcc66e13");
+    },
   };
 };
 

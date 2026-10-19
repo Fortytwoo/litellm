@@ -37,18 +37,18 @@ export default function HomePage() {
           <PageHeaderControls>
             <Button render={<a href={uiHref("api-keys?create=true")} />}>
               <Plus />
-              Create New Virtual Key
+              {uiT("ui.5fbfcba5ff368f11")}
             </Button>
           </PageHeaderControls>
         )}
       </PageHeader>
 
-      <section aria-label={`Usage, last ${HOME_USAGE_DAYS} days`}>
+      <section aria-label={uiT("ui.7991158b9e0d6da0", { v0: String(HOME_USAGE_DAYS) })}>
         {usage.failed ? (
           <div className="flex items-center justify-between gap-2 rounded-xl border bg-card px-4 py-3 text-sm">
-            <span className="text-destructive">Failed to load usage</span>
+            <span className="text-destructive">{uiT("ui.54c2adf5e39bbf74")}</span>
             <Button variant="outline" size="sm" onClick={usage.retry}>
-              Retry
+              {uiT("ui.942087cc2d41e013")}
             </Button>
           </div>
         ) : (
@@ -69,7 +69,7 @@ export default function HomePage() {
               <div>
                 <h2 id="home-whats-new" className="flex items-center gap-2 text-lg font-semibold">
                   <Sparkles className="size-4 text-muted-foreground" />
-                  What&apos;s new in LiteLLM?
+                  {uiT("ui.51b7836e9fcbcab1")}
                 </h2>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
@@ -100,8 +100,8 @@ export default function HomePage() {
           )}
 
           <Panel
-            title="Leaderboard"
-            subtitle={`Share of tokens over the last ${HOME_USAGE_DAYS} days, with the change between the first and second half of the period`}
+            title={uiT("ui.31b4712158726342")}
+            subtitle={uiT("ui.e8410ddf8fd3c44e", { v0: String(HOME_USAGE_DAYS) })}
             testId="home-leaderboard"
           >
             <Leaderboard

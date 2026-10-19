@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 import { useComplexityScorerDefaults } from "@/app/(dashboard)/hooks/autoRouter/useComplexityScorerDefaults";
@@ -35,7 +38,9 @@ const OVERRIDE_FLOOR_ID = "reasoning-override-min-score";
 const GROUPS: GroupSpec[] = [
   {
     group: "tier_boundaries",
-    title: "Tier boundaries",
+    get title() {
+      return translateUi("ui.c72cf05500f1774f");
+    },
     blurb:
       "The weighted score each tier starts at. Scores run from -1 to 1, and short or conversational prompts score below 0, so a negative boundary is a valid way to lift trivial traffic into a higher tier.",
     min: -1,
@@ -50,7 +55,9 @@ const GROUPS: GroupSpec[] = [
   },
   {
     group: "token_thresholds",
-    title: "Token thresholds",
+    get title() {
+      return translateUi("ui.cf2efb978b3ac92b");
+    },
     blurb:
       "Estimated prompt length, in tokens, that pushes the token count dimension to its floor or ceiling. Lengths between the two score neutral.",
     min: 0,
@@ -60,7 +67,9 @@ const GROUPS: GroupSpec[] = [
   },
   {
     group: "dimension_weights",
-    title: "Dimension weights",
+    get title() {
+      return translateUi("ui.3419b95853201f82");
+    },
     blurb:
       "Changing a weight rebalances the other built-in and custom weights to total 1.00. Save stores those values. Untouched routers keep their existing weights.",
     min: 0,
@@ -90,6 +99,8 @@ interface HeuristicScoringConfigProps {
 }
 
 const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState<{ id: string; raw: string } | null>(null);
   const { data: defaults, isPending, isError, refetch } = useComplexityScorerDefaults();
@@ -148,33 +159,27 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
         <ChevronDown
           className={`size-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
-        <span className="text-sm font-medium">Advanced scoring</span>
+        <span className="text-sm font-medium">{uiT("ui.7c633f54407c3779")}</span>
         {overrides > 0 && (
           <Badge variant="secondary" data-testid="advanced-scoring-override-count">
-            {overrides} {overrides === 1 ? "override" : "overrides"}
+            {overrides} {overrides === 1 ? uiT("ui.ce603774135699e9") : uiT("ui.ab2dd33e1ecd86a9")}
           </Badge>
         )}
       </CollapsibleTrigger>
 
       <CollapsibleContent>
         <div className="mt-3 space-y-6 pl-6">
-          <p className="text-xs text-muted-foreground">
-            Every knob below is optional. Left untouched, the router follows the shipped defaults, so it picks up any
-            recalibration of them rather than staying pinned to the numbers shown here.
-          </p>
+          <p className="text-xs text-muted-foreground">{uiT("ui.36725f2c11b13cf5")}</p>
 
           {isPending ? (
-            <p className="text-xs text-muted-foreground">Loading the shipped defaults...</p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.ad4a95e23509a320")}</p>
           ) : (
             <>
               {isError && (
                 <div className="flex items-start gap-2" role="alert">
-                  <p className="text-xs font-medium text-destructive">
-                    Could not load the shipped defaults, so only values this router already overrides are shown. Saving
-                    still works, and an untouched knob keeps following the defaults.
-                  </p>
+                  <p className="text-xs font-medium text-destructive">{uiT("ui.8995492f2e634bb1")}</p>
                   <Button type="button" variant="link" size="xs" onClick={() => void refetch()}>
-                    Retry
+                    {uiT("ui.942087cc2d41e013")}
                   </Button>
                 </div>
               )}
@@ -201,7 +206,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                             alone would state a total that is not the router's. */}
                         {spec.withSlider && defaults !== undefined && (
                           <span className="text-xs text-muted-foreground" data-testid="dimension-weight-total">
-                            total {total.toFixed(2)}
+                            {uiT("ui.11239872d178729a")} {total.toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -220,7 +225,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                             });
                           }}
                         >
-                          {spec.withSlider ? "Restore default weights" : "Reset to defaults"}
+                          {spec.withSlider ? uiT("ui.0addc7d640fc7473") : uiT("ui.e240e635ff6dce4f")}
                         </Button>
                       )}
                     </div>
@@ -245,7 +250,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                                 commit(spec, effective, key, String(Array.isArray(next) ? next[0] : next))
                               }
                               className="flex-1"
-                              aria-label={`${label} weight`}
+                              aria-label={uiT("ui.8e03c9777de12cb3", { v0: String(label) })}
                             />
                           )}
                           <Input
@@ -298,7 +303,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
 
               <section className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Reasoning override floor</span>
+                  <span className="text-sm font-medium">{uiT("ui.cf4de5500219dd23")}</span>
                   {value.reasoning_override_min_score !== undefined && (
                     <Button
                       type="button"
@@ -306,21 +311,20 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                       size="xs"
                       onClick={() => onChange({ ...value, reasoning_override_min_score: undefined })}
                     >
-                      Reset to defaults
+                      {uiT("ui.e240e635ff6dce4f")}
                     </Button>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Two or more reasoning markers promote a request to the reasoning tier, but only once its weighted
-                  score reaches this floor.{" "}
+                  {uiT("ui.3ea54c563f7c9057")}{" "}
                   {trackedFloor === undefined
-                    ? "Left untouched, it tracks the Simple to Medium boundary."
-                    : `Left untouched, it tracks the Simple to Medium boundary, currently ${trackedFloor.toFixed(2)}.`}{" "}
-                  Set it to 0 to promote on the markers alone.
+                    ? uiT("ui.9f8e67ec7f8b7046")
+                    : uiT("ui.204fb08340f98ec0", { v0: String(trackedFloor.toFixed(2)) })}{" "}
+                  {uiT("ui.4620e280282198a6")}
                 </p>
                 <div className="flex items-center gap-3">
                   <Label htmlFor={OVERRIDE_FLOOR_ID} className="w-44 text-xs font-normal">
-                    Minimum score
+                    {uiT("ui.e7461df96adeec60")}
                   </Label>
                   <Input
                     id={OVERRIDE_FLOOR_ID}

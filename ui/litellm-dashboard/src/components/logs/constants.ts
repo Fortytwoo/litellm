@@ -78,10 +78,18 @@ export const AGENT_CALL_TYPES = ["asend_message"];
 export const BATCH_CALL_TYPES = ["acreate_batch", "create_batch", "aretrieve_batch", "retrieve_batch"];
 
 export const SPAN_TYPE_LABELS: Record<string, string> = {
-  llm: "LLM",
-  agent: "Agent",
-  mcp: "MCP",
-  batch: "Batch",
+  get llm() {
+    return translateUi("ui.674900a77b798af1");
+  },
+  get agent() {
+    return translateUi("ui.11b39c93777e");
+  },
+  get mcp() {
+    return translateUi("ui.53f13ae99ed53bd3");
+  },
+  get batch() {
+    return translateUi("ui.320b5d80f8cf");
+  },
 };
 
 export const CREDENTIAL_LABELS: Record<string, string> = {

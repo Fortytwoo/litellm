@@ -1,3 +1,7 @@
+"use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useMemo } from "react";
 import { ChartLine } from "lucide-react";
 import { LineChart, stackedUsageColor } from "@/components/shared/charts";
@@ -22,7 +26,7 @@ function transformDailyDataToChart(dailyData: DailyData[]): Array<Record<string,
 
   dailyData.forEach((day) => {
     const date = new Date(day.date);
-    const dateStr = date.toLocaleDateString("en-US", {
+    const dateStr = date.toLocaleDateString(getFormattingLocale(), {
       month: "short",
       day: "numeric",
     });
@@ -44,6 +48,8 @@ function transformDailyDataToChart(dailyData: DailyData[]): Array<Record<string,
 }
 
 export function EndpointUsageLineChart({ dailyData }: EndpointUsageLineChartProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const chartData = useMemo(() => {
     if (!dailyData?.results || dailyData.results.length === 0) {
       return [];
@@ -62,7 +68,7 @@ export function EndpointUsageLineChart({ dailyData }: EndpointUsageLineChartProp
   const colors = useMemo(() => categories.map((_, i) => stackedUsageColor(i)), [categories]);
 
   return (
-    <Panel icon={ChartLine} title="Endpoint Usage Trends">
+    <Panel icon={ChartLine} title={uiT("ui.cd627faec55a368f")}>
       <LineChart
         className="h-64"
         data={chartData}

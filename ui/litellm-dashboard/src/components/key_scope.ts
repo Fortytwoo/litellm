@@ -14,8 +14,18 @@ const MANAGEMENT_SCOPE: KeyModelScope = {
     return translateUi("ui.e51248773b9a");
   },
 };
-const READ_ONLY_SCOPE: KeyModelScope = { hasModelAccess: false, label: "Read-only" };
-const SCIM_SCOPE: KeyModelScope = { hasModelAccess: false, label: "SCIM" };
+const READ_ONLY_SCOPE: KeyModelScope = {
+  hasModelAccess: false,
+  get label() {
+    return translateUi("ui.72bb90897ab1eadc");
+  },
+};
+const SCIM_SCOPE: KeyModelScope = {
+  hasModelAccess: false,
+  get label() {
+    return translateUi("ui.f80fdcd27632e81b");
+  },
+};
 const FULL_MODEL_ACCESS: KeyModelScope = { hasModelAccess: true, label: null };
 
 const isScimRoute = (route: string): boolean => route.startsWith(SCIM_ROUTE_PREFIX);

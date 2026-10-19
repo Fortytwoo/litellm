@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { Team } from "@/components/key_team_helpers/key_list";
 import { processActivityData } from "@/components/activity_metrics";
 import type { DailyActivityAggregatedResponse, DailyActivityMetadata, KeySpendActivityRow } from "./dailyActivityApi";
@@ -8,7 +9,9 @@ export const overallUsageMetrics = (
   results: ReturnType<typeof toDailyData>,
   metadata: DailyActivityMetadata,
 ): ModelActivityData => ({
-  label: "Overall Usage",
+  get label() {
+    return translateUi("ui.0011db623fac6b64");
+  },
   total_requests: metadata.total_api_requests,
   total_successful_requests: metadata.total_successful_requests,
   total_failed_requests: metadata.total_failed_requests,

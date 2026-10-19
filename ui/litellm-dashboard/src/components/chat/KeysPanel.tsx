@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import { Loader2, RefreshCw, KeyRound, Copy, Check } from "lucide-react";
@@ -68,6 +71,8 @@ interface FormState {
 }
 
 const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [rotateTarget, setRotateTarget] = useState<KeyResponse | null>(null);
   const [regeneratedKey, setRegeneratedKey] = useState<string | null>(null);
@@ -141,10 +146,10 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
 
       const response = await regenerateKeyCall(accessToken, rotateTarget.token || rotateTarget.token_id, payload);
       setRegeneratedKey(response.key);
-      toast.success("Key rotated successfully");
+      toast.success(translateUi("ui.67d44624b806ab53"));
       queryClient.invalidateQueries({ queryKey: [KEYS_QUERY_KEY] });
     } catch {
-      toast.error("Failed to rotate key");
+      toast.error(translateUi("ui.b511438d4993dfee"));
     } finally {
       setIsRegenerating(false);
     }
@@ -171,9 +176,9 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
   return (
     <div className="w-full">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground mb-0.5">Your API Keys</h2>
+        <h2 className="text-base font-semibold text-foreground mb-0.5">{uiT("ui.862635eef8241b5d")}</h2>
         <p className="text-sm text-muted-foreground m-0">
-          View your virtual keys and spend
+          {uiT("ui.19fd5eed60e3c6fb")}
           {premiumUser &&
             ". Rotate keys to generate new credentials while optionally keeping the old key valid during a grace period"}
         </p>
@@ -184,12 +189,18 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Key</TableHead>
-                <TableHead className={cn("text-xs font-semibold uppercase tracking-wide", NUMERIC_CELL_CLASS)}>
-                  Spend
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  {uiT("ui.99a52df3ff3d")}
                 </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Expires</TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Created</TableHead>
+                <TableHead className={cn("text-xs font-semibold uppercase tracking-wide", NUMERIC_CELL_CLASS)}>
+                  {uiT("ui.85f3d558db12")}
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  {uiT("ui.f6725f3af08a")}
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  {uiT("ui.d70b9e24bca2")}
+                </TableHead>
                 {premiumUser && (
                   <TableHead className="text-xs font-semibold uppercase tracking-wide text-right w-[80px]" />
                 )}
@@ -223,19 +234,25 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
       ) : keys.length === 0 ? (
         <div className="text-center text-muted-foreground text-sm py-12 border border-dashed rounded-lg">
           <KeyRound className="h-6 w-6 mb-3 mx-auto text-muted-foreground/50" />
-          No keys found
+          {uiT("ui.c86a63ee786d4a35")}
         </div>
       ) : (
         <div className="rounded-lg border overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Key</TableHead>
-                <TableHead className={cn("text-xs font-semibold uppercase tracking-wide", NUMERIC_CELL_CLASS)}>
-                  Spend
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  {uiT("ui.99a52df3ff3d")}
                 </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Expires</TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Created</TableHead>
+                <TableHead className={cn("text-xs font-semibold uppercase tracking-wide", NUMERIC_CELL_CLASS)}>
+                  {uiT("ui.85f3d558db12")}
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  {uiT("ui.f6725f3af08a")}
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  {uiT("ui.d70b9e24bca2")}
+                </TableHead>
                 {premiumUser && (
                   <TableHead className="text-xs font-semibold uppercase tracking-wide text-right w-[80px]" />
                 )}
@@ -258,10 +275,10 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                     </TableCell>
                     <TableCell>
                       {!record.expires ? (
-                        <span className="text-muted-foreground text-[13px]">Never</span>
+                        <span className="text-muted-foreground text-[13px]">{uiT("ui.6300ef800bb8")}</span>
                       ) : (
                         <Badge variant={expired ? "destructive" : "outline"}>
-                          {expired ? "Expired" : formatExpiresUtc(record.expires)}
+                          {expired ? uiT("ui.424a2551d356") : formatExpiresUtc(record.expires)}
                         </Badge>
                       )}
                     </TableCell>
@@ -270,9 +287,14 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                     </TableCell>
                     {premiumUser && (
                       <TableCell className="text-right">
-                        <Button variant="outline" size="xs" onClick={() => openRotateModal(record)} title="Rotate key">
+                        <Button
+                          variant="outline"
+                          size="xs"
+                          onClick={() => openRotateModal(record)}
+                          title={uiT("ui.c66b8b3809018b1b")}
+                        >
                           <RefreshCw className="h-3 w-3" />
-                          Rotate
+                          {uiT("ui.c3613b1704f54c8b")}
                         </Button>
                       </TableCell>
                     )}
@@ -287,15 +309,15 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
       <Dialog open={!!rotateTarget} onOpenChange={(v) => !v && closeModal()}>
         <DialogContent className="sm:max-w-[520px]">
           <DialogHeader>
-            <DialogTitle>Rotate Key</DialogTitle>
+            <DialogTitle>{uiT("ui.08d9ee2876c19561")}</DialogTitle>
           </DialogHeader>
 
           {regeneratedKey ? (
             <div>
               <div className="rounded-lg border border-warning/20 bg-warning/10 px-3 py-2 text-sm text-warning mb-4">
-                Save this key now; you will not see it again
+                {uiT("ui.b5cf1463afe37d48")}
               </div>
-              <div className="text-xs text-muted-foreground mb-1">New Key</div>
+              <div className="text-xs text-muted-foreground mb-1">{uiT("ui.0d3904f797a8aca5")}</div>
               <div className="bg-muted border rounded-md px-4 py-3 font-mono text-sm break-all text-foreground">
                 {regeneratedKey}
               </div>
@@ -303,12 +325,12 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           ) : (
             <div className="flex flex-col gap-4 mt-1">
               <div className="flex flex-col gap-1.5">
-                <Label>Key Alias</Label>
+                <Label>{uiT("ui.1e7044ffa52d")}</Label>
                 <Input value={formState.key_alias} disabled />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>Max Budget (USD)</Label>
+                  <Label>{uiT("ui.afa99ea4a8c3")}</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -317,7 +339,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>TPM Limit</Label>
+                  <Label>{uiT("ui.703406a2fc47")}</Label>
                   <Input
                     type="number"
                     value={formState.tpm_limit}
@@ -325,7 +347,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>RPM Limit</Label>
+                  <Label>{uiT("ui.e543e799b809")}</Label>
                   <Input
                     type="number"
                     value={formState.rpm_limit}
@@ -335,23 +357,28 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>Expire Key</Label>
+                  <Label>{uiT("ui.a3cb65a58ff2")}</Label>
                   <Input
-                    placeholder="e.g. 30s, 30h, 30d"
+                    placeholder={uiT("ui.3728344a3ec0a8c9")}
                     value={formState.duration}
                     onChange={(e) => updateField("duration", e.target.value)}
                   />
                   {formErrors.duration && <p className="text-xs text-destructive">{formErrors.duration}</p>}
                   <p className={`text-xs ${keyIsExpired ? "text-destructive" : "text-muted-foreground"}`}>
-                    Current: {rotateTarget?.expires ? formatExpiresUtc(rotateTarget.expires) : "Never"}
+                    {uiT("ui.c09f632874c2511b")}{" "}
+                    {rotateTarget?.expires ? formatExpiresUtc(rotateTarget.expires) : uiT("ui.6300ef800bb8")}
                     {keyIsExpired && " (expired)"}
                   </p>
-                  {newExpiryTime && <p className="text-xs text-success">New: {newExpiryTime}</p>}
+                  {newExpiryTime && (
+                    <p className="text-xs text-success">
+                      {uiT("ui.46dafc1f7af93a93")} {newExpiryTime}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>Grace Period</Label>
+                  <Label>{uiT("ui.ba7533bbd0b7")}</Label>
                   <Input
-                    placeholder="e.g. 24h, 2d"
+                    placeholder={uiT("ui.de97a321254c057c")}
                     value={formState.grace_period}
                     onChange={(e) => updateField("grace_period", e.target.value)}
                   />
@@ -365,19 +392,19 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
             {regeneratedKey ? (
               <>
                 <Button variant="outline" onClick={closeModal}>
-                  Close
+                  {uiT("ui.7d9eb7acb13e")}
                 </Button>
                 <CopyToClipboard text={regeneratedKey} onCopy={() => setCopied(true)}>
                   <Button>
                     {copied ? <Check className="h-4 w-4 mr-1.5" /> : <Copy className="h-4 w-4 mr-1.5" />}
-                    {copied ? "Copied" : "Copy Key"}
+                    {copied ? uiT("ui.8d525e5f158b") : uiT("ui.71b1acec4d27")}
                   </Button>
                 </CopyToClipboard>
               </>
             ) : (
               <>
                 <Button variant="outline" onClick={closeModal}>
-                  Cancel
+                  {uiT("ui.19766ed6ccb2")}
                 </Button>
                 <Button onClick={handleRegenerate} disabled={isRegenerating}>
                   {isRegenerating ? (
@@ -385,7 +412,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   ) : (
                     <RefreshCw className="h-4 w-4 mr-1.5" />
                   )}
-                  Rotate
+                  {uiT("ui.c3613b1704f54c8b")}
                 </Button>
               </>
             )}

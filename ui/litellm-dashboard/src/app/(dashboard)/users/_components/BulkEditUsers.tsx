@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useId, useState } from "react";
@@ -89,7 +90,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       keys: [],
       teams: teams || [],
     }),
-    [teams, open, uiT],
+    [teams, open],
   );
 
   const handleSubmit = async (formValues: any) => {
@@ -199,7 +200,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
         }
 
         if (failedTeams.length > 0) {
-          toast.warning(uiT("supplement.failedTeams", { count: failedTeams.length }));
+          toast.warning(translateUi("supplement.failedTeams", undefined, { count: failedTeams.length }));
         }
       }
 

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
 import { ChevronRight } from "lucide-react";
@@ -109,7 +111,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
         buildCachePayload(redisType, values, { forTesting: true }),
       );
       if (result.status === "success") {
-        toast.success("Cache connection test successful!");
+        toast.success(translateUi("ui.464dcb4b2f8c0847"));
       } else {
         toast.fromError(`Connection test failed: ${result.message || result.error}`);
       }
@@ -133,7 +135,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
     setIsSaving(true);
     try {
       await updateCacheSettingsCall(accessToken, buildCachePayload(redisType, values, { forTesting: false }));
-      toast.success("Cache settings updated successfully");
+      toast.success(translateUi("ui.5dd5da3e18dabf56"));
       await loadCacheSettings();
     } catch (error) {
       console.error("Failed to save cache settings:", error);
@@ -152,8 +154,8 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
       <FormProvider {...form}>
         <form onSubmit={(event) => event.preventDefault()} className="space-y-6">
           <div className="max-w-3xl">
-            <h3 className="text-sm font-medium text-foreground">Cache Settings</h3>
-            <p className="text-xs text-muted-foreground mt-1">Configure Redis cache for LiteLLM</p>
+            <h3 className="text-sm font-medium text-foreground">{uiT("ui.8a9a12a2386fec69")}</h3>
+            <p className="text-xs text-muted-foreground mt-1">{uiT("ui.e03a19ddcedaa332")}</p>
           </div>
 
           <RedisTypeSelector
@@ -164,7 +166,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
 
           <div className="pt-4 border-t border-border">
             <CacheFieldSection
-              title="Connection Settings"
+              title={uiT("ui.2891825a3bd77327")}
               section="connection"
               redisType={redisType}
               embeddingModels={embeddingModels}
@@ -175,7 +177,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
           {redisType === "cluster" && (
             <div className="pt-4 border-t border-border">
               <CacheFieldSection
-                title="Cluster Configuration"
+                title={uiT("ui.34a0fcad26135b28")}
                 section="cluster"
                 redisType={redisType}
                 embeddingModels={embeddingModels}
@@ -187,7 +189,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
           {redisType === "sentinel" && (
             <div className="pt-4 border-t border-border">
               <CacheFieldSection
-                title="Sentinel Configuration"
+                title={uiT("ui.49e3f57a9285dac4")}
                 section="sentinel"
                 redisType={redisType}
                 embeddingModels={embeddingModels}
@@ -199,7 +201,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
           {redisType === "semantic" && (
             <div className="pt-4 border-t border-border">
               <CacheFieldSection
-                title="Semantic Configuration"
+                title={uiT("ui.883f70e45c214469")}
                 section="semantic"
                 redisType={redisType}
                 embeddingModels={embeddingModels}
@@ -209,27 +211,27 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
 
           <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen} className="mt-4">
             <CollapsibleTrigger className="group flex w-full items-center justify-between py-2 text-left">
-              <span className="text-sm font-medium text-foreground">Advanced Settings</span>
+              <span className="text-sm font-medium text-foreground">{uiT("ui.22d4f6088b718aa4")}</span>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
             </CollapsibleTrigger>
             <CollapsibleContent>
               <div className="space-y-6">
                 <CacheFieldSection
-                  title="SSL Settings"
+                  title={uiT("ui.6817e19be5c9edb7")}
                   section="ssl"
                   redisType={redisType}
                   embeddingModels={embeddingModels}
                   headingLevel="h5"
                 />
                 <CacheFieldSection
-                  title="Cache Management"
+                  title={uiT("ui.4c879c23b6a8859a")}
                   section="cacheManagement"
                   redisType={redisType}
                   embeddingModels={embeddingModels}
                   headingLevel="h5"
                 />
                 <CacheFieldSection
-                  title="GCP Authentication"
+                  title={uiT("ui.5a7d17170cd76928")}
                   section="gcp"
                   redisType={redisType}
                   embeddingModels={embeddingModels}
@@ -243,7 +245,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
 
       <div className="border-t border-border pt-6 flex justify-end gap-3">
         <Button variant="secondary" size="sm" onClick={handleTestConnection} disabled={isTesting} className="text-sm">
-          {isTesting ? "Testing..." : "Test Connection"}
+          {isTesting ? uiT("ui.6c02a28421f8ad91") : uiT("ui.c02977b07ec93816")}
         </Button>
         <Button size="sm" onClick={handleSaveChanges} disabled={isSaving} className="text-sm font-medium">
           {isSaving ? uiT("ui.dc85af8f2b1d") : uiT("ui.35322b5bb5a2")}

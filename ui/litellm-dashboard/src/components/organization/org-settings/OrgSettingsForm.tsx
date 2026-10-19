@@ -33,9 +33,24 @@ export const BUDGET_DURATION_OPTIONS = [
       return translateUi("ui.c49ea0b73d1c");
     },
   },
-  { value: "24h", label: "daily" },
-  { value: "7d", label: "weekly" },
-  { value: "30d", label: "monthly" },
+  {
+    value: "24h",
+    get label() {
+      return translateUi("ui.6f31304cdfd0");
+    },
+  },
+  {
+    value: "7d",
+    get label() {
+      return translateUi("ui.8850eced986e");
+    },
+  },
+  {
+    value: "30d",
+    get label() {
+      return translateUi("ui.9169e3ca73ee");
+    },
+  },
 ] as const;
 
 const defaultPatchOrganization = async (organizationId: string, body: OrgPatchBody): Promise<unknown> => {
@@ -72,7 +87,7 @@ export const OrgSettingsForm = ({
   const mutation = useMutation({
     mutationFn: (body: OrgPatchBody) => patchOrganization(organizationId, body),
     onSuccess: () => {
-      toast.success("Organization settings updated successfully");
+      toast.success(translateUi("ui.7e077bab54d72f3b"));
       queryClient.invalidateQueries({ queryKey: organizationKeys.all });
       onSaved();
     },
@@ -87,7 +102,7 @@ export const OrgSettingsForm = ({
   return (
     <form onSubmit={onSubmit} noValidate>
       <FieldGroup>
-        <FormField control={form.control} name="organization_alias" label="Organization Name">
+        <FormField control={form.control} name="organization_alias" label={uiT("ui.4cbd90732447a928")}>
           {({ ref, ...field }) => <Input {...field} ref={ref} />}
         </FormField>
 
@@ -127,11 +142,11 @@ export const OrgSettingsForm = ({
           )}
         </FormField>
 
-        <FormField control={form.control} name="tpm_limit" label="Tokens per minute Limit (TPM)">
+        <FormField control={form.control} name="tpm_limit" label={uiT("ui.fc2295c5aa4194d7")}>
           {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step={1} min={0} />}
         </FormField>
 
-        <FormField control={form.control} name="rpm_limit" label="Requests per minute Limit (RPM)">
+        <FormField control={form.control} name="rpm_limit" label={uiT("ui.78a5a4ba4bb627b1")}>
           {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step={1} min={0} />}
         </FormField>
 
@@ -146,13 +161,13 @@ export const OrgSettingsForm = ({
           )}
         </FormField>
 
-        <FormField control={form.control} name="mcp" label="MCP Servers & Access Groups">
+        <FormField control={form.control} name="mcp" label={uiT("ui.aec31adce0563873")}>
           {(field) => (
             <MCPServerSelector
               value={field.value}
               onChange={field.onChange}
               accessToken={accessToken}
-              placeholder="Select MCP servers and access groups"
+              placeholder={uiT("ui.1ccf27a4854f37df")}
             />
           )}
         </FormField>

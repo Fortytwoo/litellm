@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import CopyButton from "@/components/shared/CopyButton";
 import { EntityLink } from "@/components/shared/EntityLink";
@@ -24,6 +26,8 @@ export default function LabeledField({
   copyable = false,
   defaultUserIdCheck = false,
 }: LabeledFieldProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isEmpty = !value;
   const isDefaultUser = defaultUserIdCheck && value === DEFAULT_PROXY_ADMIN_USER_ID;
   const displayValue = isEmpty ? "-" : value;
@@ -43,7 +47,7 @@ export default function LabeledField({
           {displayValue}
         </strong>
       )}
-      {isCopyable && <CopyButton value={value} label={`Copy ${label}`} />}
+      {isCopyable && <CopyButton value={value} label={uiT("ui.3f3ebff426db5fa6", { v0: String(label) })} />}
     </span>
   );
   return (

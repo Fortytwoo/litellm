@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { CircleHelp, Eye, EyeOff, Info } from "lucide-react";
@@ -132,8 +136,8 @@ const vectorStoreSchema = z.object(vectorStoreShape).superRefine((values, ctx) =
         path: [field.name],
         message:
           field.type === "select"
-            ? `Please select the ${field.label.toLowerCase()}`
-            : `Please input the ${field.label.toLowerCase()}`,
+            ? translateUi("ui.a042cd4c346f6572", undefined, { v0: String(field.label.toLowerCase()) })
+            : translateUi("ui.0a0d038c01323946", undefined, { v0: String(field.label.toLowerCase()) }),
       }),
     );
 });
@@ -165,16 +169,20 @@ const EMPTY_VALUES: VectorStoreFormValues = {
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
 
 const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<typeof InputGroupInput>>(
   (props, ref) => {
+    const { t: uiT } = useDashboardLanguage();
+
     const [revealed, setRevealed] = useState(false);
     return (
       <InputGroup>
@@ -182,7 +190,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentPropsWit
         <InputGroupAddon align="inline-end">
           <InputGroupButton
             size="icon-xs"
-            aria-label={revealed ? "Hide Password" : "Show Password"}
+            aria-label={revealed ? uiT("ui.592b73ba488ad74f") : uiT("ui.81f33754fd8c1c35")}
             onClick={() => setRevealed(!revealed)}
           >
             {revealed ? <EyeOff /> : <Eye />}
@@ -252,7 +260,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
         litellm_credential_name: formValues.litellm_credential_name,
         litellm_params: buildVectorStoreLitellmParams(formValues.custom_llm_provider, formValues),
       });
-      toast.success("Vector store created successfully");
+      toast.success(translateUi("ui.5e5c42994bdd1b12"));
       form.reset(EMPTY_VALUES);
       setMetadataJson("{}");
       onSuccess();
@@ -278,7 +286,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
     <Dialog open={isVisible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[1000px]">
         <DialogHeader>
-          <DialogTitle>Add New Vector Store</DialogTitle>
+          <DialogTitle>{uiT("ui.8702c329a4dd0052")}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={form.handleSubmit(handleCreate)}>
@@ -327,19 +335,19 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
               {selectedProvider === "pg_vector" && (
                 <Alert variant="info">
                   <Info />
-                  <AlertTitle>PG Vector Setup Required</AlertTitle>
+                  <AlertTitle>{uiT("ui.91d9fed6b75abc31")}</AlertTitle>
                   <AlertDescription>
-                    <p>LiteLLM provides a server to connect to PG Vector. To use this provider:</p>
+                    <p>{uiT("ui.45d40420aaa8158f")}</p>
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
                       <li>
-                        Deploy the litellm-pgvector server from:{" "}
+                        {uiT("ui.0c8c2630e3ed4486")}{" "}
                         <a href="https://github.com/BerriAI/litellm-pgvector" target="_blank" rel="noopener noreferrer">
                           https://github.com/BerriAI/litellm-pgvector
                         </a>
                       </li>
-                      <li>Configure your PostgreSQL database with pgvector extension</li>
-                      <li>Start the server and note the API base URL and API key</li>
-                      <li>Enter those details in the fields below</li>
+                      <li>{uiT("ui.5445a52f05e47bdb")}</li>
+                      <li>{uiT("ui.d46d4f34b7e73669")}</li>
+                      <li>{uiT("ui.d99f0a223ea328e9")}</li>
                     </ol>
                   </AlertDescription>
                 </Alert>
@@ -348,34 +356,16 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
               {selectedProvider === "valkey" && (
                 <Alert variant="info">
                   <Info />
-                  <AlertTitle>Valkey Setup Required</AlertTitle>
+                  <AlertTitle>{uiT("ui.3dd7c9829628fd43")}</AlertTitle>
                   <AlertDescription>
-                    <p>
-                      LiteLLM searches documents you have already stored in Valkey. It does not create the index or
-                      upload documents for you. Before creating this vector store, make sure:
-                    </p>
+                    <p>{uiT("ui.c0849ed71883fee7")}</p>
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
-                      <li>
-                        Your Valkey server has vector search enabled (the valkey-search module, included in the
-                        valkey-bundle image and in AWS ElastiCache / MemoryDB for Valkey)
-                      </li>
-                      <li>
-                        You have already created a search index and loaded your documents and their embeddings into it.
-                        Enter that index name as the Vector Store ID
-                      </li>
-                      <li>
-                        You know which embedding model created those stored embeddings. That model must be added to this
-                        proxy under Models so you can pick it below. Using a different model returns wrong results
-                      </li>
-                      <li>
-                        You know the field names your documents use for their text and their embedding. If they are not
-                        &quot;text&quot; and &quot;embedding&quot;, set them below
-                      </li>
+                      <li>{uiT("ui.61d186ac56f179f0")}</li>
+                      <li>{uiT("ui.724a4b099f070d2d")}</li>
+                      <li>{uiT("ui.d928f0edb62cbcfc")}</li>
+                      <li>{uiT("ui.c0cd5c1eb98b7255")}</li>
                     </ol>
-                    <p style={{ marginTop: "8px" }}>
-                      When a query comes in, LiteLLM converts it to an embedding with the model below and returns the
-                      closest matching documents from your index.
-                    </p>
+                    <p style={{ marginTop: "8px" }}>{uiT("ui.05289e52f34d1d0c")}</p>
                   </AlertDescription>
                 </Alert>
               )}
@@ -383,30 +373,24 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
               {selectedProvider === "vertex_rag_engine" && (
                 <Alert variant="info">
                   <Info />
-                  <AlertTitle>Vertex AI RAG Engine Setup</AlertTitle>
+                  <AlertTitle>{uiT("ui.f8db79339faaf41d")}</AlertTitle>
                   <AlertDescription>
-                    <p>To use Vertex AI RAG Engine:</p>
-                    <p style={{ marginTop: "4px", fontStyle: "italic" }}>
-                      Note: Google Cloud has renamed this to &quot;RAG Engine&quot; in its console — the steps below
-                      still apply.
-                    </p>
+                    <p>{uiT("ui.6881783d221d7536")}</p>
+                    <p style={{ marginTop: "4px", fontStyle: "italic" }}>{uiT("ui.a3a659aac838f44c")}</p>
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
                       <li>
-                        Set up your Vertex AI RAG Engine corpus following the guide:{" "}
+                        {uiT("ui.166fa757302cfa3f")}{" "}
                         <a
                           href="https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          Vertex AI RAG Engine Overview
+                          {uiT("ui.db7163e1b90df860")}
                         </a>
                       </li>
-                      <li>Create a corpus in your Google Cloud project</li>
-                      <li>
-                        Note the corpus ID from the Vertex AI console (now labeled &quot;RAG Engine&quot; in Google
-                        Cloud)
-                      </li>
-                      <li>Enter the corpus ID in the Vector Store ID field below</li>
+                      <li>{uiT("ui.d36464dd85d1d278")}</li>
+                      <li>{uiT("ui.a7e4013cf5ef576c")}</li>
+                      <li>{uiT("ui.4a3f64b9ceda54a7")}</li>
                     </ol>
                   </AlertDescription>
                 </Alert>
@@ -415,36 +399,27 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
               {selectedProvider === "vertex_ai/search_api" && (
                 <Alert variant="info">
                   <Info />
-                  <AlertTitle>Vertex AI Search Setup</AlertTitle>
+                  <AlertTitle>{uiT("ui.cc31eee639730b85")}</AlertTitle>
                   <AlertDescription>
-                    <p>To use Vertex AI Search (Discovery Engine):</p>
-                    <p style={{ marginTop: "4px", fontStyle: "italic" }}>
-                      Note: Google Cloud has renamed this to &quot;Agent Search&quot; in its console — the steps below
-                      still apply.
-                    </p>
+                    <p>{uiT("ui.3932a60e8dceed9f")}</p>
+                    <p style={{ marginTop: "4px", fontStyle: "italic" }}>{uiT("ui.236ace4c946cfadf")}</p>
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
                       <li>
-                        Enable the Discovery Engine API on your Google Cloud project and create a data store following
-                        the guide:{" "}
+                        {uiT("ui.bbe14b030f9cbeff")}{" "}
                         <a
                           href="https://cloud.google.com/generative-ai-app-builder/docs/create-data-store-es"
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{ textDecoration: "underline" }}
                         >
-                          Create a Vertex AI Search data store
+                          {uiT("ui.14c6e201d06315b2")}
                         </a>
                       </li>
-                      <li>Pick a supported location: global, us, or eu</li>
+                      <li>{uiT("ui.119634242b73435a")}</li>
+                      <li>{uiT("ui.b88fa22af9987bbf")}</li>
                       <li>
-                        For most data store types (Cloud Storage, BigQuery, Media): copy the data store ID and enter it
-                        in the Vector Store ID field below.
-                      </li>
-                      <li>
-                        For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a
-                        search app on top of the data store, then copy the <strong>Engine ID</strong> and enter it in
-                        the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this
-                        record, but it isn&apos;t used in the GCP URL when Engine ID is set.
+                        {uiT("ui.f3168fa9070d1077")} <strong>{uiT("ui.3341eebca3600328")}</strong>{" "}
+                        {uiT("ui.30d4ba183833af14")}
                       </li>
                     </ol>
                   </AlertDescription>
@@ -491,7 +466,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                 {({ id, value, onChange }) => (
                   <SearchSelect
                     inputId={id}
-                    placeholder="Select or search for existing credentials"
+                    placeholder={uiT("ui.1c1bd81a646a1fc6")}
                     options={credentialOptions(credentials)}
                     value={value ?? ""}
                     onValueChange={(selected) => onChange(selected === "" || selected === null ? undefined : selected)}
@@ -537,6 +512,8 @@ interface ProviderFieldProps {
 }
 
 const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const label = labelWithHint(field.label, field.tooltip);
 
   if (field.type === "select") {
@@ -570,7 +547,7 @@ const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo
               className="w-full"
             />
             <ComboboxContent>
-              <ComboboxEmpty>No matching options</ComboboxEmpty>
+              <ComboboxEmpty>{uiT("ui.39a118fc69d4f129")}</ComboboxEmpty>
               <ComboboxList>
                 {(option: { value: string; label: string }) => (
                   <ComboboxItem key={option.value} value={option}>

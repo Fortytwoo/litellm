@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { dayLabel, type Frequency, percentLabel } from "../model/frequency";
@@ -9,36 +10,40 @@ const TICK = { fontSize: 11, fill: "var(--muted-foreground)" };
 const TOP_RADIUS: [number, number, number, number] = [3, 3, 0, 0];
 
 function Legend() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
       <span className="flex items-center gap-1.5">
         <span aria-hidden="true" className="size-2 rounded-sm bg-finding-affected" />
-        Affected
+        {uiT("ui.d04d143601b3bce7")}
       </span>
       <span className="flex items-center gap-1.5">
         <span aria-hidden="true" className="size-2 rounded-sm bg-finding-unaffected" />
-        Unaffected
+        {uiT("ui.62620037164a2a45")}
       </span>
     </div>
   );
 }
 
 export function FrequencyCard({ frequency }: { frequency: Frequency }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const percent = percentLabel(frequency.affected, frequency.total);
   const data = frequency.days.map((d) => ({ ...d, label: dayLabel(d.day) }));
   const range = data.length > 0 ? `${data[0].label} – ${data[data.length - 1].label}` : null;
   return (
     <section
-      aria-label="Frequency"
+      aria-label={uiT("ui.16b6668d9831a1b8")}
       className="space-y-4 rounded-xl border border-transparent bg-muted/40 p-4 shadow-finding-ring"
     >
       <div aria-live="polite" className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="mb-1 text-sm font-medium">Frequency</h3>
+          <h3 className="mb-1 text-sm font-medium">{uiT("ui.16b6668d9831a1b8")}</h3>
           <p className="text-2xl leading-tight font-semibold tracking-tight tabular-nums">
             {percent ?? "—"}
             <span className="ml-1.5 text-sm font-normal tracking-normal text-muted-foreground">
-              {frequency.affected} of {frequency.total} traces affected
+              {frequency.affected} {uiT("ui.28391d3bc64ec15c")} {frequency.total} {uiT("ui.57b4c0563bd4c905")}
             </span>
           </p>
         </div>
@@ -81,7 +86,7 @@ export function FrequencyCard({ frequency }: { frequency: Frequency }) {
       )}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Legend />
-        <p className="text-xs text-muted-foreground">Share of traces sampled by the reporting investigations</p>
+        <p className="text-xs text-muted-foreground">{uiT("ui.8cde026e58fa7016")}</p>
       </div>
     </section>
   );

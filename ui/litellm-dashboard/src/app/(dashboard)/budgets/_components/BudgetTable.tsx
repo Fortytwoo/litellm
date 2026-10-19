@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Inbox, ShieldAlert } from "lucide-react";
@@ -36,9 +38,15 @@ interface BudgetTableProps {
 const PAGE_SIZE_OPTIONS = [25, 50, 100];
 
 const FILTER_LABELS: Record<string, string> = {
-  budget_duration: "Reset",
-  max_budget: "Max Budget",
-  created_at: "Created",
+  get budget_duration() {
+    return translateUi("ui.daee7606b339");
+  },
+  get max_budget() {
+    return translateUi("ui.3e20f0a04b21");
+  },
+  get created_at() {
+    return translateUi("ui.d70b9e24bca2");
+  },
 };
 
 const durationLabel = (value: string): string =>
@@ -82,22 +90,26 @@ const normalizeCreatedAt = (draft: CreatedAtFilterValue): CreatedAtFilterValue |
 };
 
 function EmptyState({ hasQuery }: { hasQuery: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">{hasQuery ? "No matching budgets" : "No budgets yet"}</div>
+      <div className="text-sm font-medium text-foreground">
+        {hasQuery ? uiT("ui.42861956deacc971") : uiT("ui.e76acba8421de021")}
+      </div>
       <div className="text-sm text-muted-foreground">
-        {hasQuery
-          ? "No budget matches your search or filters."
-          : "Create a budget to set spend, TPM and RPM limits for customers."}
+        {hasQuery ? uiT("ui.b92d14a82d5b0d2f") : uiT("ui.387c1459434da949")}
       </div>
     </div>
   );
 }
 
 function ErrorState({ error }: { error: Error }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const forbidden = error instanceof ApiError && error.status === 403;
   return (
     <div className="flex flex-col items-center gap-1 py-6">
@@ -105,11 +117,9 @@ function ErrorState({ error }: { error: Error }) {
         <ShieldAlert className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {forbidden ? "You do not have access to budgets" : "Could not load budgets"}
+        {forbidden ? uiT("ui.ca2b9d277235cc87") : uiT("ui.0ffa2f305967283d")}
       </div>
-      <div className="text-sm text-muted-foreground">
-        {forbidden ? "Ask a proxy admin to grant you the admin viewer role." : error.message}
-      </div>
+      <div className="text-sm text-muted-foreground">{forbidden ? uiT("ui.4d50af10515df888") : error.message}</div>
     </div>
   );
 }
@@ -165,8 +175,8 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
             value={maxBudget.min ?? ""}
             disabled={unlimitedOnly}
             onChange={(event) => set("max_budget", normalizeMaxBudget({ ...maxBudget, min: event.target.value }))}
-            placeholder="Min"
-            aria-label="Minimum max budget"
+            placeholder={uiT("ui.dea79332147ffe1f")}
+            aria-label={uiT("ui.f9cb3fe0e7329490")}
             data-testid="budget-filter-max-budget-min"
           />
           <Input
@@ -176,8 +186,8 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
             value={maxBudget.max ?? ""}
             disabled={unlimitedOnly}
             onChange={(event) => set("max_budget", normalizeMaxBudget({ ...maxBudget, max: event.target.value }))}
-            placeholder="Max"
-            aria-label="Maximum max budget"
+            placeholder={uiT("ui.a1a5936d3b0f8a69")}
+            aria-label={uiT("ui.55bc1be60437aeca")}
             data-testid="budget-filter-max-budget-max"
           />
         </div>
@@ -187,7 +197,7 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
             onCheckedChange={(checked) => set("max_budget", normalizeMaxBudget({ unlimitedOnly: checked === true }))}
             data-testid="budget-filter-max-budget-unlimited"
           />
-          Unlimited only
+          {uiT("ui.5d47e36fc940ecf7")}
         </Label>
       </DataTableFilterField>
       <DataTableFilterField label={uiT("ui.d70b9e24bca2")}>
@@ -196,14 +206,14 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
             type="date"
             value={created.from ?? ""}
             onChange={(event) => set("created_at", normalizeCreatedAt({ ...created, from: event.target.value }))}
-            aria-label="Created from"
+            aria-label={uiT("ui.afe7b2f591f189ec")}
             data-testid="budget-filter-created-from"
           />
           <Input
             type="date"
             value={created.to ?? ""}
             onChange={(event) => set("created_at", normalizeCreatedAt({ ...created, to: event.target.value }))}
-            aria-label="Created to"
+            aria-label={uiT("ui.2af3fb96b95f71a3")}
             data-testid="budget-filter-created-to"
           />
         </div>
@@ -244,7 +254,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick,
       columnFilters={list.columnFilters}
       onColumnFiltersChange={list.onColumnFiltersChange}
       isLoading={list.isLoading}
-      loadingMessage="Loading budgets…"
+      loadingMessage={uiT("ui.4bef6e4925552b39")}
       noDataMessage={emptyMessage}
       size="compact"
       toolbar={(table) => (
@@ -253,7 +263,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick,
             table={table}
             searchValue={list.searchValue}
             onSearchChange={list.onSearchChange}
-            searchPlaceholder="Search by budget ID…"
+            searchPlaceholder={uiT("ui.3270ed59feef57a1")}
             onOpenFilters={() => setFiltersOpen(true)}
             onRefresh={list.refetch}
             isRefreshing={list.isFetching}
@@ -265,7 +275,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick,
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
             title={uiT("ui.546ebb8eb993")}
-            description="Narrow down your budgets"
+            description={uiT("ui.133ba271d8a2887f")}
           >
             {(draft) => <BudgetFilterFields {...draft} />}
           </DataTableFilterDrawer>

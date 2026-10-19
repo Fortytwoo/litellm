@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useCallback, useEffect, useState } from "react";
 import ModelRetrySettingsTab from "@/app/(dashboard)/models-and-endpoints/components/ModelRetrySettingsTab";
@@ -23,6 +26,8 @@ interface RouterSettings {
 }
 
 export default function ModelRetrySettingsPanel() {
+  useDashboardLanguage();
+
   const { accessToken, userId: userID, userRole } = useAuthorized();
   const { availableModelGroups } = useModelDashboardData();
   const updateRetryPolicy = useUpdateRetryPolicy(accessToken);
@@ -69,7 +74,7 @@ export default function ModelRetrySettingsPanel() {
       { retry_policy: globalRetryPolicy, model_group_retry_policy: modelGroupRetryPolicy },
       {
         onSuccess: () => {
-          toast.success("Retry settings saved successfully");
+          toast.success(translateUi("ui.1f1205eee9cb8024"));
           void fetchRetrySettings().then((routerSettings) => {
             if (routerSettings) {
               applyRetrySettings(routerSettings);

@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
@@ -84,6 +86,8 @@ export const isAllowanceExhausted = (allowance?: Allowance) =>
 export const AUTO_ROUTER_CONTACT_URL = "https://calendly.com/tin-berri/litellm-auto-router-pricing-discussion";
 
 export const AutoRouterContactLink = ({ features, message }: { features?: string[]; message?: string }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const state = useContext(AutoRouterAvailabilityContext);
   if (state.isPending || state.isError || state.isChecking) return null;
   const exhausted = state.data?.allowances.some(
@@ -99,7 +103,7 @@ export const AutoRouterContactLink = ({ features, message }: { features?: string
         rel="noopener noreferrer"
         className="font-medium text-blue-600 hover:underline dark:text-blue-400"
       >
-        Talk to our team
+        {uiT("ui.5fbc0ca89a619cb7")}
       </a>
     </span>
   );
@@ -135,34 +139,24 @@ export const AutoRouterLimits = () => {
   return (
     <Popover>
       <PopoverTrigger className="shrink-0 whitespace-nowrap text-xs font-normal text-muted-foreground underline underline-offset-4 hover:text-foreground">
-        View limits
+        {uiT("ui.4a75eba5a8b86952")}
       </PopoverTrigger>
       <PopoverContent align="end" className="w-96 max-w-[calc(100vw-2rem)] gap-3">
-        <PopoverTitle>Routing and customization limits</PopoverTitle>
-        <p className="text-xs leading-5 text-muted-foreground">
-          Rule-based, Complexity, and OSS are unlimited with built-in settings. Choose or change tier models freely.
-          Customization allowances are shared across this proxy.
-        </p>
+        <PopoverTitle>{uiT("ui.97d6e3c52e32a136")}</PopoverTitle>
+        <p className="text-xs leading-5 text-muted-foreground">{uiT("ui.411ec20c7a1f39d7")}</p>
         <dl className="space-y-2 text-xs">
           {limits.map(([key, label]) => (
             <div key={key} className="flex items-center justify-between gap-3">
-              <dt>{label}</dt>
+              <dt>{translateText(label)}</dt>
               <dd className="shrink-0 tabular-nums text-muted-foreground">
                 {availabilityLabel(state, key) ?? uiT("ui.11dde17d6c3e")}
               </dd>
             </div>
           ))}
         </dl>
-        <p className="text-xs leading-5 text-muted-foreground">
-          Custom tier definitions and written classifier instructions share one allowance. Built-in prompts and
-          display-name changes do not use it.
-        </p>
-        <p className="text-xs leading-5 text-muted-foreground">
-          Changing scoring rules, such as weights, thresholds, keywords, or custom dimensions, uses the Rule-based
-          tuning allowance. It also applies to Heuristic first and Hybrid. Recorded settings on existing routers are
-          preserved; new routers start from built-in rules.
-        </p>
-        <AutoRouterContactLink message="Need a higher limit?" />
+        <p className="text-xs leading-5 text-muted-foreground">{uiT("ui.6966e48925922432")}</p>
+        <p className="text-xs leading-5 text-muted-foreground">{uiT("ui.c5ef66faafbf9e6a")}</p>
+        <AutoRouterContactLink message={uiT("ui.ebd904bcaaab44e3")} />
       </PopoverContent>
     </Popover>
   );

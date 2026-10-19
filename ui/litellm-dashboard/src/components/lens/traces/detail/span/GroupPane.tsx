@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import CopyButton from "@/components/shared/CopyButton";
 
@@ -30,12 +31,17 @@ export function GroupPane({
   accessToken: string;
   onClose: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const tokens = row.members.reduce((sum, m) => sum + m.input_tokens + m.output_tokens, 0);
   const firstFailure = row.members.find((m) => m.status === "error" && m.error);
   const sample = (firstFailure ?? row.members[0]).span_id;
   const handoff = useTracesApi(accessToken).handoff(trace.summary.trace_id, sample, trace.summary.trace_ref);
   return (
-    <aside className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground" aria-label="Group details">
+    <aside
+      className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground"
+      aria-label={uiT("ui.e25e0312358d62d0")}
+    >
       <PaneHeader
         type={row.type}
         model={row.members[0]?.model ?? null}
@@ -47,22 +53,27 @@ export function GroupPane({
         }
         facts={[]}
         actions={
-          <CopyButton variant="action" value={handoff.text} label="Copy group sample" copiedLabel={handoff.copied} />
+          <CopyButton
+            variant="action"
+            value={handoff.text}
+            label={uiT("ui.a7ab2a26d94e80ae")}
+            copiedLabel={handoff.copied}
+          />
         }
         onClose={onClose}
       />
       <div className="min-h-0 flex-1 overflow-auto border-t px-4 py-4">
         <div className="grid grid-cols-2 gap-2 @[520px]/trace:grid-cols-3">
-          <Metric label="Invocations" value={row.members.length.toLocaleString()} />
-          <Metric label="Failed" value={row.failedCount.toLocaleString()} />
-          <Metric label="p50 latency" value={fmtMs(row.p50Duration)} />
+          <Metric label={uiT("ui.5f5a1d734753e0bb")} value={row.members.length.toLocaleString()} />
+          <Metric label={uiT("ui.031a8f0f659d")} value={row.failedCount.toLocaleString()} />
+          <Metric label={uiT("ui.bfece7919087b45c")} value={fmtMs(row.p50Duration)} />
           <Metric label="Tokens" value={fmtTok(tokens)} />
-          <Metric label="Agent" value={row.agent || "—"} />
-          <Metric label="Type" value={row.type} />
+          <Metric label={uiT("ui.11b39c93777e")} value={row.agent || "—"} />
+          <Metric label={uiT("ui.baaddf70fb5d")} value={row.type} />
         </div>
         {firstFailure?.error && (
           <section className="mt-4 rounded-lg border border-destructive/40 bg-destructive/5 px-3.5 py-3">
-            <div className="text-sm font-semibold text-destructive">Failure pattern</div>
+            <div className="text-sm font-semibold text-destructive">{uiT("ui.7aaaf3f8e6e1c228")}</div>
             <p className="mt-2 font-mono text-xs leading-relaxed text-foreground">
               {errorHeadline(firstFailure.error)}
             </p>

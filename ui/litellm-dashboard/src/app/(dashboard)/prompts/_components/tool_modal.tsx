@@ -58,7 +58,7 @@ const ToolModal: React.FC<ToolModalProps> = ({ visible, initialJson, onSave, onC
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Add Tool</DialogTitle>
+          <DialogTitle>{uiT("ui.f6b1268526b9ce01")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           {error && (
@@ -70,11 +70,11 @@ const ToolModal: React.FC<ToolModalProps> = ({ visible, initialJson, onSave, onC
             </div>
           )}
           <textarea
-            aria-label="Tool JSON"
+            aria-label={uiT("ui.4008b8206efd336d")}
             value={json}
             onChange={(e) => setJson(e.target.value)}
             className="w-full min-h-[400px] px-4 py-3 border border-input rounded-lg text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-ring resize-none"
-            placeholder="Paste your tool JSON here..."
+            placeholder={uiT("ui.99fc9075eacaf77b")}
           />
         </div>
         <DialogFooter>

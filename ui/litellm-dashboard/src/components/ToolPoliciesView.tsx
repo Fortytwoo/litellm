@@ -30,7 +30,7 @@ export default function ToolPoliciesView({ accessToken }: ToolPoliciesViewProps)
     return (
       <div className="p-6 w-full min-w-0 flex-1">
         <h1 className="text-2xl font-semibold text-foreground mb-2">{uiT("ui.cc107f23e985")}</h1>
-        <p className="text-sm text-muted-foreground">Tool Policies is only available to admin users.</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.37460ff3296c4cce")}</p>
       </div>
     );
   }

@@ -1,3 +1,4 @@
+import { getFormattingLocale } from "@/i18n";
 import moment from "moment";
 
 const parseStoredTimestamp = (value: string): Date => {
@@ -17,7 +18,7 @@ export function formatActivityTimestamp(value: string): string {
     second: "2-digit",
     timeZoneName: "short",
   };
-  return date.toLocaleString(undefined, options);
+  return date.toLocaleString(getFormattingLocale(), options);
 }
 
 export const RUN_TIMESTAMP_FORMAT = "MMM DD HH:mm:ss.SSS";

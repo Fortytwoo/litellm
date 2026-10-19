@@ -1,5 +1,6 @@
 "use client";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useDisableBlogPosts } from "@/app/(dashboard)/hooks/useDisableBlogPosts";
 import { useDisableBouncingIcon } from "@/app/(dashboard)/hooks/useDisableBouncingIcon";
@@ -24,7 +25,11 @@ import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CopyButton from "@/components/shared/CopyButton";
 import { cn } from "@/lib/cva.config";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
+
+const subscribeHydration = () => () => {};
+const clientHydrated = () => true;
+const serverHydrated = () => false;
 
 function hueFromString(seed: string): number {
   let h = 0;
@@ -69,6 +74,7 @@ interface UserDropdownProps {
 }
 
 const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar", collapsed = false }) => {
+  const hydrated = useSyncExternalStore(subscribeHydration, clientHydrated, serverHydrated);
   const { t: uiT } = useDashboardLanguage();
 
   const {
@@ -128,7 +134,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
           <span className="max-w-[150px] truncate" title={userId || "-"}>
             {userId || "-"}
           </span>
-          <CopyButton value={userId} label="Copy User ID" />
+          <CopyButton value={userId} label={uiT("ui.c20c663acddf7418")} />
         </div>
       </div>
       <div className="flex w-full items-center justify-between gap-2">
@@ -136,7 +142,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
           <ShieldCheck className="size-4" />
           <span className="text-muted-foreground">{uiT("ui.14736a2eb9f4")}</span>
         </div>
-        <span>{userRole}</span>
+        <span>{translateText(userRole)}</span>
       </div>
       <Separator className="my-2" />
       <div className="flex w-full items-center justify-between gap-2">
@@ -154,7 +160,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableShowNewBadge");
             }
           }}
-          aria-label="Toggle hide new feature indicators"
+          aria-label={uiT("ui.2f952a08c1fe2ce2")}
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
@@ -171,7 +177,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableShowPrompts");
             }
           }}
-          aria-label="Toggle hide all prompts"
+          aria-label={uiT("ui.4296b188094145e3")}
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
@@ -188,7 +194,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableBlogPosts");
             }
           }}
-          aria-label="Toggle hide blog posts"
+          aria-label={uiT("ui.65aebd401d3453d2")}
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
@@ -205,7 +211,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableBouncingIcon");
             }
           }}
-          aria-label="Toggle hide bouncing icon"
+          aria-label={uiT("ui.a78ae5e9d36ffc73")}
         />
       </div>
       {premiumUser === true && canUseLiteAdmin && (
@@ -221,6 +227,8 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
       )}
     </div>
   );
+
+  if (!hydrated) return <div className="h-8 w-8" aria-hidden />;
 
   const seed = userEmail || userId || "user";
   const initials = initialsFromIdentity(userEmail, userId);
@@ -238,7 +246,10 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
                 "flex w-full items-center rounded-lg border border-transparent transition-colors hover:bg-sidebar-accent",
                 collapsed ? "justify-center px-0 py-1" : "gap-2.5 px-2 py-1.5 text-left",
               )}
-              aria-label={`Account menu — ${userRole ?? "Unknown role"} — signed in as ${userEmail || userId || "unknown"}`}
+              aria-label={uiT("ui.57953e74f38db243", {
+                v0: translateText(userRole ?? "Unknown role"),
+                v1: String(userEmail || userId || "unknown"),
+              })}
               aria-haspopup="dialog"
               title={collapsed ? displayName : undefined}
             />
@@ -253,7 +264,9 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
             <>
               <span className="min-w-0 flex-1 leading-tight">
                 <span className="block truncate text-[13px] font-medium text-sidebar-foreground">{displayName}</span>
-                {userRole && <span className="block truncate text-[11px] text-muted-foreground">{userRole}</span>}
+                {userRole && (
+                  <span className="block truncate text-[11px] text-muted-foreground">{translateText(userRole)}</span>
+                )}
               </span>
               <ChevronsUpDown size={16} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
             </>
@@ -265,7 +278,10 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
             <button
               type="button"
               className="flex! max-w-[min(200px,34vw)] items-center gap-2 rounded-md! py-0.5! pl-1! pr-2! transition-colors hover:bg-accent!"
-              aria-label={`Account menu — ${userRole ?? "Unknown role"} — signed in as ${userEmail || userId || "unknown"}`}
+              aria-label={uiT("ui.57953e74f38db243", {
+                v0: translateText(userRole ?? "Unknown role"),
+                v1: String(userEmail || userId || "unknown"),
+              })}
               aria-haspopup="dialog"
             />
           }

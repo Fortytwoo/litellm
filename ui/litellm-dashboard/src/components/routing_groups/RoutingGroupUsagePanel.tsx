@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Code2 } from "lucide-react";
@@ -59,9 +61,30 @@ const response = await client.chat.completions.create({
 console.log(response);`;
 
 const SNIPPET_TABS = [
-  { value: "curl", label: "cURL", language: "bash", build: buildCurlSnippet },
-  { value: "python", label: "Python (OpenAI SDK)", language: "python", build: buildPythonSnippet },
-  { value: "javascript", label: "JavaScript (OpenAI SDK)", language: "javascript", build: buildJsSnippet },
+  {
+    value: "curl",
+    get label() {
+      return translateUi("ui.addc90cfd45b0f45");
+    },
+    language: "bash",
+    build: buildCurlSnippet,
+  },
+  {
+    value: "python",
+    get label() {
+      return translateUi("ui.87d0227ecd5dabf7");
+    },
+    language: "python",
+    build: buildPythonSnippet,
+  },
+  {
+    value: "javascript",
+    get label() {
+      return translateUi("ui.3175f6ca5e81de96");
+    },
+    language: "javascript",
+    build: buildJsSnippet,
+  },
 ] as const;
 
 export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePanelProps) {
@@ -71,18 +94,19 @@ export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePane
     <div className="border-y bg-muted/40 px-4 py-4">
       <div className="mb-2 flex items-center gap-2">
         <Code2 className="size-4 text-primary" />
-        <span className="text-sm font-medium text-foreground">How routing works for this group</span>
+        <span className="text-sm font-medium text-foreground">{uiT("ui.ecaf3d69ce3de06a")}</span>
       </div>
       <p className="mb-3 text-sm text-muted-foreground">
         {group.routing_strategy === "priority" ? (
           <>
-            {uiT("ui.59f03d642b41")} <span className="font-medium text-foreground">{group.group_name}</span> to try
-            eligible models in priority order. Direct requests to a member model keep their existing routing behavior.
+            {uiT("ui.59f03d642b41")} <span className="font-medium text-foreground">{group.group_name}</span>{" "}
+            {uiT("ui.b3ca7cb1c85aa4ff")}
           </>
         ) : (
           <>
-            Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the{" "}
-            <span className="font-medium text-foreground">{formatStrategyLabel(group.routing_strategy)}</span> strategy.
+            {uiT("ui.e69df4d39cf6334f")}{" "}
+            <span className="font-medium text-foreground">{formatStrategyLabel(group.routing_strategy)}</span>{" "}
+            {uiT("ui.fae41a639f96a131")}
           </>
         )}
       </p>

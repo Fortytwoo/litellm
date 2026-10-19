@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -72,19 +73,21 @@ export function LiteAdminFrame({ children }: { children: ReactNode }) {
 }
 
 export default function LiteAdminTrigger() {
+  const { t: uiT } = useDashboardLanguage();
+
   const state = useContext(LiteAdminContext);
   if (!state) return null;
   return (
     <Button
       variant="ghost"
-      aria-label="LiteAdmin"
+      aria-label={uiT("ui.88bdddccecc147ce")}
       aria-keyshortcuts="Meta+J Control+J"
       aria-expanded={state.open}
       onClick={state.toggle}
       className="rounded-full bg-info/10 text-info hover:bg-info/15 hover:text-info/80 aria-expanded:bg-info/15 aria-expanded:text-info"
     >
       <Sparkles className="size-4" />
-      <span className="hidden lg:inline">LiteAdmin</span>
+      <span className="hidden lg:inline">{uiT("ui.88bdddccecc147ce")}</span>
       <kbd className="hidden rounded-full border border-info/30 px-1.5 font-sans text-xs lg:inline">⌘J</kbd>
     </Button>
   );
@@ -127,6 +130,8 @@ function Destination({
   open: boolean;
   close: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [approved, setApproved] = useState(false);
   if (target?.baseUrl && (!target.requiresConsent || approved)) {
     return <LiteAdminChat session={{ ...session, inferenceBaseUrl: target.baseUrl }} open={open} close={close} />;
@@ -135,29 +140,26 @@ function Destination({
     <Panel open={open}>
       <PanelHeader close={close} />
       <div className="p-4">
-        {loading && <Skeleton className="h-24" aria-label="Loading gateway settings" />}
+        {loading && <Skeleton className="h-24" aria-label={uiT("ui.f6e4314a1a4d335e")} />}
         {!loading && !target?.baseUrl && (
           <Alert variant="destructive">
-            <AlertDescription>{target?.error || "Could not load gateway settings."}</AlertDescription>
+            <AlertDescription>{target?.error || uiT("ui.46ed0f5975c8a248")}</AlertDescription>
             <Button variant="link" onClick={retry}>
-              Retry
+              {uiT("ui.942087cc2d41e013")}
             </Button>
           </Alert>
         )}
         {!loading && target?.baseUrl && (
           <Card size="sm">
             <CardHeader>
-              <CardTitle>Connect to the configured gateway</CardTitle>
+              <CardTitle>{uiT("ui.6c92169912874f29")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="break-all font-mono text-xs">{target.baseUrl}</p>
-              <p className="text-muted-foreground">
-                This gateway uses a different address. LiteAdmin will send your existing session credential to the
-                address shown above.
-              </p>
+              <p className="text-muted-foreground">{uiT("ui.a62f722e5b8d9783")}</p>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => setApproved(true)}>Use configured gateway</Button>
+              <Button onClick={() => setApproved(true)}>{uiT("ui.9d2c9ec134db7053")}</Button>
             </CardFooter>
           </Card>
         )}
@@ -176,6 +178,8 @@ function Panel({
   initialFocus?: RefObject<HTMLElement | null>;
   children: ReactNode;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const panel = ref.current;
@@ -187,7 +191,7 @@ function Panel({
   return (
     <aside
       ref={ref}
-      aria-label="LiteAdmin"
+      aria-label={uiT("ui.88bdddccecc147ce")}
       tabIndex={-1}
       hidden={!open}
       className={cn(
@@ -201,6 +205,8 @@ function Panel({
 }
 
 function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; open: boolean; close: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const chat = useLiteAdmin(session);
   const [input, setInput] = useState("");
   const [model, setModel] = useState<string | null>(null);
@@ -229,8 +235,8 @@ function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; op
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="New chat"
-          title="New chat"
+          aria-label={uiT("ui.db18382a249e0206")}
+          title={uiT("ui.db18382a249e0206")}
           disabled={chat.phase === "applying"}
           onClick={() => {
             chat.reset();
@@ -249,14 +255,14 @@ function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; op
       />
       <div className="space-y-3 border-t p-3">
         {models.isPending ? (
-          <Skeleton className="h-8" aria-label="Loading models" />
+          <Skeleton className="h-8" aria-label={uiT("ui.ac72c34bcf43cc71")} />
         ) : (
           <SearchSelect
-            aria-label="LiteAdmin model"
+            aria-label={uiT("ui.fbc7f4d3ec8718d3")}
             options={(models.data ?? []).map((item) => ({ value: item.model_group, label: item.model_group }))}
             value={selectedModel}
             onValueChange={setModel}
-            placeholder="Choose a chat model"
+            placeholder={uiT("ui.833ed2c10712271f")}
             disabled={busy}
             allowClear={false}
           />
@@ -264,48 +270,54 @@ function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; op
         {models.isError && (
           <Alert variant="destructive">
             <AlertDescription>
-              Could not load models.{" "}
+              {uiT("ui.594ac9a5341482cd")}{" "}
               <Button variant="link" onClick={() => void models.refetch()}>
-                Retry
+                {uiT("ui.942087cc2d41e013")}
               </Button>
             </AlertDescription>
           </Alert>
         )}
         {models.isSuccess && models.data.length === 0 && (
           <Alert role="status">
-            <AlertDescription>Add a chat model to your gateway to use LiteAdmin.</AlertDescription>
+            <AlertDescription>{uiT("ui.01f94c419bc72b2e")}</AlertDescription>
           </Alert>
         )}
-        {tooLong && <FieldError>Keep your message within {MAX_INPUT_LENGTH.toLocaleString()} characters.</FieldError>}
+        {tooLong && (
+          <FieldError>
+            {uiT("ui.20d2bf9a15b5282e")} {MAX_INPUT_LENGTH.toLocaleString()} {uiT("ui.58213fd0f931b4b7")}
+          </FieldError>
+        )}
         <ChatComposer
           value={input}
           onChange={setInput}
           onSubmit={send}
           onCancel={chat.phase === "applying" ? undefined : chat.stop}
-          placeholder="Ask LiteAdmin…"
+          placeholder={uiT("ui.65c6a32df73a7ba6")}
           disabled={busy || !selectedModel}
           isLoading={busy}
           submitDisabled={submitDisabled}
         />
-        <p className="text-xs text-muted-foreground">Use a model you trust with your gateway data.</p>
+        <p className="text-xs text-muted-foreground">{uiT("ui.6d7db8215867dcb8")}</p>
       </div>
     </Panel>
   );
 }
 
 function PanelHeader({ close, children }: { close: () => void; children?: ReactNode }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex items-start justify-between gap-3 border-b p-4">
       <div className="flex flex-col gap-1 text-sm">
         <h2 className="flex items-center gap-1.5 font-medium">
           <Sparkles className="size-4 text-info" />
-          LiteAdmin
+          {uiT("ui.88bdddccecc147ce")}
         </h2>
-        <p className="text-muted-foreground">Ask about your gateway. Review changes in chat.</p>
+        <p className="text-muted-foreground">{uiT("ui.2a21b6f0922fb6df")}</p>
       </div>
       <div className="flex shrink-0">
         {children}
-        <Button variant="ghost" size="icon-sm" aria-label="Close LiteAdmin" onClick={close}>
+        <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.2aceb386a9f5b108")} onClick={close}>
           <X className="size-4" />
         </Button>
       </div>

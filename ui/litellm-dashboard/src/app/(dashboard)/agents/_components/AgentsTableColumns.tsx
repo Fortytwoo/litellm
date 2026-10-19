@@ -29,7 +29,7 @@ function AgentRowActions({ agent, onDeleteClick }: AgentRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open agent actions"
+        aria-label={uiT("ui.2befb4b6e315904a")}
         data-testid={`agent-actions-${agent.agent_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -63,8 +63,12 @@ export const getAgentsTableColumns = ({
   {
     id: "agent_name",
     accessorKey: "agent_name",
-    meta: { title: "Agent Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Agent Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.28145084c72576a9");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.28145084c72576a9")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -79,8 +83,12 @@ export const getAgentsTableColumns = ({
   {
     id: "agent_id",
     accessorKey: "agent_id",
-    meta: { title: "Agent ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Agent ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.510bce732db77286");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.510bce732db77286")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -161,11 +169,12 @@ export const getAgentsTableColumns = ({
     enableSorting: false,
     cell: ({ row }) => {
       const hasKeys = (row.original.keys?.length ?? 0) > 0;
-      if (row.original.jwt_auth_configured) return <StatusBadge tone="success" label="JWT configured" />;
+      if (row.original.jwt_auth_configured)
+        return <StatusBadge tone="success" label={translateUi("ui.88594454ad2cfb20")} />;
       return hasKeys ? (
         <StatusBadge tone="success" label={translateUi("ui.92340695899b")} />
       ) : (
-        <StatusBadge tone="warning" label="Needs Setup" />
+        <StatusBadge tone="warning" label={translateUi("ui.f0cae79a3657c1db")} />
       );
     },
   },

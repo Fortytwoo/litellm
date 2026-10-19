@@ -90,7 +90,7 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
           typeof response.error.message === "string" ? JSON.parse(response.error.message) : response.error.message;
 
         errorDetails = {
-          message: errorMessage?.message || "Unknown error",
+          message: errorMessage?.message || uiT("ui.27c2ccd962c2b8dc"),
           traceback: errorMessage?.traceback || "No traceback available",
           litellm_params: errorMessage?.litellm_cache_params || {},
           health_check_cache_params: errorMessage?.health_check_cache_params || {},
@@ -161,10 +161,10 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
       <Tabs defaultValue="summary">
         <TabsList className="border-b border-border px-4">
           <TabsTrigger value="summary" className="flex-none">
-            Summary
+            {uiT("ui.8e76a94ac8320d51")}
           </TabsTrigger>
           <TabsTrigger value="raw" className="flex-none">
-            Raw Response
+            {uiT("ui.9a6d0aced8d18633")}
           </TabsTrigger>
         </TabsList>
 
@@ -179,7 +179,7 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
               <p
                 className={`text-sm font-medium ${response?.status === "healthy" ? "text-success" : "text-destructive"}`}
               >
-                Cache Status: {response?.status || "unhealthy"}
+                {uiT("ui.897955f74186ec7b")} {response?.status || uiT("ui.85826072c3d4c3a4")}
               </p>
             </div>
 
@@ -190,23 +190,29 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
                   <>
                     <tr>
                       <td colSpan={2} className="pt-4 pb-2 font-semibold text-destructive">
-                        Error Details
+                        {uiT("ui.674c0b62eba94a34")}
                       </td>
                     </tr>
                     <TableClickableErrorField label={uiT("ui.f789799c8754")} value={errorDetails.message} />
-                    <TableClickableErrorField label="Traceback" value={errorDetails.traceback} />
+                    <TableClickableErrorField label={uiT("ui.3f0c6f46bed773a4")} value={errorDetails.traceback} />
                   </>
                 )}
 
                 {/* Always show cache details, regardless of error state */}
                 <tr>
                   <td colSpan={2} className="pt-4 pb-2 font-semibold">
-                    Cache Details
+                    {uiT("ui.ee001e1769dc13bc")}
                   </td>
                 </tr>
-                <TableClickableErrorField label="Cache Configuration" value={String(parsedLitellmParams?.type)} />
-                <TableClickableErrorField label="Ping Response" value={String(response.ping_response)} />
-                <TableClickableErrorField label="Set Cache Response" value={response.set_cache_response || "N/A"} />
+                <TableClickableErrorField
+                  label={uiT("ui.3b5c3b03ef461b29")}
+                  value={String(parsedLitellmParams?.type)}
+                />
+                <TableClickableErrorField label={uiT("ui.d8f6efc32cfa769d")} value={String(response.ping_response)} />
+                <TableClickableErrorField
+                  label={uiT("ui.a998513cbe5630b0")}
+                  value={response.set_cache_response || "N/A"}
+                />
                 <TableClickableErrorField
                   label="litellm_settings.cache_params"
                   value={JSON.stringify(parsedLitellmParams, null, 2)}
@@ -217,14 +223,29 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
                   <>
                     <tr>
                       <td colSpan={2} className="pt-4 pb-2 font-semibold">
-                        Redis Details
+                        {uiT("ui.dc6e6a2c976821be")}
                       </td>
                     </tr>
-                    <TableClickableErrorField label="Redis Host" value={redisDetails.redis_host || "N/A"} />
-                    <TableClickableErrorField label="Redis Port" value={redisDetails.redis_port || "N/A"} />
-                    <TableClickableErrorField label="Redis Version" value={redisDetails.redis_version || "N/A"} />
-                    <TableClickableErrorField label="Startup Nodes" value={redisDetails.startup_nodes || "N/A"} />
-                    <TableClickableErrorField label="Namespace" value={redisDetails.namespace || "N/A"} />
+                    <TableClickableErrorField
+                      label={uiT("ui.c52d5a9e500b8d5a")}
+                      value={redisDetails.redis_host || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={uiT("ui.28977561452d2da5")}
+                      value={redisDetails.redis_port || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={uiT("ui.1a165cfdbd7ba420")}
+                      value={redisDetails.redis_version || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={uiT("ui.e0652497b41d0dac")}
+                      value={redisDetails.startup_nodes || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={uiT("ui.c4e4e7abda206b07")}
+                      value={redisDetails.namespace || "N/A"}
+                    />
                   </>
                 )}
               </tbody>
@@ -275,6 +296,8 @@ export const CacheHealthTab: React.FC<{
   runCachingHealthCheck: () => void;
   responseTimeMs?: number | null;
 }> = ({ accessToken, healthCheckResponse, runCachingHealthCheck, responseTimeMs }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [localResponseTimeMs, setLocalResponseTimeMs] = React.useState<number | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -291,7 +314,7 @@ export const CacheHealthTab: React.FC<{
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Button onClick={handleHealthCheck} disabled={isLoading}>
-          {isLoading ? "Running Health Check..." : "Run Health Check"}
+          {isLoading ? uiT("ui.6a7a77b822597662") : uiT("ui.6ab14a52545c53e3")}
         </Button>
         <ResponseTimeIndicator responseTimeMs={localResponseTimeMs} />
       </div>

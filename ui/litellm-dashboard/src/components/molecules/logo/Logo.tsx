@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { getProviderLogoAndName } from "@/components/provider_info_helpers";
 import { resolveLogoSrc } from "@/lib/assetPaths";
@@ -15,6 +17,8 @@ const DARK_TREATMENT_CLASS: Readonly<Record<LogoTreatment, string>> = {
 };
 
 export const Logo: React.FC<LogoProps> = ({ provider, src, label, className = "w-4 h-4" }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [erroredSrc, setErroredSrc] = useState<string | null>(null);
   const resolvedSrc = provider !== undefined ? getProviderLogoAndName(provider).logo : resolveLogoSrc(src) ?? "";
   const name = label ?? provider ?? "";
@@ -32,7 +36,7 @@ export const Logo: React.FC<LogoProps> = ({ provider, src, label, className = "w
   return (
     <img
       src={resolvedSrc}
-      alt={`${name || "-"} logo`}
+      alt={uiT("ui.78e75433bd1b56ea", { v0: String(name || "-") })}
       className={treatment === undefined ? className : cn(className, DARK_TREATMENT_CLASS[treatment])}
       onError={() => {
         console.warn(`Logo failed to load: ${resolvedSrc}`);

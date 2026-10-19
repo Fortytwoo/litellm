@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 
 export const ALL_TEAM_MODELS = "all-team-models";
@@ -19,7 +20,7 @@ export const projectFormSchema = z
     team_id: z
       .string()
       .nullable()
-      .pipe(z.string({ error: "Please select a team" }).min(1, "Please select a team")),
+      .pipe(z.string({ error: () => translateUi("ui.53df18bb986860b9") }).min(1, "Please select a team")),
     description: z.string().optional(),
     models: z.array(z.string()),
     max_budget: z.number().nullish(),
@@ -39,14 +40,26 @@ export const projectFormSchema = z
     const models = (values.modelLimits ?? []).map((entry) => entry.model);
     models.forEach((_, index) => {
       if (repeatsEarlierValue(models, index)) {
-        ctx.addIssue({ code: "custom", message: "Duplicate model", path: ["modelLimits", index, "model"] });
+        ctx.addIssue({
+          code: "custom",
+          get message() {
+            return translateUi("ui.69556f9627227f29");
+          },
+          path: ["modelLimits", index, "model"],
+        });
       }
     });
 
     const keys = (values.metadata ?? []).map((entry) => entry.key);
     keys.forEach((_, index) => {
       if (repeatsEarlierValue(keys, index)) {
-        ctx.addIssue({ code: "custom", message: "Duplicate key", path: ["metadata", index, "key"] });
+        ctx.addIssue({
+          code: "custom",
+          get message() {
+            return translateUi("ui.d849552825a8392a");
+          },
+          path: ["metadata", index, "key"],
+        });
       }
     });
   });

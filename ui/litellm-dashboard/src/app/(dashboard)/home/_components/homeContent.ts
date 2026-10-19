@@ -1,3 +1,4 @@
+import { getFormattingLocale } from "@/i18n";
 import type { BlogPost } from "@/app/(dashboard)/hooks/blogPosts/useBlogPosts";
 import { getProviderLogoAndName } from "@/components/provider_info_helpers";
 
@@ -34,4 +35,4 @@ export const cardProvider = (post: BlogPost): string | undefined =>
   post.tags.find((tag) => getProviderLogoAndName(tag).logo !== "");
 
 export const formatPublishedOn = (isoDate: string): string =>
-  new Date(`${isoDate}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  new Date(`${isoDate}T00:00:00`).toLocaleDateString(getFormattingLocale(), { month: "short", day: "numeric" });

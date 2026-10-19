@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { TraceSummary } from "../../types";
 import type { TimeWindow } from "@/components/shared/timeRange/timeRange";
@@ -20,11 +21,13 @@ interface RunsToolbarProps {
 }
 
 export function RunsToolbar({ query, onQueryChange, runs, range, busy, children }: RunsToolbarProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { status, setStatus } = useRunFilterRouting();
   const statuses = [
-    { value: "all", label: "All status" },
-    { value: "ok", label: "No errors" },
-    { value: "error", label: "With errors" },
+    { value: "all", label: uiT("ui.32b9b2c4de19c2e4") },
+    { value: "ok", label: uiT("ui.cfa7674387164b15") },
+    { value: "error", label: uiT("ui.b5bd75920f4806d6") },
   ];
   return (
     <div className="flex shrink-0 flex-col bg-card">
@@ -38,7 +41,7 @@ export function RunsToolbar({ query, onQueryChange, runs, range, busy, children 
           value={status}
           onValueChange={(value: "all" | "ok" | "error" | null) => value !== null && setStatus(value)}
         >
-          <SelectTrigger size="sm" className="h-8 min-w-28 text-xs" aria-label="Filter traces by status">
+          <SelectTrigger size="sm" className="h-8 min-w-28 text-xs" aria-label={uiT("ui.3e3db1aa314534e0")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

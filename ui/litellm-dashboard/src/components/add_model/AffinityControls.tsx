@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 
 import { Input } from "@/components/ui/input";
@@ -10,6 +12,8 @@ export const AffinityControls: React.FC<{
   value: ComplexityRouterConfigValue;
   onChange: (value: ComplexityRouterConfigValue) => void;
 }> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [ttlDraft, setTtlDraft] = React.useState<string | null>(null);
   const commitTtl = (raw: string) => {
     setTtlDraft(null);
@@ -28,17 +32,14 @@ export const AffinityControls: React.FC<{
         <Switch
           checked={value.deployment_affinity ?? DEFAULT_DEPLOYMENT_AFFINITY}
           onCheckedChange={(deploymentAffinity) => onChange({ ...value, deployment_affinity: deploymentAffinity })}
-          aria-label="Pin one model deployment per tier"
+          aria-label={uiT("ui.53e30e278490b93f")}
         />
-        <strong className="font-semibold">Pin one model deployment per tier</strong>
+        <strong className="font-semibold">{uiT("ui.53e30e278490b93f")}</strong>
       </div>
-      <span className="block text-xs mb-3 text-muted-foreground">
-        Reuses the model chosen for each tier and its deployment when available. Requests can still move between tiers.
-        Turn off to select models and load-balance deployments every turn.
-      </span>
+      <span className="block text-xs mb-3 text-muted-foreground">{uiT("ui.b4efd4b0b7aebffd")}</span>
       <div style={{ maxWidth: 320 }}>
         <label className="block text-sm font-medium mb-1" htmlFor="session-affinity-ttl">
-          How long a pin survives idle (seconds)
+          {uiT("ui.b690e8ecf44e9c9d")}
         </label>
         <Input
           id="session-affinity-ttl"
@@ -49,8 +50,7 @@ export const AffinityControls: React.FC<{
           onBlur={(event) => commitTtl(event.target.value)}
         />
         <span className="block text-xs mt-1 text-muted-foreground">
-          Refreshes after every request that reuses a pin. Empty tracks the backend default of{" "}
-          {DEFAULT_SESSION_AFFINITY_TTL_SECONDS} seconds.
+          {uiT("ui.db0c81254b9858c4")} {DEFAULT_SESSION_AFFINITY_TTL_SECONDS} {uiT("ui.5d992667f7075c53")}
         </span>
       </div>
     </>

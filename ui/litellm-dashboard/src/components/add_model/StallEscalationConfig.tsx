@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
@@ -30,6 +32,8 @@ const StallEscalationConfig: React.FC<{
   value: ComplexityRouterConfigValue;
   onChange: (value: ComplexityRouterConfigValue) => void;
 }> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const enabled = value.stall_escalation_enabled ?? false;
   const blockedReason = stallEscalationBlockedReason(value);
   const window = value.stall_escalation_window ?? DEFAULT_STALL_ESCALATION_WINDOW;
@@ -70,21 +74,19 @@ const StallEscalationConfig: React.FC<{
           // this back off, since the backend rejects saving both together.
           disabled={blockedReason !== null && !enabled}
           onCheckedChange={toggle}
-          aria-label="Escalate a stalled task to a stronger model"
+          aria-label={uiT("ui.ec0386c4411c8349")}
         />
-        <strong className="font-semibold">Escalate a stalled task to a stronger model</strong>
+        <strong className="font-semibold">{uiT("ui.ec0386c4411c8349")}</strong>
       </div>
       <span className="block text-xs mb-3 text-muted-foreground">
-        When the model keeps repeating the same tool call, or the same call keeps erroring, bump the request one tier
-        higher for as long as it looks stuck. The automatic counterpart to an escalation keyword: nobody has to notice
-        the loop and ask. Off means a stuck task keeps the model it was classified onto.
+        {uiT("ui.f63318546161ac52")}
         {blockedReason !== null && ` ${blockedReason}`}
       </span>
       {enabled && blockedReason === null && (
         <div className="flex flex-wrap gap-4">
           <div style={{ maxWidth: 240 }}>
             <label className="block text-sm font-medium mb-1" htmlFor="stall-escalation-repeat-threshold">
-              Repeats before escalating
+              {uiT("ui.afe888e71f518a78")}
             </label>
             <Input
               id="stall-escalation-repeat-threshold"
@@ -92,13 +94,11 @@ const StallEscalationConfig: React.FC<{
               value={threshold}
               onChange={(event) => commitThreshold(event.target.value)}
             />
-            <span className="block text-xs mt-1 text-muted-foreground">
-              How many identical or failing calls count as stuck. At least 2; lower reacts sooner and misfires more.
-            </span>
+            <span className="block text-xs mt-1 text-muted-foreground">{uiT("ui.9a31eecee6cc26f6")}</span>
           </div>
           <div style={{ maxWidth: 240 }}>
             <label className="block text-sm font-medium mb-1" htmlFor="stall-escalation-window">
-              Recent calls examined
+              {uiT("ui.df10e6497aeb0562")}
             </label>
             <Input
               id="stall-escalation-window"
@@ -106,9 +106,7 @@ const StallEscalationConfig: React.FC<{
               value={window}
               onChange={(event) => commitWindow(event.target.value)}
             />
-            <span className="block text-xs mt-1 text-muted-foreground">
-              How far back to look, in tool calls. Never below the repeat count, since that could never be reached.
-            </span>
+            <span className="block text-xs mt-1 text-muted-foreground">{uiT("ui.43a72dafe2f50234")}</span>
           </div>
         </div>
       )}

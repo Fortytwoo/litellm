@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ArrowRight, PanelRight, X } from "lucide-react";
 import type { ReactNode } from "react";
@@ -98,12 +99,14 @@ export function LiveStrip({
   onOpen: () => void;
   onClose: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const now = useNow(5000);
   const recent = newestFirst(reviews, RECENT);
   const finished = state.kind === "done" || state.kind === "failed";
   return (
     <section
-      aria-label="Live trace results"
+      aria-label={uiT("ui.5b269e19861305b3")}
       onClick={onOpen}
       className="flex cursor-pointer flex-wrap items-start gap-x-6 gap-y-2 rounded-md bg-muted/30 px-3 py-2 text-xs text-muted-foreground transition-colors hover:bg-muted/50"
     >
@@ -111,13 +114,14 @@ export function LiveStrip({
         <div className="flex flex-col gap-1">
           <ModelName model={model} />
           <span className="tabular-nums">
-            {reviewed} of {selected} traces · {issueLabel(issues)} · {money(cost)}
+            {reviewed} {uiT("ui.28391d3bc64ec15c")} {selected} {uiT("ui.168d42bb2135290a")} {issueLabel(issues)} ·{" "}
+            {money(cost)}
           </span>
           {(reused > 0 || reusable > 0) && (
             <span>
               {finished
-                ? `${reused} reused without review cost · ${Math.max(0, reviewed - reused)} newly reviewed`
-                : `${reusable} eligible for reuse · ${Math.max(0, selected - reusable)} need review`}
+                ? uiT("ui.500eb2716b11ad8b", { v0: String(reused), v1: String(Math.max(0, reviewed - reused)) })
+                : uiT("ui.5f03d80fc9038300", { v0: String(reusable), v1: String(Math.max(0, selected - reusable)) })}
             </span>
           )}
         </div>
@@ -131,7 +135,7 @@ export function LiveStrip({
           }}
         >
           <PanelRight />
-          View run
+          {uiT("ui.aaf7fccc7d1315f2")}
           <ArrowRight />
         </Button>
       </div>
@@ -152,7 +156,7 @@ export function LiveStrip({
           </p>
         )}
         {recent.length > 0 && state.kind !== "waiting" && (
-          <ol aria-label="Recently reviewed traces" className="flex flex-col">
+          <ol aria-label={uiT("ui.5c701ef071b79017")} className="flex flex-col">
             {recent.map((review) => (
               <RecentLine key={reviewKey(review)} review={review} now={now} onOpen={onOpen} />
             ))}
@@ -162,7 +166,7 @@ export function LiveStrip({
       <Button
         variant="ghost"
         size="icon-xs"
-        aria-label="Hide live trace results"
+        aria-label={uiT("ui.6d987b1fc1facd27")}
         className="shrink-0"
         onClick={(event) => {
           event.stopPropagation();

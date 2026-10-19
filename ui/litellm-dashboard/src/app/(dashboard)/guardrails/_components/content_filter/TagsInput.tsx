@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -47,7 +49,7 @@ export const TagsInput = ({
   onValueChange,
   options = [],
   placeholder,
-  emptyText = "No matching options",
+  emptyText = translateUi("ui.39a118fc69d4f129"),
   tokenSeparators = [],
   loading = false,
   disabled = false,

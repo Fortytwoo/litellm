@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Braces } from "lucide-react";
 
@@ -28,6 +29,8 @@ export function TextBody({ text, format }: { text: string; format: TextFormat })
 }
 
 export function Payload({ view, name, failed }: { view: PayloadView; name: string; failed: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   switch (view.kind) {
     case "messages":
       return <MessageList messages={view.messages} />;
@@ -41,7 +44,7 @@ export function Payload({ view, name, failed }: { view: PayloadView; name: strin
               <Braces />
             </BlockBadge>
           }
-          label="Fields"
+          label={uiT("ui.616f48c1db195b6f")}
           name="fields"
           meta={<span className="text-xs text-muted-foreground tabular-nums">{view.entries.length}</span>}
         >

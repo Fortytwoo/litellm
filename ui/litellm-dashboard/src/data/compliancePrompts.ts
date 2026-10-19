@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { insultsCompliancePrompts } from "./insultsCompliancePrompts";
 import { financialCompliancePrompts } from "./financialCompliancePrompts";
 import { codeExecutionCompliancePrompts } from "./codeExecutionCompliancePrompts";
@@ -525,40 +526,51 @@ export function getCategories(): ComplianceCategory[] {
 const frameworkMeta: Record<string, { icon: string; description: string }> = {
   "EU AI Act": {
     icon: "shield",
-    description: "Article 5 prohibited AI practices under the European Union AI Act.",
+    get description() {
+      return translateUi("ui.18be7bb35579d711");
+    },
   },
   GDPR: {
     icon: "lock",
-    description: "General Data Protection Regulation — data privacy and protection requirements.",
+    get description() {
+      return translateUi("ui.cd12f16d9cf655d9");
+    },
   },
   "Topic Blocking": {
     icon: "shield",
-    description:
-      "Content filter guardrails that block messages matching specific prohibited topics while allowing legitimate use of related words in context.",
+    get description() {
+      return translateUi("ui.117f3b64f1e19972");
+    },
   },
   "Canadian PII (PIPEDA)": {
     icon: "shield",
-    description:
-      "Canadian PII detection under PIPEDA and provincial privacy legislation — masks SIN, OHIP, driver's licence, passport, immigration docs, bank accounts, and postal codes.",
+    get description() {
+      return translateUi("ui.19c14153a42778ff");
+    },
   },
   "Canadian PII (FIPPA)": {
     icon: "graduation-cap",
-    description:
-      "Ontario FIPPA institutional identifier detection — masks University of Toronto student/employee numbers, UTORid logins, and TCard campus IDs.",
+    get description() {
+      return translateUi("ui.deb73a95b823a3fc");
+    },
   },
   "Airline Brand Protection": {
     icon: "plane",
-    description: "Destination vs competitor intent — avoid answering competitor comparison questions.",
+    get description() {
+      return translateUi("ui.20c4335abf711f83");
+    },
   },
   "Code Execution Safety": {
     icon: "terminal",
-    description:
-      "Requests that ask the assistant to execute code, run commands, access the filesystem/network, or otherwise perform runtime actions should be blocked; static explanation/analysis is allowed.",
+    get description() {
+      return translateUi("ui.3db95f0ef1ae7c01");
+    },
   },
   "Claims Assistant": {
     icon: "shield",
-    description:
-      "Security + UX validation prompts for an AI claims assistant supporting out-of-network claim submissions.",
+    get description() {
+      return translateUi("ui.3c62dc942e0b143e");
+    },
   },
 };
 

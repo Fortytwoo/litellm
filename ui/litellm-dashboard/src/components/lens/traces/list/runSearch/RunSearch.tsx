@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMemo } from "react";
 
@@ -24,6 +25,8 @@ interface RunSearchProps {
 
 /** The runs list query box: free text plus `key:value` filters over run fields, copyable as a trace query. */
 export function RunSearch({ value, onChange, runs, range, busy = false }: RunSearchProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const command = useMemo(() => runQueryCommand(range), [range]);
   return (
     <SearchBox.Root
@@ -31,12 +34,12 @@ export function RunSearch({ value, onChange, runs, range, busy = false }: RunSea
       values={itemValues(RUN_INDEX, runs)}
       value={value}
       onValueChange={onChange}
-      label="Search runs"
+      label={uiT("ui.26d6d37f90dc1f5d")}
       className="h-10 min-w-0 basis-full sm:w-auto sm:basis-0"
     >
       <SearchBox.Input
         className="h-full overflow-hidden rounded-none border-0 px-3 whitespace-nowrap focus-within:bg-muted/40 focus-within:ring-0 dark:bg-transparent"
-        placeholder="Search input or trace ID"
+        placeholder={uiT("ui.8c2238b11cfe5a9f")}
         busy={busy}
       />
       <SearchBox.Suggestions>

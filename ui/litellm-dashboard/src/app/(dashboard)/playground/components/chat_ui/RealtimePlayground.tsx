@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { CircleX, Mic, MicOff, Send, Volume2 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -27,6 +28,8 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
   customProxyBaseUrl,
   selectedGuardrails,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [messages, setMessages] = useState<RealtimeMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isConnected, setIsConnected] = useState(false);
@@ -365,10 +368,14 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted">
         <div className="flex items-center gap-3">
           <Volume2 className="size-5 text-info" />
-          <span className="font-semibold text-foreground">Realtime Voice Chat</span>
+          <span className="font-semibold text-foreground">{uiT("ui.8ae075c20392a488")}</span>
           <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? "bg-success" : "bg-border"}`} />
           <span className="text-xs text-muted-foreground">
-            {isConnected ? "Connected" : isConnecting ? "Connecting..." : "Disconnected"}
+            {isConnected
+              ? uiT("ui.22965568d22a14ee")
+              : isConnecting
+                ? uiT("ui.5f04ae9ed6a865bb")
+                : uiT("ui.04dfac3671b494ad")}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -377,7 +384,7 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
             onValueChange={(voice) => setSelectedVoice(voice ?? selectedVoice)}
             disabled={isConnected}
           >
-            <SelectTrigger size="sm" className="w-[220px]" aria-label="Voice">
+            <SelectTrigger size="sm" className="w-[220px]" aria-label={uiT("ui.87bf2bc08589")}>
               <SelectValue>{OPEN_AI_VOICE_SELECT_OPTIONS.find((v) => v.value === selectedVoice)?.label}</SelectValue>
             </SelectTrigger>
             <SelectContent>
@@ -390,12 +397,12 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
           </Select>
           {!isConnected ? (
             <Button onClick={connect} disabled={isConnecting} size="sm">
-              Connect
+              {uiT("ui.1a2303ede07493ac")}
             </Button>
           ) : (
             <Button variant="destructive" onClick={disconnect} size="sm">
               <CircleX />
-              Disconnect
+              {uiT("ui.acfc5be785a9bb3d")}
             </Button>
           )}
         </div>
@@ -406,10 +413,9 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
         {messages.length === 0 && !isConnected && (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3">
             <Volume2 className="size-12" />
-            <span className="text-lg text-muted-foreground">Realtime Voice Playground</span>
+            <span className="text-lg text-muted-foreground">{uiT("ui.8a3f0a6a496c605c")}</span>
             <p className="text-sm text-muted-foreground text-center max-w-md">
-              Click <b>Connect</b> to start a realtime session. You can speak using your microphone or type messages.
-              The AI will respond with voice and text.
+              {uiT("ui.95ba4ed9329f4a25")} <b>{uiT("ui.1a2303ede07493ac")}</b> {uiT("ui.58dcc6034e060264")}
             </p>
           </div>
         )}
@@ -428,7 +434,9 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
                     : "bg-muted text-foreground rounded-bl-md"
                 }`}
               >
-                <div className="text-xs font-medium mb-0.5 opacity-70">{msg.role === "user" ? "You" : "AI"}</div>
+                <div className="text-xs font-medium mb-0.5 opacity-70">
+                  {msg.role === "user" ? uiT("ui.08b041935798fbf6") : uiT("ui.11fb682be0a0233d")}
+                </div>
                 <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
               </div>
             )}
@@ -445,13 +453,13 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
               size="icon-lg"
               variant={isRecording ? "destructive" : "outline"}
               onClick={isRecording ? stopRecording : startRecording}
-              title={isRecording ? "Stop recording" : "Start recording"}
+              title={isRecording ? uiT("ui.3d591e826d545919") : uiT("ui.30756af0134e4bf1")}
               className={`rounded-full ${isRecording ? "animate-pulse" : ""}`}
             >
               {isRecording ? <MicOff /> : <Mic />}
             </Button>
             <Input
-              placeholder="Type a message or use the mic..."
+              placeholder={uiT("ui.6023a5d8666bc2b5")}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => {
@@ -459,14 +467,19 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
               }}
               className="h-10 flex-1"
             />
-            <Button size="icon-lg" onClick={sendTextMessage} disabled={!inputText.trim()} aria-label="Send">
+            <Button
+              size="icon-lg"
+              onClick={sendTextMessage}
+              disabled={!inputText.trim()}
+              aria-label={uiT("ui.f6f4688ff23d50c6")}
+            >
               <Send />
             </Button>
           </div>
           {isRecording && (
             <div className="mt-2 flex items-center gap-2 text-destructive text-xs">
               <span className="inline-block w-2 h-2 rounded-full bg-destructive animate-pulse" />
-              Listening — speak into your microphone. Server VAD will detect when you stop.
+              {uiT("ui.fd25abca704ffc53")}
             </div>
           )}
         </div>

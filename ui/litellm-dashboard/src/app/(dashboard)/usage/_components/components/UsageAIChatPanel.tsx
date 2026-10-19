@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -43,6 +45,8 @@ const TOOL_ICONS: Record<string, string> = {
 };
 
 const ToolCallDisplay: React.FC<{ step: ToolCallStep }> = ({ step }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const icon = TOOL_ICONS[step.tool_name] || "🔧";
   const args = step.arguments;
   const dateRange = args.start_date && args.end_date ? `${args.start_date} → ${args.end_date}` : "";
@@ -64,7 +68,11 @@ const ToolCallDisplay: React.FC<{ step: ToolCallStep }> = ({ step }) => {
           {icon} {step.tool_label}
         </div>
         {dateRange && <div className="text-muted-foreground mt-0.5">{dateRange}</div>}
-        {filter && <div className="text-muted-foreground mt-0.5">Filter: {filter}</div>}
+        {filter && (
+          <div className="text-muted-foreground mt-0.5">
+            {uiT("ui.e1146f006ab341fd")} {filter}
+          </div>
+        )}
         {step.status === "error" && step.error && <div className="text-destructive mt-0.5">{step.error}</div>}
       </div>
     </div>
@@ -190,7 +198,10 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         (errorMsg: string) => {
           setStatusMessage(null);
           setActiveToolCalls([]);
-          setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${errorMsg}` }]);
+          setMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: translateUi("ui.a507b52e6cbe29ba", undefined, { v0: String(errorMsg) }) },
+          ]);
           setStreamingContent("");
         },
         (status: string) => {
@@ -212,7 +223,10 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         return;
       }
       const errorMsg = error?.message || "Failed to get response. Please try again.";
-      setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${errorMsg}` }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: translateUi("ui.a507b52e6cbe29ba", undefined, { v0: String(errorMsg) }) },
+      ]);
       setStreamingContent("");
     } finally {
       setIsLoading(false);
@@ -254,9 +268,9 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         <div className="min-w-0">
           <h3 className="flex items-center gap-2 text-sm leading-5 font-medium text-foreground">
             <Sparkles aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
-            Ask AI
+            {uiT("ui.ea9e45ac7083cf49")}
           </h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">Ask about your spend, models, keys, and trends</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{uiT("ui.df7825ae4c9daee6")}</p>
         </div>
         <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.7d9eb7acb13e")} onClick={handleClose}>
           <X />
@@ -272,13 +286,13 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         >
           <ComboboxInput
             className="w-full"
-            placeholder="Select a model (optional, defaults to gpt-4o-mini)"
-            aria-label="Select a model (optional, defaults to gpt-4o-mini)"
+            placeholder={uiT("ui.726735c6c834fc0e")}
+            aria-label={uiT("ui.726735c6c834fc0e")}
             aria-busy={isLoadingModels}
             showClear={selectedModel !== undefined}
           />
           <ComboboxContent>
-            <ComboboxEmpty>{isLoadingModels ? "Loading models…" : uiT("ui.a650c298cf44")}</ComboboxEmpty>
+            <ComboboxEmpty>{isLoadingModels ? uiT("ui.cc8b4624f7659c68") : uiT("ui.a650c298cf44")}</ComboboxEmpty>
             <ComboboxList>
               {(model: string) => (
                 <ComboboxItem key={model} value={model}>
@@ -295,8 +309,8 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         {messages.length === 0 && !streamingContent && !isLoading && (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <MessageSquare aria-hidden="true" className="mb-2 size-6" strokeWidth={1.5} />
-            <p className="text-sm font-medium text-foreground">Ask a question about your usage</p>
-            <p className="text-xs mt-1">e.g. &quot;Which model costs me the most?&quot;</p>
+            <p className="text-sm font-medium text-foreground">{uiT("ui.d8a61fe1342d7390")}</p>
+            <p className="text-xs mt-1">{uiT("ui.6d77c9dea78017bc")}</p>
           </div>
         )}
 
@@ -340,7 +354,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         {isLoading && !streamingContent && (
           <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground">
             <UiLoadingSpinner className="size-3.5" />
-            <span className="italic">{statusMessage || "Thinking..."}</span>
+            <span className="italic">{statusMessage || uiT("ui.b4739a4f08650db2")}</span>
           </div>
         )}
 
@@ -361,14 +375,14 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about your usage..."
+            placeholder={uiT("ui.ae0177ebda903bad")}
             rows={1}
             className="flex-1 min-h-9 max-h-24"
             disabled={isLoading}
           />
           <Button onClick={handleSend} disabled={!inputText.trim() || isLoading}>
             {isLoading && <UiLoadingSpinner className="size-4" />}
-            Send
+            {uiT("ui.f6f4688ff23d50c6")}
           </Button>
         </div>
         <div className="flex justify-between items-center mt-2">
@@ -377,9 +391,9 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             disabled={messages.length === 0}
           >
-            Clear chat
+            {uiT("ui.10a9a8152dcd0984")}
           </button>
-          <span className="text-xs text-muted-foreground">Enter to send</span>
+          <span className="text-xs text-muted-foreground">{uiT("ui.03c539e810e07010")}</span>
         </div>
       </div>
     </div>

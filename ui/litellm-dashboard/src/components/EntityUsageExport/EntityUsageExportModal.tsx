@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
@@ -34,7 +36,12 @@ const EntityUsageExportModal: React.FC<EntityUsageExportModalProps> = ({
     try {
       const blob = await onExport(exportType, exportFormat);
       downloadBlob(blob, exportFilename(entityType, exportType, exportFormat, dateRange));
-      toast.success(`${entityLabel} usage data exported successfully as ${exportFormat.toUpperCase()}`);
+      toast.success(
+        translateUi("ui.4b70d8b8e4fe0c2b", undefined, {
+          v0: String(entityLabel),
+          v1: String(exportFormat.toUpperCase()),
+        }),
+      );
       onClose();
     } catch (error) {
       console.error("Error exporting data:", error);
@@ -65,7 +72,9 @@ const EntityUsageExportModal: React.FC<EntityUsageExportModalProps> = ({
             </Button>
             <Button onClick={handleExport} disabled={isExporting}>
               {isExporting && <Loader2 className="animate-spin" />}
-              {isExporting ? "Exporting..." : `Export ${exportFormat.toUpperCase()}`}
+              {isExporting
+                ? uiT("ui.639e45361badf069")
+                : uiT("ui.1591171cd580487a", { v0: String(exportFormat.toUpperCase()) })}
             </Button>
           </div>
         </div>

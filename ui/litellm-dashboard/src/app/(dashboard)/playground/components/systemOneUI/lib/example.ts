@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { DecisionRequest, SystemOneRequest } from "./schemas";
 import type { OpenAIDecisionsRequest } from "./openAIDecisions";
 import { parseJson } from "./validatePayload";
@@ -125,10 +126,34 @@ const leadScoring = {
 } satisfies PresetRequest;
 
 export const DECISION_PRESETS: readonly DecisionPreset[] = [
-  { id: "bug-triage", label: "Triage a bug report", request: bugTriage },
-  { id: "support-routing", label: "Route a support ticket", request: supportRouting },
-  { id: "moderation", label: "Moderate a forum comment", request: moderation },
-  { id: "lead-scoring", label: "Score a sales lead", request: leadScoring },
+  {
+    id: "bug-triage",
+    get label() {
+      return translateUi("ui.9844c6fec68adabf");
+    },
+    request: bugTriage,
+  },
+  {
+    id: "support-routing",
+    get label() {
+      return translateUi("ui.cbbb1981717fc6d1");
+    },
+    request: supportRouting,
+  },
+  {
+    id: "moderation",
+    get label() {
+      return translateUi("ui.12aeb235307d3cf3");
+    },
+    request: moderation,
+  },
+  {
+    id: "lead-scoring",
+    get label() {
+      return translateUi("ui.62fab23c727b18ca");
+    },
+    request: leadScoring,
+  },
 ];
 
 const toOpenAIQuestion = (name: string, question: PresetQuestion): OpenAIDecisionsRequest["questions"][number] => {

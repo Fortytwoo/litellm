@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
@@ -48,9 +50,9 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
       const result = await triggerAgentKillSwitchCall(accessToken, agentId);
       setLastResult(result);
       setIsConfirmOpen(false);
-      toast.success(`Kill switch fired (HTTP ${result.status_code})`);
+      toast.success(translateUi("ui.fa1274e376c6250f", undefined, { v0: String(result.status_code) }));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to fire kill switch");
+      toast.error(error instanceof Error ? error.message : translateUi("ui.51cc1684174a5d23"));
     } finally {
       setIsFiring(false);
     }
@@ -59,38 +61,33 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
   return (
     <section aria-labelledby="agent-danger-zone-heading" className="mt-6">
       <h3 id="agent-danger-zone-heading" className="text-lg font-medium text-destructive">
-        Danger Zone
+        {uiT("ui.3c1c01b405853556")}
       </h3>
       <div className="mt-4 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0 space-y-1 text-sm">
-            <p className="font-medium text-foreground">Kill switch</p>
+            <p className="font-medium text-foreground">{uiT("ui.e7bf576c9bf8dc33")}</p>
             {killSwitch ? (
               <>
-                <p className="text-muted-foreground">
-                  Calls the configured webhook to stop this agent&apos;s upstream runtime. This can cause an outage for
-                  everyone using the agent and cannot be undone from LiteLLM
-                </p>
+                <p className="text-muted-foreground">{uiT("ui.cfe47a11d3456eb8")}</p>
                 <p className="font-mono break-all text-foreground">
                   {killSwitch.method ?? "POST"} {killSwitch.url}
                 </p>
               </>
             ) : (
-              <p className="text-muted-foreground">
-                Not configured. Add a kill switch webhook under Settings to enable this action
-              </p>
+              <p className="text-muted-foreground">{uiT("ui.bab6f3ff11e3d0d2")}</p>
             )}
           </div>
           {killSwitch && (
             <Button type="button" variant="destructive" onClick={openConfirm} disabled={isFiring} aria-busy={isFiring}>
               {isFiring && <UiLoadingSpinner className="size-4" />}
-              Fire Kill Switch
+              {uiT("ui.76241085248f9162")}
             </Button>
           )}
         </div>
         {lastResult && (
           <p className="mt-3 text-sm text-muted-foreground" role="status">
-            Last result: HTTP {lastResult.status_code}
+            {uiT("ui.d56c25f7f7c5315a")} {lastResult.status_code}
             {lastResult.response_body ? ` ${lastResult.response_body}` : ""}
           </p>
         )}
@@ -99,27 +96,30 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
       <Dialog open={isConfirmOpen} onOpenChange={(open) => !open && !isFiring && setIsConfirmOpen(false)}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Fire kill switch for {agentName}?</DialogTitle>
+            <DialogTitle>
+              {uiT("ui.99737d944b84aa01")} {agentName}?
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <Alert variant="error">
               <CircleAlert />
-              <AlertTitle>This can cause an outage</AlertTitle>
+              <AlertTitle>{uiT("ui.b39be9a0fd536dd1")}</AlertTitle>
               <AlertDescription>
-                LiteLLM will call {killSwitch?.method ?? "POST"} {killSwitch?.url} immediately. Whatever that webhook
-                does to the agent is outside LiteLLM&apos;s control and cannot be reverted here
+                {uiT("ui.c3c42a0bea4df63d")} {killSwitch?.method ?? "POST"} {killSwitch?.url}{" "}
+                {uiT("ui.64008e43c4f01aad")}
               </AlertDescription>
             </Alert>
             <div>
               <p className="mb-2 text-base font-medium text-foreground">
-                {uiT("ui.baaddf70fb5d")} <span className="font-semibold text-destructive">{agentName}</span> to confirm:
+                {uiT("ui.baaddf70fb5d")} <span className="font-semibold text-destructive">{agentName}</span>{" "}
+                {uiT("ui.1b2a5036345d3021")}
               </p>
               <InputGroup className="rounded-md">
                 <InputGroupAddon>
                   <CircleAlert className="size-3.5 text-destructive" />
                 </InputGroupAddon>
                 <InputGroupInput
-                  aria-label="Confirm agent name"
+                  aria-label={uiT("ui.400a98617a34db54")}
                   value={confirmationInput}
                   onChange={(e) => setConfirmationInput(e.target.value)}
                   placeholder={agentName}
@@ -139,7 +139,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
               aria-busy={isFiring}
             >
               {isFiring && <UiLoadingSpinner className="size-4" />}
-              {isFiring ? "Firing..." : "Fire Kill Switch"}
+              {isFiring ? uiT("ui.0ad0790108d27577") : uiT("ui.76241085248f9162")}
             </Button>
           </DialogFooter>
         </DialogContent>

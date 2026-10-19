@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { MoreHorizontal } from "lucide-react";
 
@@ -46,11 +47,13 @@ function Guides({ depth, guide }: { depth: number; guide: TreeGuide }) {
 }
 
 function Caret({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <span
       role="button"
       tabIndex={-1}
-      aria-label={open ? "Collapse" : "Expand"}
+      aria-label={open ? uiT("ui.be6eb1fc3b05") : uiT("ui.07548c2c6511")}
       className="grid size-5 shrink-0 place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
       onClick={(event) => {
         event.stopPropagation();
@@ -207,6 +210,8 @@ export function SpanRow({ row, ctx }: { row: SpanRowData; ctx: RowContext }) {
 }
 
 export function GroupRow({ row, ctx }: { row: GroupRowData; ctx: RowContext }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const start = Math.min(...row.members.map((m) => m.start_offset_ms));
   const end = Math.max(...row.members.map((m) => m.start_offset_ms + m.duration_ms));
   return (
@@ -230,7 +235,11 @@ export function GroupRow({ row, ctx }: { row: GroupRowData; ctx: RowContext }) {
           <span className="shrink-0 rounded-sm bg-muted px-1 text-xs leading-4 text-muted-foreground tabular-nums">
             ×{row.members.length}
           </span>
-          {row.failedCount > 0 && <span className={cn(META, "text-destructive")}>{row.failedCount} failed</span>}
+          {row.failedCount > 0 && (
+            <span className={cn(META, "text-destructive")}>
+              {row.failedCount} {uiT("ui.5d28a90f4498a814")}
+            </span>
+          )}
         </Label>
         {ctx.layout === "waterfall" && (
           <Bar start={start} duration={end - start} total={ctx.totalMs} type={row.type} failed={row.isFailureGroup} />
@@ -252,6 +261,8 @@ export function LoadMoreRow({
   guide: TreeGuide;
   onLoadMore: (groupId: string) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <button
       type="button"
@@ -260,8 +271,10 @@ export function LoadMoreRow({
     >
       <Guides depth={row.depth} guide={guide} />
       <span className="flex items-center gap-2 pl-1.5">
-        <MoreHorizontal className="size-3.5" /> Load 20 more
-        <span>({row.remaining} remaining)</span>
+        <MoreHorizontal className="size-3.5" /> {uiT("ui.95a520d31aad20b8")}
+        <span>
+          ({row.remaining} {uiT("ui.c17c33c93bf41a01")}
+        </span>
       </span>
     </button>
   );

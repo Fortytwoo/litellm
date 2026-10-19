@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { CostEstimateResponse } from "../types";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { MultiModelResult } from "./types";
@@ -66,7 +67,7 @@ const generateModelSection = (result: CostEstimateResponse): string => {
 export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
-    alert("Please allow popups to export PDF");
+    alert(translateUi("ui.7fb9edb7fb17e881"));
     return;
   }
 

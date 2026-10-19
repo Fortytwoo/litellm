@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
@@ -128,26 +132,31 @@ const buildSsoInvitationLink = (userId: string, createdBy: string): InvitationLi
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
 
-const EmailInvitationsNotice: React.FC = () => (
-  <Alert variant="info" className="mb-4">
-    <Info />
-    <AlertTitle>Email invitations</AlertTitle>
-    <AlertDescription>
-      New users receive an email invite only when an email integration (SMTP, Resend, or SendGrid) is configured.{" "}
-      <a href="https://docs.litellm.ai/docs/proxy/email" target="_blank" rel="noreferrer">
-        Learn how to set up email notifications
-      </a>
-    </AlertDescription>
-  </Alert>
-);
+const EmailInvitationsNotice: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Alert variant="info" className="mb-4">
+      <Info />
+      <AlertTitle>{uiT("ui.a117218765589669")}</AlertTitle>
+      <AlertDescription>
+        {uiT("ui.609da76a937a368d")}{" "}
+        <a href="https://docs.litellm.ai/docs/proxy/email" target="_blank" rel="noreferrer">
+          {uiT("ui.179e3509830c82be")}
+        </a>
+      </AlertDescription>
+    </Alert>
+  );
+};
 
 export const CreateUserButton: React.FC<CreateuserProps> = ({
   userID,
@@ -205,7 +214,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
   const handleCreate = async (formValues: CreateUserFormValues) => {
     try {
-      toast.info("Making API Call");
+      toast.info(translateUi("ui.6bd96a047f1a5dee"));
       if (!isEmbedded) {
         setIsModalVisible(true);
       }
@@ -232,7 +241,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
         setIsInvitationLinkModalVisible(true);
       }
 
-      toast.success("API user Created");
+      toast.success(translateUi("ui.c7456945c692555c"));
       form.reset(defaultValues);
       localStorage.removeItem("userData" + userID);
     } catch (error: any) {
@@ -259,7 +268,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
       control={form.control}
       name="team_id"
       label={uiT("ui.5985039f106d")}
-      description="If selected, user will be added as a 'user' role to the team."
+      description={uiT("ui.68ffd090d80e07d8")}
     >
       {({ id, value, onChange }) => <TeamDropdown id={id} value={value} onChange={onChange} />}
     </FormField>
@@ -274,7 +283,12 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   );
 
   const sendInviteEmailField = (
-    <FormField control={form.control} name="send_invite_email" label="Send invitation email" orientation="horizontal">
+    <FormField
+      control={form.control}
+      name="send_invite_email"
+      label={uiT("ui.97042a3cae85589d")}
+      orientation="horizontal"
+    >
       {({ id, value, onChange, onBlur }) => (
         <Checkbox id={id} checked={value} onCheckedChange={onChange} onBlur={onBlur} />
       )}
@@ -338,7 +352,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
             <DialogTitle>{uiT("ui.19fa22d99577")}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-3">
-            <p className="mb-1 text-sm text-foreground">Create a User who can own keys</p>
+            <p className="mb-1 text-sm text-foreground">{uiT("ui.302364ecad999849")}</p>
             <EmailInvitationsNotice />
           </div>
           <TooltipProvider>
@@ -357,7 +371,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                   control={form.control}
                   name="organization_ids"
                   label={uiT("ui.d764d42592fc")}
-                  description="The user will be added to the selected organization(s)."
+                  description={uiT("ui.2af7d06fa457febf")}
                 >
                   {({ id, value, onChange }) => (
                     <Select
@@ -367,7 +381,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                       onValueChange={(selected: string[]) => onChange(selected.length === 0 ? undefined : selected)}
                     >
                       <SelectTrigger id={id} className="w-full">
-                        <SelectValue placeholder="Select Organization">
+                        <SelectValue placeholder={uiT("ui.b3359f5675ef3e9c")}>
                           {(selected: string[]) =>
                             selected.length === 0
                               ? "Select Organization"
@@ -398,14 +412,14 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                       className={`size-4 transition-transform ${isPersonalKeyOpen ? "rotate-90" : ""}`}
                       aria-hidden
                     />
-                    Personal Key Creation
+                    {uiT("ui.0a6bda787177c1e4")}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-4">
                     <FormField
                       control={form.control}
                       name="models"
                       label={labelWithHint("Models", "Models user has access to, outside of team scope.")}
-                      description="Models user has access to, outside of team scope."
+                      description={uiT("ui.508ea0367d5aef76")}
                     >
                       {({ value, onChange }) => (
                         <MultiSelect

@@ -112,7 +112,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
             if (row.provider === "global") {
               return (
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium">Global (All Providers)</span>
+                  <span className="font-medium">{uiT("ui.deb78ef134843b3c")}</span>
                 </div>
               );
             }
@@ -126,7 +126,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           },
         },
         {
-          header: "Margin",
+          header: uiT("ui.2bf63d817630601b"),
           numeric: true,
           cell: (row) => {
             const displayName = marginRowDisplayName(row.provider);
@@ -155,7 +155,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Save margin for ${displayName}`}
+                      aria-label={uiT("ui.c302c88f774f6d76", { v0: String(displayName) })}
                       onClick={() => handleSaveEdit(row.provider)}
                       className="cursor-pointer text-success hover:text-success/80"
                     >
@@ -164,7 +164,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Cancel editing margin for ${displayName}`}
+                      aria-label={uiT("ui.8ee3f63b994c5645", { v0: String(displayName) })}
                       onClick={handleCancelEdit}
                       className="cursor-pointer text-muted-foreground hover:text-foreground"
                     >
@@ -177,7 +177,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Edit margin for ${displayName}`}
+                      aria-label={uiT("ui.cb21237a2e0100ee", { v0: String(displayName) })}
                       onClick={() => handleStartEdit(row.provider, row.margin)}
                       className="cursor-pointer text-info hover:text-info/80"
                     >
@@ -198,7 +198,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                aria-label={`Remove margin for ${displayName}`}
+                aria-label={uiT("ui.b6ff6593cfc822f0", { v0: String(displayName) })}
                 onClick={() => onRemoveProvider(row.provider, displayName)}
                 className="cursor-pointer hover:text-destructive"
               >
@@ -210,7 +210,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
         },
       ]}
       getRowKey={(row) => row.provider}
-      emptyMessage="No provider margins configured"
+      emptyMessage={uiT("ui.4c774f9ba10f5e48")}
     />
   );
 };

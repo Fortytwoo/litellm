@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { formatNumberWithCommas, getSpendString } from "@/utils/dataUtils";
 
 export type UsageUnits = Readonly<Record<string, number>>;
@@ -73,7 +74,9 @@ export const pricingIssueUrl = (unpriced: UsageUnits, provider?: string): string
   const subject = provider ? `${provider} guardrail` : "guardrail";
   const params = new URLSearchParams({
     template: "feature_request.yml",
-    title: `[Feature]: add ${subject} pricing to the cost map`,
+    get title() {
+      return translateUi("ui.7273646211497072", undefined, { v0: String(subject) });
+    },
     "the-feature": `LiteLLM has no price for these ${subject} usage units, so the Guardrails Monitor leaves them out of the cost: ${Object.keys(unpriced).join(", ")}`,
   });
   return `https://github.com/BerriAI/litellm/issues/new?${params.toString()}`;

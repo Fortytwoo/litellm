@@ -24,10 +24,12 @@ export const DYNAMIC_SPEND_TAG_DESCRIPTION =
 const isDynamicSpendTag = (tag: Tag) => tag.description === DYNAMIC_SPEND_TAG_DESCRIPTION;
 
 function TagNameCell({ tag, onSelectTag }: { tag: Tag; onSelectTag: (tagName: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (isDynamicSpendTag(tag)) {
     return (
       <CellTooltip
-        content="You cannot view the information of a dynamically generated spend tag"
+        content={uiT("ui.d8d70410f8d33df1")}
         trigger={<span className="block max-w-60 truncate font-mono text-xs text-muted-foreground">{tag.name}</span>}
       />
     );
@@ -54,7 +56,7 @@ function TagModelsCell({ tag }: { tag: Tag }) {
       {models.map((modelId) => (
         <CellTooltip
           key={modelId}
-          content={`ID: ${modelId}`}
+          content={uiT("ui.50d7d1fb9a8c81d7", { v0: String(modelId) })}
           trigger={
             <Badge variant="outline" className="cursor-default">
               {tag.model_info?.[modelId] || modelId}
@@ -80,7 +82,7 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open tag actions"
+        aria-label={uiT("ui.23690351aa3dc71d")}
         data-testid={`tag-actions-${tag.name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -90,7 +92,7 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
         <DropdownMenuItem
           disabled={isDynamic}
           data-testid="tag-action-edit"
-          title={isDynamic ? "Dynamically generated spend tags cannot be edited" : undefined}
+          title={isDynamic ? uiT("ui.9bbc780778062613") : undefined}
           onClick={() => onEdit(tag)}
         >
           <Pencil />
@@ -100,7 +102,7 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
           variant="destructive"
           disabled={isDynamic}
           data-testid="tag-action-delete"
-          title={isDynamic ? "Dynamically generated spend tags cannot be deleted" : undefined}
+          title={isDynamic ? uiT("ui.8a66825cd9b1a1d1") : undefined}
           onClick={() => onDelete(tag.name)}
         >
           <Trash2 />
@@ -121,8 +123,12 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Tag Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tag Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.077b1b77d3100997");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.077b1b77d3100997")} />,
     size: 260,
     enableSorting: true,
     filterFn: "includesString",
@@ -153,8 +159,15 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   },
   {
     id: "models",
-    meta: { title: "Allowed Models", skeleton: "chips" },
-    header: "Allowed Models",
+    meta: {
+      get title() {
+        return translateUi("ui.bd7237634a25de42");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.bd7237634a25de42");
+    },
     size: 240,
     enableSorting: false,
     cell: ({ row }) => <TagModelsCell tag={row.original} />,

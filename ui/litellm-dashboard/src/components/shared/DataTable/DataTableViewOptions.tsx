@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { Menu } from "@base-ui/react/menu";
 import type { Table } from "@tanstack/react-table";
@@ -16,10 +18,12 @@ interface DataTableViewOptionsProps<TData> {
 
 export function DataTableViewOptions<TData>({
   table,
-  label = "View",
+  label = translateUi("ui.dcc839a4015c"),
   iconOnly = false,
   className,
 }: DataTableViewOptionsProps<TData>) {
+  useDashboardLanguage();
+
   const hideableColumns = table.getAllLeafColumns().filter((column) => column.getCanHide());
 
   if (hideableColumns.length === 0) {

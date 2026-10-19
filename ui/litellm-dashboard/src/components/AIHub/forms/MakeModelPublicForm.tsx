@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useCallback, useEffect } from "react";
 import { Loader2 } from "lucide-react";
@@ -125,7 +129,7 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
       const modelGroupsToMakePublic = Array.from(selectedModels);
       await makeModelGroupPublic(accessToken, modelGroupsToMakePublic);
 
-      toast.success(`Successfully made ${modelGroupsToMakePublic.length} model group(s) public!`);
+      toast.success(translateUi("ui.9306f6975915daf9", undefined, { v0: String(modelGroupsToMakePublic.length) }));
       handleClose();
       onSuccess();
     } catch (error) {
@@ -144,7 +148,7 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Select Models to Make Public</h3>
+          <h3 className="text-lg font-semibold">{uiT("ui.498f0efc93165756")}</h3>
           <div className="flex items-center space-x-2">
             <label className="flex items-center gap-2 text-sm">
               <Checkbox
@@ -153,15 +157,12 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
                 onCheckedChange={(checked) => handleSelectAll(checked === true)}
                 disabled={filteredData.length === 0}
               />
-              Select All {filteredData.length > 0 && `(${filteredData.length})`}
+              {uiT("ui.d1ec69e64b9609d0")} {filteredData.length > 0 && `(${filteredData.length})`}
             </label>
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground">
-          Select the models you want to be visible on the public model hub. Users will still require a valid Virtual Key
-          to use these models.
-        </p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.6e5d58ee486a5dc9")}</p>
 
         {/* Filters */}
         <ModelFilters
@@ -175,7 +176,7 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
           <div className="space-y-3">
             {filteredData.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                <p>No models match the current filters.</p>
+                <p>{uiT("ui.0febc21832d3e99a")}</p>
               </div>
             ) : (
               filteredData.map((model) => (
@@ -209,7 +210,8 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
         {selectedModels.size > 0 && (
           <div className="bg-info/10 border border-info/20 rounded-lg p-3">
             <p className="text-sm text-info">
-              <strong>{selectedModels.size}</strong> model{selectedModels.size !== 1 ? "s" : ""} selected
+              <strong>{selectedModels.size}</strong> {uiT("ui.9372c470eeadd5ec")}
+              {selectedModels.size !== 1 ? "s" : ""} {uiT("ui.d7cbbb688b2e506c")}
             </p>
           </div>
         )}
@@ -220,17 +222,17 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
   const renderStep2Content = () => {
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Confirm Making Models Public</h3>
+        <h3 className="text-lg font-semibold">{uiT("ui.d1dfa9349cf6e34c")}</h3>
 
         <div className="bg-warning/10 border border-warning/20 rounded-lg p-4">
           <p className="text-sm text-warning">
-            <strong>Warning:</strong> Once you make these models public, anyone who can go to the{" "}
-            <code>/ui/model_hub_table</code> will be able to know they exist on the proxy.
+            <strong>{uiT("ui.63ea82367063caf1")}</strong> {uiT("ui.92a2c46edda1aec2")} <code>/ui/model_hub_table</code>{" "}
+            {uiT("ui.52ed3699baa916db")}
           </p>
         </div>
 
         <div className="space-y-3">
-          <p className="font-medium">Models to be made public:</p>
+          <p className="font-medium">{uiT("ui.918acb3b091ccaec")}</p>
           <div className="max-h-48 overflow-y-auto border rounded-lg p-3">
             <div className="space-y-2">
               {Array.from(selectedModels).map((modelGroup) => {
@@ -258,8 +260,8 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
 
         <div className="bg-info/10 border border-info/20 rounded-lg p-3">
           <p className="text-sm text-info">
-            {uiT("ui.18e872be2359")} <strong>{selectedModels.size}</strong> model{selectedModels.size !== 1 ? "s" : ""}{" "}
-            will be made public
+            {uiT("ui.18e872be2359")} <strong>{selectedModels.size}</strong> {uiT("ui.9372c470eeadd5ec")}
+            {selectedModels.size !== 1 ? "s" : ""} {uiT("ui.54dee8362e2d8325")}
           </p>
         </div>
       </div>
@@ -294,7 +296,7 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
           {currentStep === 1 && (
             <Button onClick={handleSubmit} disabled={loading}>
               {loading && <Loader2 className="size-4 animate-spin" />}
-              Make Public
+              {uiT("ui.24139936d627112e")}
             </Button>
           )}
         </div>
@@ -306,7 +308,7 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()} disablePointerDismissal>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[1200px]">
         <DialogHeader>
-          <DialogTitle>Make Models Public</DialogTitle>
+          <DialogTitle>{uiT("ui.63ca6f48dd4986ca")}</DialogTitle>
         </DialogHeader>
 
         <div>
@@ -328,7 +330,7 @@ const MakeModelPublicForm: React.FC<MakeModelPublicFormProps> = ({
                   {index + 1}
                 </span>
                 <span className={cn("text-sm", currentStep === index ? "font-medium" : "text-muted-foreground")}>
-                  {title}
+                  {translateText(title)}
                 </span>
               </li>
             ))}

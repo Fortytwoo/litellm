@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -58,6 +60,8 @@ const formatShortDate = (value: string | null | undefined): string | null => {
 };
 
 function ModelInformationCell({ model, displayName }: { model: ModelData; displayName: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const litellmModelName = model.litellm_model_name || "-";
 
   return (
@@ -87,23 +91,25 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             {model.provider ? <ProviderLogo provider={model.provider} className="size-4 shrink-0" /> : null}
-            <span className="truncate text-xs text-muted-foreground">{model.provider || "Unknown provider"}</span>
+            <span className="truncate text-xs text-muted-foreground">
+              {model.provider || uiT("ui.59080be0f444945a")}
+            </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">Public Model Name</span>
+            <span className="text-xs text-muted-foreground">{uiT("ui.dbff03874de84d83")}</span>
             <span className="truncate text-sm font-medium text-foreground" title={displayName}>
               {displayName}
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">LiteLLM Model Name</span>
+            <span className="text-xs text-muted-foreground">{uiT("ui.1d433b48aec3812b")}</span>
             <span className="flex min-w-0 items-center gap-1.5">
               <span className="truncate font-mono text-sm text-foreground" title={litellmModelName}>
                 {litellmModelName}
               </span>
               <button
                 type="button"
-                aria-label="Copy LiteLLM model name"
+                aria-label={uiT("ui.fd3b6004c97887a4")}
                 data-testid={`copy-litellm-model-name-${model.model_info.id}`}
                 className="shrink-0 cursor-pointer text-muted-foreground hover:text-foreground"
                 onClick={() => void copyToClipboard(litellmModelName, "LiteLLM model name copied")}
@@ -129,7 +135,7 @@ function CredentialsHeader() {
           render={
             <button
               type="button"
-              aria-label="About credential types"
+              aria-label={uiT("ui.369f048d343bfb6e")}
               data-testid="credentials-header-info"
               className="cursor-pointer text-muted-foreground hover:text-foreground"
             />
@@ -139,24 +145,20 @@ function CredentialsHeader() {
         </HoverCardTrigger>
         <HoverCardContent align="start" className="w-80">
           <div className="flex flex-col gap-3">
-            <span className="text-sm font-medium text-foreground">Credential types</span>
+            <span className="text-sm font-medium text-foreground">{uiT("ui.d9132c217df4e0c9")}</span>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-info">
                 <RefreshCw className="size-3.5" />
-                Reusable
+                {uiT("ui.8ded2b384940a83e")}
               </span>
-              <span className="text-xs text-muted-foreground">
-                Credentials saved in LiteLLM that can be added to models repeatedly.
-              </span>
+              <span className="text-xs text-muted-foreground">{uiT("ui.ccf2cb892c8c595b")}</span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                 <Pencil className="size-3.5" />
-                Manual
+                {uiT("ui.b0b9fe24ffa9")}
               </span>
-              <span className="text-xs text-muted-foreground">
-                Credentials added directly during model creation or defined in the config file.
-              </span>
+              <span className="text-xs text-muted-foreground">{uiT("ui.01721458f9b1a0c1")}</span>
             </div>
           </div>
         </HoverCardContent>
@@ -166,11 +168,13 @@ function CredentialsHeader() {
 }
 
 function CredentialsCell({ credentialName, label }: { credentialName: string | undefined; label: string | undefined }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!credentialName) {
     return (
       <Badge variant="outline" className="gap-1 font-normal text-muted-foreground">
         <Pencil className="size-3" />
-        Manual
+        {uiT("ui.b0b9fe24ffa9")}
       </Badge>
     );
   }
@@ -186,6 +190,8 @@ function CredentialsCell({ credentialName, label }: { credentialName: string | u
 }
 
 function CreatedByCell({ model }: { model: ModelData }) {
+  useDashboardLanguage();
+
   const isConfigModel = !model.model_info?.db_model;
   const createdAt = formatShortDate(model.model_info.created_at);
   const primary = isConfigModel ? "Defined in config" : model.model_info.created_by || "Unknown";
@@ -194,7 +200,7 @@ function CreatedByCell({ model }: { model: ModelData }) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
       <span className="max-w-44 truncate text-sm text-foreground" title={primary}>
-        {primary}
+        {translateText(primary)}
       </span>
       <span className="truncate text-xs text-muted-foreground">{isConfigModel ? "-" : secondaryForDbModel}</span>
     </div>
@@ -211,6 +217,8 @@ function CostRow({ label, value }: { label: string; value: string }) {
 }
 
 function CostsCell({ model }: { model: ModelData }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { input_cost: inputCost, output_cost: outputCost, output_cost_per_second: perSecond } = model;
   const hasPerSecond = perSecond != null;
   const showInput = inputCost != null && (!hasPerSecond || Number(inputCost) > 0);
@@ -222,12 +230,12 @@ function CostsCell({ model }: { model: ModelData }) {
 
   return (
     <CellTooltip
-      content={hasPerSecond ? "Cost per 1M tokens; /s is cost per second of output" : "Cost per 1M tokens"}
+      content={hasPerSecond ? uiT("ui.93bc86e4114b9aa0") : uiT("ui.e74169336302a9b7")}
       trigger={
         <div className="flex flex-col gap-0.5 whitespace-nowrap">
-          {showInput && <CostRow label="IN" value={`$${inputCost}`} />}
-          {showOutput && <CostRow label="OUT" value={`$${outputCost}`} />}
-          {hasPerSecond && <CostRow label="OUT" value={formatPerSecondCost(perSecond)} />}
+          {showInput && <CostRow label={uiT("ui.fed1d872f6d540f4")} value={`$${inputCost}`} />}
+          {showOutput && <CostRow label={uiT("ui.c57929ed14088114")} value={`$${outputCost}`} />}
+          {hasPerSecond && <CostRow label={uiT("ui.c57929ed14088114")} value={formatPerSecondCost(perSecond)} />}
         </div>
       }
     />
@@ -235,6 +243,8 @@ function CostsCell({ model }: { model: ModelData }) {
 }
 
 function AccessGroupsCell({ accessGroups }: { accessGroups: string[] | null }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!accessGroups || accessGroups.length === 0) {
     return <span className="text-sm text-muted-foreground">-</span>;
   }
@@ -257,7 +267,7 @@ function AccessGroupsCell({ accessGroups }: { accessGroups: string[] | null }) {
           }
           trigger={
             <Badge variant="outline" className="shrink-0 cursor-default font-normal">
-              +{overflow.length} more
+              +{overflow.length} {uiT("ui.187897ce0afc")}
             </Badge>
           }
         />
@@ -285,6 +295,8 @@ function ModelRowActions({
   onDeleteClick,
   onTogglePauseClick,
 }: ModelRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const modelId = model.model_info?.id;
   const isConfigModel = !model.model_info?.db_model;
   const isAdmin = userRole === "Admin" && !isViewOnly;
@@ -323,7 +335,7 @@ function ModelRowActions({
                   size="sm"
                   checked={!isBlocked}
                   disabled={!isPauseToggleable}
-                  aria-label={isBlocked ? "Resume model" : "Pause model"}
+                  aria-label={isBlocked ? uiT("ui.67acd600bfd8ac4e") : uiT("ui.78b93761a8e20a48")}
                   data-testid={`model-pause-toggle-${modelId}`}
                   onCheckedChange={(nextChecked) => {
                     if (isPauseToggleable && onTogglePauseClick && modelId) {
@@ -343,7 +355,7 @@ function ModelRowActions({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="Delete model"
+              aria-label={uiT("ui.b7828ba00ee15c11")}
               data-testid={`model-delete-${modelId}`}
               disabled={isConfigModel || !canEditModel}
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
@@ -410,8 +422,13 @@ export const getModelsTableColumns = ({
   {
     id: MODEL_NAME_COLUMN_ID,
     accessorFn: (row) => row.model_name ?? "",
-    meta: { title: "Model Information", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model Information" />,
+    meta: {
+      get title() {
+        return translateUi("ui.6d67a9d8ae2482ed");
+      },
+      skeleton: "twoLine",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.6d67a9d8ae2482ed")} />,
     enableSorting: true,
     size: 280,
     minSize: 160,
@@ -473,8 +490,13 @@ export const getModelsTableColumns = ({
   {
     id: COSTS_COLUMN_ID,
     accessorFn: (row) => row.input_cost,
-    meta: { title: "Costs", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Costs" />,
+    meta: {
+      get title() {
+        return translateUi("ui.b88fc5fc4765148e");
+      },
+      numeric: true,
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.b88fc5fc4765148e")} />,
     enableSorting: true,
     size: 130,
     minSize: 90,
@@ -505,8 +527,15 @@ export const getModelsTableColumns = ({
   {
     id: ACCESS_GROUPS_COLUMN_ID,
     accessorFn: (row) => row.model_info.access_groups ?? [],
-    meta: { title: "Model Access Group", skeleton: "chips" },
-    header: "Model Access Group",
+    meta: {
+      get title() {
+        return translateUi("ui.0d23fa3b30db7beb");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.0d23fa3b30db7beb");
+    },
     enableSorting: false,
     size: 200,
     minSize: 120,
@@ -515,16 +544,21 @@ export const getModelsTableColumns = ({
   {
     id: STATUS_COLUMN_ID,
     accessorFn: (row) => row.model_info.db_model,
-    meta: { title: "Source", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Source" />,
+    meta: {
+      get title() {
+        return translateUi("ui.0e570ca6fabe24f9");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.0e570ca6fabe24f9")} />,
     enableSorting: true,
     size: 140,
     minSize: 100,
     cell: ({ row }) =>
       row.original.model_info.db_model ? (
-        <StatusBadge tone="info" label="DB Model" />
+        <StatusBadge tone="info" label={translateUi("ui.c99ebcbd622346ae")} />
       ) : (
-        <StatusBadge tone="neutral" label="Config Model" />
+        <StatusBadge tone="neutral" label={translateUi("ui.5ca93acb979e80dd")} />
       ),
   },
   {

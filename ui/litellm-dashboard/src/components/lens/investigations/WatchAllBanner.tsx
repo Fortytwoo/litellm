@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { z } from "zod";
 import { useLensUpdate } from "../data/mutations";
@@ -13,6 +14,8 @@ export interface WatchAllBannerProps {
 }
 
 export function WatchAllBanner({ lenses }: WatchAllBannerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const watchAll = useLensUpdate();
   const paused = lenses.filter((lens) => !lens.settings.enabled).length;
   if (paused === 0) return null;
@@ -25,19 +28,23 @@ export function WatchAllBanner({ lenses }: WatchAllBannerProps) {
         className="text-xs text-muted-foreground"
         title={skipped.map((s) => `${s.name}: ${s.reason}`).join("\n")}
       >
-        {paused} paused · {skipped.length === 1 ? `${skipped[0].name} needs a fix` : `${skipped.length} need a fix`}
+        {paused} {uiT("ui.c8ef4c217519f34d")}{" "}
+        {skipped.length === 1
+          ? uiT("ui.6bb0e6fac27661b5", { v0: String(skipped[0].name) })
+          : uiT("ui.764d088243dc5a3c", { v0: String(skipped.length) })}
       </span>
     );
   return (
     <span role="status" className="text-xs text-muted-foreground">
-      {paused} paused · {watchAll.error && <span className="text-destructive">{watchAll.error.message} · </span>}
+      {paused} {uiT("ui.c8ef4c217519f34d")}{" "}
+      {watchAll.error && <span className="text-destructive">{watchAll.error.message} · </span>}
       <button
         type="button"
         disabled={watchAll.isPending}
         onClick={() => watchAll.mutate((api) => api.watchAll())}
         className="font-medium text-foreground underline-offset-2 hover:underline disabled:opacity-50"
       >
-        Turn all on
+        {uiT("ui.08f6d3f555b7c1f5")}
       </button>
     </span>
   );

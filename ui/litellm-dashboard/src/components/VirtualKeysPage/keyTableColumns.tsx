@@ -1,4 +1,5 @@
 "use client";
+
 import { t as translateUi } from "@/i18n";
 
 import { Info } from "lucide-react";
@@ -56,12 +57,20 @@ export const KEY_TABLE_SORT_FIELDS: readonly string[] = [
 
 const getKeyStatus = (key: KeyResponse): KeyStatus => {
   if (key.deleted_at) {
+    const deletedAt = key.deleted_at;
     return {
       tone: "neutral",
       get label() {
         return translateUi("ui.b48ff39c2e0f");
       },
-      tooltip: `Deleted ${new Date(key.deleted_at).toLocaleString()}${key.deleted_by ? ` by ${key.deleted_by}` : ""}. Kept for audit and spend history; requests using this key are rejected.`,
+      get tooltip() {
+        return translateUi("ui.579bfd0aa6efce90", undefined, {
+          v0: String(new Date(deletedAt).toLocaleString()),
+          v1: String(
+            key.deleted_by ? translateUi("ui.c66bf4d522a7d8fc", undefined, { v0: String(key.deleted_by) }) : "",
+          ),
+        });
+      },
     };
   }
   if (key.blocked === true) {
@@ -71,9 +80,7 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
       get label() {
         return translateUi("ui.18f2a0947f9d");
       },
-      tooltip: isScimBlocked
-        ? "Blocked by SCIM (external identity provider deactivated or deleted the owning user)."
-        : "Blocked. Requests using this key will be rejected with 401.",
+      tooltip: isScimBlocked ? translateUi("ui.92ebc8655b73f153") : translateUi("ui.6a46af85b4fd8fba"),
     };
   }
   const expiresAt = key.expires ? Date.parse(key.expires) : Number.NaN;
@@ -83,7 +90,9 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
       get label() {
         return translateUi("ui.424a2551d356");
       },
-      tooltip: "This key has passed its expiry date.",
+      get tooltip() {
+        return translateUi("ui.3cb4ea9374c8aea0");
+      },
     };
   }
   return {
@@ -91,7 +100,9 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
     get label() {
       return translateUi("ui.92340695899b");
     },
-    tooltip: "This key is not blocked and has not expired.",
+    get tooltip() {
+      return translateUi("ui.c33eb324090401dd");
+    },
   };
 };
 
@@ -234,12 +245,7 @@ export const getKeyTableColumns = ({
         return translateUi("ui.b512d97e7cbf");
       },
     },
-    header: () => (
-      <InfoHeader
-        label={translateUi("ui.b512d97e7cbf")}
-        tooltip="Displays the first available value: User Alias, User Email, or User ID."
-      />
-    ),
+    header: () => <InfoHeader label={translateUi("ui.b512d97e7cbf")} tooltip={translateUi("ui.4f19b05f4553186f")} />,
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -319,12 +325,7 @@ export const getKeyTableColumns = ({
         return translateUi("ui.b6dc1b957942");
       },
     },
-    header: () => (
-      <InfoHeader
-        label={translateUi("ui.b6dc1b957942")}
-        tooltip="This is a new field and is not backfilled. Only new key usage will update this value."
-      />
-    ),
+    header: () => <InfoHeader label={translateUi("ui.b6dc1b957942")} tooltip={translateUi("ui.b114ceb448912c56")} />,
     size: 130,
     enableSorting: false,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Unknown" />,
@@ -347,7 +348,13 @@ export const getKeyTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend / Budget", skeleton: "meter", numeric: true },
+    meta: {
+      get title() {
+        return translateUi("ui.b5406e72f06b2464");
+      },
+      skeleton: "meter",
+      numeric: true,
+    },
     header: ({ table }) => <DataTableMultiSortHeader table={table} fields={SPEND_BUDGET_SORT_FIELDS} />,
     size: 180,
     enableSorting: true,
@@ -376,12 +383,7 @@ export const getKeyTableColumns = ({
         return translateUi("ui.eac3d121beb3");
       },
     },
-    header: () => (
-      <InfoHeader
-        label={translateUi("ui.eac3d121beb3")}
-        tooltip="Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade."
-      />
-    ),
+    header: () => <InfoHeader label={translateUi("ui.eac3d121beb3")} tooltip={translateUi("ui.9f82a3d6a422a5e3")} />,
     size: 130,
     enableSorting: false,
     cell: (info) => <MoneyCell value={info.getValue() as number | null | undefined} showZero />,
@@ -439,8 +441,14 @@ export const getKeyTableColumns = ({
       const key = row.original;
       return (
         <div className="text-xs">
-          <div>TPM: {key.tpm_limit !== null ? key.tpm_limit : translateUi("ui.11dde17d6c3e")}</div>
-          <div>RPM: {key.rpm_limit !== null ? key.rpm_limit : translateUi("ui.11dde17d6c3e")}</div>
+          <div>
+            {translateUi("ui.22506bb2e2fc9c02")}{" "}
+            {key.tpm_limit !== null ? key.tpm_limit : translateUi("ui.11dde17d6c3e")}
+          </div>
+          <div>
+            {translateUi("ui.0a9c9fab18f38f0e")}{" "}
+            {key.rpm_limit !== null ? key.rpm_limit : translateUi("ui.11dde17d6c3e")}
+          </div>
         </div>
       );
     },

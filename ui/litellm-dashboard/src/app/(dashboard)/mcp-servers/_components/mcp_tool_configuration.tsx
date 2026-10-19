@@ -92,7 +92,7 @@ const ToolRow: React.FC<ToolRowProps> = ({
               <Badge variant={isEnabled ? "secondary" : "outline"}>
                 {isEnabled ? uiT("ui.92c1cdfdf4cb") : uiT("ui.75081b593d15")}
               </Badge>
-              {toolNameToDisplayName[tool.name] && <Badge variant="secondary">Custom name</Badge>}
+              {toolNameToDisplayName[tool.name] && <Badge variant="secondary">{uiT("ui.3c26a847fc0b897e")}</Badge>}
             </div>
             {(toolNameToDescription[tool.name] || tool.description) && (
               <p className="mt-1 block text-sm text-muted-foreground">
@@ -100,14 +100,14 @@ const ToolRow: React.FC<ToolRowProps> = ({
               </p>
             )}
             <p className="mt-1 block text-xs text-muted-foreground">
-              {isEnabled ? "✓ Users can call this tool" : "✗ Users cannot call this tool"}
+              {isEnabled ? uiT("ui.7d5bbdc5f818a7a4") : uiT("ui.f3d85d13447a8e7e")}
             </p>
           </div>
           <Button
             variant="ghost"
             size="icon-sm"
             onClick={(e) => onToggleExpand(tool.name, e)}
-            title="Edit display name and description"
+            title={uiT("ui.e8b78c15434e037a")}
           >
             <Pencil />
           </Button>
@@ -119,7 +119,7 @@ const ToolRow: React.FC<ToolRowProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div>
-            <p className="mb-1 block text-xs font-medium">Display Name</p>
+            <p className="mb-1 block text-xs font-medium">{uiT("ui.18d67c992b71ce69")}</p>
             <Input
               placeholder={tool.name}
               value={toolNameToDisplayName[tool.name] || ""}
@@ -127,27 +127,21 @@ const ToolRow: React.FC<ToolRowProps> = ({
               aria-invalid={isDisplayNameInvalid || undefined}
             />
             {isDisplayNameInvalid ? (
-              <p className="mt-1 block text-xs text-destructive">
-                Only letters, digits, underscores, and hyphens are allowed (no spaces).
-              </p>
+              <p className="mt-1 block text-xs text-destructive">{uiT("ui.2b5e1ddfa1650b45")}</p>
             ) : (
-              <p className="mt-1 block text-xs text-muted-foreground">
-                Override how this tool&apos;s name appears to users. Leave blank to use original.
-              </p>
+              <p className="mt-1 block text-xs text-muted-foreground">{uiT("ui.bc0fec1543e049bf")}</p>
             )}
           </div>
           <div>
             <p className="mb-1 block text-xs font-medium">{uiT("ui.526e0087cc3f")}</p>
             <Textarea
               className="field-sizing-fixed"
-              placeholder={tool.description || "No description"}
+              placeholder={tool.description || uiT("ui.bcd8cc53f40e3d4e")}
               value={toolNameToDescription[tool.name] || ""}
               onChange={(e) => onDescriptionChange(tool.name, e.target.value)}
               rows={2}
             />
-            <p className="mt-1 block text-xs text-muted-foreground">
-              Override the tool description shown to users. Leave blank to use original.
-            </p>
+            <p className="mt-1 block text-xs text-muted-foreground">{uiT("ui.dedfbc160d6b3003")}</p>
           </div>
         </div>
       )}
@@ -406,7 +400,7 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Wrench className="size-4 text-muted-foreground" />
-            <h3 className="text-lg font-medium">Tool Configuration</h3>
+            <h3 className="text-lg font-medium">{uiT("ui.412de81a4e2feaa7")}</h3>
             {tools.length > 0 && <Badge variant="secondary">{tools.length}</Badge>}
           </div>
           {tools.length > 0 && (
@@ -416,14 +410,14 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
                 variant={viewMode === "crud" ? "default" : "outline"}
                 onClick={() => setViewMode("crud")}
               >
-                Risk Groups
+                {uiT("ui.a5ef0e28dfa2edeb")}
               </Button>
               <Button
                 size="sm"
                 variant={viewMode === "flat" ? "default" : "outline"}
                 onClick={() => setViewMode("flat")}
               >
-                Flat List
+                {uiT("ui.3ecbafeeb94edccc")}
               </Button>
             </div>
           )}
@@ -432,8 +426,7 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
         {/* Description */}
         <div className="rounded-lg border border-border bg-muted p-3">
           <p className="text-sm">
-            <strong>Select which tools users can call:</strong> Only checked tools will be available for users to
-            invoke. Unchecked tools will be blocked from execution.
+            <strong>{uiT("ui.9c76c394f2cda3c8")}</strong> {uiT("ui.563f807402167002")}
           </p>
         </div>
 
@@ -441,7 +434,7 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
         {isLoadingTools && (
           <div className="flex items-center justify-center gap-3 py-6">
             <UiLoadingSpinner className="size-6 text-muted-foreground" />
-            <p className="text-sm">Loading tools...</p>
+            <p className="text-sm">{uiT("ui.efc190cd4ce7585d")}</p>
           </div>
         )}
 
@@ -455,7 +448,7 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
         {toolsError && !isLoadingTools && !isPreviewForbidden && (
           <div className="rounded-lg border border-dashed border-destructive/40 bg-destructive/5 py-6 text-center">
             <Wrench className="mx-auto mb-2 size-6 text-destructive" />
-            <p className="text-sm font-medium text-destructive">Unable to load tools</p>
+            <p className="text-sm font-medium text-destructive">{uiT("ui.92334032f1a15115")}</p>
             <p className="text-sm text-destructive">{toolsError}</p>
           </div>
         )}
@@ -468,14 +461,16 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
           (keyTools && keyTools.length > 0 ? (
             <div className="rounded-lg border border-dashed py-4 text-center text-muted-foreground">
               <Wrench className="mx-auto mb-2 size-6" />
-              <p className="text-sm">No tools loaded from spec</p>
-              <p className="mt-1 block text-sm">Expected tools: {keyTools.map((t) => t.name).join(", ")}</p>
+              <p className="text-sm">{uiT("ui.51f50472559a5774")}</p>
+              <p className="mt-1 block text-sm">
+                {uiT("ui.c3b1476afa5a1d84")} {keyTools.map((t) => t.name).join(", ")}
+              </p>
             </div>
           ) : (
             <div className="rounded-lg border border-dashed py-6 text-center text-muted-foreground">
               <Wrench className="mx-auto mb-2 size-6" />
-              <p className="text-sm">No tools available for configuration</p>
-              <p className="text-sm">Connect to an MCP server with tools to configure them</p>
+              <p className="text-sm">{uiT("ui.ce78f70efcfe5d1d")}</p>
+              <p className="text-sm">{uiT("ui.ec53b38deab71996")}</p>
             </div>
           ))}
 
@@ -483,8 +478,8 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
         {!canFetchTools && (formValues.url || formValues.spec_path) && (
           <div className="rounded-lg border border-dashed py-6 text-center text-muted-foreground">
             <Wrench className="mx-auto mb-2 size-6" />
-            <p className="text-sm">Complete required fields to configure tools</p>
-            <p className="text-sm">Fill in URL, Transport, and Authentication to load available tools</p>
+            <p className="text-sm">{uiT("ui.7e9fa26204a801a1")}</p>
+            <p className="text-sm">{uiT("ui.745ab26551d21ec2")}</p>
           </div>
         )}
 
@@ -494,8 +489,9 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
             <div className="flex items-center gap-2 rounded-lg border border-border bg-muted p-3">
               <CircleCheck className="size-4" />
               <p className="text-sm font-medium">
-                {effectiveAllowedTools.length} of {tools.length} {tools.length === 1 ? "tool" : "tools"} enabled for
-                user access
+                {effectiveAllowedTools.length} {uiT("ui.28391d3bc64ec15c")} {tools.length}{" "}
+                {tools.length === 1 ? uiT("ui.7c9bbe5ec9b3fb77") : uiT("ui.f9d35d43770d3909")}{" "}
+                {uiT("ui.63b40d4efb458a22")}
               </p>
             </div>
 
@@ -505,7 +501,7 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
                 <Search className="size-4 text-muted-foreground" />
               </InputGroupAddon>
               <InputGroupInput
-                placeholder="Search tools by name or description..."
+                placeholder={uiT("ui.023b4bf5cc066576")}
                 value={toolSearchTerm}
                 onChange={(e) => setToolSearchTerm(e.target.value)}
               />
@@ -527,7 +523,10 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
                 {filteredTools.length === 0 ? (
                   <div className="rounded-lg border border-dashed py-6 text-center text-muted-foreground">
                     <Search className="mx-auto mb-2 size-6" />
-                    <p className="text-sm">No tools found matching &quot;{toolSearchTerm}&quot;</p>
+                    <p className="text-sm">
+                      {uiT("ui.87c6d7831368ff06")}
+                      {toolSearchTerm} {uiT("ui.8a331fdde7032f33")}
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -535,14 +534,14 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
                       <>
                         <div className="flex items-center justify-between px-1">
                           <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                            Suggested tools
+                            {uiT("ui.4764380fdae36d44")}
                           </p>
                           <div className="flex gap-2">
                             <Button variant="link" size="sm" onClick={handleEnableSuggested}>
-                              Enable all
+                              {uiT("ui.06f08e7c2f8a8c00")}
                             </Button>
                             <Button variant="link" size="sm" onClick={handleDisableSuggested}>
-                              Disable all
+                              {uiT("ui.6cb2279dbfe762e0")}
                             </Button>
                           </div>
                         </div>
@@ -566,14 +565,14 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
                       <>
                         <div className="flex items-center justify-between px-1 pt-2">
                           <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                            {pinnedFiltered.length > 0 ? "All tools" : uiT("ui.ea93d6a262ec")}
+                            {pinnedFiltered.length > 0 ? uiT("ui.81c151f98a190da7") : uiT("ui.ea93d6a262ec")}
                           </p>
                           <div className="flex gap-2">
                             <Button variant="link" size="sm" onClick={handleEnableRest}>
-                              Enable all
+                              {uiT("ui.06f08e7c2f8a8c00")}
                             </Button>
                             <Button variant="link" size="sm" onClick={handleDisableRest}>
-                              Disable all
+                              {uiT("ui.6cb2279dbfe762e0")}
                             </Button>
                           </div>
                         </div>

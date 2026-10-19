@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Minus, Plus } from "lucide-react";
 
@@ -11,6 +13,8 @@ interface QueryParamInputProps {
 }
 
 const QueryParamInput: React.FC<QueryParamInputProps> = ({ value = [], onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const handleAdd = () => onChange?.([...value, ["", ""]]);
 
   const handleRemove = (index: number) => onChange?.(value.filter((_, i) => i !== index));
@@ -23,12 +27,12 @@ const QueryParamInput: React.FC<QueryParamInputProps> = ({ value = [], onChange 
       {value.map(([key, val], index) => (
         <div key={index} className="flex items-center gap-2">
           <Input
-            placeholder="Parameter Name (e.g., version)"
+            placeholder={uiT("ui.2f984ca0f1dc154f")}
             value={key}
             onChange={(e) => handleChange(index, [e.target.value, val])}
           />
           <Input
-            placeholder="Parameter Value (e.g., v1)"
+            placeholder={uiT("ui.78da5353cfe12262")}
             value={val}
             onChange={(e) => handleChange(index, [key, e.target.value])}
           />
@@ -37,7 +41,7 @@ const QueryParamInput: React.FC<QueryParamInputProps> = ({ value = [], onChange 
             variant="ghost"
             size="icon-sm"
             onClick={() => handleRemove(index)}
-            aria-label={`Remove query parameter ${index + 1}`}
+            aria-label={uiT("ui.010948ebfe99de3d", { v0: String(index + 1) })}
           >
             <Minus />
           </Button>
@@ -45,7 +49,7 @@ const QueryParamInput: React.FC<QueryParamInputProps> = ({ value = [], onChange 
       ))}
       <Button type="button" variant="outline" onClick={handleAdd}>
         <Plus />
-        Add Query Parameter
+        {uiT("ui.12dd04026e5d3658")}
       </Button>
     </div>
   );

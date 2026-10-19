@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -21,12 +23,14 @@ interface MSTeamsSettingsProps {
 }
 
 const FIELD_HELP: Record<string, React.ReactNode> = {
-  MS_TEAMS_WEBHOOK_URL: (
-    <>
-      Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)
-      <span className="text-destructive"> Required * </span>
-    </>
-  ),
+  get MS_TEAMS_WEBHOOK_URL() {
+    return (
+      <>
+        {translateUi("ui.a0eb166eea16e346")}
+        <span className="text-destructive"> {translateUi("ui.5f896c7415b77201")} </span>
+      </>
+    );
+  },
 };
 
 const SENSITIVE_FIELD_PATTERN = /(PASSWORD|SECRET|KEY|TOKEN|URL)/i;
@@ -81,7 +85,7 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
         environment_variables: updatedVariables,
       };
       await setCallbacksCall(accessToken, payload);
-      toast.success("MS Teams settings updated successfully");
+      toast.success(translateUi("ui.07a83133f434ea70"));
     } catch (error) {
       toast.fromError(error);
     }
@@ -90,16 +94,16 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Microsoft Teams Alerting Settings</CardTitle>
+        <CardTitle className="text-base">{uiT("ui.80a977f2e818b3e7")}</CardTitle>
         <p className="text-sm">
-          Send LiteLLM alerts to a Microsoft Teams channel via an incoming webhook. Create one from{" "}
+          {uiT("ui.fe79afee5c5f64a5")}{" "}
           <a
             href="https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook"
             target="_blank"
             rel="noreferrer"
             className="text-primary underline underline-offset-4"
           >
-            Microsoft Docs: incoming webhooks
+            {uiT("ui.893424c659002f53")}
           </a>
         </p>
       </CardHeader>
@@ -126,7 +130,7 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
                           <InputGroupButton
                             size="icon-xs"
                             onClick={() => toggleFieldVisibility(key)}
-                            aria-label={isVisible ? "Hide credential" : "Show credential"}
+                            aria-label={isVisible ? uiT("ui.7f945bb5247d01a9") : uiT("ui.4f65689fea0d449f")}
                           >
                             {isVisible ? <EyeOff /> : <Eye />}
                           </InputGroupButton>
@@ -148,13 +152,13 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
               if (!accessToken) return;
               try {
                 await serviceHealthCheck(accessToken, "ms_teams");
-                toast.success("MS Teams test alert triggered. Check your Teams channel.");
+                toast.success(translateUi("ui.ee1b2cbc9ac298d2"));
               } catch (error) {
                 toast.fromError(error);
               }
             }}
           >
-            Test MS Teams Alerts
+            {uiT("ui.efc56e307cdfe5d0")}
           </Button>
         </div>
       </CardContent>

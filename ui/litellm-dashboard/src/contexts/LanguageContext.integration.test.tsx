@@ -1,6 +1,8 @@
 import { fireEvent, render, screen, cleanup } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { LanguageProvider } from "./LanguageContext";
+import { LanguageProvider, LocalizedText } from "./LanguageContext";
+import { FieldError } from "@/components/ui/field";
+import { z } from "zod";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DataTablePagination } from "@/components/shared/DataTable/DataTablePagination";
 import { DateCell } from "@/components/shared/table_cells/date_cell";
@@ -54,6 +56,25 @@ function DetailFixture() {
 describe("language switching", () => {
   beforeEach(() => localStorage.clear());
   afterEach(cleanup);
+
+  it("updates stored form errors and built-in validation without rewriting field values", () => {
+    render(
+      <LanguageProvider>
+        <LanguageSwitcher />
+        <LocalizedText text="Cancel" />
+        <FieldError errors={[{ message: "Name is required" }]} />
+        <input aria-label="identifier" defaultValue="deepseek-flash" />
+      </LanguageProvider>,
+    );
+    expect(screen.getByText("取消")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).not.toHaveTextContent("Name is required");
+    const zhError = z.string().safeParse(12).error?.issues[0].message;
+    expect(zhError).toMatch(/[\u4e00-\u9fff]/);
+    fireEvent.click(screen.getByRole("button", { name: "English" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("Name is required");
+    expect(z.string().safeParse(12).error?.issues[0].message).toContain("Invalid input");
+    expect(screen.getByLabelText("identifier")).toHaveValue("deepseek-flash");
+  });
 
   it("switches the table and date while preserving conversation data and input state", () => {
     render(<AuditFixture />);

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +37,8 @@ const PolicyTemplateCard: React.FC<PolicyTemplateCardProps> = ({
   complexity,
   onUseTemplate,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Card className="h-full transition-shadow hover:shadow-md">
       <CardContent className="flex h-full flex-col">
@@ -42,7 +46,9 @@ const PolicyTemplateCard: React.FC<PolicyTemplateCardProps> = ({
           <div className={`rounded-lg p-2 ${iconBg}`}>
             <Icon className={`size-6 ${iconColor}`} />
           </div>
-          <Badge variant="outline">{complexity} Complexity</Badge>
+          <Badge variant="outline">
+            {complexity} {uiT("ui.2dcf78dcabca38ef")}
+          </Badge>
         </div>
 
         <h3 className="mb-2 text-base font-semibold">{title}</h3>
@@ -60,14 +66,14 @@ const PolicyTemplateCard: React.FC<PolicyTemplateCardProps> = ({
 
         {inherits && (
           <div className="mb-4 text-xs">
-            <span className="text-muted-foreground">Inherits from: </span>
+            <span className="text-muted-foreground">{uiT("ui.e50bd41e523054e2")} </span>
             <span className="rounded-sm bg-muted px-2 py-0.5 font-medium">{inherits}</span>
           </div>
         )}
 
         <div className="mb-6">
           <span className="mb-2 block text-xs font-medium tracking-wider text-muted-foreground uppercase">
-            Included Guardrails
+            {uiT("ui.84449627865b29e0")}
           </span>
           <div className="flex flex-wrap gap-2">
             {guardrails.map((g) => (
@@ -79,7 +85,7 @@ const PolicyTemplateCard: React.FC<PolicyTemplateCardProps> = ({
         </div>
 
         <Button className="mt-auto w-full" onClick={onUseTemplate}>
-          Use Template
+          {uiT("ui.6a0418f673c8bc5b")}
         </Button>
       </CardContent>
     </Card>
@@ -163,7 +169,7 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
         onTemplatesLoaded?.(data);
       } catch (error) {
         console.error("Error fetching policy templates:", error);
-        toast.error("Failed to fetch policy templates");
+        toast.error(translateUi("ui.e013280c905fb3ca"));
       } finally {
         setIsLoading(false);
       }
@@ -186,16 +192,14 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
     <div className="space-y-6">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-lg font-medium">Policy Templates</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Start with a pre-configured policy template to quickly set up guardrails for your organization.
-          </p>
+          <h2 className="text-lg font-medium">{uiT("ui.9b7b487f398bd557")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.0f7cc8d485107fc8")}</p>
         </div>
         <Button variant="outline" onClick={onOpenAiSuggestion}>
           <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 1l1.5 3.5L13 6l-3.5 1.5L8 11 6.5 7.5 3 6l3.5-1.5L8 1zm4 7l.75 1.75L14.5 10.5l-1.75.75L12 13l-.75-1.75L9.5 10.5l1.75-.75L12 8zM4 9l.75 1.75L6.5 11.5l-1.75.75L4 14l-.75-1.75L1.5 11.5l1.75-.75L4 9z" />
           </svg>
-          Use AI to find templates
+          {uiT("ui.64c25184d66ef8b0")}
         </Button>
       </div>
 
@@ -205,7 +209,7 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
           <div className="w-52 shrink-0">
             <div className="sticky top-4">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-semibold">Categories</span>
+                <span className="text-sm font-semibold">{uiT("ui.b8b1d894c6837252")}</span>
                 {selectedTags.size > 0 && (
                   <button onClick={handleClearAll} className="text-xs text-primary hover:underline">
                     {uiT("ui.29a390f9237e")}
@@ -236,7 +240,8 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
         <div className="flex-1">
           {selectedTags.size > 0 && (
             <div className="mb-4 text-sm text-muted-foreground">
-              {uiT("ui.d604310a789a")} {filteredTemplates.length} of {templates.length} templates
+              {uiT("ui.d604310a789a")} {filteredTemplates.length} {uiT("ui.28391d3bc64ec15c")} {templates.length}{" "}
+              {uiT("ui.9c6641c1f9cfb0c6")}
             </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -259,9 +264,9 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
 
           {filteredTemplates.length === 0 && (
             <div className="py-12 text-center text-muted-foreground">
-              <p>No templates match the selected filters.</p>
+              <p>{uiT("ui.ccc35865acf11711")}</p>
               <button onClick={handleClearAll} className="mt-2 text-sm text-primary hover:underline">
-                Clear all filters
+                {uiT("ui.de22447d91bbb54e")}
               </button>
             </div>
           )}

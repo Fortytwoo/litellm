@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 /**
@@ -53,8 +55,18 @@ const GRANULARITY_OPTIONS = [
   },
 ] as const satisfies readonly { value: Granularity; label: string }[];
 const SCALE_OPTIONS = [
-  { value: "linear", label: "Linear" },
-  { value: "log", label: "Log" },
+  {
+    value: "linear",
+    get label() {
+      return translateUi("ui.e6950b45d25c2027");
+    },
+  },
+  {
+    value: "log",
+    get label() {
+      return translateUi("ui.21e49eb2b299c9f7");
+    },
+  },
 ] as const satisfies readonly { value: StackedUsageScale; label: string }[];
 
 export default function UsageOverview({
@@ -68,6 +80,8 @@ export default function UsageOverview({
   providerBreakdown,
   budget,
 }: UsageOverviewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [state, setState] = useState<BreakdownState>({ metric: "spend", dimension: "model_groups" });
   const [granularity, setGranularity] = useState<Granularity>("day");
   const [scale, setScale] = useState<StackedUsageScale>("linear");
@@ -87,18 +101,21 @@ export default function UsageOverview({
       />
 
       <Panel
-        title="Top models"
-        subtitle={`${granularity === "day" ? "Daily" : "Weekly"} ${METRIC_NOUN[state.metric]}, top 8 stacked`}
+        title={uiT("ui.79489561d9efe32b")}
+        subtitle={uiT("ui.0f4a5bf810b445fd", {
+          v0: String(granularity === "day" ? uiT("ui.b36c2611dcdf") : uiT("ui.2975132481a7")),
+          v1: String(METRIC_NOUN[state.metric]),
+        })}
         action={
           <>
             <BreakdownControls state={state} onChange={setState} showDimension={false} />
             <Segmented
-              label="Bucket size"
+              label={uiT("ui.663b1cb2b6b696ff")}
               value={granularity}
               options={GRANULARITY_OPTIONS}
               onChange={setGranularity}
             />
-            <Segmented label="Scale" value={scale} options={SCALE_OPTIONS} onChange={setScale} />
+            <Segmented label={uiT("ui.f102986b39effb31")} value={scale} options={SCALE_OPTIONS} onChange={setScale} />
           </>
         }
         bodyClassName="px-0 pt-4 pb-0"
@@ -135,7 +152,7 @@ export default function UsageOverview({
       {topAgents}
       {providerBreakdown}
 
-      <Panel icon={KeyRound} title="Top Virtual Keys">
+      <Panel icon={KeyRound} title={uiT("ui.4ed9e11cbdc764dc")}>
         {topKeys}
       </Panel>
       {gatewayByEndpoint}

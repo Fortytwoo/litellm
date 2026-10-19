@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import useCan from "@/app/(dashboard)/hooks/useCan";
 import { Policy } from "./types";
@@ -52,6 +54,8 @@ const PolicySelector: React.FC<PolicySelectorProps> = ({
   disabled,
   onPoliciesLoaded,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const canViewPolicies = useCan("viewPolicies");
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [loading, setLoading] = useState(false);
@@ -89,9 +93,7 @@ const PolicySelector: React.FC<PolicySelectorProps> = ({
     <div className="min-w-0">
       <MultiSelect
         disabled={disabled}
-        placeholder={
-          disabled ? "Setting policies is a premium feature." : "Select policies (production or published versions)"
-        }
+        placeholder={disabled ? uiT("ui.4125648201c4bfaa") : uiT("ui.8d607e5a28854456")}
         onValueChange={handlePolicyChange}
         value={value}
         loading={loading}

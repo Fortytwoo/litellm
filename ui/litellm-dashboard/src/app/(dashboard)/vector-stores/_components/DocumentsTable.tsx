@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Inbox } from "lucide-react";
 import React, { useMemo } from "react";
@@ -14,13 +15,15 @@ interface DocumentsTableProps {
 }
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No documents uploaded yet</div>
-      <div className="text-sm text-muted-foreground">Upload documents above to get started.</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.4ddd017b4b52e7a6")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.9298a531f90292f7")}</div>
     </div>
   );
 }

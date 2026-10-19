@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type React from "react";
 import type { Validate } from "react-hook-form";
 
@@ -42,7 +43,9 @@ export const tagsControl = (control: MountedFieldControlProps) => {
     options: [...new Set(value)].map((tag) => ({ label: tag, value: tag })),
     value,
     onValueChange: control.onChange,
-    emptyText: "Type to add",
+    get emptyText() {
+      return translateUi("ui.a1fe8156bc0eb26f");
+    },
     allowCustomValues: true,
   };
 };

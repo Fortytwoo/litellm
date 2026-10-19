@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Bot, Users } from "lucide-react";
@@ -26,14 +28,39 @@ type ActivityView = "active-users" | "per-user";
 type ActivePeriod = "dau" | "wau" | "mau";
 
 const VIEW_OPTIONS = [
-  { value: "active-users", label: "Active users" },
-  { value: "per-user", label: "Per user" },
+  {
+    value: "active-users",
+    get label() {
+      return translateUi("ui.d8fc11b038204ef6");
+    },
+  },
+  {
+    value: "per-user",
+    get label() {
+      return translateUi("ui.95acfecbda89e3c9");
+    },
+  },
 ] as const satisfies readonly { value: ActivityView; label: string }[];
 
 const PERIOD_OPTIONS = [
-  { value: "dau", label: "DAU" },
-  { value: "wau", label: "WAU" },
-  { value: "mau", label: "MAU" },
+  {
+    value: "dau",
+    get label() {
+      return translateUi("ui.1d0989dd292da0d0");
+    },
+  },
+  {
+    value: "wau",
+    get label() {
+      return translateUi("ui.b5f9aa44845340b1");
+    },
+  },
+  {
+    value: "mau",
+    get label() {
+      return translateUi("ui.9f047250be47ad1a");
+    },
+  },
 ] as const satisfies readonly { value: ActivePeriod; label: string }[];
 
 const SUMMARY_SLOTS = 4;
@@ -94,11 +121,13 @@ interface ActiveUserChart {
 }
 
 function ActiveUsersChart({ chart }: { chart: ActiveUserChart }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (chart.loading) return <ChartSkeleton className="h-72" />;
   if (chart.tags.length === 0) {
     return (
       <div className="flex h-72 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-        No active users in this period
+        {uiT("ui.70899dc8186fad5c")}
       </div>
     );
   }
@@ -134,6 +163,8 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
   onDateChange,
   initialTags,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   // Maximum number of categories to show in charts to prevent color palette overflow
   const MAX_CATEGORIES = 10;
@@ -422,7 +453,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
   const activeUserCharts: readonly ActiveUserChart[] = [
     {
       value: "dau",
-      title: "Daily Active Users - Last 7 Days",
+      title: uiT("ui.13d6224c554c5884"),
       loading: dauLoading,
       data: dailyChartData,
       index: "date",
@@ -430,7 +461,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
     },
     {
       value: "wau",
-      title: "Weekly Active Users - Last 7 Weeks",
+      title: uiT("ui.acad48f2f910a5ec"),
       loading: wauLoading,
       data: weeklyChartData,
       index: "week",
@@ -438,7 +469,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
     },
     {
       value: "mau",
-      title: "Monthly Active Users - Last 7 Months",
+      title: uiT("ui.4e2ec3a467fba0e7"),
       loading: mauLoading,
       data: monthlyChartData,
       index: "month",
@@ -452,11 +483,11 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
     <div className="grid gap-3">
       <Panel
         icon={Bot}
-        title="Summary by User Agent"
-        subtitle="Performance metrics for different user agents"
+        title={uiT("ui.10d134f653c876a6")}
+        subtitle={uiT("ui.dd2904293ecf3120")}
         action={
           <div className="flex w-full items-center gap-2 sm:w-96">
-            <label className="shrink-0 text-xs text-muted-foreground">Filter by User Agents</label>
+            <label className="shrink-0 text-xs text-muted-foreground">{uiT("ui.65af85201a5e8e5c")}</label>
             <Combobox
               multiple
               items={availableTags}
@@ -473,11 +504,11 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
                     ))
                   }
                 </ComboboxValue>
-                <ComboboxChipsInput placeholder="All User Agents" aria-label="All User Agents" />
-                {selectedTags.length > 0 && <ComboboxClear aria-label="Clear user agent filter" />}
+                <ComboboxChipsInput placeholder={uiT("ui.a07c9a642da5d57d")} aria-label={uiT("ui.a07c9a642da5d57d")} />
+                {selectedTags.length > 0 && <ComboboxClear aria-label={uiT("ui.945e9237ef4dff0d")} />}
               </ComboboxChips>
               <ComboboxContent anchor={anchor}>
-                <ComboboxEmpty>No user agents found</ComboboxEmpty>
+                <ComboboxEmpty>{uiT("ui.97c84380f83c11e8")}</ComboboxEmpty>
                 <ComboboxList>
                   {(tag: string) => {
                     const userAgent = extractUserAgent(tag);
@@ -523,7 +554,9 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
             {Array.from({ length: Math.max(0, SUMMARY_SLOTS - summaryRows.length) }).map((_, index) => (
               <SummaryCell
                 key={`empty-${index}`}
-                name={<h4 className="truncate text-sm font-medium text-muted-foreground">No Data</h4>}
+                name={
+                  <h4 className="truncate text-sm font-medium text-muted-foreground">{uiT("ui.af75117dfbb0edb7")}</h4>
+                }
                 successRequests="-"
                 totalTokens="-"
                 totalCost="-"
@@ -536,14 +569,24 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
       {/* DAU/WAU/MAU vs Per User Usage. Every view stays mounted so switching does not reset its state. */}
       <Panel
         icon={Users}
-        title={activityView === "active-users" ? "DAU, WAU & MAU per Agent" : "Per User Usage (Last 30 Days)"}
-        subtitle={activityView === "active-users" ? "Active users across different time periods" : "Usage per end user"}
+        title={activityView === "active-users" ? uiT("ui.266023aaa4962453") : uiT("ui.cfe0f20667281225")}
+        subtitle={activityView === "active-users" ? uiT("ui.50f5b30d3392c44e") : uiT("ui.7c668e9ec1495d32")}
         action={
           <>
             {activityView === "active-users" && (
-              <Segmented label="Active users period" value={period} options={PERIOD_OPTIONS} onChange={setPeriod} />
+              <Segmented
+                label={uiT("ui.fedbae930efbb011")}
+                value={period}
+                options={PERIOD_OPTIONS}
+                onChange={setPeriod}
+              />
             )}
-            <Segmented label="Activity view" value={activityView} options={VIEW_OPTIONS} onChange={setActivityView} />
+            <Segmented
+              label={uiT("ui.bbf9857741a88c38")}
+              value={activityView}
+              options={VIEW_OPTIONS}
+              onChange={setActivityView}
+            />
           </>
         }
       >
@@ -581,7 +624,7 @@ function SummaryCell({
   const { t: uiT } = useDashboardLanguage();
 
   const rows = [
-    { label: "Success Requests", value: successRequests },
+    { label: uiT("ui.e7c0837530e1f7d8"), value: successRequests },
     { label: uiT("ui.cd41bf0d3e9a"), value: totalTokens },
     { label: uiT("ui.dfa5cc738da2"), value: totalCost },
   ];

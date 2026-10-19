@@ -21,7 +21,9 @@ const actionConfig: Record<
     color: "text-muted-foreground",
     bg: "bg-muted",
     border: "border-border",
-    label: "Not run",
+    get label() {
+      return translateUi("ui.25f0c23a0878");
+    },
   },
   blocked: {
     icon: X,
@@ -46,7 +48,9 @@ const actionConfig: Record<
     color: "text-warning",
     bg: "bg-warning/10",
     border: "border-warning/20",
-    label: "Flagged",
+    get label() {
+      return translateUi("ui.2f1978c6166e");
+    },
   },
 };
 
@@ -127,14 +131,14 @@ export function LogViewer({
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h3 className="text-base font-semibold text-foreground">
-              {guardrailName ? `Logs — ${guardrailName}` : uiT("ui.0df118694f09")}
+              {guardrailName ? uiT("ui.cbe4d78d4047d549", { v0: String(guardrailName) }) : uiT("ui.0df118694f09")}
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
               {logsLoading
                 ? uiT("ui.ba3bbbe10d8b")
                 : logs.length > 0
-                  ? `Showing ${displayLogs.length} of ${total} entries`
-                  : "No logs for this period. Select a guardrail and date range."}
+                  ? uiT("ui.bba77d7e1bce0ab4", { v0: String(displayLogs.length), v1: String(total) })
+                  : uiT("ui.903d3995dfec9c00")}
             </p>
           </div>
           {logs.length > 0 && (
@@ -153,7 +157,7 @@ export function LogViewer({
               </div>
               <div className="h-4 w-px bg-border" />
               <div className="flex items-center gap-1">
-                <span className="text-xs text-muted-foreground mr-1">Sample:</span>
+                <span className="text-xs text-muted-foreground mr-1">{uiT("ui.720206d61a65f18a")}</span>
                 {sampleSizes.map((size) => (
                   <Button
                     key={size}
@@ -176,9 +180,7 @@ export function LogViewer({
         </div>
       )}
       {!logsLoading && displayLogs.length === 0 && (
-        <div className="py-12 text-center text-sm text-muted-foreground">
-          No logs to display. Adjust filters or date range.
-        </div>
+        <div className="py-12 text-center text-sm text-muted-foreground">{uiT("ui.dfab971f118f0d49")}</div>
       )}
       {!logsLoading && displayLogs.length > 0 && (
         <div className="divide-y divide-border">

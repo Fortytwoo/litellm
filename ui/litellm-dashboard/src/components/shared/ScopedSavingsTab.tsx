@@ -1,4 +1,5 @@
 "use client";
+import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
@@ -107,11 +108,15 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
           <CardTitle>{uiT("ui.ed46218066a7")}</CardTitle>
           <CardDescription>{savingsSubtitle}</CardDescription>
           <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-            <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />
+            <CustomLegend
+              categories={SAVINGS_SERIES}
+              colors={SAVINGS_COLORS}
+              formatLabel={(category) => translateText(category)}
+            />
             <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
               <TabsList>
                 <TabsTrigger value="cumulative">{uiT("ui.cecf2aade089")}</TabsTrigger>
-                <TabsTrigger value="per-interval">{intervalLabel}</TabsTrigger>
+                <TabsTrigger value="per-interval">{translateText(intervalLabel)}</TabsTrigger>
               </TabsList>
             </Tabs>
           </CardAction>
@@ -121,7 +126,9 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
             <p className="py-12 text-center text-sm text-muted-foreground" data-testid={`${entityType}-savings-empty`}>
               {isLoading
                 ? uiT("ui.b0f9bbc4463e")
-                : uiT("supplement.noUsage", { entity: uiT("supplement." + entityType + "Noun") })}
+                : uiT("supplement.noUsage", {
+                    entity: uiT("supplement." + entityType + "Noun"),
+                  })}
             </p>
           )}
           {showChart &&

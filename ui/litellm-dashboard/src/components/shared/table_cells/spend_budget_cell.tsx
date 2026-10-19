@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 
 import { InheritedBudgetHint, type InheritedBudgetGate } from "@/components/shared/InheritedBudgetHint";
 import { Meter, MeterIndicator, MeterTrack } from "@/components/shared/Meter";
@@ -25,6 +27,8 @@ export function SpendBudgetCell({
   spendDecimals = 4,
   budgetDecimals = 0,
 }: SpendBudgetCellProps) {
+  useDashboardLanguage();
+
   const spendValue = typeof spend === "number" && !Number.isNaN(spend) ? spend : 0;
   const budget = maxBudget ?? null;
   const hasBudget = typeof budget === "number" && budget > 0;
@@ -37,7 +41,7 @@ export function SpendBudgetCell({
     <div className="flex min-w-[130px] flex-col gap-1">
       <div className="whitespace-nowrap text-xs">
         <span className="font-medium tabular-nums text-foreground">{spendText}</span>{" "}
-        <span className="text-muted-foreground">{budgetLabel}</span>
+        <span className="text-muted-foreground">{translateText(budgetLabel)}</span>
         {budget === null && <InheritedBudgetHint gates={inheritedGates} />}
       </div>
       {hasBudget && (

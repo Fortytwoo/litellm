@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useEffect, useState } from "react";
 import { AssistantMessageUpdate, ChatMessage, Conversation } from "./types";
 
@@ -134,11 +135,9 @@ export function useChatHistory(
         if (conv.id !== conversationId) return conv;
         const updatedMessages = [...conv.messages, newMessage];
         let title = conv.title;
-        if (
-          title === "New conversation" &&
-          newMessage.role === "user" &&
-          conv.messages.filter((m) => m.role === "user").length === 0
-        ) {
+        const hasDefaultTitle = title === "New conversation" && !conv.customTitle;
+        const isFirstUserMessage = newMessage.role === "user" && !conv.messages.some((m) => m.role === "user");
+        if (hasDefaultTitle && isFirstUserMessage) {
           title = generateTitle(newMessage.content);
         }
         return { ...conv, title, messages: updatedMessages, updatedAt: Date.now() };
@@ -187,7 +186,9 @@ export function useChatHistory(
   const renameConversation = useCallback((id: string, newTitle: string) => {
     setConversations((prev) =>
       trimConversations(
-        prev.map((conv) => (conv.id === id ? { ...conv, title: newTitle, updatedAt: Date.now() } : conv)),
+        prev.map((conv) =>
+          conv.id === id ? { ...conv, title: newTitle, customTitle: true, updatedAt: Date.now() } : conv,
+        ),
       ),
     );
   }, []);

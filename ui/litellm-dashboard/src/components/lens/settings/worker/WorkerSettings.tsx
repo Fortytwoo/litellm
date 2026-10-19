@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState, type ReactNode } from "react";
 import { FormProvider } from "react-hook-form";
@@ -52,25 +55,25 @@ function WorkerFormCard({
   onSubmit: () => void;
   children: ReactNode;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <SettingsCard className="flex flex-col gap-5">
       <header className="space-y-1">
-        <h3 className="text-base font-semibold">{editing ? "Analysis access" : "Connect a worker"}</h3>
+        <h3 className="text-base font-semibold">{editing ? uiT("ui.5cb9a258cd668ee7") : uiT("ui.81c1a51a904b487c")}</h3>
         <p className="text-sm text-muted-foreground">
-          {editing
-            ? "Choose which key pays for analysis."
-            : "Choose a model and spending limit. Your Lens service runs investigations automatically."}
+          {editing ? uiT("ui.1676ac2d3108cd4a") : uiT("ui.97e9fa1cc7b5ca03")}
         </p>
       </header>
       <WorkerForm editingWorker={editing?.id ?? null} />
       <div className="flex justify-end gap-2">
         {editing && (
           <Button variant="outline" disabled={busy} onClick={onCancel}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
         )}
         <Button disabled={!valid || busy} onClick={onSubmit}>
-          {submitLabel(editing, busy)}
+          {translateText(submitLabel(editing, busy))}
         </Button>
       </div>
       {children}
@@ -86,6 +89,8 @@ export function WorkerSettings({
   /** Shown once a freshly installed worker connects; defaults to a Done button that returns to the list. */
   readyAction?: ReactNode;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const revokeWorker = useRevokeWorker();
   const prepareWorker = usePrepareWorker();
   const form = useZodForm(workerFormSchema, {
@@ -158,7 +163,7 @@ export function WorkerSettings({
         <WorkerInstall connected={screen.connected}>
           {readyAction ?? (
             <Button className="w-full" onClick={() => prepareWorker.reset()}>
-              Done
+              {uiT("ui.11a6767d5674c7e4")}
             </Button>
           )}
         </WorkerInstall>

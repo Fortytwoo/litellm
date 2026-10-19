@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useMemo, useState } from "react";
 import { PaginatedMultiSelect } from "@/components/shared/PaginatedMultiSelect";
@@ -20,7 +22,7 @@ const TeamMultiSelect: React.FC<TeamMultiSelectProps> = ({
   disabled,
   organizationId,
   pageSize = 20,
-  placeholder = "Search teams by alias...",
+  placeholder = translateUi("ui.f13338bcb9640004"),
 }) => {
   const { t: uiT } = useDashboardLanguage();
 
@@ -62,7 +64,7 @@ const TeamMultiSelect: React.FC<TeamMultiSelectProps> = ({
       isFetchingNextPage={isFetchingNextPage}
       placeholder={placeholder}
       emptyText={uiT("ui.c83a06f9875f")}
-      loadingText="Loading teams..."
+      loadingText={uiT("ui.b9176fa052860fdb")}
       clearAllLabel="Clear all teams"
       disabled={disabled}
     />

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Bot, User } from "lucide-react";
 import React from "react";
 import ReactMarkdown from "react-markdown";
@@ -40,6 +42,8 @@ function ChatMessageBubble({
   codeInterpreterResult,
   accessToken,
 }: ChatMessageBubbleProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const syntaxTheme = useSyntaxTheme(coy);
   const isUser = message.role === "user";
 
@@ -117,7 +121,7 @@ function ChatMessageBubble({
           {message.isImage ? (
             <img
               src={typeof message.content === "string" ? message.content : ""}
-              alt="Generated image"
+              alt={uiT("ui.df37e04fda71344a")}
               className="max-w-full rounded-md border border-border shadow-xs"
               style={{ maxHeight: "500px" }}
             />
@@ -175,7 +179,7 @@ function ChatMessageBubble({
                 <div className="mt-3">
                   <img
                     src={message.image.url}
-                    alt="Generated image"
+                    alt={uiT("ui.df37e04fda71344a")}
                     className="max-w-full rounded-md border border-border shadow-xs"
                     style={{ maxHeight: "500px" }}
                   />

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 
 const sharedShape = {
@@ -22,11 +23,11 @@ const semanticRouterShape = {
   auto_router_default_model: z
     .string()
     .nullable()
-    .pipe(z.string({ error: "Default model is required" }).min(1, "Default model is required")),
+    .pipe(z.string({ error: () => translateUi("ui.67341bfab40937b5") }).min(1, "Default model is required")),
   auto_router_embedding_model: z
     .string()
     .nullable()
-    .pipe(z.string({ error: "Embedding model is required" }).min(1, "Embedding model is required")),
+    .pipe(z.string({ error: () => translateUi("ui.36074d33df4ee720") }).min(1, "Embedding model is required")),
 };
 
 export const complexityRouterSchema = z.object(complexityRouterShape);

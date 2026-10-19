@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useResetTeamMemberBudget } from "@/app/(dashboard)/hooks/teams/useResetTeamMemberBudget";
 import { useResetTeamMemberSpend } from "@/app/(dashboard)/hooks/teams/useResetTeamMemberSpend";
@@ -20,8 +24,12 @@ import { useState, type ComponentProps } from "react";
 import { TeamData, TeamMemberBudgetSource, TeamMembership } from "./TeamInfo";
 
 const BUDGET_SOURCE_LABELS: Record<Exclude<TeamMemberBudgetSource, "none">, string> = {
-  team_default: "Team default",
-  custom: "Custom",
+  get team_default() {
+    return translateUi("ui.a8ff2bee9c29984e");
+  },
+  get custom() {
+    return translateUi("ui.494ca78f7374");
+  },
 };
 
 const formatBudget = (value: number | null): string =>
@@ -150,9 +158,9 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Model Scope
-          <SimpleTooltip content="Models this member can access. Empty means they inherit all team models.">
-            <CircleHelp className="size-4" aria-label="Model scope information" />
+          {uiT("ui.053213da727a1846")}
+          <SimpleTooltip content={uiT("ui.40ba0e86987b2485")}>
+            <CircleHelp className="size-4" aria-label={uiT("ui.a123d4e3bb5a57a8")} />
           </SimpleTooltip>
         </span>
       ),
@@ -160,7 +168,7 @@ export default function TeamMemberTab({
       render: (record: Member) => {
         const models = getUserAllowedModels(record.user_id);
         if (!models) {
-          return <span className="text-muted-foreground">(all team models)</span>;
+          return <span className="text-muted-foreground">{uiT("ui.6e13218a52d4e80b")}</span>;
         }
         const displayed = models.slice(0, 2);
         const remaining = models.length - displayed.length;
@@ -173,7 +181,9 @@ export default function TeamMemberTab({
             ))}
             {remaining > 0 && (
               <SimpleTooltip content={models.slice(2).join(", ")}>
-                <span className="text-muted-foreground">+{remaining} more</span>
+                <span className="text-muted-foreground">
+                  +{remaining} {uiT("ui.187897ce0afc")}
+                </span>
               </SimpleTooltip>
             )}
           </div>
@@ -183,9 +193,9 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Current Cycle Spend (USD)
-          <SimpleTooltip content="Spend for the current budget cycle. Resets to $0 when the member's budget window rolls over. This is the value checked against the member's budget.">
-            <CircleHelp className="size-4" aria-label="Current cycle spend information" />
+          {uiT("ui.f88d6068bd0bd49c")}
+          <SimpleTooltip content={uiT("ui.3abd0f29f03e47ee")}>
+            <CircleHelp className="size-4" aria-label={uiT("ui.de16cc75700dc234")} />
           </SimpleTooltip>
         </span>
       ),
@@ -198,8 +208,8 @@ export default function TeamMemberTab({
       title: (
         <span className="flex items-center gap-1">
           {uiT("ui.c33ab4e98f55")}
-          <SimpleTooltip content="Cumulative spend by this member within this team, across all budget cycles. Tracking began 2026-04-21; spend from before that date is not included.">
-            <CircleHelp className="size-4" aria-label="Total spend information" />
+          <SimpleTooltip content={uiT("ui.7f48d018ff9eb79f")}>
+            <CircleHelp className="size-4" aria-label={uiT("ui.a9e4d1d566890262")} />
           </SimpleTooltip>
         </span>
       ),
@@ -211,9 +221,9 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Team Member Budget (USD)
-          <SimpleTooltip content="Team default follows the team's member budget, so changing it in team settings updates this member too. Custom is set on this member only and ignores later team changes.">
-            <CircleHelp className="size-4" aria-label="Team member budget information" />
+          {uiT("ui.257da8bedcb0b6f1")}
+          <SimpleTooltip content={uiT("ui.90fe82dfa540d1c3")}>
+            <CircleHelp className="size-4" aria-label={uiT("ui.3cc84373a18eed36")} />
           </SimpleTooltip>
         </span>
       ),
@@ -238,7 +248,7 @@ export default function TeamMemberTab({
                 data-testid="reset-member-budget"
                 onClick={() => setMemberToResetBudget(record)}
               >
-                Use team default
+                {uiT("ui.8532f22efcdb73c9")}
               </Button>
             )}
           </span>
@@ -254,14 +264,14 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Team Member Rate Limits
-          <SimpleTooltip content="Rate limits for this member's usage within this team.">
-            <CircleHelp className="size-4" aria-label="Team member rate limits information" />
+          {uiT("ui.94e09b1c09b751f6")}
+          <SimpleTooltip content={uiT("ui.32e30791e2306f59")}>
+            <CircleHelp className="size-4" aria-label={uiT("ui.90e69dd96e21ab8f")} />
           </SimpleTooltip>
         </span>
       ),
       key: "rate_limits",
-      render: (record: Member) => <span>{getUserRateLimits(record.user_id)}</span>,
+      render: (record: Member) => <span>{translateText(getUserRateLimits(record.user_id))}</span>,
     },
   ];
 
@@ -271,7 +281,7 @@ export default function TeamMemberTab({
       { teamId: teamData.team_id, userId: memberToResetSpend.user_id },
       {
         onSuccess: () => {
-          toast.success("Team member spend reset to $0");
+          toast.success(translateUi("ui.3ef23a183225b79b"));
           setMemberToResetSpend(null);
           onMemberSpendReset();
         },
@@ -286,7 +296,7 @@ export default function TeamMemberTab({
       { teamId: teamData.team_id, userId: memberToResetBudget.user_id },
       {
         onSuccess: () => {
-          toast.success("Team member budget reset to the team default");
+          toast.success(translateUi("ui.7cda5fab4178f869"));
           setMemberToResetBudget(null);
           onMemberBudgetReset();
         },
@@ -326,17 +336,17 @@ export default function TeamMemberTab({
       <Dialog open={memberToResetSpend !== null} onOpenChange={(open) => !open && setMemberToResetSpend(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reset Team Member Spend</DialogTitle>
+            <DialogTitle>{uiT("ui.2bf0f1976cb32162")}</DialogTitle>
           </DialogHeader>
           <p>
-            Reset current cycle spend for{" "}
-            <strong>{memberToResetSpend?.user_email || memberToResetSpend?.user_id}</strong> in this team to{" "}
-            <strong>$0</strong>?
+            {uiT("ui.9fc9ceeeff2ab00f")}{" "}
+            <strong>{memberToResetSpend?.user_email || memberToResetSpend?.user_id}</strong>{" "}
+            {uiT("ui.760d12382f4b41ab")} <strong>$0</strong>?
           </p>
           <p className="text-sm text-muted-foreground">
-            Current cycle spend:{" "}
+            {uiT("ui.1e3ffcea4c611430")}{" "}
             <strong>${formatNumberWithCommas(getUserCurrentCycleSpend(memberToResetSpend?.user_id ?? null), 4)}</strong>
-            . This is the value checked against the member&apos;s budget. Total spend and logs are preserved.
+            {uiT("ui.71676fb9330ef42a")}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setMemberToResetSpend(null)}>
@@ -351,23 +361,24 @@ export default function TeamMemberTab({
       <Dialog open={memberToResetBudget !== null} onOpenChange={(open) => !open && setMemberToResetBudget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reset Team Member Budget</DialogTitle>
+            <DialogTitle>{uiT("ui.8c98fdb41f08539e")}</DialogTitle>
           </DialogHeader>
           <p>
-            Remove the custom budget for{" "}
-            <strong>{memberToResetBudget?.user_email || memberToResetBudget?.user_id}</strong> and put them back on the
-            team default of <strong>{formatBudget(teamDefaultBudget)}</strong>?
+            {uiT("ui.d8d9a18a18585e5e")}{" "}
+            <strong>{memberToResetBudget?.user_email || memberToResetBudget?.user_id}</strong>{" "}
+            {uiT("ui.ad1019646e8d8d4a")} <strong>{translateText(formatBudget(teamDefaultBudget))}</strong>?
           </p>
           <p className="text-sm text-muted-foreground">
-            Custom budget: <strong>{formatBudget(getUserBudget(memberToResetBudget?.user_id ?? null))}</strong>. Their
-            spend is kept. Future changes to the team&apos;s member budget will apply to them again.
+            {uiT("ui.1e08b8b31269873f")}{" "}
+            <strong>{translateText(formatBudget(getUserBudget(memberToResetBudget?.user_id ?? null)))}</strong>
+            {uiT("ui.a1a8e69db9bdf81b")}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setMemberToResetBudget(null)}>
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleResetBudget} disabled={isResettingBudget}>
-              Use team default
+              {uiT("ui.8532f22efcdb73c9")}
             </Button>
           </DialogFooter>
         </DialogContent>

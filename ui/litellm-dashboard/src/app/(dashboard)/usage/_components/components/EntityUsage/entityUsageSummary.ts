@@ -78,13 +78,17 @@ export const buildSummaryTiles = (metadata: SpendSummaryMetadata, showFlatCost: 
 
 export const buildCostBreakdownTiles = (metadata: SpendSummaryMetadata): SummaryTile[] => [
   {
-    title: "Request Cost",
+    get title() {
+      return translateUi("ui.9e579bd69d156ee0");
+    },
     value: `$${formatNumberWithCommas(metadata.total_spend, 2)}`,
     className: "text-info",
     tooltip: REQUEST_COST_TOOLTIP,
   },
   {
-    title: "Flat Cost",
+    get title() {
+      return translateUi("ui.b5a82c86b929e176");
+    },
     value: `$${formatNumberWithCommas(metadata.total_flat_cost ?? 0, 2)}`,
     className: "text-violet-600",
     tooltip: FLAT_COST_TOOLTIP,

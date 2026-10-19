@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import {
   getCoreRowModel,
@@ -25,9 +27,11 @@ export interface DatasetsViewProps {
 }
 
 export function DatasetsView({ readOnly = false }: DatasetsViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { datasetId, openDataset } = useDatasetRoute();
   return (
-    <section aria-label="Datasets" className="flex w-full min-w-0 flex-1 flex-col">
+    <section aria-label={uiT("ui.e9faf7b714ee2400")} className="flex w-full min-w-0 flex-1 flex-col">
       {datasetId ? (
         <DatasetDetail key={datasetId} datasetId={datasetId} readOnly={readOnly} onBack={() => openDataset(null)} />
       ) : (
@@ -38,14 +42,16 @@ export function DatasetsView({ readOnly = false }: DatasetsViewProps) {
 }
 
 function DatasetList({ onOpen }: { onOpen: (id: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const datasets = useDatasets();
   if (datasets.isPending)
     return (
       <StateMessage
         role="status"
         icon={<Loader2 className="size-5 animate-spin motion-reduce:animate-none" />}
-        title="Loading datasets…"
-        description="Fetching the datasets you can see."
+        title={uiT("ui.d7fcee61faac0802")}
+        description={uiT("ui.e076573328bc7cfe")}
       />
     );
   if (datasets.isError)
@@ -54,11 +60,11 @@ function DatasetList({ onOpen }: { onOpen: (id: string) => void }) {
         role="alert"
         tone="destructive"
         icon={<TriangleAlert className="size-5" />}
-        title="Couldn't load datasets"
+        title={uiT("ui.58428272564fc231")}
         description={datasets.error.message}
       >
         <Button size="sm" onClick={() => void datasets.refetch()}>
-          Try again
+          {uiT("ui.d8b8392e2c542950")}
         </Button>
       </StateMessage>
     );
@@ -67,8 +73,8 @@ function DatasetList({ onOpen }: { onOpen: (id: string) => void }) {
       <StateMessage
         role="status"
         icon={<Database className="size-5" />}
-        title="No datasets yet"
-        description="Open a trace or a finding and choose Add to dataset to save real conversations for an agent."
+        title={uiT("ui.21f1501fad2477d6")}
+        description={uiT("ui.19dfe75388a052fb")}
       />
     );
   return <DatasetTable datasets={datasets.data} onOpen={onOpen} />;
@@ -79,16 +85,24 @@ type Cell = CellContext<DatasetSummary, unknown>;
 const DATASET_HEIGHT = 36;
 
 function NameCell({ row: { original: dataset } }: Cell) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <span className="flex min-w-0 flex-col">
       <span className="truncate font-medium text-foreground">{dataset.name}</span>
-      <span className="truncate text-xs text-muted-foreground md:hidden">{dataset.agent_name || "Any agent"}</span>
+      <span className="truncate text-xs text-muted-foreground md:hidden">
+        {dataset.agent_name || uiT("ui.ee3e7690173b4911")}
+      </span>
     </span>
   );
 }
 
 function AgentCell({ row: { original: dataset } }: Cell) {
-  return <span className="block truncate text-muted-foreground">{dataset.agent_name || "Any agent"}</span>;
+  const { t: uiT } = useDashboardLanguage();
+
+  return (
+    <span className="block truncate text-muted-foreground">{dataset.agent_name || uiT("ui.ee3e7690173b4911")}</span>
+  );
 }
 
 function RevisionCell({ row: { original: dataset } }: Cell) {
@@ -112,15 +126,61 @@ function OpenCell() {
 }
 
 const COLUMNS: ColumnDef<DatasetSummary>[] = [
-  { id: "name", header: "Dataset", cell: NameCell },
-  { id: "agent", size: 160, header: "Agent", cell: AgentCell },
-  { id: "revision", size: 80, header: "Revision", cell: RevisionCell, meta: { numeric: true } },
-  { id: "cases", size: 64, header: "Cases", cell: CasesCell, meta: { numeric: true } },
-  { id: "updated", size: 200, header: "Updated", cell: UpdatedCell },
-  { id: "open", size: 40, header: "Open", cell: OpenCell, meta: { headerClassName: "sr-only", className: "pl-0" } },
+  {
+    id: "name",
+    get header() {
+      return translateUi("ui.4411e525721e7dd8");
+    },
+    cell: NameCell,
+  },
+  {
+    id: "agent",
+    size: 160,
+    get header() {
+      return translateUi("ui.11b39c93777e");
+    },
+    cell: AgentCell,
+  },
+  {
+    id: "revision",
+    size: 80,
+    get header() {
+      return translateUi("ui.2e516d68f42f3e35");
+    },
+    cell: RevisionCell,
+    meta: { numeric: true },
+  },
+  {
+    id: "cases",
+    size: 64,
+    get header() {
+      return translateUi("ui.2249bd503ec47d72");
+    },
+    cell: CasesCell,
+    meta: { numeric: true },
+  },
+  {
+    id: "updated",
+    size: 200,
+    get header() {
+      return translateUi("ui.3a5ecca188c0");
+    },
+    cell: UpdatedCell,
+  },
+  {
+    id: "open",
+    size: 40,
+    get header() {
+      return translateUi("ui.ed077f3d8125");
+    },
+    cell: OpenCell,
+    meta: { headerClassName: "sr-only", className: "pl-0" },
+  },
 ];
 
 function DatasetTable({ datasets, onOpen }: { datasets: readonly DatasetSummary[]; onOpen: (id: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const desktop = useMediaQuery("(min-width: 768px)");
   const tableOptions: TableOptions<DatasetSummary> = {
     data: [...datasets],
@@ -144,7 +204,7 @@ function DatasetTable({ datasets, onOpen }: { datasets: readonly DatasetSummary[
     >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card">
         <InspectorTable.Root table={table}>
-          <InspectorTable.Grid aria-label="Datasets" className="text-xs md:min-w-[720px]">
+          <InspectorTable.Grid aria-label={uiT("ui.e9faf7b714ee2400")} className="text-xs md:min-w-[720px]">
             <InspectorTable.Header />
             <InspectorTable.Body<DatasetSummary> rowHeight={() => (desktop ? DATASET_HEIGHT : 48)}>
               {(row) => (
@@ -160,7 +220,8 @@ function DatasetTable({ datasets, onOpen }: { datasets: readonly DatasetSummary[
           </InspectorTable.Grid>
         </InspectorTable.Root>
         <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-          {datasets.length} {datasets.length === 1 ? "dataset" : "datasets"} · {cases} {cases === 1 ? "case" : "cases"}
+          {datasets.length} {datasets.length === 1 ? uiT("ui.b277fd623676a525") : uiT("ui.714284abfa95a144")} · {cases}{" "}
+          {cases === 1 ? uiT("ui.bbfcd4160a1e8674") : uiT("ui.352b84777d8dd96a")}
         </footer>
       </div>
     </Inspector.Root>

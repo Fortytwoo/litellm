@@ -1,7 +1,11 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { Control, UseFormReturn } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,10 +22,12 @@ import { AgentsAndGroups, KeyEditFormValues } from "./keyEditFormValues";
 
 export const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent className="max-w-xs">{hint}</TooltipContent>
+      <TooltipContent className="max-w-xs">
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -32,21 +38,27 @@ const KEY_TYPE_OPTIONS = [
     get label() {
       return translateUi("ui.1d36da8581e0");
     },
-    hint: "Can call all routes (AI APIs, Management, and read-only)",
+    get hint() {
+      return translateUi("ui.2bc65f06c7b55ec0");
+    },
   },
   {
     value: "llm_api",
     get label() {
       return translateUi("ui.d2abdaa27ce8");
     },
-    hint: "Can call only AI API routes (chat/completions, embeddings, etc.)",
+    get hint() {
+      return translateUi("ui.dd6ebc488d6f849b");
+    },
   },
   {
     value: "management",
     get label() {
       return translateUi("ui.e51248773b9a");
     },
-    hint: "Can call only management routes (user/team/key management)",
+    get hint() {
+      return translateUi("ui.ff3df0ecc8db7171");
+    },
   },
 ];
 
@@ -175,7 +187,7 @@ export const moveMetadataTagsToTagsField = (form: KeyEditForm): void => {
   form.setValue("metadata", moved.metadata, { shouldDirty: true });
   form.setValue("tags", moved.tags, { shouldDirty: true });
   if (moved.movedTags.length > 0) {
-    toast.info(`Moved ${moved.movedTags.join(", ")} from metadata to the Tags field`);
+    toast.info(translateUi("ui.64fd054fe61db8b3", undefined, { v0: String(moved.movedTags.join(", ")) }));
   }
 };
 
@@ -226,3 +238,20 @@ export const KeyBudgetNumberField = ({
     )}
   </FormField>
 );
+
+export function KeyEditActions({ onCancel, isKeySaving }: { onCancel: () => void; isKeySaving: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <div className="sticky z-chrome bg-background p-4 border-t border-border -bottom-6 -inset-x-6">
+      <div className="flex justify-end items-center gap-2">
+        <Button type="button" variant="secondary" onClick={onCancel} disabled={isKeySaving}>
+          {uiT("ui.19766ed6ccb2")}
+        </Button>
+        <Button type="submit" disabled={isKeySaving} aria-busy={isKeySaving}>
+          {isKeySaving && <UiLoadingSpinner className="size-4" />}
+          {uiT("ui.35322b5bb5a2")}
+        </Button>
+      </div>
+    </div>
+  );
+}

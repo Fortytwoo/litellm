@@ -28,16 +28,16 @@ export const DeprecationBanner: React.FC<DeprecationBannerProps> = ({ featureNam
     >
       <Info className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
       <div className="min-w-0 flex-1">
-        <p className="font-medium">{`${featureName} is on a draft deprecation list`}</p>
+        <p className="font-medium">{uiT("ui.dfb848fa8b8bd7d2", { v0: String(featureName) })}</p>
         <p className="mt-1 break-words text-muted-foreground">
-          {`${featureName} is one of several experimental features we're considering removing, potentially as early as ${DEPRECATION_TARGET_DATE}. This list is a draft and is not final. If you rely on this feature, please share feedback on the `}
+          {uiT("ui.ea769f3fe374c2b6", { v0: String(featureName), v1: String(DEPRECATION_TARGET_DATE) })}
           <Link
             href={DEPRECATION_DISCUSSION_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-4"
           >
-            deprecation discussion
+            {uiT("ui.5278988bdb981a5a")}
           </Link>
           .
         </p>

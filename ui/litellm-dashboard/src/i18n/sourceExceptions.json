@@ -1,0 +1,446 @@
+[
+  {
+    "file": "src/app/(dashboard)/agents/_components/AgentKillSwitchDangerZone.tsx",
+    "scope": "AgentKillSwitchDangerZone",
+    "text": "POST",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/agents/_components/AgentKillSwitchDangerZone.tsx",
+    "scope": "AgentKillSwitchDangerZone",
+    "text": "POST",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/agents/_components/KillSwitchFormFields.tsx",
+    "scope": "KillSwitchAuthFields",
+    "text": "X-API-Key",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/agents/_components/KillSwitchFormFields.tsx",
+    "scope": "KillSwitchFormFields",
+    "text": "{\"reason\": \"manual kill switch\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/caching/_components/cache_health.tsx",
+    "scope": "HealthCheckDetails",
+    "text": "litellm_settings.cache_params",
+    "reason": "technical identifier"
+  },
+  {
+    "file": "src/app/(dashboard)/caching/_components/response_time_indicator.tsx",
+    "scope": "ResponseTimeIndicator",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/custom_code/CustomCodeModal.tsx",
+    "scope": "CustomCodeModal",
+    "text": "{\"texts\": [\"test message\"], ...}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/GuardrailTestPanel.tsx",
+    "scope": "GuardrailTestPanel",
+    "text": "Enter",
+    "reason": "physical keyboard key"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/GuardrailTestPanel.tsx",
+    "scope": "GuardrailTestPanel",
+    "text": "{\"forbidden_topics\": [\"tax\", \"finance\"]}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/GuardrailTestResults.tsx",
+    "scope": "GuardrailTestResults",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/GuardrailTestResults.tsx",
+    "scope": "GuardrailTestResults",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/guardrail_garden_detail.tsx",
+    "scope": "GuardrailDetailView",
+    "text": "litellm/",
+    "reason": "example identifier"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/TeamGuardrailsTab.tsx",
+    "scope": "TeamGuardrailsTab",
+    "text": "{\"forward_api_key\": true, \"headers\": {\"X-Custom\": \"value\"}}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/guardrails/_components/TeamGuardrailsTab.tsx",
+    "scope": "TeamGuardrailsTab",
+    "text": "{\"description\": \"Detects PII in requests\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/mcp-servers/_components/mcp_server_edit.tsx",
+    "scope": "MCPServerEdit",
+    "text": "{\n  \"KEY\": \"value\"\n}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/mcp-servers/_components/OAuthFormFields.tsx",
+    "scope": "OAuthFormFields",
+    "text": "{\n  \"organization\": \"my-org\",\n  \"team.id\": \"123\"\n}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/mcp-servers/_components/UpstreamTokenHeaderField.tsx",
+    "scope": "UpstreamTokenHeaderField",
+    "text": "Authorization",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/memory/_components/MemoryEditModal.tsx",
+    "scope": "MemoryEditModal",
+    "text": "{\"tags\": [\"example\"]}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/playground/components/chat_ui/AgentBuilderView.tsx",
+    "scope": "AgentBuilderView",
+    "text": "product@berri.ai",
+    "reason": "address or path"
+  },
+  {
+    "file": "src/app/(dashboard)/playground/components/complianceUI/ComplianceUI.tsx",
+    "scope": "ComplianceUI",
+    "text": "Enter",
+    "reason": "physical keyboard key"
+  },
+  {
+    "file": "src/app/(dashboard)/playground/components/systemOneUI/ResponseView.tsx",
+    "scope": "ResponseView",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/policies/_components/ai_suggestion_modal.tsx",
+    "scope": "renderTestPanel",
+    "text": "Enter",
+    "reason": "physical keyboard key"
+  },
+  {
+    "file": "src/app/(dashboard)/search-tools/_components/SearchToolTester.tsx",
+    "scope": "SearchToolTester",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/search-tools/_components/SearchToolTester.tsx",
+    "scope": "SearchToolTester",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/app/(dashboard)/skills/_components/add_plugin_form.tsx",
+    "scope": "AddPluginForm",
+    "text": "plugins/my-skill",
+    "reason": "example identifier"
+  },
+  {
+    "file": "src/app/(dashboard)/skills/_components/add_plugin_form.tsx",
+    "scope": "AddPluginForm",
+    "text": "author@example.com",
+    "reason": "address or path"
+  },
+  {
+    "file": "src/app/(dashboard)/vector-stores/_components/VectorStoreForm.tsx",
+    "scope": "VectorStoreForm",
+    "text": "{\"key\": \"value\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/vector-stores/_components/vector_store_info.tsx",
+    "scope": "VectorStoreInfoView",
+    "text": "{\"key\": \"value\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/app/(dashboard)/workflows/WorkflowRuns.tsx",
+    "scope": "eventStyle",
+    "text": "text-muted-foreground",
+    "reason": "style token"
+  },
+  {
+    "file": "src/components/add_model/advanced_settings.tsx",
+    "scope": "AdvancedSettings",
+    "text": "{\n                  \"rpm\": 100,\n                  \"timeout\": 0,\n                  \"stream_timeout\": 0\n                }",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/add_model/advanced_settings.tsx",
+    "scope": "AdvancedSettings",
+    "text": "{\n                  \"mode\": \"chat\"\n                }",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/add_model/ComplexityRouterConfig.tsx",
+    "scope": "TIER_DESCRIPTIONS",
+    "text": "Non-reasoning",
+    "reason": "canonical tier label used by router serialization"
+  },
+  {
+    "file": "src/components/add_model/ComplexityRouterConfig.tsx",
+    "scope": "TIER_DESCRIPTIONS",
+    "text": "Simple",
+    "reason": "canonical tier label used by router serialization"
+  },
+  {
+    "file": "src/components/add_model/ComplexityRouterConfig.tsx",
+    "scope": "TIER_DESCRIPTIONS",
+    "text": "Medium",
+    "reason": "canonical tier label used by router serialization"
+  },
+  {
+    "file": "src/components/add_model/ComplexityRouterConfig.tsx",
+    "scope": "TIER_DESCRIPTIONS",
+    "text": "Complex",
+    "reason": "canonical tier label used by router serialization"
+  },
+  {
+    "file": "src/components/add_model/ComplexityRouterConfig.tsx",
+    "scope": "TIER_DESCRIPTIONS",
+    "text": "Reasoning",
+    "reason": "canonical tier label used by router serialization"
+  },
+  {
+    "file": "src/components/chat/useChatHistory.ts",
+    "scope": "newConversation",
+    "text": "New conversation",
+    "reason": "stored conversation placeholder"
+  },
+  {
+    "file": "src/components/CommandPalette/CommandPalette.tsx",
+    "scope": "CommandPaletteDialog",
+    "text": "esc",
+    "reason": "physical keyboard key"
+  },
+  {
+    "file": "src/components/common_components/ModelAliasManager.tsx",
+    "scope": "ModelAliasManager",
+    "text": "model_aliases:",
+    "reason": "technical identifier"
+  },
+  {
+    "file": "src/components/logs/detail/DrawerHeader.tsx",
+    "scope": "DrawerHeader",
+    "text": "x-litellm-call-id:",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/components/logs/detail/DrawerHeader.tsx",
+    "scope": "DrawerHeader",
+    "text": "x-litellm-call-id",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/components/logs/detail/LogDetailContent.tsx",
+    "scope": "MetricsSection",
+    "text": "ms",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/components/logs/detail/sections/GuardrailViewer/CompliancePanel.tsx",
+    "scope": "CompliancePanel",
+    "text": "EU AI Act",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/components/logs/detail/sections/GuardrailViewer/CompliancePanel.tsx",
+    "scope": "CompliancePanel",
+    "text": "GDPR",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/components/logs/request/RequestLogsTableColumns.tsx",
+    "scope": "RequestIdWithCallIdTooltip",
+    "text": "x-litellm-call-id:",
+    "reason": "protocol, standard, key or unit"
+  },
+  {
+    "file": "src/components/ModelInfoEditForm.tsx",
+    "scope": "ModelInfoEditForm",
+    "text": "{\"gpt-4\": 100, \"claude-v1\": 200}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/ModelInfoEditForm.tsx",
+    "scope": "ModelInfoEditForm",
+    "text": "{\n  \"rpm\": 100,\n  \"timeout\": 0,\n  \"stream_timeout\": 0\n}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/model_add/anthropic_federation.ts",
+    "scope": "FEDERATION_CORE_FIELDS",
+    "text": "fdrl_...",
+    "reason": "example identifier"
+  },
+  {
+    "file": "src/components/model_add/anthropic_federation.ts",
+    "scope": "FEDERATION_CORE_FIELDS",
+    "text": "svac_...",
+    "reason": "example identifier"
+  },
+  {
+    "file": "src/components/model_add/anthropic_federation.ts",
+    "scope": "FEDERATION_CORE_FIELDS",
+    "text": "wrkspc_...",
+    "reason": "example identifier"
+  },
+  {
+    "file": "src/components/model_add/anthropic_federation.ts",
+    "scope": "IDENTITY_SOURCES",
+    "text": "os.environ/ANTHROPIC_ISSUER_SIGNING_KEY",
+    "reason": "code example"
+  },
+  {
+    "file": "src/components/model_add/anthropic_federation.ts",
+    "scope": "IDENTITY_SOURCES",
+    "text": "os.environ/KEYCLOAK_CLIENT_SECRET",
+    "reason": "code example"
+  },
+  {
+    "file": "src/components/model_group_alias_settings.tsx",
+    "scope": "ModelGroupAliasSettings",
+    "text": "router_settings:",
+    "reason": "technical identifier"
+  },
+  {
+    "file": "src/components/pass_through_info.tsx",
+    "scope": "PassThroughInfoView",
+    "text": "{\"Authorization\": \"Bearer your-token\", \"Content-Type\": \"application/json\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/price_data_reload.tsx",
+    "scope": "buttonVariants",
+    "text": "ghost",
+    "reason": "component variant mapping"
+  },
+  {
+    "file": "src/components/routing_groups/RoutingGroupModal.tsx",
+    "scope": "RoutingGroupModal",
+    "text": "{ \"ttl\": 3600 }",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/shared/Alert.tsx",
+    "scope": "STATUS_VARIANT_CLASSES",
+    "text": "border-info/20 bg-info/5 text-info *:[svg]:text-current",
+    "reason": "style token"
+  },
+  {
+    "file": "src/components/shared/Alert.tsx",
+    "scope": "STATUS_VARIANT_CLASSES",
+    "text": "border-destructive/20 bg-destructive/10 text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-destructive",
+    "reason": "style token"
+  },
+  {
+    "file": "src/components/shared/StatusDot.tsx",
+    "scope": "colors",
+    "text": "fill-red-500 text-red-500",
+    "reason": "style token"
+  },
+  {
+    "file": "src/components/shared/table_cells/status_badge.tsx",
+    "scope": "TONE_CLASS",
+    "text": "border-destructive/20 bg-destructive/10 text-destructive",
+    "reason": "style token"
+  },
+  {
+    "file": "src/components/shared/table_cells/status_badge.tsx",
+    "scope": "TONE_CLASS",
+    "text": "border-info/20 bg-info/10 text-info",
+    "reason": "style token"
+  },
+  {
+    "file": "src/components/team/EditMembership.tsx",
+    "scope": "MemberModal",
+    "text": "user@example.com",
+    "reason": "address or path"
+  },
+  {
+    "file": "src/components/team/TeamInfo.tsx",
+    "scope": "tabItems",
+    "text": "{\"region\": \"us\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/team/TeamInfo.tsx",
+    "scope": "tabItems",
+    "text": "{\"gpt-4\": 4096}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/team/TeamInfo.tsx",
+    "scope": "tabItems",
+    "text": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/Teams.tsx",
+    "scope": "Teams",
+    "text": "{\"region\": \"us\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/Teams.tsx",
+    "scope": "Teams",
+    "text": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/templates/key_edit_view.tsx",
+    "scope": "KeyEditView",
+    "text": "{\"gpt-4\": 100, \"claude-v1\": 200}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/templates/key_edit_view.tsx",
+    "scope": "KeyEditView",
+    "text": "{\"gpt-4\": 100, \"claude-v1\": 200}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/templates/key_edit_view.tsx",
+    "scope": "KeyEditView",
+    "text": "{\"gpt-4\": 4096}",
+    "reason": "JSON example"
+  },
+  {
+    "file": "src/components/vector_store_providers.tsx",
+    "scope": "vectorStoreProviderFields",
+    "text": "text-embedding-3-small",
+    "reason": "model identifier"
+  },
+  {
+    "file": "src/components/vector_store_providers.tsx",
+    "scope": "vectorStoreProviderFields",
+    "text": "text-embedding-3-small",
+    "reason": "model identifier"
+  },
+  {
+    "file": "src/components/vector_store_providers.tsx",
+    "scope": "vectorStoreProviderFields",
+    "text": "text-embedding-3-small",
+    "reason": "model identifier"
+  },
+  {
+    "file": "src/components/vector_store_providers.tsx",
+    "scope": "vectorStoreProviderFields",
+    "text": "text-embedding-3-small",
+    "reason": "model identifier"
+  }
+]

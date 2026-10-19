@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 
 const contentPart = z.discriminatedUnion("type", [
@@ -23,7 +24,9 @@ const choiceQuestion = z
   .refine(
     (question) => new Set(question.choices.map((choice) => String(choice.value))).size === question.choices.length,
     {
-      message: "Choice values must be unique, including their string representations.",
+      get message() {
+        return translateUi("ui.e59bb26c060dedd6");
+      },
       path: ["choices"],
     },
   );

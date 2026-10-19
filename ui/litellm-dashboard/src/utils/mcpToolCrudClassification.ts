@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export type CrudOp = "read" | "create" | "update" | "delete" | "unknown";
 
 const DELETE_RE = /\b(delete|remove|destroy|purge|drop|erase|unlink)\b/i;
@@ -59,28 +60,48 @@ export const CRUD_GROUP_META: Record<
   { label: string; description: string; risk: "low" | "medium" | "high" | "unknown" }
 > = {
   read: {
-    label: "Read",
-    description: "Safe operations — fetch, list, search. No side effects.",
+    get label() {
+      return translateUi("ui.9b9a8d05a7ec353b");
+    },
+    get description() {
+      return translateUi("ui.3cb0d9edb6638412");
+    },
     risk: "low",
   },
   create: {
-    label: "Create",
-    description: "Add new resources — insert, upload, register.",
+    get label() {
+      return translateUi("ui.4759498ac2a7");
+    },
+    get description() {
+      return translateUi("ui.1bf6006d26e9cf6b");
+    },
     risk: "medium",
   },
   update: {
-    label: "Update",
-    description: "Modify existing resources — edit, patch, rename.",
+    get label() {
+      return translateUi("ui.c1c1009d3f37ec05");
+    },
+    get description() {
+      return translateUi("ui.bb2361f9cdab3993");
+    },
     risk: "medium",
   },
   delete: {
-    label: "Delete",
-    description: "Destructive operations — remove, purge, destroy.",
+    get label() {
+      return translateUi("ui.e2d0a54968ea");
+    },
+    get description() {
+      return translateUi("ui.99ee346f1d3ead04");
+    },
     risk: "high",
   },
   unknown: {
-    label: "Other",
-    description: "Operations that could not be automatically classified.",
+    get label() {
+      return translateUi("ui.f97e9da0e3b879f0");
+    },
+    get description() {
+      return translateUi("ui.e7c9b3173f42e928");
+    },
     risk: "unknown",
   },
 };

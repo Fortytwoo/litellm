@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 import { ChevronRight, Database, Download, Loader2, TriangleAlert } from "lucide-react";
@@ -19,6 +20,8 @@ export interface DatasetDetailProps {
 }
 
 export function DatasetDetail({ datasetId, readOnly, onBack }: DatasetDetailProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { revision, setRevision } = useDatasetRoute();
   const latest = useDataset(datasetId);
   const viewed = useDataset(datasetId, revision);
@@ -27,8 +30,8 @@ export function DatasetDetail({ datasetId, readOnly, onBack }: DatasetDetailProp
       <StateMessage
         role="status"
         icon={<Loader2 className="size-5 animate-spin motion-reduce:animate-none" />}
-        title="Loading dataset…"
-        description="Fetching its cases."
+        title={uiT("ui.2c7802efbb3ce96d")}
+        description={uiT("ui.0e5cdd1a7d715a85")}
       />
     );
   const error = latest.error ?? viewed.error;
@@ -38,11 +41,11 @@ export function DatasetDetail({ datasetId, readOnly, onBack }: DatasetDetailProp
         role="alert"
         tone="destructive"
         icon={<TriangleAlert className="size-5" />}
-        title="Couldn't load this dataset"
-        description={error?.message ?? "The proxy returned no dataset."}
+        title={uiT("ui.4e538d2ff943f3db")}
+        description={error?.message ?? uiT("ui.ad566f7154709485")}
       >
         <Button size="sm" variant="outline" onClick={onBack}>
-          All datasets
+          {uiT("ui.efe579563af1cbf3")}
         </Button>
       </StateMessage>
     );
@@ -74,6 +77,8 @@ interface DatasetRevisionProps {
 }
 
 function DatasetRevision(props: DatasetRevisionProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { dataset, latestRevision, readOnly, onBack, onPickRevision, onShowLatest, onReload } = props;
   const { caseId, setCaseId } = useDatasetRoute();
   const [edits, setEdits] = useState<CaseEdits>({});
@@ -98,9 +103,9 @@ function DatasetRevision(props: DatasetRevisionProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <header className="flex shrink-0 flex-col gap-1 border-b bg-background px-3 pt-2.5 pb-2 sm:px-4">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-xs text-muted-foreground">
+        <nav aria-label={uiT("ui.2bd873d6c734e63e")} className="flex items-center gap-1 text-xs text-muted-foreground">
           <button type="button" onClick={onBack} className="rounded hover:text-foreground hover:underline">
-            Datasets
+            {uiT("ui.e9faf7b714ee2400")}
           </button>
           <ChevronRight aria-hidden="true" className="size-3" />
           <span className="truncate">{dataset.name}</span>
@@ -109,9 +114,9 @@ function DatasetRevision(props: DatasetRevisionProps) {
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <Database aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
             <h2 className="min-w-0 truncate text-base font-semibold">{dataset.name}</h2>
-            <IdChip value={dataset.id} label="Copy dataset ID" />
+            <IdChip value={dataset.id} label={uiT("ui.0a7764084cb58549")} />
             <span className="hidden truncate text-xs text-muted-foreground sm:inline">
-              {dataset.agent_name || "Any agent"}
+              {dataset.agent_name || uiT("ui.ee3e7690173b4911")}
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -123,12 +128,12 @@ function DatasetRevision(props: DatasetRevisionProps) {
               onClick={() => exportDataset.mutate({ id: dataset.id, name: dataset.name, revision: dataset.revision })}
             >
               <Download className="size-3.5" />
-              Export JSONL
+              {uiT("ui.87000e5f335c493a")}
             </Button>
             {editable && (
               <Button size="sm" disabled={changed === 0 || save.isPending} onClick={saveRevision}>
                 {save.isPending && <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />}
-                Save as revision {dataset.revision + 1}
+                {uiT("ui.bc959dc50284d8fd")} {dataset.revision + 1}
               </Button>
             )}
           </div>
@@ -137,13 +142,11 @@ function DatasetRevision(props: DatasetRevisionProps) {
       <SaveProblem error={save.error ?? exportDataset.error} onReload={reload} />
       {!isLatest && (
         <p role="status" className="border-b px-4 py-2 text-xs text-muted-foreground">
-          Revision {dataset.revision} is read-only. Switch to the latest revision to make changes.
+          {uiT("ui.2e516d68f42f3e35")} {dataset.revision} {uiT("ui.e57f072b74f445b1")}
         </p>
       )}
       {cases.length === 0 ? (
-        <p className="px-4 py-10 text-center text-sm text-muted-foreground">
-          This revision has no cases. Add some from a trace or a finding.
-        </p>
+        <p className="px-4 py-10 text-center text-sm text-muted-foreground">{uiT("ui.12752902b92dcdc5")}</p>
       ) : (
         <CaseTable
           cases={cases}
@@ -168,6 +171,8 @@ function DatasetRevision(props: DatasetRevisionProps) {
 }
 
 function SaveProblem({ error, onReload }: { error: Error | null; onReload: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!error) return null;
   const conflict = isRevisionConflict(error);
   return (
@@ -175,14 +180,10 @@ function SaveProblem({ error, onReload }: { error: Error | null; onReload: () =>
       role="alert"
       className="flex items-center justify-between gap-3 border-b border-destructive/30 bg-destructive/5 px-4 py-2 text-sm text-destructive"
     >
-      <span className="min-w-0">
-        {conflict
-          ? "Someone saved a newer revision while you were editing. Reload to see it, then make your changes again."
-          : error.message}
-      </span>
+      <span className="min-w-0">{conflict ? uiT("ui.39f3088118fd5460") : error.message}</span>
       {conflict && (
         <Button variant="ghost" size="sm" onClick={onReload}>
-          Reload
+          {uiT("ui.bdc090ec61e3")}
         </Button>
       )}
     </div>
@@ -198,18 +199,20 @@ function RevisionPicker({
   latest: number;
   onPick: (revision: number) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const revisions = Array.from({ length: latest + 1 }, (_, offset) => latest - offset);
   return (
     <select
-      aria-label="Revision"
+      aria-label={uiT("ui.2e516d68f42f3e35")}
       className="h-8 rounded-md border-0 bg-transparent pr-7 pl-2 text-xs text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
       value={revision}
       onChange={(event) => onPick(Number(event.target.value))}
     >
       {revisions.map((value) => (
         <option key={value} value={value}>
-          Revision {value}
-          {value === latest ? " (latest)" : ""}
+          {uiT("ui.2e516d68f42f3e35")} {value}
+          {value === latest ? uiT("ui.6a47e389bb83ebee") : ""}
         </option>
       ))}
     </select>

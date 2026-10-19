@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { parseAsString, useQueryState } from "nuqs";
@@ -166,7 +167,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         return;
       }
       try {
-        toast.success(uiT("ui.4410d9c39839"));
+        toast.success(translateUi("ui.4410d9c39839"));
         const data = await invitationCreateCall(accessToken, userId);
         setInvitationLinkData(data);
         setIsInvitationLinkModalVisible(true);
@@ -174,7 +175,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         toast.fromError("Failed to generate password reset link");
       }
     },
-    [accessToken, uiT],
+    [accessToken],
   );
 
   const confirmDelete = async () => {
@@ -190,7 +191,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
           return { ...previousData, users: updatedUsers };
         });
 
-        toast.success(uiT("ui.0886a0785854"));
+        toast.success(translateUi("ui.0886a0785854"));
       } catch (error) {
         console.error("Error deleting user:", error);
         toast.fromError("Failed to delete user");

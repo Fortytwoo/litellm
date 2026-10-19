@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 /**
  * Unified selector component that handles both model and agent selection
  * based on the current endpoint configuration.
@@ -26,6 +29,8 @@ const matchesQuery = (option: SelectorOption, query: string): boolean =>
   option.label.toLowerCase().includes(query.trim().toLowerCase());
 
 export function UnifiedSelector({ value, options, loading, config, onChange }: UnifiedSelectorProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const selected = options.find((option) => option.value === value) ?? null;
   const noun = config.selectorLabel.toLowerCase();
 
@@ -39,7 +44,9 @@ export function UnifiedSelector({ value, options, loading, config, onChange }: U
       filter={matchesQuery}
     >
       <ComboboxInput
-        placeholder={loading ? `Loading ${noun}s...` : config.selectorPlaceholder}
+        placeholder={
+          loading ? uiT("ui.baf5cba8712d67c5", { v0: translateText(noun) }) : translateText(config.selectorPlaceholder)
+        }
         className="w-48 md:w-64 lg:w-72"
       />
       <ComboboxContent>
@@ -49,7 +56,7 @@ export function UnifiedSelector({ value, options, loading, config, onChange }: U
               <UiLoadingSpinner className="size-4" />
             </span>
           ) : (
-            `No ${noun}s available`
+            uiT("ui.92812187a2924551", { v0: String(noun) })
           )}
         </ComboboxEmpty>
         <ComboboxList>

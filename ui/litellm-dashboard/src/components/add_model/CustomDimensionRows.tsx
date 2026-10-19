@@ -1,4 +1,7 @@
 "use client";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -11,8 +14,18 @@ import { Slider } from "@/components/ui/slider";
 import type { CustomDimensionRow } from "./custom_dimensions";
 
 const SCORING_MODES = [
-  { value: "binary", label: "Binary" },
-  { value: "match_count", label: "Match count" },
+  {
+    value: "binary",
+    get label() {
+      return translateUi("ui.ee1c8277caf5fb9b");
+    },
+  },
+  {
+    value: "match_count",
+    get label() {
+      return translateUi("ui.5b2c5230eae26071");
+    },
+  },
 ] as const;
 
 interface Props {
@@ -38,14 +51,16 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
     <div className="space-y-4">
       {rows.map((row, index) => (
         <fieldset key={row.id} className="min-w-0 space-y-3 rounded-md border p-3">
-          <legend className="float-left text-sm font-semibold">Custom dimension {index + 1}</legend>
+          <legend className="float-left text-sm font-semibold">
+            {uiT("ui.7875ebc9ff4a1b76")} {index + 1}
+          </legend>
           <div className="flex items-center gap-2">
             <Button
               type="button"
               variant="ghost"
               size="sm"
               className="text-destructive hover:text-destructive/80"
-              aria-label={`Remove custom dimension ${index + 1}`}
+              aria-label={uiT("ui.5aaeef80d367509f", { v0: String(index + 1) })}
               disabled={disabled}
               onClick={() => onRemove(row.id)}
             >
@@ -71,7 +86,9 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
               disabled={disabled}
               value={[row.weight]}
               className="min-w-24 flex-1"
-              aria-label={`${row.name || `Custom dimension ${index + 1}`} weight`}
+              aria-label={uiT("ui.8e03c9777de12cb3", {
+                v0: String(row.name || translateUi("ui.400fd5c23c914343", undefined, { v0: String(index + 1) })),
+              })}
               onValueChange={(value) => onWeight(row.id, Array.isArray(value) ? value[0] : value)}
             />
             <Input
@@ -88,7 +105,8 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
             {(["keywords", "patterns"] as const).map((field) => (
               <div key={field} className="min-w-0 space-y-1">
                 <Label htmlFor={`${row.id}-${field}`}>
-                  {field === "keywords" ? "Keywords" : "Regex patterns"} (one per line)
+                  {field === "keywords" ? uiT("ui.8bfdb93cafaa9147") : uiT("ui.36e205848147c947")}{" "}
+                  {uiT("ui.71b442586d53faea")}
                 </Label>
                 <Textarea
                   id={`${row.id}-${field}`}
@@ -102,7 +120,7 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
             ))}
           </div>
           <div className="space-y-1">
-            <Label htmlFor={`${row.id}-scoring`}>Scoring</Label>
+            <Label htmlFor={`${row.id}-scoring`}>{uiT("ui.9ea9bd2122aab52a")}</Label>
             <Select
               items={SCORING_MODES}
               value={row.scoring_mode ?? "binary"}
@@ -121,20 +139,14 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-muted-foreground">
-              Binary uses the full weight for any hit. Match count uses half for one distinct matcher and full weight
-              for two or more.
-            </p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.ec60f1b1eff1938b")}</p>
           </div>
         </fieldset>
       ))}
       <Button type="button" variant="outline" size="sm" disabled={disabled || rows.length >= 16} onClick={onAdd}>
-        Add custom dimension
+        {uiT("ui.9ebed1fa5178cba4")}
       </Button>
-      <p className="text-xs text-muted-foreground">
-        Keywords match the current ask. Regex scans its first 2,048 characters and permits bounded single-character
-        repeats up to 64. The proxy validates patterns on save.
-      </p>
+      <p className="text-xs text-muted-foreground">{uiT("ui.90f4294f1bcd5262")}</p>
     </div>
   );
 }

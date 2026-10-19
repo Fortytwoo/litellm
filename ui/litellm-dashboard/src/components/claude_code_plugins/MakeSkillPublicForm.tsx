@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
@@ -95,7 +99,7 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
         }),
       );
 
-      toast.success(`Skill Hub updated — ${selectedSkills.size} skill(s) published`);
+      toast.success(translateUi("ui.d44e08d5869de414", undefined, { v0: String(selectedSkills.size) }));
       handleClose();
       onSuccess();
     } catch (error) {
@@ -112,7 +116,7 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
   const renderStep1 = () => (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Select Skills to Publish</h3>
+        <h3 className="text-lg font-semibold">{uiT("ui.98d1300becedd667")}</h3>
         <label className="flex items-center gap-2 text-sm">
           <Checkbox
             checked={allSelected}
@@ -120,19 +124,18 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
             onCheckedChange={(checked) => handleSelectAll(checked === true)}
             disabled={skillsList.length === 0}
           />
-          Select All ({skillsList.length})
+          {uiT("ui.e63e448c28093948")}
+          {skillsList.length})
         </label>
       </div>
 
-      <p className="text-sm text-muted-foreground">
-        Selected skills will be visible to all users in the Skill Hub. Deselected skills will be unpublished.
-      </p>
+      <p className="text-sm text-muted-foreground">{uiT("ui.fc37714b8e49048c")}</p>
 
       <div className="max-h-96 overflow-y-auto border rounded-lg p-4">
         <div className="space-y-3">
           {skillsList.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <p>No skills registered yet.</p>
+              <p>{uiT("ui.860dd776ed20c08d")}</p>
             </div>
           ) : (
             skillsList.map((skill) => (
@@ -145,7 +148,7 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="font-medium font-mono text-sm break-words">{skill.name}</p>
-                    {skill.enabled && <Badge variant="secondary">Public</Badge>}
+                    {skill.enabled && <Badge variant="secondary">{uiT("ui.591935b15b1c88e2")}</Badge>}
                   </div>
                   {skill.description && (
                     <p className="text-xs text-muted-foreground truncate max-w-sm">{skill.description}</p>
@@ -161,7 +164,8 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
       {selectedSkills.size > 0 && (
         <div className="bg-info/10 border border-info/20 rounded-lg p-3">
           <p className="text-sm text-info">
-            <strong>{selectedSkills.size}</strong> skill{selectedSkills.size !== 1 ? "s" : ""} will be published
+            <strong>{selectedSkills.size}</strong> {uiT("ui.9c53c074d7ac6a27")}
+            {selectedSkills.size !== 1 ? "s" : ""} {uiT("ui.5182b177761b9a1f")}
           </p>
         </div>
       )}
@@ -170,17 +174,16 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
 
   const renderStep2 = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Confirm Publish to Skill Hub</h3>
+      <h3 className="text-lg font-semibold">{uiT("ui.8c48afa68b15d620")}</h3>
 
       <div className="bg-warning/10 border border-warning/20 rounded-lg p-4">
         <p className="text-sm text-warning">
-          <strong>Note:</strong> Published skills will be visible to all users in the Skill Hub tab. Skills not in the
-          list below will be unpublished.
+          <strong>{uiT("ui.1150f05446e4d344")}</strong> {uiT("ui.d48940e9fa150d44")}
         </p>
       </div>
 
       <div className="space-y-3">
-        <p className="font-medium">Skills to be published:</p>
+        <p className="font-medium">{uiT("ui.1c760cd72f1c2f38")}</p>
         <div className="max-h-48 overflow-y-auto border rounded-lg p-3">
           <div className="space-y-2">
             {Array.from(selectedSkills).map((name) => {
@@ -198,8 +201,8 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
 
       <div className="bg-info/10 border border-info/20 rounded-lg p-3">
         <p className="text-sm text-info">
-          {uiT("ui.18e872be2359")} <strong>{selectedSkills.size}</strong> skill{selectedSkills.size !== 1 ? "s" : ""}{" "}
-          will be published
+          {uiT("ui.18e872be2359")} <strong>{selectedSkills.size}</strong> {uiT("ui.9c53c074d7ac6a27")}
+          {selectedSkills.size !== 1 ? "s" : ""} {uiT("ui.5182b177761b9a1f")}
         </p>
       </div>
     </div>
@@ -209,7 +212,7 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()} disablePointerDismissal>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Publish to Skill Hub</DialogTitle>
+          <DialogTitle>{uiT("ui.d6b93e55272f1f5c")}</DialogTitle>
         </DialogHeader>
 
         <div>
@@ -231,7 +234,7 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
                   {index + 1}
                 </span>
                 <span className={cn("text-sm", currentStep === index ? "font-medium" : "text-muted-foreground")}>
-                  {title}
+                  {translateText(title)}
                 </span>
               </li>
             ))}
@@ -252,7 +255,7 @@ const MakeSkillPublicForm: React.FC<MakeSkillPublicFormProps> = ({
               {currentStep === 1 && (
                 <Button onClick={handleSubmit} disabled={loading}>
                   {loading && <Loader2 className="size-4 animate-spin" />}
-                  Publish to Hub
+                  {uiT("ui.b31cd107d818451f")}
                 </Button>
               )}
             </div>

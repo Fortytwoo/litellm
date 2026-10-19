@@ -42,30 +42,29 @@ export const AgentIdentityDetails = ({
   if (!identity || !isAdmin) return null;
   const executionLabel = data?.enabled ? "Enabled" : "Disabled";
   return (
-    <section aria-label="Agent Identity" className="mb-6 space-y-2 rounded-lg border border-border p-4">
-      <h3 className="font-medium">Agent Identity: Microsoft Entra ID</h3>
+    <section aria-label={uiT("ui.7a23ac9bb939a97e")} className="mb-6 space-y-2 rounded-lg border border-border p-4">
+      <h3 className="font-medium">{uiT("ui.cee7a52717a81598")}</h3>
       <p className="text-sm">
-        Tenant: <span className="font-mono">{identity.tenant_id}</span>
+        {uiT("ui.4bfda820af2a8501")} <span className="font-mono">{identity.tenant_id}</span>
       </p>
       <>
         <p className="text-sm">
-          Application (Client) ID: <span className="font-mono">{identity.client_id}</span>
+          {uiT("ui.b4969a9e043fed0e")} <span className="font-mono">{identity.client_id}</span>
         </p>
-        <p className="text-sm">Enterprise application Object ID: {identity.service_principal_id || "Not configured"}</p>
+        <p className="text-sm">
+          {uiT("ui.c34f773650a1bd73")} {identity.service_principal_id || uiT("ui.dd1841d295024256")}
+        </p>
       </>
       <p className="text-sm">
-        Execution: {data ? executionLabel : uiT("ui.dc380888c4e2")} · Mode:{" "}
+        {uiT("ui.639fd433f6dc9987")} {data ? executionLabel : uiT("ui.dc380888c4e2")} {uiT("ui.81aea8d1a31a438f")}{" "}
         {data?.execution_mode ?? uiT("ui.dc380888c4e2")}
       </p>
       <p className="text-sm">
         {data?.identity?.active === false
-          ? "Identity unbound; execution is disabled"
+          ? uiT("ui.744ab66488329a13")
           : authenticationMessage(isError, data?.last_authenticated_at)}
       </p>
-      <p className="text-xs text-muted-foreground">
-        Recent evidence comes from a validated Entra token matching this binding. It is persisted across restarts and
-        cleared when the binding changes. Tool and model permissions are checked separately.
-      </p>
+      <p className="text-xs text-muted-foreground">{uiT("ui.1e408ca7faa2f91b")}</p>
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -75,10 +74,10 @@ export const AgentIdentityDetails = ({
             void refetch();
           }}
         >
-          Refresh authentication evidence
+          {uiT("ui.8cde430800f5d0f1")}
         </Button>
         <a className="text-sm underline" href="/ui/logs/">
-          View request logs
+          {uiT("ui.6d5544f8243ebac3")}
         </a>
       </div>
     </section>

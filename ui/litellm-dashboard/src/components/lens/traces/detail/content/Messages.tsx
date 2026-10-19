@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Bot, Settings2, User, Wrench } from "lucide-react";
 
@@ -10,7 +13,20 @@ import { Block, BlockBadge, type BadgeTone } from "./Block";
 import { Markdown } from "./Markdown";
 import { ToolArguments, ToolOutput } from "./ToolContent";
 
-const ROLE_LABEL: Record<string, string> = { user: "User", system: "System", assistant: "Assistant", tool: "Tool" };
+const ROLE_LABEL: Record<string, string> = {
+  get user() {
+    return translateUi("ui.b512d97e7cbf");
+  },
+  get system() {
+    return translateUi("ui.6725e7bbcd28f3a8");
+  },
+  get assistant() {
+    return translateUi("ui.391e405152779acc");
+  },
+  get tool() {
+    return translateUi("ui.2e53bdcd0740867b");
+  },
+};
 const ROLE_TONE: Record<string, BadgeTone> = { user: "user", assistant: "assistant", tool: "tool", system: "neutral" };
 const ROLE_ICON: Record<string, React.ReactNode> = {
   user: <User />,
@@ -22,6 +38,8 @@ const ROLE_ICON: Record<string, React.ReactNode> = {
 const argsText = (args: unknown): string => (typeof args === "string" ? args : JSON.stringify(args));
 
 export function ToolCallBlock({ call }: { call: TraceToolCall }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="rounded-md border border-border bg-background">
       <div className="flex items-center gap-2 border-b border-border/70 px-2.5 py-1.5">
@@ -32,14 +50,14 @@ export function ToolCallBlock({ call }: { call: TraceToolCall }) {
         <CopyButton
           variant="action"
           value={`${call.name}(${argsText(call.args)})`}
-          label={`Copy ${call.name} call`}
+          label={uiT("ui.af1a5d5755c18108", { v0: String(call.name) })}
           iconOnly
           className="ml-auto size-6 text-muted-foreground"
         />
       </div>
       <div className="px-2.5 py-2">
         {call.args === undefined ? (
-          <p className="py-2 text-xs text-muted-foreground">Arguments not recorded</p>
+          <p className="py-2 text-xs text-muted-foreground">{uiT("ui.9f629d690cfc43c4")}</p>
         ) : (
           <ToolArguments args={call.args} />
         )}
@@ -86,6 +104,8 @@ export function MessageList({ messages }: { messages: readonly TraceMessage[] })
 }
 
 export function ToolResultCard({ name, result, failed = false }: { name: string; result: string; failed?: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <article
       className={cn(
@@ -101,7 +121,7 @@ export function ToolResultCard({ name, result, failed = false }: { name: string;
         <CopyButton
           variant="action"
           value={result}
-          label={`Copy ${name} result`}
+          label={uiT("ui.31fbd1b7902bb3d6", { v0: String(name) })}
           iconOnly
           className="size-6 shrink-0 text-muted-foreground"
         />

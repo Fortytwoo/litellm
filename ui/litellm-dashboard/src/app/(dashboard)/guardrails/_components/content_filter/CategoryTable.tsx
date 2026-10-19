@@ -36,7 +36,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
 
   const columns: ColumnDef<ContentCategory>[] = [
     {
-      header: "Category",
+      header: uiT("ui.292c06f0045a45d0"),
       accessorKey: "display_name",
       cell: ({ row }) => {
         const { category, display_name: displayName } = row.original;
@@ -49,7 +49,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       },
     },
     {
-      header: "Severity Threshold",
+      header: uiT("ui.3b84d530eec69788"),
       accessorKey: "severity_threshold",
       size: 180,
       cell: ({ row }) => {
@@ -65,7 +65,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
               value && onSeverityChange?.(id, value as "high" | "medium" | "low")
             }
           >
-            <SelectTrigger size="sm" className="w-[150px]" aria-label="Severity Threshold">
+            <SelectTrigger size="sm" className="w-[150px]" aria-label={uiT("ui.3b84d530eec69788")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -125,7 +125,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
   }
 
   if (categories.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No categories configured.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{uiT("ui.945ffee71e288710")}</div>;
   }
 
   return <DataTable data={categories} columns={columns} getRowId={(row) => row.id} size="compact" />;

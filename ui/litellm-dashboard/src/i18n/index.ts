@@ -1,5 +1,6 @@
 import en from "./locales/en.json";
 import zh from "./locales/zh.json";
+import templateInflections from "./templateInflections.json";
 
 export type Locale = "en" | "zh";
 export type TranslationMap = { readonly [key: string]: string | TranslationMap };
@@ -24,11 +25,64 @@ const displayKeys = new Map(
 
 export function translateText(value: string, locale: Locale = activeLocale): string {
   const key = displayKeys.get(value);
-  return key ? t(key, locale) : value;
+  if (key) return t(key, locale);
+  const trimmedKey = displayKeys.get(value.trim());
+  if (trimmedKey) {
+    return (value.match(/^\s*/)?.[0] ?? "") + t(trimmedKey, locale).trim() + (value.match(/\s*$/)?.[0] ?? "");
+  }
+  if (value.length > 5000) return value;
+  for (const template of displayTemplates) {
+    if (template.locale === locale || !value.startsWith(template.prefix)) continue;
+    const match = template.pattern.exec(value);
+    if (!match) continue;
+    const captures = Object.fromEntries(template.names.map((name, index) => [name, match[index + 1]]));
+    if (template.names.some((name, index) => captures[name] !== match[index + 1])) continue;
+    const suffixes = (templateInflections as Readonly<Record<string, readonly string[]>>)[template.key] ?? [];
+    const values = Object.fromEntries(
+      Object.entries(captures).map(([name, captured]) => [
+        name,
+        locale === "zh" && suffixes.includes(name) ? "" : captured,
+      ]),
+    );
+    return t(template.key, locale, values);
+  }
+  return value;
 }
+
+const escapePattern = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const displayTemplates = (["en", "zh"] as const)
+  .flatMap((locale) =>
+    Object.entries(translations[locale].ui as Readonly<Record<string, string>>).flatMap(([id, message]) => {
+      const names = [...message.matchAll(/\{\{(\w+)\}\}/g)].map((match) => match[1]);
+      const parts = message.split(/\{\{\w+\}\}/g);
+      const suffixes = (templateInflections as Readonly<Record<string, readonly string[]>>)["ui." + id] ?? [];
+      const ambiguous = /\}\}\s*\{\{/.test(message) && !suffixes.length;
+      if (!names.length || parts.join("").trim().length < 8 || ambiguous) return [];
+      const pattern = parts.reduce((result, part, index) => {
+        if (!index) return escapePattern(part);
+        const capture = suffixes.includes(names[index - 1]) ? "(s?)" : "([\\s\\S]*?)";
+        return result + capture + escapePattern(part);
+      }, "");
+      return [
+        {
+          key: "ui." + id,
+          locale,
+          names,
+          prefix: parts[0],
+          pattern: new RegExp("^" + pattern + "$"),
+          weight: parts.join("").length,
+        },
+      ];
+    }),
+  )
+  .sort((left, right) => right.weight - left.weight);
 
 export function getActiveLocale(): Locale {
   return activeLocale;
+}
+
+export function getFormattingLocale(): string {
+  return activeLocale === "zh" ? "zh-CN" : "en-US";
 }
 
 export function setActiveLocale(locale: Locale): void {

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
@@ -77,7 +79,7 @@ const TagManagement: React.FC<TagProps> = ({ accessToken, userID, userRole }) =>
         rpm_limit: formValues.rpm_limit,
         budget_duration: formValues.budget_duration,
       });
-      toast.success("Tag created successfully");
+      toast.success(translateUi("ui.e77d3ef3d82345a5"));
       setIsCreateModalVisible(false);
       fetchTags();
     } catch (error) {
@@ -96,7 +98,7 @@ const TagManagement: React.FC<TagProps> = ({ accessToken, userID, userRole }) =>
     setIsDeleting(true);
     try {
       await tagDeleteCall(accessToken, tagToDelete);
-      toast.success("Tag deleted successfully");
+      toast.success(translateUi("ui.cb0e058f95cae151"));
       fetchTags();
     } catch (error) {
       console.error("Error deleting tag:", error);
@@ -147,27 +149,35 @@ const TagManagement: React.FC<TagProps> = ({ accessToken, userID, userRole }) =>
           <div className="mt-2 mb-4 flex w-full items-center justify-between">
             <h1>{uiT("ui.ffad9c9950e0")}</h1>
             <div className="flex items-center space-x-2">
-              {lastRefreshed && <p className="text-sm">Last Refreshed: {lastRefreshed}</p>}
-              <Button variant="outline" size="icon-sm" aria-label="Refresh tags" onClick={handleRefreshClick}>
+              {lastRefreshed && (
+                <p className="text-sm">
+                  {uiT("ui.3b98c503fa688b18")} {lastRefreshed}
+                </p>
+              )}
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label={uiT("ui.a973fee58b6786af")}
+                onClick={handleRefreshClick}
+              >
                 <RefreshCw />
               </Button>
             </div>
           </div>
 
           <div className="mb-4 text-sm">
-            Click on a tag name to view and edit its details.
+            {uiT("ui.48165dbacbe2ced1")}
             <p>
-              You can use tags to restrict the usage of certain LLMs based on tags passed in the request. Read more
-              about tag routing{" "}
+              {uiT("ui.1c62364a98d5a350")}{" "}
               <a href="https://docs.litellm.ai/docs/proxy/tag_routing" target="_blank" rel="noopener noreferrer">
-                here
+                {uiT("ui.fcec91509759ad99")}
               </a>
               .
             </p>
           </div>
 
           <Button className="mb-4 self-start" onClick={() => setIsCreateModalVisible(true)}>
-            + Create New Tag
+            {uiT("ui.ecaeb3bb98e6f769")}
           </Button>
 
           <div className="mt-2 flex min-h-0 flex-1 flex-col">
@@ -194,10 +204,10 @@ const TagManagement: React.FC<TagProps> = ({ accessToken, userID, userRole }) =>
           {/* Delete Confirmation Modal */}
           <DeleteResourceModal
             isOpen={isDeleteModalOpen}
-            title="Delete Tag"
-            message="Are you sure you want to delete this tag? This action cannot be undone."
+            title={uiT("ui.01595e8f253bee9c")}
+            message={uiT("ui.380fb510513f76a7")}
             resourceInformationTitle="Tag Information"
-            resourceInformation={[{ label: "Tag Name", value: tagToDelete, code: true }]}
+            resourceInformation={[{ label: uiT("ui.077b1b77d3100997"), value: tagToDelete, code: true }]}
             onCancel={() => {
               setIsDeleteModalOpen(false);
               setTagToDelete(null);

@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +20,8 @@ export interface RunPickerProps {
 }
 
 export function RunPicker({ lens, job }: RunPickerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { batchId, selectRun } = useRunRoute();
   const history = useRunHistory(lens, 0);
   if (!job) return null;
@@ -29,56 +33,56 @@ export function RunPicker({ lens, job }: RunPickerProps) {
   return (
     <div className="flex min-w-0 items-center gap-1 pb-1">
       <select
-        aria-label="Investigation run"
+        aria-label={uiT("ui.c53c938f0a20d238")}
         className="h-8 w-44 max-w-full truncate rounded-md border-0 bg-transparent px-2 text-xs text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
         value={batchId}
         onChange={(e) => selectRun(e.target.value)}
       >
-        <option value="latest">Latest run</option>
+        <option value="latest">{uiT("ui.36adcd07b9bda0b9")}</option>
         {outsideHistory && (
           <option value={batchId}>
-            {when(job.created_at)} · {runStatus(job)}
+            {when(job.created_at)} · {translateText(runStatus(job))}
           </option>
         )}
         {options.map((j) => (
           <option key={j.id} value={j.id}>
-            {when(j.created_at)} · {runStatus(j)}
+            {when(j.created_at)} · {translateText(runStatus(j))}
           </option>
         ))}
-        <option value="all">All accumulated findings</option>
+        <option value="all">{uiT("ui.f48acfef3ef0e661")}</option>
       </select>
       {batchId !== "all" && (
         <Popover key={job.id}>
           <PopoverTrigger
-            aria-label="Run details"
+            aria-label={uiT("ui.7bbc36905270774e")}
             render={<Button variant="ghost" size="icon" className="size-7 text-muted-foreground" />}
           >
             <Info className="size-3.5" />
           </PopoverTrigger>
           <PopoverContent align="end" className="gap-3">
-            <PopoverTitle>Run details</PopoverTitle>
+            <PopoverTitle>{uiT("ui.7bbc36905270774e")}</PopoverTitle>
             <p className="text-xs text-muted-foreground">
-              {newlyReviewed} newly reviewed · {reused} reused reviews
+              {newlyReviewed} {uiT("ui.666e403b582ac23b")} {reused} {uiT("ui.08b2beaa154431c6")}
               <ScanDuration job={job} />
             </p>
             <p className="text-xs text-muted-foreground">
-              {job.coverage?.partial ?? 0} partial traces · {job.coverage?.unassessable ?? 0} could not be assessed ·{" "}
-              {job.coverage?.inconclusive ?? 0} inconclusive
+              {job.coverage?.partial ?? 0} {uiT("ui.789cda6337e0a124")} {job.coverage?.unassessable ?? 0}{" "}
+              {uiT("ui.e5e07a5af6fc153e")} {job.coverage?.inconclusive ?? 0} {uiT("ui.9e68cbd21510abbf")}
             </p>
             <dl className="space-y-2 text-xs">
               <div>
-                <dt className="text-muted-foreground">Activity window</dt>
+                <dt className="text-muted-foreground">{uiT("ui.f6080fcbab17cbeb")}</dt>
                 <dd className="mt-1">
-                  {when(job.start)} to {when(job.end)}
+                  {when(job.start)} {uiT("ui.663ea1bfffe5")} {when(job.end)}
                 </dd>
               </div>
               <div className="flex justify-between gap-2">
-                <dt className="text-muted-foreground">Analysis cost</dt>
+                <dt className="text-muted-foreground">{uiT("ui.cb7279a3181aa742")}</dt>
                 <dd>{money(job.cost ?? 0)}</dd>
               </div>
               <div className="flex justify-between gap-2">
-                <dt className="text-muted-foreground">Status</dt>
-                <dd>{runStatus(job)}</dd>
+                <dt className="text-muted-foreground">{uiT("ui.920e413c7d41")}</dt>
+                <dd>{translateText(runStatus(job))}</dd>
               </div>
             </dl>
           </PopoverContent>

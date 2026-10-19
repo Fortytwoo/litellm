@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { useId, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
@@ -19,13 +23,15 @@ function useLocked() {
 }
 
 function StorageStep({ state, goTo, storageReady }: StepProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { readOnly, openTrace } = useOnboarding();
   const accessToken = useLensAccessToken();
   if (!storageReady)
     return (
       <>
         <TracingSetupFields
-          detail="Tracing is not enabled"
+          detail={uiT("ui.c692abf869ef7e09")}
           accessToken={accessToken}
           onOpenTrace={openTrace}
           onCheck={state.refresh}
@@ -38,10 +44,10 @@ function StorageStep({ state, goTo, storageReady }: StepProps) {
   return (
     <div className="space-y-4">
       <p role="status" className="text-sm text-success">
-        Trace storage is connected
+        {uiT("ui.66b7dd23520f2f3e")}
       </p>
       <Button onClick={() => goTo(1)}>
-        Continue to your agent <ArrowRight aria-hidden="true" className="size-4" />
+        {uiT("ui.6fc49306b4b4880b")} <ArrowRight aria-hidden="true" className="size-4" />
       </Button>
       <ActivityContinuation state={state} />
     </div>
@@ -54,25 +60,27 @@ function continuationLabel(state: LensReadiness) {
 }
 
 function ActivityContinuation({ state }: { state: LensReadiness }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { connect, create } = useOnboarding();
   const locked = useLocked();
   if (!state.activityReady) return null;
   return (
     <div className="mt-4">
       <Button onClick={state.connected ? create : connect} disabled={locked}>
-        {continuationLabel(state)}
+        {translateText(continuationLabel(state))}
         <ArrowRight aria-hidden="true" className="size-4" />
       </Button>
       {state.requestsReady && !state.tracesReady && (
-        <p className="mt-2 text-xs text-muted-foreground">
-          Request logs are already available. You can investigate them now and add agent traces later.
-        </p>
+        <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.9a09ba0b8b0d600e")}</p>
       )}
     </div>
   );
 }
 
 function AgentStep({ state }: StepProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { readOnly, canMintTracingKey, openTrace } = useOnboarding();
   const accessToken = useLensAccessToken();
   return (
@@ -93,7 +101,7 @@ function AgentStep({ state }: StepProps) {
       </div>
       {state.tracesReady && (
         <p role="status" className="text-sm text-success">
-          Your first trace is ready. Continue setup so Lens can investigate your agent’s behavior.
+          {uiT("ui.d6ce81b03e246cb9")}
         </p>
       )}
       <ActivityContinuation state={state} />
@@ -102,20 +110,18 @@ function AgentStep({ state }: StepProps) {
 }
 
 function WorkerStep({ state }: StepProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { connect, create } = useOnboarding();
   const locked = useLocked();
   return (
     <div className="space-y-4">
       <p role="status" className="text-sm text-muted-foreground">
-        {state.connected
-          ? "Worker connected. You’re ready to create an investigation."
-          : "The worker reviews recorded activity using a model on your gateway. You choose its analysis model and spending limit."}
+        {state.connected ? uiT("ui.99a15f3e2c920d42") : uiT("ui.c8793c429d7c9de6")}
       </p>
-      {!state.activityReady && (
-        <p className="text-sm text-muted-foreground">Recorded activity is required before connecting a worker.</p>
-      )}
+      {!state.activityReady && <p className="text-sm text-muted-foreground">{uiT("ui.3186de2a491bfbdf")}</p>}
       <Button onClick={state.connected ? create : connect} disabled={!state.activityReady || locked}>
-        {state.connected ? "Continue to investigation" : "Connect worker"}
+        {state.connected ? uiT("ui.eca46c3ea84ec35c") : uiT("ui.f3dfc2f02f831858")}
         <ArrowRight aria-hidden="true" className="size-4" />
       </Button>
     </div>
@@ -123,21 +129,16 @@ function WorkerStep({ state }: StepProps) {
 }
 
 function InvestigationStep({ state }: StepProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { create } = useOnboarding();
   const locked = useLocked();
   return (
     <div className="space-y-4">
-      <p className="text-sm leading-6 text-muted-foreground">
-        Choose the activity to review and describe how your agent should behave. Lens will show findings with evidence
-        and suggested changes.
-      </p>
-      {!state.ready && (
-        <p className="text-sm text-muted-foreground">
-          Recorded activity and a connected worker are required before you can run an investigation.
-        </p>
-      )}
+      <p className="text-sm leading-6 text-muted-foreground">{uiT("ui.ea8cfdf3b091c8e1")}</p>
+      {!state.ready && <p className="text-sm text-muted-foreground">{uiT("ui.9aa42634f12cbf92")}</p>}
       <Button onClick={create} disabled={!state.ready || locked}>
-        New investigation <ArrowRight aria-hidden="true" className="size-4" />
+        {uiT("ui.c11364d7598c3309")} <ArrowRight aria-hidden="true" className="size-4" />
       </Button>
     </div>
   );
@@ -152,26 +153,42 @@ interface StepDefinition {
 
 const STEPS: readonly StepDefinition[] = [
   {
-    title: "Install Lens",
-    description: "Enable Lens in your Helm or Docker deployment.",
+    get title() {
+      return translateUi("ui.3bfe61916c50a7d2");
+    },
+    get description() {
+      return translateUi("ui.95e6e237ba0ef72b");
+    },
     complete: (_state, storageReady) => storageReady,
     Content: StorageStep,
   },
   {
-    title: "Send your first trace",
-    description: "Capture your agent’s inputs, outputs, and tool calls.",
+    get title() {
+      return translateUi("ui.435bfcfc80cbf1c1");
+    },
+    get description() {
+      return translateUi("ui.4c2e81a8fa77c676");
+    },
     complete: (state) => state.tracesReady,
     Content: AgentStep,
   },
   {
-    title: "Connect a worker",
-    description: "Choose an analysis model and spending limit.",
+    get title() {
+      return translateUi("ui.81c1a51a904b487c");
+    },
+    get description() {
+      return translateUi("ui.d513985538f1191b");
+    },
     complete: (state) => state.connected,
     Content: WorkerStep,
   },
   {
-    title: "Run your first investigation",
-    description: "Describe the expected behavior and review a sample of activity.",
+    get title() {
+      return translateUi("ui.fba0d2ed7d2290e3");
+    },
+    get description() {
+      return translateUi("ui.7ac42ea4d2e3bcfe");
+    },
     complete: (state) => state.hasInvestigations,
     Content: InvestigationStep,
   },

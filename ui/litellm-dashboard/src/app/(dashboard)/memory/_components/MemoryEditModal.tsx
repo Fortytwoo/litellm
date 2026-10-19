@@ -1,4 +1,6 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { CircleHelp } from "lucide-react";
@@ -25,10 +27,12 @@ type MemoryFormValues = z.output<typeof memorySchema>;
 
 const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -83,7 +87,11 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
     >
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[640px]">
         <DialogHeader>
-          <DialogTitle>{mode === "create" ? "Create memory" : `Edit ${initialRow?.key ?? ""}`}</DialogTitle>
+          <DialogTitle>
+            {mode === "create"
+              ? uiT("ui.65a3bd29134fcd8d")
+              : uiT("ui.f1be7e63b84c48df", { v0: String(initialRow?.key ?? "") })}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <TooltipProvider>
@@ -97,7 +105,7 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
                 )}
               >
                 {({ ref, ...field }) => (
-                  <Input {...field} ref={ref} placeholder="e.g. user_role" disabled={mode === "edit"} />
+                  <Input {...field} ref={ref} placeholder={uiT("ui.4e3f60656aa97853")} disabled={mode === "edit"} />
                 )}
               </FormField>
 
@@ -107,7 +115,7 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
                 label={labelWithHint("Value", "Markdown/text injected into LLM context. Plain strings are fine.")}
               >
                 {({ ref, ...field }) => (
-                  <Textarea {...field} ref={ref} rows={8} placeholder="What the agent should remember…" />
+                  <Textarea {...field} ref={ref} rows={8} placeholder={uiT("ui.4646e5c9f657a0a1")} />
                 )}
               </FormField>
 
@@ -116,7 +124,7 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
                 name="metadata"
                 label={labelWithHint(
                   <span>
-                    {uiT("ui.9eddf573cb50")} <span className="text-muted-foreground">(optional JSON)</span>
+                    {uiT("ui.9eddf573cb50")} <span className="text-muted-foreground">{uiT("ui.9935941459eca6fd")}</span>
                   </span>,
                   "Optional structured metadata — must be valid JSON if provided.",
                 )}

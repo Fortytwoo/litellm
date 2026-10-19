@@ -1,4 +1,9 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Edit, ExternalLink, Info, KeyRound, PlugZap, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -36,6 +41,8 @@ function DetailRow({ children, label }: { children: React.ReactNode; label: stri
 }
 
 export default function HashicorpVault() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const { data, isLoading, isError, error } = useHashicorpVaultConfig();
   const { mutate: deleteConfig, isPending: isDeleting } = useDeleteHashicorpVaultConfig(accessToken);
@@ -52,7 +59,7 @@ export default function HashicorpVault() {
     setIsTesting(true);
     try {
       const result = await testHashicorpVaultConnection(accessToken);
-      toast.success(result.message || "Connection to Vault successful!");
+      toast.success(result.message || translateUi("ui.f0773c461a9c5ba2"));
     } catch (err) {
       toast.fromError(err);
     } finally {
@@ -63,7 +70,7 @@ export default function HashicorpVault() {
   const handleDelete = () => {
     deleteConfig(undefined, {
       onSuccess: () => {
-        toast.success("Hashicorp Vault configuration deleted");
+        toast.success(translateUi("ui.53a90c3794bb9015"));
         setIsDeleteModalOpen(false);
       },
       onError: (err) => toast.fromError(err),
@@ -76,7 +83,9 @@ export default function HashicorpVault() {
       { [clearingField]: "" },
       {
         onSuccess: () => {
-          toast.success(`${FIELD_LABELS[clearingField] ?? clearingField} cleared`);
+          toast.success(
+            translateUi("ui.f221bbbc0ddd4d4f", undefined, { v0: String(FIELD_LABELS[clearingField] ?? clearingField) }),
+          );
           setClearingField(null);
         },
         onError: (err) => toast.fromError(err),
@@ -86,7 +95,7 @@ export default function HashicorpVault() {
 
   const renderValue = (key: string) => {
     const value = rawValues[key];
-    if (!value) return <span className="text-muted-foreground italic">Not configured</span>;
+    if (!value) return <span className="text-muted-foreground italic">{uiT("ui.dd1841d295024256")}</span>;
     if (!SENSITIVE_FIELDS.has(key)) return <span className="font-mono text-muted-foreground">{value}</span>;
 
     return (
@@ -96,7 +105,7 @@ export default function HashicorpVault() {
           type="button"
           variant="ghost"
           size="icon-sm"
-          aria-label={`Clear ${FIELD_LABELS[key] ?? key}`}
+          aria-label={uiT("ui.ada4add9f42761ca", { v0: String(FIELD_LABELS[key] ?? key) })}
           onClick={() => setClearingField(key)}
         >
           <Trash2 className="size-3.5" />
@@ -110,7 +119,7 @@ export default function HashicorpVault() {
   return (
     <>
       {isLoading ? (
-        <Card role="status" aria-label="Loading Hashicorp Vault configuration">
+        <Card role="status" aria-label={uiT("ui.0eb7a13cbbae036e")}>
           <CardContent className="space-y-3">
             <Skeleton className="h-8 w-64" />
             <Skeleton className="h-40 w-full" />
@@ -120,7 +129,7 @@ export default function HashicorpVault() {
         <Card>
           <CardContent>
             <Alert variant="error">
-              <AlertTitle>Could not load Hashicorp Vault configuration</AlertTitle>
+              <AlertTitle>{uiT("ui.7299f9e70539b3e8")}</AlertTitle>
               {error instanceof Error && <AlertDescription>{error.message}</AlertDescription>}
             </Alert>
           </CardContent>
@@ -132,24 +141,24 @@ export default function HashicorpVault() {
               <KeyRound className="size-6 text-muted-foreground" />
               <div>
                 <CardTitle>
-                  <h3>Hashicorp Vault</h3>
+                  <h3>{uiT("ui.03e2d829ad76471e")}</h3>
                 </CardTitle>
-                <CardDescription>Manage secret manager configuration</CardDescription>
+                <CardDescription>{uiT("ui.84b52e8beac8684a")}</CardDescription>
               </div>
             </div>
             {isConfigured && (
               <CardAction className="flex flex-wrap gap-2">
                 <Button type="button" variant="outline" disabled={isTesting} onClick={handleTestConnection}>
                   <PlugZap />
-                  {isTesting ? "Testing..." : "Test Connection"}
+                  {isTesting ? uiT("ui.6c02a28421f8ad91") : uiT("ui.c02977b07ec93816")}
                 </Button>
                 <Button type="button" variant="outline" onClick={() => setIsEditModalVisible(true)}>
                   <Edit />
-                  Edit Configuration
+                  {uiT("ui.0a397326a036f57a")}
                 </Button>
                 <Button type="button" variant="destructive" onClick={() => setIsDeleteModalOpen(true)}>
                   <Trash2 />
-                  Delete Configuration
+                  {uiT("ui.9ac1ac7be0a63da1")}
                 </Button>
               </CardAction>
             )}
@@ -158,7 +167,7 @@ export default function HashicorpVault() {
             {isConfigured && (
               <Alert variant="info">
                 <Info />
-                <AlertTitle>Secrets must be stored with the field name &quot;key&quot;</AlertTitle>
+                <AlertTitle>{uiT("ui.527384e3ef8c504e")}</AlertTitle>
                 <AlertDescription>
                   <code className="block font-mono">vault kv put secret/SECRET_NAME key=secret_value</code>
                   <a
@@ -167,7 +176,7 @@ export default function HashicorpVault() {
                     rel="noreferrer"
                     className="inline-flex items-center gap-1"
                   >
-                    View documentation
+                    {uiT("ui.392e16f77e9f5d6d")}
                     <ExternalLink className="size-3" />
                   </a>
                 </AlertDescription>
@@ -177,7 +186,7 @@ export default function HashicorpVault() {
             {isConfigured ? (
               fieldsToShow.length > 0 && (
                 <dl className="divide-y divide-border overflow-hidden rounded-md border border-border">
-                  <DetailRow label="Auth Method">{detectAuthMethod(rawValues)}</DetailRow>
+                  <DetailRow label={uiT("ui.b765e993fce69784")}>{translateText(detectAuthMethod(rawValues))}</DetailRow>
                   {fieldsToShow.map(([key]) => (
                     <DetailRow key={key} label={FIELD_LABELS[key] ?? key}>
                       {renderValue(key)}
@@ -199,21 +208,26 @@ export default function HashicorpVault() {
       />
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete Hashicorp Vault Configuration?"
-        message="Models using Vault secrets will lose access to their API keys until a new configuration is saved."
+        title={uiT("ui.f2db61be291a383a")}
+        message={uiT("ui.bf4a9788a61839e1")}
         resourceInformationTitle="Vault Configuration"
-        resourceInformation={[{ label: "Vault Address", value: rawValues.vault_addr }]}
+        resourceInformation={[{ label: uiT("ui.dad7f7adc2ac7c60"), value: rawValues.vault_addr }]}
         onCancel={() => setIsDeleteModalOpen(false)}
         onOk={handleDelete}
         confirmLoading={isDeleting}
       />
       <DeleteResourceModal
         isOpen={clearingField !== null}
-        title={`Clear ${clearingField ? FIELD_LABELS[clearingField] ?? clearingField : ""}?`}
-        message="This will remove the stored value."
+        title={uiT("ui.4f137c555ab4e3ec", {
+          v0: String(clearingField ? FIELD_LABELS[clearingField] ?? clearingField : ""),
+        })}
+        message={uiT("ui.c3631bf5b94e22c1")}
         resourceInformationTitle="Field"
         resourceInformation={[
-          { label: "Field", value: clearingField ? FIELD_LABELS[clearingField] ?? clearingField : "" },
+          {
+            label: uiT("ui.f45fc1dfdc96db27"),
+            value: clearingField ? FIELD_LABELS[clearingField] ?? clearingField : "",
+          },
         ]}
         onCancel={() => setClearingField(null)}
         onOk={handleClearField}

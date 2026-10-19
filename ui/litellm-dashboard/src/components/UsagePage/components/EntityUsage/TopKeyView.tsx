@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { BarChart } from "@/components/shared/charts";
@@ -19,8 +21,18 @@ const LIMIT_OPTIONS = TOP_KEYS_LIMITS.map((limit) => ({ value: String(limit), la
 
 type ViewMode = "table" | "chart";
 const VIEW_OPTIONS = [
-  { value: "table", label: "Table View" },
-  { value: "chart", label: "Chart View" },
+  {
+    value: "table",
+    get label() {
+      return translateUi("ui.e8636d7c556110e5");
+    },
+  },
+  {
+    value: "chart",
+    get label() {
+      return translateUi("ui.aa29c78fe01e47dd");
+    },
+  },
 ] as const satisfies readonly { value: ViewMode; label: string }[];
 
 const BAR_COLOR = "#2b3fd6";
@@ -167,7 +179,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                 content={
                   <div>
                     <div>
-                      <span className="text-muted-foreground">Tag Name:</span> {tag.tag}
+                      <span className="text-muted-foreground">{uiT("ui.4a32b016fa3839ad")}</span> {tag.tag}
                     </div>
                     <div>
                       <span className="text-muted-foreground">{uiT("ui.158796225fc7")}</span>{" "}
@@ -185,7 +197,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
               <button
                 onClick={() => toggleTagsExpansion(apiKey)}
                 className="ml-0.5 rounded-md p-1 transition-colors hover:bg-accent"
-                title={isExpanded ? "Show fewer tags" : "Show all tags"}
+                title={isExpanded ? uiT("ui.9728e55d43abc20c") : uiT("ui.8749911900553966")}
               >
                 {isExpanded ? (
                   <ChevronUpIcon className="h-3 w-3 text-muted-foreground" />
@@ -218,7 +230,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
     <>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <Segmented
-          label="Number of top keys to show"
+          label={uiT("ui.0ff65c992079d62e")}
           value={String(topKeysLimit)}
           options={LIMIT_OPTIONS}
           onChange={(limit) => setTopKeysLimit(Number(limit))}
@@ -248,11 +260,11 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                 <div className="relative z-floating max-w-xs rounded-lg border bg-popover px-3 py-2 text-xs shadow-lg">
                   <div className="grid gap-1">
                     <div>
-                      <span className="text-muted-foreground">Key Alias: </span>
+                      <span className="text-muted-foreground">{uiT("ui.4b47fc3d50cf815c")} </span>
                       <span className="break-all font-mono text-foreground">{item?.key_alias}</span>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Key ID: </span>
+                      <span className="text-muted-foreground">{uiT("ui.79217bbd4b440387")} </span>
                       <span className="break-all font-mono text-foreground">{item?.api_key}</span>
                     </div>
                     <div>

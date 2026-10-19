@@ -33,16 +33,18 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
       accessorKey: "type",
       size: 100,
       cell: ({ row }) => (
-        <Badge variant="secondary">{row.original.type === "prebuilt" ? "Prebuilt" : uiT("ui.494ca78f7374")}</Badge>
+        <Badge variant="secondary">
+          {row.original.type === "prebuilt" ? uiT("ui.e230325386e39e00") : uiT("ui.494ca78f7374")}
+        </Badge>
       ),
     },
     {
-      header: "Pattern name",
+      header: uiT("ui.7948d837382ac556"),
       accessorKey: "name",
       cell: ({ row }) => row.original.display_name || row.original.name,
     },
     {
-      header: "Regex pattern",
+      header: uiT("ui.c5b46488a11a6f10"),
       accessorKey: "pattern",
       cell: ({ row }) =>
         row.original.pattern ? (
@@ -88,7 +90,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
   ];
 
   if (patterns.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No patterns added.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{uiT("ui.497bcd5b3dc8cb43")}</div>;
   }
 
   return <DataTable data={patterns} columns={columns} getRowId={(row) => row.id} size="compact" />;

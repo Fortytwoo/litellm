@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
@@ -28,7 +29,7 @@ export function OutputCard({ message, completionTokens, outputCost }: OutputCard
     if (!message) return;
 
     navigator.clipboard.writeText(message.content || "");
-    toast.success(uiT("ui.fe4fe7e78f1d"));
+    toast.success(translateUi("ui.fe4fe7e78f1d"));
   };
 
   return (

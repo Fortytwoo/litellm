@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 import { ChevronRight, ClipboardCopy, X } from "lucide-react";
@@ -40,6 +43,8 @@ export interface FindingDetailsProps {
 }
 
 function TopBar({ finding, onClose }: Pick<FindingDetailsProps, "finding" | "onClose">) {
+  const { t: uiT } = useDashboardLanguage();
+
   const now = useNow(30000);
   return (
     <div className="sticky top-0 z-raised flex h-11 items-center justify-between gap-2 bg-background/95 px-4 backdrop-blur">
@@ -60,18 +65,18 @@ function TopBar({ finding, onClose }: Pick<FindingDetailsProps, "finding" | "onC
           onClick={() => void copyToClipboard(findingMarkdown(finding), "Copied for agent")}
         >
           <ClipboardCopy />
-          Copy for agent
+          {uiT("ui.e2b4176b1e8a2745")}
         </Button>
         {onClose && (
           <Button
             variant="ghost"
             size="xs"
             className="enabled:active:scale-[0.96]"
-            aria-label="Close finding (Esc)"
+            aria-label={uiT("ui.11cc69299744744f")}
             onClick={onClose}
           >
             <X />
-            Close
+            {uiT("ui.7d9eb7acb13e")}
           </Button>
         )}
       </div>
@@ -107,11 +112,21 @@ function ProseSection({ title, children }: { title: string; children: string }) 
 
 const FIELD = /^(Input|Output|Status|Error)\s*:/gm;
 const FIELD_LABEL: Readonly<Record<string, string>> = {
-  "Input,Output": "Call and result",
-  Input: "Call input",
-  Output: "Returned output",
-  Status: "Span status",
-  Error: "Error",
+  get "Input,Output"() {
+    return translateUi("ui.31ab58c43f55c0cd");
+  },
+  get Input() {
+    return translateUi("ui.149fbcc01a05360c");
+  },
+  get Output() {
+    return translateUi("ui.6b9767774034e8b3");
+  },
+  get Status() {
+    return translateUi("ui.7915e57daef158f0");
+  },
+  get Error() {
+    return translateUi("ui.54a0e8c17ebb");
+  },
 };
 
 function quoteLabel(quote: Quote, isTrace: boolean): string {
@@ -126,19 +141,21 @@ const MARK = {
 } as const;
 
 function QuoteCard({ quote, onOpen }: { quote: Quote; onOpen: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isTrace = evidenceTarget(quote.execution_id)?.source === "traces";
   return (
     <div className="-mx-1 rounded-lg border border-transparent bg-background p-2.5 shadow-finding-ring">
       <div className="mb-1.5 flex items-center justify-between gap-2">
         <span className="min-w-0 truncate text-sm font-medium">{quoteLabel(quote, isTrace)}</span>
         <Button variant="outline" size="xs" className="enabled:active:scale-[0.96]" onClick={onOpen}>
-          {isTrace ? "View span" : "View request"}
+          {isTrace ? uiT("ui.f047bcf761007c0d") : uiT("ui.9c9c3275d4f0b964")}
         </Button>
       </div>
       <button
         type="button"
         tabIndex={-1}
-        title="Open this evidence"
+        title={uiT("ui.95c443e3939c30de")}
         onClick={onOpen}
         className="block w-full overflow-x-auto rounded-md bg-muted/60 py-1.5 text-left font-mono text-xs leading-5 transition-[background-color] duration-150 hover:bg-muted"
       >
@@ -151,6 +168,8 @@ function QuoteCard({ quote, onOpen }: { quote: Quote; onOpen: () => void }) {
 }
 
 function EvidenceRail({ children }: { children: React.ReactNode }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <>
       <div className="relative flex gap-2">
@@ -160,7 +179,9 @@ function EvidenceRail({ children }: { children: React.ReactNode }) {
           </div>
           <div aria-hidden="true" className="h-2 w-px bg-border" />
         </div>
-        <div className="min-w-0 flex-1 text-xs leading-5 font-medium text-muted-foreground">Evidence</div>
+        <div className="min-w-0 flex-1 text-xs leading-5 font-medium text-muted-foreground">
+          {uiT("ui.03867aea70acaf4c")}
+        </div>
       </div>
       <div className="relative">
         <div aria-hidden="true" className="absolute inset-y-0 left-[5px] w-px bg-border" />
@@ -177,6 +198,8 @@ interface ExampleGroup {
 }
 
 function Example({ group, onOpenEvidence }: { group: ExampleGroup; onOpenEvidence: (e: EvidenceRef) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const traceId = evidenceTarget(group.id)?.id;
   const name = group.run?.name ?? (traceId ? `Trace ${traceId.slice(0, 8)}` : "Recorded run");
   return (
@@ -192,9 +215,9 @@ function Example({ group, onOpenEvidence }: { group: ExampleGroup; onOpenEvidenc
       <div className="w-full">
         {group.quotes.length === 0 ? (
           <div className="flex items-center justify-between gap-3">
-            <p className="text-sm text-muted-foreground">No quote was retained for this trace.</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.aca2f46852a3cdc2")}</p>
             <Button variant="outline" size="xs" onClick={() => onOpenEvidence({ id: group.id, span: "" })}>
-              View trace
+              {uiT("ui.bd38ee3d52633f7f")}
             </Button>
           </div>
         ) : (
@@ -222,8 +245,10 @@ function Examples({
   groups: readonly ExampleGroup[];
   onOpenEvidence: (e: EvidenceRef) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [expanded, setExpanded] = useState(false);
-  if (groups.length === 0) return <p className="text-sm text-muted-foreground">No examples were recorded.</p>;
+  if (groups.length === 0) return <p className="text-sm text-muted-foreground">{uiT("ui.b8fdb2d2c6b2bd8a")}</p>;
   const shown = expanded ? groups : groups.slice(0, VISIBLE_EXAMPLES);
   const hidden = groups.length - shown.length;
   return (
@@ -238,7 +263,8 @@ function Examples({
           className="self-start text-muted-foreground"
           onClick={() => setExpanded(true)}
         >
-          Show {hidden} more {hidden === 1 ? "example" : "examples"}
+          {uiT("ui.0df6f1cad36c49da")} {hidden} {uiT("ui.187897ce0afc")}{" "}
+          {hidden === 1 ? uiT("ui.50d858e0985ecc7f") : uiT("ui.c590b3c924c35c2f")}
         </Button>
       )}
     </>
@@ -246,26 +272,24 @@ function Examples({
 }
 
 function ReviewForm({ finding, busy, onReview }: Pick<FindingDetailsProps, "finding" | "busy" | "onReview">) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [reason, setReason] = useState(finding.reason ?? "");
   return (
     <section className="space-y-3 border-t pt-6">
       <label className="grid gap-2 text-sm font-medium">
-        What should Lens remember?
-        <Textarea
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          placeholder="What should Lens know about this finding?"
-        />
+        {uiT("ui.1a5f81f9ce74b0e7")}
+        <Textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder={uiT("ui.428c1bd37b4391cd")} />
       </label>
-      <p className="text-xs text-muted-foreground">Your explanation informs future scans of this Lens.</p>
+      <p className="text-xs text-muted-foreground">{uiT("ui.9029fd52562d791c")}</p>
       <div className="flex flex-wrap gap-2">
         {finding.kind === "issue" && (
           <Button disabled={busy} onClick={() => onReview(finding.status === "resolved" ? "open" : "resolved", reason)}>
-            {finding.status === "resolved" ? "Reopen" : "Mark resolved"}
+            {finding.status === "resolved" ? uiT("ui.a886d1dc4f128e27") : uiT("ui.d6d8eeddd8354a4d")}
           </Button>
         )}
         <Button disabled={busy} variant="outline" onClick={() => onReview("dismissed", reason)}>
-          This is expected
+          {uiT("ui.253bcd5d747f11e2")}
         </Button>
       </div>
     </section>
@@ -283,6 +307,8 @@ export function FindingDetails({
   onReview,
   onClose,
 }: FindingDetailsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const groups: ExampleGroup[] = [
     ...new Set([...finding.evidence.map((e) => e.execution_id), ...finding.occurrences]),
   ].map((id) => ({
@@ -302,45 +328,49 @@ export function FindingDetails({
             {finding.kind === "issue" ? (
               <PriorityPill priority={finding.priority} />
             ) : (
-              <span className="inline-flex h-5 items-center rounded-full bg-muted px-2 font-medium">Pattern</span>
+              <span className="inline-flex h-5 items-center rounded-full bg-muted px-2 font-medium">
+                {uiT("ui.4288ade73ff9d328")}
+              </span>
             )}
             {agents.length > 0 && <span className="font-medium text-foreground">{agents.join(", ")}</span>}
             <span className="tabular-nums">
-              {affected} affected {affected === 1 ? "trace" : "traces"}
+              {affected} {uiT("ui.19b6357dad532cc2")}{" "}
+              {affected === 1 ? uiT("ui.eafe895eb8119e6e") : uiT("ui.b5ac69fc467c01f3")}
             </span>
             {runs > 0 && (
               <span className="tabular-nums">
-                Found across {runs} investigation {runs === 1 ? "run" : "runs"}
+                {uiT("ui.a6a468447d63627c")} {runs} {uiT("ui.57794bdeddd90874")}{" "}
+                {runs === 1 ? uiT("ui.acba25512100f80b") : uiT("ui.1f64fff08d787e73")}
               </span>
             )}
           </div>
         </header>
-        <ProseSection title="Summary">{finding.description}</ProseSection>
-        {finding.suggestion && <ProseSection title="Suggested fix">{finding.suggestion}</ProseSection>}
+        <ProseSection title={uiT("ui.8e76a94ac8320d51")}>{finding.description}</ProseSection>
+        {finding.suggestion && <ProseSection title={uiT("ui.d05d259b1f1d3022")}>{finding.suggestion}</ProseSection>}
         {finding.brief && (
-          <Disclosure title="Issue brief and test cases">
+          <Disclosure title={uiT("ui.ec2251a36d84c3a4")}>
             <IssueBrief title={finding.title} brief={finding.brief} />
           </Disclosure>
         )}
         {finding.limitation && (
-          <Disclosure title="Evidence limits">
+          <Disclosure title={uiT("ui.b16ad5fcb7d20708")}>
             <p className="max-w-[70ch] text-sm leading-relaxed text-pretty text-muted-foreground">
               {finding.limitation}
             </p>
           </Disclosure>
         )}
         <section>
-          <h2 className={`mb-2 ${SECTION_LABEL}`}>Monitors</h2>
+          <h2 className={`mb-2 ${SECTION_LABEL}`}>{uiT("ui.d2ea1516fbd01374")}</h2>
           <FrequencyCard frequency={findingFrequency(finding.occurrences, sampledRuns)} />
         </section>
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
-            <h2 className={SECTION_LABEL}>Examples</h2>
+            <h2 className={SECTION_LABEL}>{uiT("ui.e68ee04dff59551b")}</h2>
             {lensId && finding.evidence.length > 0 && (
               <AddToDatasetButton
                 sources={[{ kind: "finding", lens_id: lensId, finding_ids: [finding.id] }]}
                 agentName={agents[0]}
-                label="Add evidence to dataset"
+                label={uiT("ui.c1b72574df2c2e93")}
               />
             )}
           </div>
@@ -401,8 +431,10 @@ export function FindingPanelBody({
 
 /** The side panel for whichever finding the surrounding Inspector has open. */
 export function FindingPanel(props: FindingPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <Inspector.Panel label="Finding details" testId="finding-panel">
+    <Inspector.Panel label={uiT("ui.0d59110897709f34")} testId="finding-panel">
       {(owned: OwnedFinding) => <FindingPanelBody {...props} owned={owned} />}
     </Inspector.Panel>
   );

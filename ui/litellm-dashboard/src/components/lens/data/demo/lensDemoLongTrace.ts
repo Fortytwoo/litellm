@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { Span, SpanDetail, Trace } from "@/components/lens/traces/types";
 
 export function withReleaseCases(run: { trace: Trace; details: SpanDetail[] }) {
@@ -60,7 +61,9 @@ export function withReleaseCases(run: { trace: Trace; details: SpanDetail[] }) {
             : JSON.stringify([
                 {
                   role: "assistant",
-                  content: failed ? `Hold this case for review. ${result}.` : `Case ${index} passed. ${result}.`,
+                  content: failed
+                    ? translateUi("ui.f46e22305749a59c", undefined, { v0: String(result) })
+                    : translateUi("ui.fdca6c711eb0e772", undefined, { v0: String(index), v1: String(result) }),
                 },
               ]),
         attributes: { "gen_ai.agent.name": "search_case", "test.case": String(index), demo: "true" },

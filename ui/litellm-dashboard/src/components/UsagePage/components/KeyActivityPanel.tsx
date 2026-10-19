@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { KeyRound, Search, X } from "lucide-react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -74,21 +76,23 @@ interface KeyDetailContentProps {
 }
 
 const KeyDetailContent: React.FC<KeyDetailContentProps> = ({ apiKey, detail, hidePromptCachingMetrics, onRetry }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (detail?.status === "loading") {
-    return <p className="py-4 text-sm text-muted-foreground">Loading key details...</p>;
+    return <p className="py-4 text-sm text-muted-foreground">{uiT("ui.a39257dfef773811")}</p>;
   }
   if (detail?.status === "failed") {
     return (
       <p className="py-4 text-sm text-muted-foreground">
-        Could not load key details.{" "}
+        {uiT("ui.0ba2aeab8b32ec4f")}{" "}
         <button type="button" className="font-medium text-foreground underline" onClick={onRetry}>
-          Retry
+          {uiT("ui.942087cc2d41e013")}
         </button>
       </p>
     );
   }
   if (detail?.status !== "loaded" || detail.metrics === undefined) {
-    return <p className="py-4 text-sm text-muted-foreground">No daily details available</p>;
+    return <p className="py-4 text-sm text-muted-foreground">{uiT("ui.9fecf3024d6cf9ff")}</p>;
   }
   return (
     <ModelSection modelName={apiKey} metrics={detail.metrics} hidePromptCachingMetrics={hidePromptCachingMetrics} />
@@ -135,10 +139,10 @@ const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hid
     >
       {loading ? (
         <span role="status" className="sr-only">
-          Loading chart data...
+          {uiT("ui.ebb949c33349")}
         </span>
       ) : (
-        <h3 className="sr-only">Overall Usage</h3>
+        <h3 className="sr-only">{uiT("ui.0011db623fac6b64")}</h3>
       )}
       <StatCell trend={trend("spend")}>
         <Stat label={uiT("ui.85f3d558db12")} value={formatUsd(summary.total_spend)} pending={loading} />
@@ -154,7 +158,7 @@ const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hid
               <span className={summary.total_failed_requests > 0 ? "text-destructive tabular-nums" : "tabular-nums"}>
                 {summary.total_failed_requests.toLocaleString()}
               </span>{" "}
-              failed
+              {uiT("ui.5d28a90f4498a814")}
             </span>
           </div>
         )}
@@ -167,19 +171,22 @@ const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hid
           hint={
             loading
               ? undefined
-              : `${formatCompact(summary.prompt_tokens)} in · ${formatCompact(summary.completion_tokens)} out`
+              : uiT("ui.6161b8582dc0bde9", {
+                  v0: String(formatCompact(summary.prompt_tokens)),
+                  v1: String(formatCompact(summary.completion_tokens)),
+                })
           }
         />
       </StatCell>
       <StatCell>
         <Stat
-          label="Avg cost / request"
+          label={uiT("ui.1bb3d5ae09fcc35e")}
           value={formatUsd(avgCost, 4)}
           pending={loading}
           hint={
             loading || hidePromptCachingMetrics
               ? undefined
-              : `${formatCompact(summary.total_cache_read_input_tokens)} cache read tokens`
+              : uiT("ui.48ab9ff95f2f120d", { v0: String(formatCompact(summary.total_cache_read_input_tokens)) })
           }
         />
       </StatCell>
@@ -389,9 +396,9 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   };
   const firstPageError = (
     <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-      Could not load keys for this range.{" "}
+      {uiT("ui.9a53cc72fa1add6e")}{" "}
       <button type="button" className="font-medium text-foreground underline" onClick={retryFirstPage}>
-        Retry
+        {uiT("ui.942087cc2d41e013")}
       </button>
     </p>
   );
@@ -422,7 +429,7 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
             </div>
             <span className="text-right text-sm tabular-nums text-foreground">{formatUsd(metrics.total_spend)}</span>
             <span className="text-right text-sm tabular-nums text-muted-foreground">
-              {metrics.total_requests.toLocaleString()} <span className="sr-only">requests</span>
+              {metrics.total_requests.toLocaleString()} <span className="sr-only">{uiT("ui.ec72420df5dfbdce")}</span>
             </span>
           </div>
         }
@@ -446,14 +453,18 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   const showSearchErrorNote = !noMatches && searchFailed && !searching;
   const searchRetryButton = (
     <button type="button" className="font-medium text-foreground underline" onClick={retrySearch}>
-      Retry search
+      {uiT("ui.f468ed38f202c600")}
     </button>
   );
   const emptyFilterBody = searchFailed ? (
-    <p className="px-4 py-8 text-center text-sm text-muted-foreground">Could not search keys. {searchRetryButton}</p>
+    <p className="px-4 py-8 text-center text-sm text-muted-foreground">
+      {uiT("ui.e15bac8b415306ec")} {searchRetryButton}
+    </p>
   ) : (
     <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-      No keys match &quot;{trimmedQuery}&quot; in this date range
+      {uiT("ui.c02c4051fef67eb2")}
+      {trimmedQuery}
+      {uiT("ui.e2ef27ad3b00a6fd")}
     </p>
   );
 
@@ -495,14 +506,14 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
         <Search className="size-3.5 text-muted-foreground" />
       </InputGroupAddon>
       <InputGroupInput
-        aria-label="Search keys"
-        placeholder="Search alias, hash, user ID, or email"
+        aria-label={uiT("ui.83491c9273bc165a")}
+        placeholder={uiT("ui.b125a3271388fd85")}
         value={query}
         onChange={(event) => updateQuery(event.target.value)}
       />
       {isFiltering && (
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="icon-xs" aria-label="Clear key search" onClick={() => updateQuery("")}>
+          <InputGroupButton size="icon-xs" aria-label={uiT("ui.7e5e9eaa51c18d47")} onClick={() => updateQuery("")}>
             <X />
           </InputGroupButton>
         </InputGroupAddon>
@@ -516,12 +527,17 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
         {searchInput}
         {!pageUnavailable && (
           <span className="text-xs text-muted-foreground tabular-nums" aria-live="polite">
-            {keyCountLabel}
+            {translateText(keyCountLabel)}
           </span>
         )}
       </div>
       <KeySummaryStrip summary={summary} loading={summaryLoading} hidePromptCachingMetrics={hidePromptCachingMetrics} />
-      <Panel icon={KeyRound} title="Virtual keys" className="overflow-hidden" bodyClassName="px-0 pt-3 pb-0">
+      <Panel
+        icon={KeyRound}
+        title={uiT("ui.f82ee654ca6aaafd")}
+        className="overflow-hidden"
+        bodyClassName="px-0 pt-3 pb-0"
+      >
         {showColumnHeaders && (
           <div
             aria-hidden="true"
@@ -535,13 +551,17 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
         <div className={showColumnHeaders ? undefined : "border-t"}>{noMatches ? emptyFilterBody : listBody}</div>
         {showFooter && (
           <div className="border-t px-4 py-2.5 text-xs text-muted-foreground">
-            {showSearchErrorNote && <p>Could not search all keys. {searchRetryButton}</p>}
-            {loadingMore && <p>Loading more keys...</p>}
+            {showSearchErrorNote && (
+              <p>
+                {uiT("ui.bf5ca32d70657bce")} {searchRetryButton}
+              </p>
+            )}
+            {loadingMore && <p>{uiT("ui.c03d24d6f440ee33")}</p>}
             {showNextPageRetry && (
               <p>
-                Could not load more keys.{" "}
+                {uiT("ui.a9a9e7431ca39b22")}{" "}
                 <button type="button" className="font-medium text-foreground underline" onClick={retryNextPage}>
-                  Retry
+                  {uiT("ui.942087cc2d41e013")}
                 </button>
               </p>
             )}

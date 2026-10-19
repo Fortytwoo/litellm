@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Building2, SearchX } from "lucide-react";
 import React, { useMemo } from "react";
@@ -20,6 +21,8 @@ interface OrganizationsTableProps {
 }
 
 function EmptyState({ searchActive }: { searchActive: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const Icon = searchActive ? SearchX : Building2;
   return (
     <div className="flex flex-col items-center gap-1 py-6">
@@ -27,12 +30,10 @@ function EmptyState({ searchActive }: { searchActive: boolean }) {
         <Icon className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {searchActive ? "No matching organizations" : "No organizations yet"}
+        {searchActive ? uiT("ui.3ac208abedb2ffa9") : uiT("ui.5b7a7cbdd630d761")}
       </div>
       <div className="text-sm text-muted-foreground">
-        {searchActive
-          ? "No organizations match your search. Try a different name or ID."
-          : "Create an organization to group teams, models, and budgets."}
+        {searchActive ? uiT("ui.f27850ccda82acf1") : uiT("ui.c41b32c8a4e3213d")}
       </div>
     </div>
   );
@@ -47,6 +48,8 @@ const OrganizationsTable: React.FC<OrganizationsTableProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { sorting, onSortingChange, pagination, onPaginationChange } = useOrganizationsTableState();
 
   const columns = useMemo(() => {
@@ -66,7 +69,7 @@ const OrganizationsTable: React.FC<OrganizationsTableProps> = ({
       sorting={sorting}
       onSortingChange={onSortingChange}
       isLoading={isLoading}
-      loadingMessage="Loading organizations…"
+      loadingMessage={uiT("ui.c924ecff75c1fdbe")}
       noDataMessage={<EmptyState searchActive={searchActive} />}
       size="compact"
     />

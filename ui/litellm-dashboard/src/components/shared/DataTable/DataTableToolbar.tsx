@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { Table } from "@tanstack/react-table";
@@ -38,7 +40,7 @@ export function DataTableToolbar<TData>({
   table,
   searchValue,
   onSearchChange,
-  searchPlaceholder = "Search",
+  searchPlaceholder = translateUi("ui.49c266baaaa7"),
   onOpenFilters,
   onRefresh,
   isRefreshing = false,

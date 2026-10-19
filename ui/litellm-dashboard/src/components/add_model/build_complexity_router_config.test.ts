@@ -16,7 +16,10 @@ import {
   hydrateTierLabels,
   BuildComplexityRouterConfigParams,
   dryRunRejection,
+  serializeTierLabels,
 } from "./build_complexity_router_config";
+import { effectiveTierLabel, localizedTierLabel } from "./ComplexityRouterConfig";
+import { setActiveLocale } from "@/i18n";
 import { CUSTOM_TIER_RESTRICTIONS, activeTierRows } from "./tier_rows";
 
 const tiers = {
@@ -57,6 +60,15 @@ const baseParams: BuildComplexityRouterConfigParams = {
 };
 
 describe("buildComplexityRouterConfig", () => {
+  it("localizes built-in tier labels while preserving saved defaults and custom labels", () => {
+    setActiveLocale("zh");
+    expect(effectiveTierLabel("SIMPLE", undefined)).toBe("Simple");
+    expect(localizedTierLabel("SIMPLE", undefined)).toBe("简单");
+    expect(serializeTierLabels({ SIMPLE: "Simple" })).toBeUndefined();
+    expect(localizedTierLabel("SIMPLE", { SIMPLE: "My routing tier" })).toBe("My routing tier");
+    expect(serializeTierLabels({ SIMPLE: "My routing tier" })).toEqual({ SIMPLE: "My routing tier" });
+    expect(buildComplexityRouterConfig(baseParams)).not.toHaveProperty("tier_labels");
+  });
   it.each(["heuristic_first", "hybrid"] as const)(
     "persists the selected local heuristic for %s and preserves inactive v1 settings",
     (classifierType) => {

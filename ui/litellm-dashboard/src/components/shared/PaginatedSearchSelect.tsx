@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { Loader2 } from "lucide-react";
 import { useMemo, useRef, useState, type SyntheticEvent } from "react";
@@ -64,10 +66,10 @@ export function PaginatedSearchSelect({
   hasNextPage = false,
   isLoading = false,
   isFetchingNextPage = false,
-  placeholder = "Search…",
-  emptyText = "No results",
+  placeholder = translateUi("ui.7336265a0467a255"),
+  emptyText = translateUi("ui.a43619f32117"),
   errorText,
-  loadingText = "Loading…",
+  loadingText = translateUi("ui.ba3bbbe10d8b"),
   autoHighlight = false,
   disabled = false,
   className,
@@ -76,6 +78,8 @@ export function PaginatedSearchSelect({
   "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedBy,
 }: PaginatedSearchSelectProps) {
+  useDashboardLanguage();
+
   const [pickedOption, setPickedOption] = useState<SearchSelectOption | null>(null);
   const wholeSelectionRef = useRef(false);
 

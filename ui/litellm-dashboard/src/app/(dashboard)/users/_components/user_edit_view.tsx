@@ -1,4 +1,5 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useMemo, useState } from "react";
@@ -141,10 +142,12 @@ const changedLimit = (value: number | null, stored: number | null | undefined): 
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );

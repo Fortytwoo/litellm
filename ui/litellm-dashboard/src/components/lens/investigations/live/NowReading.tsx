@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { cn } from "@/lib/cva.config";
 
@@ -23,6 +24,8 @@ function dotTone(reading: boolean, issueShown: boolean): string {
 }
 
 function LaneRow({ lane, now, charMs }: { lane: Lane; now: number; charMs: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { review } = lane;
   const text = review ? laneText(review.reasoning) : "";
   const typed = typedChars(lane, now, charMs);
@@ -32,10 +35,12 @@ function LaneRow({ lane, now, charMs }: { lane: Lane; now: number; charMs: numbe
     <li className="flex flex-col gap-1 rounded-lg bg-background/70 px-2.5 py-2 text-xs ring-1 ring-border/60 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-200">
       <div className="flex items-center gap-2">
         <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", dotTone(!review, issue && !typing))} />
-        <span className="truncate font-medium text-foreground">{lane.agent || "trace"}</span>
+        <span className="truncate font-medium text-foreground">{lane.agent || uiT("ui.eafe895eb8119e6e")}</span>
         <span className="truncate font-mono text-xs text-muted-foreground">{lane.traceId.slice(0, 8)}</span>
         <span className="ml-auto shrink-0 text-xs tabular-nums text-muted-foreground">
-          {review ? durationLabel(review.duration_ms) : `reading · ${durationLabel(Math.max(0, now - lane.startedAt))}`}
+          {review
+            ? durationLabel(review.duration_ms)
+            : uiT("ui.69d92fe30933c897", { v0: String(durationLabel(Math.max(0, now - lane.startedAt))) })}
         </span>
       </div>
       {!review ? (
@@ -79,8 +84,13 @@ export function NowReading({
   now: number;
   charMs: number;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <section aria-label="Now reading" className="mb-3 flex flex-col gap-2 rounded-xl bg-muted p-2.5 ring-1 ring-border">
+    <section
+      aria-label={uiT("ui.64e56dcc4c489859")}
+      className="mb-3 flex flex-col gap-2 rounded-xl bg-muted p-2.5 ring-1 ring-border"
+    >
       <header className="flex items-center justify-between gap-3 px-0.5">
         <ModelName model={model} size="md" />
         <span role="status" className="text-xs tabular-nums text-muted-foreground">
@@ -103,17 +113,21 @@ export function NowReading({
 }
 
 export function ActiveWork({ model, activities }: { model: string; activities: readonly Activity[] }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const now = useNow(500);
   return (
     <section
-      aria-label="Current work"
+      aria-label={uiT("ui.77b61a7a9ba380c6")}
       className="mb-3 flex flex-col gap-2 rounded-xl bg-muted p-2.5 ring-1 ring-border"
     >
       <header className="flex items-center justify-between gap-3 px-0.5">
         <ModelName model={model} size="md" />
-        <span className="text-xs tabular-nums text-muted-foreground">{activities.length} active</span>
+        <span className="text-xs tabular-nums text-muted-foreground">
+          {activities.length} {uiT("ui.96879611650f80a8")}
+        </span>
       </header>
-      <ol aria-label="Active analysis tasks" className="flex flex-col gap-1.5">
+      <ol aria-label={uiT("ui.8cfd90214260bb5c")} className="flex flex-col gap-1.5">
         {activities.map((activity) => {
           const tools = toolCallSummary(activity.tool_calls);
           return (
@@ -135,7 +149,11 @@ export function ActiveWork({ model, activities }: { model: string; activities: r
               <p role="status" className="text-foreground">
                 {activityOperation(activity)}
               </p>
-              {tools && <p className="text-muted-foreground">Tool calls: {tools}</p>}
+              {tools && (
+                <p className="text-muted-foreground">
+                  {uiT("ui.ebe7c49b473c86a0")} {tools}
+                </p>
+              )}
             </li>
           );
         })}

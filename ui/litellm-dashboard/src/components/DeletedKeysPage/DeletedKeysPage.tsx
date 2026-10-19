@@ -24,9 +24,7 @@ export default function DeletedKeysPage() {
         <Alert className="shrink-0">
           <Info />
           <AlertTitle>{uiT("ui.04ed5d8219ac")}</AlertTitle>
-          <AlertDescription>
-            Deleted key auditing is graduating from beta into our Enterprise audit &amp; compliance suite.
-          </AlertDescription>
+          <AlertDescription>{uiT("ui.a27821e04d52")}</AlertDescription>
         </Alert>
       )}
       <DeletedKeysTable

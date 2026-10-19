@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flag, Trash2 } from "lucide-react";
@@ -32,26 +33,27 @@ import {
 const LIBRARY_QUESTIONS: ReadonlySet<string> = new Set(SIGNAL_LIBRARY.map((signal) => signal.question));
 
 export function SignalSettings() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <SettingsSection
-      heading="Signals"
-      description="Set once for every trace. A System 1 model checks each run and Traces flags matches in red."
-    >
+    <SettingsSection heading="Signals" description={uiT("ui.e2ac58497e2f71db")}>
       <SignalConfigLoader />
     </SettingsSection>
   );
 }
 
 function SignalConfigLoader() {
+  const { t: uiT } = useDashboardLanguage();
+
   const api = useLensApi();
   const config = useQuery(lensQueries.signalConfig(api));
   if (config.error)
     return (
       <p role="alert" className="text-sm text-destructive">
-        Could not load signals: {config.error.message}
+        {uiT("ui.0919cd0a00215cff")} {config.error.message}
       </p>
     );
-  if (!config.data) return <Skeleton aria-label="Loading signals" className="h-40 w-full" />;
+  if (!config.data) return <Skeleton aria-label={uiT("ui.ba36829d43afad5a")} className="h-40 w-full" />;
   return <SignalForm saved={config.data} />;
 }
 
@@ -59,21 +61,23 @@ const FieldError = ({ children }: { children?: string }) =>
   children ? <p className="mt-1 text-xs text-destructive">{children}</p> : null;
 
 function SetupCallout({ hasModels }: { hasModels: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
       <Flag aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-destructive" />
       <div className="space-y-1">
-        <p className="font-medium">Choose a System 1 model to start flagging traces</p>
+        <p className="font-medium">{uiT("ui.3b9117b0a4774aea")}</p>
         {hasModels ? (
-          <p className="text-xs text-muted-foreground">Pick one of the evaluation models on this proxy below.</p>
+          <p className="text-xs text-muted-foreground">{uiT("ui.695db77d0411610b")}</p>
         ) : (
           <p className="text-xs text-muted-foreground">
-            This proxy has no System 1 models yet. Add one with mode evaluation, for example typesafe/jev-latest, on{" "}
+            {uiT("ui.7b9bff4cd1cb504d")}{" "}
             <Link
               href={uiHref("models-and-endpoints")}
               className="font-medium text-foreground underline underline-offset-2"
             >
-              Models + Endpoints
+              {uiT("ui.4e7cc82a7500")}
             </Link>
             .
           </p>
@@ -94,13 +98,15 @@ function SignalFields({
   onChange: (row: SignalRow) => void;
   onRemove: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const label = row.name.trim() || "new signal";
   return (
     <li className="grid gap-2 rounded-md border border-border p-3 sm:grid-cols-[200px_minmax(0,1fr)_auto]">
       <div>
         <Input
-          aria-label="Signal name"
-          placeholder="User frustration"
+          aria-label={uiT("ui.f384f5eec63fb067")}
+          placeholder={uiT("ui.56e60702769e4a73")}
           value={row.name}
           aria-invalid={Boolean(problems?.name)}
           onChange={(event) => onChange({ ...row, name: event.target.value })}
@@ -109,8 +115,8 @@ function SignalFields({
       </div>
       <div>
         <Textarea
-          aria-label={`Question for ${label}`}
-          placeholder="Does the user show frustration with the agent in this run?"
+          aria-label={uiT("ui.eaaa94a3e6acb6d4", { v0: String(label) })}
+          placeholder={uiT("ui.9b8959d57127311d")}
           rows={2}
           value={row.question}
           aria-invalid={Boolean(problems?.question)}
@@ -118,7 +124,12 @@ function SignalFields({
         />
         <FieldError>{problems?.question}</FieldError>
       </div>
-      <Button variant="ghost" size="icon-sm" aria-label={`Remove ${label}`} onClick={onRemove}>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={uiT("ui.86790c6d4f116494", { v0: String(label) })}
+        onClick={onRemove}
+      >
         <Trash2 aria-hidden="true" />
       </Button>
     </li>
@@ -126,6 +137,8 @@ function SignalFields({
 }
 
 export function SignalForm({ saved }: { saved: SignalConfig }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const api = useLensApi();
   const queryClient = useQueryClient();
   const modelId = useId();
@@ -198,40 +211,38 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
       <SettingsCard className="space-y-4">
         <p role="status" className="inline-flex items-center gap-2 text-sm">
           <StatusDot state={active ? "ok" : "off"} />
-          {active ? `Flagging traces with ${saved.model}` : "Signals are off"}
+          {active ? uiT("ui.274527056871005b", { v0: String(saved.model) }) : uiT("ui.f6ffd283344c0ee9")}
         </p>
         {!saved.model && !details.isPending && <SetupCallout hasModels={models.length > 0} />}
         {savedElsewhere && (
           <div role="alert" className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
-            <span>Signals were changed elsewhere</span>
+            <span>{uiT("ui.c26bb0a30b34a423")}</span>
             <Button type="button" variant="outline" size="sm" onClick={loadLatest}>
-              Load latest
+              {uiT("ui.86edc8705b8329c1")}
             </Button>
           </div>
         )}
         <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_160px]">
           <div className="space-y-1.5">
             <label htmlFor={modelId} className="text-sm font-medium">
-              System 1 model
+              {uiT("ui.755e18b1f8dfc937")}
             </label>
             <SearchSelect
               inputId={modelId}
-              aria-label="System 1 model"
+              aria-label={uiT("ui.755e18b1f8dfc937")}
               options={options}
               value={draft.model}
               onValueChange={(value) => setDraft((current) => ({ ...current, model: value ?? "" }))}
-              placeholder={details.isPending ? "Loading models…" : "Choose a System 1 model"}
+              placeholder={details.isPending ? uiT("ui.cc8b4624f7659c68") : uiT("ui.f998e27d3d14ad91")}
               disabled={details.isPending}
-              emptyText="No System 1 models on this proxy"
+              emptyText={uiT("ui.ef51b5bbcba346c0")}
               allowClear
             />
-            <p className="text-xs text-muted-foreground">
-              Decisions API models onboarded with mode evaluation, such as TypeSafe JEV
-            </p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.8d255f02505d1238")}</p>
           </div>
           <div className="space-y-1.5">
             <label htmlFor={thresholdId} className="text-sm font-medium">
-              Flag at score
+              {uiT("ui.4f95064028db657c")}
             </label>
             <div className="flex items-center gap-1.5">
               <Input
@@ -254,7 +265,7 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
         </div>
         <div className="space-y-4 border-t border-border pt-4">
           <WatchPicker
-            label="Flag runs where"
+            label={uiT("ui.e6dd36ecc6aba604")}
             options={SIGNAL_LIBRARY}
             selected={picked}
             onChange={pick}
@@ -262,7 +273,7 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
             addDisabled={draft.rows.length >= MAX_SIGNALS}
           />
           {custom.length > 0 && (
-            <ul aria-label="Custom signals" className="space-y-2">
+            <ul aria-label={uiT("ui.dcaca9b672da3972")} className="space-y-2">
               {custom.map((row) => (
                 <SignalFields
                   key={row.key}
@@ -274,20 +285,18 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
               ))}
             </ul>
           )}
-          {draft.rows.length === 0 && (
-            <p className="text-xs text-muted-foreground">Pick at least one signal to flag traces</p>
-          )}
+          {draft.rows.length === 0 && <p className="text-xs text-muted-foreground">{uiT("ui.bc7ad87f328c51aa")}</p>}
           <FieldError>{problems.signals}</FieldError>
         </div>
         <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
           {save.error && (
             <p role="alert" className="text-sm text-destructive">
-              Could not save signals: {save.error.message}
+              {uiT("ui.b53211bf0430a35b")} {save.error.message}
             </p>
           )}
-          {save.isSuccess && !dirty && <p className="text-xs text-muted-foreground">Saved</p>}
+          {save.isSuccess && !dirty && <p className="text-xs text-muted-foreground">{uiT("ui.b5c120b316c237a0")}</p>}
           <Button disabled={!dirty || problems.any || save.isPending} onClick={() => save.mutate(next)}>
-            {save.isPending ? "Saving…" : "Save signals"}
+            {save.isPending ? uiT("ui.23e39291d6135814") : uiT("ui.d6d1ff6135c498bf")}
           </Button>
         </div>
       </SettingsCard>

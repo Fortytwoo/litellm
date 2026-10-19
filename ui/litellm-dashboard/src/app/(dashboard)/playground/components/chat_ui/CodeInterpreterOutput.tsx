@@ -148,7 +148,7 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
             }
           >
             <Code className="size-4" />
-            Python Code Executed
+            {uiT("ui.c5c6abe0353fcdf5")}
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div className="border-t border-border p-2">
@@ -175,13 +175,13 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
           {loadingImages[annotation.file_id] ? (
             <div className="flex items-center justify-center bg-muted p-8">
               <Loader2 className="size-4 animate-spin text-muted-foreground" aria-hidden="true" />
-              <span className="ml-2 text-sm text-muted-foreground">Loading image...</span>
+              <span className="ml-2 text-sm text-muted-foreground">{uiT("ui.ef7ae93e291b6cb0")}</span>
             </div>
           ) : imageUrls[annotation.file_id] ? (
             <div>
               <img
                 src={imageUrls[annotation.file_id]}
-                alt={annotation.filename || "Generated chart"}
+                alt={annotation.filename || uiT("ui.6d9662091d35f541")}
                 className="max-h-[400px] max-w-full"
               />
               <div className="flex items-center justify-between border-t border-border bg-muted px-3 py-2">
@@ -203,7 +203,7 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
             </div>
           ) : (
             <div className="flex items-center justify-center bg-muted p-4">
-              <span className="text-sm text-muted-foreground">Image not available</span>
+              <span className="text-sm text-muted-foreground">{uiT("ui.7e89dbff2c5a0096")}</span>
             </div>
           )}
         </div>

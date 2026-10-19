@@ -1,11 +1,14 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/cva.config";
 
-const Breadcrumb = React.forwardRef<HTMLElement, React.ComponentPropsWithoutRef<"nav">>(({ ...props }, ref) => (
-  <nav ref={ref} aria-label="breadcrumb" data-slot="breadcrumb" {...props} />
-));
+const Breadcrumb = React.forwardRef<HTMLElement, React.ComponentPropsWithoutRef<"nav">>(({ ...props }, ref) => {
+  const { t: uiT } = useDashboardLanguage();
+  return <nav ref={ref} aria-label={uiT("ui.d6dc6b5ebe192c2c")} data-slot="breadcrumb" {...props} />;
+});
 Breadcrumb.displayName = "Breadcrumb";
 
 const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<"ol">>(

@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -12,7 +16,7 @@ import { formatExpiryDate, getDaysUntilExpiration, getLicenseExpiryTier } from "
 const DISMISS_KEY_PREFIX = "litellm:licenseExpiryBannerDismissed:";
 const SALES_EMAIL = "sales@berri.ai";
 
-const salesLink = <a href={`mailto:${SALES_EMAIL}`}>{SALES_EMAIL}</a>;
+const salesLink = <a href={`mailto:${SALES_EMAIL}`}>{translateText(SALES_EMAIL)}</a>;
 
 interface LicenseExpiryBannerProps {
   accessToken: string | null;
@@ -34,12 +38,24 @@ const describeCountdown = (days: number): string => {
 
 const expiryDescription = (tier: "warning" | "critical" | "expired"): React.ReactNode => {
   if (tier === "expired") {
-    return <>Enterprise features are now disabled. Reach out to {salesLink} to restore access</>;
+    return (
+      <>
+        {translateUi("ui.bef747292a12358a")} {salesLink} {translateUi("ui.f29b9677af216d17")}
+      </>
+    );
   }
   if (tier === "critical") {
-    return <>Renew now to avoid losing enterprise features. Reach out to {salesLink}</>;
+    return (
+      <>
+        {translateUi("ui.e42da0fb40ec2587")} {salesLink}
+      </>
+    );
   }
-  return <>Renew before it lapses to keep enterprise features. Reach out to {salesLink}</>;
+  return (
+    <>
+      {translateUi("ui.821a6ee60f76f898")} {salesLink}
+    </>
+  );
 };
 
 export const LicenseExpiryBannerView: React.FC<LicenseExpiryBannerViewProps> = ({ licenseInfo }) => {
@@ -87,7 +103,7 @@ export const LicenseExpiryBannerView: React.FC<LicenseExpiryBannerViewProps> = (
       ) : (
         <CircleAlert className="size-4" aria-hidden />
       )}
-      <AlertTitle>{message}</AlertTitle>
+      <AlertTitle>{translateText(message)}</AlertTitle>
       <AlertDescription>{description}</AlertDescription>
       {isDismissible && (
         <AlertAction>

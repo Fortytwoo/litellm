@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import aimSecurityLogo from "../../../../../public/assets/logos/aim_security.jpeg";
 import aktoLogo from "../../../../../public/assets/logos/akto.svg";
 import aliceLogo from "../../../../../public/assets/logos/alice.svg";
@@ -132,9 +133,24 @@ export const normalizeLoggingOnlyScopeChoice = (
 ): LoggingOnlyScopeChoice => (directionalScopeSupported || choice === "default" ? choice : "default");
 
 const LOGGING_ONLY_SCOPE_OPTIONS: LoggingOnlyScopeOption[] = [
-  { label: "Default (request and response)", value: "default" },
-  { label: "Input only (request)", value: "input" },
-  { label: "Output only (response)", value: "output" },
+  {
+    get label() {
+      return translateUi("ui.44620c2ebf15be56");
+    },
+    value: "default",
+  },
+  {
+    get label() {
+      return translateUi("ui.044be22f204075fc");
+    },
+    value: "input",
+  },
+  {
+    get label() {
+      return translateUi("ui.8d0f6d6d34507ebf");
+    },
+    value: "output",
+  },
 ];
 
 export const loggingOnlyScopeToChoice = (v: string | null | undefined): LoggingOnlyScopeChoice =>
@@ -389,9 +405,24 @@ export const GUARDRAIL_STREAM_SCOPES = ["both", "streaming", "non_streaming"] as
 export type GuardrailStreamScope = (typeof GUARDRAIL_STREAM_SCOPES)[number];
 
 export const STREAM_SCOPE_OPTIONS: { value: GuardrailStreamScope; label: string }[] = [
-  { value: "both", label: "Streaming and non-streaming" },
-  { value: "streaming", label: "Streaming only" },
-  { value: "non_streaming", label: "Non-streaming only" },
+  {
+    value: "both",
+    get label() {
+      return translateUi("ui.ca7fbc6c4567a5fa");
+    },
+  },
+  {
+    value: "streaming",
+    get label() {
+      return translateUi("ui.27ea5a747ec19c7c");
+    },
+  },
+  {
+    value: "non_streaming",
+    get label() {
+      return translateUi("ui.9b350880ce98725b");
+    },
+  },
 ];
 
 export const isGuardrailStreamScope = (value: unknown): value is GuardrailStreamScope =>
@@ -467,3 +498,30 @@ export const streamScopeForUpdate = (
   }
   return nextStreamScope ?? "both";
 };
+
+export interface GuardrailUISettings {
+  supported_entities: string[];
+  supported_actions: string[];
+  pii_entity_categories: Array<{
+    category: string;
+    entities: string[];
+  }>;
+  supported_modes: string[];
+  providers_without_directional_logging_only_scope?: string[];
+  content_filter_settings?: {
+    prebuilt_patterns: Array<{
+      name: string;
+      display_name: string;
+      category: string;
+      description: string;
+    }>;
+    pattern_categories: string[];
+    supported_actions: string[];
+    content_categories?: Array<{
+      name: string;
+      display_name: string;
+      description: string;
+      default_action: string;
+    }>;
+  };
+}

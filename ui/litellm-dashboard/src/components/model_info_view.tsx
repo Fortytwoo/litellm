@@ -1,4 +1,9 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
 import { useModelHub, useModelsInfo } from "@/app/(dashboard)/hooks/models/useModels";
@@ -260,9 +265,9 @@ export default function ModelInfoView({
         custom_llm_provider: localModelData.litellm_params?.custom_llm_provider,
       },
     };
-    toast.info("Storing credential..");
+    toast.info(translateUi("ui.f61d5b2e0b8db4f8"));
     let credentialResponse = await credentialCreateCall(accessToken, credentialItem);
-    toast.success("Credential stored successfully");
+    toast.success(translateUi("ui.20021f543c768f35"));
   };
 
   const handleModelUpdate = async (
@@ -432,7 +437,7 @@ export default function ModelInfoView({
         onModelUpdate(updatedModelData);
       }
 
-      toast.success("Model settings updated successfully");
+      toast.success(translateUi("ui.ab942d18d65014a4"));
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating model:", error);
@@ -448,7 +453,7 @@ export default function ModelInfoView({
       <div className="p-4">
         <Button variant="ghost" onClick={onClose} className="mb-4">
           <ArrowLeft className="size-4" />
-          Back to Models
+          {uiT("ui.a28c02f0446699ba")}
         </Button>
         <p className="text-sm">{uiT("ui.47d2a515ef2f")}</p>
       </div>
@@ -461,9 +466,9 @@ export default function ModelInfoView({
       <div className="p-4">
         <Button variant="ghost" onClick={onClose} className="mb-4">
           <ArrowLeft className="size-4" />
-          Back to Models
+          {uiT("ui.a28c02f0446699ba")}
         </Button>
-        <p className="text-sm">Model not found</p>
+        <p className="text-sm">{uiT("ui.ad048e33705c93a6")}</p>
       </div>
     );
   }
@@ -473,7 +478,7 @@ export default function ModelInfoView({
     if (isComplexityRouterModel) {
       const targets = buildComplexityRouterTestTargets(localModelData ?? modelData);
       if (targets.length === 0) {
-        toast.warning("No complexity tiers are configured yet, so there is nothing to test.");
+        toast.warning(translateUi("ui.32bd189a6b5e3fdd"));
         return;
       }
       setAutoRouterTestTargets(targets);
@@ -482,7 +487,7 @@ export default function ModelInfoView({
       return;
     }
     try {
-      toast.info("Testing connection...");
+      toast.info(translateUi("ui.3d0032b7b274243e"));
       const response = await testConnectionRequest(
         accessToken,
         {
@@ -501,15 +506,15 @@ export default function ModelInfoView({
       );
 
       if (response.status === "success") {
-        toast.success("Connection test successful!");
+        toast.success(translateUi("ui.6d95a4c6b5798845"));
       } else {
         throw new Error(response?.result?.error || response?.message || "Unknown error");
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error("Error testing connection: " + truncateString(error.message, 100));
+        toast.error(translateUi("ui.1a6234ed4ee56808", undefined, { v0: String(truncateString(error.message, 100)) }));
       } else {
-        toast.error("Error testing connection: " + String(error));
+        toast.error(translateUi("ui.1a6234ed4ee56808", undefined, { v0: String(String(error)) }));
       }
     }
   };
@@ -519,7 +524,7 @@ export default function ModelInfoView({
       setDeleteLoading(true);
       if (!accessToken) return;
       await modelDeleteCall(accessToken, modelId);
-      toast.success("Model deleted successfully");
+      toast.success(translateUi("ui.b2372d9648348990"));
 
       if (onModelUpdate) {
         onModelUpdate({
@@ -570,15 +575,17 @@ export default function ModelInfoView({
         <div>
           <Button variant="ghost" onClick={onClose} className="mb-4">
             <ArrowLeft className="size-4" />
-            Back to Models
+            {uiT("ui.a28c02f0446699ba")}
           </Button>
-          <h2 className="text-xl font-semibold">Public Model Name: {getDisplayModelName(modelData)}</h2>
+          <h2 className="text-xl font-semibold">
+            {uiT("ui.aa49f8746850ab62")} {getDisplayModelName(modelData)}
+          </h2>
           <div className="flex items-center cursor-pointer">
             <span className="text-sm text-muted-foreground font-mono">{modelData.model_info.id}</span>
             <Button
               variant="ghost"
               size="icon-xs"
-              aria-label="Copy model ID"
+              aria-label={uiT("ui.16af2c8fb28f78df")}
               onClick={() => copyToClipboard(modelData.model_info.id, "model-id")}
               className={`left-2 z-raised transition-all duration-200 ${
                 copiedStates["model-id"]
@@ -599,7 +606,7 @@ export default function ModelInfoView({
               data-testid="test-connection-button"
             >
               <RefreshIcon className="h-4 w-4" />
-              Test Connection
+              {uiT("ui.c02977b07ec93816")}
             </Button>
           )}
 
@@ -613,7 +620,7 @@ export default function ModelInfoView({
                 data-testid="update-api-key-button"
               >
                 <KeyIcon className="h-4 w-4" />
-                Update API Key
+                {uiT("ui.3cb3f696572cff3d")}
               </Button>
 
               <Button
@@ -624,7 +631,7 @@ export default function ModelInfoView({
                 data-testid="reuse-credentials-button"
               >
                 <KeyIcon className="h-4 w-4" />
-                Re-use Credentials
+                {uiT("ui.255ac5b374cfcb5c")}
               </Button>
             </>
           )}
@@ -636,7 +643,7 @@ export default function ModelInfoView({
             data-testid="delete-model-button"
           >
             <TrashIcon className="h-4 w-4" />
-            {deleteLabel}
+            {translateText(deleteLabel)}
           </Button>
         </div>
       </div>
@@ -647,7 +654,7 @@ export default function ModelInfoView({
             {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           <TabsTrigger value="raw" className="flex-none rounded-none px-4 py-2">
-            Raw JSON
+            {uiT("ui.fcd7b889e82a4dd8")}
           </TabsTrigger>
         </TabsList>
 
@@ -663,7 +670,7 @@ export default function ModelInfoView({
                 </div>
               </Card>
               <Card className="block p-6">
-                <p className="text-sm">LiteLLM Model</p>
+                <p className="text-sm">{uiT("ui.e041a7ca160fa55a")}</p>
                 <div className="mt-2 overflow-hidden">
                   <SimpleTooltip
                     content={modelData.litellm_model_name || uiT("ui.8290035d4cf4")}
@@ -676,7 +683,7 @@ export default function ModelInfoView({
                 </div>
               </Card>
               <Card className="block p-6">
-                <p className="text-sm">Pricing</p>
+                <p className="text-sm">{uiT("ui.dfe95783edfef791")}</p>
                 <ModelPricingSummary model={modelData} />
               </Card>
             </div>
@@ -694,7 +701,7 @@ export default function ModelInfoView({
                 </svg>
                 {uiT("ui.3d44337010bf")}{" "}
                 {modelData.model_info.created_at
-                  ? new Date(modelData.model_info.created_at).toLocaleDateString("en-US", {
+                  ? new Date(modelData.model_info.created_at).toLocaleDateString(getFormattingLocale(), {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
@@ -717,11 +724,11 @@ export default function ModelInfoView({
             {/* Settings Card */}
             <Card className="block p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium">Model Settings</h3>
+                <h3 className="text-lg font-medium">{uiT("ui.739715ca3e9f3186")}</h3>
                 <div className="flex gap-2">
                   {isAutoRouterModel && canEditRouter && !isEditing && (
                     <Button onClick={() => setIsAutoRouterModalOpen(true)} className="flex items-center">
-                      Edit Auto Router
+                      {uiT("ui.1f26e10c50e33694")}
                     </Button>
                   )}
                   {canEditModel ? (
@@ -731,7 +738,7 @@ export default function ModelInfoView({
                       </Button>
                     )
                   ) : (
-                    <SimpleTooltip content="Only DB models can be edited. You must be an admin or the creator of the model to edit it.">
+                    <SimpleTooltip content={uiT("ui.bb5623f217a138c4")}>
                       <Info className="size-4 text-muted-foreground" />
                     </SimpleTooltip>
                   )}
@@ -778,15 +785,17 @@ export default function ModelInfoView({
         isOpen={isDeleteModalOpen}
         title={deleteLabel}
         alertMessage="This action cannot be undone."
-        message={`Are you sure you want to delete this ${isAnyAutoRouter ? "auto-router" : "model"}?`}
+        message={uiT("ui.a297351c6725e68f", {
+          v0: String(isAnyAutoRouter ? uiT("ui.33e1b15ac8e39384") : uiT("ui.9372c470eeadd5ec")),
+        })}
         resourceInformationTitle="Model Information"
         resourceInformation={[
           {
-            label: "Model Name",
+            label: uiT("ui.a501a70a42b98bc7"),
             value: modelData?.model_name || "Not Set",
           },
           {
-            label: "LiteLLM Model Name",
+            label: uiT("ui.1d433b48aec3812b"),
             value: modelData?.litellm_model_name || "Not Set",
           },
           {
@@ -815,7 +824,7 @@ export default function ModelInfoView({
         <Dialog open={isCredentialModalOpen} onOpenChange={(open) => !open && setIsCredentialModalOpen(false)}>
           <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Using Existing Credential</DialogTitle>
+              <DialogTitle>{uiT("ui.96abcaa22f3d35ac")}</DialogTitle>
             </DialogHeader>
             <CredentialIdentity
               className="text-sm"
@@ -859,7 +868,7 @@ export default function ModelInfoView({
       <Dialog open={isAutoRouterTestModalOpen} onOpenChange={(open) => !open && setIsAutoRouterTestModalOpen(false)}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
           <DialogHeader>
-            <DialogTitle>Connection Test Results</DialogTitle>
+            <DialogTitle>{uiT("ui.0ec99e1bdc5ce188")}</DialogTitle>
           </DialogHeader>
           {isAutoRouterTestModalOpen && accessToken && (
             <AutoRouterConnectionTest

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Button } from "@/components/ui/button";
 
@@ -35,6 +36,8 @@ function pageFailureMessage(failure: TraceReadFailure): string {
  * same way every time.
  */
 export function PagingBanner({ loaded, total, failure, busy, onLoadMore, onRefresh }: PagingBannerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const retryable = failure !== null && isRetryableTraceRead(failure);
   const nextLabel = failure ? "Retry" : "Load more steps";
   return (
@@ -45,17 +48,17 @@ export function PagingBanner({ loaded, total, failure, busy, onLoadMore, onRefre
       <span>
         {failure
           ? pageFailureMessage(failure)
-          : `Showing ${loaded.toLocaleString()} of ${total.toLocaleString()} steps`}
+          : uiT("ui.3ac65bd69a773862", { v0: String(loaded.toLocaleString()), v1: String(total.toLocaleString()) })}
       </span>
       <span className="flex items-center gap-2">
         {failure && (
           <Button size="xs" variant={retryable ? "ghost" : "outline"} disabled={busy} onClick={onRefresh}>
-            Refresh trace
+            {uiT("ui.7b24cfd99e307478")}
           </Button>
         )}
         {(!failure || retryable) && (
           <Button size="xs" variant="outline" disabled={busy} onClick={onLoadMore}>
-            {busy ? "Loading…" : nextLabel}
+            {busy ? uiT("ui.ba3bbbe10d8b") : nextLabel}
           </Button>
         )}
       </span>

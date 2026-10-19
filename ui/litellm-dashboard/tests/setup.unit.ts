@@ -1,4 +1,11 @@
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
+import { setActiveLocale } from "@/i18n";
+import { z } from "zod";
+
+beforeEach(() => {
+  setActiveLocale("en");
+  z.config(z.locales.en());
+});
 
 vi.mock("@/lib/toast", () => ({
   toast: {

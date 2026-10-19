@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { CircleMinus, Info, Plus } from "lucide-react";
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,8 +20,18 @@ import { matchesPattern, selectControl, selectTriggerControl, textControl } from
 import { listControl } from "./mcpFormStore";
 
 const SCOPE_OPTIONS = [
-  { value: "global", label: "Instance" },
-  { value: "user", label: "Per-user" },
+  {
+    value: "global",
+    get label() {
+      return translateUi("ui.425f233626b3cd02");
+    },
+  },
+  {
+    value: "user",
+    get label() {
+      return translateUi("ui.a6bb6180e1bf41da");
+    },
+  },
 ];
 
 const VARIABLE_NAME_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
@@ -34,6 +47,8 @@ const VARIABLE_NAME_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
  * The parent form reads the ``env_vars`` field from the form values.
  */
 const EnvVarsSection: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<MountedFormValues>();
   const { fields, append, remove } = useFieldArray({ control: listControl(control), name: "env_vars" });
   useMountedName("env_vars");
@@ -41,16 +56,16 @@ const EnvVarsSection: React.FC = () => {
   return (
     <div className="rounded-lg border border-border bg-muted p-4">
       <div className="flex items-center gap-2 mb-1">
-        <strong className="text-sm font-semibold">Variables</strong>
+        <strong className="text-sm font-semibold">{uiT("ui.02db55bac5e3f7ce")}</strong>
         <SimpleTooltip
           content={
             <>
-              Define variables you can interpolate in Static Headers or Authentication using{" "}
-              <code>{"${VAR_NAME}"}</code>. <br />
-              <b>Instance</b>: admin-defined value used for every user.
+              {uiT("ui.95103d9bfb0e5ab7")} <code>{"${VAR_NAME}"}</code>. <br />
+              <b>{uiT("ui.425f233626b3cd02")}</b>
+              {uiT("ui.0404962da6234300")}
               <br />
-              <b>Per-user</b>: each user supplies their own value (e.g. personal credentials) via the MCP Gateway
-              dashboard.
+              <b>{uiT("ui.a6bb6180e1bf41da")}</b>
+              {uiT("ui.25e566fd6e0d9174")}
             </>
           }
         >
@@ -58,7 +73,8 @@ const EnvVarsSection: React.FC = () => {
         </SimpleTooltip>
       </div>
       <span className="mb-3 block text-xs text-muted-foreground">
-        Reference these in Static Headers or Authentication as <code>{"${VAR_NAME}"}</code>. For example:{" "}
+        {uiT("ui.3c1b6944418849c8")} <code>{"${VAR_NAME}"}</code>
+        {uiT("ui.18ab2178bc27b124")}{" "}
         <code className="bg-card px-1 rounded-sm border border-border">
           {"${DB_PROTOCOL}://${CORP_USERNAME}:${CORP_PASSWORD}@${DB_HOSTNAME}"}
         </code>
@@ -67,9 +83,9 @@ const EnvVarsSection: React.FC = () => {
       <div className="space-y-2">
         {fields.length > 0 && (
           <div className="flex gap-3 px-1 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            <div style={{ flex: 1 }}>Variable Name</div>
-            <div style={{ flex: 1 }}>Value / Description</div>
-            <div style={{ width: 160 }}>Scope</div>
+            <div style={{ flex: 1 }}>{uiT("ui.27c2ee03484204e4")}</div>
+            <div style={{ flex: 1 }}>{uiT("ui.5cc784a57d905108")}</div>
+            <div style={{ width: 160 }}>{uiT("ui.b073f6c68ef87211")}</div>
             <div style={{ width: 24 }} />
           </div>
         )}
@@ -89,7 +105,11 @@ const EnvVarsSection: React.FC = () => {
               }}
             >
               {(control) => (
-                <Input {...textControl(control)} placeholder="e.g. DB_PROTOCOL" className="rounded-md font-mono" />
+                <Input
+                  {...textControl(control)}
+                  placeholder={uiT("ui.d120d9a9aab29f16")}
+                  className="rounded-md font-mono"
+                />
               )}
             </MountedFormField>
             <div style={{ flex: 1 }}>
@@ -121,7 +141,7 @@ const EnvVarsSection: React.FC = () => {
         ))}
         <Button variant="outline" className="w-full border-dashed" onClick={() => append({ scope: "global" })}>
           <Plus />
-          Add Variable
+          {uiT("ui.f95fcf61a86350ab")}
         </Button>
       </div>
     </div>
@@ -132,6 +152,8 @@ const EnvVarsSection: React.FC = () => {
 // vars the value comes from each user later, so the column instead captures an
 // optional description that the per-user fill-in modal shows as a hint.
 const ScopedValueOrDescription: React.FC<{ index: number }> = ({ index }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isPerUser = useWatch({ name: `env_vars.${index}.scope` }) === "user";
   if (isPerUser) {
     return (
@@ -139,16 +161,16 @@ const ScopedValueOrDescription: React.FC<{ index: number }> = ({ index }) => {
         {(control) => (
           <InputGroup>
             <InputGroupAddon>
-              <SimpleTooltip content="Per-user variables have no shared value. This text is only a hint shown to each user when they fill in their own value.">
+              <SimpleTooltip content={uiT("ui.430d4a5300170c56")}>
                 <span className="text-xs text-muted-foreground cursor-help whitespace-nowrap">
                   <Info className="mr-1 inline size-3 align-text-bottom" />
-                  Hint
+                  {uiT("ui.a7b4cf9f7e429771")}
                 </span>
               </SimpleTooltip>
             </InputGroupAddon>
             <InputGroupInput
               {...textControl(control)}
-              placeholder="e.g. Your DB username"
+              placeholder={uiT("ui.c50b4e93e4ce51fc")}
               className="text-muted-foreground"
             />
           </InputGroup>
@@ -158,7 +180,9 @@ const ScopedValueOrDescription: React.FC<{ index: number }> = ({ index }) => {
   }
   return (
     <MountedFormField name={["env_vars", String(index), "value"]} className="mb-0">
-      {(control) => <Input {...textControl(control)} placeholder="e.g. postgresql" className="rounded-md font-mono" />}
+      {(control) => (
+        <Input {...textControl(control)} placeholder={uiT("ui.daadd3b4d8978797")} className="rounded-md font-mono" />
+      )}
     </MountedFormField>
   );
 };

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
 import { Users } from "lucide-react";
@@ -17,21 +18,23 @@ interface AvailableTeamsTableProps {
 const DEFAULT_SORTING: SortingState = [{ id: "team_alias", desc: false }];
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Users className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No available teams to join</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.4f087ac5da944d61")}</div>
       <div className="text-sm text-muted-foreground">
-        See how to set available teams{" "}
+        {uiT("ui.9e471684985aa6cb")}{" "}
         <a
           href="https://docs.litellm.ai/docs/proxy/self_serve#all-settings-for-self-serve--sso-flow"
           target="_blank"
           rel="noopener noreferrer"
           className="text-primary underline-offset-4 hover:underline"
         >
-          here
+          {uiT("ui.fcec91509759ad99")}
         </a>
       </div>
     </div>
@@ -39,6 +42,8 @@ function EmptyState() {
 }
 
 const AvailableTeamsTable: React.FC<AvailableTeamsTableProps> = ({ teams, isLoading, onJoinTeam }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
 
   const columns = useMemo(() => getAvailableTeamsTableColumns({ onJoinTeam }), [onJoinTeam]);
@@ -53,7 +58,7 @@ const AvailableTeamsTable: React.FC<AvailableTeamsTableProps> = ({ teams, isLoad
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading available teams…"
+      loadingMessage={uiT("ui.03cad57c45ae86d8")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

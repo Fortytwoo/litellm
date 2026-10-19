@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { CostEstimateRequest, CostEstimateResponse } from "../types";
@@ -13,6 +17,8 @@ interface EntryResult {
 }
 
 export function useMultiCostEstimate(accessToken: string | null) {
+  useDashboardLanguage();
+
   const [entryResults, setEntryResults] = useState<Map<string, EntryResult>>(new Map());
   const debounceRefs = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
@@ -99,7 +105,7 @@ export function useMultiCostEstimate(accessToken: string | null) {
             entry,
             result: null,
             loading: false,
-            error: "Network error",
+            error: translateUi("ui.2a33d984de881573"),
           });
           return next;
         });

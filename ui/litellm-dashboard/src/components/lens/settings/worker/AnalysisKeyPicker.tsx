@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { analysisKeysQuery, type Key } from "../../data/queries";
 
@@ -18,6 +19,8 @@ import {
 } from "@/components/ui/combobox";
 
 export function AnalysisKeyPicker() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<WorkerFormInput>();
   const value = useWatch({ control, name: "analysisKey" });
   const api = useLensApi();
@@ -35,7 +38,7 @@ export function AnalysisKeyPicker() {
     : choices;
   return (
     <div className="space-y-2">
-      <p className="text-sm">Charge analysis to</p>
+      <p className="text-sm">{uiT("ui.68163c75b3252b30")}</p>
       <div className="flex flex-wrap items-start gap-2">
         <div className="min-w-0 flex-1">
           <Controller
@@ -65,9 +68,9 @@ export function AnalysisKeyPicker() {
                   }}
                   onValueChange={handleValueChange}
                 >
-                  <ComboboxInput aria-label="Charge analysis to" placeholder="Search existing keys" />
+                  <ComboboxInput aria-label={uiT("ui.68163c75b3252b30")} placeholder={uiT("ui.3227035b0eb6a6f7")} />
                   <ComboboxContent>
-                    <ComboboxEmpty>{loading ? "Loading keys…" : "No matching keys"}</ComboboxEmpty>
+                    <ComboboxEmpty>{loading ? uiT("ui.c902f01addd57274") : uiT("ui.e7c5fa5b3dcc175a")}</ComboboxEmpty>
                     <ComboboxList>
                       {(key: Key) => (
                         <ComboboxItem key={key.token} value={key}>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
 import { Bot, CircleCheck, Search as SearchIcon, X } from "lucide-react";
@@ -27,16 +28,18 @@ interface AgentsTableProps {
 const DEFAULT_SORTING: SortingState = [{ id: "created_at", desc: true }];
 
 function EmptyState({ isFiltered }: { isFiltered: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Bot className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">{isFiltered ? "No matching agents" : "No agents yet"}</div>
+      <div className="text-sm font-medium text-foreground">
+        {isFiltered ? uiT("ui.38b006752ec7a0a6") : uiT("ui.971b61f8cb4dab8e")}
+      </div>
       <div className="text-sm text-muted-foreground">
-        {isFiltered
-          ? "Adjust the search to see more agents."
-          : "Add an agent to make it available in your organization."}
+        {isFiltered ? uiT("ui.bc5abf6e9f8afba4") : uiT("ui.22c2f104ba12bca8")}
       </div>
     </div>
   );
@@ -52,6 +55,8 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
   onAgentClick,
   onDeleteClick,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
   const [searchTerm, setSearchTerm] = useState("");
   const filteredAgents = useMemo(
@@ -79,7 +84,7 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading agents…"
+      loadingMessage={uiT("ui.ae0c1414f42139ce")}
       noDataMessage={<EmptyState isFiltered={agents.length > 0} />}
       size="compact"
       toolbar={() => (
@@ -89,13 +94,17 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
               <SearchIcon className="size-4 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Search agents by name, ID, or description..."
+              placeholder={uiT("ui.90e0a825194bd251")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             {searchTerm && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setSearchTerm("")}>
+                <InputGroupButton
+                  size="icon-xs"
+                  aria-label={uiT("ui.3b7ea51793e9d906")}
+                  onClick={() => setSearchTerm("")}
+                >
                   <X />
                 </InputGroupButton>
               </InputGroupAddon>
@@ -109,7 +118,7 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
                     <CircleCheck
                       className={healthCheckEnabled ? "size-4 text-success" : "size-4 text-muted-foreground"}
                     />
-                    <span className="text-sm text-muted-foreground">Health Check</span>
+                    <span className="text-sm text-muted-foreground">{uiT("ui.388d2fd1db132e51")}</span>
                     <Switch
                       size="sm"
                       checked={healthCheckEnabled}
@@ -119,7 +128,7 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
                   </div>
                 }
               />
-              <TooltipContent>When enabled, only agents with reachable URLs are shown</TooltipContent>
+              <TooltipContent>{uiT("ui.f8be4a06015b4464")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>

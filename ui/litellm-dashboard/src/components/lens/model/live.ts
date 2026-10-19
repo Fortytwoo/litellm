@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { durationText } from "./format";
 import { activeJob, isActive, readingStart } from "./status";
 import type { Activity, InFlight, Job, Review, ReviewVerdict, Settings, ToolCount } from "./types";
@@ -56,16 +57,25 @@ export function stripState(
   model: string,
   queued = "Queued, waiting for a worker to pick this up",
 ): StripState {
-  if (job.status === "failed") return { kind: "failed", message: job.error || "The investigation failed" };
+  if (job.status === "failed") return { kind: "failed", message: job.error || translateUi("ui.1e7b1999592de6b7") };
   if (job.status === "completed" || job.status === "cancelled") return { kind: "done" };
   const stepError = job.steps.findLast((step) => step.kind === "error");
   if (stepError && !job.reviews.length) return { kind: "failed", message: stepError.label };
-  if (job.reviews.length) return { kind: "reviewing", message: job.stage || "Reviewing traces" };
+  if (job.reviews.length) return { kind: "reviewing", message: job.stage || translateUi("ui.b5b016ee223e79b8") };
   if (job.status === "queued") return { kind: "waiting", message: queued };
   const { selected } = job.coverage;
   const using = model ? ` with ${model}` : "";
   if (job.stage === "Reading executions" && selected) {
-    return { kind: "waiting", message: `Reading ${selected} ${selected === 1 ? "trace" : "traces"}${using}…` };
+    return {
+      kind: "waiting",
+      get message() {
+        return translateUi("ui.9307ae7c7310acb5", undefined, {
+          v0: String(selected),
+          v1: String(selected === 1 ? translateUi("ui.eafe895eb8119e6e") : translateUi("ui.b5ac69fc467c01f3")),
+          v2: String(using),
+        });
+      },
+    };
   }
   return { kind: "waiting", message: `${job.stage || "Starting"}${using}…` };
 }
@@ -182,37 +192,87 @@ export function activeActivities(job: Pick<Job, "status" | "activities">): reado
 }
 
 const PHASE_LABELS: Record<Activity["phase"], string> = {
-  load: "Loading trace evidence",
-  review: "Reviewing trace",
-  group: "Grouping observations",
-  reconcile: "Combining candidate groups",
-  investigate: "Investigating candidate",
+  get load() {
+    return translateUi("ui.f940adda918e5012");
+  },
+  get review() {
+    return translateUi("ui.bef961b84bf70637");
+  },
+  get group() {
+    return translateUi("ui.a8d06f57d3a2cf34");
+  },
+  get reconcile() {
+    return translateUi("ui.baf80e033977937e");
+  },
+  get investigate() {
+    return translateUi("ui.5a309a98c357ceb9");
+  },
 };
 
 const TOOL_LABELS: Record<ToolCount["name"], string> = {
-  model: "Model",
-  read: "Read",
-  search: "Search",
-  python: "Python",
-  catalog: "Trace catalog",
-  review_catalog: "Review catalog",
-  read_reviews: "Read reviews",
-  search_reviews: "Search reviews",
-  history: "History",
-  checkpoint: "Context compaction",
+  get model() {
+    return translateUi("ui.5e2c614c23f0");
+  },
+  get read() {
+    return translateUi("ui.9b9a8d05a7ec353b");
+  },
+  get search() {
+    return translateUi("ui.49c266baaaa7");
+  },
+  get python() {
+    return translateUi("ui.18885f27b5af9012");
+  },
+  get catalog() {
+    return translateUi("ui.7a9aa158de4a6998");
+  },
+  get review_catalog() {
+    return translateUi("ui.f507d1440bd30983");
+  },
+  get read_reviews() {
+    return translateUi("ui.bdba6ea3daf11260");
+  },
+  get search_reviews() {
+    return translateUi("ui.e7264db1974a39f7");
+  },
+  get history() {
+    return translateUi("ui.0e76960093379060");
+  },
+  get checkpoint() {
+    return translateUi("ui.3820cab0b2463a99");
+  },
 };
 
 const OPERATION_LABELS: Record<ToolCount["name"], string> = {
-  model: "Analyzing evidence",
-  read: "Reading trace content",
-  search: "Searching trace content",
-  python: "Running Python",
-  catalog: "Inspecting trace catalog",
-  review_catalog: "Inspecting review catalog",
-  read_reviews: "Reading review observations",
-  search_reviews: "Searching review observations",
-  history: "Reading prior analysis",
-  checkpoint: "Compacting context",
+  get model() {
+    return translateUi("ui.d84681c79c89366d");
+  },
+  get read() {
+    return translateUi("ui.da76559ad8400f67");
+  },
+  get search() {
+    return translateUi("ui.b2f8a888f808a44c");
+  },
+  get python() {
+    return translateUi("ui.5e82fe39eb1a6571");
+  },
+  get catalog() {
+    return translateUi("ui.26c3f63b0846be43");
+  },
+  get review_catalog() {
+    return translateUi("ui.1ff683e7bba3d128");
+  },
+  get read_reviews() {
+    return translateUi("ui.c53f700df10c6741");
+  },
+  get search_reviews() {
+    return translateUi("ui.f0b1a1dcdd568a7c");
+  },
+  get history() {
+    return translateUi("ui.8765046c5df14eda");
+  },
+  get checkpoint() {
+    return translateUi("ui.67afcd229f27233e");
+  },
 };
 
 export function activityPhase(activity: Pick<Activity, "phase">): string {

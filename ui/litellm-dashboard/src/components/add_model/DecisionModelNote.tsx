@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Info } from "lucide-react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -23,6 +25,8 @@ const selectedModelNames = (value: unknown): string[] => {
 };
 
 export default function DecisionModelNote({ catalog, litellmProvider }: DecisionModelNoteProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<MountedFormValues>();
   const model = useWatch({ control, name: "model" });
 
@@ -31,21 +35,21 @@ export default function DecisionModelNote({ catalog, litellmProvider }: Decision
   }
 
   return (
-    <Alert variant="info" role="note" aria-label="Decision model notice" className="mb-4">
+    <Alert variant="info" role="note" aria-label={uiT("ui.61ff598dec622d27")} className="mb-4">
       <Info />
-      <AlertTitle>Decision model</AlertTitle>
+      <AlertTitle>{uiT("ui.1e7a941a0dab1722")}</AlertTitle>
       <AlertDescription>
         <p>
-          For decision requests, call <code>/v1/decisions</code> (OpenAI format) or <code>/v1/systemone</code> (System
-          One format).{" "}
+          {uiT("ui.f94379e9b327a0c5")} <code>/v1/decisions</code> {uiT("ui.d5f90b419d45feee")}{" "}
+          <code>/v1/systemone</code> {uiT("ui.9cc5d8032e8a3b47")}{" "}
           <a href={DECISIONS_DOCS_URL} target="_blank" rel="noopener noreferrer" className="underline">
-            How to call decision models
+            {uiT("ui.7c42d83806a10c4f")}
           </a>
         </p>
         <p>
-          After you add it,{" "}
+          {uiT("ui.f0ca89dd6941965c")}{" "}
           <a href={uiHref(SYSTEM_ONE_PLAYGROUND_ROUTE)} className="underline">
-            test it in the Decisions playground
+            {uiT("ui.f22356a598077ec3")}
           </a>
         </p>
       </AlertDescription>

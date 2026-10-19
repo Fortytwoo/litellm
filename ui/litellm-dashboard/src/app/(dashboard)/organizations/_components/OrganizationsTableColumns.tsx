@@ -32,8 +32,12 @@ function OrganizationLimitsCell({ organization }: { organization: Organization }
   const { tpm_limit, rpm_limit } = getOrganizationBudget(organization);
   return (
     <div className="flex flex-col text-xs text-muted-foreground">
-      <span>TPM: {tpm_limit ?? uiT("ui.11dde17d6c3e")}</span>
-      <span>RPM: {rpm_limit ?? uiT("ui.11dde17d6c3e")}</span>
+      <span>
+        {uiT("ui.22506bb2e2fc9c02")} {tpm_limit ?? uiT("ui.11dde17d6c3e")}
+      </span>
+      <span>
+        {uiT("ui.0a9c9fab18f38f0e")} {rpm_limit ?? uiT("ui.11dde17d6c3e")}
+      </span>
     </div>
   );
 }
@@ -50,7 +54,7 @@ function OrganizationRowActions({ organization, onEditClick, onDeleteClick }: Or
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open organization actions"
+        aria-label={uiT("ui.866672c520f37938")}
         data-testid={`organization-actions-${organization.organization_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -93,8 +97,12 @@ export const getOrganizationsTableColumns = ({
   {
     id: "organization_id",
     accessorKey: "organization_id",
-    meta: { title: "Organization ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Organization ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.1f466322634e2d85");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.1f466322634e2d85")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -109,8 +117,12 @@ export const getOrganizationsTableColumns = ({
   {
     id: "organization_alias",
     accessorKey: "organization_alias",
-    meta: { title: "Organization Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Organization Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.4cbd90732447a928");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.4cbd90732447a928")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -189,8 +201,14 @@ export const getOrganizationsTableColumns = ({
   },
   {
     id: "limits",
-    meta: { title: "TPM / RPM Limits" },
-    header: "TPM / RPM Limits",
+    meta: {
+      get title() {
+        return translateUi("ui.4c19fc8425d2d98f");
+      },
+    },
+    get header() {
+      return translateUi("ui.4c19fc8425d2d98f");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <OrganizationLimitsCell organization={row.original} />,

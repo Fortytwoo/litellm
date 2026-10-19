@@ -1,4 +1,6 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useDisableBlogPosts } from "@/app/(dashboard)/hooks/useDisableBlogPosts";
 import { useBlogPosts, type BlogPost } from "@/app/(dashboard)/hooks/blogPosts/useBlogPosts";
@@ -16,7 +18,7 @@ import React from "react";
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr + "T00:00:00");
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(getFormattingLocale(), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -38,7 +40,7 @@ export const BlogDropdown: React.FC = () => {
     if (isLoading) {
       return (
         <div className="flex items-center px-2 py-1.5 text-sm">
-          <LoaderCircle role="img" aria-label="loading" className="size-4 animate-spin" />
+          <LoaderCircle role="img" aria-label={uiT("ui.b4a070a2d341940c")} className="size-4 animate-spin" />
         </div>
       );
     }
@@ -46,16 +48,16 @@ export const BlogDropdown: React.FC = () => {
     if (isError) {
       return (
         <div className="flex items-center gap-2 px-2 py-1.5 text-sm">
-          <span className="text-destructive">Failed to load posts</span>
+          <span className="text-destructive">{uiT("ui.499fd72f8b1be123")}</span>
           <Button variant="outline" size="sm" onClick={() => refetch()}>
-            Retry
+            {uiT("ui.942087cc2d41e013")}
           </Button>
         </div>
       );
     }
 
     if (!data || data.posts.length === 0) {
-      return <div className="px-2 py-1.5 text-sm text-muted-foreground">No posts available</div>;
+      return <div className="px-2 py-1.5 text-sm text-muted-foreground">{uiT("ui.21aa2d6351a4d746")}</div>;
     }
 
     return (
@@ -76,7 +78,7 @@ export const BlogDropdown: React.FC = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <a href="https://docs.litellm.ai/blog" target="_blank" rel="noopener noreferrer">
-            View all posts
+            {uiT("ui.0ae622ba90817ff2")}
           </a>
         </DropdownMenuItem>
       </>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useNow } from "@/hooks/useNow";
 import {
@@ -15,6 +16,8 @@ import { QueueReasonText } from "./QueueReasonText";
 import { useQueueReason, type QueueContext } from "./useQueueReason";
 
 export function InvestigationProgress({ job, queue }: { job: Job; queue?: QueueContext }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const now = useNow(1000);
   const reason = useQueueReason(job, queue);
   const progress = analysisProgress(job);
@@ -23,27 +26,31 @@ export function InvestigationProgress({ job, queue }: { job: Job; queue?: QueueC
   const { secondsLeft } = analysisPace(useProgressSamples(progress), now);
   const queued = progress.step < 0;
   return (
-    <section aria-label="Analysis progress" className="space-y-2">
+    <section aria-label={uiT("ui.cf1b0ab764d11644")} className="space-y-2">
       <div className="flex items-baseline justify-between gap-3 tabular-nums">
         <span
           role="progressbar"
-          aria-label="Investigation progress"
+          aria-label={uiT("ui.6a3ac965ef98d615")}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={percent}
           aria-valuetext={`${percent}% overall. ${progress.title}: ${progress.detail}`}
-          title={`Overall progress: ${stages.map((stage) => `${stage.label} ${stage.weight * 100}%`).join(", ")}`}
+          title={uiT("ui.6cd43e73a08f1935", {
+            v0: String(stages.map((stage) => `${stage.label} ${stage.weight * 100}%`).join(", ")),
+          })}
           className="text-2xl font-semibold"
         >
           {queued ? "–" : `${percent}%`}
-          {!queued && <span className="ml-1.5 text-xs font-normal text-muted-foreground">overall</span>}
+          {!queued && (
+            <span className="ml-1.5 text-xs font-normal text-muted-foreground">{uiT("ui.c1deb3268b977bb9")}</span>
+          )}
         </span>
         <span className="text-xs text-muted-foreground">
-          {analysisElapsed(job.created_at, now)} elapsed
+          {analysisElapsed(job.created_at, now)} {uiT("ui.b712cf8eee5eda32")}
           {!queued && ` · ${remainingLabel(secondsLeft)} left`}
         </span>
       </div>
-      <ol aria-label="Analysis stages" className="flex gap-1">
+      <ol aria-label={uiT("ui.05bff2cb7737ecf1")} className="flex gap-1">
         {stages.map((stage) => (
           <li
             key={stage.label}

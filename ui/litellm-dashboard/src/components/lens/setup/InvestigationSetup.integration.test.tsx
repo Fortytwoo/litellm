@@ -171,7 +171,7 @@ describe("Investigation setup", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: "Run and monitor" })).toBeEnabled());
     expect(screen.getByText("1 matching run")).toBeInTheDocument();
     expect(screen.getByText("Research report")).toBeInTheDocument();
-    expect(screen.getByText(/2026-09-30/)).toBeInTheDocument();
+    expect(screen.getByTitle("2026-09-30 18:00:00.000")).toBeVisible();
     expect(screen.getByRole("spinbutton", { name: "Monthly limit (USD)" })).not.toBeVisible();
     await user.click(screen.getByRole("button", { name: "Run and monitor" }));
     const expected = {

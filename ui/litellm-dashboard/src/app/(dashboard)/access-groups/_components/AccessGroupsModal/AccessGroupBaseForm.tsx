@@ -62,7 +62,7 @@ export function AccessGroupBaseForm({
       <TabsList className="w-full">
         <TabsTrigger value={GENERAL_TAB}>
           <InfoIcon size={16} />
-          General Info
+          {uiT("ui.19f115f04394fd82")}
         </TabsTrigger>
         <TabsTrigger value={MODELS_TAB}>
           <LayersIcon size={16} />
@@ -80,48 +80,46 @@ export function AccessGroupBaseForm({
 
       <TabsContent value={GENERAL_TAB} className="pt-4">
         <FieldGroup>
-          <FormField control={form.control} name="name" label="Group Name">
+          <FormField control={form.control} name="name" label={uiT("ui.8e7526fdcc5cc34f")}>
             {({ ref, ...field }) => (
-              <Input {...field} ref={ref} placeholder="e.g. Engineering Team" disabled={isNameDisabled} />
+              <Input {...field} ref={ref} placeholder={uiT("ui.e28e43b933f4530d")} disabled={isNameDisabled} />
             )}
           </FormField>
           <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
-            {({ ref, ...field }) => (
-              <Textarea {...field} ref={ref} rows={4} placeholder="Describe the purpose of this access group..." />
-            )}
+            {({ ref, ...field }) => <Textarea {...field} ref={ref} rows={4} placeholder={uiT("ui.59a6dce6349151e2")} />}
           </FormField>
         </FieldGroup>
       </TabsContent>
 
       <TabsContent value={MODELS_TAB} className="pt-4">
-        <FormField control={form.control} name="modelIds" label="Allowed Models">
+        <FormField control={form.control} name="modelIds" label={uiT("ui.bd7237634a25de42")}>
           {(field) => <ModelSelect context="global" value={field.value} onChange={field.onChange} />}
         </FormField>
       </TabsContent>
 
       <TabsContent value={MCP_SERVERS_TAB} className="pt-4">
-        <FormField control={form.control} name="mcpServerIds" label="Allowed MCP Servers">
+        <FormField control={form.control} name="mcpServerIds" label={uiT("ui.d9543d4a192d4721")}>
           {({ id, value, onChange }) => (
             <MultiSelect
               id={id}
               value={value}
               onValueChange={onChange}
               options={mcpServerOptions}
-              placeholder="Select MCP servers"
+              placeholder={uiT("ui.53d4538fdfcceb6c")}
             />
           )}
         </FormField>
       </TabsContent>
 
       <TabsContent value={AGENTS_TAB} className="pt-4">
-        <FormField control={form.control} name="agentIds" label="Allowed Agents">
+        <FormField control={form.control} name="agentIds" label={uiT("ui.299b3b300b6c1f97")}>
           {({ id, value, onChange }) => (
             <MultiSelect
               id={id}
               value={value}
               onValueChange={onChange}
               options={agentOptions}
-              placeholder="Select agents"
+              placeholder={uiT("ui.9c2f5e9fd3f263f4")}
             />
           )}
         </FormField>

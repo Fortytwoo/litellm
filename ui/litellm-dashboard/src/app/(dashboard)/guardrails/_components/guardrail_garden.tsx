@@ -1,4 +1,5 @@
 "use client";
+import { translateText } from "@/i18n";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
@@ -24,10 +25,9 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
   const filteredCards = ALL_CARDS.filter((card) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
+    const matchesName = card.name.toLowerCase().includes(q) || translateText(card.name).toLowerCase().includes(q);
     return (
-      card.name.toLowerCase().includes(q) ||
-      card.description.toLowerCase().includes(q) ||
-      card.tags.some((t) => t.toLowerCase().includes(q))
+      matchesName || card.description.toLowerCase().includes(q) || card.tags.some((t) => t.toLowerCase().includes(q))
     );
   });
 
@@ -54,7 +54,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
             <Search className="size-4 text-muted-foreground" />
           </InputGroupAddon>
           <InputGroupInput
-            placeholder="Search guardrails"
+            placeholder={uiT("ui.26c8ec48ebcd0322")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -64,7 +64,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
       <section className="mb-10" aria-labelledby="guardrail-garden-litellm">
         <div className="mb-1 flex items-center justify-between">
           <h2 id="guardrail-garden-litellm" className="m-0 text-xl font-semibold text-foreground">
-            LiteLLM Content Filter
+            {uiT("ui.40374e449c5c1646")}
           </h2>
           <span
             className="inline-flex cursor-pointer items-center gap-1.5 text-sm text-primary"
@@ -75,14 +75,12 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
             ) : (
               <>
                 <ArrowRight className="size-3" />
-                {`Show all (${litellmCards.length})`}
+                {uiT("ui.ca352b1834121400", { v0: String(litellmCards.length) })}
               </>
             )}
           </span>
         </div>
-        <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.
-        </p>
+        <p className="mt-1 mb-5 text-[13px] text-muted-foreground">{uiT("ui.a4d97e763e13a78d")}</p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {(showAllLitellm ? litellmCards : litellmCards.slice(0, CARDS_PER_ROW * VISIBLE_ROWS)).map((card) => (
             <GuardrailCard key={card.id} card={card} onClick={() => setSelectedCard(card)} />
@@ -92,12 +90,9 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
 
       <section className="mb-10" aria-labelledby="guardrail-garden-decision-model">
         <h2 id="guardrail-garden-decision-model" className="mt-0 mb-1 text-xl font-semibold text-foreground">
-          Decision Model
+          {uiT("ui.9aa9d2dad8ea2a17")}
         </h2>
-        <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          Ask a decision model yes/no questions about each request or response, and block or log when a score reaches
-          its threshold.
-        </p>
+        <p className="mt-1 mb-5 text-[13px] text-muted-foreground">{uiT("ui.54357c0090e6de19")}</p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {decisionModelCards.map((card) => (
             <GuardrailCard key={card.id} card={card} onClick={() => setSelectedCard(card)} />
@@ -107,11 +102,9 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
 
       <section className="mb-10" aria-labelledby="guardrail-garden-partner">
         <h2 id="guardrail-garden-partner" className="mt-0 mb-1 text-xl font-semibold text-foreground">
-          Partner Guardrails
+          {uiT("ui.5dfaeea31cca1fd6")}
         </h2>
-        <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          Third-party guardrail integrations from leading AI security providers.
-        </p>
+        <p className="mt-1 mb-5 text-[13px] text-muted-foreground">{uiT("ui.c8a77059a6ab5805")}</p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {partnerCards.map((card) => (
             <GuardrailCard key={card.id} card={card} onClick={() => setSelectedCard(card)} />
