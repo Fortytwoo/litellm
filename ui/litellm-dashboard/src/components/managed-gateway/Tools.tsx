@@ -81,7 +81,7 @@ export function Tools({ services = false }: { services?: boolean }) {
             setResults(null);
           }}
         />
-        <Button disabled={!query.trim() || action.pending}>{t("semantic")}</Button>
+        <Button type="submit" disabled={!query.trim() || action.pending}>{t("semantic")}</Button>
       </form>
       <Grid
         data={tools}

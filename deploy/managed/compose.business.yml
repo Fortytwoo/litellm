@@ -1,5 +1,3 @@
-# Apply after compose.yml and compose.gateway.yml. Generate the private env
-# from the verified business runtime; never copy credentials into this file.
 services:
   gateway:
     entrypoint: [python, -m, mcp_gateway.server]
