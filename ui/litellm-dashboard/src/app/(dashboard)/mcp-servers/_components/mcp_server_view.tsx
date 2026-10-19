@@ -121,14 +121,16 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
       <div className="mb-6">
         <Button variant="ghost" className="mb-4" onClick={onBack}>
           <ArrowLeft />
-          Back to All Servers
+          {uiT("ui.741f8d598c018618")}
         </Button>
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-semibold">{mcpServer.server_name || mcpServer.alias || "Unnamed Server"}</h1>
+          <h1 className="text-2xl font-semibold">
+            {mcpServer.server_name || mcpServer.alias || uiT("ui.fbe82fb867f31b34")}
+          </h1>
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label="Copy server name"
+            aria-label={uiT("ui.9758ba7e0b38a9fd")}
             onClick={() => copyToClipboard(mcpServer.server_name || mcpServer.alias, "mcp-server_name")}
           >
             {copiedStates["mcp-server_name"] ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
@@ -144,7 +146,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label="Copy server id"
+            aria-label={uiT("ui.3e708a2735eb6423")}
             onClick={() => copyToClipboard(mcpServer.server_id, "mcp-server-id")}
           >
             {copiedStates["mcp-server-id"] ? <CheckIcon size={10} /> : <CopyIcon size={10} />}
@@ -161,7 +163,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
             {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           <TabsTrigger value="1" className="flex-none rounded-none px-4 py-2">
-            MCP Tools
+            {uiT("ui.ecd806d3c25e667a")}
           </TabsTrigger>
           {isProxyAdmin && (
             <TabsTrigger value="2" className="flex-none rounded-none px-4 py-2">
@@ -170,7 +172,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
           )}
           {canViewUserCredentials && (
             <TabsTrigger value="3" className="flex-none rounded-none px-4 py-2">
-              User Credentials
+              {uiT("ui.8e1a22b849f51bb4")}
             </TabsTrigger>
           )}
         </TabsList>
@@ -179,19 +181,25 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
         <TabsContent value="0" keepMounted>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Card className="p-4">
-              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Transport</p>
+              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {uiT("ui.aaead4abf5d0fd5e")}
+              </p>
               <div className="mt-3">
                 {getTransportBadge(handleTransport(mcpServer.transport ?? undefined, mcpServer.spec_path ?? undefined))}
               </div>
             </Card>
 
             <Card className="p-4">
-              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Authentication</p>
+              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {uiT("ui.66880d2d8216260d")}
+              </p>
               <div className="mt-3">{getAuthBadge(handleAuth(mcpServer.auth_type ?? undefined))}</div>
             </Card>
 
             <Card className="p-4">
-              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Host URL</p>
+              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {uiT("ui.dae951acf769351a")}
+              </p>
               <div className="mt-3 flex items-center gap-2">
                 <p className="overflow-wrap-anywhere font-mono text-sm break-all">
                   {renderUrlWithToggle(mcpServer.url, showFullUrl)}
@@ -205,7 +213,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={showFullUrl ? "Hide full URL" : "Show full URL"}
+                    aria-label={showFullUrl ? uiT("ui.53fdca381a8fba29") : uiT("ui.ba289ab924cf8b8b")}
                     onClick={() => setShowFullUrl(!showFullUrl)}
                   >
                     {showFullUrl ? <EyeOff /> : <Eye />}
@@ -215,7 +223,9 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
             </Card>
           </div>
           <Card className="mt-4 p-4">
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Cost Configuration</p>
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              {uiT("ui.20a90e67e23542a2")}
+            </p>
             <div className="mt-3">
               <MCPServerCostDisplay costConfig={mcpServer.mcp_info?.mcp_server_cost_info} />
             </div>
@@ -243,18 +253,14 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
         <TabsContent value="2" keepMounted>
           <Card className="p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">MCP Server Settings</h2>
+              <h2 className="text-lg font-medium">{uiT("ui.7b3667d5d6be4d9b")}</h2>
               {editing && canEdit ? null : (
                 <Button variant="outline" disabled={!canEdit} onClick={() => setEditing(true)}>
                   {uiT("ui.cddc5824575b")}
                 </Button>
               )}
             </div>
-            {mcpServer.is_config && (
-              <p className="mb-4 text-sm text-muted-foreground">
-                Defined in config. Edit your YAML configuration to make changes
-              </p>
-            )}
+            {mcpServer.is_config && <p className="mb-4 text-sm text-muted-foreground">{uiT("ui.2cb7c2901b34faa9")}</p>}
             {editing && canEdit ? (
               <MCPServerEdit
                 mcpServer={mcpServer}
@@ -269,13 +275,13 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
             ) : (
               <div className="divide-y divide-border">
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Server Name</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.bc4816425ebe8079")}</p>
                   <div className="col-span-2 text-sm">
                     {mcpServer.server_name || <span className="text-muted-foreground">—</span>}
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Alias</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.b19e02e9502bbe5a")}</p>
                   <div className="col-span-2 font-mono text-sm">
                     {mcpServer.alias || <span className="text-muted-foreground">—</span>}
                   </div>
@@ -294,7 +300,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        aria-label={showFullUrl ? "Hide full URL" : "Show full URL"}
+                        aria-label={showFullUrl ? uiT("ui.53fdca381a8fba29") : uiT("ui.ba289ab924cf8b8b")}
                         onClick={() => setShowFullUrl(!showFullUrl)}
                       >
                         {showFullUrl ? <EyeOff /> : <Eye />}
@@ -303,17 +309,17 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Transport</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.aaead4abf5d0fd5e")}</p>
                   <div className="col-span-2">
                     {getTransportBadge(handleTransport(mcpServer.transport, mcpServer.spec_path))}
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Authentication</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.66880d2d8216260d")}</p>
                   <div className="col-span-2">{getAuthBadge(handleAuth(mcpServer.auth_type))}</div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Extra Headers</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.3c1aeb3d156fdd97")}</p>
                   <div className="col-span-2 text-sm">
                     {mcpServer.extra_headers && mcpServer.extra_headers.length > 0 ? (
                       mcpServer.extra_headers.join(", ")
@@ -323,7 +329,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Allow All Keys</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.51df80a79d83384c")}</p>
                   <div className="col-span-2">
                     {mcpServer.allow_all_keys ? (
                       <Badge variant="outline">
@@ -336,7 +342,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Network access</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.0226fc91b55c9cfa")}</p>
                   <div className="col-span-2">
                     <Badge variant="outline">
                       <span className={`h-1.5 w-1.5 rounded-full ${networkAccess.dotClassName}`} />
@@ -347,12 +353,12 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                 </div>
                 {handleAuth(mcpServer.auth_type) === "oauth2" && (
                   <div className="grid grid-cols-3 gap-4 py-3">
-                    <p className="text-sm font-medium text-muted-foreground">Delegate Auth to Upstream</p>
+                    <p className="text-sm font-medium text-muted-foreground">{uiT("ui.12e66592a51ca540")}</p>
                     <div className="col-span-2">
                       {mcpServer.delegate_auth_to_upstream ? (
                         <Badge variant="outline">
                           <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                          Enabled (PKCE passthrough)
+                          {uiT("ui.7d2a315d803650ce")}
                         </Badge>
                       ) : (
                         <Badge variant="outline">{uiT("ui.75081b593d15")}</Badge>
@@ -364,7 +370,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   Array.isArray(mcpServer.extra_headers) &&
                   mcpServer.extra_headers.some((h) => typeof h === "string" && h.toLowerCase() === "authorization") && (
                     <div className="grid grid-cols-3 gap-4 py-3">
-                      <p className="text-sm font-medium text-muted-foreground">OAuth Pass-through</p>
+                      <p className="text-sm font-medium text-muted-foreground">{uiT("ui.4ee6e62c3a3a22ac")}</p>
                       <div className="col-span-2">
                         {mcpServer.oauth_passthrough ? (
                           <Badge variant="outline">
@@ -394,7 +400,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Allowed Tools</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.40c14c3addf57fe1")}</p>
                   <div className="col-span-2">
                     {mcpServer.allowed_tools && mcpServer.allowed_tools.length > 0 ? (
                       <div className="flex flex-wrap gap-1.5">
@@ -405,7 +411,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                         ))}
                       </div>
                     ) : (
-                      <Badge variant="outline">All tools enabled</Badge>
+                      <Badge variant="outline">{uiT("ui.4e1975aae4aa0c7a")}</Badge>
                     )}
                   </div>
                 </div>

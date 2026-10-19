@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -26,7 +28,9 @@ const changePasswordSchema = z
     confirmNewPassword: z.string().min(1, "Confirm your new password"),
   })
   .refine((values) => values.newPassword === values.confirmNewPassword, {
-    message: "New passwords do not match",
+    get message() {
+      return translateUi("ui.c7d087ef477aaf9f");
+    },
     path: ["confirmNewPassword"],
   });
 
@@ -52,12 +56,12 @@ export function ChangePasswordForm() {
         // The session key was minted restricted; only a fresh login lifts it.
         // Revoke it server-side too (best-effort) so it doesn't sit valid
         // until the expiry reaper gets to it.
-        toast.success("Password updated. Please log in with your new password.");
+        toast.success(translateUi("ui.49327bc5b2a9fbb6"));
         await revokeSessionAndClearClientState(accessToken);
         window.location.replace(getLoginUrl(getProxyBaseUrl()));
         return;
       }
-      toast.success("Password updated");
+      toast.success(translateUi("ui.836b6b9bf46c1ebf"));
       form.reset();
     } catch (error) {
       setSubmitError(extractProxyErrorMessage(error));
@@ -71,25 +75,18 @@ export function ChangePasswordForm() {
       <Card>
         <CardContent>
           <h3 className="text-2xl font-semibold text-foreground">{uiT("ui.a949f4623074")}</h3>
-          <p className="text-sm text-muted-foreground">
-            Enter your current password and choose a new one. The new password must meet this proxy&apos;s password
-            policy.
-          </p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.652b063b975c726e")}</p>
 
           {passwordResetRequired && (
             <Alert variant="warning" className="mt-4">
               <CircleAlert />
-              <AlertTitle>
-                Your password must be changed before you can use the dashboard: it was either found in a known data
-                breach or set by an administrator as a temporary password. After updating it, you will be signed out to
-                log in again.
-              </AlertTitle>
+              <AlertTitle>{uiT("ui.babbbbb220eaf361")}</AlertTitle>
             </Alert>
           )}
 
           <form className="mb-2 mt-8" onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
-              <FormField control={form.control} name="currentPassword" label="Current Password">
+              <FormField control={form.control} name="currentPassword" label={uiT("ui.8ac76099cc6666b3")}>
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="current-password" />}
               </FormField>
 
@@ -97,7 +94,7 @@ export function ChangePasswordForm() {
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="new-password" />}
               </FormField>
 
-              <FormField control={form.control} name="confirmNewPassword" label="Confirm New Password">
+              <FormField control={form.control} name="confirmNewPassword" label={uiT("ui.642776c02c0d14a0")}>
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="new-password" />}
               </FormField>
             </FieldGroup>
@@ -111,7 +108,9 @@ export function ChangePasswordForm() {
 
             <div className="mt-8">
               <Button type="submit" disabled={isPending}>
-                {isPending && <UiLoadingSpinner className="size-4" role="img" aria-label="loading" />}
+                {isPending && (
+                  <UiLoadingSpinner className="size-4" role="img" aria-label={uiT("ui.b4a070a2d341940c")} />
+                )}
                 {uiT("ui.a949f4623074")}
               </Button>
             </div>

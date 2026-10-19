@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Plus } from "lucide-react";
@@ -64,7 +66,7 @@ export function AutoRoutersPanel({
     setIsDeleting(true);
     try {
       await modelDeleteCall(accessToken, deletingRouter.id);
-      toast.success(`Deleted auto router: ${deletingRouter.name}`);
+      toast.success(translateUi("ui.076aff58b9b4e0a4", undefined, { v0: String(deletingRouter.name) }));
       setDeletingRouter(null);
       await invalidateAutoRouters();
     } catch (error) {
@@ -78,16 +80,13 @@ export function AutoRoutersPanel({
     <div className="w-full space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Auto routers</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Auto routers sit above your deployments and pick a model per request. They are called like any other model,
-            so clients keep using a single model name.
-          </p>
+          <h2 className="text-base font-semibold text-foreground">{uiT("ui.7a81cacea3ccc993")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.6311fbae8c402480")}</p>
         </div>
         {canCreate && (
           <Button onClick={() => setIsCreating(true)} className="shrink-0">
             <Plus />
-            Add Auto Router
+            {uiT("ui.8fdd8218c7e9d5bd")}
           </Button>
         )}
       </div>
@@ -108,11 +107,8 @@ export function AutoRoutersPanel({
           className="max-h-[90vh] overflow-y-auto sm:max-w-4xl"
         >
           <DialogHeader>
-            <DialogTitle>Add Auto Router</DialogTitle>
-            <DialogDescription>
-              Choose a classifier to route each request to a model. Called like any other model, so clients keep using a
-              single model name.
-            </DialogDescription>
+            <DialogTitle>{uiT("ui.8fdd8218c7e9d5bd")}</DialogTitle>
+            <DialogDescription>{uiT("ui.e4122ee922c1d53d")}</DialogDescription>
           </DialogHeader>
           <AddAutoRouterTab
             handleOk={handleCreated}
@@ -128,8 +124,8 @@ export function AutoRoutersPanel({
       {deletingRouter && (
         <DeleteResourceModal
           isOpen
-          title="Delete Auto Router"
-          message={`Are you sure you want to delete "${deletingRouter.name}"? Any client still calling this model name will start failing.`}
+          title={uiT("ui.e653029a89197a2d")}
+          message={uiT("ui.955559c486c862a6", { v0: String(deletingRouter.name) })}
           resourceInformationTitle="Auto router"
           resourceInformation={[
             { label: uiT("ui.dcd1d5223f73"), value: deletingRouter.name },

@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import React, { useCallback, useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Plus, ChevronDown, Check, X } from "lucide-react";
@@ -51,6 +55,8 @@ function getProviderFromModelName(modelName: string): string {
 }
 
 export default function ChatConversationPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const [, setConversationIdInUrl] = useQueryState("id", { history: "push" });
   const router = useRouter();
   const {
@@ -113,7 +119,7 @@ export default function ChatConversationPage() {
           localStorage.setItem(LOCALSTORAGE_MODEL_KEY, names[0]);
         }
       })
-      .catch(() => toast.error("Could not load models"))
+      .catch(() => toast.error(translateUi("ui.8849eaf405f12959")))
       .finally(() => setIsLoadingModels(false));
   }, [accessToken]);
 
@@ -232,7 +238,7 @@ export default function ChatConversationPage() {
       } catch (err: unknown) {
         if (err instanceof Error && err.name === "AbortError") {
           updateLastAssistantMessage(convId!, {
-            content: accumulatedContent + " [stopped]",
+            content: translateUi("ui.5b36498df4b47182", undefined, { v0: String(accumulatedContent) }),
           });
         } else {
           updateLastAssistantMessage(convId!, {
@@ -346,7 +352,7 @@ export default function ChatConversationPage() {
 
   const showBlankState = !activeConversation || activeConversation.messages.length === 0;
   const displayName = userEmail?.split("@")[0] ?? userId ?? "";
-  const greeting = displayName ? `${getGreeting()}, ${displayName}` : getGreeting();
+  const greeting = displayName ? `${translateText(getGreeting())}, ${displayName}` : translateText(getGreeting());
 
   // Filtered models: selected one floats to the top, then alphabetical
   const filteredModels = (
@@ -364,7 +370,7 @@ export default function ChatConversationPage() {
           autoFocus
           value={modelSearchText}
           onChange={(e) => setModelSearchText(e.target.value)}
-          placeholder="Search models..."
+          placeholder={uiT("ui.37b90680b842")}
           className="h-8 text-[13px]"
         />
       </div>
@@ -435,7 +441,7 @@ export default function ChatConversationPage() {
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap">{selectedModel}</span>
               </>
             ) : (
-              <span className="text-muted-foreground">Select model</span>
+              <span className="text-muted-foreground">{uiT("ui.1d446005add35afa")}</span>
             )}
             <ChevronDown className="h-3 w-3 text-muted-foreground shrink-0" />
           </Button>
@@ -454,7 +460,7 @@ export default function ChatConversationPage() {
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={inConversation ? "Send a message..." : "How can I help you today?"}
+        placeholder={inConversation ? uiT("ui.67b579fea2f8038f") : uiT("ui.b9e9d6be1bcf2f85")}
         className="w-full border-none outline-none resize-none text-[15px] text-foreground bg-transparent font-[inherit] box-border"
         style={{
           minHeight: inConversation ? 52 : 80,
@@ -491,7 +497,8 @@ export default function ChatConversationPage() {
         <div className="flex items-center gap-2">
           {inConversation && selectedMCPServers.length > 0 && (
             <span className="text-xs text-muted-foreground max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap">
-              {selectedMCPServers.length} tool{selectedMCPServers.length > 1 ? "s" : ""} connected
+              {selectedMCPServers.length} {uiT("ui.7c9bbe5ec9b3fb77")}
+              {selectedMCPServers.length > 1 ? "s" : ""} {uiT("ui.12a7bd86e0a43032")}
             </span>
           )}
           {isStreaming ? (
@@ -504,7 +511,7 @@ export default function ChatConversationPage() {
               onClick={() => handleSend(inputText)}
               disabled={!inputText.trim() || isLoadingModels || !selectedModel}
             >
-              Send
+              {uiT("ui.f6f4688ff23d50c6")}
             </Button>
           )}
         </div>
@@ -516,7 +523,7 @@ export default function ChatConversationPage() {
     <>
       {storageUnavailable && !storageBannerDismissed && (
         <div className="bg-warning/10 border-b border-warning/20 px-5 py-1.5 text-[13px] text-warning flex justify-between items-center">
-          <span>Chat history won&apos;t be saved in this browser session</span>
+          <span>{uiT("ui.7314c48aede95be5")}</span>
           <Button
             variant="ghost"
             size="icon-xs"
@@ -536,13 +543,13 @@ export default function ChatConversationPage() {
             </h1>
 
             <p className="-mt-4 mb-7 text-sm text-muted-foreground text-center max-w-[520px] leading-relaxed">
-              Chat with 100+ LLMs + MCP tools; authenticate once, use them here.{" "}
+              {uiT("ui.8ab68a6d75af1010")}{" "}
               <Button
                 variant="link"
                 onClick={() => router.push(getChatRoutes().integrations)}
                 className="h-auto p-0 text-sm font-medium"
               >
-                Open Integrations -&gt;
+                {uiT("ui.23f985412db929ba")}
               </Button>
             </p>
 
@@ -557,7 +564,7 @@ export default function ChatConversationPage() {
                   onClick={() => setInputText(s + ": ")}
                   className="rounded-full px-4 text-muted-foreground"
                 >
-                  {s}
+                  {translateText(s)}
                 </Button>
               ))}
             </div>
@@ -589,7 +596,7 @@ export default function ChatConversationPage() {
                   }
                 }}
                 className="absolute bottom-[100px] left-1/2 -translate-x-1/2 z-chrome rounded-full border bg-background/75 text-muted-foreground shadow-sm backdrop-blur-md hover:bg-background/95"
-                aria-label="Scroll to bottom"
+                aria-label={uiT("ui.6a36c1b26f1c1ab7")}
               >
                 <ChevronDown className="h-3 w-3" />
               </Button>

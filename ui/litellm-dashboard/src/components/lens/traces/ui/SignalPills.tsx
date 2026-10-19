@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/cva.config";
 
 import type { SignalFlag } from "../types";
@@ -26,11 +28,13 @@ export function SignalPills({
   showScore?: boolean;
   className?: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <span
       role="list"
-      aria-label="Signals"
-      title={`Signals: ${signalSummary(flags)}`}
+      aria-label={uiT("ui.88b01c8a4bff")}
+      title={uiT("ui.446f08feda968127", { v0: String(signalSummary(flags)) })}
       className={cn("inline-flex max-w-full min-w-0 items-center gap-1", className)}
     >
       {flags.map((flag) => (

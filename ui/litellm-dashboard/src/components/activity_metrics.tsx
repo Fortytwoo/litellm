@@ -116,11 +116,14 @@ const ItemMark = ({ label, color }: { label: string; color: string }) => {
   );
 };
 
-const TopKeysPanel = ({ children }: { children: ReactNode }) => (
-  <Panel icon={KeyRound} title="Top Virtual Keys by Spend">
-    {children}
-  </Panel>
-);
+const TopKeysPanel = ({ children }: { children: ReactNode }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Panel icon={KeyRound} title={uiT("ui.4cdc66a3a15c7ac8")}>
+      {children}
+    </Panel>
+  );
+};
 
 const ModelTopKeys = ({
   modelName,
@@ -129,6 +132,8 @@ const ModelTopKeys = ({
   modelName: string;
   fetchTopApiKeys: (model: string) => Promise<ModelTopKeysResponse>;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   interface ModelTopKeyRow {
     api_key: string;
     key_alias: string | null;
@@ -181,7 +186,7 @@ const ModelTopKeys = ({
   if (current === null) {
     return (
       <TopKeysPanel>
-        <p className="py-2 text-xs text-muted-foreground">Loading top keys...</p>
+        <p className="py-2 text-xs text-muted-foreground">{uiT("ui.60750848a0bb8399")}</p>
       </TopKeysPanel>
     );
   }
@@ -190,7 +195,7 @@ const ModelTopKeys = ({
     return (
       <TopKeysPanel>
         <p className="py-2 text-xs text-muted-foreground">
-          Could not load top keys.{" "}
+          {uiT("ui.dc505e010ba1b57a")}{" "}
           <button
             type="button"
             className="font-medium text-foreground underline"
@@ -199,7 +204,7 @@ const ModelTopKeys = ({
               setRetryToken((token) => token + 1);
             }}
           >
-            Retry
+            {uiT("ui.942087cc2d41e013")}
           </button>
         </p>
       </TopKeysPanel>
@@ -218,15 +223,22 @@ const ModelTopKeys = ({
             <li key={keyData.api_key} className="flex items-center justify-between gap-4 py-2.5">
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-foreground">{keyLabel}</p>
-                {keyData.team_id && <p className="truncate text-xs text-muted-foreground">Team: {keyData.team_id}</p>}
+                {keyData.team_id && (
+                  <p className="truncate text-xs text-muted-foreground">
+                    {uiT("ui.47355f46161815a6")} {keyData.team_id}
+                  </p>
+                )}
                 {keyData.user && keyData.user !== keyLabel && (
-                  <p className="truncate text-xs text-muted-foreground">User: {keyData.user}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {uiT("ui.93d6b3e9b86ec660")} {keyData.user}
+                  </p>
                 )}
               </div>
               <div className="shrink-0 text-right">
                 <p className="text-sm tabular-nums text-foreground">${formatNumberWithCommas(keyData.spend, 2)}</p>
                 <p className="text-xs tabular-nums text-muted-foreground">
-                  {keyData.requests.toLocaleString()} requests | {keyData.tokens.toLocaleString()} tokens
+                  {keyData.requests.toLocaleString()} {uiT("ui.798503e1d0d57b7e")} {keyData.tokens.toLocaleString()}{" "}
+                  tokens
                 </p>
               </div>
             </li>
@@ -261,7 +273,7 @@ export const ModelSection = ({
         </StatCell>
         <StatCell>
           <Stat
-            label="Total Successful Requests"
+            label={uiT("ui.68203b6502241659")}
             value={<StatValue>{metrics.total_successful_requests.toLocaleString()}</StatValue>}
           />
         </StatCell>
@@ -269,21 +281,25 @@ export const ModelSection = ({
           <Stat
             label={uiT("ui.cd41bf0d3e9a")}
             value={<StatValue>{metrics.total_tokens.toLocaleString()}</StatValue>}
-            hint={`${Math.round(metrics.total_tokens / metrics.total_successful_requests)} avg per successful request`}
+            hint={uiT("ui.bd0975f96383e964", {
+              v0: String(Math.round(metrics.total_tokens / metrics.total_successful_requests)),
+            })}
           />
         </StatCell>
         <StatCell>
           <Stat
             label={uiT("ui.00c71c737b6c")}
             value={<StatValue>${formatNumberWithCommas(metrics.total_spend, 2)}</StatValue>}
-            hint={`$${formatNumberWithCommas(metrics.total_spend / metrics.total_successful_requests, 3)} per successful request`}
+            hint={uiT("ui.fe43a58cbcbf4330", {
+              v0: String(formatNumberWithCommas(metrics.total_spend / metrics.total_successful_requests, 3)),
+            })}
           />
         </StatCell>
         <StatCell>
           <Stat
-            label="Avg Response Time"
+            label={uiT("ui.fe1d03f605928106")}
             value={<StatValue>{formatResponseTime(modelAverageResponseTimeMs(metrics))}</StatValue>}
-            hint={`over ${(metrics.total_timed_requests ?? 0).toLocaleString()} timed successful requests`}
+            hint={uiT("ui.74f35410ff380c62", { v0: String((metrics.total_timed_requests ?? 0).toLocaleString()) })}
           />
         </StatCell>
       </StatStrip>
@@ -292,7 +308,11 @@ export const ModelSection = ({
 
       {metrics.top_models && metrics.top_models.length > 0 && <KeyModelUsageView topModels={metrics.top_models} />}
 
-      <Panel icon={Coins} title="Spend per day" action={<SeriesKey categories={["metrics.spend"]} colors={[BRAND]} />}>
+      <Panel
+        icon={Coins}
+        title={uiT("ui.59b8da891881017c")}
+        action={<SeriesKey categories={["metrics.spend"]} colors={[BRAND]} />}
+      >
         <BarChart
           className={CHART_CLASS}
           data={metrics.daily_data}
@@ -323,7 +343,10 @@ export const ModelSection = ({
           />
         </Panel>
 
-        <Panel title="Requests per day" action={<SeriesKey categories={["metrics.api_requests"]} colors={[BRAND]} />}>
+        <Panel
+          title={uiT("ui.6611bf12beae9b75")}
+          action={<SeriesKey categories={["metrics.api_requests"]} colors={[BRAND]} />}
+        >
           <BarChart
             className={CHART_CLASS}
             data={metrics.daily_data}
@@ -340,7 +363,7 @@ export const ModelSection = ({
         {(metrics.total_timed_requests ?? 0) > 0 && (
           <Panel
             icon={Timer}
-            title="Avg Response Time per day"
+            title={uiT("ui.38170f0850219589")}
             action={<SeriesKey categories={["metrics.avg_response_time_ms"]} colors={[BRAND]} />}
           >
             <LineChart
@@ -358,7 +381,7 @@ export const ModelSection = ({
         )}
 
         <Panel
-          title="Success vs Failed Requests"
+          title={uiT("ui.4fc5a467bdbf0966")}
           action={<SeriesKey categories={REQUEST_CATEGORIES} colors={["green", "red"]} />}
         >
           <AreaChart
@@ -376,12 +399,16 @@ export const ModelSection = ({
         {!hidePromptCachingMetrics && (
           <Panel
             icon={Database}
-            title="Prompt Caching Metrics"
+            title={uiT("ui.4392622dc7b0e5fc")}
             action={<SeriesKey categories={CACHE_CATEGORIES} colors={["cyan", "purple"]} />}
           >
             <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs tabular-nums text-muted-foreground">
-              <p>Cache Read: {metrics.total_cache_read_input_tokens?.toLocaleString() || 0} tokens</p>
-              <p>Cache Creation: {metrics.total_cache_creation_input_tokens?.toLocaleString() || 0} tokens</p>
+              <p>
+                {uiT("ui.aed5fbf43127819c")} {metrics.total_cache_read_input_tokens?.toLocaleString() || 0} tokens
+              </p>
+              <p>
+                {uiT("ui.bd9227f2439fe8a6")} {metrics.total_cache_creation_input_tokens?.toLocaleString() || 0} tokens
+              </p>
             </div>
             <AreaChart
               className={cn(CHART_CLASS, "mt-3")}
@@ -544,7 +571,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
           </StatCell>
           <StatCell>
             <Stat
-              label="Total Successful Requests"
+              label={uiT("ui.68203b6502241659")}
               value={<StatValue>{totalSuccessfulRequests.toLocaleString()}</StatValue>}
             />
           </StatCell>
@@ -561,7 +588,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
 
         <div className="grid gap-3 lg:grid-cols-2">
           <Panel
-            title="Total Tokens Over Time"
+            title={uiT("ui.df0642f63ff97760")}
             action={<SeriesKey categories={TOKEN_CATEGORIES} colors={TOKEN_COLORS} />}
           >
             <AreaChart
@@ -577,7 +604,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
             />
           </Panel>
           <Panel
-            title="Total Requests Over Time"
+            title={uiT("ui.a163d755bc3a357b")}
             action={<SeriesKey categories={REQUEST_CATEGORIES} colors={["emerald", "red"]} />}
           >
             <AreaChart
@@ -629,9 +656,13 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
                     </div>
                     <div className="flex shrink-0 items-center gap-5 text-sm tabular-nums text-muted-foreground">
                       <span className="text-foreground">${formatNumberWithCommas(metrics.total_spend, 2)}</span>
-                      <span>{metrics.total_requests.toLocaleString()} requests</span>
+                      <span>
+                        {metrics.total_requests.toLocaleString()} {uiT("ui.ec72420df5dfbdce")}
+                      </span>
                       {avgResponse != null && (
-                        <span className="hidden md:inline">{formatResponseTime(avgResponse)} avg response</span>
+                        <span className="hidden md:inline">
+                          {formatResponseTime(avgResponse)} {uiT("ui.1301ccc78d9ddadd")}
+                        </span>
                       )}
                     </div>
                   </div>

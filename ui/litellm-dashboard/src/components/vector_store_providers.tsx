@@ -66,7 +66,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.0c9c3591f7c3");
       },
-      tooltip: "Enter the base URL of your deployed litellm-pgvector server (e.g., http://your-server:8000)",
+      get tooltip() {
+        return translateUi("ui.7dd5045af7df405f");
+      },
       placeholder: "http://your-deployed-server:8000",
       required: true,
       type: "text",
@@ -76,8 +78,12 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.23189d55f697");
       },
-      tooltip: "Enter the API key from your deployed litellm-pgvector server",
-      placeholder: "your-deployed-api-key",
+      get tooltip() {
+        return translateUi("ui.54e884b188ff0357");
+      },
+      get placeholder() {
+        return translateUi("ui.bdd5cbebb7c7fbd6");
+      },
       required: true,
       type: "password",
     },
@@ -86,39 +92,75 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   "vertex_ai/search_api": [
     {
       name: "vertex_project",
-      label: "Vertex Project",
-      tooltip: "Google Cloud project ID that hosts the Vertex AI Search data store.",
-      placeholder: "my-gcp-project-id",
+      get label() {
+        return translateUi("ui.1c89933f7f87b677");
+      },
+      get tooltip() {
+        return translateUi("ui.08376660f07c2855");
+      },
+      get placeholder() {
+        return translateUi("ui.4ce8239e66e9b1cd");
+      },
       required: true,
       type: "text",
     },
     {
       name: "vertex_location",
-      label: "Vertex Location",
-      tooltip: "Vertex AI Search data store location. Must be one of global, us, or eu.",
+      get label() {
+        return translateUi("ui.0a20d3860ef556e9");
+      },
+      get tooltip() {
+        return translateUi("ui.9924949018b26ddf");
+      },
       required: true,
       type: "select",
       options: [
-        { value: "global", label: "global" },
-        { value: "us", label: "us" },
-        { value: "eu", label: "eu" },
+        {
+          value: "global",
+          get label() {
+            return translateUi("ui.8001c27439650c5c");
+          },
+        },
+        {
+          value: "us",
+          get label() {
+            return translateUi("ui.79adb2a2fce5c6ba");
+          },
+        },
+        {
+          value: "eu",
+          get label() {
+            return translateUi("ui.4d0282941aaf2d69");
+          },
+        },
       ],
       initialValue: "global",
     },
     {
       name: "vertex_collection_id",
-      label: "Collection ID (optional)",
-      tooltip: "Discovery Engine collection ID. Leave blank to use the default collection.",
-      placeholder: "e.g. my-custom-collection",
+      get label() {
+        return translateUi("ui.0f421c947cc40fd6");
+      },
+      get tooltip() {
+        return translateUi("ui.f41156177e167f76");
+      },
+      get placeholder() {
+        return translateUi("ui.db86db9dcfb6bb9d");
+      },
       required: false,
       type: "text",
     },
     {
       name: "vertex_engine_id",
-      label: "Engine ID (optional)",
-      tooltip:
-        "Search app (engine) ID. Required for website, healthcare, and connector-based data stores (Workspace, Slack, Jira, etc.) because these sources route search through an engine. Leave blank to query the data store directly.",
-      placeholder: "e.g. my-search-app_1234567890",
+      get label() {
+        return translateUi("ui.82e6fee50c8f0cf2");
+      },
+      get tooltip() {
+        return translateUi("ui.497ffa2828fa5c82");
+      },
+      get placeholder() {
+        return translateUi("ui.416432ee05e17f26");
+      },
       required: false,
       type: "text",
     },
@@ -129,8 +171,12 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.23189d55f697");
       },
-      tooltip: "Enter your OpenAI API key",
-      placeholder: "sk-...",
+      get tooltip() {
+        return translateUi("ui.699e26dc48c9245c");
+      },
+      get placeholder() {
+        return translateUi("ui.6946d3ffe03d648c");
+      },
       required: true,
       type: "password",
     },
@@ -141,8 +187,12 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.23189d55f697");
       },
-      tooltip: "Enter your Azure OpenAI API key",
-      placeholder: "your-azure-api-key",
+      get tooltip() {
+        return translateUi("ui.3e8205b3f3f8ef9e");
+      },
+      get placeholder() {
+        return translateUi("ui.45010e418fcb9e4e");
+      },
       required: true,
       type: "password",
     },
@@ -151,7 +201,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.0c9c3591f7c3");
       },
-      tooltip: "Enter your Azure OpenAI endpoint (e.g., https://your-resource.openai.azure.com/)",
+      get tooltip() {
+        return translateUi("ui.32edf88d31e5ece9");
+      },
       placeholder: "https://your-resource.openai.azure.com/",
       required: true,
       type: "text",
@@ -163,9 +215,12 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.23189d55f697");
       },
-      tooltip:
-        "To obtain a token, you should use a colon (:) to concatenate the username and password that you use to access your Milvus instance (e.g., username:password)",
-      placeholder: "username:password or api key",
+      get tooltip() {
+        return translateUi("ui.ac869f5d8f911a37");
+      },
+      get placeholder() {
+        return translateUi("ui.08d8d62a27313617");
+      },
       required: true,
       type: "password",
     },
@@ -174,15 +229,21 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       get label() {
         return translateUi("ui.0c9c3591f7c3");
       },
-      tooltip: "Enter your Milvus endpoint (e.g., https://your-milvus-endpoint.com/)",
+      get tooltip() {
+        return translateUi("ui.75057a71b636aeae");
+      },
       placeholder: "https://your-milvus-endpoint.com/",
       required: true,
       type: "text",
     },
     {
       name: "embedding_model",
-      label: "Embedding Model",
-      tooltip: "Select the embedding model to use",
+      get label() {
+        return translateUi("ui.860ec100606ba01b");
+      },
+      get tooltip() {
+        return translateUi("ui.4607522ce50837bf");
+      },
       placeholder: "text-embedding-3-small",
       required: true,
       type: "select",
@@ -191,70 +252,104 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   mongodb: [
     {
       name: "api_base",
-      label: "Sidecar URL",
-      tooltip: "Use HTTPS for a remote sidecar, or HTTP with a loopback IP for a sidecar on the same host or Pod",
+      get label() {
+        return translateUi("ui.65f21efd07cc8d0e");
+      },
+      get tooltip() {
+        return translateUi("ui.c20d190407737a40");
+      },
       placeholder: "http://127.0.0.1:8080",
       required: true,
       type: "text",
     },
     {
       name: "api_key",
-      label: "Sidecar API Key",
-      tooltip: "The MONGODB_SIDECAR_API_KEY configured in your MongoDB sidecar",
-      placeholder: "Enter sidecar API key",
+      get label() {
+        return translateUi("ui.59b2c3777d7c9062");
+      },
+      get tooltip() {
+        return translateUi("ui.f9db54181b637159");
+      },
+      get placeholder() {
+        return translateUi("ui.79a54de86633ca75");
+      },
       required: true,
       type: "password",
     },
     {
       name: "mongodb_database",
-      label: "Database",
-      tooltip: "The MongoDB database holding the collection you want to search",
+      get label() {
+        return translateUi("ui.fa7fe67124e94375");
+      },
+      get tooltip() {
+        return translateUi("ui.40db5ffa0c033b2b");
+      },
       placeholder: "sample_mflix",
       required: true,
       type: "text",
     },
     {
       name: "mongodb_collection",
-      label: "Collection",
-      tooltip: "The collection your MongoDB Vector Search index was built on",
+      get label() {
+        return translateUi("ui.7b790708ff1b1713");
+      },
+      get tooltip() {
+        return translateUi("ui.25b81e52268fefee");
+      },
       placeholder: "embedded_movies",
       required: true,
       type: "text",
     },
     {
       name: "embedding_model",
-      label: "Embedding Model",
-      tooltip:
-        "The embedding model on this proxy that created the vectors already stored in your collection. LiteLLM embeds every search query with it, so it must be the same model. A different model of the same size will not error, it will just return wrong results. Add it under Models first if it is not listed",
+      get label() {
+        return translateUi("ui.860ec100606ba01b");
+      },
+      get tooltip() {
+        return translateUi("ui.7f11aa1b4fdcfb52");
+      },
       placeholder: "text-embedding-3-small",
       required: true,
       type: "select",
     },
     {
       name: "mongodb_embedding_field",
-      label: "Vector Field Name",
-      tooltip:
-        "The field in each document that holds its embedding. It must match the path your MongoDB Vector Search index was created on (default: embedding)",
-      placeholder: "embedding",
+      get label() {
+        return translateUi("ui.80f43ccde464ef5d");
+      },
+      get tooltip() {
+        return translateUi("ui.f98dfadac7f230c6");
+      },
+      get placeholder() {
+        return translateUi("ui.aa580156f36e357b");
+      },
       required: false,
       type: "text",
       initialValue: "embedding",
     },
     {
       name: "mongodb_text_field",
-      label: "Text Field",
-      tooltip:
-        "The field in each document that holds its readable text. LiteLLM returns this text in search results, and it accepts a dotted path such as metadata.body (default: text)",
-      placeholder: "text",
+      get label() {
+        return translateUi("ui.bae9f7252798def4");
+      },
+      get tooltip() {
+        return translateUi("ui.1f52c07c161a58cb");
+      },
+      get placeholder() {
+        return translateUi("ui.982d9e3eb996f559");
+      },
       required: false,
       type: "text",
       initialValue: "text",
     },
     {
       name: "mongodb_num_candidates",
-      label: "Candidates Considered",
-      tooltip:
-        "How many nearest neighbours MongoDB examines before returning the top results. Higher is more accurate and slower. Leave blank to let LiteLLM scale it with the requested result count",
+      get label() {
+        return translateUi("ui.83a4f418359ec1c9");
+      },
+      get tooltip() {
+        return translateUi("ui.e49be45e1ec8e415");
+      },
       placeholder: "100",
       required: false,
       type: "text",
@@ -263,16 +358,26 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   valkey: [
     {
       name: "valkey_host",
-      label: "Valkey Host",
-      tooltip: "Hostname or IP of your Valkey server, without redis:// or a port (e.g. my-valkey.example.com)",
-      placeholder: "my-valkey.example.com",
+      get label() {
+        return translateUi("ui.f447ab89ead9dc89");
+      },
+      get tooltip() {
+        return translateUi("ui.7c269d6bb7df1805");
+      },
+      get placeholder() {
+        return translateUi("ui.2b522826ae4ab3be");
+      },
       required: true,
       type: "text",
     },
     {
       name: "valkey_port",
-      label: "Valkey Port",
-      tooltip: "Port your Valkey server listens on. Leave as 6379 unless you changed it",
+      get label() {
+        return translateUi("ui.1286d8384228a7a7");
+      },
+      get tooltip() {
+        return translateUi("ui.7403d07febac0b56");
+      },
       placeholder: "6379",
       required: false,
       type: "text",
@@ -280,49 +385,79 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
     },
     {
       name: "valkey_password",
-      label: "Valkey Password",
-      tooltip: "Password used to log in to your Valkey server. Leave blank if it has no password",
+      get label() {
+        return translateUi("ui.7ca8e1900c4bfa78");
+      },
+      get tooltip() {
+        return translateUi("ui.4d9ec48dc9d736f0");
+      },
       required: false,
       type: "password",
     },
     {
       name: "valkey_ssl",
-      label: "Use TLS",
-      tooltip:
-        "Set to true if your Valkey server requires an encrypted (TLS) connection, for example AWS ElastiCache with in-transit encryption turned on",
+      get label() {
+        return translateUi("ui.377ccb2abdc512f1");
+      },
+      get tooltip() {
+        return translateUi("ui.822374dcaefb4e46");
+      },
       required: false,
       type: "select",
       options: [
-        { value: "false", label: "false" },
-        { value: "true", label: "true" },
+        {
+          value: "false",
+          get label() {
+            return translateUi("ui.fcbcf165908dd18a");
+          },
+        },
+        {
+          value: "true",
+          get label() {
+            return translateUi("ui.b5bea41b6c623f7c");
+          },
+        },
       ],
       initialValue: "false",
     },
     {
       name: "embedding_model",
-      label: "Embedding Model",
-      tooltip:
-        "The embedding model on this proxy that was used to create the embeddings already stored in your Valkey index. LiteLLM uses it to embed each search query, so it must be the same model or results will be wrong. Add it under Models first if it is not listed",
+      get label() {
+        return translateUi("ui.860ec100606ba01b");
+      },
+      get tooltip() {
+        return translateUi("ui.59be4e8495e4e286");
+      },
       placeholder: "text-embedding-3-small",
       required: true,
       type: "select",
     },
     {
       name: "valkey_text_field",
-      label: "Text Field",
-      tooltip:
-        "The field in each stored document that holds its readable text. LiteLLM returns this text in search results. Must match how your documents were stored (default: text)",
-      placeholder: "text",
+      get label() {
+        return translateUi("ui.bae9f7252798def4");
+      },
+      get tooltip() {
+        return translateUi("ui.fb2ec0c961ba2544");
+      },
+      get placeholder() {
+        return translateUi("ui.982d9e3eb996f559");
+      },
       required: false,
       type: "text",
       initialValue: "text",
     },
     {
       name: "valkey_embedding_field",
-      label: "Vector Field Name",
-      tooltip:
-        "The field in each stored document that holds its embedding. LiteLLM searches against this field, so it must match the field your index was created on (default: embedding)",
-      placeholder: "embedding",
+      get label() {
+        return translateUi("ui.80f43ccde464ef5d");
+      },
+      get tooltip() {
+        return translateUi("ui.e6331e3db7504553");
+      },
+      get placeholder() {
+        return translateUi("ui.aa580156f36e357b");
+      },
       required: false,
       type: "text",
       initialValue: "embedding",
@@ -331,32 +466,54 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   s3_vectors: [
     {
       name: "vector_bucket_name",
-      label: "Vector Bucket Name",
-      tooltip: "S3 bucket name for vector storage (will be auto-created if it doesn't exist)",
-      placeholder: "my-vector-bucket",
+      get label() {
+        return translateUi("ui.3e64d2096956da2f");
+      },
+      get tooltip() {
+        return translateUi("ui.0a966d31dfdb408b");
+      },
+      get placeholder() {
+        return translateUi("ui.75e080931d0d9a85");
+      },
       required: true,
       type: "text",
     },
     {
       name: "index_name",
-      label: "Index Name",
-      tooltip: "Name for the vector index (optional, will be auto-generated if not provided)",
-      placeholder: "my-vector-index",
+      get label() {
+        return translateUi("ui.0f53d21d5f51a27b");
+      },
+      get tooltip() {
+        return translateUi("ui.1f11b5b6db34ac10");
+      },
+      get placeholder() {
+        return translateUi("ui.ba58237e4407af63");
+      },
       required: false,
       type: "text",
     },
     {
       name: "aws_region_name",
-      label: "AWS Region",
-      tooltip: "AWS region where the S3 bucket is located (e.g., us-west-2)",
-      placeholder: "us-west-2",
+      get label() {
+        return translateUi("ui.7e489ee639b80be4");
+      },
+      get tooltip() {
+        return translateUi("ui.8e15a2cdc5331162");
+      },
+      get placeholder() {
+        return translateUi("ui.d8c0d0637775d579");
+      },
       required: true,
       type: "text",
     },
     {
       name: "embedding_model",
-      label: "Embedding Model",
-      tooltip: "Select the embedding model to use for vector generation",
+      get label() {
+        return translateUi("ui.860ec100606ba01b");
+      },
+      get tooltip() {
+        return translateUi("ui.18fdf9dec65ff3f6");
+      },
       placeholder: "text-embedding-3-small",
       required: true,
       type: "select",

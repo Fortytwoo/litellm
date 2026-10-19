@@ -69,10 +69,8 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
     <div className="mt-2 space-y-1">
       {rows.some(({ options }) => options.length > 0) && (
         <div className="flex items-center gap-1">
-          <span className="text-xs font-medium text-muted-foreground">Reasoning effort</span>
-          <SimpleTooltip
-            content={`Sent as reasoning_effort on requests this tier routes to the model, overriding the caller's value. Default leaves the request untouched.`}
-          >
+          <span className="text-xs font-medium text-muted-foreground">{uiT("ui.3236aeec43e563ca")}</span>
+          <SimpleTooltip content={uiT("ui.952b57f87862abc5")}>
             <Info className="size-3 text-muted-foreground/70" />
           </SimpleTooltip>
         </div>
@@ -97,7 +95,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
                 <SelectTrigger
                   size="sm"
                   className="w-36"
-                  aria-label={`Reasoning effort for ${model} in the ${tierLabel} tier`}
+                  aria-label={uiT("ui.4ebc50ea288c1cae", { v0: String(model), v1: String(tierLabel) })}
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -112,17 +110,17 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
               </Select>
             )}
             {canEditFastMode(model, fastModeByModel, paramsByModel) && (
-              <SimpleTooltip content="Fast mode has higher pricing and requires an eligible provider account. Off removes this tier's speed override and inherits the request or provider default">
+              <SimpleTooltip content={uiT("ui.d8185b73f9037faf")}>
                 <label
                   className="flex items-center gap-2 text-xs"
-                  aria-label={`Fast mode for ${model} in the ${tierLabel} tier`}
+                  aria-label={uiT("ui.2ff6caa181453fd5", { v0: String(model), v1: String(tierLabel) })}
                 >
                   <Switch
                     size="sm"
                     checked={paramsByModel?.[model]?.speed === "fast"}
                     onCheckedChange={(enabled) => onFastModeChange(model, enabled)}
                   />
-                  Fast mode
+                  {uiT("ui.1b7f9ecb7cd6a212")}
                 </label>
               </SimpleTooltip>
             )}

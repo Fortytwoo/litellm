@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { organizationKeys, useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { useUserModels } from "@/app/(dashboard)/hooks/models/useModels";
 import OrganizationFilters, { FilterState } from "@/app/(dashboard)/organizations/OrganizationFilters";
@@ -28,6 +32,8 @@ const ORGANIZATION_DETAIL_STATE = {
 const ORGANIZATION_DETAIL_URL_KEYS = { tab: ORGANIZATION_TAB_URL_KEY };
 
 const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, accessToken, premiumUser }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [{ org: selectedOrgId }, setOrganizationDetail] = useQueryStates(ORGANIZATION_DETAIL_STATE, {
     history: "push",
     urlKeys: ORGANIZATION_DETAIL_URL_KEYS,
@@ -78,7 +84,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
     try {
       setIsDeleting(true);
       await organizationDeleteCall(accessToken, orgToDelete);
-      toast.success("Organization deleted successfully");
+      toast.success(translateUi("ui.a6daca3c3a72e991"));
 
       setIsDeleteModalOpen(false);
       setOrgToDelete(null);
@@ -99,14 +105,14 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
     return (
       <div className="mx-4 mt-4">
         <p className="text-sm text-muted-foreground">
-          This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key{" "}
+          {uiT("ui.6860f1e55491acc6")}{" "}
           <a
             href="https://www.litellm.ai/#pricing"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary underline-offset-4 hover:underline"
           >
-            here
+            {uiT("ui.fcec91509759ad99")}
           </a>
           .
         </p>
@@ -118,7 +124,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
     <div className="mx-4 mt-4 flex flex-col gap-4">
       {(userRole === "Admin" || userRole === "Org Admin") && (
         <Button className="w-fit" onClick={() => setIsOrgModalVisible(true)}>
-          + Create New Organization
+          {uiT("ui.48371fba8990779f")}
         </Button>
       )}
 
@@ -133,7 +139,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
         />
       ) : (
         <>
-          <p className="text-sm text-muted-foreground">Click on an organization ID to view its details.</p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.9cede87d5f9ff86a")}</p>
           <OrganizationFilters
             filters={filters}
             showFilters={showFilters}
@@ -157,10 +163,10 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
 
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete Organization?"
-        message="Are you sure you want to delete this organization? This action cannot be undone."
+        title={uiT("ui.9e40ec9bb835a303")}
+        message={uiT("ui.8b098f34978bac44")}
         resourceInformationTitle="Organization Information"
-        resourceInformation={[{ label: "Organization ID", value: orgToDelete, code: true }]}
+        resourceInformation={[{ label: uiT("ui.1f466322634e2d85"), value: orgToDelete, code: true }]}
         onCancel={cancelDelete}
         onOk={confirmDelete}
         confirmLoading={isDeleting}

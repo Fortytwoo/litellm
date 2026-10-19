@@ -44,6 +44,8 @@ export interface CategoryFilterProps {
 }
 
 export const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, selectedCategories, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const categoryNames = categories.map((cat) => cat.category);
 
@@ -51,7 +53,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, sele
     <div>
       <div className="mb-2 flex items-center">
         <Filter className="mr-1 size-4 text-muted-foreground" />
-        <span className="font-medium text-muted-foreground">Filter by category</span>
+        <span className="font-medium text-muted-foreground">{uiT("ui.a9b0a2e6303f4ad3")}</span>
       </div>
       <Combobox items={categoryNames} value={selectedCategories} onValueChange={onChange} multiple>
         <ComboboxChips render={<div ref={anchor} />} className="mb-4 w-full">
@@ -60,12 +62,10 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, sele
               {category}
             </ComboboxChip>
           ))}
-          <ComboboxChipsInput
-            placeholder={selectedCategories.length === 0 ? "Select categories to filter by" : undefined}
-          />
+          <ComboboxChipsInput placeholder={selectedCategories.length === 0 ? uiT("ui.736355d234e2b308") : undefined} />
         </ComboboxChips>
         <ComboboxContent anchor={anchor}>
-          <ComboboxEmpty>No matching categories</ComboboxEmpty>
+          <ComboboxEmpty>{uiT("ui.15269886edc236b4")}</ComboboxEmpty>
           <ComboboxList>
             {(category: string) => (
               <ComboboxItem key={category} value={category}>
@@ -87,11 +87,13 @@ export interface QuickActionsProps {
 }
 
 export const QuickActions: React.FC<QuickActionsProps> = ({ onSelectAll, onUnselectAll, hasSelectedEntities }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="mb-6 rounded-lg border border-border bg-muted/40 p-5 shadow-xs">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
-          <span className="text-base font-semibold">Quick Actions</span>
+          <span className="text-base font-semibold">{uiT("ui.2cc2b6f7f200e65c")}</span>
           <Tooltip>
             <TooltipTrigger
               render={
@@ -100,22 +102,22 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onSelectAll, onUnsel
                 </span>
               }
             />
-            <TooltipContent>Apply action to all PII types at once</TooltipContent>
+            <TooltipContent>{uiT("ui.a2df4a6784a89460")}</TooltipContent>
           </Tooltip>
         </div>
         <Button variant="outline" onClick={onUnselectAll} disabled={!hasSelectedEntities}>
           <X />
-          Unselect All
+          {uiT("ui.4d44ab42f01b12aa")}
         </Button>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Button variant="outline" className="h-10 w-full" onClick={() => onSelectAll("MASK")}>
           <EyeOff />
-          Select All &amp; Mask
+          {uiT("ui.28b520de4976384f")}
         </Button>
         <Button variant="outline" className="h-10 w-full" onClick={() => onSelectAll("BLOCK")}>
           <Ban />
-          Select All &amp; Block
+          {uiT("ui.f9cf91d8d6ae03fd")}
         </Button>
       </div>
     </div>
@@ -147,12 +149,12 @@ export const PiiEntityList: React.FC<PiiEntityListProps> = ({
   return (
     <div className="overflow-hidden rounded-lg border border-border shadow-xs">
       <div className="flex border-b border-border bg-muted/40 px-5 py-3">
-        <span className="flex-1 font-semibold">PII Type</span>
+        <span className="flex-1 font-semibold">{uiT("ui.54106bb454237fc8")}</span>
         <span className="w-32 text-right font-semibold">{uiT("ui.64cff1319d2f")}</span>
       </div>
       <div className="max-h-[400px] overflow-y-auto">
         {entities.length === 0 ? (
-          <div className="py-10 text-center text-muted-foreground">No PII types match your filter criteria</div>
+          <div className="py-10 text-center text-muted-foreground">{uiT("ui.4477b1226b0630c6")}</div>
         ) : (
           entities.map((entity) => {
             const isSelected = selectedEntities.includes(entity);

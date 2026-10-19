@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import type { ColumnFiltersState, Table } from "@tanstack/react-table";
 import * as React from "react";
@@ -46,13 +48,15 @@ export function DataTableFilterDrawer<TData>({
   table,
   open,
   onOpenChange,
-  title = "Filters",
+  title = translateUi("ui.546ebb8eb993"),
   description,
   applyLabel = "Apply Filters",
   resetLabel = "Reset",
   onReset,
   children,
 }: DataTableFilterDrawerProps<TData>) {
+  useDashboardLanguage();
+
   const [draft, setDraft] = React.useState<Record<string, unknown>>(() => toDraft(table.getState().columnFilters));
   const [wasOpen, setWasOpen] = React.useState(open);
 

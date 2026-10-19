@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { PTU_EDIT_FIELDS } from "./ModelInfoEditFormData";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,30 +43,11 @@ import { isMaskedSecret } from "../utils/maskedSecretUtils";
 import {
   MAX_COST_PER_PTU_PER_HOUR,
   MAX_PTU_COUNT,
-  PTU_COUNT_FIELD,
-  PTU_END_FIELD,
-  PTU_RATE_FIELD,
-  PTU_START_FIELD,
   isFilledPtuValue,
   isNonNegativePtuRate,
   isPositiveWholePtuCount,
   ptuWindowIsOrdered,
 } from "../utils/ptuValidation";
-
-interface PtuEditField {
-  name: string;
-  label: string;
-  input: "number" | "datetime";
-  placeholder?: string;
-  isCount?: boolean;
-}
-
-const PTU_EDIT_FIELDS: PtuEditField[] = [
-  { name: PTU_COUNT_FIELD, label: "PTU Count", input: "number", placeholder: "e.g. 15", isCount: true },
-  { name: PTU_RATE_FIELD, label: "Cost per PTU / Hour (USD)", input: "number", placeholder: "e.g. 2.00" },
-  { name: PTU_START_FIELD, label: "PTU Effective From (UTC)", input: "datetime" },
-  { name: PTU_END_FIELD, label: "PTU Effective To (UTC)", input: "datetime" },
-];
 
 export type TouchedPricingField = "input_cost" | "output_cost" | "cache_read_cost" | "cache_write_cost";
 
@@ -444,7 +429,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
     ) : (
       <div>
         <FieldLabel>{label}</FieldLabel>
-        <Display>{displayCost(localModelData, name)}</Display>
+        <Display>{translateText(displayCost(localModelData, name))}</Display>
       </div>
     );
 
@@ -559,7 +544,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
             )}
 
             <div>
-              <FieldLabel>Model Access Groups</FieldLabel>
+              <FieldLabel>{uiT("ui.7540b533cb95c6fd")}</FieldLabel>
               {isEditing ? (
                 tagsField(
                   "model_access_group",
@@ -577,7 +562,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
               <FieldLabel>
                 {uiT("ui.443f975eefe8")}
                 <DocsHint
-                  text="Apply safety guardrails to this model to filter content or enforce policies"
+                  text={uiT("ui.219e29815309a292")}
                   href="https://docs.litellm.ai/docs/proxy/guardrails/quick_start"
                 />
               </FieldLabel>
@@ -596,9 +581,9 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             <div>
               <FieldLabel>
-                Attached Knowledge Bases (RAG)
+                {uiT("ui.2c7c945cb030211c")}
                 <DocsHint
-                  text="Vector stores used for RAG. Every request to this model will automatically retrieve context from these knowledge bases."
+                  text={uiT("ui.4db387dffe2e19af")}
                   href="https://docs.litellm.ai/docs/completion/knowledgebase"
                 />
               </FieldLabel>
@@ -609,7 +594,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
                       value={value as string[] | undefined}
                       onChange={onChange}
                       accessToken={accessToken || ""}
-                      placeholder="Select knowledge bases (optional)"
+                      placeholder={uiT("ui.4365a7c543ad2f47")}
                     />
                   )}
                 </FormField>
@@ -639,14 +624,14 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
             </div>
 
             <div>
-              <FieldLabel>Existing Credentials</FieldLabel>
+              <FieldLabel>{uiT("ui.c6939b110b6549ac")}</FieldLabel>
               {isEditing ? (
                 <FormField control={form.control} name="litellm_credential_name">
                   {({ id, value, onChange }) => (
                     <>
                       <SearchSelect
                         inputId={id}
-                        placeholder="Select or search for existing credentials"
+                        placeholder={uiT("ui.1c1bd81a646a1fc6")}
                         options={credentialOptions(credentialsList)}
                         value={(value as string | null) ?? ""}
                         allowClear={false}
@@ -673,7 +658,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             {isWildcardModel && (
               <div>
-                <FieldLabel>Health Check Model</FieldLabel>
+                <FieldLabel>{uiT("ui.b0fa77fe6b9ce4f8")}</FieldLabel>
                 {isEditing ? (
                   <FormField control={form.control} name="health_check_model">
                     {({ id, value, onChange, onBlur }) => (
@@ -683,7 +668,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
                         onValueChange={onChange}
                       >
                         <SelectTrigger id={id} className="w-full" onBlur={onBlur}>
-                          <SelectValue placeholder="Select existing health check model" />
+                          <SelectValue placeholder={uiT("ui.9a0418f3b2d42d1f")} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value={null}>{uiT("ui.dc937b598926")}</SelectItem>
@@ -740,7 +725,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
               </>
             ) : (
               <div>
-                <FieldLabel>Cache Control</FieldLabel>
+                <FieldLabel>{uiT("ui.d828fe5cf079d245")}</FieldLabel>
                 <Display>
                   {localModelData.litellm_params?.cache_control_injection_points ? (
                     <div>
@@ -748,8 +733,19 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
                       <div className="mt-2">
                         {localModelData.litellm_params.cache_control_injection_points.map((point: any, i: number) => (
                           <div key={i} className="mb-1 text-sm text-muted-foreground">
-                            Location: {point.location},{point.role && <span> Role: {point.role}</span>}
-                            {point.index !== undefined && <span> Index: {point.index}</span>}
+                            {uiT("ui.bbdffe25dc7d80cf")} {point.location},
+                            {point.role && (
+                              <span>
+                                {" "}
+                                {uiT("ui.44dd5f163cbadd27")} {point.role}
+                              </span>
+                            )}
+                            {point.index !== undefined && (
+                              <span>
+                                {" "}
+                                {uiT("ui.655e83ef57e88613")} {point.index}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -762,7 +758,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
             )}
 
             <div>
-              <FieldLabel>Model Info</FieldLabel>
+              <FieldLabel>{uiT("ui.2067ded05a802d3d")}</FieldLabel>
               {isEditing ? (
                 <FormField control={form.control} name="model_info">
                   {({ value, ...control }) => (
@@ -785,11 +781,8 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             <div>
               <FieldLabel>
-                LiteLLM Params
-                <DocsHint
-                  text="Optional litellm params used for making a litellm.completion() call. Some params are automatically added by LiteLLM."
-                  href="https://docs.litellm.ai/docs/completion/input"
-                />
+                {uiT("ui.dd43b316e52fb06c")}
+                <DocsHint text={uiT("ui.8393e01804633291")} href="https://docs.litellm.ai/docs/completion/input" />
               </FieldLabel>
               {isEditing ? (
                 <FormField control={form.control} name="litellm_extra_params">

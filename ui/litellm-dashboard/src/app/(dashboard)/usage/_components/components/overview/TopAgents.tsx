@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import React, { useMemo, useState } from "react";
@@ -46,9 +48,24 @@ const METRICS = [
 
 /** Brand-tinted monograms for runtimes that have no logo file, so a top spender never shows a blank tile. */
 const MONOGRAMS: Readonly<Record<string, { text: string; className: string }>> = {
-  python: { text: "Py", className: "bg-[#3776ab] text-[#ffd43b]" },
-  node: { text: "JS", className: "bg-[#3c873a] text-white" },
-  curl: { text: "cu", className: "bg-[#073551] text-white" },
+  python: {
+    get text() {
+      return translateUi("ui.10ccd6f1587baa41");
+    },
+    className: "bg-[#3776ab] text-[#ffd43b]",
+  },
+  node: {
+    get text() {
+      return translateUi("ui.0917e7be3804e622");
+    },
+    className: "bg-[#3c873a] text-white",
+  },
+  curl: {
+    get text() {
+      return translateUi("ui.e67be79550661604");
+    },
+    className: "bg-[#073551] text-white",
+  },
 };
 
 /** Claude Code's mark: a white spark on Claude terracotta. Drawn here since no Claude asset ships in the repo. */
@@ -114,6 +131,8 @@ function AgentItem({
   color: string | undefined;
   onOpen?: (agent: AgentRow) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <li className="group grid grid-cols-[1.5rem_auto_minmax(0,1fr)_auto] items-center gap-3 py-2.5">
       <span className="text-sm tabular-nums text-muted-foreground">{rank}.</span>
@@ -135,7 +154,7 @@ function AgentItem({
             onClick={() => onOpen(agent)}
             className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
-            View activity
+            {uiT("ui.4bf3f8ddd7bf23d2")}
             <ArrowRight aria-hidden="true" className="size-3 transition-transform group-hover:translate-x-0.5" />
           </button>
         ) : (
@@ -153,8 +172,10 @@ function AgentItem({
 }
 
 function TopAgentsBody({ loading, empty, children }: { loading: boolean; empty: boolean; children: React.ReactNode }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (loading) return <ChartSkeleton className="mx-5 h-64 w-auto" />;
-  if (empty) return <p className="py-10 text-center text-xs text-muted-foreground">No agent traffic in this range</p>;
+  if (empty) return <p className="py-10 text-center text-xs text-muted-foreground">{uiT("ui.d981b7c8cf3e8007")}</p>;
   return <>{children}</>;
 }
 
@@ -179,6 +200,8 @@ export default function TopAgents({
   totalTokens: number;
   onOpenAgent?: (agent: AgentRow) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [metric, setMetric] = useState<UsageMetric>("tokens");
   const allAgents = useMemo(() => topAgents(rows ?? []), [rows]);
   const agents = useMemo(
@@ -208,10 +231,10 @@ export default function TopAgents({
   return (
     <Panel
       icon={Bot}
-      title="Top agents"
+      title={uiT("ui.152b5720722e2de5")}
       subtitle={subtitle}
       testId="top-agents"
-      action={<Segmented label="Agent metric" value={metric} options={METRICS} onChange={setMetric} />}
+      action={<Segmented label={uiT("ui.1d07a4f7b2640509")} value={metric} options={METRICS} onChange={setMetric} />}
       bodyClassName="px-0 pt-4 pb-0"
     >
       <TopAgentsBody loading={loading} empty={agents.length === 0}>

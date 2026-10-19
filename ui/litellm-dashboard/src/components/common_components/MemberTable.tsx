@@ -169,7 +169,7 @@ const buildColumns = ({
     enableGlobalFilter: true,
     cell: ({ row }) =>
       row.original.user_id === "default_user_id" ? (
-        <StatusBadge tone="info" label="Default Proxy Admin" />
+        <StatusBadge tone="info" label={translateUi("ui.45511f6a4e578aea")} />
       ) : (
         row.original.user_id || "-"
       ),
@@ -262,7 +262,7 @@ export default function MemberTable({
   };
   const columns = buildColumns(columnDeps);
   const roleFilterItems = [
-    { value: ALL_ROLES, label: "All Roles" },
+    { value: ALL_ROLES, label: uiT("ui.2a4bfb379d362991") },
     ...memberRoleOptions(members).map((role) => ({ value: role, label: role })),
   ];
 
@@ -287,7 +287,7 @@ export default function MemberTable({
         onGlobalFilterChange={setGlobalFilter}
         noDataMessage={
           <span className="text-muted-foreground">
-            {isNarrowed ? "No members match your search or filters" : emptyText ?? uiT("ui.3b41ba9c7cb8")}
+            {isNarrowed ? uiT("ui.02bc739e0be6e93b") : emptyText ?? uiT("ui.3b41ba9c7cb8")}
           </span>
         }
         toolbar={(table) => (
@@ -296,7 +296,7 @@ export default function MemberTable({
               table={table}
               searchValue={globalFilter}
               onSearchChange={setGlobalFilter}
-              searchPlaceholder="Search by name, email, or user ID"
+              searchPlaceholder={uiT("ui.181c3a84ed1e709e")}
               onOpenFilters={() => setFiltersOpen(true)}
               showViewOptions={false}
             />
@@ -305,7 +305,7 @@ export default function MemberTable({
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
               title={uiT("ui.546ebb8eb993")}
-              description="Narrow down members"
+              description={uiT("ui.d7349befd2541387")}
             >
               {({ get, set }) => (
                 <DataTableFilterField label={roleColumnTitle}>
@@ -315,7 +315,7 @@ export default function MemberTable({
                     onValueChange={(value) => set("role", value === ALL_ROLES ? undefined : value)}
                   >
                     <SelectTrigger className="w-full" data-testid="filter-role">
-                      <SelectValue placeholder="All Roles" />
+                      <SelectValue placeholder={uiT("ui.2a4bfb379d362991")} />
                     </SelectTrigger>
                     <SelectContent>
                       {roleFilterItems.map((item) => (

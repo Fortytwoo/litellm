@@ -72,6 +72,8 @@ function ResponseCacheIndicator() {
 }
 
 function PromptCacheChips({ usage }: { usage?: TokenUsage }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (usage?.servedFromResponseCache) {
     return <ResponseCacheIndicator />;
   }
@@ -83,7 +85,7 @@ function PromptCacheChips({ usage }: { usage?: TokenUsage }) {
     <>
       {readTokens > 0 && (
         <MetricItem
-          label="Cache Read"
+          label={uiT("ui.bc60bc6b4e59a4e3")}
           tooltip={PROMPT_CACHE_READ_TOOLTIP}
           icon={<Database className="size-3" aria-hidden="true" />}
           value={String(readTokens)}
@@ -92,7 +94,7 @@ function PromptCacheChips({ usage }: { usage?: TokenUsage }) {
 
       {creationTokens > 0 && (
         <MetricItem
-          label="Cache Write"
+          label={uiT("ui.1471a902cb72f017")}
           tooltip={PROMPT_CACHE_CREATION_TOOLTIP}
           icon={<DatabaseBackup className="size-3" aria-hidden="true" />}
           value={String(creationTokens)}
@@ -112,7 +114,7 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
       {timeToFirstToken !== undefined && (
         <MetricItem
           label="TTFT"
-          tooltip="Time to first token"
+          tooltip={uiT("ui.0cec400f147f0f13")}
           icon={<Clock className="size-3" aria-hidden="true" />}
           value={`${(timeToFirstToken / 1000).toFixed(2)}s`}
         />
@@ -120,8 +122,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {totalLatency !== undefined && (
         <MetricItem
-          label="Total Latency"
-          tooltip="Total latency"
+          label={uiT("ui.58c0439d739643a6")}
+          tooltip={uiT("ui.21848d236dc60c6b")}
           icon={<Clock className="size-3" aria-hidden="true" />}
           value={`${(totalLatency / 1000).toFixed(2)}s`}
         />
@@ -129,8 +131,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.promptTokens !== undefined && (
         <MetricItem
-          label="In"
-          tooltip="Prompt tokens"
+          label={uiT("ui.8bc1d53cc57c24b7")}
+          tooltip={uiT("ui.b8fbf83c69d10704")}
           icon={<ArrowDownToLine className="size-3" aria-hidden="true" />}
           value={String(usage.promptTokens)}
         />
@@ -140,8 +142,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.completionTokens !== undefined && (
         <MetricItem
-          label="Out"
-          tooltip="Completion tokens"
+          label={uiT("ui.9a3c5460432ba66a")}
+          tooltip={uiT("ui.f5ad1c5b775f969a")}
           icon={<ArrowUpFromLine className="size-3" aria-hidden="true" />}
           value={String(usage.completionTokens)}
         />
@@ -149,8 +151,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.reasoningTokens !== undefined && (
         <MetricItem
-          label="Reasoning"
-          tooltip="Reasoning tokens"
+          label={uiT("ui.d8211e24e83d1600")}
+          tooltip={uiT("ui.157b0f67b44284d4")}
           icon={<Lightbulb className="size-3" aria-hidden="true" />}
           value={String(usage.reasoningTokens)}
         />
@@ -159,7 +161,7 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
       {usage?.totalTokens !== undefined && (
         <MetricItem
           label={uiT("ui.c9b3c38247f7")}
-          tooltip="Total tokens"
+          tooltip={uiT("ui.e7601ca1178ad955")}
           icon={<Hash className="size-3" aria-hidden="true" />}
           value={String(usage.totalTokens)}
         />
@@ -176,8 +178,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {toolName && (
         <MetricItem
-          label="Tool"
-          tooltip="Tool used"
+          label={uiT("ui.2e53bdcd0740867b")}
+          tooltip={uiT("ui.9b41efae340c46c7")}
           icon={<Wrench className="size-3" aria-hidden="true" />}
           value={toolName}
         />

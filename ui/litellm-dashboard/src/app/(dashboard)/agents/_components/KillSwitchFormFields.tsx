@@ -23,6 +23,8 @@ const KeyValueFieldArray = ({
   keyPlaceholder: string;
   valuePlaceholder: string;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<AgentFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name });
 
@@ -58,7 +60,7 @@ const KeyValueFieldArray = ({
             type="button"
             variant="ghost"
             size="icon"
-            aria-label={`Remove ${addLabel.replace(/^Add /, "").toLowerCase()}`}
+            aria-label={uiT("ui.86790c6d4f116494", { v0: String(addLabel.replace(/^Add /, "").toLowerCase()) })}
             className="text-destructive hover:text-destructive/80"
             onClick={() => remove(index)}
           >
@@ -118,18 +120,25 @@ const KillSwitchAuthFields = () => {
 
   switch (authType) {
     case "bearer":
-      return <TextField name="kill_switch.auth_token" label="Bearer token" required="Token required" secret />;
+      return (
+        <TextField name="kill_switch.auth_token" label={uiT("ui.b22ac30e61f624d5")} required="Token required" secret />
+      );
     case "api_key":
       return (
         <>
-          <TextField name="kill_switch.auth_header_name" label="Header name" placeholder="X-API-Key" />
-          <TextField name="kill_switch.auth_api_key" label="API key" required="API key required" secret />
+          <TextField name="kill_switch.auth_header_name" label={uiT("ui.c1dcc8fb31f6ee89")} placeholder="X-API-Key" />
+          <TextField
+            name="kill_switch.auth_api_key"
+            label={uiT("ui.16f0ee47f993d627")}
+            required="API key required"
+            secret
+          />
         </>
       );
     case "basic":
       return (
         <>
-          <TextField name="kill_switch.auth_username" label="Username" required="Username required" />
+          <TextField name="kill_switch.auth_username" label={uiT("ui.e3b89e9d33f88e52")} required="Username required" />
           <TextField
             name="kill_switch.auth_password"
             label={uiT("ui.e7cf3ef4f17c")}
@@ -174,7 +183,7 @@ const KillSwitchFormFields = () => {
       </AgentFormField>
 
       <Field>
-        <FieldTitle>Headers</FieldTitle>
+        <FieldTitle>{uiT("ui.194e9fe656a1bcab")}</FieldTitle>
         <KeyValueFieldArray
           name="kill_switch.headers"
           addLabel="Add Header"
@@ -184,7 +193,7 @@ const KillSwitchFormFields = () => {
       </Field>
 
       <Field>
-        <FieldTitle>Query Parameters</FieldTitle>
+        <FieldTitle>{uiT("ui.2867b24f4cdc9915")}</FieldTitle>
         <KeyValueFieldArray
           name="kill_switch.query_params"
           addLabel="Add Query Parameter"
@@ -210,7 +219,7 @@ const KillSwitchFormFields = () => {
         )}
       </AgentFormField>
 
-      <AgentFormField name="kill_switch.auth_type" label="Authentication">
+      <AgentFormField name="kill_switch.auth_type" label={uiT("ui.66880d2d8216260d")}>
         {({ value, onChange, ref: _ref, ...control }) => (
           <Select value={typeof value === "string" ? value : "none"} onValueChange={onChange}>
             <SelectTrigger {...control} className="w-full">

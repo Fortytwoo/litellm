@@ -11,6 +11,9 @@ import {
 } from "react";
 import moment from "moment";
 import "moment/locale/zh-cn";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+import { z } from "zod";
 import {
   DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
@@ -29,6 +32,12 @@ interface LanguageContextValue {
   t: (key: string, values?: TranslationValues) => string;
 }
 
+function setFormattingLocale(locale: Locale): void {
+  moment.locale(locale === "zh" ? "zh-cn" : "en");
+  dayjs.locale(locale === "zh" ? "zh-cn" : "en");
+  z.config(locale === "zh" ? z.locales.zhCN() : z.locales.en());
+}
+
 const LanguageContext = createContext<LanguageContextValue>({
   locale: "en",
   setLocale: () => undefined,
@@ -39,9 +48,11 @@ export function useLanguage(): LanguageContextValue {
   return useContext(LanguageContext);
 }
 
-export function LocalizedText({ id, text }: { id?: string; text?: string | null }) {
+export function LocalizedText({ id, text, children }: { id?: string; text?: string | null; children?: ReactNode }) {
   const { locale, t } = useLanguage();
-  return id ? t(id) : translateText(text ?? "", locale);
+  if (id) return t(id);
+  const value = text ?? children ?? "";
+  return typeof value === "string" ? translateText(value, locale) : value;
 }
 
 export function LanguageProvider({
@@ -54,7 +65,7 @@ export function LanguageProvider({
   const subscribe = useCallback(
     (listener: () => void) =>
       subscribeLocale(() => {
-        moment.locale(getActiveLocale() === "zh" ? "zh-cn" : "en");
+        setFormattingLocale(getActiveLocale());
         listener();
       }, initialLocale),
     [initialLocale],
@@ -62,7 +73,7 @@ export function LanguageProvider({
   const getServerSnapshot = useCallback(() => initialLocale, [initialLocale]);
   const locale = useSyncExternalStore(subscribe, getActiveLocale, getServerSnapshot);
   const setLocale = useCallback((next: Locale) => {
-    moment.locale(next === "zh" ? "zh-cn" : "en");
+    setFormattingLocale(next);
     try {
       localStorage.setItem(LOCALE_STORAGE_KEY, next);
     } catch {}

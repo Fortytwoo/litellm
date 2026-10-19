@@ -1,3 +1,4 @@
+import { getFormattingLocale } from "@/i18n";
 import type { Sample } from "./types";
 
 type Execution = Sample["executions"][number];
@@ -55,4 +56,8 @@ export function percentLabel(affected: number, total: number): string | null {
 }
 
 export const dayLabel = (day: string): string =>
-  new Date(`${day}T00:00:00Z`).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
+  new Date(`${day}T00:00:00Z`).toLocaleDateString(getFormattingLocale(), {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });

@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { Input } from "@/components/ui/input";
 
@@ -24,22 +27,33 @@ interface NumericalInputProps {
  */
 const NumericalInput = React.forwardRef<HTMLInputElement, NumericalInputProps>(
   (
-    { step = 0.01, style = { width: "100%" }, placeholder = "Enter a numerical value", min, max, onChange, ...rest },
+    {
+      step = 0.01,
+      style = { width: "100%" },
+      placeholder = translateUi("ui.3154bfe4269c"),
+      min,
+      max,
+      onChange,
+      ...rest
+    },
     ref,
-  ) => (
-    <Input
-      ref={ref}
-      type="number"
-      onWheel={(event) => event.currentTarget.blur()}
-      step={step}
-      style={style}
-      placeholder={placeholder}
-      min={min}
-      max={max}
-      onChange={onChange}
-      {...rest}
-    />
-  ),
+  ) => {
+    useDashboardLanguage();
+    return (
+      <Input
+        ref={ref}
+        type="number"
+        onWheel={(event) => event.currentTarget.blur()}
+        step={step}
+        style={style}
+        placeholder={placeholder}
+        min={min}
+        max={max}
+        onChange={onChange}
+        {...rest}
+      />
+    );
+  },
 );
 NumericalInput.displayName = "NumericalInput";
 

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { SearchSelect, type SearchSelectOption } from "@/components/shared/SearchSelect";
@@ -53,8 +55,18 @@ const API_KEY_FIELDS: readonly string[] = ["api_key"];
 const NO_HIDDEN_FIELDS: readonly string[] = [];
 
 const authMethodItems: { value: AuthMethod; label: string }[] = [
-  { value: "api_key", label: "API key" },
-  { value: "federation", label: "Workload identity federation" },
+  {
+    value: "api_key",
+    get label() {
+      return translateUi("ui.16f0ee47f993d627");
+    },
+  },
+  {
+    value: "federation",
+    get label() {
+      return translateUi("ui.9f65dc4c17e6d21e");
+    },
+  },
 ];
 
 interface CredentialModalProps {
@@ -156,7 +168,7 @@ export default function CredentialModal({
     <Dialog open={open} onOpenChange={(open) => !open && closeAndReset()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit Credential" : "Add New Credential"}</DialogTitle>
+          <DialogTitle>{isEdit ? uiT("ui.00896ee08f67dc5c") : uiT("ui.79b6bc831f2c586a")}</DialogTitle>
         </DialogHeader>
         <FormProvider {...form}>
           <MountedFormProvider value={{ control: form.control, registry }}>
@@ -167,7 +179,7 @@ export default function CredentialModal({
               }}
             >
               <MountedFormField
-                label="Credential Name:"
+                label={uiT("ui.fd25c574750877cf")}
                 name="credential_name"
                 required
                 rules={{ validate: { required: requiredRule("Credential name is required") } }}
@@ -179,20 +191,20 @@ export default function CredentialModal({
                     value={typeof control.value === "string" ? control.value : ""}
                     onChange={control.onChange}
                     onBlur={control.onBlur}
-                    placeholder="Unique name that models reference this credential by"
+                    placeholder={uiT("ui.b9ed5819bc21ee83")}
                     disabled={isEdit}
                   />
                 )}
               </MountedFormField>
 
-              <MountedFormField label="Display Name:" name="display_name" className="mb-4">
+              <MountedFormField label={uiT("ui.01c17432f91bc0ec")} name="display_name" className="mb-4">
                 {(control) => (
                   <Input
                     id={control.id}
                     value={typeof control.value === "string" ? control.value : ""}
                     onChange={control.onChange}
                     onBlur={control.onBlur}
-                    placeholder="e.g. Production OpenAI"
+                    placeholder={uiT("ui.3f5ce4fbed46c21a")}
                   />
                 )}
               </MountedFormField>
@@ -207,7 +219,7 @@ export default function CredentialModal({
                 {(control) => (
                   <SearchSelect
                     inputId={control.id}
-                    placeholder="Select a provider"
+                    placeholder={uiT("ui.71e2ca7b1c9f58dc")}
                     options={providerOptions}
                     value={typeof control.value === "string" ? control.value : null}
                     disabled={providerLocked}
@@ -261,9 +273,9 @@ export default function CredentialModal({
               )}
 
               <div className="flex justify-between items-center">
-                <SimpleTooltip content="Get help on our github">
+                <SimpleTooltip content={uiT("ui.432f534e73f8eb9f")}>
                   <a href="https://github.com/BerriAI/litellm/issues" className="text-sm text-primary hover:underline">
-                    Need Help?
+                    {uiT("ui.5c799f5aa8a75879")}
                   </a>
                 </SimpleTooltip>
 
@@ -271,7 +283,7 @@ export default function CredentialModal({
                   <Button variant="outline" className="mr-2.5" onClick={closeAndReset}>
                     {uiT("ui.19766ed6ccb2")}
                   </Button>
-                  <Button type="submit">{isEdit ? "Update Credential" : "Add Credential"}</Button>
+                  <Button type="submit">{isEdit ? uiT("ui.8cc2629565a8488d") : uiT("ui.35d74dfd8dacfa8a")}</Button>
                 </div>
               </div>
             </form>

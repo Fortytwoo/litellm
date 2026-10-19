@@ -148,7 +148,14 @@ const unavailableGroups = (
   if (!offeredListKnown) return [];
   const items = selectedOptions.filter((option) => !offeredByValue.has(option.value));
   if (items.length === 0) return [];
-  return [{ label: "Unavailable", items }];
+  return [
+    {
+      get label() {
+        return translateUi("ui.ca184496974204a0");
+      },
+      items,
+    },
+  ];
 };
 
 export const ModelSelect = (props: ModelSelectProps) => {
@@ -195,7 +202,7 @@ export const ModelSelect = (props: ModelSelectProps) => {
     ...(includeSpecialOptions
       ? [
           {
-            label: "Special Options",
+            label: uiT("ui.cc8bdd1800a59750"),
             items: [
               ...(shouldShowAllProxyModels
                 ? [
@@ -224,13 +231,13 @@ export const ModelSelect = (props: ModelSelectProps) => {
     ...(wildcard.length > 0
       ? [
           {
-            label: "Wildcard Options",
+            label: uiT("ui.104d610e783864ab"),
             items: wildcard.map((model) => {
               const provider = model.replace("/*", "");
               const capitalizedProvider = provider.charAt(0).toUpperCase() + provider.slice(1);
 
               return {
-                label: `All ${capitalizedProvider} models`,
+                label: uiT("ui.51b8189c57f0119f", { v0: String(capitalizedProvider) }),
                 value: model,
                 disabled: hasSpecialOptionSelected,
               };
@@ -281,16 +288,21 @@ export const ModelSelect = (props: ModelSelectProps) => {
                 ))}
                 {overflowOptions.length > 0 && (
                   <Tooltip>
-                    <TooltipTrigger
-                      render={<span className="px-1 text-xs text-muted-foreground" />}
-                    >{`+${overflowOptions.length} more`}</TooltipTrigger>
+                    <TooltipTrigger render={<span className="px-1 text-xs text-muted-foreground" />}>
+                      {uiT("ui.8769eb5def333374", { v0: String(overflowOptions.length) })}
+                    </TooltipTrigger>
                     <TooltipContent>{overflowOptions.map((option) => option.value).join(", ")}</TooltipContent>
                   </Tooltip>
                 )}
               </>
             )}
           </ComboboxValue>
-          <ComboboxChipsInput id={id} placeholder="Select Models" aria-label="Select Models" className="min-w-24" />
+          <ComboboxChipsInput
+            id={id}
+            placeholder={uiT("ui.05c39c4c5b136419")}
+            aria-label={uiT("ui.05c39c4c5b136419")}
+            className="min-w-24"
+          />
         </ComboboxChips>
         <ComboboxContent anchor={anchor}>
           <ComboboxEmpty>{uiT("ui.a650c298cf44")}</ComboboxEmpty>

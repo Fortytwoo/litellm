@@ -96,11 +96,9 @@ export function EvaluationSettingsModal({
     <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[640px]">
         <DialogHeader>
-          <DialogTitle>Evaluation Settings</DialogTitle>
+          <DialogTitle>{uiT("ui.8cac4d663131af48")}</DialogTitle>
           <DialogDescription>
-            {guardrailName
-              ? `Configure AI evaluation for ${guardrailName}`
-              : "Configure AI evaluation for re-running on logs"}
+            {guardrailName ? uiT("ui.7c9c5a730ea97ffb", { v0: String(guardrailName) }) : uiT("ui.9da353f325fe1aad")}
           </DialogDescription>
         </DialogHeader>
 
@@ -108,10 +106,10 @@ export function EvaluationSettingsModal({
           <div>
             <div className="mb-1.5 flex items-center justify-between">
               <label htmlFor="evaluation-prompt" className="text-sm font-medium text-foreground">
-                Evaluation Prompt
+                {uiT("ui.3e86329248a8dc86")}
               </label>
               <Button variant="link" size="xs" onClick={handleResetPrompt}>
-                Reset to default
+                {uiT("ui.bc5b45ae7b60692a")}
               </Button>
             </div>
             <Textarea
@@ -121,16 +119,14 @@ export function EvaluationSettingsModal({
               rows={6}
               className="field-sizing-fixed font-mono text-sm"
             />
-            <p className="mt-1 text-xs text-muted-foreground">
-              System prompt sent to the evaluation model. Output is structured via response_format.
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.90b2cb1da9b3647d")}</p>
           </div>
 
           <div>
             <label htmlFor="evaluation-schema" className="mb-1.5 block text-sm font-medium text-foreground">
-              Response Schema
+              {uiT("ui.a42c5883b94f93e5")}
             </label>
-            <p className="mb-1 text-xs text-muted-foreground">response_format: json_schema</p>
+            <p className="mb-1 text-xs text-muted-foreground">{uiT("ui.ddd13da3deda2c2e")}</p>
             <Textarea
               id="evaluation-schema"
               value={schema}
@@ -146,8 +142,8 @@ export function EvaluationSettingsModal({
               options={modelSelectOptions}
               value={model ?? undefined}
               onValueChange={(value) => setModel(value || null)}
-              placeholder={loadingModels ? "Loading models…" : "Select a model"}
-              emptyText={!accessToken ? "Sign in to see models" : "No models available"}
+              placeholder={loadingModels ? uiT("ui.cc8b4624f7659c68") : uiT("ui.fad7a5ffc4902bc2")}
+              emptyText={!accessToken ? uiT("ui.52fed8f26137bd68") : uiT("ui.a5a9895b0241125f")}
             />
           </div>
         </div>
@@ -158,7 +154,7 @@ export function EvaluationSettingsModal({
           </Button>
           <Button onClick={handleRun} disabled={!model}>
             <Play className="size-4" />
-            Run Evaluation
+            {uiT("ui.5ba76a8058f04ebd")}
           </Button>
         </DialogFooter>
       </DialogContent>

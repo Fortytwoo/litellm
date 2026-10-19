@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { zodFunction } from "openai/helpers/zod";
 import { z } from "zod";
 import { apiClient } from "@/components/networking";
@@ -121,7 +122,12 @@ export function createLiteAdminOperations(context: OperationContext) {
     ) => {
       const definition = {
         name,
-        description: `${title}. Null means omitted or unchanged. ${mode === "read" ? "Read-only." : "Requires the administrator to review and confirm the change."}`,
+        get description() {
+          return translateUi("ui.f7b663ad6eef70e6", undefined, {
+            v0: String(title),
+            v1: String(mode === "read" ? translateUi("ui.64b240a63d687cd3") : translateUi("ui.9b7236385627b8fb")),
+          });
+        },
         parameters: schema,
         function: async (rawArgs: unknown) => {
           const args = stripNulls(rawArgs as z.output<Schema>);
@@ -159,7 +165,9 @@ export function createLiteAdminOperations(context: OperationContext) {
             if (action) {
               const result: ActionResult = {
                 status: "unknown",
-                message: "The change could not be verified. Check the resource before trying again.",
+                get message() {
+                  return translateUi("ui.b271248b69529c34");
+                },
               };
               context.onResult(action, result);
               throw new Error(result.message);
@@ -168,7 +176,9 @@ export function createLiteAdminOperations(context: OperationContext) {
               operation: name,
               success: false,
               status: outcome.error instanceof ApiError ? outcome.error.status : undefined,
-              message: "The gateway could not complete this lookup.",
+              get message() {
+                return translateUi("ui.39d063ba7d93eb40");
+              },
             };
           }
           const key = name === "key_create" || name === "user_create" ? generatedKey(outcome.value) : undefined;

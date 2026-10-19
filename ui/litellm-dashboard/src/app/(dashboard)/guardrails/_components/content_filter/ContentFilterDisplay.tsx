@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -56,6 +58,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
   onCategorySeverityChange,
   onCategoryRemove,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (patterns.length === 0 && blockedWords.length === 0 && categories.length === 0) {
     return null;
   }
@@ -69,8 +73,10 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Content Categories</p>
-              <Badge variant="secondary">{categories.length} categories configured</Badge>
+              <p className="text-lg font-semibold">{uiT("ui.9f86bb49e94e67ee")}</p>
+              <Badge variant="secondary">
+                {categories.length} {uiT("ui.aa16083ef16d9bd7")}
+              </Badge>
             </div>
             <CategoryTable
               categories={categories}
@@ -87,8 +93,10 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Pattern Detection</p>
-              <Badge variant="secondary">{patterns.length} patterns configured</Badge>
+              <p className="text-lg font-semibold">{uiT("ui.150361a3fa9f8f75")}</p>
+              <Badge variant="secondary">
+                {patterns.length} {uiT("ui.42b2d421ad337f36")}
+              </Badge>
             </div>
             <PatternTable
               patterns={patterns}
@@ -103,8 +111,10 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Blocked Keywords</p>
-              <Badge variant="secondary">{blockedWords.length} keywords configured</Badge>
+              <p className="text-lg font-semibold">{uiT("ui.161a9bd671ffa96e")}</p>
+              <Badge variant="secondary">
+                {blockedWords.length} {uiT("ui.2afb9284a98a32f4")}
+              </Badge>
             </div>
             <KeywordTable
               keywords={blockedWords}

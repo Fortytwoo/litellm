@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCloudZeroSettings } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroSettings";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +11,8 @@ import { createQueryKeys } from "@/app/(dashboard)/hooks/common/queryKeysFactory
 import { CloudZeroIntegrationSettings } from "./CloudZeroIntegrationSettings";
 
 export default function CloudZeroCostTracking() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const { data: settings, isLoading, error } = useCloudZeroSettings(accessToken);
   const queryClient = useQueryClient();
@@ -29,7 +33,7 @@ export default function CloudZeroCostTracking() {
     return (
       <Card>
         <CardContent>
-          <p className="text-sm text-muted-foreground">Loading CloudZero settings...</p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.86878c2ae31c90d4")}</p>
         </CardContent>
       </Card>
     );
@@ -40,7 +44,7 @@ export default function CloudZeroCostTracking() {
       <Card>
         <CardContent>
           <p className="text-sm text-destructive">
-            Error loading CloudZero settings: {error instanceof Error ? error.message : String(error)}
+            {uiT("ui.a8cb28241e6b29e7")} {error instanceof Error ? error.message : String(error)}
           </p>
         </CardContent>
       </Card>

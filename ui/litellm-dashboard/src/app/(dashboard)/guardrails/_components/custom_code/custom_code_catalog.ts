@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export const CODE_TEMPLATES = {
   empty: {
     name: "Empty Template",
@@ -115,18 +116,50 @@ export const PRIMITIVES = {
 };
 
 export const MODE_OPTIONS = [
-  { value: "pre_call", label: "pre_call (Request)" },
-  { value: "post_call", label: "post_call (Response)" },
-  { value: "during_call", label: "during_call (Parallel)" },
+  {
+    value: "pre_call",
+    get label() {
+      return translateUi("ui.80c0d24848c165f7");
+    },
+  },
+  {
+    value: "post_call",
+    get label() {
+      return translateUi("ui.19aae42ce4b3e791");
+    },
+  },
+  {
+    value: "during_call",
+    get label() {
+      return translateUi("ui.c9d3d15259daa54a");
+    },
+  },
   { value: "logging_only", label: "logging_only" },
-  { value: "pre_mcp_call", label: "pre_mcp_call (Before MCP Tool Call)" },
-  { value: "post_mcp_call", label: "post_mcp_call (After MCP Tool Call)" },
-  { value: "during_mcp_call", label: "during_mcp_call (During MCP Tool Call)" },
+  {
+    value: "pre_mcp_call",
+    get label() {
+      return translateUi("ui.c9f3b56997704941");
+    },
+  },
+  {
+    value: "post_mcp_call",
+    get label() {
+      return translateUi("ui.2b1b422337384fa0");
+    },
+  },
+  {
+    value: "during_mcp_call",
+    get label() {
+      return translateUi("ui.ebe196e2ab42d013");
+    },
+  },
 ];
 
 export const TEMPLATE_ITEMS = Object.entries(CODE_TEMPLATES).map(([key, template]) => ({
   value: key,
-  label: template.name,
+  get label() {
+    return template.name;
+  },
 }));
 
 export type ModeOption = (typeof MODE_OPTIONS)[number];

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import { Check } from "lucide-react";
@@ -29,6 +31,8 @@ const markdown: Components = {
 };
 
 export function IssueBrief({ title, brief }: { title: string; brief: IssueBrief }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [copied, setCopied] = useState<string | null>(null);
   const source = briefMarkdown(title, brief);
   const copy = async (agent: string) => {
@@ -40,14 +44,14 @@ export function IssueBrief({ title, brief }: { title: string; brief: IssueBrief 
   return (
     <div className="overflow-hidden rounded-lg border border-border">
       <div className="flex h-10 items-center gap-1 border-b border-border bg-muted/40 px-3">
-        <span className="font-mono text-xs text-muted-foreground">issue-brief.md</span>
-        <span className="mr-1 ml-auto text-xs text-muted-foreground">Copy for</span>
+        <span className="font-mono text-xs text-muted-foreground">{uiT("ui.e4b492c92fec2c5c")}</span>
+        <span className="mr-1 ml-auto text-xs text-muted-foreground">{uiT("ui.182de25646b3f8fa")}</span>
         {AGENTS.map((agent) => (
           <button
             key={agent.name}
             type="button"
             onClick={() => void copy(agent.name)}
-            aria-label={`Copy for ${agent.name}`}
+            aria-label={uiT("ui.ac4e9e3d9463b660", { v0: String(agent.name) })}
             className="inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-background px-2 text-xs font-medium hover:bg-muted"
           >
             {copied === agent.name ? (

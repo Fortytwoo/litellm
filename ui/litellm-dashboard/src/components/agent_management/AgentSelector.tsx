@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { MultiSelect, type MultiSelectOption } from "@/components/shared/MultiSelect";
@@ -28,7 +30,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select agents",
+  placeholder = translateUi("ui.9c2f5e9fd3f263f4"),
   disabled = false,
 }) => {
   const { t: uiT } = useDashboardLanguage();
@@ -69,7 +71,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
     ...accessGroups.map((group) => ({
       label: group,
       value: `group:${group}`,
-      description: "Access Group",
+      description: uiT("ui.de2abd6b489e37a2"),
     })),
     ...agents.map((agent) => ({
       label: `${agent.agent_name || agent.agent_id}`,
@@ -95,7 +97,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
         value={selectedValues}
         onValueChange={handleChange}
         placeholder={placeholder}
-        emptyText="No agents found"
+        emptyText={uiT("ui.0661615149895720")}
         loading={loading}
         disabled={disabled}
         className={`w-full ${className ?? ""}`}

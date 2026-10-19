@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 
 const analysisAccessFields = { model: z.string().nullable(), budget: z.string() };
@@ -10,7 +11,12 @@ export const analysisAccessSchema = z
   .object(analysisAccessFields)
   .superRefine((access, ctx) => {
     if (!access.model || !Number.isFinite(Number(access.budget)) || Number(access.budget) <= 0)
-      ctx.addIssue({ code: "custom", message: "Choose a model and a monthly limit greater than zero" });
+      ctx.addIssue({
+        code: "custom",
+        get message() {
+          return translateUi("ui.817f158bd8f98f96");
+        },
+      });
   })
   .transform((access) => ({ model: access.model ?? "", budget: Number(access.budget) }));
 
@@ -21,7 +27,9 @@ export const workerFormSchema = z.object(workerFormFields).superRefine((values, 
     if (!values.analysisKey) {
       ctx.addIssue({
         code: "custom",
-        message: "Choose an existing virtual key",
+        get message() {
+          return translateUi("ui.15f8d0747c6c9509");
+        },
         path: ["analysisKey"],
       });
     }

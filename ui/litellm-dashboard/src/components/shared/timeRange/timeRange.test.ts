@@ -1,8 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { setActiveLocale } from "@/i18n";
 
 import { isRangeHours, presetLabel, timeWindow } from "./timeRange";
 
 const HOUR = 3600 * 1000;
+beforeEach(() => setActiveLocale("en"));
 
 describe("timeWindow", () => {
   it("rolls a live range forward with now so live tail keeps a fixed-length window", () => {

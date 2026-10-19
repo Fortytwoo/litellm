@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch, type UseFormReturn } from "react-hook-form";
@@ -87,13 +89,27 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 // Define human-friendly descriptions for each mode
 const modeDescriptions = {
-  pre_call: "Before LLM Call - Runs before the LLM call and checks the input (Recommended)",
-  during_call: "During LLM Call - Runs in parallel with the LLM call, with response held until check completes",
-  post_call: "After LLM Call - Runs after the LLM call and checks only the output",
-  logging_only: "Logging Only - Only runs on logging callbacks without affecting the LLM call",
-  pre_mcp_call: "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
-  during_mcp_call: "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
-  post_mcp_call: "After MCP Tool Call - Runs after MCP tool execution and checks the tool result",
+  get pre_call() {
+    return translateUi("ui.9c713a64da24e47d");
+  },
+  get during_call() {
+    return translateUi("ui.2fde99d006f65648");
+  },
+  get post_call() {
+    return translateUi("ui.aa639cdc1537177c");
+  },
+  get logging_only() {
+    return translateUi("ui.b86e729b511ae7ba");
+  },
+  get pre_mcp_call() {
+    return translateUi("ui.c948ab8d0c3a4bb3");
+  },
+  get during_mcp_call() {
+    return translateUi("ui.013d7fc3c40fd377");
+  },
+  get post_mcp_call() {
+    return translateUi("ui.812c0bbe30d086fe");
+  },
 };
 
 interface GuardrailPreset {
@@ -200,8 +216,18 @@ const INITIAL_VALUES: GuardrailFormValues = {
 };
 
 const ALWAYS_ON_ITEMS = [
-  { label: "Yes", value: true },
-  { label: "No", value: false },
+  {
+    get label() {
+      return translateUi("ui.85a39ab345d672ff");
+    },
+    value: true,
+  },
+  {
+    get label() {
+      return translateUi("ui.1ea442a134b2a184");
+    },
+    value: false,
+  },
 ];
 
 const DEFAULT_MODES = ["pre_call", "during_call", "post_call", "logging_only"];
@@ -769,7 +795,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
 
       await createGuardrailCall(accessToken, guardrailData);
 
-      toast.success("Guardrail created successfully");
+      toast.success(translateUi("ui.9299f9746e02a239"));
 
       // Reset form and close modal
       resetForm();
@@ -803,18 +829,18 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
         <GuardrailField
           control={form.control}
           name="guardrail_name"
-          label="Guardrail Name"
+          label={uiT("ui.25e74db3ec6ad797")}
           rules={requiredRule("Please enter a guardrail name")}
         >
           {({ ref, value, ...field }) => (
-            <Input {...field} ref={ref} value={asText(value)} placeholder="Enter a name for this guardrail" />
+            <Input {...field} ref={ref} value={asText(value)} placeholder={uiT("ui.0edbc70e40ce310e")} />
           )}
         </GuardrailField>
 
         <GuardrailField
           control={form.control}
           name="provider"
-          label="Guardrail Provider"
+          label={uiT("ui.4684e543247d31f2")}
           rules={requiredRule("Please select a provider")}
         >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
@@ -834,11 +860,11 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                 id={id}
                 aria-invalid={ariaInvalid}
                 aria-describedby={ariaDescribedBy}
-                placeholder="Select a guardrail provider"
+                placeholder={uiT("ui.581d97f1a0f398fb")}
                 className="w-full"
               />
               <ComboboxContent>
-                <ComboboxEmpty>No matching providers</ComboboxEmpty>
+                <ComboboxEmpty>{uiT("ui.9c82379afa4faf6e")}</ComboboxEmpty>
                 <ComboboxList>
                   {(key: string) => (
                     <ComboboxItem key={key} value={key}>
@@ -893,11 +919,11 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
               onValueChange={(next: boolean | null) => onChange(next)}
             >
               <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-                <SelectValue placeholder="Select an option" />
+                <SelectValue placeholder={uiT("ui.fb1cbc38fb4060f4")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={true}>Yes</SelectItem>
-                <SelectItem value={false}>No</SelectItem>
+                <SelectItem value={true}>{uiT("ui.85a39ab345d672ff")}</SelectItem>
+                <SelectItem value={false}>{uiT("ui.1ea442a134b2a184")}</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -1082,14 +1108,13 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
       <div className="space-y-6">
         <div>
           <p className="text-sm text-muted-foreground">
-            Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a
-            specific endpoint like <code>/v1/realtime</code>.
+            {uiT("ui.57526fae5a3e4066")} <code>/v1/realtime</code>.
           </p>
         </div>
 
         <div>
           <label htmlFor="guardrail-call-type" className="mb-1 block text-sm font-medium text-foreground">
-            Call type
+            {uiT("ui.3729f9c348dff8b9")}
           </label>
           <Select
             items={CALL_TYPE_ITEMS}
@@ -1100,7 +1125,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
             }}
           >
             <SelectTrigger id="guardrail-call-type" className="w-65">
-              <SelectValue placeholder="Select a call type" />
+              <SelectValue placeholder={uiT("ui.0cff97dd9e232e6b")} />
             </SelectTrigger>
             <SelectContent>
               {CALL_TYPE_ITEMS.map((item) => (
@@ -1110,7 +1135,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
               ))}
             </SelectContent>
           </Select>
-          <p className="mt-1 text-xs text-muted-foreground">More call types coming soon.</p>
+          <p className="mt-1 text-xs text-muted-foreground">{uiT("ui.3382036d541f743a")}</p>
         </div>
 
         {selectedEndpointType === "realtime" && (
@@ -1139,17 +1164,14 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                     htmlFor="guardrail-end-session-after"
                     className="mb-1 block text-sm font-medium text-foreground"
                   >
-                    End session after X violations
+                    {uiT("ui.faa70e4cddaa118f")}
                   </label>
-                  <p className="mb-2 text-xs text-muted-foreground">
-                    Automatically close the session after this many guardrail violations. Leave empty to never
-                    auto-close.
-                  </p>
+                  <p className="mb-2 text-xs text-muted-foreground">{uiT("ui.d79cac5a4c1b2727")}</p>
                   <Input
                     id="guardrail-end-session-after"
                     type="number"
                     min={1}
-                    placeholder="e.g. 3"
+                    placeholder={uiT("ui.8c2fb766660896ad")}
                     value={endSessionAfterNFails ?? ""}
                     onChange={(e) =>
                       setEndSessionAfterNFails(e.target.value ? parseInt(e.target.value, 10) : undefined)
@@ -1159,7 +1181,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">On violation</label>
+                  <label className="mb-2 block text-sm font-medium text-foreground">{uiT("ui.6b8ba96cd466bb14")}</label>
                   <div className="space-y-2">
                     {(["warn", "end_session"] as const).map((opt) => (
                       <label key={opt} className="flex items-start gap-2 cursor-pointer">
@@ -1173,12 +1195,10 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                         />
                         <div>
                           <span className="text-sm font-medium text-foreground">
-                            {opt === "warn" ? "Warn" : "End session"}
+                            {opt === "warn" ? uiT("ui.8448814dc5caff5c") : uiT("ui.f00b921ff35b9045")}
                           </span>
                           <p className="m-0 text-xs text-muted-foreground">
-                            {opt === "warn"
-                              ? "Bot speaks the message, session continues"
-                              : "Bot speaks the message, connection closes immediately"}
+                            {opt === "warn" ? uiT("ui.4a8bb0ecff14a07a") : uiT("ui.3c9cde5811002532")}
                           </p>
                         </div>
                       </label>
@@ -1191,16 +1211,13 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                     htmlFor="guardrail-realtime-message"
                     className="mb-1 block text-sm font-medium text-foreground"
                   >
-                    Message the user hears
+                    {uiT("ui.8a869354afac1026")}
                   </label>
-                  <p className="mb-2 text-xs text-muted-foreground">
-                    What the bot says aloud when this guardrail fires. Falls back to the default violation message if
-                    empty.
-                  </p>
+                  <p className="mb-2 text-xs text-muted-foreground">{uiT("ui.c77290376fcb213b")}</p>
                   <Textarea
                     id="guardrail-realtime-message"
                     rows={3}
-                    placeholder="e.g. I'm not able to continue this conversation. Please contact us at 1-800-774-2678."
+                    placeholder={uiT("ui.ce58b1e4802a3934")}
                     value={realtimeViolationMessage}
                     onChange={(e) => setRealtimeViolationMessage(e.target.value)}
                     className="w-full resize-none"
@@ -1217,28 +1234,28 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
   const getStepConfigs = () => {
     if (shouldRenderContentFilterConfigSettings(selectedProvider)) {
       return [
-        { title: "Basic Info", optional: false },
-        { title: "Topics", optional: false },
-        { title: "Patterns", optional: false },
-        { title: "Keywords", optional: false },
-        { title: "Endpoint Settings (Optional)", optional: true },
+        { title: uiT("ui.c6b6593221c55573"), optional: false },
+        { title: uiT("ui.e22820fcf5cd90e3"), optional: false },
+        { title: uiT("ui.160a13d94fb04738"), optional: false },
+        { title: uiT("ui.8bfdb93cafaa9147"), optional: false },
+        { title: uiT("ui.6a41bf7cf7d0e594"), optional: true },
       ];
     }
     if (shouldRenderPIIConfigSettings(selectedProvider)) {
       return [
-        { title: "Basic Info", optional: false },
-        { title: "PII Configuration", optional: false },
+        { title: uiT("ui.c6b6593221c55573"), optional: false },
+        { title: uiT("ui.a4cd120410aa3544"), optional: false },
       ];
     }
     if (isDecisionModelProvider) {
       return [
-        { title: "Basic Info", optional: false },
-        { title: "Decision Model Configuration", optional: false },
+        { title: uiT("ui.c6b6593221c55573"), optional: false },
+        { title: uiT("ui.222c564a04389ff3"), optional: false },
       ];
     }
     return [
-      { title: "Basic Info", optional: false },
-      { title: "Provider Configuration", optional: false },
+      { title: uiT("ui.c6b6593221c55573"), optional: false },
+      { title: uiT("ui.e423aa73a3e7e8e6"), optional: false },
     ];
   };
 
@@ -1254,7 +1271,9 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
           <div className="flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border px-6 py-4">
-              <DialogTitle className="m-0 text-base font-semibold text-foreground">Create guardrail</DialogTitle>
+              <DialogTitle className="m-0 text-base font-semibold text-foreground">
+                {uiT("ui.b99ce36aedcb2da8")}
+              </DialogTitle>
               <button
                 type="button"
                 onClick={handleClose}
@@ -1294,7 +1313,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                         >
                           <span className={`text-sm ${getStepTitleClass(isDone, isCurrent)}`}>{step.title}</span>
                           {step.optional && !isCurrent && (
-                            <span className="text-[11px] text-muted-foreground">optional</span>
+                            <span className="text-[11px] text-muted-foreground">{uiT("ui.ec91fdd9256cb75a")}</span>
                           )}
                           {isDone && (
                             <span className="text-[11px] text-info hover:underline">{uiT("ui.464c4ffd019e")}</span>
@@ -1327,7 +1346,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
               ) : (
                 <Button type="button" onClick={handleSubmit} disabled={loading}>
                   {loading && <UiLoadingSpinner className="size-4" />}
-                  Create Guardrail
+                  {uiT("ui.4aa9636f1060f2c6")}
                 </Button>
               )}
             </div>

@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { useQuery } from "@tanstack/react-query";
 import { Inspector, useInspector } from "@/components/shared/Inspector";
@@ -30,10 +32,30 @@ import { InvestigationError, InvestigationsLoading } from "./InvestigationStates
 import { PRIORITY_LABEL, PRIORITY_ORDER, PriorityDot } from "./PriorityMark";
 
 const PRIORITIES: { value: Priority | "all"; label: string }[] = [
-  { value: "all", label: "All priorities" },
-  { value: "high", label: "High" },
-  { value: "medium", label: "Medium" },
-  { value: "low", label: "Low" },
+  {
+    value: "all",
+    get label() {
+      return translateUi("ui.423775b6a593dc75");
+    },
+  },
+  {
+    value: "high",
+    get label() {
+      return translateUi("ui.c4ebc6d4a5832cd9");
+    },
+  },
+  {
+    value: "medium",
+    get label() {
+      return translateUi("ui.8e588cd187741f1c");
+    },
+  },
+  {
+    value: "low",
+    get label() {
+      return translateUi("ui.f793de205ead5ac3");
+    },
+  },
 ];
 
 function FilterSelect<T extends string>({
@@ -68,6 +90,8 @@ function FilterSelect<T extends string>({
 }
 
 function FindingRow({ row, now }: { row: InboxRow; now: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const frequency = findingFrequency(inboxFinding(row).occurrences, inboxSampledRuns(row));
   const percent = percentLabel(frequency.affected, frequency.total);
   return (
@@ -91,9 +115,15 @@ function FindingRow({ row, now }: { row: InboxRow; now: number }) {
         </span>
         <span
           className="whitespace-nowrap text-foreground/75 tabular-nums"
-          title={`${row.runs} affected ${row.runs === 1 ? "trace" : "traces"} across ${row.sources.map(({ lens }) => lens.settings.name).join(", ")}`}
+          title={uiT("ui.994cba809f7e6c1a", {
+            v0: String(row.runs),
+            v1: String(row.runs === 1 ? uiT("ui.eafe895eb8119e6e") : uiT("ui.b5ac69fc467c01f3")),
+            v2: String(row.sources.map(({ lens }) => lens.settings.name).join(", ")),
+          })}
         >
-          {percent ? `${percent} affected` : `${row.runs} ${row.runs === 1 ? "trace" : "traces"}`}
+          {percent
+            ? uiT("ui.01f5a1e0a0d58b2e", { v0: String(percent) })
+            : `${row.runs} ${row.runs === 1 ? "trace" : "traces"}`}
         </span>
       </div>
     </Inspector.Row>
@@ -101,20 +131,32 @@ function FindingRow({ row, now }: { row: InboxRow; now: number }) {
 }
 
 function FindingList({ rows, now }: { rows: readonly InboxRow[]; now: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const groups = PRIORITY_ORDER.map((priority) => ({
     priority,
     rows: rows.filter((row) => row.priority === priority),
   })).filter((group) => group.rows.length > 0);
   return (
-    <div role="grid" aria-label="Findings" className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2">
+    <div
+      role="grid"
+      aria-label={uiT("ui.e171c2ff25b55e5a")}
+      className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2"
+    >
       {groups.map((group) => (
-        <div role="rowgroup" key={group.priority} aria-label={`${PRIORITY_LABEL[group.priority]} priority findings`}>
+        <div
+          role="rowgroup"
+          key={group.priority}
+          aria-label={uiT("ui.396154be9a9c05fb", { v0: String(PRIORITY_LABEL[group.priority]) })}
+        >
           <div
             role="row"
             className="sticky top-0 z-raised flex items-center gap-2 bg-background/95 px-4 pt-3 pb-1.5 text-xs font-medium text-muted-foreground backdrop-blur"
           >
             <PriorityDot priority={group.priority} />
-            <span role="columnheader">{PRIORITY_LABEL[group.priority]} priority</span>
+            <span role="columnheader">
+              {PRIORITY_LABEL[group.priority]} {uiT("ui.3092a5f0dba05ff3")}
+            </span>
             <span className="ml-auto tabular-nums">{group.rows.length}</span>
           </div>
           <div className="space-y-0.5">
@@ -172,6 +214,8 @@ function InboxDetail({
 }
 
 export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const api = useLensApi();
   const list = useQuery(lensQueries.list(api));
   const update = useLensUpdate();
@@ -183,7 +227,7 @@ export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
   const selected =
     all.find((row) => row.sources.some(({ lens, finding }) => findingKey(lens, finding) === issueKey)) ?? null;
   const agents = [
-    { value: ALL_AGENTS, label: "All agents" },
+    { value: ALL_AGENTS, label: uiT("ui.54c32d3e2cfa1cc8") },
     ...inboxAgents(all).map((agent) => ({ value: agent, label: agent })),
   ];
   const review = (row: InboxRow, status: Finding["status"], reason: string) => {
@@ -220,13 +264,18 @@ export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
         )}
         <div className="flex min-h-0 flex-1">
           <section
-            aria-label="Findings list"
+            aria-label={uiT("ui.7ac569a50343c229")}
             className={`flex min-h-0 w-full flex-col border-r md:w-[22rem] md:shrink-0 lg:w-[28rem] ${selected ? "hidden md:flex" : "flex"}`}
           >
             <div className="flex shrink-0 items-center gap-2 px-3 py-2">
-              <FilterSelect label="Filter by agent" value={filters.agent} items={agents} onChange={filters.setAgent} />
               <FilterSelect
-                label="Filter by priority"
+                label={uiT("ui.94dc2569edb01463")}
+                value={filters.agent}
+                items={agents}
+                onChange={filters.setAgent}
+              />
+              <FilterSelect
+                label={uiT("ui.48b74b8f81c021ef")}
                 value={filters.priority}
                 items={PRIORITIES}
                 onChange={filters.setPriority}
@@ -235,19 +284,17 @@ export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
             <FindingList rows={rows} now={now} />
             {!rows.length && !list.error && (
               <p className="px-4 py-16 text-center text-xs text-muted-foreground">
-                {all.length
-                  ? "No findings match these filters."
-                  : "No open findings yet. New problems show up here as soon as an investigation spots them."}
+                {all.length ? uiT("ui.ca4c8e0348a5971b") : uiT("ui.d782e36edf7269f6")}
               </p>
             )}
             <footer className="flex h-8 shrink-0 items-center border-t px-3 text-xs text-muted-foreground">
-              {rows.length} {rows.length === 1 ? "finding" : "findings"}
+              {rows.length} {rows.length === 1 ? uiT("ui.8bf18252cb6dadd5") : uiT("ui.8aa3c4ce3ccdfe89")}
               {rows.length !== all.length && ` of ${all.length}`}
             </footer>
           </section>
           {selected ? (
             <aside
-              aria-label="Finding details"
+              aria-label={uiT("ui.0d59110897709f34")}
               data-testid="finding-panel"
               className="flex min-h-0 min-w-0 flex-1 flex-col"
             >
@@ -255,7 +302,7 @@ export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
             </aside>
           ) : (
             <div className="hidden min-w-0 flex-1 items-center justify-center p-8 text-sm text-muted-foreground md:flex">
-              {rows.length ? "Select a finding to see how often it happens and where." : null}
+              {rows.length ? uiT("ui.291ee6c63fffbf80") : null}
             </div>
           )}
         </div>

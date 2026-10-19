@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useRef, useState } from "react";
 import { Upload as UploadIcon, X } from "lucide-react";
@@ -33,7 +35,14 @@ interface CreatePromptRequest {
   };
 }
 
-const PROMPT_INTEGRATION_OPTIONS = [{ label: "dotprompt", value: "dotprompt" }];
+const PROMPT_INTEGRATION_OPTIONS = [
+  {
+    get label() {
+      return translateUi("ui.57714fcfa2b5870e");
+    },
+    value: "dotprompt",
+  },
+];
 
 const addPromptSchema = z.object({
   prompt_id: z
@@ -138,7 +147,7 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
 
     try {
       await createPromptCall(accessToken, promptData);
-      toast.success("Prompt created successfully!");
+      toast.success(translateUi("ui.425e774fef4bd474"));
       handleCancel();
       onSuccess();
     } catch (createError) {
@@ -153,17 +162,15 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
     <Dialog open={visible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Add New Prompt</DialogTitle>
+          <DialogTitle>{uiT("ui.984e22922f4f80eb")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <FieldGroup>
-            <FormField control={form.control} name="prompt_id" label="Prompt ID">
-              {({ ref, ...field }) => (
-                <Input {...field} ref={ref} placeholder="Enter unique prompt ID (e.g., my_prompt_id)" />
-              )}
+            <FormField control={form.control} name="prompt_id" label={uiT("ui.79dba348219cfb50")}>
+              {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.b05cac0b6cb99f07")} />}
             </FormField>
 
-            <FormField control={form.control} name="prompt_integration" label="Prompt Integration">
+            <FormField control={form.control} name="prompt_integration" label={uiT("ui.0f7786b8f54a2c1f")}>
               {({ id, value, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                 <Select items={PROMPT_INTEGRATION_OPTIONS} value={value} onValueChange={handleIntegrationChange}>
                   <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy}>
@@ -184,25 +191,27 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
               <>
                 <FieldSeparator />
                 <Field>
-                  <FieldTitle>Prompt File</FieldTitle>
+                  <FieldTitle>{uiT("ui.9226f7461db91eb3")}</FieldTitle>
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept=".prompt"
-                    aria-label="Prompt file"
+                    aria-label={uiT("ui.44942ae69ae4a67c")}
                     className="sr-only"
                     onChange={handleFileChange}
                   />
                   <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
                     <UploadIcon />
-                    Select .prompt File
+                    {uiT("ui.73efd429c2e793c2")}
                   </Button>
                   {selectedFile && (
                     <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                      <span>Selected: {selectedFile.name}</span>
+                      <span>
+                        {uiT("ui.bef9d85df8ea13fe")} {selectedFile.name}
+                      </span>
                       <button
                         type="button"
-                        aria-label={`Remove ${selectedFile.name}`}
+                        aria-label={uiT("ui.86790c6d4f116494", { v0: String(selectedFile.name) })}
                         onClick={clearSelectedFile}
                         className="text-muted-foreground hover:text-destructive"
                       >
@@ -210,7 +219,7 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
                       </button>
                     </div>
                   )}
-                  <FieldDescription>Upload a .prompt file that follows the Dotprompt specification</FieldDescription>
+                  <FieldDescription>{uiT("ui.0bd391fbfc4b7e3a")}</FieldDescription>
                 </Field>
               </>
             )}
@@ -222,7 +231,7 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
           </Button>
           <Button type="button" disabled={loading} onClick={() => void form.handleSubmit(handleSubmit)()}>
             {loading && <UiLoadingSpinner className="size-4" />}
-            Create Prompt
+            {uiT("ui.b05071bf361e1244")}
           </Button>
         </DialogFooter>
       </DialogContent>

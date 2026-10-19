@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import {
   Combobox,
@@ -45,9 +49,11 @@ const SkillSelector: React.FC<SkillSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select skills (optional)",
+  placeholder = translateUi("ui.88d6ecd86716470f"),
   disabled = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [options, setOptions] = useState<SkillOption[]>([]);
   const [loading, setLoading] = useState(false);
@@ -86,17 +92,21 @@ const SkillSelector: React.FC<SkillSelectorProps> = ({
           }
         </ComboboxValue>
         <ComboboxChipsInput placeholder={placeholder} aria-label={placeholder} disabled={disabled} />
-        {value && value.length > 0 && <ComboboxClear aria-label="Clear all skills" disabled={disabled} />}
+        {value && value.length > 0 && <ComboboxClear aria-label={uiT("ui.1107f8fa6b5c8d84")} disabled={disabled} />}
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>{loading ? "Loading skills…" : "No skills found"}</ComboboxEmpty>
+        <ComboboxEmpty>{loading ? uiT("ui.5546d5d6f57f25bd") : uiT("ui.52777c2d5f9c50ae")}</ComboboxEmpty>
         <ComboboxList>
           {(skill: string) => {
             const isPrivate = options.some((option) => option.name === skill && !option.enabled);
             return (
-              <ComboboxItem key={skill} value={skill} aria-label={isPrivate ? `${skill} (private)` : skill}>
+              <ComboboxItem
+                key={skill}
+                value={skill}
+                aria-label={isPrivate ? uiT("ui.1f79a8fb934ab09e", { v0: String(skill) }) : skill}
+              >
                 {skill}
-                {isPrivate && <span className="ml-2 text-xs text-muted-foreground">private</span>}
+                {isPrivate && <span className="ml-2 text-xs text-muted-foreground">{uiT("ui.715dc8493c36579a")}</span>}
               </ComboboxItem>
             );
           }}

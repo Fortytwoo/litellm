@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { CircleHelp } from "lucide-react";
@@ -64,7 +68,7 @@ const attachmentShape = {
   models: z.array(z.string()),
   tags: z.array(z.string()),
   priority: z
-    .number({ error: "Priority must be a whole number" })
+    .number({ error: () => translateUi("ui.0c15ec3c9582a023") })
     .int("Priority must be a whole number")
     .min(INT32_MIN, `Priority must be at least ${INT32_MIN}`)
     .max(INT32_MAX, `Priority must be at most ${INT32_MAX}`)
@@ -85,17 +89,19 @@ const buildAttachmentSchema = (scopeType: ScopeType, teamsLoaded: boolean, avail
       code: "custom",
       path: ["teams"],
       message:
-        `These teams don't exist: ${invalid.join(", ")}. ` +
-        `Choose an existing team, or use a wildcard like "team-*" to match by prefix.`,
+        translateUi("ui.d048a43d8017ad5c", undefined, { v0: String(invalid.join(", ")) }) +
+        translateUi("ui.feedc4f750d004c3"),
     });
   });
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -229,7 +235,9 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
 
       if (successCount > 0 && failed.length === 0) {
         toast.success(
-          successCount === 1 ? "Attachment created successfully" : `${successCount} attachments created successfully`,
+          successCount === 1
+            ? translateUi("ui.730512f9dfafea9f")
+            : translateUi("ui.d7ddbd344b3d9d3a", undefined, { v0: String(successCount) }),
         );
       } else if (successCount > 0 && failed.length > 0) {
         toast.fromError(`${successCount} attachments created, ${failed.length} failed`);
@@ -254,7 +262,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Create Policy Attachment</DialogTitle>
+          <DialogTitle>{uiT("ui.aaffaf2372103bf0")}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
@@ -273,9 +281,9 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                     value={value}
                     onValueChange={onChange}
                     onBlur={onBlur}
-                    placeholder="Select policies to attach"
+                    placeholder={uiT("ui.06d012effcfbb796")}
                     options={policyOptions}
-                    emptyText="No matching policies"
+                    emptyText={uiT("ui.81aee79ab23fd45e")}
                     ariaInvalid={ariaInvalid}
                     ariaDescribedBy={ariaDescribedBy}
                   />
@@ -283,20 +291,20 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
               </FormField>
 
               <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold">Scope</span>
+                <span className="text-sm font-semibold">{uiT("ui.b073f6c68ef87211")}</span>
                 <Separator className="flex-1" />
               </div>
 
               <div>
-                <FieldTitle className="mb-2">Scope Type</FieldTitle>
+                <FieldTitle className="mb-2">{uiT("ui.de2d289e24a990b4")}</FieldTitle>
                 <RadioGroup value={scopeType} onValueChange={(value: unknown) => setScopeType(value as ScopeType)}>
                   <FieldLabel className="font-normal">
                     <RadioGroupItem value="specific" />
-                    Specific (teams, keys, models, or tags)
+                    {uiT("ui.5b7883fac7e1c180")}
                   </FieldLabel>
                   <FieldLabel className="font-normal">
                     <RadioGroupItem value="global" />
-                    Global (applies to all requests)
+                    {uiT("ui.8fe92405e33af8ad")}
                   </FieldLabel>
                 </RadioGroup>
               </div>
@@ -324,11 +332,11 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                         value={value}
                         onValueChange={onChange}
                         onBlur={onBlur}
-                        placeholder={isLoadingTeams ? "Loading teams..." : "Select or enter team aliases"}
+                        placeholder={isLoadingTeams ? uiT("ui.b9176fa052860fdb") : uiT("ui.1ed6a73322bdcfb8")}
                         options={availableTeams}
                         allowCustomValues
                         tokenSeparators={[","]}
-                        emptyText="No matching teams"
+                        emptyText={uiT("ui.bb06d219c8ddc8e4")}
                         ariaInvalid={ariaInvalid}
                         ariaDescribedBy={ariaDescribedBy}
                       />
@@ -356,11 +364,11 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                         value={value}
                         onValueChange={onChange}
                         onBlur={onBlur}
-                        placeholder={isLoadingKeys ? uiT("ui.e0c65255e48f") : "Select or enter key aliases"}
+                        placeholder={isLoadingKeys ? uiT("ui.e0c65255e48f") : uiT("ui.a88fc0acebe6995b")}
                         options={availableKeys}
                         allowCustomValues
                         tokenSeparators={[","]}
-                        emptyText="No matching keys"
+                        emptyText={uiT("ui.e7c5fa5b3dcc175a")}
                         ariaInvalid={ariaInvalid}
                         ariaDescribedBy={ariaDescribedBy}
                       />
@@ -388,13 +396,11 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                         value={value}
                         onValueChange={onChange}
                         onBlur={onBlur}
-                        placeholder={
-                          isLoadingModels ? "Loading models..." : "Select or enter model names (e.g., gpt-4, bedrock/*)"
-                        }
+                        placeholder={isLoadingModels ? uiT("ui.802435241f0ac4f5") : uiT("ui.4473768a25cf990d")}
                         options={availableModels}
                         allowCustomValues
                         tokenSeparators={[","]}
-                        emptyText="No matching models"
+                        emptyText={uiT("ui.5267f5e646a5a193")}
                         ariaInvalid={ariaInvalid}
                         ariaDescribedBy={ariaDescribedBy}
                       />
@@ -410,8 +416,8 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                     )}
                     description={
                       <span className="text-xs">
-                        Matches tags from key/team <code>metadata.tags</code> or tags passed dynamically in the request
-                        body. Use <code>*</code> as a suffix wildcard (e.g., <code>prod-*</code> matches{" "}
+                        {uiT("ui.6d42c69d4858f16b")} <code>metadata.tags</code> {uiT("ui.5404e72192010ce3")}{" "}
+                        <code>*</code> {uiT("ui.8a029196892451fc")} <code>prod-*</code> {uiT("ui.a54084383e3cf7c2")}{" "}
                         <code>prod-us</code>, <code>prod-eu</code>).
                       </span>
                     }
@@ -429,7 +435,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                         value={value}
                         onValueChange={onChange}
                         onBlur={onBlur}
-                        placeholder="Type a tag and press Enter (e.g. healthcare, prod-*)"
+                        placeholder={uiT("ui.d01fe1ec1188e274")}
                         allowCustomValues
                         tokenSeparators={[",", " "]}
                         ariaInvalid={ariaInvalid}
@@ -447,7 +453,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                   "Priority",
                   "Lower numbers run first. Attachments with a priority run before attachments without one.",
                 )}
-                description="Optional. Leave blank to keep the default order: global, then teams, keys, tags, models."
+                description={uiT("ui.95e86862734edb9e")}
               >
                 {({ ref, value, onChange, ...field }) => (
                   <Input
@@ -456,7 +462,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                     type="number"
                     step={1}
                     value={value ?? ""}
-                    placeholder="e.g. 10"
+                    placeholder={uiT("ui.8abd1799a7d9f074")}
                     onChange={(event) => onChange(event.target.value === "" ? null : event.target.valueAsNumber)}
                   />
                 )}
@@ -469,7 +475,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                   "Default (fallback)",
                   "A default attachment is applied only when no non-default attachment matches the request.",
                 )}
-                description="Use this for the guardrail everyone gets unless they opt in to another attachment."
+                description={uiT("ui.d505e60545deb1c3")}
               >
                 {({ value, onChange, ref, ...field }) => (
                   <Switch {...field} inputRef={ref} checked={value === true} onCheckedChange={onChange} />
@@ -492,7 +498,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                   aria-busy={isEstimating}
                 >
                   {isEstimating && <UiLoadingSpinner className="size-4" />}
-                  Estimate Impact
+                  {uiT("ui.e3b561812253af65")}
                 </Button>
               )}
               <Button
@@ -502,7 +508,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                 aria-busy={isSubmitting}
               >
                 {isSubmitting && <UiLoadingSpinner className="size-4" />}
-                Create Attachment
+                {uiT("ui.e741fad9eb828b96")}
               </Button>
             </div>
           </form>

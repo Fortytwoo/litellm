@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 
@@ -74,6 +75,8 @@ interface ContentTabProps {
 
 /** The error first (if any), then collapsible Input and Output. */
 export function ContentTab({ accessToken, traceId, traceRef, span }: ContentTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const detailQuery = useSpanDetail(accessToken, traceId, span.span_id, traceRef);
   const detail = detailQuery.data;
   const empty = detail && !detail.input && !detail.output;
@@ -93,16 +96,32 @@ export function ContentTab({ accessToken, traceId, traceRef, span }: ContentTabP
           )}
         </div>
       )}
-      {detailQuery.isLoading && <div className={STATUS_TEXT}>Loading span…</div>}
-      {detailQuery.isError && <div className={STATUS_TEXT}>Could not load span: {detailQuery.error.message}</div>}
+      {detailQuery.isLoading && <div className={STATUS_TEXT}>{uiT("ui.faaef8b305a2f7b8")}</div>}
+      {detailQuery.isError && (
+        <div className={STATUS_TEXT}>
+          {uiT("ui.647991a2cdf36a4e")} {detailQuery.error.message}
+        </div>
+      )}
       {detail?.input ? (
-        <PayloadSection title="Input" raw={detail.input} content={detail.input_ui} span={span} role="input" />
+        <PayloadSection
+          title={uiT("ui.36ecb4f86691")}
+          raw={detail.input}
+          content={detail.input_ui}
+          span={span}
+          role="input"
+        />
       ) : null}
       {detail?.output ? (
-        <PayloadSection title="Output" raw={detail.output} content={detail.output_ui} span={span} role="output" />
+        <PayloadSection
+          title={uiT("ui.b2439bcb8dee")}
+          raw={detail.output}
+          content={detail.output_ui}
+          span={span}
+          role="output"
+        />
       ) : null}
       {empty && span.status !== "error" && (
-        <div className="py-12 text-center text-sm text-muted-foreground">No content recorded for this span.</div>
+        <div className="py-12 text-center text-sm text-muted-foreground">{uiT("ui.f34a6b7cea2ffd88")}</div>
       )}
     </div>
   );

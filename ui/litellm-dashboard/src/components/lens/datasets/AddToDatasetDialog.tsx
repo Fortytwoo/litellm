@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { Check, DatabaseZap, Loader2, RotateCw, TriangleAlert } from "lucide-react";
@@ -85,6 +89,8 @@ function useDatasetTarget(agentName: string) {
 }
 
 export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDatasetDialogProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { datasets, target, existingId, setPicked } = useDatasetTarget(agentName);
   const dataset = useDataset(existingId);
   const build = useBuildCases({ sources: [...sources], dataset_id: existingId ?? "" }, target !== null);
@@ -130,13 +136,16 @@ export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDa
         datasetId: base.id,
         body: { base_revision: base.revision, cases: revisionCases(base.cases, built, draft) },
       });
-      toast.success(`Added ${cases(chosen)} to ${saved.name}`, {
-        description: (
-          <button type="button" className="underline underline-offset-2" onClick={() => openSaved(saved.id)}>
-            Open dataset
-          </button>
-        ),
-      });
+      toast.success(
+        translateUi("ui.8e1f9c04459ae6dc", undefined, { v0: String(cases(chosen)), v1: String(saved.name) }),
+        {
+          description: (
+            <button type="button" className="underline underline-offset-2" onClick={() => openSaved(saved.id)}>
+              {translateUi("ui.8ea5b75e725aa2d2")}
+            </button>
+          ),
+        },
+      );
       onClose();
     } catch (error) {
       if (isRevisionConflict(error)) setConflict(true);
@@ -148,8 +157,8 @@ export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDa
     <Dialog open onOpenChange={(open) => !open && !busy && onClose()}>
       <DialogContent className="max-h-[90vh] grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-4 sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add to dataset</DialogTitle>
-          <DialogDescription>Saves a copy of each conversation, so it stays after the trace expires.</DialogDescription>
+          <DialogTitle>{uiT("ui.159d93ec1948b77b")}</DialogTitle>
+          <DialogDescription>{uiT("ui.5a72cdfcd392321e")}</DialogDescription>
         </DialogHeader>
         <TargetFields datasets={datasets} target={target} name={name} onTarget={pickTarget} onName={setName} />
         <CasePreview
@@ -163,11 +172,11 @@ export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDa
           {conflict ? <ConflictNotice onReload={() => void reload()} /> : <span />}
           <div className="flex gap-2">
             <Button variant="outline" disabled={busy} onClick={onClose}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button disabled={!canSave} onClick={() => void submit()}>
               {busy && <Loader2 aria-hidden="true" className="animate-spin motion-reduce:animate-none" />}
-              {chosen > 0 ? `Save ${cases(chosen)}` : "Save"}
+              {chosen > 0 ? uiT("ui.4b837b6e6fa7fa56", { v0: String(cases(chosen)) }) : uiT("ui.1509f561f241")}
             </Button>
           </div>
         </DialogFooter>
@@ -185,21 +194,23 @@ interface TargetFieldsProps {
 }
 
 function TargetFields({ datasets, target, name, onTarget, onName }: TargetFieldsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const nameId = useId();
   const items = [
-    { value: NEW_DATASET, label: "New dataset" },
+    { value: NEW_DATASET, label: uiT("ui.90174b80a0007ea0") },
     ...datasets.map((item) => ({ value: item.id, label: item.name })),
   ];
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       <label className="grid gap-1.5 text-xs text-muted-foreground">
-        Dataset
+        {uiT("ui.4411e525721e7dd8")}
         <Select value={target} items={items} onValueChange={(next: string | null) => next !== null && onTarget(next)}>
-          <SelectTrigger aria-label="Dataset" size="sm" className="w-full text-sm">
-            <SelectValue placeholder="Loading datasets…" />
+          <SelectTrigger aria-label={uiT("ui.4411e525721e7dd8")} size="sm" className="w-full text-sm">
+            <SelectValue placeholder={uiT("ui.d7fcee61faac0802")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={NEW_DATASET}>New dataset</SelectItem>
+            <SelectItem value={NEW_DATASET}>{uiT("ui.90174b80a0007ea0")}</SelectItem>
             {datasets.map((item) => (
               <SelectItem key={item.id} value={item.id}>
                 {item.name}
@@ -211,12 +222,12 @@ function TargetFields({ datasets, target, name, onTarget, onName }: TargetFields
       </label>
       {target === NEW_DATASET && (
         <label htmlFor={nameId} className="grid gap-1.5 text-xs text-muted-foreground">
-          Name
+          {uiT("ui.dcd1d5223f73")}
           <Input
             id={nameId}
             value={name}
             maxLength={120}
-            placeholder="checkout regressions"
+            placeholder={uiT("ui.5496b029bdddf643")}
             onChange={(event) => onName(event.target.value)}
             className="h-8"
           />
@@ -227,13 +238,15 @@ function TargetFields({ datasets, target, name, onTarget, onName }: TargetFields
 }
 
 function ConflictNotice({ onReload }: { onReload: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <p role="alert" className="flex items-center gap-2 text-xs text-destructive">
       <TriangleAlert aria-hidden="true" className="size-3.5" />
-      Someone saved this dataset since you opened it. Reload to add to the latest version.
+      {uiT("ui.a24cec800afe2abc")}
       <Button variant="outline" size="xs" onClick={onReload}>
         <RotateCw aria-hidden="true" />
-        Reload
+        {uiT("ui.bdc090ec61e3")}
       </Button>
     </p>
   );
@@ -248,11 +261,13 @@ interface CasePreviewProps {
 }
 
 function CasePreview({ build, draft, chosen, onToggle, onExpected }: CasePreviewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (build.isPending)
     return (
       <p role="status" className="flex items-center gap-2 py-6 text-sm text-muted-foreground">
         <Loader2 aria-hidden="true" className="size-4 animate-spin motion-reduce:animate-none" />
-        Reading the conversation…
+        {uiT("ui.65c280a9a093e1cf")}
       </p>
     );
   if (build.isError)
@@ -266,15 +281,15 @@ function CasePreview({ build, draft, chosen, onToggle, onExpected }: CasePreview
   return (
     <div className="flex min-h-0 flex-col gap-3 overflow-y-auto">
       <div className="flex items-baseline justify-between">
-        <p className="text-sm font-medium">Cases</p>
+        <p className="text-sm font-medium">{uiT("ui.2249bd503ec47d72")}</p>
         <p className="text-xs text-muted-foreground tabular-nums">
-          {chosen} of {cases.length} selected
+          {chosen} {uiT("ui.28391d3bc64ec15c")} {cases.length} {uiT("ui.d7cbbb688b2e506c")}
         </p>
       </div>
       {cases.length === 0 ? (
-        <p className="rounded-xl bg-muted/60 px-3 py-4 text-sm text-muted-foreground">Nothing new to add.</p>
+        <p className="rounded-xl bg-muted/60 px-3 py-4 text-sm text-muted-foreground">{uiT("ui.5fcf1ad4fac28631")}</p>
       ) : (
-        <ul aria-label="Cases to add" className="grid gap-2.5">
+        <ul aria-label={uiT("ui.2fe347bda4760ddb")} className="grid gap-2.5">
           {cases.map((item, index) => (
             <CaseTile
               key={item.id}
@@ -308,6 +323,8 @@ function CaseTile({
   onToggle: () => void;
   onExpected: (text: string) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const label = `Case ${index + 1}`;
   return (
     <li
@@ -325,7 +342,12 @@ function CaseTile({
         />
       )}
       <div className="flex min-w-0 items-start gap-2.5 pr-6">
-        <Checkbox checked={selected} onCheckedChange={onToggle} aria-label={`Include ${label}`} className="mt-0.5" />
+        <Checkbox
+          checked={selected}
+          onCheckedChange={onToggle}
+          aria-label={uiT("ui.8890b6d6a699740f", { v0: String(label) })}
+          className="mt-0.5"
+        />
         <span className="grid min-w-0 gap-0.5">
           <span className="line-clamp-2 text-sm font-medium text-foreground">{casePrompt(item) || label}</span>
           <span className="line-clamp-2 text-xs text-muted-foreground">{caseReplySummary(item)}</span>
@@ -334,20 +356,21 @@ function CaseTile({
       {item.messages.length > 0 && (
         <details className="pl-6.5 text-xs">
           <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-            Conversation · {item.messages.length} {item.messages.length === 1 ? "message" : "messages"}
+            {uiT("ui.4df1d87f05574b41")} {item.messages.length}{" "}
+            {item.messages.length === 1 ? uiT("ui.ab530a13e4591498") : uiT("ui.f5cccfb737512bed")}
           </summary>
           <CaseConversation messages={item.messages} />
         </details>
       )}
       {selected && (
         <label className="grid gap-1 pl-6.5 text-xs text-muted-foreground">
-          Expected
+          {uiT("ui.ca99b7f1b14ee2c0")}
           <Textarea
             value={expected}
             rows={1}
-            placeholder="What a good reply does (optional)"
+            placeholder={uiT("ui.0805ad8daf1097c3")}
             onChange={(event) => onExpected(event.target.value)}
-            aria-label={`Expected for ${label}`}
+            aria-label={uiT("ui.9b3c31bc7e386acd", { v0: String(label) })}
             className="min-h-8 text-sm"
           />
         </label>
@@ -375,14 +398,20 @@ export function CaseConversation({ messages }: { messages: readonly DatasetMessa
 }
 
 function SkippedList({ skipped }: { skipped: readonly SkippedCase[] }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="grid gap-1.5">
-      <p className="text-sm font-medium">Skipped</p>
-      <ul aria-label="Skipped" className="grid gap-1 text-xs text-muted-foreground">
+      <p className="text-sm font-medium">{uiT("ui.12698ce1ea5cd4ab")}</p>
+      <ul aria-label={uiT("ui.12698ce1ea5cd4ab")} className="grid gap-1 text-xs text-muted-foreground">
         {skipped.map((item, index) => (
           <li key={`${item.source.trace_id}-${item.source.span_id}-${index}`} className="flex gap-2">
             <span className="text-foreground">{SKIP_REASON_TEXT[item.reason]}</span>
-            {item.source.trace_id && <span className="truncate">trace {item.source.trace_id.slice(0, 12)}</span>}
+            {item.source.trace_id && (
+              <span className="truncate">
+                {uiT("ui.eafe895eb8119e6e")} {item.source.trace_id.slice(0, 12)}
+              </span>
+            )}
           </li>
         ))}
       </ul>
@@ -401,9 +430,11 @@ export interface AddToDatasetButtonProps {
 export function AddToDatasetButton({
   sources,
   agentName,
-  label = "Add to dataset",
+  label = translateUi("ui.159d93ec1948b77b"),
   className,
 }: AddToDatasetButtonProps) {
+  useDashboardLanguage();
+
   const allowed = useCanAddToDataset();
   const [open, setOpen] = useState(false);
   if (!allowed) return null;
@@ -416,7 +447,7 @@ export function AddToDatasetButton({
         onClick={() => setOpen(true)}
       >
         <DatabaseZap aria-hidden="true" className="size-3" />
-        {label}
+        {translateText(label)}
       </Button>
       {open && <AddToDatasetDialog sources={sources} agentName={agentName} onClose={() => setOpen(false)} />}
     </>

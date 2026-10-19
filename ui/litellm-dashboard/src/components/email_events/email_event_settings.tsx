@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -53,7 +57,7 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
 
     try {
       await updateEmailEventSettings(accessToken, { settings: eventSettings });
-      toast.success("Email event settings updated successfully");
+      toast.success(translateUi("ui.94ca3fe85f4de7f8"));
     } catch (error) {
       console.error("Failed to update email event settings:", error);
       toast.fromError(error);
@@ -65,7 +69,7 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
 
     try {
       await resetEmailEventSettings(accessToken);
-      toast.success("Email event settings reset to defaults");
+      toast.success(translateUi("ui.00b052e103145f5b"));
       // Refresh settings after reset
       fetchEventSettings();
     } catch (error) {
@@ -94,8 +98,8 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Email Notifications</CardTitle>
-        <p className="text-sm text-muted-foreground">Select which events should trigger email notifications.</p>
+        <CardTitle className="text-base">{uiT("ui.04e0f1e94f7985f8")}</CardTitle>
+        <p className="text-sm text-muted-foreground">{uiT("ui.edf3b3f089ba4bf8")}</p>
       </CardHeader>
 
       <CardContent>
@@ -117,7 +121,9 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
                 />
                 <div className="ml-3">
                   <p className="text-sm">{setting.event}</p>
-                  <div className="block text-sm text-muted-foreground">{getEventDescription(setting.event)}</div>
+                  <div className="block text-sm text-muted-foreground">
+                    {translateText(getEventDescription(setting.event))}
+                  </div>
                 </div>
               </div>
             ))}
@@ -129,7 +135,7 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
             {uiT("ui.35322b5bb5a2")}
           </Button>
           <Button variant="secondary" onClick={handleResetSettings} disabled={loading}>
-            Reset to Defaults
+            {uiT("ui.0953e0d5167d771d")}
           </Button>
         </div>
       </CardContent>

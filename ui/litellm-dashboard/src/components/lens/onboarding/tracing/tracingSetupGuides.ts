@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import langgraphLogo from "../../../../../public/assets/logos/langgraph-color.svg";
 import langchainLogo from "../../../../../public/assets/logos/langchain.svg";
 import openaiAgentsLogo from "../../../../../public/assets/logos/openai-agents.svg";
@@ -29,7 +30,9 @@ export interface FrameworkGuide {
 export const FRAMEWORKS: readonly FrameworkGuide[] = [
   {
     id: "deepagents",
-    label: "DeepAgents",
+    get label() {
+      return translateUi("ui.c51031f90e3e82e4");
+    },
     logo: langgraphLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http deepagents openinference-instrumentation-langchain langchain-openai",
@@ -59,7 +62,9 @@ print(result["messages"][-1].content)`,
   },
   {
     id: "langgraph",
-    label: "LangGraph",
+    get label() {
+      return translateUi("ui.845bbc27a312cec7");
+    },
     logo: langgraphLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http langgraph openinference-instrumentation-langchain langchain-openai",
@@ -91,7 +96,9 @@ print(result["messages"][-1].content)`,
   },
   {
     id: "langchain",
-    label: "LangChain",
+    get label() {
+      return translateUi("ui.63c34d5ded165a69");
+    },
     logo: langchainLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http langchain openinference-instrumentation-langchain langchain-openai",
@@ -121,7 +128,9 @@ print(result["messages"][-1].content)`,
   },
   {
     id: "openai-agents",
-    label: "OpenAI Agents",
+    get label() {
+      return translateUi("ui.b90951441f1013fb");
+    },
     logo: openaiAgentsLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http openai-agents openinference-instrumentation-openai-agents",
@@ -149,7 +158,9 @@ print(result.final_output)`,
   },
   {
     id: "claude",
-    label: "Claude Agent SDK",
+    get label() {
+      return translateUi("ui.88c65262d2135f45");
+    },
     logo: anthropicLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http claude-agent-sdk openinference-instrumentation-claude-agent-sdk",
@@ -185,7 +196,9 @@ asyncio.run(main())`,
   },
   {
     id: "crewai",
-    label: "CrewAI",
+    get label() {
+      return translateUi("ui.5ed19ca34161ab69");
+    },
     logo: crewaiLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http crewai openinference-instrumentation-crewai",
@@ -220,7 +233,9 @@ print(Crew(agents=[agent], tasks=[task]).kickoff())`,
   },
   {
     id: "pydantic-ai",
-    label: "Pydantic AI",
+    get label() {
+      return translateUi("ui.e6b55c0756869a37");
+    },
     logo: pydanticAiLogo.src,
     install: "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http pydantic-ai",
     language: "python",
@@ -249,7 +264,9 @@ print(agent.run_sync("What is an agent trace?").output)`,
   },
   {
     id: "llamaindex",
-    label: "LlamaIndex",
+    get label() {
+      return translateUi("ui.bbef28c9ea693db8");
+    },
     logo: llamaindexLogo.src,
     install:
       "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http llama-index-core openinference-instrumentation-llama-index llama-index-llms-openai-like",
@@ -292,7 +309,9 @@ asyncio.run(main())`,
   },
   {
     id: "adk",
-    label: "Google ADK",
+    get label() {
+      return translateUi("ui.5595402fe7a883ec");
+    },
     logo: adkLogo.src,
     install: "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http google-adk",
     language: "python",
@@ -325,7 +344,9 @@ asyncio.run(InMemoryRunner(agent=agent).run_debug("What is an agent trace?"))`,
   },
   {
     id: "strands",
-    label: "Strands",
+    get label() {
+      return translateUi("ui.cae0bb48f7a53cea");
+    },
     logo: strandsLogo.src,
     install: 'pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http "strands-agents[otel]" openai',
     language: "python",
@@ -356,7 +377,9 @@ print(agent("What is an agent trace?"))`,
   },
   {
     id: "vercel",
-    label: "Vercel AI SDK",
+    get label() {
+      return translateUi("ui.490c9cb0b3e768b1");
+    },
     logo: vercelLogo.src,
     install:
       "npm install ai @ai-sdk/otel @opentelemetry/sdk-node @opentelemetry/exporter-trace-otlp-http @ai-sdk/openai-compatible",
@@ -393,7 +416,9 @@ try {
   },
   {
     id: "openclaw",
-    label: "OpenClaw",
+    get label() {
+      return translateUi("ui.a7b90ee8facf0aed");
+    },
     logo: openclawLogo.src,
     language: "json",
     quickstart: `{
@@ -421,7 +446,9 @@ try {
     fileName: "openclaw.json",
     note: 'Set LITELLM_TRACING_KEY to your Lens tracing key, then run openclaw agent --local --session-id first-trace --message "What is an agent trace?". Select research_agent in Lens. Restart an existing gateway after changing the config.',
     plugin: {
-      label: "diagnostics-otel plugin",
+      get label() {
+        return translateUi("ui.74ab9331da6654af");
+      },
       url: "https://docs.openclaw.ai/plugins/reference/diagnostics-otel",
       instruction:
         "Set your agent ID once in ~/.openclaw/openclaw.json. Keep your existing model and workspace settings when adding the tracing configuration.",
@@ -429,7 +456,9 @@ try {
   },
   {
     id: "hermes",
-    label: "Hermes",
+    get label() {
+      return translateUi("ui.66e0988d1198afe0");
+    },
     logo: hermesLogo.src,
     language: "yaml",
     quickstart: `resource_attributes:
@@ -446,14 +475,18 @@ backends:
     fileName: "hermes_otel.yaml",
     note: "Start a new Hermes session and ask a question. The configured name research_agent appears in Lens. Hermes' built-in diagnostic telemetry alone does not include the conversation content needed for investigations.",
     plugin: {
-      label: "community hermes-otel plugin",
+      get label() {
+        return translateUi("ui.20bfa3a2bbe7977f");
+      },
       url: "https://github.com/briancaffey/hermes-otel#install",
       instruction: "Set LITELLM_TRACING_KEY to your Lens tracing key, then add this to ~/.hermes/hermes_otel.yaml.",
     },
   },
   {
     id: "otel",
-    label: "OpenTelemetry",
+    get label() {
+      return translateUi("ui.ccc542051b196db0");
+    },
     logo: otelLogo.src,
     install: "pip install opentelemetry-distro opentelemetry-exporter-otlp-proto-http openai",
     language: "python",

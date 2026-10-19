@@ -7,9 +7,11 @@ import { chartColorValue, type ChartColor } from "./colors";
 export const CustomLegend = ({
   categories,
   colors,
+  formatLabel = formatCategoryName,
 }: {
   categories: readonly string[];
   colors: readonly ChartColor[];
+  formatLabel?: (category: string) => string;
 }) => (
   <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1">
     {categories.map((category, idx) => (
@@ -18,7 +20,7 @@ export const CustomLegend = ({
           className="h-2 w-2 shrink-0 rounded-full ring-4 ring-white"
           style={{ backgroundColor: chartColorValue(colors[idx % colors.length]) }}
         />
-        <p className="text-sm text-muted-foreground">{formatCategoryName(category)}</p>
+        <p className="text-sm text-muted-foreground">{formatLabel(category)}</p>
       </div>
     ))}
   </div>

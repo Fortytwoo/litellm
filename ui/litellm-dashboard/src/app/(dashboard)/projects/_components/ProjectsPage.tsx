@@ -72,12 +72,12 @@ export function ProjectsPage() {
           <Folder />
           {uiT("ui.04e2a9728af7")}
         </PageHeaderTitle>
-        <PageHeaderDescription>Manage projects within your teams</PageHeaderDescription>
+        <PageHeaderDescription>{uiT("ui.48f5bd1b41600800")}</PageHeaderDescription>
         {canCreateProject && (
           <PageHeaderControls>
             <Button onClick={() => setIsCreateModalVisible(true)}>
               <Plus className="size-4" />
-              Create Project
+              {uiT("ui.4d3c29d3258c7bbf")}
             </Button>
           </PageHeaderControls>
         )}
@@ -90,13 +90,17 @@ export function ProjectsPage() {
               <SearchIcon className="size-4 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Search projects by name, ID, description, or team..."
+              placeholder={uiT("ui.afe99f55d2da684c")}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
             {searchText && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setSearchText("")}>
+                <InputGroupButton
+                  size="icon-xs"
+                  aria-label={uiT("ui.3b7ea51793e9d906")}
+                  onClick={() => setSearchText("")}
+                >
                   <X />
                 </InputGroupButton>
               </InputGroupAddon>

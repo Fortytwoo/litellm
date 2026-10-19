@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Shield } from "lucide-react";
 
@@ -8,14 +9,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 const CONTENT_WIDTHS = ["w-24", "w-48", "w-60", "w-44", "w-52"];
 
 export default function SSOSettingsLoadingSkeleton() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <Card role="status" aria-label="Loading SSO configuration">
+    <Card role="status" aria-label={uiT("ui.9ae8c1806e09e7f9")}>
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-3">
           <Shield className="size-6 text-muted-foreground" />
           <div>
-            <h3 className="text-lg font-semibold text-foreground">SSO Configuration</h3>
-            <p className="text-sm text-muted-foreground">Manage Single Sign-On authentication settings</p>
+            <h3 className="text-lg font-semibold text-foreground">{uiT("ui.afd5751ed211f84e")}</h3>
+            <p className="text-sm text-muted-foreground">{uiT("ui.5f46184f85a8f87a")}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

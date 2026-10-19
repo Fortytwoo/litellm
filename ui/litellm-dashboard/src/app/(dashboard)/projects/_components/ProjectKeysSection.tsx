@@ -44,13 +44,17 @@ export function ProjectKeysSection({ projectId }: ProjectKeysSectionProps) {
               <SearchIcon className="size-3.5 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Filter by key name..."
+              placeholder={uiT("ui.328ccea5406c7d23")}
               value={keyAlias}
               onChange={(e) => setKeyAlias(e.target.value)}
             />
             {keyAlias && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Clear key filter" onClick={() => setKeyAlias("")}>
+                <InputGroupButton
+                  size="icon-xs"
+                  aria-label={uiT("ui.7ebed584871f46ec")}
+                  onClick={() => setKeyAlias("")}
+                >
                   <X />
                 </InputGroupButton>
               </InputGroupAddon>

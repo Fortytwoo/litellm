@@ -43,10 +43,12 @@ const teamModelCount = (team: Team): number => team.models?.length ?? 0;
 const teamKeyCount = (team: Team): number => team.keys_count ?? team.keys?.length ?? 0;
 
 function ResourcesCell({ team }: { team: Team }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const items = [
-    { key: "members" as const, label: "members", count: teamMemberCount(team) },
-    { key: "models" as const, label: "models", count: teamModelCount(team) },
-    { key: "keys" as const, label: "keys", count: teamKeyCount(team) },
+    { key: "members" as const, label: uiT("ui.17373ca1c7634a4b"), count: teamMemberCount(team) },
+    { key: "models" as const, label: uiT("ui.8edcc26c0f6c7256"), count: teamModelCount(team) },
+    { key: "keys" as const, label: uiT("ui.48a53f0774c8ceff"), count: teamKeyCount(team) },
   ];
 
   return (
@@ -91,6 +93,8 @@ interface TeamRowActionsProps {
 }
 
 function TeamRowActions({ team, canManage, onEditTeam, onDeleteTeam }: TeamRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const handleCopy = () => {
     void copyToClipboard(team.team_id, "Team ID copied");
   };
@@ -98,7 +102,7 @@ function TeamRowActions({ team, canManage, onEditTeam, onDeleteTeam }: TeamRowAc
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open team actions"
+        aria-label={uiT("ui.283db7a5ee00852a")}
         data-testid={`team-actions-${team.team_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -108,19 +112,19 @@ function TeamRowActions({ team, canManage, onEditTeam, onDeleteTeam }: TeamRowAc
         {canManage && (
           <DropdownMenuItem onClick={() => onEditTeam(team)} data-testid="team-action-edit">
             <Pencil />
-            Edit team
+            {uiT("ui.ced8519d92a6d4f7")}
           </DropdownMenuItem>
         )}
         <DropdownMenuItem onClick={handleCopy} data-testid="team-action-copy">
           <Copy />
-          Copy team ID
+          {uiT("ui.dae198e71a511224")}
         </DropdownMenuItem>
         {canManage && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={() => onDeleteTeam(team)} data-testid="team-action-delete">
               <Trash2 />
-              Delete team
+              {uiT("ui.9ff59cd469c06e79")}
             </DropdownMenuItem>
           </>
         )}
@@ -207,7 +211,9 @@ export const getTeamTableColumns = ({
     {
       id: "resources",
       meta: {
-        title: "Resources",
+        get title() {
+          return translateUi("ui.e89b30aa1dc30a6a");
+        },
         renderSkeleton: () => (
           <div className="flex items-center gap-1.5">
             <Skeleton className="h-6 w-12 rounded-md" />
@@ -216,7 +222,9 @@ export const getTeamTableColumns = ({
           </div>
         ),
       },
-      header: "Resources",
+      get header() {
+        return translateUi("ui.e89b30aa1dc30a6a");
+      },
       size: 210,
       enableSorting: false,
       cell: ({ row }) => <ResourcesCell team={row.original} />,
@@ -224,8 +232,16 @@ export const getTeamTableColumns = ({
     {
       id: "spend",
       accessorKey: "spend",
-      meta: { title: "Spend / Budget", skeleton: "meter", numeric: true },
-      header: "Spend / Budget",
+      meta: {
+        get title() {
+          return translateUi("ui.b5406e72f06b2464");
+        },
+        skeleton: "meter",
+        numeric: true,
+      },
+      get header() {
+        return translateUi("ui.b5406e72f06b2464");
+      },
       size: 200,
       enableSorting: false,
       cell: ({ row }) => (

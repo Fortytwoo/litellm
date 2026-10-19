@@ -64,16 +64,26 @@ const UnpricedUnitsCell = ({ unpriced }: { unpriced: number }) =>
   );
 
 const unpricedColumn = <TRow extends { unpriced: number }>(): ColumnDef<TRow> => ({
-  header: "Unpriced Units",
+  get header() {
+    return translateUi("ui.59d56ba6f58a5a4a");
+  },
   accessorKey: "unpriced",
   meta: { numeric: true },
   cell: ({ row }) => <UnpricedUnitsCell unpriced={row.original.unpriced} />,
 });
 
 const counterColumns: ColumnDef<CounterRow>[] = [
-  { header: "Counter", accessorKey: "counter", cell: ({ row }) => counterLabel(row.original.counter) },
   {
-    header: "Units",
+    get header() {
+      return translateUi("ui.a78cfdf4acfc2942");
+    },
+    accessorKey: "counter",
+    cell: ({ row }) => counterLabel(row.original.counter),
+  },
+  {
+    get header() {
+      return translateUi("ui.9fb6669a77ea48bb");
+    },
     accessorKey: "units",
     meta: { numeric: true },
     cell: ({ row }) => row.original.units.toLocaleString(),
@@ -101,7 +111,9 @@ const groupColumns = (label: string, emptyLabel: string): ColumnDef<GroupRow>[] 
       ),
   },
   {
-    header: "Units",
+    get header() {
+      return translateUi("ui.9fb6669a77ea48bb");
+    },
     accessorKey: "units",
     meta: { numeric: true },
     cell: ({ row }) => row.original.units.toLocaleString(),
@@ -120,22 +132,26 @@ const groupColumns = (label: string, emptyLabel: string): ColumnDef<GroupRow>[] 
 const teamColumns = groupColumns("Team", "No team");
 const keyColumns = groupColumns("Key", "No key");
 
-const CostMath = ({ counters, detail }: { counters: CounterRow[]; detail: GuardrailUsageDetail }) => (
-  <CalcPopover title="How this cost is calculated" formula="priced units × price per unit = cost, per counter">
-    <MathTable rows={counters.map(counterMathRow)} total={formatCost(detail.cost)} />
-    <p className="text-xs text-muted-foreground">Per-unit prices come from the cost map LiteLLM ships with.</p>
-    <UnpricedNote unpriced={detail.untracked_usage_units} provider={detail.provider} />
-  </CalcPopover>
-);
+const CostMath = ({ counters, detail }: { counters: CounterRow[]; detail: GuardrailUsageDetail }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <CalcPopover title={uiT("ui.27ef3c481acdf586")} formula="priced units × price per unit = cost, per counter">
+      <MathTable rows={counters.map(counterMathRow)} total={formatCost(detail.cost)} />
+      <p className="text-xs text-muted-foreground">{uiT("ui.f0fa0b6a67c04a07")}</p>
+      <UnpricedNote unpriced={detail.untracked_usage_units} provider={detail.provider} />
+    </CalcPopover>
+  );
+};
 
-const UnitsMath = ({ units }: { units: GuardrailUsageDetail["usage_units"] }) => (
-  <CalcPopover title="How usage units add up" formula="counter + counter + … = usage units">
-    <MathTable rows={unitsMathRows(units)} total={totalUnits(units).toLocaleString()} />
-    <p className="text-xs text-muted-foreground">
-      Units are the billable counters the provider reported for this guardrail, added up over every call.
-    </p>
-  </CalcPopover>
-);
+const UnitsMath = ({ units }: { units: GuardrailUsageDetail["usage_units"] }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <CalcPopover title={uiT("ui.76f08349a5a872ea")} formula="counter + counter + … = usage units">
+      <MathTable rows={unitsMathRows(units)} total={totalUnits(units).toLocaleString()} />
+      <p className="text-xs text-muted-foreground">{uiT("ui.072562000d53a6df")}</p>
+    </CalcPopover>
+  );
+};
 
 const TableHeading = ({ title }: { title: string }) => (
   <h6 className="text-sm font-semibold text-foreground">{title}</h6>
@@ -148,16 +164,14 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
   const unpriced = unpricedSummary(detail.untracked_usage_units);
 
   return (
-    <section className="space-y-4" aria-label="Usage and cost">
+    <section className="space-y-4" aria-label={uiT("ui.46351fb0732a385a")}>
       <div>
-        <h5 className="mb-0 text-base font-semibold text-foreground">Usage &amp; Cost</h5>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          Billable units the provider reported for this guardrail and what LiteLLM priced them at
-        </p>
+        <h5 className="mb-0 text-base font-semibold text-foreground">{uiT("ui.f70903efee7d221e")}</h5>
+        <p className="mt-0.5 text-xs text-muted-foreground">{uiT("ui.4576355cbe4d3330")}</p>
       </div>
 
       {counters.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No billable usage units were recorded in this period.</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.831ac32bdfc4762b")}</p>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -170,7 +184,7 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
               hint={<CostMath counters={counters} detail={detail} />}
             />
             <MetricCard
-              label="Usage Units"
+              label={uiT("ui.761ff3d777b99b2c")}
               value={totalUnits(detail.usage_units).toLocaleString()}
               subtitle={`${counters.length} ${counters.length === 1 ? "counter" : "counters"}`}
               hint={<UnitsMath units={detail.usage_units} />}
@@ -182,7 +196,7 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
             data={counters}
             getRowId={(row) => row.counter}
             size="compact"
-            toolbar={() => <TableHeading title="By counter" />}
+            toolbar={() => <TableHeading title={uiT("ui.9277adf82393a0af")} />}
           />
 
           <div className="grid gap-4 lg:grid-cols-2">
@@ -191,14 +205,14 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
               data={groupRows(detail.usage_units_by_team, detail.cost_by_team, detail.untracked_usage_units_by_team)}
               getRowId={(row) => row.id || "no-team"}
               size="compact"
-              toolbar={() => <TableHeading title="By team" />}
+              toolbar={() => <TableHeading title={uiT("ui.18e440d893593d99")} />}
             />
             <DataTable
               columns={keyColumns}
               data={groupRows(detail.usage_units_by_key, detail.cost_by_key, detail.untracked_usage_units_by_key)}
               getRowId={(row) => row.id || "no-key"}
               size="compact"
-              toolbar={() => <TableHeading title="By key" />}
+              toolbar={() => <TableHeading title={uiT("ui.f6fa88a3eddd5a7e")} />}
             />
           </div>
         </>

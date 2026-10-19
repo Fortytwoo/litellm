@@ -30,6 +30,7 @@ import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/compone
 import { CommandPaletteTrigger } from "@/components/CommandPalette/CommandPaletteTrigger";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 
 // Top bar for the dashboard shell. Sits only over the content column (the brand
 // lives in the sidebar header); mirrors the design's breadcrumb-left / tools-right layout.
@@ -61,7 +62,7 @@ export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: Rea
           </BreadcrumbItem>
           <BreadcrumbSeparator className="max-md:hidden" />
           <BreadcrumbItem className="min-w-0">
-            <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
+            <BreadcrumbPage className="truncate">{translateText(title)}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -137,9 +138,9 @@ export const getRequestLogsTableColumns = ({
 
       const tooltipParts = [
         sessionLlmCount > 0 && `${sessionLlmCount} LLM`,
-        sessionAgentCount > 0 && `${sessionAgentCount} Agent`,
+        sessionAgentCount > 0 && `${sessionAgentCount} ${translateUi("nav.agents")}`,
         sessionMcpCount > 0 && `${sessionMcpCount} MCP`,
-        log.session_cache_hit_count != null && `${log.session_cache_hit_count} cache hit`,
+        log.session_cache_hit_count != null && `${log.session_cache_hit_count} ${translateUi("supplement.cacheHits")}`,
       ].filter(Boolean);
       return <CellTooltip content={tooltipParts.join(" • ")} trigger={sessionTypeBadge} />;
     },
@@ -161,8 +162,8 @@ export const getRequestLogsTableColumns = ({
         return (
           <StatusBadge
             tone="warning"
-            label={`${batchCounts.successful}/${total} succeeded`}
-            tooltip={`${batchCounts.failed} of ${total} batch requests failed`}
+            label={translateUi("supplement.batchSuccess", undefined, { count: batchCounts.successful, total })}
+            tooltip={translateUi("supplement.batchFailed", undefined, { count: batchCounts.failed, total })}
           />
         );
       }
@@ -197,7 +198,12 @@ export const getRequestLogsTableColumns = ({
       if (batchId) {
         return (
           <div className="flex flex-col">
-            <IdCell value={batchId} variant="plain" copyable tooltip={`Batch ${batchId} (row: ${log.request_id})`} />
+            <IdCell
+              value={batchId}
+              variant="plain"
+              copyable
+              tooltip={translateUi("supplement.batchRow", undefined, { id: batchId, row: log.request_id })}
+            />
             <span className="text-[10px] text-muted-foreground">{translateUi("ui.ac147bbffdf3")}</span>
           </div>
         );
@@ -242,7 +248,7 @@ export const getRequestLogsTableColumns = ({
           )}
           {mcpCount > 0 && mcpSpend > 0 && (
             <span className="text-[10px] text-warning">
-              incl. {getSpendString(mcpSpend)} from {mcpCount} MCP
+              {translateUi("supplement.mcpSpend", undefined, { spend: getSpendString(mcpSpend), count: mcpCount })}
             </span>
           )}
         </div>
@@ -266,7 +272,7 @@ export const getRequestLogsTableColumns = ({
       return (
         <div className="flex flex-col items-end">
           <CellTooltip
-            content={`${ms}ms`}
+            content={translateUi("ui.7b9b98b759ff033c", undefined, { v0: String(ms) })}
             trigger={<span className="max-w-[15ch] truncate inline-block">{(ms / 1000).toFixed(2)}</span>}
           />
           {sessionTotalMs != null && (
@@ -293,7 +299,7 @@ export const getRequestLogsTableColumns = ({
       if (ttftMs <= 0) return <span>-</span>;
       return (
         <CellTooltip
-          content={`${ttftMs}ms`}
+          content={translateUi("ui.7b9b98b759ff033c", undefined, { v0: String(ttftMs) })}
           trigger={<span className="max-w-[15ch] truncate inline-block">{(ttftMs / 1000).toFixed(2)}</span>}
         />
       );

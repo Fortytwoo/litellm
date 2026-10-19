@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -52,7 +54,12 @@ const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, 
       const response = (await importMCPServers(accessToken, parsed.payload)) as MCPConnectorImportResponse;
       setResult(response);
       if (response.imported.length > 0) {
-        toast.success(`Imported ${response.imported.length} MCP server${response.imported.length === 1 ? "" : "s"}`);
+        toast.success(
+          translateUi("ui.37058fc63204b9c7", undefined, {
+            v0: String(response.imported.length),
+            v1: String(response.imported.length === 1 ? "" : translateUi("inflections.s")),
+          }),
+        );
         onImported();
       }
     } catch (error) {
@@ -67,15 +74,15 @@ const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, 
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Import MCP Connectors</DialogTitle>
+          <DialogTitle>{uiT("ui.c20cf7d5c6aa8c13")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Paste an Anthropic connector configuration: the <code>mcpServers</code> mapping from a Claude Desktop /
-            Claude Code config file, or the <code>mcp_servers</code> array from the Anthropic Messages API.
+            {uiT("ui.dcd1ee5471f21cdb")} <code>mcpServers</code> {uiT("ui.ede0845a926dd777")} <code>mcp_servers</code>{" "}
+            {uiT("ui.4a4e9e42b8fe05d3")}
           </p>
           <Textarea
-            aria-label="Connector JSON"
+            aria-label={uiT("ui.6a46e1733b45bb09")}
             value={configText}
             onChange={(e) => setConfigText(e.target.value)}
             placeholder={PLACEHOLDER}
@@ -91,13 +98,13 @@ const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, 
             <div className="space-y-2 text-sm">
               {result.imported.length > 0 && (
                 <div>
-                  <span className="font-semibold">Imported:</span>{" "}
+                  <span className="font-semibold">{uiT("ui.1cf90a038f31f9db")}</span>{" "}
                   {result.imported.map((entry) => entry.alias || entry.name).join(", ")}
                 </div>
               )}
               {result.skipped.length > 0 && (
                 <div>
-                  <span className="font-semibold">Skipped:</span>
+                  <span className="font-semibold">{uiT("ui.bdba73448fdc3e40")}</span>
                   <ul className="ml-4 list-disc">
                     {result.skipped.map((entry) => (
                       <li key={entry.name}>
@@ -109,7 +116,7 @@ const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, 
               )}
               {result.errors.length > 0 && (
                 <div>
-                  <span className="font-semibold">Failed:</span>
+                  <span className="font-semibold">{uiT("ui.89e0c2f73fe94c4d")}</span>
                   <ul className="ml-4 list-disc">
                     {result.errors.map((entry) => (
                       <li key={entry.name}>
@@ -126,7 +133,7 @@ const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, 
               {uiT("ui.7d9eb7acb13e")}
             </Button>
             <Button onClick={handleImport} disabled={isImporting}>
-              {isImporting ? "Importing..." : "Import"}
+              {isImporting ? uiT("ui.b7a3cd401b23dd41") : uiT("ui.2cff9baabf56ca00")}
             </Button>
           </div>
         </div>

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ArrowLeft, ChevronDown, RefreshCw } from "lucide-react";
@@ -73,11 +75,21 @@ const STATUS_DOT: Record<RunStatus, string> = {
 
 const RUN_STATUS_OPTIONS: RunStatus[] = ["pending", "running", "paused", "completed", "failed"];
 const STATUS_LABELS: Record<RunStatus, string> = {
-  pending: "Pending",
-  running: "Running",
-  paused: "Paused",
-  completed: "Completed",
-  failed: "Failed",
+  get pending() {
+    return translateUi("ui.331551b0de41");
+  },
+  get running() {
+    return translateUi("ui.f4ccae29e1bb0c20");
+  },
+  get paused() {
+    return translateUi("ui.e159b06187d369a0");
+  },
+  get completed() {
+    return translateUi("ui.22a970d2e5b1cc23");
+  },
+  get failed() {
+    return translateUi("ui.031a8f0f659d");
+  },
 };
 
 const EVENT_COLOR: Record<string, { bar: string; text: string }> = {
@@ -132,6 +144,8 @@ const StatusDot: React.FC<{ status: RunStatus; className?: string }> = ({ status
 const TRUNCATE_AT = 120;
 
 const TruncatedValue: React.FC<{ value: string }> = ({ value }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [expanded, setExpanded] = useState(false);
   if (value.length <= TRUNCATE_AT) {
     return <span className="break-all text-foreground">{value}</span>;
@@ -140,7 +154,7 @@ const TruncatedValue: React.FC<{ value: string }> = ({ value }) => {
     <span className="break-all text-foreground">
       {expanded ? value : value.slice(0, TRUNCATE_AT) + "…"}
       <Button variant="link" size="xs" className="h-auto px-1 py-0 text-[11px]" onClick={() => setExpanded((e) => !e)}>
-        {expanded ? "less" : "more"}
+        {expanded ? uiT("ui.4fdd3b6201a22c78") : uiT("ui.187897ce0afc")}
       </Button>
     </span>
   );
@@ -149,13 +163,15 @@ const TruncatedValue: React.FC<{ value: string }> = ({ value }) => {
 // ── metadata card ─────────────────────────────────────────────────────────────
 
 const MetadataCard: React.FC<{ run: WorkflowRun }> = ({ run }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const meta = run.metadata ?? {};
 
   const primaryFields: { key: string; label: string }[] = [
-    { key: "state", label: "state" },
-    { key: "worktree_path", label: "worktree" },
-    { key: "grill_session_id", label: "grill session" },
-    { key: "session_id", label: "session" },
+    { key: "state", label: uiT("ui.4ba69735ca53765e") },
+    { key: "worktree_path", label: uiT("ui.d63516bc98983230") },
+    { key: "grill_session_id", label: uiT("ui.599a6c038fbd1a86") },
+    { key: "session_id", label: uiT("ui.3f3af1ecebbd1410") },
   ];
 
   const primaryKeys = new Set(["title", ...primaryFields.map((f) => f.key)]);
@@ -177,15 +193,15 @@ const MetadataCard: React.FC<{ run: WorkflowRun }> = ({ run }) => {
 
       {/* key fields grid */}
       <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-x-6 gap-y-2 px-5 py-3 font-mono text-xs">
-        <FieldPair label="status">
+        <FieldPair label={uiT("ui.073c1634c496cdb6")}>
           <span className="capitalize text-foreground">{run.status}</span>
         </FieldPair>
-        <FieldPair label="created">
+        <FieldPair label={uiT("ui.406effb1e9c59672")}>
           <span className="text-foreground">{timeAgo(run.created_at)}</span>
         </FieldPair>
 
         {meta.pr_url && (
-          <FieldPair label="pr">
+          <FieldPair label={uiT("ui.0510eddd78110203")}>
             <a
               href={String(meta.pr_url)}
               target="_blank"
@@ -234,8 +250,10 @@ const GanttTimeline: React.FC<{
   run: WorkflowRun;
   events: WorkflowRunEvent[];
 }> = ({ run, events }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (events.length === 0) {
-    return <div className="py-4 font-mono text-xs text-muted-foreground">No events recorded</div>;
+    return <div className="py-4 font-mono text-xs text-muted-foreground">{uiT("ui.089f2c1bd95a28b1")}</div>;
   }
 
   const runStart = new Date(run.created_at).getTime();
@@ -305,24 +323,24 @@ const GanttTimeline: React.FC<{
                     <TooltipContent className="font-mono text-[11px] leading-relaxed">
                       <div className="flex flex-col">
                         <div>
-                          <span className="opacity-70">type: </span>
+                          <span className="opacity-70">{uiT("ui.f7cf39ee72f47395")} </span>
                           <span>{ev.event_type}</span>
                         </div>
                         <div>
-                          <span className="opacity-70">step: </span>
+                          <span className="opacity-70">{uiT("ui.3596fbeb37fe4384")} </span>
                           {ev.step_name}
                         </div>
                         <div>
-                          <span className="opacity-70">seq: </span>
+                          <span className="opacity-70">{uiT("ui.532ee976ed0a87d7")} </span>
                           {ev.sequence_number}
                         </div>
                         <div>
-                          <span className="opacity-70">time: </span>
+                          <span className="opacity-70">{uiT("ui.9abf0068949e9d52")} </span>
                           {timeAgo(ev.created_at)}
                         </div>
                         {ev.data && Object.keys(ev.data).length > 0 && (
                           <div>
-                            <span className="opacity-70">data: </span>
+                            <span className="opacity-70">{uiT("ui.ff72caa36dca2baa")} </span>
                             {JSON.stringify(ev.data)}
                           </div>
                         )}
@@ -459,8 +477,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       {
         id: "run",
         accessorFn: (row) => `${runTitle(row)} ${row.run_id}`,
-        header: "Run",
-        meta: { title: "Run", skeleton: "twoLine" },
+        header: uiT("ui.00d60e31a4e6b834"),
+        meta: { title: uiT("ui.00d60e31a4e6b834"), skeleton: "twoLine" },
         cell: ({ row }) => {
           const run = row.original;
           return (
@@ -514,9 +532,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       {/* page header */}
       <div className="mb-5">
         <div className="text-lg font-semibold text-foreground">{uiT("ui.a444842d2c72")}</div>
-        <div className="mt-0.5 text-[13px] text-muted-foreground">
-          Durable state tracking for agents and automated workflows
-        </div>
+        <div className="mt-0.5 text-[13px] text-muted-foreground">{uiT("ui.8942d58bb9db5c35")}</div>
       </div>
 
       <DataTable
@@ -524,8 +540,10 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
         columns={columns}
         getRowId={(run) => run.run_id}
         isLoading={loadingRuns}
-        loadingMessage="Loading workflow runs…"
-        noDataMessage={<div className="py-6 text-center text-[13px] text-muted-foreground">No workflow runs yet</div>}
+        loadingMessage={uiT("ui.c436c1b01163772b")}
+        noDataMessage={
+          <div className="py-6 text-center text-[13px] text-muted-foreground">{uiT("ui.878dcecd1b25367f")}</div>
+        }
         paginationMode="client"
         pageSizeOptions={[50, 100]}
         filterMode="client"
@@ -541,7 +559,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               table={table}
               searchValue={globalFilter}
               onSearchChange={setGlobalFilter}
-              searchPlaceholder="Search runs…"
+              searchPlaceholder={uiT("ui.ab1831881896aa2e")}
               onRefresh={fetchRuns}
               isRefreshing={loadingRuns}
               onOpenFilters={() => setFiltersOpen(true)}
@@ -551,7 +569,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
               title={uiT("ui.546ebb8eb993")}
-              description="Narrow down workflow runs"
+              description={uiT("ui.8a6d4248bd14e128")}
             >
               {({ get, set }) => (
                 <>
@@ -562,10 +580,10 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                       onValueChange={(value: string | null) => set("status", value ?? "")}
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="All statuses" />
+                        <SelectValue placeholder={uiT("ui.8ee57323a6f24cc7")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>All statuses</SelectItem>
+                        <SelectItem value={null}>{uiT("ui.8ee57323a6f24cc7")}</SelectItem>
                         {RUN_STATUS_OPTIONS.map((status) => (
                           <SelectItem key={status} value={status}>
                             {STATUS_LABELS[status]}
@@ -578,7 +596,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                     <Input
                       value={(get("workflow_type") as string) ?? ""}
                       onChange={(event) => set("workflow_type", event.target.value)}
-                      placeholder="Filter by type…"
+                      placeholder={uiT("ui.a6223b775db79803")}
                     />
                   </DataTableFilterField>
                 </>
@@ -594,10 +612,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
           showCloseButton={false}
           className="overflow-y-auto p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-[680px]"
         >
-          <SheetTitle className="sr-only">Workflow run details</SheetTitle>
-          <SheetDescription className="sr-only">
-            Metadata, timeline and messages for the selected workflow run
-          </SheetDescription>
+          <SheetTitle className="sr-only">{uiT("ui.926ab37ef975270d")}</SheetTitle>
+          <SheetDescription className="sr-only">{uiT("ui.c37c8add140d2c34")}</SheetDescription>
           {!selectedRun ? null : loadingDetail ? (
             <div className="flex justify-center py-20">
               <UiLoadingSpinner className="size-8 text-muted-foreground" />
@@ -613,7 +629,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                   onClick={() => setDrawerOpen(false)}
                 >
                   <ArrowLeft />
-                  close
+                  {uiT("ui.310ff200149b44a3")}
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => fetchRunDetail(selectedRun)}>
                   <RefreshCw />
@@ -627,10 +643,10 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               {/* collapsible sections */}
               <div className="divide-y overflow-hidden rounded-lg border">
                 <DetailSection
-                  title="Timeline"
+                  title={uiT("ui.9dcff98e275f0cb9")}
                   meta={
                     <>
-                      {events.length} {events.length === 1 ? "event" : "events"}
+                      {events.length} {events.length === 1 ? uiT("ui.b8e1f80bd70ae078") : uiT("ui.862417b9e7c3720b")}
                     </>
                   }
                   defaultOpen
@@ -639,7 +655,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                 </DetailSection>
                 <DetailSection title={uiT("ui.04d7b4833927")} meta={messages.length}>
                   {messages.length === 0 ? (
-                    <div className="py-3 font-mono text-xs text-muted-foreground">No messages</div>
+                    <div className="py-3 font-mono text-xs text-muted-foreground">{uiT("ui.a06faf2668c28d0b")}</div>
                   ) : (
                     <div>
                       {messages.map((msg) => (

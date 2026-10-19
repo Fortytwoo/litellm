@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
@@ -34,12 +36,12 @@ function CreateProjectForm({ onClose }: { onClose: () => void }) {
 
     createMutation.mutate(params, {
       onSuccess: () => {
-        toast.success("Project created successfully");
+        toast.success(translateUi("ui.927a9b433245fc3f"));
         form.reset(emptyProjectFormValues);
         onClose();
       },
       onError: (error) => {
-        toast.error(error.message || "Failed to create project");
+        toast.error(error.message || translateUi("ui.518e6db15484081c"));
       },
     });
   });
@@ -59,7 +61,7 @@ function CreateProjectForm({ onClose }: { onClose: () => void }) {
         </Button>
         <Button type="button" onClick={() => void handleSubmit()} disabled={createMutation.isPending}>
           {createMutation.isPending ? <UiLoadingSpinner /> : <FolderPlus />}
-          Create Project
+          {uiT("ui.4d3c29d3258c7bbf")}
         </Button>
       </div>
     </form>
@@ -67,11 +69,13 @@ function CreateProjectForm({ onClose }: { onClose: () => void }) {
 }
 
 export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[720px]">
         <DialogHeader>
-          <DialogTitle className="text-lg">Create New Project</DialogTitle>
+          <DialogTitle className="text-lg">{uiT("ui.e6aa22b9d2b6bd11")}</DialogTitle>
         </DialogHeader>
         <CreateProjectForm onClose={onClose} />
       </DialogContent>

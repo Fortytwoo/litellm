@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { z } from "zod";
@@ -70,7 +72,7 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
 
       const response = await keyCreateCall(accessToken, userID, formData);
       setTokenData(response);
-      toast.success("SCIM token created successfully");
+      toast.success(translateUi("ui.0224719bc0ceace9"));
     } catch (error: any) {
       console.error("Error creating SCIM token:", error);
       toast.fromError("Failed to create SCIM token: " + parseErrorMessage(error));
@@ -84,12 +86,9 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
       <Card>
         <CardContent>
           <div className="flex items-center mb-4">
-            <CardTitle>SCIM Configuration</CardTitle>
+            <CardTitle>{uiT("ui.1c34f6e397170ec3")}</CardTitle>
           </div>
-          <p className="text-muted-foreground">
-            System for Cross-domain Identity Management (SCIM) allows you to automatically provision and manage users
-            and groups in LiteLLM.
-          </p>
+          <p className="text-muted-foreground">{uiT("ui.0db6af3b744a3813")}</p>
 
           <Separator className="my-6" />
 
@@ -100,15 +99,13 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                 <div className="flex items-center justify-center w-6 h-6 rounded-full bg-info/15 text-info mr-2">1</div>
                 <h3 className="text-lg font-medium flex items-center">
                   <Link className="h-5 w-5 mr-2" />
-                  SCIM Tenant URL
+                  {uiT("ui.5f451932a6e224e4")}
                 </h3>
               </div>
-              <p className="text-muted-foreground mb-3">
-                Use this URL in your identity provider SCIM integration settings.
-              </p>
+              <p className="text-muted-foreground mb-3">{uiT("ui.7a8b7c63e2c96ca2")}</p>
               <div className="flex items-center">
                 <Input value={scimBaseUrl} disabled={true} readOnly className="grow" />
-                <CopyToClipboard text={scimBaseUrl} onCopy={() => toast.success("URL copied to clipboard")}>
+                <CopyToClipboard text={scimBaseUrl} onCopy={() => toast.success(translateUi("ui.2f396c3e6698a5ae"))}>
                   <Button type="button" className="ml-2 flex items-center">
                     <Copy />
                     {uiT("ui.e21f935f11d7")}
@@ -123,25 +120,22 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                 <div className="flex items-center justify-center w-6 h-6 rounded-full bg-info/15 text-info mr-2">2</div>
                 <h3 className="text-lg font-medium flex items-center">
                   <KeyRound className="h-5 w-5 mr-2" />
-                  Authentication Token
+                  {uiT("ui.c856c7eb1cf5f532")}
                 </h3>
               </div>
 
               <Alert variant="info" className="mb-4">
                 <Info />
-                <AlertTitle>Using SCIM</AlertTitle>
-                <AlertDescription>
-                  You need a SCIM token to authenticate with the SCIM API. Create one below and use it in your SCIM
-                  provider configuration.
-                </AlertDescription>
+                <AlertTitle>{uiT("ui.db990779fbd9efd3")}</AlertTitle>
+                <AlertDescription>{uiT("ui.d8de6f822613c675")}</AlertDescription>
               </Alert>
 
               {!tokenData ? (
                 <div className="bg-muted p-4 rounded-lg">
                   <form onSubmit={form.handleSubmit(handleCreateSCIMToken)}>
                     <FieldGroup>
-                      <FormField control={form.control} name="key_alias" label="Token Name">
-                        {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="SCIM Access Token" />}
+                      <FormField control={form.control} name="key_alias" label={uiT("ui.fdb9d557c85ce051")}>
+                        {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.2a9b671382a755bc")} />}
                       </FormField>
                       <div>
                         <Button
@@ -151,7 +145,7 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                           className="flex items-center"
                         >
                           {isCreatingToken ? <UiLoadingSpinner className="size-4" /> : <KeyRound />}
-                          Create SCIM Token
+                          {uiT("ui.579fb31695030990")}
                         </Button>
                       </div>
                     </FieldGroup>
@@ -161,14 +155,15 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                 <Card className="block p-6 border border-warning/30 bg-warning/10">
                   <div className="flex items-center mb-2 text-warning">
                     <CircleAlert className="h-5 w-5 mr-2" />
-                    <h4 className="text-lg font-medium text-warning">Your SCIM Token</h4>
+                    <h4 className="text-lg font-medium text-warning">{uiT("ui.cd3008b4fec1edd6")}</h4>
                   </div>
-                  <p className="text-warning mb-4 font-medium">
-                    Make sure to copy this token now. You will not be able to see it again.
-                  </p>
+                  <p className="text-warning mb-4 font-medium">{uiT("ui.498d3a6193284de8")}</p>
                   <div className="flex items-center">
                     <Input value={tokenData.key} className="grow mr-2" type="password" disabled={true} readOnly />
-                    <CopyToClipboard text={tokenData.key} onCopy={() => toast.success("Token copied to clipboard")}>
+                    <CopyToClipboard
+                      text={tokenData.key}
+                      onCopy={() => toast.success(translateUi("ui.ce28f2a3666f03b1"))}
+                    >
                       <Button type="button" className="flex items-center">
                         <Copy />
                         {uiT("ui.e21f935f11d7")}
@@ -182,7 +177,7 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                     onClick={() => setTokenData(null)}
                   >
                     <CirclePlus />
-                    Create Another Token
+                    {uiT("ui.4c09ca6b449e2e65")}
                   </Button>
                 </Card>
               )}

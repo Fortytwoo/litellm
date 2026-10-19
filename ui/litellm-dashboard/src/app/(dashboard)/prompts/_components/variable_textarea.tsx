@@ -79,7 +79,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
       {/* Variable Management - Clear and Functional */}
       {variables.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-muted-foreground mr-1">Detected variables:</span>
+          <span className="text-xs text-muted-foreground mr-1">{uiT("ui.1a0abe130440b73e")}</span>
           {variables.map((variable, index) => (
             <Popover
               key={`${variable.start}-${index}`}
@@ -115,12 +115,12 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
               </PopoverTrigger>
               <PopoverContent className="w-[216px]">
                 <div className="p-2">
-                  <div className="text-xs text-muted-foreground mb-2">Edit variable name</div>
+                  <div className="text-xs text-muted-foreground mb-2">{uiT("ui.0426e9baabba6713")}</div>
                   <Input
                     value={newVariableName}
                     onChange={(e) => setNewVariableName(e.target.value)}
                     onKeyDown={(event) => event.key === "Enter" && handleVariableEdit()}
-                    placeholder="Variable name"
+                    placeholder={uiT("ui.0b64682bead3a63a")}
                     autoFocus
                   />
                   <div className="flex gap-2 mt-2">

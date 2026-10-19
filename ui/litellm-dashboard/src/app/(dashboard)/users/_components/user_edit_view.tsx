@@ -1,4 +1,6 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
@@ -140,10 +142,12 @@ const changedLimit = (value: number | null, stored: number | null | undefined): 
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -382,7 +386,7 @@ export function UserEditView({
               onChange={setModelMaxBudget}
               availableModels={userModels}
               usage={userData.user_info?.model_max_budget_usage}
-              hint="Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds."
+              hint={uiT("ui.b1c6d6497da1")}
             />
           )}
 

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { RoutingGroup } from "./types";
 
 export const STRATEGIES_WITH_ARGS = new Set<string>(["latency-based-routing", "usage-based-routing"]);
@@ -69,7 +70,9 @@ export const buildRoutingGroupPayload = (values: RoutingGroupFormValues): Routin
       return {
         ok: false,
         field: "model_priorities",
-        message: "Set a priority for each selected model and remove unused priorities",
+        get message() {
+          return translateUi("ui.d098984562d0e648");
+        },
       };
     }
     if (
@@ -81,7 +84,9 @@ export const buildRoutingGroupPayload = (values: RoutingGroupFormValues): Routin
       return {
         ok: false,
         field: "model_priorities",
-        message: "Priorities must be whole numbers from 1 to 9007199254740991",
+        get message() {
+          return translateUi("ui.51c7402b9b119381");
+        },
       };
     }
     return {
@@ -101,6 +106,12 @@ export const buildRoutingGroupPayload = (values: RoutingGroupFormValues): Routin
   try {
     return { ok: true, group: { ...base, routing_strategy_args: JSON.parse(args) as Record<string, unknown> } };
   } catch {
-    return { ok: false, field: "routing_strategy_args", message: "Must be valid JSON" };
+    return {
+      ok: false,
+      field: "routing_strategy_args",
+      get message() {
+        return translateUi("ui.ce7ac4022be5b9dd");
+      },
+    };
   }
 };

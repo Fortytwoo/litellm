@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCloudZeroDryRun } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroDryRun";
 import { useCloudZeroExport } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroExport";
@@ -42,7 +44,10 @@ const DetailRow = ({ label, children }: DetailRowProps) => (
   </div>
 );
 
-const NotConfigured = () => <span className="text-muted-foreground italic">Not configured</span>;
+const NotConfigured = () => {
+  const { t: uiT } = useDashboardLanguage();
+  return <span className="text-muted-foreground italic">{uiT("ui.dd1841d295024256")}</span>;
+};
 
 export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: CloudZeroIntegrationSettingsProps) {
   const { t: uiT } = useDashboardLanguage();
@@ -63,10 +68,10 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
       { limit: 10 },
       {
         onSuccess: (data) => {
-          toast.success("Dry run completed successfully");
+          toast.success(translateUi("ui.24103ff78ad22124"));
         },
         onError: (error) => {
-          toast.error(error?.message || "Failed to perform dry run");
+          toast.error(error?.message || translateUi("ui.2a4fe10114a55cff"));
         },
       },
     );
@@ -81,11 +86,11 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
       { operation: "replace_hourly" },
       {
         onSuccess: () => {
-          toast.success("Data successfully exported to CloudZero");
+          toast.success(translateUi("ui.619741d763c9cb80"));
           setIsExportConfirmOpen(false);
         },
         onError: (error) => {
-          toast.error(error?.message || "Failed to export data");
+          toast.error(error?.message || translateUi("ui.364defbbdd485d93"));
         },
       },
     );
@@ -113,12 +118,12 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
 
     deleteMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success("CloudZero integration deleted successfully");
+        toast.success(translateUi("ui.b4661f984b5b7b4c"));
         setIsDeleteModalOpen(false);
         onSettingsUpdated();
       },
       onError: (error) => {
-        toast.error(error?.message || "Failed to delete CloudZero integration");
+        toast.error(error?.message || translateUi("ui.c132eb4ec89523af"));
       },
     });
   };
@@ -133,7 +138,7 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              CloudZero Configuration
+              {uiT("ui.fcd81ad73c5755b5")}
               <Badge variant="secondary" className="capitalize">
                 {settings.status || uiT("ui.92340695899b")}
               </Badge>
@@ -152,14 +157,16 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
 
           <CardContent>
             <dl className="rounded-md border border-border">
-              <DetailRow label="API Key (Redacted)">
+              <DetailRow label={uiT("ui.f285178a08d2c1d7")}>
                 <span className="font-mono">{settings.api_key_masked || <NotConfigured />}</span>
               </DetailRow>
-              <DetailRow label="Connection ID">
+              <DetailRow label={uiT("ui.f8ca8ad99b78ad5d")}>
                 <span className="font-mono">{settings.connection_id || <NotConfigured />}</span>
               </DetailRow>
-              <DetailRow label="Timezone">
-                {settings.timezone || <span className="text-muted-foreground italic">Default (UTC)</span>}
+              <DetailRow label={uiT("ui.4ceca1d52cede44d")}>
+                {settings.timezone || (
+                  <span className="text-muted-foreground italic">{uiT("ui.61411d7773281c8e")}</span>
+                )}
               </DetailRow>
             </dl>
 
@@ -171,21 +178,23 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
             <div className="mt-4 mb-6 flex flex-wrap gap-4">
               <Button variant="outline" onClick={handleDryRun} disabled={dryRunMutation.isPending}>
                 <Play />
-                Run Dry Run Simulation
+                {uiT("ui.c64d7acedd7cc8fa")}
               </Button>
 
               <Button onClick={() => setIsExportConfirmOpen(true)} disabled={exportMutation.isPending}>
                 <Upload />
-                Export Data Now
+                {uiT("ui.584cf3afff421f98")}
               </Button>
             </div>
 
             {dryRunResult && (
               <Alert>
                 <CheckCircle />
-                <AlertTitle>Dry Run Results</AlertTitle>
+                <AlertTitle>{uiT("ui.43b1ab5db3f51569")}</AlertTitle>
                 <AlertDescription>
-                  <p>Simulation output for connection: {settings.connection_id}</p>
+                  <p>
+                    {uiT("ui.6da04b9cdd17cac7")} {settings.connection_id}
+                  </p>
                   <pre className="overflow-x-auto rounded-md border border-border bg-muted p-4 font-mono text-xs text-foreground">
                     {dryRunResult}
                   </pre>
@@ -199,10 +208,8 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
       <AlertDialog open={isExportConfirmOpen} onOpenChange={setIsExportConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Export Data to CloudZero</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will push the current accumulated cost data to CloudZero. Continue?
-            </AlertDialogDescription>
+            <AlertDialogTitle>{uiT("ui.ece7319857aea91b")}</AlertDialogTitle>
+            <AlertDialogDescription>{uiT("ui.92e54978f37d694b")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={exportMutation.isPending}>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
@@ -222,17 +229,17 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
 
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete CloudZero Integration?"
-        message="Are you sure you want to delete this CloudZero integration? All associated settings and configurations will be permanently removed."
+        title={uiT("ui.2f2e815b269eead6")}
+        message={uiT("ui.37578cce8a8d419e")}
         resourceInformationTitle="Integration Details"
         resourceInformation={[
           {
-            label: "Connection ID",
+            label: uiT("ui.f8ca8ad99b78ad5d"),
             value: settings.connection_id,
             code: true,
           },
           {
-            label: "Timezone",
+            label: uiT("ui.4ceca1d52cede44d"),
             value: settings.timezone || "Default (UTC)",
           },
         ]}

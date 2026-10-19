@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { Wrench, Copy, Check, Pencil } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -83,7 +85,7 @@ const markdownComponents: Components = {
 
 const markdownWithoutImages: Components = {
   ...markdownComponents,
-  img: ({ alt }) => <span>{alt || "Image omitted"}</span>,
+  img: ({ alt }) => <span>{alt || translateUi("ui.70d79da6fa2c6c82")}</span>,
 };
 
 interface UserBubbleProps {
@@ -93,6 +95,8 @@ interface UserBubbleProps {
 }
 
 function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [hovered, setHovered] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(message.content);
@@ -138,7 +142,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
         <div className="w-[72%] bg-background border-2 border-primary rounded-xl overflow-hidden shadow-[0_0_0_3px_rgba(var(--primary)/0.1)]">
           <Textarea
             ref={textareaRef}
-            aria-label="Edit message"
+            aria-label={uiT("ui.9757ccd5ef123556")}
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -153,10 +157,10 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                 setEditing(false);
               }}
             >
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button size="sm" onClick={handleSave} disabled={!editValue.trim()}>
-              Save & Send
+              {uiT("ui.93ab78d1d82a4b98")}
             </Button>
           </div>
         </div>
@@ -179,7 +183,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                   <Button
                     variant="ghost"
                     size="icon-xs"
-                    aria-label="Edit message"
+                    aria-label={uiT("ui.9757ccd5ef123556")}
                     onClick={() => {
                       setEditValue(message.content);
                       setEditing(true);
@@ -191,7 +195,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                 }
               />
               <TooltipContent>
-                <p>Edit message</p>
+                <p>{uiT("ui.9757ccd5ef123556")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -222,6 +226,8 @@ function AssistantBubble({
   isTypingIndicator,
   mcpEvents,
 }: AssistantBubbleProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [reasoningKey, setReasoningKey] = useState(0);
   const prevStreamingRef = useRef<boolean>(isStreaming);
 
@@ -268,7 +274,7 @@ function AssistantBubble({
         >
           {mainContent}
         </ReactMarkdown>
-        {stoppedSuffix && <span className="text-muted-foreground italic"> [stopped]</span>}
+        {stoppedSuffix && <span className="text-muted-foreground italic"> {uiT("ui.414a78cb543e5886")}</span>}
       </BubbleContent>
 
       <CopyButton text={mainContent} />
@@ -288,6 +294,8 @@ function AssistantBubble({
 }
 
 function CopyButton({ text }: { text: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -309,7 +317,7 @@ function CopyButton({ text }: { text: string }) {
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label={copied ? "Copied message" : "Copy message"}
+                aria-label={copied ? uiT("ui.5e27d2e02f0d98b7") : uiT("ui.457efe538b254dfb")}
                 onClick={handleCopy}
                 className={copied ? "text-success" : "text-muted-foreground hover:text-foreground"}
               >
@@ -318,7 +326,7 @@ function CopyButton({ text }: { text: string }) {
             }
           />
           <TooltipContent>
-            <p>{copied ? "Copied!" : "Copy"}</p>
+            <p>{copied ? uiT("ui.ea61bc15688d") : uiT("ui.e21f935f11d7")}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -327,42 +335,24 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function ThinkingPlaceholder() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <>
-      <style>{`
-        @keyframes thinking-pulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
-        }
-        .chat-thinking-text {
-          animation: thinking-pulse 1.4s ease-in-out infinite;
-        }
-      `}</style>
+      <style>{uiT("ui.dee018f2262e6977")}</style>
       <div className="inline-flex items-center gap-1.5 px-2.5 mb-2 bg-muted/50 border rounded-lg text-xs text-muted-foreground">
-        <span className="chat-thinking-text py-1">Thinking...</span>
+        <span className="chat-thinking-text py-1">{uiT("ui.b4739a4f08650db2")}</span>
       </div>
     </>
   );
 }
 
 function TypingDots() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <>
-      <style>{`
-        @keyframes chat-typing-bounce {
-          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-          30% { transform: translateY(-4px); opacity: 1; }
-        }
-        .chat-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background-color: var(--color-muted-foreground);
-          animation: chat-typing-bounce 1.2s ease-in-out infinite;
-        }
-        .chat-dot:nth-child(2) { animation-delay: 0.2s; }
-        .chat-dot:nth-child(3) { animation-delay: 0.4s; }
-      `}</style>
+      <style>{uiT("ui.e82d9e8fb1a5c319")}</style>
       <div className="chat-dot" />
       <div className="chat-dot" />
       <div className="chat-dot" />
@@ -375,6 +365,8 @@ interface ToolCardProps {
 }
 
 function ToolCard({ message }: ToolCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const redactedArgs = message.toolArgs ? redactSensitiveValues(message.toolArgs) : undefined;
   const [open, setOpen] = useState(false);
 
@@ -383,13 +375,13 @@ function ToolCard({ message }: ToolCardProps) {
       <Collapsible open={open} onOpenChange={setOpen}>
         <CollapsibleTrigger className="flex items-center gap-1.5 text-[13px] px-3 py-2 border rounded-lg bg-muted/50 hover:bg-muted transition-colors w-full text-left">
           <Wrench className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="font-medium text-foreground">{message.toolName ?? "Tool call"}</span>
+          <span className="font-medium text-foreground">{message.toolName ?? uiT("ui.17011048725fe0aa")}</span>
         </CollapsibleTrigger>
         <CollapsibleContent className="border border-t-0 rounded-b-lg px-3 py-2 bg-muted/30">
           {redactedArgs !== undefined && (
             <div className={message.toolResult ? "mb-3" : ""}>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                Arguments
+                {uiT("ui.7f816072c1c6a23b")}
               </div>
               <pre className="m-0 p-2 bg-muted rounded-md text-xs font-mono whitespace-pre-wrap break-words text-foreground">
                 {JSON.stringify(redactedArgs, null, 2)}
@@ -399,7 +391,7 @@ function ToolCard({ message }: ToolCardProps) {
           {message.toolResult && (
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                Result
+                {uiT("ui.6e7d50e84f47")}
               </div>
               <div className="text-[13px] text-foreground whitespace-pre-wrap break-words font-mono">
                 {message.toolResult}

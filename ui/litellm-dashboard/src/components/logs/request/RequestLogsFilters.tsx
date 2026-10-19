@@ -77,7 +77,12 @@ const CREDENTIAL_FILTER_ITEMS = [
       return translateUi("ui.12bc41c9fffd");
     },
   },
-  ...Object.entries(CREDENTIAL_LABELS).map(([value, label]) => ({ value, label })),
+  ...Object.keys(CREDENTIAL_LABELS).map((value) => ({
+    value,
+    get label() {
+      return CREDENTIAL_LABELS[value];
+    },
+  })),
 ] as const;
 
 const SPAN_TYPE_FILTER_ITEMS = [
@@ -337,8 +342,8 @@ function ErrorCodeFilterField({ value, onChange }: { value: string; onChange: (v
       (option) => option.value === trimmed || option.label.toLowerCase() === lowered,
     );
     if (trimmed === "" || isKnownCode) return matches;
-    return [...matches, { label: `Use custom code: ${trimmed}`, value: trimmed }];
-  }, [query]);
+    return [...matches, { label: uiT("supplement.customCode", { code: trimmed }), value: trimmed }];
+  }, [query, uiT]);
 
   const selected = useMemo<SearchSelectOption | null>(() => {
     if (value === "") return null;

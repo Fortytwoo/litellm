@@ -1,4 +1,9 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ArrowRight, ArrowUpRight, Check, Copy, KeyRound, Loader2, Send } from "lucide-react";
 import { useState } from "react";
@@ -37,46 +42,20 @@ const PY_INSTALL: Record<Installer, (packages: string) => string> = {
   uv: (packages) => `uv add ${packages}`,
 };
 
-export const tracingEnvSnippet = (proxyUrl: string, tracingKey: string | null = null): string =>
-  [
-    `export LITELLM_TRACING_KEY="${tracingKey ?? "<your tracing key>"}"`,
-    `export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="${proxyUrl}/v1/traces"`,
-    `export OTEL_EXPORTER_OTLP_TRACES_HEADERS="Authorization=Bearer $LITELLM_TRACING_KEY"`,
-    'export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"',
-    'export OTEL_METRICS_EXPORTER="none"',
-    'export OTEL_LOGS_EXPORTER="none"',
-  ].join("\n");
-
-export const codingAgentPrompt = (proxyUrl: string, traceUrl: string, guide: FrameworkGuide, model: string): string =>
-  [
-    `Send this ${guide.label} project's OpenTelemetry traces to LiteLLM.`,
-    "Keep the existing model configuration, authentication, and application behavior. Never hardcode keys. Read the model key from LITELLM_API_KEY and the dedicated tracing key from LITELLM_TRACING_KEY.",
-    "Set the trace destination wherever this project loads environment variables:",
-    tracingEnvSnippet(traceUrl),
-    guide.install ?? `Install and enable the ${guide.plugin?.label}: ${guide.plugin?.url}`,
-    guide.plugin?.instruction ??
-      "Initialize OpenTelemetry before creating the agent. If the app already configures a tracer provider, keep it and point its exporter at the destination above instead.",
-    "Adapt this example to the existing application, replacing research_agent with the agent's name:",
-    frameworkSnippet(guide, proxyUrl, model, traceUrl),
-    guide.note ?? "",
-    "Run the agent once and confirm its named run appears in Lens > Traces.",
-  ]
-    .filter(Boolean)
-    .join("\n\n");
-
-const shellQuote = (value: string): string => `'${value.replaceAll("'", "'\\''")}'`;
-
-export const codingAgentCommand = (agent: CodingAgent, prompt: string): string =>
-  `${agent === "Claude Code" ? "claude" : "codex"} ${shellQuote(prompt)}`;
-
-export const maskSecret = (secret: string): string =>
-  secret.length > 10 ? `${secret.slice(0, 5)}${"•".repeat(16)}${secret.slice(-4)}` : "•".repeat(secret.length);
-
-export const otlpEndpoints = (proxyUrl: string): readonly (readonly [string, string, boolean])[] => [
-  ["Traces endpoint", `${proxyUrl}/v1/traces`, true],
-  ["Auth header", "Authorization: Bearer <Lens tracing key>", true],
-  ["Protocol", "OTLP/HTTP (protobuf or JSON)", false],
-];
+export {
+  tracingEnvSnippet,
+  codingAgentPrompt,
+  codingAgentCommand,
+  maskSecret,
+  otlpEndpoints,
+} from "./tracingSetupSnippets";
+import {
+  tracingEnvSnippet,
+  codingAgentPrompt,
+  codingAgentCommand,
+  maskSecret,
+  otlpEndpoints,
+} from "./tracingSetupSnippets";
 
 function CodeBlock({
   code,
@@ -175,10 +154,18 @@ type SendState =
   | { kind: "failed"; message: string };
 
 const SEND_LABEL: Record<Exclude<SendState["kind"], "ready">, string> = {
-  idle: "Send a test trace",
-  sending: "Sending…",
-  waiting: "Waiting for it to arrive…",
-  failed: "Send a test trace",
+  get idle() {
+    return translateUi("ui.b4391a31a8e9ba7c");
+  },
+  get sending() {
+    return translateUi("ui.b8ed5279e897be5d");
+  },
+  get waiting() {
+    return translateUi("ui.a6ecda238a216ca8");
+  },
+  get failed() {
+    return translateUi("ui.b4391a31a8e9ba7c");
+  },
 };
 
 const delay = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -205,6 +192,8 @@ function SendTestTrace({
   tracingKey: string | null;
   onOpenTrace: (trace: TraceSummary) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [state, setState] = useState<SendState>({ kind: "idle" });
   const send = async () => {
     setState({ kind: "sending" });
@@ -221,25 +210,21 @@ function SendTestTrace({
       };
       await client.post("/v1/traces", options);
     } catch {
-      setState({ kind: "failed", message: "Could not send the test trace." });
+      setState({ kind: "failed", message: translateUi("ui.860ee7ed11532e5f") });
       return;
     }
     setState({ kind: "waiting" });
     const trace = await waitForTrace(accessToken, sample.traceId);
-    setState(
-      trace
-        ? { kind: "ready", trace }
-        : { kind: "failed", message: "Sent, but it has not shown up yet. Check again in a moment." },
-    );
+    setState(trace ? { kind: "ready", trace } : { kind: "failed", message: translateUi("ui.15e121bf57971329") });
   };
   if (state.kind === "ready") {
     return (
       <div className="flex flex-wrap items-center gap-3">
         <span role="status" className="inline-flex items-center gap-1 text-sm text-emerald-700 dark:text-emerald-400">
-          <Check aria-hidden="true" className="size-4" /> Test trace received
+          <Check aria-hidden="true" className="size-4" /> {uiT("ui.ba7af1179065642e")}
         </span>
         <Button onClick={() => onOpenTrace(state.trace)}>
-          View trace <ArrowRight aria-hidden="true" className="size-4" />
+          {uiT("ui.bd38ee3d52633f7f")} <ArrowRight aria-hidden="true" className="size-4" />
         </Button>
       </div>
     );
@@ -271,26 +256,25 @@ function TraceReceipt({
   checking: boolean;
   onCheck: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const missingAfterCheck = checked && !checking && !connected;
   return (
-    <section className="mt-6 border-t pt-6" aria-label="Trace connection status">
+    <section className="mt-6 border-t pt-6" aria-label={uiT("ui.366c4ea02901292f")}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p role="status" className="text-sm font-medium">
-            {connected ? "Traces connected" : "Waiting for your first trace"}
+            {connected ? uiT("ui.3b4aa1c3fa41f392") : uiT("ui.2e4a20bfb50a8225")}
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">Run your agent once. Its traces will appear here.</p>
+          <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.2c612788d814191e")}</p>
         </div>
         <Button variant="outline" onClick={onCheck} disabled={checking}>
           {checking && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-          {checking ? "Checking…" : "Check for traces"}
+          {checking ? uiT("ui.ec963ffc911b8401") : uiT("ui.ed720bdb7f2e7755")}
         </Button>
       </div>
       {missingAfterCheck && (
-        <p className="mt-3 text-sm leading-6 text-muted-foreground">
-          No traces received yet. Check the Lens URL and tracing key in your agent’s environment, then check its logs
-          for export errors.
-        </p>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">{uiT("ui.01c6f10550239ab8")}</p>
       )}
     </section>
   );
@@ -305,6 +289,8 @@ function TracingKey({
   tracingKey: string | null;
   onCreated: (key: string) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
   const [pendingActivation, setPendingActivation] = useState(false);
@@ -330,15 +316,15 @@ function TracingKey({
       <div className="space-y-2">
         {pendingActivation && (
           <p role="status" className="text-sm text-muted-foreground">
-            Key saved. Lens has not confirmed it yet. Once the service is connected, keys sync within 30 seconds.
+            {uiT("ui.1b9be258a879eb78")}
           </p>
         )}
-        <CodeBlock code={tracingKey} display={maskSecret(tracingKey)} tabs={<FileLabel>Your tracing key</FileLabel>} />
-        <p className="text-sm text-muted-foreground">
-          Hidden for safety. Copy copies the full key, and the environment step below includes it. This key can only
-          send traces and check delivery. Your agent still needs its own key for model calls. Save this key before
-          leaving the page.
-        </p>
+        <CodeBlock
+          code={tracingKey}
+          display={maskSecret(tracingKey)}
+          tabs={<FileLabel>{uiT("ui.2549e6c76df4f619")}</FileLabel>}
+        />
+        <p className="text-sm text-muted-foreground">{uiT("ui.e23f620210220421")}</p>
       </div>
     );
   }
@@ -350,15 +336,17 @@ function TracingKey({
         ) : (
           <KeyRound aria-hidden="true" className="size-4" />
         )}
-        Generate tracing key
+        {uiT("ui.ff31812003f22c34")}
       </Button>
-      <span className="text-sm text-muted-foreground">Use a dedicated Lens key for tracing.</span>
+      <span className="text-sm text-muted-foreground">{uiT("ui.0b40063deb1a6dd8")}</span>
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   );
 }
 
 function EndpointValue({ value }: { value: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [copied, setCopied] = useState(false);
   useTimeout(() => setCopied(false), copied ? COPIED_RESET_MS : null);
   const copy = async () => setCopied(await copyToClipboard(value));
@@ -366,7 +354,7 @@ function EndpointValue({ value }: { value: string }) {
     <button
       type="button"
       onClick={() => void copy()}
-      aria-label={`Copy ${value}`}
+      aria-label={uiT("ui.3f3ebff426db5fa6", { v0: String(value) })}
       className="group inline-flex min-w-0 items-center gap-2 text-left font-mono text-xs text-foreground"
     >
       <span className="break-all">{value}</span>
@@ -380,19 +368,21 @@ function EndpointValue({ value }: { value: string }) {
 }
 
 function Endpoints({ proxyUrl, children }: { proxyUrl: string; children?: React.ReactNode }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <section className="mt-6" aria-labelledby="otel-endpoints">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 id="otel-endpoints" className="inline-flex items-center gap-2 text-sm font-medium">
           <img src={otelLogo.src} alt="" className="size-5" />
-          Connection details
+          {uiT("ui.51bfffbcdbcfbc00")}
         </h3>
         {children}
       </div>
       <dl className="mt-3 grid gap-x-6 gap-y-3 rounded-md border bg-muted/30 p-4 md:grid-cols-2">
         {otlpEndpoints(proxyUrl).map(([label, value, copyable]) => (
           <div key={label} className={cn("min-w-0", label === "Traces endpoint" && "md:col-span-2")}>
-            <dt className="text-xs text-muted-foreground">{label}</dt>
+            <dt className="text-xs text-muted-foreground">{translateText(label)}</dt>
             <dd className="mt-0.5">
               {copyable ? <EndpointValue value={value} /> : <span className="text-xs">{value}</span>}
             </dd>
@@ -447,6 +437,8 @@ function EnableTracing({
   checking: boolean;
   onCheck: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const configured = connection.configured ?? connection.connected;
   let message = "Lens is connected. Set its public tracing address so your agents know where to send traces.";
   if (!configured) {
@@ -460,18 +452,18 @@ function EnableTracing({
   }
   return (
     <div className="space-y-4">
-      <p className="text-sm font-medium">{configured ? "Check the Lens connection" : "Install Lens"}</p>
-      <p className="text-sm leading-6 text-muted-foreground">{message}</p>
+      <p className="text-sm font-medium">{configured ? uiT("ui.4b463d9b7ca12361") : uiT("ui.3bfe61916c50a7d2")}</p>
+      <p className="text-sm leading-6 text-muted-foreground">{translateText(message)}</p>
       {!configured && (
         <p className="text-sm text-muted-foreground">
           {connection.release ? (
             <>
-              Use Lens <code>{connection.release}</code> to match this LiteLLM deployment.
+              {uiT("ui.cbc250de35415ad9")} <code>{connection.release}</code> {uiT("ui.d8fea1a8d13a0ec7")}
             </>
           ) : (
-            "Use Lens from the same release as this LiteLLM deployment."
+            uiT("ui.ba2c06745a73a394")
           )}{" "}
-          The deployment connects the services and supplies trace storage.
+          {uiT("ui.141c7cc5eab20895")}
         </p>
       )}
       <div className="flex flex-wrap gap-3">
@@ -481,7 +473,7 @@ function EnableTracing({
           target="_blank"
           rel="noreferrer"
         >
-          Helm setup <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          {uiT("ui.aea5f28c643fc0d7")} <ArrowUpRight aria-hidden="true" className="size-3.5" />
         </a>
         <a
           className="inline-flex items-center gap-1 text-sm underline underline-offset-4"
@@ -489,12 +481,12 @@ function EnableTracing({
           target="_blank"
           rel="noreferrer"
         >
-          Docker setup <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          {uiT("ui.5b0615347f6bdf13")} <ArrowUpRight aria-hidden="true" className="size-3.5" />
         </a>
       </div>
       <Button variant="outline" onClick={onCheck} disabled={checking}>
         {checking && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-        {checking ? "Checking…" : "Check setup"}
+        {checking ? uiT("ui.ec963ffc911b8401") : uiT("ui.6cd8cd183c21312a")}
       </Button>
     </div>
   );
@@ -511,6 +503,8 @@ function CodingAgentSetup({
   guide: FrameworkGuide;
   model: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [codingAgent, setCodingAgent] = useState<CodingAgent>("Claude Code");
   const [copied, setCopied] = useState<string | null>(null);
   const command = codingAgentCommand(codingAgent, codingAgentPrompt(proxyUrl, traceUrl, guide, model));
@@ -521,7 +515,7 @@ function CodingAgentSetup({
   return (
     <section className="mt-6" aria-labelledby="connect-project">
       <h3 id="connect-project" className="text-sm font-medium">
-        Connect your project
+        {uiT("ui.389360eb4cd775db")}
       </h3>
       <div className="mt-3 overflow-hidden rounded-md border">
         <div className="border-b bg-muted/30 px-4">
@@ -537,8 +531,8 @@ function CodingAgentSetup({
         </div>
         <div className="p-4">
           <p className="text-sm leading-6 text-muted-foreground">
-            Run the setup command in your agent’s project. It uses <code className="text-xs">LITELLM_TRACING_KEY</code>{" "}
-            for traces and keeps your model key separate.
+            {uiT("ui.b1e0016e27d4831f")} <code className="text-xs">LITELLM_TRACING_KEY</code>{" "}
+            {uiT("ui.e952eb0749f7f5d9")}
           </p>
           <Button className="mt-3" onClick={() => void copy()}>
             {copied === command ? (
@@ -546,10 +540,12 @@ function CodingAgentSetup({
             ) : (
               <Copy aria-hidden="true" className="size-4" />
             )}
-            {copied === command ? "Copied" : "Copy setup command"}
+            {copied === command ? uiT("ui.8d525e5f158b") : uiT("ui.d931d96e8f4c8304")}
           </Button>
           <details className="mt-3">
-            <summary className="w-fit cursor-pointer text-xs text-muted-foreground">View command</summary>
+            <summary className="w-fit cursor-pointer text-xs text-muted-foreground">
+              {uiT("ui.e4bedd4ec5d2a99f")}
+            </summary>
             <pre className="mt-3 max-h-56 overflow-auto whitespace-pre-wrap rounded-md bg-muted/40 p-3 text-xs leading-5">
               <code>{command}</code>
             </pre>
@@ -576,6 +572,8 @@ function ConnectAgent({
   tracingKey,
   setTracingKey,
 }: ConnectAgentProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const proxyUrl = getProxyBaseUrl().replace(/\/$/, "");
   const connection = useLensService(accessToken);
   const traceUrl = connection.data?.url ?? "";
@@ -588,26 +586,24 @@ function ConnectAgent({
   if (!traceUrl)
     return (
       <p role="status" className="text-sm text-muted-foreground">
-        {connection.isPending
-          ? "Checking Lens connection…"
-          : "Set LITELLM_LENS_PUBLIC_URL on LiteLLM to the Lens address your agents can reach, then restart LiteLLM."}
+        {connection.isPending ? uiT("ui.53ebe100847077fe") : uiT("ui.8c63aa04cac12dc7")}
       </p>
     );
   return (
     <>
       {!connection.data?.connected && (
         <p role="alert" className="text-sm text-destructive">
-          The Lens service is unavailable. Check the service URL and shared secret.
+          {uiT("ui.6b409a2d69e48936")}
         </p>
       )}
       {connection.data?.connected && !connection.data.status.storage_ready && (
         <p role="alert" className="text-sm text-destructive">
-          Lens is connected, but ClickHouse is unavailable.
+          {uiT("ui.c0444e6a67ff995d")}
         </p>
       )}
       <div className="mt-6 space-y-2">
         <label id="tracing-framework" className="block text-sm font-medium">
-          Your agent framework
+          {uiT("ui.4caed0b2b01d712b")}
         </label>
         <Select
           value={framework}
@@ -632,22 +628,22 @@ function ConnectAgent({
         </Select>
       </div>
 
-      <Step title="Create a tracing key">
+      <Step title={uiT("ui.e045f6ffe017f006")}>
         {canMintTracingKey && !readOnly ? (
           <TracingKey accessToken={accessToken} tracingKey={tracingKey} onCreated={setTracingKey} />
         ) : (
-          <p className="text-sm text-muted-foreground">Ask your proxy admin for a dedicated Lens tracing key.</p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.4ab004302240705d")}</p>
         )}
       </Step>
       <div className="mt-6 border-t pt-6">
         {install && (
-          <Step title="Install dependencies">
+          <Step title={uiT("ui.28cf1ec4677d123b")}>
             <CodeBlock
               code={install}
               wrap
               tabs={
                 guide.language === "typescript" ? (
-                  <FileLabel>npm</FileLabel>
+                  <FileLabel>{uiT("ui.d79677188687e7b3")}</FileLabel>
                 ) : (
                   <LineTabs value={installer} options={["pip", "uv"]} onChange={setInstaller} />
                 )
@@ -656,9 +652,9 @@ function ConnectAgent({
           </Step>
         )}
         {guide.plugin && (
-          <Step title="Enable the plugin">
+          <Step title={uiT("ui.e778c905d78acee3")}>
             <p className="text-sm leading-6 text-muted-foreground">
-              Install and enable the{" "}
+              {uiT("ui.e0e3b2ebb188e223")}{" "}
               <a className="underline underline-offset-4" href={guide.plugin.url} target="_blank" rel="noreferrer">
                 {guide.plugin.label}
               </a>
@@ -666,16 +662,16 @@ function ConnectAgent({
             </p>
           </Step>
         )}
-        <Step title="Configure environment">
+        <Step title={uiT("ui.4f9fc4fc50db996e")}>
           <p className="mb-3 text-sm leading-6 text-muted-foreground">
             {tracingKey ? (
               <>
-                Tracing uses the key above. Set <code>LITELLM_API_KEY</code> to a key with model access.
+                {uiT("ui.37864f903238d776")} <code>LITELLM_API_KEY</code> {uiT("ui.b4ed5af4274d03ed")}
               </>
             ) : (
               <>
-                Set <code>LITELLM_TRACING_KEY</code> to a Lens tracing key and keep <code>LITELLM_API_KEY</code> for
-                model calls.
+                {uiT("ui.b6f6f3ad07b3c05f")} <code>LITELLM_TRACING_KEY</code> {uiT("ui.1305384c28801b91")}{" "}
+                <code>LITELLM_API_KEY</code> {uiT("ui.abffb3a24bab9573")}
               </>
             )}
           </p>
@@ -683,14 +679,14 @@ function ConnectAgent({
             copyLabel="Copy tracing configuration"
             code={tracingEnvSnippet(traceUrl, tracingKey)}
             display={tracingEnvSnippet(traceUrl, tracingKey && maskSecret(tracingKey))}
-            tabs={<FileLabel>Shell</FileLabel>}
+            tabs={<FileLabel>{uiT("ui.a733285486d54383")}</FileLabel>}
             wrap
           />
         </Step>
-        <Step title="Run your agent">
+        <Step title={uiT("ui.1c270c0502b6626a")}>
           <p className="mb-3 text-sm leading-6 text-muted-foreground">
-            {guide.existingModel ? "Keep your existing model settings. " : "Save and run this example. "}
-            Replace <code>research_agent</code> with your agent’s name.
+            {guide.existingModel ? uiT("ui.629fb9b37bebf7d6") : uiT("ui.e8ad1765ae913915")}
+            {uiT("ui.95e154398a4bc009")} <code>research_agent</code> {uiT("ui.55fc9d51ca1bc22a")}
             {!guide.existingModel && " Use a model configured on this proxy."}
           </p>
           <CodeBlock code={quickstart} tabs={<FileLabel>{guide.fileName}</FileLabel>} wrap />
@@ -699,7 +695,7 @@ function ConnectAgent({
             <div className="mt-3">
               <CodeBlock
                 code={guide.language === "typescript" ? "npx tsx agent.mts" : "python agent.py"}
-                tabs={<FileLabel>Shell</FileLabel>}
+                tabs={<FileLabel>{uiT("ui.a733285486d54383")}</FileLabel>}
               />
             </div>
           )}
@@ -709,7 +705,7 @@ function ConnectAgent({
             target="_blank"
             rel="noreferrer"
           >
-            View in docs <ArrowUpRight aria-hidden="true" className="size-3.5" />
+            {uiT("ui.d7493b10c873f1c7")} <ArrowUpRight aria-hidden="true" className="size-3.5" />
           </a>
         </Step>
       </div>
@@ -749,6 +745,8 @@ export function TracingSetupFields({
   readOnly = false,
   canMintTracingKey = false,
 }: TracingSetupProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [framework, setFramework] = useState(FRAMEWORKS[0].id);
   const [installer, setInstaller] = useState<Installer>("pip");
   const [tracingKey, setTracingKey] = useState<string | null>(null);
@@ -762,17 +760,17 @@ export function TracingSetupFields({
   if (connection.isPending)
     return (
       <p role="status" className="text-sm text-muted-foreground">
-        Checking Lens connection…
+        {uiT("ui.53ebe100847077fe")}
       </p>
     );
   if (!connection.data)
     return (
       <div className="space-y-3">
         <p role="alert" className="text-sm text-muted-foreground">
-          Could not check the Lens connection.
+          {uiT("ui.4297819db8acca43")}
         </p>
         <Button variant="outline" onClick={check}>
-          Try again
+          {uiT("ui.d8b8392e2c542950")}
         </Button>
       </div>
     );
@@ -799,20 +797,24 @@ export function TracingSetupFields({
 }
 
 export function TracingSetupCard(props: TracingSetupProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const connection = useLensService(props.accessToken);
   const enabled = Boolean(connection.data?.connected && connection.data.status.storage_ready && connection.data.url);
 
   return (
     <div className="w-full max-w-3xl pb-8" data-testid="tracing-setup-card">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <h2 className="text-xl font-semibold tracking-tight">{setupTitle(enabled, props.connected ?? false)}</h2>
+        <h2 className="text-xl font-semibold tracking-tight">
+          {translateText(setupTitle(enabled, props.connected ?? false))}
+        </h2>
         <span role="status" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
           {enabled ? (
             <ActiveDot />
           ) : (
             <span aria-hidden="true" className="size-1.5 rounded-full bg-muted-foreground/50" />
           )}
-          {enabled ? "Tracing enabled" : "Setup required"}
+          {enabled ? uiT("ui.6f1a1263a5df54d8") : uiT("ui.1a367c79441e13b7")}
         </span>
         <a
           className="ml-auto inline-flex shrink-0 items-center gap-1 text-sm underline underline-offset-4"
@@ -820,13 +822,11 @@ export function TracingSetupCard(props: TracingSetupProps) {
           target="_blank"
           rel="noreferrer"
         >
-          Docs <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          {uiT("ui.7af023c43013")} <ArrowUpRight aria-hidden="true" className="size-3.5" />
         </a>
       </div>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        {enabled
-          ? "Send your agent’s runs to LiteLLM to see its inputs, outputs, and tool calls."
-          : "Connect Lens to start recording your agent’s runs."}
+        {enabled ? uiT("ui.6b75bff82cfec991") : uiT("ui.95ab56f063564aa8")}
       </p>
       <TracingSetupFields {...props} />
     </div>

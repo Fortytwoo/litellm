@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowLeft } from "lucide-react";
@@ -10,9 +13,30 @@ import { GUARDRAIL_PRESETS } from "./guardrail_garden_configs";
 import { GuardrailCardInfo } from "./guardrail_garden_data";
 
 const CATEGORY_LABELS: Record<GuardrailCardInfo["category"], { provider: string; type: string }> = {
-  litellm: { provider: "LiteLLM Content Filter", type: "Content Filter" },
-  decision_model: { provider: "Decision Model", type: "Decision Model" },
-  partner: { provider: "Partner Guardrail", type: "Partner" },
+  litellm: {
+    get provider() {
+      return translateUi("ui.40374e449c5c1646");
+    },
+    get type() {
+      return translateUi("ui.2fcf0adf5381f798");
+    },
+  },
+  decision_model: {
+    get provider() {
+      return translateUi("ui.9aa9d2dad8ea2a17");
+    },
+    get type() {
+      return translateUi("ui.9aa9d2dad8ea2a17");
+    },
+  },
+  partner: {
+    get provider() {
+      return translateUi("ui.33698b10f02a4dde");
+    },
+    get type() {
+      return translateUi("ui.29035e784f9305c0");
+    },
+  },
 };
 
 interface GuardrailDetailViewProps {
@@ -53,7 +77,7 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
 
   const tabs = [
     { key: "overview", label: uiT("ui.d4b1ea5708dd") },
-    ...(card.eval ? [{ key: "eval", label: "Eval Results" }] : []),
+    ...(card.eval ? [{ key: "eval", label: uiT("ui.6f9cc0b5df784aec") }] : []),
   ];
 
   return (
@@ -64,21 +88,25 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
         className="mb-6 inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted-foreground"
       >
         <ArrowLeft className="size-3" />
-        <span>{card.name}</span>
+        <span>{translateText(card.name)}</span>
       </div>
 
       {/* ── Header block (Vertex-style) ── */}
       <div className="mb-2 flex items-center gap-4">
-        <Logo src={card.logo} label={card.name} className="w-10 h-10 rounded-lg object-contain shrink-0" />
-        <h1 className="m-0 text-[28px] font-normal leading-tight text-foreground">{card.name}</h1>
+        <Logo
+          src={card.logo}
+          label={translateText(card.name)}
+          className="w-10 h-10 rounded-lg object-contain shrink-0"
+        />
+        <h1 className="m-0 text-[28px] font-normal leading-tight text-foreground">{translateText(card.name)}</h1>
       </div>
 
-      <p className="m-0 mb-5 text-sm leading-relaxed text-muted-foreground">{card.description}</p>
+      <p className="m-0 mb-5 text-sm leading-relaxed text-muted-foreground">{translateText(card.description)}</p>
 
       {/* Action buttons — outlined style like Vertex */}
       <div className="mb-8 flex gap-2.5">
         <Button variant="outline" className="rounded-full" onClick={() => setIsAddFormVisible(true)}>
-          Create Guardrail
+          {uiT("ui.4aa9636f1060f2c6")}
         </Button>
       </div>
 
@@ -108,16 +136,18 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
           {/* Left column — overview + details table */}
           <div className="min-w-0 flex-1">
             <h2 className="m-0 mb-3 text-lg font-normal text-foreground">{uiT("ui.d4b1ea5708dd")}</h2>
-            <p className="m-0 mb-8 text-sm leading-[1.7] text-foreground">{card.description}</p>
+            <p className="m-0 mb-8 text-sm leading-[1.7] text-foreground">{translateText(card.description)}</p>
 
-            <h2 className="m-0 mb-1 text-lg font-normal text-foreground">Guardrail Details</h2>
-            <p className="m-0 mb-4 text-[13px] text-muted-foreground">Details are as follows</p>
+            <h2 className="m-0 mb-1 text-lg font-normal text-foreground">{uiT("ui.d8efac55cf252f72")}</h2>
+            <p className="m-0 mb-4 text-[13px] text-muted-foreground">{uiT("ui.9cc66b40291a96d6")}</p>
 
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="w-50 py-3 text-left font-medium text-muted-foreground">Property</th>
-                  <th className="py-3 text-left font-medium text-muted-foreground">{card.name}</th>
+                  <th className="w-50 py-3 text-left font-medium text-muted-foreground">
+                    {uiT("ui.40040cb181f7f0ee")}
+                  </th>
+                  <th className="py-3 text-left font-medium text-muted-foreground">{translateText(card.name)}</th>
                 </tr>
               </thead>
               <tbody>
@@ -135,7 +165,7 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
           <div className="w-60 shrink-0">
             {/* Guardrail ID */}
             <div className="mb-7">
-              <div className="mb-1 text-xs text-muted-foreground">Guardrail ID</div>
+              <div className="mb-1 text-xs text-muted-foreground">{uiT("ui.4327f43f4ab4293c")}</div>
               <div className="break-all text-[13px] text-foreground">litellm/{card.id}</div>
             </div>
 
@@ -167,12 +197,12 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
 
       {activeTab === "eval" && (
         <div>
-          <h2 className="m-0 mb-4 text-lg font-normal text-foreground">Eval Results</h2>
+          <h2 className="m-0 mb-4 text-lg font-normal text-foreground">{uiT("ui.6f9cc0b5df784aec")}</h2>
           <table className="w-full max-w-[560px] border-collapse text-sm">
             <thead>
               <tr className="border-b border-border bg-muted">
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Metric</th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Value</th>
+                <th className="px-4 py-3 text-left font-medium text-muted-foreground">{uiT("ui.2d275a74912cca2e")}</th>
+                <th className="px-4 py-3 text-left font-medium text-muted-foreground">{uiT("ui.8e37953d23daca5f")}</th>
               </tr>
             </thead>
             <tbody>

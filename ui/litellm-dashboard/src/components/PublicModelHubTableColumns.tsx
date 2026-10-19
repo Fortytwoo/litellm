@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -170,8 +172,12 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
     {
       id: "model_group",
       accessorKey: "model_group",
-      meta: { title: "Model Name" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Model Name" />,
+      meta: {
+        get title() {
+          return translateUi("ui.a501a70a42b98bc7");
+        },
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.a501a70a42b98bc7")} />,
       size: 200,
       sortingFn: "alphanumeric",
       cell: ({ row }) => (
@@ -186,8 +192,13 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
     {
       id: "providers",
       accessorKey: "providers",
-      meta: { title: "Providers", skeleton: "chips" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Providers" />,
+      meta: {
+        get title() {
+          return translateUi("ui.996c32b35f2182a9");
+        },
+        skeleton: "chips",
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.996c32b35f2182a9")} />,
       size: 150,
       sortingFn: (rowA, rowB) =>
         (rowA.original.providers ?? []).join(", ").localeCompare((rowB.original.providers ?? []).join(", ")),
@@ -196,61 +207,96 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
     {
       id: "mode",
       accessorKey: "mode",
-      meta: { title: "Mode" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Mode" />,
+      meta: {
+        get title() {
+          return translateUi("ui.5e23ec6a300dc60a");
+        },
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.5e23ec6a300dc60a")} />,
       size: 110,
       sortingFn: "alphanumeric",
       cell: ({ row }) => (
         <span className="flex items-center gap-2 text-sm">
           <span>{getModeIcon(row.original.mode || "")}</span>
-          <span>{row.original.mode || "Chat"}</span>
+          <span>{row.original.mode || translateUi("ui.460b3a7da007b7af")}</span>
         </span>
       ),
     },
     {
       id: "max_input_tokens",
       accessorKey: "max_input_tokens",
-      meta: { title: "Max Input", numeric: true },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Max Input" />,
+      meta: {
+        get title() {
+          return translateUi("ui.a6a0257f985f0ac4");
+        },
+        numeric: true,
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.a6a0257f985f0ac4")} />,
       size: 100,
       cell: ({ row }) => <span className="text-sm">{formatTokens(row.original.max_input_tokens)}</span>,
     },
     {
       id: "max_output_tokens",
       accessorKey: "max_output_tokens",
-      meta: { title: "Max Output", numeric: true },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Max Output" />,
+      meta: {
+        get title() {
+          return translateUi("ui.35e8d5deb0b0f91a");
+        },
+        numeric: true,
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.35e8d5deb0b0f91a")} />,
       size: 100,
       cell: ({ row }) => <span className="text-sm">{formatTokens(row.original.max_output_tokens)}</span>,
     },
     {
       id: "input_cost_per_token",
       accessorKey: "input_cost_per_token",
-      meta: { title: "Input $/1M", numeric: true },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Input $/1M" />,
+      meta: {
+        get title() {
+          return translateUi("ui.d9245b63d0f00e43");
+        },
+        numeric: true,
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d9245b63d0f00e43")} />,
       size: 110,
       cell: ({ row }) => (
         <span className="text-sm">
-          {row.original.input_cost_per_token ? formatCost(row.original.input_cost_per_token) : "Free"}
+          {row.original.input_cost_per_token
+            ? formatCost(row.original.input_cost_per_token)
+            : translateUi("ui.f411a1fb62758b4c")}
         </span>
       ),
     },
     {
       id: "output_cost_per_token",
       accessorKey: "output_cost_per_token",
-      meta: { title: "Output $/1M", numeric: true },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Output $/1M" />,
+      meta: {
+        get title() {
+          return translateUi("ui.7fba7dad023df4d1");
+        },
+        numeric: true,
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.7fba7dad023df4d1")} />,
       size: 110,
       cell: ({ row }) => (
         <span className="text-sm">
-          {row.original.output_cost_per_token ? formatCost(row.original.output_cost_per_token) : "Free"}
+          {row.original.output_cost_per_token
+            ? formatCost(row.original.output_cost_per_token)
+            : translateUi("ui.f411a1fb62758b4c")}
         </span>
       ),
     },
     {
       id: "features",
-      meta: { title: "Features", skeleton: "chips" },
-      header: "Features",
+      meta: {
+        get title() {
+          return translateUi("ui.5697d03daef4de9c");
+        },
+        skeleton: "chips",
+      },
+      get header() {
+        return translateUi("ui.5697d03daef4de9c");
+      },
       size: 140,
       cell: ({ row }) => {
         const features = Object.entries(row.original)
@@ -262,8 +308,13 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
     {
       id: "health_status",
       accessorKey: "health_status",
-      meta: { title: "Health Status", skeleton: "badge" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Health Status" />,
+      meta: {
+        get title() {
+          return translateUi("ui.97b7a73d47fd543e");
+        },
+        skeleton: "badge",
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.97b7a73d47fd543e")} />,
       size: 130,
       cell: ({ row }) => {
         const model = row.original;
@@ -277,8 +328,8 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
           <CellTooltip
             content={
               <>
-                <div>{responseTimeLabel}</div>
-                <div>{lastCheckedLabel}</div>
+                <div>{translateText(responseTimeLabel)}</div>
+                <div>{translateText(lastCheckedLabel)}</div>
               </>
             }
             trigger={
@@ -296,8 +347,12 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
     {
       id: "rpm",
       accessorKey: "rpm",
-      meta: { title: "Limits" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Limits" />,
+      meta: {
+        get title() {
+          return translateUi("ui.dffb64dc70011ecf");
+        },
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dffb64dc70011ecf")} />,
       size: 150,
       cell: ({ row }) => (
         <span className="text-xs text-muted-foreground">{formatLimits(row.original.rpm, row.original.tpm)}</span>
@@ -318,8 +373,12 @@ export const getPublicAgentHubColumns = ({ onAgentClick }: PublicAgentHubColumns
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Agent Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Agent Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.28145084c72576a9");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.28145084c72576a9")} />,
     size: 200,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -354,8 +413,12 @@ export const getPublicAgentHubColumns = ({ onAgentClick }: PublicAgentHubColumns
   {
     id: "version",
     accessorKey: "version",
-    meta: { title: "Version" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Version" />,
+    meta: {
+      get title() {
+        return translateUi("ui.dd167905de0defca");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dd167905de0defca")} />,
     size: 90,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -397,8 +460,15 @@ export const getPublicAgentHubColumns = ({ onAgentClick }: PublicAgentHubColumns
   },
   {
     id: "capabilities",
-    meta: { title: "Capabilities", skeleton: "chips" },
-    header: "Capabilities",
+    meta: {
+      get title() {
+        return translateUi("ui.9460f16ac9b5171e");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.9460f16ac9b5171e");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -429,8 +499,12 @@ export const getPublicMCPHubColumns = ({ onServerClick }: PublicMCPHubColumnsDep
   {
     id: "server_name",
     accessorKey: "server_name",
-    meta: { title: "Server Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Server Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.bc4816425ebe8079");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.bc4816425ebe8079")} />,
     size: 180,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -467,8 +541,13 @@ export const getPublicMCPHubColumns = ({ onServerClick }: PublicMCPHubColumnsDep
   {
     id: "transport",
     accessorKey: "transport",
-    meta: { title: "Transport", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Transport" />,
+    meta: {
+      get title() {
+        return translateUi("ui.aaead4abf5d0fd5e");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.aaead4abf5d0fd5e")} />,
     size: 110,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -481,8 +560,13 @@ export const getPublicMCPHubColumns = ({ onServerClick }: PublicMCPHubColumnsDep
   {
     id: "auth_type",
     accessorKey: "auth_type",
-    meta: { title: "Auth Type", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Auth Type" />,
+    meta: {
+      get title() {
+        return translateUi("ui.f3690a28345f92e0");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.f3690a28345f92e0")} />,
     size: 110,
     enableSorting: true,
     sortingFn: "alphanumeric",

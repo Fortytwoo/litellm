@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useRef, useEffect } from "react";
 import { CheckCircle2, ChevronRight, Code, ExternalLink, PlayCircle, Save, Users, XCircle } from "lucide-react";
@@ -108,11 +110,11 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
             type: "function",
             function: {
               name: "get_weather",
-              description: "Get the current weather in a location",
+              description: uiT("ui.15d66258e2d7b5f0"),
               parameters: {
                 type: "object",
                 properties: {
-                  location: { type: "string", description: "City name" },
+                  location: { type: "string", description: uiT("ui.b7c7a822e5ce3544") },
                 },
                 required: ["location"],
               },
@@ -157,11 +159,11 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
             type: "function",
             function: {
               name: "read_wiki_structure",
-              description: "Read the structure of a GitHub repository (MCP tool passed as OpenAI tool)",
+              description: uiT("ui.57209220803d8eae"),
               parameters: {
                 type: "object",
                 properties: {
-                  repoName: { type: "string", description: "Repository name, e.g. BerriAI/litellm" },
+                  repoName: { type: "string", description: uiT("ui.320e68c1142c390a") },
                 },
                 required: ["repoName"],
               },
@@ -323,7 +325,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         }
 
         await updateGuardrailCall(accessToken, editData.guardrail_id, updateData);
-        toast.success("Custom code guardrail updated successfully");
+        toast.success(translateUi("ui.ab5e949ef5c722fe"));
       } else {
         // Create new guardrail
         const streamScope = streamScopePayload(mode, streamScopeByMode);
@@ -341,7 +343,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         };
 
         await createGuardrailCall(accessToken, guardrailData);
-        toast.success("Custom code guardrail created successfully");
+        toast.success(translateUi("ui.a0933d4fa9d8cdc0"));
       }
       onSuccess();
       onClose();
@@ -359,7 +361,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   // Test guardrail using backend endpoint
   const handleTest = async () => {
     if (!accessToken) {
-      setTestResult({ error: "No access token available" });
+      setTestResult({ error: translateUi("ui.86895250093a18e4") });
       return;
     }
 
@@ -372,7 +374,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
       try {
         parsedInput = JSON.parse(testInput);
       } catch (e) {
-        setTestResult({ error: "Invalid test input JSON" });
+        setTestResult({ error: translateUi("ui.0470650ba7de4b53") });
         setIsTesting(false);
         return;
       }
@@ -409,12 +411,12 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           error_type: response.error_type,
         });
       } else {
-        setTestResult({ error: "Unknown error occurred" });
+        setTestResult({ error: translateUi("ui.43c4deec555b4c7e") });
       }
     } catch (error) {
       console.error("Failed to test custom code:", error);
       setTestResult({
-        error: error instanceof Error ? error.message : "Failed to test custom code",
+        error: error instanceof Error ? error.message : translateUi("ui.4b97fb6a6f358f18"),
       });
     } finally {
       setIsTesting(false);
@@ -434,27 +436,27 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[1400px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            {isEditMode ? "Edit Custom Guardrail" : "Create Custom Guardrail"}
+            {isEditMode ? uiT("ui.aa2bf0ce043666d3") : uiT("ui.7bcafb235770c66e")}
           </DialogTitle>
-          <DialogDescription>Define custom logic using Python-like syntax</DialogDescription>
+          <DialogDescription>{uiT("ui.db735ee03ac4c5ca")}</DialogDescription>
         </DialogHeader>
 
         {/* Top Controls */}
         <div className="flex flex-wrap items-center gap-4 border-b border-border py-4">
           <div className="min-w-[160px] max-w-[200px] flex-1">
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Guardrail Name</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.25e74db3ec6ad797")}</label>
             <Input
               value={guardrailName}
               onChange={(e) => setGuardrailName(e.target.value)}
-              placeholder="e.g., block-pii-custom"
+              placeholder={uiT("ui.a1504fc7e31a3351")}
             />
           </div>
           <div className="w-[280px]">
             <label className="mb-1 block text-xs font-medium text-muted-foreground">
-              {tagScopedModeLabel ? "Mode (tag-scoped, read-only)" : "Mode (can select multiple)"}
+              {tagScopedModeLabel ? uiT("ui.4e1652a344976533") : uiT("ui.35c6f3f65f888a13")}
             </label>
             {tagScopedModeLabel ? (
-              <Input value={tagScopedModeLabel} disabled aria-label="Mode (tag-scoped)" />
+              <Input value={tagScopedModeLabel} disabled aria-label={uiT("ui.fdd5049fe09bcf29")} />
             ) : (
               <Combobox
                 items={MODE_OPTIONS}
@@ -468,10 +470,10 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                       {option.label}
                     </ComboboxChip>
                   ))}
-                  <ComboboxChipsInput placeholder={mode.length === 0 ? "Select modes" : undefined} />
+                  <ComboboxChipsInput placeholder={mode.length === 0 ? uiT("ui.0345a90f92546455") : undefined} />
                 </ComboboxChips>
                 <ComboboxContent anchor={anchor}>
-                  <ComboboxEmpty>No matching modes</ComboboxEmpty>
+                  <ComboboxEmpty>{uiT("ui.1c9d746bb224c84c")}</ComboboxEmpty>
                   <ComboboxList>
                     {(option: ModeOption) => (
                       <ComboboxItem key={option.value} value={option}>
@@ -488,30 +490,28 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           )}
           {mode.includes("logging_only") && (
             <div className="flex shrink-0 items-center gap-2 pt-5">
-              <span className="text-sm text-muted-foreground">
-                Continue observing the response after a flagged request
-              </span>
+              <span className="text-sm text-muted-foreground">{uiT("ui.14894801a2bf4e6b")}</span>
               <Switch
                 checked={loggingOnlyScopeChoice === "default" && loggingOnlyContinue}
                 disabled={loggingOnlyScopeChoice !== "default"}
                 onCheckedChange={setLoggingOnlyContinue}
-                aria-label="Continue observing the response after a flagged request"
+                aria-label={uiT("ui.14894801a2bf4e6b")}
               />
             </div>
           )}
           <div className="w-[180px]">
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Template</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.0575f29df888a27e")}</label>
             <Select
               items={TEMPLATE_ITEMS}
               value={selectedTemplate}
               onValueChange={(value: string | null) => value && handleTemplateChange(value)}
             >
-              <SelectTrigger className="w-full" aria-label="Template">
+              <SelectTrigger className="w-full" aria-label={uiT("ui.0575f29df888a27e")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>STANDARD</SelectLabel>
+                  <SelectLabel>{uiT("ui.335fd665f279a081")}</SelectLabel>
                   {TEMPLATE_ITEMS.map((template) => (
                     <SelectItem key={template.value} value={template.value}>
                       {template.label}
@@ -525,15 +525,15 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                   className="flex w-full items-center gap-1 rounded-sm px-2 py-1.5 text-xs text-primary hover:bg-accent"
                 >
                   <Users className="size-3.5" />
-                  <span>Browse Community templates</span>
+                  <span>{uiT("ui.d3a644d24adc4a72")}</span>
                   <ExternalLink className="size-2.5" />
                 </button>
               </SelectContent>
             </Select>
           </div>
           <div className="flex items-center gap-2 pt-5">
-            <span className="text-sm text-muted-foreground">Default On</span>
-            <Switch checked={defaultOn} onCheckedChange={setDefaultOn} aria-label="Default On" />
+            <span className="text-sm text-muted-foreground">{uiT("ui.53a0a7d96788c7f0")}</span>
+            <Switch checked={defaultOn} onCheckedChange={setDefaultOn} aria-label={uiT("ui.53a0a7d96788c7f0")} />
           </div>
         </div>
         {mode.length > 0 && (
@@ -547,8 +547,10 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           {/* Code Editor */}
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="mb-2 flex shrink-0 items-center justify-between">
-              <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Python Logic</span>
-              <span className="text-xs text-muted-foreground">Restricted environment (no imports)</span>
+              <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                {uiT("ui.964c2964ef971c00")}
+              </span>
+              <span className="text-xs text-muted-foreground">{uiT("ui.11eff42d28f67600")}</span>
             </div>
             <div
               className="relative rounded-lg overflow-hidden border border-gray-700 bg-[#1e1e1e] shrink-0"
@@ -595,59 +597,70 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
               <CollapsibleTrigger className="flex w-full items-center gap-2 p-3 text-sm font-medium">
                 <ChevronRight className={`size-4 transition-transform ${testExpanded ? "rotate-90" : ""}`} />
                 <PlayCircle className="size-4 text-muted-foreground" />
-                Test Your Guardrail
+                {uiT("ui.a2aead626200b546")}
               </CollapsibleTrigger>
               <CollapsibleContent className="p-3 pt-0">
                 <div className="space-y-3">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="block text-xs font-medium text-muted-foreground">Test Input (JSON)</label>
+                      <label className="block text-xs font-medium text-muted-foreground">
+                        {uiT("ui.2e9845628811a0a8")}
+                      </label>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">Load example:</span>
+                        <span className="text-xs text-muted-foreground">{uiT("ui.1d5a39f3cf11e34a")}</span>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.pre_call.data, null, 2))}
                           className="px-2 py-1 text-xs rounded-sm border border-warning/20 bg-warning/10 text-warning hover:bg-warning/15 transition-colors"
                         >
-                          Pre-call
+                          {uiT("ui.c23edc69906a258e")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.pre_mcp_call.data, null, 2))}
                           className="px-2 py-1 text-xs rounded-sm border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300 dark:hover:bg-purple-900"
                         >
-                          Pre MCP
+                          {uiT("ui.ba9cafac7a23db5f")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.post_call.data, null, 2))}
                           className="px-2 py-1 text-xs rounded-sm border border-success/20 bg-success/10 text-success hover:bg-success/15 transition-colors"
                         >
-                          Post-call
+                          {uiT("ui.656dd8e7e30aee24")}
                         </button>
                       </div>
                     </div>
                     <div className="mb-2 rounded-sm border border-border bg-muted/40 p-2 text-xs text-muted-foreground">
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                         <div>
-                          <strong>texts</strong>: Message content (always)
+                          <strong>{uiT("ui.a4b992ab42964e5b")}</strong>
+                          {uiT("ui.9ab3a241bc4409fe")}
                         </div>
                         <div>
-                          <strong>images</strong>: Base64 images (vision)
+                          <strong>{uiT("ui.21b2eed1e328a2c6")}</strong>
+                          {uiT("ui.1ab0be7b6891ef15")}
                         </div>
                         <div>
-                          <strong>tools</strong>: Tool definitions <span className="text-warning">(pre_call)</span>, MCP
-                          as OpenAI tool <span className="text-purple-600">(pre_mcp_call)</span>
+                          <strong>{uiT("ui.f9d35d43770d3909")}</strong>
+                          {uiT("ui.ea184975b6bfb4ca")}{" "}
+                          <span className="text-warning">{uiT("ui.7ee4607dcb7f05cd")}</span>
+                          {uiT("ui.f38eff482c6001b0")}{" "}
+                          <span className="text-purple-600">{uiT("ui.27bc44b90e88d298")}</span>
                         </div>
                         <div>
-                          <strong>tool_calls</strong>: LLM tool calls <span className="text-success">(post_call)</span>
+                          <strong>tool_calls</strong>
+                          {uiT("ui.ecf32072926ea811")}{" "}
+                          <span className="text-success">{uiT("ui.5a31a047d9d4db5e")}</span>
                         </div>
                         <div>
-                          <strong>structured_messages</strong>: Full messages{" "}
-                          <span className="text-warning">(pre_call)</span>
+                          <strong>structured_messages</strong>
+                          {uiT("ui.4e64c5eeb8a7ead4")}{" "}
+                          <span className="text-warning">{uiT("ui.7ee4607dcb7f05cd")}</span>
                         </div>
                         <div>
-                          <strong>model</strong>: Model name (always)
+                          <strong>{uiT("ui.9372c470eeadd5ec")}</strong>
+                          {uiT("ui.edbd7bcdd0971e07")}
                         </div>
                       </div>
                     </div>
@@ -662,7 +675,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                   <div className="flex items-center gap-3">
                     <Button size="sm" onClick={handleTest} disabled={isTesting} aria-busy={isTesting}>
                       {isTesting ? <UiLoadingSpinner className="size-4" /> : <PlayCircle />}
-                      {isTesting ? "Running..." : "Run Test"}
+                      {isTesting ? uiT("ui.4977a7e5bb3675c4") : uiT("ui.f3c5e08fb592ef7b")}
                     </Button>
                     {testResult && (
                       <div
@@ -686,18 +699,18 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                           </>
                         ) : testResult.action === "allow" ? (
                           <>
-                            <CheckCircle2 className="size-4" /> Allowed
+                            <CheckCircle2 className="size-4" /> {uiT("ui.1bb201d188352e9b")}
                           </>
                         ) : testResult.action === "block" ? (
                           <>
-                            <XCircle className="size-4" /> Blocked: {testResult.reason}
+                            <XCircle className="size-4" /> {uiT("ui.3e75b48427eca3ff")} {testResult.reason}
                           </>
                         ) : testResult.action === "modify" ? (
                           <>
-                            <CheckCircle2 className="size-4" /> Modified
+                            <CheckCircle2 className="size-4" /> {uiT("ui.e8ce5dcaf408935f")}
                             {testResult.texts && testResult.texts.length > 0 && (
                               <span className="ml-1 text-xs text-muted-foreground">
-                                -&gt; {testResult.texts[0].substring(0, 50)}
+                                {uiT("ui.71b37b9a8a57b848")} {testResult.texts[0].substring(0, 50)}
                                 {testResult.texts[0].length > 50 ? "..." : ""}
                               </span>
                             )}
@@ -720,15 +733,13 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                   <Users className="size-5 text-info" />
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Built a useful guardrail?</div>
-                  <div className="text-xs text-muted-foreground">
-                    Share it with the community and help others build faster
-                  </div>
+                  <div className="text-sm font-medium">{uiT("ui.d30f7f3983a2fce9")}</div>
+                  <div className="text-xs text-muted-foreground">{uiT("ui.d3080be1149ca083")}</div>
                 </div>
               </div>
               <Button size="sm" onClick={() => window.open("https://github.com/BerriAI/litellm-guardrails", "_blank")}>
                 <ExternalLink />
-                Contribute Template
+                {uiT("ui.5bde54101fd0f3dd")}
               </Button>
             </div>
           </div>
@@ -737,9 +748,9 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           <div className="w-[300px] shrink-0 overflow-auto border-l border-border pl-6">
             <div className="mb-3 flex items-center gap-2">
               <Code className="size-4 text-muted-foreground" />
-              <span className="font-semibold">Available Primitives</span>
+              <span className="font-semibold">{uiT("ui.04236bdf0dad9d29")}</span>
             </div>
-            <p className="mb-3 text-xs text-muted-foreground">Click to copy functions to clipboard</p>
+            <p className="mb-3 text-xs text-muted-foreground">{uiT("ui.c51ea8820032d10f")}</p>
 
             <div className="space-y-2">
               {Object.entries(PRIMITIVES).map(([category, primitives]) => (
@@ -784,14 +795,14 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
 
         {/* Footer */}
         <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-          <span className="text-xs text-muted-foreground">Changes are auto-saved to local draft</span>
+          <span className="text-xs text-muted-foreground">{uiT("ui.32c4589aa99d954d")}</span>
           <div className="flex items-center gap-3">
             <Button variant="secondary" onClick={onClose}>
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleSave} disabled={isSaving || !guardrailName.trim()} aria-busy={isSaving}>
               {isSaving ? <UiLoadingSpinner className="size-4" /> : <Save />}
-              {isEditMode ? "Update Guardrail" : "Save Guardrail"}
+              {isEditMode ? uiT("ui.83861808dc39644e") : uiT("ui.6c03a96fbb2db9b9")}
             </Button>
           </div>
         </div>

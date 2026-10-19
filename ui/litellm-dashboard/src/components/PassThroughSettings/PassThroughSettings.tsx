@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import {
@@ -88,7 +90,7 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
       const updatedSettings = generalSettings.filter((setting) => setting.id !== endpointToDelete);
       setGeneralSettings(updatedSettings);
 
-      toast.success("Endpoint deleted successfully.");
+      toast.success(translateUi("ui.f3758de6831d1f48"));
     } catch (error) {
       console.error("Error deleting the endpoint:", error);
       toast.fromError("Error deleting the endpoint: " + error);
@@ -111,7 +113,7 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
     const selectedEndpoint = generalSettings.find((endpoint) => endpoint.id === selectedEndpointId);
 
     if (!selectedEndpoint) {
-      return <div>Endpoint not found</div>;
+      return <div>{uiT("ui.cc257538d703d46e")}</div>;
     }
 
     return (
@@ -129,8 +131,8 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
   return (
     <div>
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-foreground">Pass Through Endpoints</h2>
-        <p className="text-sm text-muted-foreground">Configure and manage your pass-through endpoints</p>
+        <h2 className="text-lg font-semibold text-foreground">{uiT("ui.a682f90dd1c41bb2")}</h2>
+        <p className="text-sm text-muted-foreground">{uiT("ui.cb74fc3528d207d4")}</p>
       </div>
 
       <AddPassThroughEndpoint
@@ -150,10 +152,8 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
       <AlertDialog open={isDeleteModalOpen} onOpenChange={(open) => !open && cancelDelete()}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Pass-Through Endpoint</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this pass-through endpoint? This action cannot be undone.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{uiT("ui.d35d2efda2b7ac23")}</AlertDialogTitle>
+            <AlertDialogDescription>{uiT("ui.d15cc820344302c4")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>

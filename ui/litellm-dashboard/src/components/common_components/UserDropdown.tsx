@@ -58,9 +58,9 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ value, onChange, disabled, 
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search users by email…"
+        placeholder={uiT("ui.ee590fbaeec4eea3")}
         emptyText={uiT("ui.bf1e104fb3c8")}
-        loadingText="Loading users…"
+        loadingText={uiT("ui.a53ec7ac2a7b8fb1")}
         disabled={disabled}
         inputId={id}
       />

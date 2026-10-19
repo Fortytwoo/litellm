@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
@@ -97,12 +99,12 @@ function EditProjectForm({ project, onClose, onSuccess }: Omit<EditProjectModalP
       { projectId: project.project_id, params },
       {
         onSuccess: () => {
-          toast.success("Project updated successfully");
+          toast.success(translateUi("ui.a4ed0005ac95b299"));
           onSuccess?.();
           onClose();
         },
         onError: (error) => {
-          toast.error(error.message || "Failed to update project");
+          toast.error(error.message || translateUi("ui.b5d5f6aaebfb2016"));
         },
       },
     );
@@ -126,11 +128,13 @@ function EditProjectForm({ project, onClose, onSuccess }: Omit<EditProjectModalP
 }
 
 export function EditProjectModal({ isOpen, project, onClose, onSuccess }: EditProjectModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[720px]">
         <DialogHeader>
-          <DialogTitle className="text-lg">Edit Project</DialogTitle>
+          <DialogTitle className="text-lg">{uiT("ui.f47434e4c28ef88d")}</DialogTitle>
         </DialogHeader>
         <EditProjectForm key={project.project_id} project={project} onClose={onClose} onSuccess={onSuccess} />
       </DialogContent>

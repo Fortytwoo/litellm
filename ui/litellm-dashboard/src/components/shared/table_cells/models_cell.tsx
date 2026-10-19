@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { deriveKeyModelScope } from "@/components/key_scope";
@@ -32,10 +33,10 @@ export function ModelsCell({ models, maxVisible = 3, allowedRoutes, keyType }: M
     if (!scope.hasModelAccess) {
       return (
         <CellTooltip
-          content={`Scoped to ${scope.label} routes; this key cannot call any models`}
+          content={uiT("ui.5254286816a971dd", { v0: String(scope.label) })}
           trigger={
             <Badge variant="secondary" className="cursor-default">
-              No model access
+              {uiT("ui.47bff7723801")}
             </Badge>
           }
         />
@@ -65,7 +66,7 @@ export function ModelsCell({ models, maxVisible = 3, allowedRoutes, keyType }: M
           }
           trigger={
             <Badge variant="outline" className="cursor-default">
-              +{overflow.length} more
+              +{overflow.length} {uiT("ui.187897ce0afc")}
             </Badge>
           }
         />

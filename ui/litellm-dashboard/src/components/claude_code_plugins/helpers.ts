@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 /**
  * Helper utilities for Claude Code Marketplace
  */
@@ -103,7 +104,9 @@ const parseGitHubSource = (url: URL, subPath?: string): SkillSourcePreview | nul
   const repoUrl = `https://github.com/${repoFull}`;
   const repoPreview: SkillSourcePreview = {
     parsed: { source: "github", repo: repoFull },
-    label: `GitHub repo — ${repoFull}`,
+    get label() {
+      return translateUi("ui.5151fbf08f73f0b1", undefined, { v0: String(repoFull) });
+    },
     suggestedName: toKebabCase(repoBase),
   };
 
@@ -121,7 +124,9 @@ const parseGitHubSource = (url: URL, subPath?: string): SkillSourcePreview | nul
     }
     return {
       parsed: { source: "git-subdir", url: repoUrl, path },
-      label: `GitHub subdir — ${repoFull} @ ${path}`,
+      get label() {
+        return translateUi("ui.f51f966a41db667c", undefined, { v0: String(repoFull), v1: String(path) });
+      },
       suggestedName: toKebabCase(lastSegment(path)),
     };
   }
@@ -137,7 +142,9 @@ const parseGitHubSource = (url: URL, subPath?: string): SkillSourcePreview | nul
     }
     return {
       parsed: { source: "git-subdir", url: repoUrl, path: normalized },
-      label: `GitHub subdir — ${repoFull} @ ${normalized}`,
+      get label() {
+        return translateUi("ui.f51f966a41db667c", undefined, { v0: String(repoFull), v1: String(normalized) });
+      },
       suggestedName: toKebabCase(lastSegment(normalized)),
     };
   }
@@ -158,14 +165,22 @@ const buildGitSourcePreview = (
     }
     return {
       parsed: { source: "git-subdir", url: repoUrl, path: normalized },
-      label: `${kind} subdir — ${repoUrl} @ ${normalized}`,
+      get label() {
+        return translateUi("ui.df9e3abfa0525a6e", undefined, {
+          v0: String(kind),
+          v1: String(repoUrl),
+          v2: String(normalized),
+        });
+      },
       suggestedName: toKebabCase(lastSegment(normalized)),
     };
   }
 
   return {
     parsed: { source: "url", url: repoUrl },
-    label: `${kind} repo — ${repoUrl}`,
+    get label() {
+      return translateUi("ui.53be7ddb7b2be781", undefined, { v0: String(kind), v1: String(repoUrl) });
+    },
     suggestedName: toKebabCase(repoName),
   };
 };
@@ -205,7 +220,9 @@ const parseSshSource = (raw: string, subPath?: string): SkillSourcePreview | nul
 
 const parseArchiveSource = (url: URL): SkillSourcePreview => ({
   parsed: { source: "archive", url: url.href },
-  label: `Zip archive — ${url.host}${url.pathname}`,
+  get label() {
+    return translateUi("ui.7a89baaf96f03fef", undefined, { v0: String(url.host), v1: String(url.pathname) });
+  },
   suggestedName: toKebabCase(lastSegment(url.pathname).replace(ZIP_ARCHIVE_REGEX, "")),
 });
 

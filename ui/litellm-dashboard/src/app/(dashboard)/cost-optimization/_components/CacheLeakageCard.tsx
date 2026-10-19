@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useMemo, useState } from "react";
@@ -68,6 +70,8 @@ const SortableHead = ({
   sort: SortState;
   onSort: (column: SortColumn) => void;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const active = sort.column === column;
   const ActiveArrow = sort.dir === "asc" ? ArrowUp : ArrowDown;
   const Arrow = active ? ActiveArrow : ArrowUpDown;
@@ -77,7 +81,7 @@ const SortableHead = ({
         <button
           type="button"
           onClick={() => onSort(column)}
-          aria-label={`Sort by ${label}`}
+          aria-label={uiT("ui.6c7e5c25097ff973", { v0: String(label) })}
           className="inline-flex items-center gap-1 font-medium hover:text-foreground"
         >
           {label}
@@ -128,18 +132,19 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
         <CardHeader>
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="min-w-0">
-              <CardTitle>Cache leakage by {dimension === "model" ? "model" : "virtual key"}</CardTitle>
+              <CardTitle>
+                {uiT("ui.103c4d85d20cd411")}{" "}
+                {dimension === "model" ? uiT("ui.9372c470eeadd5ec") : uiT("ui.e1a273bd92055635")}
+              </CardTitle>
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                {subject} sending large volumes of uncached input with a low cache hit rate are likely missing prompt
-                caching. Potential savings is approximate: uncached input priced at what your cached traffic nets per
-                cached token, after cache-write premiums.
+                {translateText(subject)} {uiT("ui.a48ae659ac0c28b4")}
               </p>
             </div>
           </div>
           <Tabs value={dimension} onValueChange={(value) => setDimension(value === "model" ? "model" : "key")}>
             <TabsList>
-              <TabsTrigger value="key">By virtual key</TabsTrigger>
-              <TabsTrigger value="model">By model</TabsTrigger>
+              <TabsTrigger value="key">{uiT("ui.8f8facc186eae5a0")}</TabsTrigger>
+              <TabsTrigger value="model">{uiT("ui.2fbd410f0979fdc3")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </CardHeader>
@@ -152,25 +157,25 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{firstColumn}</TableHead>
+                  <TableHead>{translateText(firstColumn)}</TableHead>
                   <SortableHead
                     column="uncachedPromptTokens"
-                    label="Uncached input tokens"
-                    info="Input tokens you sent in this range that weren't served from or written to the cache"
+                    label={uiT("ui.fabb395358a4314c")}
+                    info={uiT("ui.72f82235d8abd68d")}
                     sort={sort}
                     onSort={onSort}
                   />
                   <SortableHead
                     column="cacheHitRatio"
-                    label="Cache hit rate"
-                    info="Share of your input tokens that were served from the cache"
+                    label={uiT("ui.a394d2c9753144e7")}
+                    info={uiT("ui.75d05fa543410f22")}
                     sort={sort}
                     onSort={onSort}
                   />
                   <SortableHead
                     column="potentialSavings"
-                    label="Potential savings"
-                    info="About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall."
+                    label={uiT("ui.3abfe3547ae5db65")}
+                    info={uiT("ui.20be88ec6e81a652")}
                     sort={sort}
                     onSort={onSort}
                   />

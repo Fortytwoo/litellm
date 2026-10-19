@@ -1,3 +1,4 @@
+import { getFormattingLocale, t as translateUi } from "@/i18n";
 import type { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import { stackedUsageColor } from "@/components/shared/charts";
 import { EMPTY_DAILY_ACTIVITY_METADATA, type DailyActivityMetadata } from "@/components/UsagePage/dailyActivityApi";
@@ -65,7 +66,10 @@ const seriesKey = (index: number) => `s${index}`;
 const formatDayLabel = (date: string): string => {
   const parsed = new Date(`${date}T00:00:00`);
   if (Number.isNaN(parsed.getTime())) return date;
-  return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return parsed.toLocaleDateString(getFormattingLocale(), {
+    month: "short",
+    day: "numeric",
+  });
 };
 
 const sortByDate = (results: readonly DailyData[]) =>
@@ -141,7 +145,9 @@ export const bucketSeries = (series: Series, granularity: Granularity): Series =
     const members = series.data.filter((day) => bucketStart(day.date) === start);
     return {
       date: start,
-      label: `Wk of ${formatDayLabel(start)}`,
+      get label() {
+        return translateUi("ui.751ac52075d83019", undefined, { v0: String(formatDayLabel(start)) });
+      },
       ...Object.fromEntries(
         series.keys.map((key) => [key, members.reduce((sum, day) => sum + Number(day[key] ?? 0), 0)]),
       ),

@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useId } from "react";
 import { AutoRouterAllowanceNote } from "./AutoRouterAvailability";
 import { Button } from "@/components/ui/button";
@@ -10,12 +14,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { defaultJevClassifierConfig, fixedClassifierModels } from "./jev_classifier_config";
 
 const providerDescriptions = {
-  jev: "Uses TypeSafe System One Choice evaluation with your configured tiers",
-  laya: "Uses Laya with your configured tiers. Set LAYA_API_BASE on the gateway to connect your Laya server.",
-  bespoke:
-    "Uses Bespoke Nimble with your configured tiers. Set BESPOKE_API_BASE on the gateway to connect your Nimble server.",
-  databricks:
-    "Uses a Databricks ai_decide serving endpoint with your configured tiers. Set DATABRICKS_API_BASE and DATABRICKS_API_KEY on the gateway, and enter the serving endpoint name as the classifier model.",
+  get jev() {
+    return translateUi("ui.d83744d206a7dc8b");
+  },
+  get laya() {
+    return translateUi("ui.be904d2124c8186b");
+  },
+  get bespoke() {
+    return translateUi("ui.9b0f632fc2d0724c");
+  },
+  get databricks() {
+    return translateUi("ui.0abe53f5a5c906c2");
+  },
 };
 
 export default function JevClassifierConfig({
@@ -27,6 +37,8 @@ export default function JevClassifierConfig({
   onChange: (value: ComplexityRouterConfigValue) => void;
   section?: "all" | "model" | "advanced";
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = useId();
   const config = value.jev_classifier_config ?? defaultJevClassifierConfig();
   const models = fixedClassifierModels(config.provider);
@@ -39,7 +51,7 @@ export default function JevClassifierConfig({
         <>
           <p className="text-sm text-muted-foreground">{providerDescriptions[config.provider ?? "jev"]}</p>
           <div className="space-y-2">
-            <Label htmlFor={`${id}-model`}>Classifier Model</Label>
+            <Label htmlFor={`${id}-model`}>{uiT("ui.6493f94f0e0348f3")}</Label>
             {models ? (
               <Select value={config.model} onValueChange={(model) => model && update({ model })}>
                 <SelectTrigger id={`${id}-model`} className="w-full">
@@ -57,11 +69,7 @@ export default function JevClassifierConfig({
               <Input
                 id={`${id}-model`}
                 value={config.model}
-                placeholder={
-                  config.provider === "databricks"
-                    ? "Serving endpoint name, e.g. databricks-openjev-qwen35-4b"
-                    : undefined
-                }
+                placeholder={config.provider === "databricks" ? uiT("ui.bb2e460bae9860a5") : undefined}
                 onChange={(event) => update({ model: event.target.value })}
               />
             )}
@@ -71,7 +79,7 @@ export default function JevClassifierConfig({
       {section !== "model" && (
         <>
           <div className="space-y-2">
-            <Label htmlFor={`${id}-timeout`}>Classifier Timeout (ms)</Label>
+            <Label htmlFor={`${id}-timeout`}>{uiT("ui.e6420b7434d85823")}</Label>
             <Input
               id={`${id}-timeout`}
               type="number"
@@ -91,25 +99,20 @@ export default function JevClassifierConfig({
             }
           />
           <div className="space-y-2">
-            <Label htmlFor={`${id}-instructions`}>Classifier Instructions</Label>
-            <AutoRouterAllowanceNote
-              feature="tier_or_classifier_prompt"
-              label="Custom instructions share the custom-tier allowance"
-            />
+            <Label htmlFor={`${id}-instructions`}>{uiT("ui.6348538146593203")}</Label>
+            <AutoRouterAllowanceNote feature="tier_or_classifier_prompt" label={uiT("ui.caf1b1b01e3a6be4")} />
             <Textarea
               id={`${id}-instructions`}
               value={config.instructions ?? ""}
-              placeholder="Leave blank to use the built-in instructions"
+              placeholder={uiT("ui.2d2aaa0f4691e9a6")}
               onChange={(event) => update({ instructions: event.target.value || undefined })}
             />
             {config.instructions && (
               <Button variant="outline" type="button" onClick={() => update({ instructions: undefined })}>
-                Restore built-in instructions
+                {uiT("ui.e6ca70f8529692a9")}
               </Button>
             )}
-            <p className="text-xs text-muted-foreground">
-              Built-in decision model classification is available without a license and uses the shipped tier criteria
-            </p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.6faa590590cad398")}</p>
           </div>
         </>
       )}

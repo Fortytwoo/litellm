@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -10,11 +13,13 @@ interface RoutingOptionsProps {
 }
 
 const RoutingOptions = ({
-  label = "Advanced settings",
+  label = translateUi("ui.7b0bd218a84eef9a"),
   showValidationErrors = false,
   summary,
   children,
 }: RoutingOptionsProps) => {
+  useDashboardLanguage();
+
   const [open, setOpen] = React.useState(false);
   const [previousValidation, setPreviousValidation] = React.useState(showValidationErrors);
   if (previousValidation !== showValidationErrors) {

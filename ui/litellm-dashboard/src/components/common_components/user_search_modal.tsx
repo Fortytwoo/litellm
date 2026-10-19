@@ -1,4 +1,7 @@
 "use client";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useRef, useState } from "react";
 import { Info, UserPlus } from "lucide-react";
@@ -54,14 +57,14 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
   onCancel,
   onSubmit,
   accessToken,
-  title = "Add Team Member",
+  title = translateUi("ui.279ff6cfe4906f62"),
   roles = [
     {
-      label: "admin",
+      label: translateUi("ui.8c6976e5b5410415"),
       value: "admin",
-      description: "Admin role. Can create team keys, add members, and manage settings.",
+      description: translateUi("ui.7664a8fc8f412dba"),
     },
-    { label: "user", value: "user", description: "User role. Can view team info, but not manage it." },
+    { label: translateUi("ui.04f8996da763b7a9"), value: "user", description: translateUi("ui.5b8cfb7a634ecf6a") },
   ],
   defaultRole = "user",
   teamId,
@@ -177,7 +180,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
           isLoading={loading}
           placeholder={placeholder}
           emptyText={uiT("ui.a43619f32117")}
-          loadingText="Loading..."
+          loadingText={uiT("ui.47d2a515ef2f")}
           inputId={controlProps.id}
         />
       </div>
@@ -194,10 +197,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
           <form onSubmit={form.handleSubmit(handleSubmit)} noValidate>
             <Alert variant="info" className="mb-4" data-testid="member-existing-users-notice">
               <Info />
-              <AlertTitle>
-                Search selects from users that already exist. To add someone new, ask a proxy admin to create their
-                account first.
-              </AlertTitle>
+              <AlertTitle>{uiT("ui.64ade30a84d1d411")}</AlertTitle>
             </Alert>
 
             <FieldGroup>
@@ -207,7 +207,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
                 }
               </FormField>
 
-              <div className="text-center">OR</div>
+              <div className="text-center">{uiT("ui.829e5b28af38ab33")}</div>
 
               <FormField control={form.control} name="user_id" label={uiT("ui.7967e089a7b9")}>
                 {({ id, value, onChange }) => renderUserSearch("user_id", "Search by user ID", { id, value, onChange })}

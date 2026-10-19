@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useRef, useState } from "react";
 import { Plus, Upload } from "lucide-react";
 import { validateBlockedWordsFile } from "@/components/networking";
@@ -102,6 +106,8 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
   competitorIntentConfig = null,
   onCompetitorIntentChange,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [patternModalVisible, setPatternModalVisible] = useState(false);
   const [keywordModalVisible, setKeywordModalVisible] = useState(false);
   const [customPatternModalVisible, setCustomPatternModalVisible] = useState(false);
@@ -119,7 +125,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddPrebuiltPattern = () => {
     if (!selectedPatternName) {
-      toast.error("Please select a pattern");
+      toast.error(translateUi("ui.721b8fe18aa5030d"));
       return;
     }
 
@@ -140,7 +146,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddCustomPattern = () => {
     if (!customPatternName || !customPatternRegex) {
-      toast.error("Please provide pattern name and regex");
+      toast.error(translateUi("ui.9c837ad9a57d93ac"));
       return;
     }
 
@@ -160,7 +166,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddKeyword = () => {
     if (!newKeyword) {
-      toast.error("Please enter a keyword");
+      toast.error(translateUi("ui.9630377418a0f828"));
       return;
     }
 
@@ -188,14 +194,14 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           if (onFileUpload) {
             onFileUpload(content);
           }
-          toast.success(result.message || "File uploaded successfully");
+          toast.success(result.message || translateUi("ui.2cd92465d38ecabc"));
         } else {
           const errorMessage = result.error || (result.errors && result.errors.join(", ")) || "Invalid file";
-          toast.error(`Validation failed: ${errorMessage}`);
+          toast.error(translateUi("ui.22a8f97bb92ad484", undefined, { v0: String(errorMessage) }));
         }
       }
     } catch (error) {
-      toast.error(`Failed to upload file: ${error}`);
+      toast.error(translateUi("ui.fd516635bd39a714", undefined, { v0: String(error) }));
     } finally {
       setUploadValidating(false);
     }
@@ -219,10 +225,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
     <div className="space-y-6">
       {!showStep && (
         <div>
-          <p className="text-muted-foreground">
-            Configure patterns, keywords, and content categories to detect and filter sensitive information in requests
-            and responses.
-          </p>
+          <p className="text-muted-foreground">{uiT("ui.b21e60514bddd5e0")}</p>
         </div>
       )}
 
@@ -230,21 +233,19 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>Pattern Detection</CardTitle>
-              <p className="text-sm font-normal text-muted-foreground">
-                Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)
-              </p>
+              <CardTitle>{uiT("ui.150361a3fa9f8f75")}</CardTitle>
+              <p className="text-sm font-normal text-muted-foreground">{uiT("ui.02c9fc5c082d309f")}</p>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setPatternModalVisible(true)}>
                 <Plus />
-                Add prebuilt pattern
+                {uiT("ui.f49c33b1806e6215")}
               </Button>
               <Button variant="outline" onClick={() => setCustomPatternModalVisible(true)}>
                 <Plus />
-                Add custom regex
+                {uiT("ui.42cbec18da19276b")}
               </Button>
             </div>
             <PatternTable
@@ -260,17 +261,15 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>Blocked Keywords</CardTitle>
-              <p className="text-sm font-normal text-muted-foreground">
-                Block or mask specific sensitive terms and phrases
-              </p>
+              <CardTitle>{uiT("ui.161a9bd671ffa96e")}</CardTitle>
+              <p className="text-sm font-normal text-muted-foreground">{uiT("ui.63b57def6f28bff4")}</p>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setKeywordModalVisible(true)}>
                 <Plus />
-                Add keyword
+                {uiT("ui.1ea78f2a43b87684")}
               </Button>
               <input
                 ref={fileInputRef}
@@ -286,7 +285,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
                 onClick={() => fileInputRef.current?.click()}
               >
                 {uploadValidating ? <UiLoadingSpinner className="size-4" /> : <Upload />}
-                Upload YAML file
+                {uiT("ui.58308e3644d7a9ae")}
               </Button>
             </div>
             <KeywordTable keywords={blockedWords} onActionChange={onBlockedWordUpdate} onRemove={onBlockedWordRemove} />

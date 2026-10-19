@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Plus } from "lucide-react";
@@ -49,7 +51,7 @@ export default function CredentialsPanel() {
         ...newCredential,
         ...(valuesToDelete.length > 0 ? { credential_values_to_delete: valuesToDelete } : {}),
       });
-      toast.success("Credential updated successfully");
+      toast.success(translateUi("ui.6ffbe42cbc6ec7f6"));
       setIsUpdateModalOpen(false);
       await refetchCredentials();
     } catch (error) {
@@ -64,7 +66,7 @@ export default function CredentialsPanel() {
     try {
       const newCredential = buildCredential(submission, submission.credential_values);
       await credentialCreateCall(accessToken, newCredential);
-      toast.success("Credential added successfully");
+      toast.success(translateUi("ui.d266dc90e6652fa2"));
       setIsAddModalOpen(false);
       await refetchCredentials();
     } catch (error) {
@@ -79,10 +81,10 @@ export default function CredentialsPanel() {
     setIsCredentialDeleting(true);
     try {
       await credentialDeleteCall(accessToken, credentialToDelete.credential_name);
-      toast.success("Credential deleted successfully");
+      toast.success(translateUi("ui.e0644d070b0d8f0c"));
       await refetchCredentials();
     } catch (error) {
-      toast.error("Failed to delete credential");
+      toast.error(translateUi("ui.add2bc531b542720"));
     } finally {
       setCredentialToDelete(null);
       setIsDeleteModalOpen(false);
@@ -108,13 +110,11 @@ export default function CredentialsPanel() {
   return (
     <div className="mx-auto flex w-full flex-auto flex-col gap-4 overflow-y-auto p-2">
       <div className="flex items-center justify-between gap-4">
-        <p className="text-sm text-muted-foreground">
-          Configured credentials for different AI providers. Add and manage your API credentials.
-        </p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.121255c3cc3b8dfb")}</p>
         {canModifyCredentials && (
           <Button onClick={() => setIsAddModalOpen(true)}>
             <Plus className="size-4" />
-            Add Credential
+            {uiT("ui.35d74dfd8dacfa8a")}
           </Button>
         )}
       </div>
@@ -149,11 +149,11 @@ export default function CredentialsPanel() {
         isOpen={isDeleteModalOpen}
         onCancel={closeDeleteModal}
         onOk={handleDeleteCredential}
-        title="Delete Credential?"
-        message="Are you sure you want to delete this credential? This action cannot be undone and may break existing integrations."
+        title={uiT("ui.79efd11c1a31c35d")}
+        message={uiT("ui.09f1f823e3781b03")}
         resourceInformationTitle="Credential Information"
         resourceInformation={[
-          { label: "Credential Name", value: credentialToDelete?.credential_name },
+          { label: uiT("ui.793f05950149e538"), value: credentialToDelete?.credential_name },
           { label: uiT("ui.472590ae974d"), value: credentialToDelete?.credential_info?.custom_llm_provider || "-" },
         ]}
         confirmLoading={isCredentialDeleting}

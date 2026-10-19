@@ -163,7 +163,7 @@ const MemberModal = <T extends BaseMember>({
                 options={field.options ?? []}
                 value={Array.isArray(value) ? value : []}
                 onValueChange={onChange}
-                placeholder={field.placeholder || "Select options"}
+                placeholder={field.placeholder || uiT("ui.e0ee36381c498dc4")}
               />
             );
           case "budget-duration":
@@ -195,7 +195,9 @@ const MemberModal = <T extends BaseMember>({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[1000px]">
         <DialogHeader>
-          <DialogTitle>{config.title || (mode === "add" ? uiT("ui.e7d80d8f7fda") : "Edit Member")}</DialogTitle>
+          <DialogTitle>
+            {config.title || (mode === "add" ? uiT("ui.e7d80d8f7fda") : uiT("ui.41d3aafd7a40222c"))}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
@@ -214,7 +216,7 @@ const MemberModal = <T extends BaseMember>({
             )}
 
             {config.showEmail && config.showUserId && (
-              <div className="text-center text-sm text-muted-foreground">OR</div>
+              <div className="text-center text-sm text-muted-foreground">{uiT("ui.829e5b28af38ab33")}</div>
             )}
 
             {config.showUserId && (
@@ -238,7 +240,9 @@ const MemberModal = <T extends BaseMember>({
                 <span className="flex items-center gap-2">
                   <span>{uiT("ui.14736a2eb9f4")}</span>
                   {mode === "edit" && initialData && (
-                    <span className="text-sm text-muted-foreground">(Current: {getRoleLabel(initialData.role)})</span>
+                    <span className="text-sm text-muted-foreground">
+                      {uiT("ui.02346c7e02c3ce63")} {getRoleLabel(initialData.role)})
+                    </span>
                   )}
                 </span>
               }

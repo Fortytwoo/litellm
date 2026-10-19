@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 /**
  * Utility functions for working with navigation pages
  */
@@ -47,7 +48,7 @@ export const getAvailablePages = (): PageMetadata[] => {
           page: item.page,
           label: labelText(item),
           group: group.groupLabel,
-          description: pageDescriptions[item.page] || "No description available",
+          description: pageDescriptions[item.page] || translateUi("ui.aab5e3e77b99b45f"),
         });
       }
 
@@ -61,7 +62,7 @@ export const getAvailablePages = (): PageMetadata[] => {
               page: child.page,
               label: labelText(child),
               group: `${group.groupLabel} > ${parentLabel}`,
-              description: pageDescriptions[child.page] || "No description available",
+              description: pageDescriptions[child.page] || translateUi("ui.aab5e3e77b99b45f"),
             });
           }
         });

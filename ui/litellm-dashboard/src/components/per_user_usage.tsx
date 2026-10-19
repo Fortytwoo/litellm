@@ -93,12 +93,12 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
       cell: ({ row }) => row.original.user_email || "N/A",
     },
     {
-      header: "User Agent",
+      header: uiT("ui.62e013458fd79bac"),
       accessorKey: "user_agent",
       cell: ({ row }) => row.original.user_agent || "Unknown",
     },
     {
-      header: "Success Generations",
+      header: uiT("ui.5d5fb79ce09c89c9"),
       accessorKey: "successful_requests",
       meta: { numeric: true },
       cell: ({ row }) => formatAbbreviatedNumber(row.original.successful_requests),
@@ -125,8 +125,8 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
 
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-medium text-foreground">Per User Usage</h3>
-      <p className="text-sm text-muted-foreground">Individual developer usage metrics</p>
+      <h3 className="text-lg font-medium text-foreground">{uiT("ui.ed02b9d72644c3c3")}</h3>
+      <p className="text-sm text-muted-foreground">{uiT("ui.1093c9f59a40ec04")}</p>
 
       <Tabs defaultValue="details">
         <TabsList variant="line" className="mb-6 h-auto w-full justify-start rounded-none border-b p-0">
@@ -134,7 +134,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
             {uiT("ui.dfff6effe97d")}
           </TabsTrigger>
           <TabsTrigger value="distribution" className="flex-none rounded-none px-4 py-2">
-            Usage Distribution
+            {uiT("ui.25e05ac98c301a5f")}
           </TabsTrigger>
         </TabsList>
 
@@ -148,7 +148,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
             pagination={pagination}
             onPaginationChange={handlePaginationChange}
             rowCount={perUserData.total_count}
-            noDataMessage="No per-user usage data"
+            noDataMessage={uiT("ui.2db07e02e5182868")}
             size="compact"
           />
         </TabsContent>
@@ -156,8 +156,8 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
         {/* Tab 2: Usage Distribution Histogram */}
         <TabsContent value="distribution" keepMounted>
           <div className="mb-4">
-            <h4 className="text-lg font-medium text-foreground">User Usage Distribution</h4>
-            <p className="text-sm text-muted-foreground">Number of users by successful request frequency</p>
+            <h4 className="text-lg font-medium text-foreground">{uiT("ui.27c3f39ecd4157a3")}</h4>
+            <p className="text-sm text-muted-foreground">{uiT("ui.0c32844b9ecc38ca")}</p>
           </div>
 
           <BarChart

@@ -1,4 +1,6 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ChevronRight, CircleHelp } from "lucide-react";
@@ -19,10 +21,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -83,12 +87,12 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
     <Dialog open={visible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Create New Tag</DialogTitle>
+          <DialogTitle>{uiT("ui.ad41f17a7f5ed0d2")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleFinish)} noValidate>
           <TooltipProvider>
             <FieldGroup>
-              <FormField control={form.control} name="tag_name" label="Tag Name">
+              <FormField control={form.control} name="tag_name" label={uiT("ui.077b1b77d3100997")}>
                 {({ ref, ...field }) => <Input {...field} ref={ref} />}
               </FormField>
 
@@ -109,7 +113,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
                     options={modelOptions}
                     value={value}
                     onValueChange={onChange}
-                    placeholder="Select Models"
+                    placeholder={uiT("ui.05c39c4c5b136419")}
                   />
                 )}
               </FormField>
@@ -121,7 +125,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
               className="mt-4 mb-4 rounded-md border border-border"
             >
               <CollapsibleTrigger className="group flex w-full items-center justify-between px-4 py-3 text-base font-medium text-foreground">
-                Budget & Rate Limits (Optional)
+                {uiT("ui.586d6c061b7ad399")}
                 <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
               </CollapsibleTrigger>
               <CollapsibleContent className="px-4 pb-4">
@@ -157,14 +161,14 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
 
                 <div className="mt-4 rounded-md border border-border bg-muted p-3">
                   <p className="text-sm text-muted-foreground">
-                    TPM/RPM limits for tags are not currently supported. If you need this feature, please{" "}
+                    {uiT("ui.67670860de9fb61e")}{" "}
                     <a
                       href="https://github.com/BerriAI/litellm/issues/new"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-info underline hover:text-info/80"
                     >
-                      create a GitHub issue
+                      {uiT("ui.f99c06a14931f486")}
                     </a>
                     .
                   </p>
@@ -173,7 +177,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
             </Collapsible>
 
             <div className="mt-2.5 text-right">
-              <Button type="submit">Create Tag</Button>
+              <Button type="submit">{uiT("ui.15093d5dd1659e6a")}</Button>
             </div>
           </TooltipProvider>
         </form>

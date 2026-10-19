@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Organization } from "../networking";
@@ -20,9 +24,11 @@ const OrganizationDropdown: React.FC<OrganizationDropdownProps> = ({
   disabled,
   loading,
   style,
-  placeholder = "All Organizations",
+  placeholder = translateUi("ui.949520d020905f7b"),
   id,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div style={{ minWidth: 280, ...style }}>
       <SearchSelect
@@ -34,7 +40,7 @@ const OrganizationDropdown: React.FC<OrganizationDropdownProps> = ({
         value={value}
         onValueChange={(organizationId) => onChange?.(organizationId)}
         placeholder={placeholder}
-        emptyText={loading ? "Loading organizations…" : "No organizations found"}
+        emptyText={loading ? uiT("ui.c924ecff75c1fdbe") : uiT("ui.538995dba7bbf7a5")}
         disabled={disabled}
         inputId={id}
       />

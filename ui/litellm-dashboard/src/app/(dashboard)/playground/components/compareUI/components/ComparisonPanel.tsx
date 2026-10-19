@@ -116,10 +116,10 @@ export function ComparisonPanel({
             id={syncId}
             checked={comparison.applyAcrossModels}
             onCheckedChange={handleSyncChange}
-            aria-label="Sync Settings Across Models"
+            aria-label={uiT("ui.c48f86505de1ede9")}
           />
           <label htmlFor={syncId} className="cursor-pointer text-xs font-medium">
-            Sync Settings Across Models
+            {uiT("ui.c48f86505de1ede9")}
           </label>
         </div>
 
@@ -127,7 +127,9 @@ export function ComparisonPanel({
 
         {/* General Settings */}
         <div>
-          <h4 className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">General Settings</h4>
+          <h4 className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">
+            {uiT("ui.de322f87b5f5957b")}
+          </h4>
           <div className="space-y-2">
             <div>
               <label className="text-xs font-medium text-muted-foreground block mb-0.5">{uiT("ui.1331275bc537")}</label>
@@ -157,17 +159,19 @@ export function ComparisonPanel({
         </div>
         {/* Advanced Settings */}
         <div>
-          <h4 className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">Advanced Settings</h4>
+          <h4 className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">
+            {uiT("ui.22d4f6088b718aa4")}
+          </h4>
           <div className="space-y-2">
             <div className="flex items-center gap-2 pb-1">
               <Checkbox
                 id={advancedParamsId}
                 checked={comparison.useAdvancedParams}
                 onCheckedChange={handleAdvancedParamsChange}
-                aria-label="Use Advanced Parameters"
+                aria-label={uiT("ui.1e2b3b6d2199c1a9")}
               />
               <label htmlFor={advancedParamsId} className="cursor-pointer text-sm font-medium">
-                Use Advanced Parameters
+                {uiT("ui.1e2b3b6d2199c1a9")}
               </label>
             </div>
             <div className="space-y-2 transition-opacity duration-200" style={{ opacity: disabledOpacity }}>
@@ -191,7 +195,7 @@ export function ComparisonPanel({
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className={`text-xs font-medium ${disabledTextColor}`}>Max Tokens</label>
+                  <label className={`text-xs font-medium ${disabledTextColor}`}>{uiT("ui.c18e6c7f33c41f22")}</label>
                   <span className={`text-xs ${disabledTextColor}`}>{comparison.maxTokens}</span>
                 </div>
                 <Slider

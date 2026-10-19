@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMCPSemanticFilterSettings } from "@/app/(dashboard)/hooks/mcpSemanticFilterSettings/useMCPSemanticFilterSettings";
@@ -67,10 +71,12 @@ const SIMILARITY_THRESHOLD_MARKS = [
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -93,7 +99,7 @@ const SaveSuccessAlert = () => {
   return (
     <Alert variant="success" className="mb-4">
       <CircleCheck />
-      <AlertTitle>Settings saved successfully</AlertTitle>
+      <AlertTitle>{uiT("ui.074a3722982c6aba")}</AlertTitle>
       <AlertAction>
         <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.7d9eb7acb13e")} onClick={() => setDismissed(true)}>
           <X className="size-4" />
@@ -169,7 +175,7 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
         setIsDirty(false);
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
-        toast.success("Settings updated successfully. Changes will be applied across all pods within 10 seconds.");
+        toast.success(translateUi("ui.cd45e5e5d93f5315"));
       },
       onError: (error) => {
         toast.fromError(error);
@@ -193,9 +199,7 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
   };
 
   if (!accessToken) {
-    return (
-      <div className="p-6 text-center text-muted-foreground">Please log in to configure semantic filter settings.</div>
-    );
+    return <div className="p-6 text-center text-muted-foreground">{uiT("ui.a9e4630b32278e29")}</div>;
   }
 
   return (
@@ -209,26 +213,22 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
         </div>
       ) : isError ? (
         <Alert variant="error" className="mb-6">
-          <AlertTitle>Could not load MCP Semantic Filter settings</AlertTitle>
+          <AlertTitle>{uiT("ui.ff71ee2fbe247274")}</AlertTitle>
           {error instanceof Error && <AlertDescription>{error.message}</AlertDescription>}
         </Alert>
       ) : (
         <>
           <Alert variant="info" className="mb-6">
             <Info />
-            <AlertTitle>Semantic Tool Filtering</AlertTitle>
-            <AlertDescription>
-              Filter MCP tools semantically based on query relevance. This reduces context window size and improves tool
-              selection accuracy. Click &apos;Save Settings&apos; to apply changes across all pods (takes effect within
-              10 seconds).
-            </AlertDescription>
+            <AlertTitle>{uiT("ui.4989165962af8800")}</AlertTitle>
+            <AlertDescription>{uiT("ui.7a1c22a9d8517afa")}</AlertDescription>
           </Alert>
 
           {saveSuccess && <SaveSuccessAlert />}
 
           {updateError && (
             <Alert variant="error" className="mb-4">
-              <AlertTitle>Could not update settings</AlertTitle>
+              <AlertTitle>{uiT("ui.bcbefab00e66df05")}</AlertTitle>
               {updateError instanceof Error && <AlertDescription>{updateError.message}</AlertDescription>}
             </Alert>
           )}
@@ -266,7 +266,7 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
 
                   <Card className="mb-4">
                     <CardHeader className="border-b">
-                      <CardTitle>Configuration</CardTitle>
+                      <CardTitle>{uiT("ui.b332c3492d5eb10a")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <FieldGroup>
@@ -288,8 +288,8 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
                               value={value}
                               onValueChange={(selected) => commitChange(onChange, selected)}
                               allowClear={false}
-                              placeholder={loadingModels ? "Loading models..." : "Select embedding model"}
-                              emptyText={loadingModels ? uiT("ui.47d2a515ef2f") : "No embedding models available"}
+                              placeholder={loadingModels ? uiT("ui.802435241f0ac4f5") : uiT("ui.bbf105074207a289")}
+                              emptyText={loadingModels ? uiT("ui.47d2a515ef2f") : uiT("ui.0a6598c0e2ff62a0")}
                               disabled={isUpdating || loadingModels}
                             />
                           )}
@@ -364,7 +364,7 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
                       disabled={!isDirty || isUpdating}
                     >
                       {isUpdating ? <UiLoadingSpinner className="size-4" /> : <Save />}
-                      Save Settings
+                      {uiT("ui.ec92e1dc9bb3bf7b")}
                     </Button>
                   </div>
                 </form>

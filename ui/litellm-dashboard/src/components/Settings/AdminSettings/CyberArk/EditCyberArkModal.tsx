@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useCyberArkConfig } from "@/app/(dashboard)/hooks/configOverrides/useCyberArkConfig";
@@ -26,22 +28,36 @@ interface CyberArkFieldGroup {
 
 const FIELD_GROUPS: CyberArkFieldGroup[] = [
   {
-    title: "Connection",
+    get title() {
+      return translateUi("ui.639a40e82b9a96f0");
+    },
     fields: ["cyberark_api_base", "cyberark_account", "cyberark_username"],
   },
   {
-    title: "API Key Authentication",
-    subtitle: "Use a Conjur API key to authenticate. Only one auth method is required.",
+    get title() {
+      return translateUi("ui.f372368088b8fa2e");
+    },
+    get subtitle() {
+      return translateUi("ui.f8deb3714ba618c8");
+    },
     fields: ["cyberark_api_key"],
   },
   {
-    title: "Certificate Authentication",
-    subtitle: "Use a client TLS certificate and key to authenticate. Only one auth method is required.",
+    get title() {
+      return translateUi("ui.a79d23c12bf113c3");
+    },
+    get subtitle() {
+      return translateUi("ui.71defe5e7c7121cb");
+    },
     fields: ["client_cert", "client_key"],
   },
   {
-    title: "Advanced",
-    subtitle: "Optional TLS and token caching settings.",
+    get title() {
+      return translateUi("ui.9f088dbebd6c3c70");
+    },
+    get subtitle() {
+      return translateUi("ui.1e4670469dcafb35");
+    },
     fields: ["ssl_verify", "refresh_interval"],
   },
 ];
@@ -55,7 +71,9 @@ const buildSchema = (fields: readonly string[]): z.ZodType<CyberArkFormValues, C
         name,
         name === "cyberark_api_base"
           ? z.string().refine((value) => value.length === 0 || /^https?:\/\/.+/.test(value), {
-              message: "Must start with http:// or https://",
+              get message() {
+                return translateUi("ui.3ca6e40c7de5fa02");
+              },
             })
           : z.string(),
       ]),
@@ -108,7 +126,7 @@ const EditCyberArkModal: React.FC<EditCyberArkModalProps> = ({ isVisible, onCanc
 
     mutate(config, {
       onSuccess: () => {
-        toast.success("CyberArk configuration updated successfully");
+        toast.success(translateUi("ui.afc038fb481bae30"));
         onSuccess();
       },
       onError: (err) => {
@@ -148,7 +166,7 @@ const EditCyberArkModal: React.FC<EditCyberArkModalProps> = ({ isVisible, onCanc
     <Dialog open={isVisible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Edit CyberArk Configuration</DialogTitle>
+          <DialogTitle>{uiT("ui.26c582f24d5c2b04")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           {FIELD_GROUPS.map((group, index) => (

@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -42,13 +44,15 @@ interface AccessGroupRowActionsProps {
 }
 
 function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudget }: AccessGroupRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const hasBudget = accessGroup.budget != null;
   const blocked = writeBlockedReason(accessGroup, canWrite);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open budget actions for ${accessGroup.access_group}`}
+        aria-label={uiT("ui.e3c462dc54965504", { v0: String(accessGroup.access_group) })}
         data-testid={`access-group-actions-${accessGroup.access_group}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -62,17 +66,17 @@ function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudg
           onClick={() => onSetBudget(accessGroup)}
         >
           <Wallet />
-          {hasBudget ? "Edit budget" : "Set budget"}
+          {hasBudget ? uiT("ui.8cb99c4d32541f76") : uiT("ui.df4e88af065d54f0")}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
           disabled={blocked !== undefined || !hasBudget}
           data-testid="access-group-action-clear-budget"
-          title={blocked ?? (hasBudget ? undefined : "This access group has no budget to clear")}
+          title={blocked ?? (hasBudget ? undefined : uiT("ui.6a917ade08abb502"))}
           onClick={() => onClearBudget(accessGroup)}
         >
           <Trash2 />
-          Clear budget
+          {uiT("ui.ea3df2f72fc77a02")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -93,8 +97,12 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "access_group",
     accessorKey: "access_group",
-    meta: { title: "Access Group" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Access Group" />,
+    meta: {
+      get title() {
+        return translateUi("ui.de2abd6b489e37a2");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.de2abd6b489e37a2")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -121,8 +129,13 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "deployment_count",
     accessorKey: "deployment_count",
-    meta: { title: "Deployments", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Deployments" />,
+    meta: {
+      get title() {
+        return translateUi("ui.842a4697fd0dddaa");
+      },
+      numeric: true,
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.842a4697fd0dddaa")} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => row.original.deployment_count,
@@ -130,8 +143,12 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Shared Spend" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Shared Spend" />,
+    meta: {
+      get title() {
+        return translateUi("ui.dcabae3b2cf80cd3");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dcabae3b2cf80cd3")} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => (
@@ -144,8 +161,14 @@ export const getAccessGroupBudgetColumns = ({
   },
   {
     id: "budget_duration",
-    meta: { title: "Resets" },
-    header: "Resets",
+    meta: {
+      get title() {
+        return translateUi("ui.7816b9affc62a9e9");
+      },
+    },
+    get header() {
+      return translateUi("ui.7816b9affc62a9e9");
+    },
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (

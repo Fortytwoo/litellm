@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { modelCreateCall } from "../networking";
 import { toast } from "@/lib/toast";
 import type { ComplexityRouterConfigPayload } from "./build_complexity_router_config";
@@ -44,7 +45,7 @@ export const handleAddAutoRouterSubmit = async (
 
     await modelCreateCall(accessToken, autoRouterConfig);
 
-    toast.success(`Successfully created Auto Router: ${values.auto_router_name}`);
+    toast.success(translateUi("ui.d4496222c4476765", undefined, { v0: String(values.auto_router_name) }));
 
     resetForm();
 

@@ -37,15 +37,15 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Add blocked keyword</DialogTitle>
+          <DialogTitle>{uiT("ui.8591d95ebc0c1b16")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div>
-            <p className="font-semibold">Keyword</p>
+            <p className="font-semibold">{uiT("ui.a668022aed26067d")}</p>
             <Input
               className="mt-2"
-              placeholder="Enter sensitive keyword or phrase"
+              placeholder={uiT("ui.8e33c0ea6062693d")}
               value={keyword}
               onChange={(e) => onKeywordChange(e.target.value)}
             />
@@ -53,9 +53,7 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
 
           <div>
             <p className="font-semibold">{uiT("ui.64cff1319d2f")}</p>
-            <p className="mt-1 mb-2 text-muted-foreground">
-              Choose what action the guardrail should take when this keyword is detected
-            </p>
+            <p className="mt-1 mb-2 text-muted-foreground">{uiT("ui.724f5aca27f9bd39")}</p>
             <Select
               items={ACTION_ITEMS}
               value={action}
@@ -75,10 +73,10 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
           </div>
 
           <div>
-            <p className="font-semibold">Description (optional)</p>
+            <p className="font-semibold">{uiT("ui.f6cbe2f0c1f8a38b")}</p>
             <Textarea
               className="mt-2 field-sizing-fixed"
-              placeholder="Explain why this keyword is sensitive"
+              placeholder={uiT("ui.53c3ab64f2291c08")}
               value={description}
               onChange={(e) => onDescriptionChange(e.target.value)}
               rows={3}

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useId, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -52,6 +53,8 @@ function SampleSession() {
 }
 
 function DemoToggle({ demo, onChange }: { demo: boolean; onChange: (demo: boolean) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = useId();
   return (
     <div
@@ -60,7 +63,7 @@ function DemoToggle({ demo, onChange }: { demo: boolean; onChange: (demo: boolea
         demo ? "font-medium text-info" : "text-muted-foreground",
       )}
     >
-      <label htmlFor={id}>Demo data</label>
+      <label htmlFor={id}>{uiT("ui.71ddd59aa6f1d209")}</label>
       <Switch id={id} size="sm" checked={demo} onCheckedChange={onChange} className="data-checked:bg-info" />
     </div>
   );
@@ -81,6 +84,8 @@ const PANEL =
   "flex min-h-0 flex-1 flex-col overflow-y-auto animate-in fade-in-0 duration-300 motion-reduce:animate-none";
 
 function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">) {
+  const { t: uiT } = useDashboardLanguage();
+
   const accessToken = useLensAccessToken();
   const { tab, lensId, demo, settingUp, setTab, setDemo, setSetup } = useLensRoute();
   const { dialog, openDialog } = useDialogRoute();
@@ -174,8 +179,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-0.5 text-xs text-muted-foreground hover:text-foreground"
               >
-                Docs
-                <ArrowUpRight aria-hidden="true" className="size-3" />
+                {uiT("ui.7af023c43013")} <ArrowUpRight aria-hidden="true" className="size-3" />
               </a>
               <DemoToggle demo={demo} onChange={toggleDemo} />
             </div>
@@ -186,7 +190,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                 {setupState.loading ? (
                   <p role="status" className="flex items-center gap-2 py-8 text-sm text-muted-foreground">
                     <Loader2 aria-hidden="true" className="size-4 animate-spin" />
-                    Checking Lens setup…
+                    {uiT("ui.244860a85e510d2b")}
                   </p>
                 ) : (
                   <LensGettingStarted state={setupState} onStart={startSetup} onExit={exitSetup} />
@@ -208,16 +212,14 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                   {canViewInvestigations ? (
                     <FindingsView readOnly={readOnly || !isAdmin} />
                   ) : (
-                    <p className="py-6 text-sm text-muted-foreground">Findings require proxy administrator access.</p>
+                    <p className="py-6 text-sm text-muted-foreground">{uiT("ui.4f07ae68a4621982")}</p>
                   )}
                 </TabsContent>
                 <TabsContent value="investigations" className={PANEL}>
                   {canViewInvestigations ? (
                     <InvestigationsView readOnly={readOnly || !isAdmin} />
                   ) : (
-                    <p className="py-6 text-sm text-muted-foreground">
-                      Investigations require proxy administrator access. You can still view your traces.
-                    </p>
+                    <p className="py-6 text-sm text-muted-foreground">{uiT("ui.02662adc78fa7836")}</p>
                   )}
                 </TabsContent>
                 <TabsContent value="datasets" className={PANEL}>
@@ -232,7 +234,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                   workerReadyAction={
                     list.lenses.length === 0 ? (
                       <Button className="w-full" onClick={startFirstInvestigation}>
-                        New investigation
+                        {uiT("ui.c11364d7598c3309")}
                       </Button>
                     ) : undefined
                   }
@@ -248,8 +250,9 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
 }
 
 function DatasetsPanel({ canView, isAdmin, readOnly }: { canView: boolean; isAdmin: boolean; readOnly: boolean }) {
-  if (!canView)
-    return <p className="py-6 text-sm text-muted-foreground">Datasets require proxy administrator access.</p>;
+  const { t: uiT } = useDashboardLanguage();
+
+  if (!canView) return <p className="py-6 text-sm text-muted-foreground">{uiT("ui.fee8d943d112e153")}</p>;
   return <DatasetsView readOnly={readOnly || !isAdmin} />;
 }
 

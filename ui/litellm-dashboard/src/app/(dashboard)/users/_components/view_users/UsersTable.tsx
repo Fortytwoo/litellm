@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
@@ -51,10 +53,18 @@ interface UsersTableProps {
 }
 
 const FILTER_LABELS: Record<string, string> = {
-  user_id: "User ID",
-  sso_user_id: "SSO ID",
-  user_role: "Role",
-  team: "Team",
+  get user_id() {
+    return translateUi("ui.7967e089a7b9");
+  },
+  get sso_user_id() {
+    return translateUi("ui.b76f39051ffc");
+  },
+  get user_role() {
+    return translateUi("ui.14736a2eb9f4");
+  },
+  get team() {
+    return translateUi("ui.5985039f106d");
+  },
 };
 
 function EmptyState() {
@@ -154,7 +164,7 @@ export function UsersTable({
       rowSelection={rowSelection}
       onRowSelectionChange={onRowSelectionChange}
       isLoading={isLoading}
-      loadingMessage="Loading users…"
+      loadingMessage={uiT("ui.a53ec7ac2a7b8fb1")}
       noDataMessage={<EmptyState />}
       size="compact"
       toolbar={(table) => (
@@ -163,7 +173,7 @@ export function UsersTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search by email or ID…"
+            searchPlaceholder={uiT("ui.6688287ebdd5")}
             onOpenFilters={() => setFiltersOpen(true)}
             filterLabels={FILTER_LABELS}
             formatFilterValue={formatFilterValue}

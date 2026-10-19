@@ -26,46 +26,70 @@ export const FIELD_GROUPS: FieldGroup[] = [
         get label() {
           return translateUi("ui.526e0087cc3f");
         },
-        description: "Must have a non-empty description",
+        get description() {
+          return translateUi("ui.6281f556ef39209f");
+        },
         check: (s) => !!s.description?.trim(),
       },
       {
         key: "alias",
-        label: "Alias",
-        description: "Must have a display alias",
+        get label() {
+          return translateUi("ui.b19e02e9502bbe5a");
+        },
+        get description() {
+          return translateUi("ui.d3892ee4f1d6d4d7");
+        },
         check: (s) => !!s.alias?.trim(),
       },
     ],
   },
   {
-    label: "Source",
+    get label() {
+      return translateUi("ui.0e570ca6fabe24f9");
+    },
     fields: [
       {
         key: "source_url",
-        label: "GitHub / Source URL",
-        description: "Must link to a source repository",
+        get label() {
+          return translateUi("ui.019e0db0779205ad");
+        },
+        get description() {
+          return translateUi("ui.71a97b667aae356d");
+        },
         check: (s) => !!s.source_url?.trim(),
       },
     ],
   },
   {
-    label: "Connection",
+    get label() {
+      return translateUi("ui.639a40e82b9a96f0");
+    },
     fields: [
       {
         key: "url",
-        label: "Server URL",
-        description: "Must have a URL configured",
+        get label() {
+          return translateUi("ui.22f5ebc3ad3ff763");
+        },
+        get description() {
+          return translateUi("ui.ae9a960816e73449");
+        },
         check: (s) => !!s.url?.trim(),
       },
     ],
   },
   {
-    label: "Security",
+    get label() {
+      return translateUi("ui.8f6fb4eb7f42c0e2");
+    },
     fields: [
       {
         key: "auth_type",
-        label: "Auth configured",
-        description: "Must use authentication (not 'none')",
+        get label() {
+          return translateUi("ui.78416c5568f50492");
+        },
+        get description() {
+          return translateUi("ui.5035b74728683133");
+        },
         check: (s) => !!s.auth_type && s.auth_type !== "none",
       },
     ],

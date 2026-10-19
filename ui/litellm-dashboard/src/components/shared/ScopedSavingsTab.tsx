@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMemo, useState } from "react";
@@ -84,7 +86,7 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
   return (
     <div className="w-full space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-4">
-        <span className="text-sm text-muted-foreground">Spend is bucketed by UTC day</span>
+        <span className="text-sm text-muted-foreground">{uiT("ui.d05724952f09")}</span>
         <AdvancedDatePicker value={dateValue} onValueChange={onDateChange} />
       </div>
 
@@ -96,7 +98,7 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
 
       {unavailable && (
         <p role="alert" className="text-sm text-muted-foreground">
-          Savings are unavailable for this range. Try another date range or reopen this tab.
+          {uiT("ui.f3073053c1d9")}
         </p>
       )}
       {showResults && <SavingsTiles results={results} isLoading={false} />}
@@ -106,11 +108,15 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
           <CardTitle>{uiT("ui.ed46218066a7")}</CardTitle>
           <CardDescription>{savingsSubtitle}</CardDescription>
           <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-            <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />
+            <CustomLegend
+              categories={SAVINGS_SERIES}
+              colors={SAVINGS_COLORS}
+              formatLabel={(category) => translateText(category)}
+            />
             <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
               <TabsList>
-                <TabsTrigger value="cumulative">Cumulative</TabsTrigger>
-                <TabsTrigger value="per-interval">{intervalLabel}</TabsTrigger>
+                <TabsTrigger value="cumulative">{uiT("ui.cecf2aade089")}</TabsTrigger>
+                <TabsTrigger value="per-interval">{translateText(intervalLabel)}</TabsTrigger>
               </TabsList>
             </Tabs>
           </CardAction>
@@ -118,7 +124,11 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
         <CardContent>
           {showEmpty && (
             <p className="py-12 text-center text-sm text-muted-foreground" data-testid={`${entityType}-savings-empty`}>
-              {isLoading ? "Loading savings..." : `No usage recorded for this ${entityType} in this range.`}
+              {isLoading
+                ? uiT("ui.b0f9bbc4463e")
+                : uiT("supplement.noUsage", {
+                    entity: uiT("supplement." + entityType + "Noun"),
+                  })}
             </p>
           )}
           {showChart &&

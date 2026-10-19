@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { EndpointType } from "@/components/chat_ui/mode_endpoint_mapping";
 
 export const OPEN_AI_VOICES = {
@@ -16,21 +17,43 @@ export const OPEN_AI_VOICES = {
 export type OpenAIVoice = (typeof OPEN_AI_VOICES)[keyof typeof OPEN_AI_VOICES];
 
 export const OPEN_AI_VOICE_LABELS = {
-  ALLOY: "Alloy - Professional and confident",
-  ASH: "Ash - Casual and relaxed",
-  BALAD: "Ballad - Smooth and melodic",
-  CORAL: "Coral - Warm and engaging",
-  ECHO: "Echo - Friendly and conversational",
-  FABLE: "Fable - Wise and measured",
-  NOVA: "Nova - Friendly and conversational",
-  ONYX: "Onyx - Deep and authoritative",
-  SAGE: "Sage - Wise and measured",
-  SHIMMER: "Shimmer - Bright and cheerful",
+  get ALLOY() {
+    return translateUi("ui.cd01e7c4790dcef7");
+  },
+  get ASH() {
+    return translateUi("ui.746683f5a7790136");
+  },
+  get BALAD() {
+    return translateUi("ui.db76c6192c0d75ff");
+  },
+  get CORAL() {
+    return translateUi("ui.2a2d312cf27db74c");
+  },
+  get ECHO() {
+    return translateUi("ui.a70785bcfd4f19bf");
+  },
+  get FABLE() {
+    return translateUi("ui.32d25adf0df02dd4");
+  },
+  get NOVA() {
+    return translateUi("ui.4cf44b946839614d");
+  },
+  get ONYX() {
+    return translateUi("ui.43c7d29a471de25b");
+  },
+  get SAGE() {
+    return translateUi("ui.176655e6591035b5");
+  },
+  get SHIMMER() {
+    return translateUi("ui.decf4a1bf79b0358");
+  },
 };
 
 export const OPEN_AI_VOICE_SELECT_OPTIONS = Object.entries(OPEN_AI_VOICES).map(([key, voice]) => ({
   value: voice,
-  label: OPEN_AI_VOICE_LABELS[key as keyof typeof OPEN_AI_VOICE_LABELS],
+  get label() {
+    return OPEN_AI_VOICE_LABELS[key as keyof typeof OPEN_AI_VOICE_LABELS];
+  },
 }));
 
 export const ENDPOINT_OPTIONS = [

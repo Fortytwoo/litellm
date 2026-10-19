@@ -60,15 +60,50 @@ export const AUTH_TYPE_ITEMS = [
       return translateUi("ui.23189d55f697");
     },
   },
-  { value: AUTH_TYPE.BEARER_TOKEN, label: "Bearer Token" },
+  {
+    value: AUTH_TYPE.BEARER_TOKEN,
+    get label() {
+      return translateUi("ui.105f8fe557fe2389");
+    },
+  },
   { value: AUTH_TYPE.TOKEN, label: "Token" },
-  { value: AUTH_TYPE.BASIC, label: "Basic Auth" },
+  {
+    value: AUTH_TYPE.BASIC,
+    get label() {
+      return translateUi("ui.f0a792cf36e663ad");
+    },
+  },
   { value: AUTH_TYPE.OAUTH2, label: "OAuth" },
-  { value: AUTH_TYPE.OAUTH2_TOKEN_EXCHANGE, label: "OAuth Token Exchange (OBO)" },
-  { value: AUTH_TYPE.OAUTH2_ID_JAG, label: "ID-JAG (Okta Cross App Access)" },
-  { value: AUTH_TYPE.AWS_SIGV4, label: "AWS SigV4 (Bedrock AgentCore MCPs)" },
-  { value: AUTH_TYPE.TRUE_PASSTHROUGH, label: "True Passthrough (no LiteLLM auth)" },
-  { value: AUTH_TYPE.OAUTH_DELEGATE, label: "OAuth Delegate (client-supplied upstream token)" },
+  {
+    value: AUTH_TYPE.OAUTH2_TOKEN_EXCHANGE,
+    get label() {
+      return translateUi("ui.aca63426efd52a41");
+    },
+  },
+  {
+    value: AUTH_TYPE.OAUTH2_ID_JAG,
+    get label() {
+      return translateUi("ui.27eb44400560a5f2");
+    },
+  },
+  {
+    value: AUTH_TYPE.AWS_SIGV4,
+    get label() {
+      return translateUi("ui.ad4a5a39a578dc9e");
+    },
+  },
+  {
+    value: AUTH_TYPE.TRUE_PASSTHROUGH,
+    get label() {
+      return translateUi("ui.31a0411800966ff7");
+    },
+  },
+  {
+    value: AUTH_TYPE.OAUTH_DELEGATE,
+    get label() {
+      return translateUi("ui.8f80c2791fe08cb1");
+    },
+  },
 ];
 
 // The two client-forwarded token modes: the caller supplies the upstream Authorization (forwarded
@@ -276,10 +311,30 @@ export const TRANSPORT = {
 };
 
 export const TRANSPORT_ITEMS = [
-  { value: TRANSPORT.HTTP, label: "Streamable HTTP (Recommended)" },
-  { value: TRANSPORT.SSE, label: "Server-Sent Events (SSE)" },
-  { value: TRANSPORT.STDIO, label: "Standard Input/Output (stdio)" },
-  { value: TRANSPORT.OPENAPI, label: "OpenAPI Spec" },
+  {
+    value: TRANSPORT.HTTP,
+    get label() {
+      return translateUi("ui.7d605e3333cc1d89");
+    },
+  },
+  {
+    value: TRANSPORT.SSE,
+    get label() {
+      return translateUi("ui.c3e6cbfe59d36c3f");
+    },
+  },
+  {
+    value: TRANSPORT.STDIO,
+    get label() {
+      return translateUi("ui.6a6bbf33c6dd5774");
+    },
+  },
+  {
+    value: TRANSPORT.OPENAPI,
+    get label() {
+      return translateUi("ui.388b6125fb52c3ae");
+    },
+  },
 ];
 
 export const handleTransport = (transport?: string | null, specPath?: string | null): string => {

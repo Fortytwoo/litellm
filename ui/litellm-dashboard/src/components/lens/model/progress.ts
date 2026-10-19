@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { Job } from "./types";
 import { durationText } from "./format";
 
@@ -13,7 +14,9 @@ export function analysisProgress(job: Job) {
   if (job.status === "queued") {
     return {
       step: -1,
-      title: "Queued for your worker",
+      get title() {
+        return translateUi("ui.f4c5959d41769319");
+      },
       done: 0,
       total: 0,
       detail: "The worker picks up queued investigations automatically.",
@@ -22,7 +25,9 @@ export function analysisProgress(job: Job) {
   if (job.stage === "Grouping observations") {
     return {
       step: 1,
-      title: "Finding patterns",
+      get title() {
+        return translateUi("ui.6721372d72029951");
+      },
       done: grouped_batches,
       total: grouping_batches,
       detail: grouping_batches
@@ -33,7 +38,9 @@ export function analysisProgress(job: Job) {
   if (job.stage === "Checking original evidence") {
     return {
       step: 2,
-      title: "Checking evidence",
+      get title() {
+        return translateUi("ui.e7782bc44064a3f7");
+      },
       done: investigated,
       total: candidates,
       detail: candidates
@@ -44,7 +51,9 @@ export function analysisProgress(job: Job) {
   if (!selected) {
     return {
       step: -1,
-      title: "Preparing activity",
+      get title() {
+        return translateUi("ui.c238ca8bcaee199e");
+      },
       done: 0,
       total: 0,
       detail: "Loading the runs selected for this investigation.",
@@ -52,7 +61,9 @@ export function analysisProgress(job: Job) {
   }
   return {
     step: 0,
-    title: "Reviewing activity",
+    get title() {
+      return translateUi("ui.0337ac21633f517b");
+    },
     done: screened,
     total: selected,
     detail: `${screened} of ${selected} selected runs reviewed`,
@@ -62,14 +73,30 @@ export function analysisProgress(job: Job) {
 type Coverage = Job["coverage"];
 
 export const ANALYSIS_STAGES = [
-  { label: "Review runs", weight: 0.6, done: (c: Coverage) => c.screened, total: (c: Coverage) => c.selected },
   {
-    label: "Find patterns",
+    get label() {
+      return translateUi("ui.a1f8549571e6e8ed");
+    },
+    weight: 0.6,
+    done: (c: Coverage) => c.screened,
+    total: (c: Coverage) => c.selected,
+  },
+  {
+    get label() {
+      return translateUi("ui.6bb86725138b1622");
+    },
     weight: 0.2,
     done: (c: Coverage) => c.grouped_batches,
     total: (c: Coverage) => c.grouping_batches,
   },
-  { label: "Check evidence", weight: 0.2, done: (c: Coverage) => c.investigated, total: (c: Coverage) => c.candidates },
+  {
+    get label() {
+      return translateUi("ui.2f970ecec0ffdaa6");
+    },
+    weight: 0.2,
+    done: (c: Coverage) => c.investigated,
+    total: (c: Coverage) => c.candidates,
+  },
 ] as const;
 
 export interface StageProgress {

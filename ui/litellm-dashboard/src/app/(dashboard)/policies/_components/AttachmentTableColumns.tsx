@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -46,12 +48,14 @@ const CONFIG_ATTACHMENT_HINT =
   "Config attachments are defined in the config file and cannot be deleted from the dashboard.";
 
 function AttachmentRowActions({ attachment, isAdmin, onDeleteClick }: AttachmentRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isConfigAttachment = attachment.definition_location === "config";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open attachment actions"
+        aria-label={uiT("ui.9c70a27fcfab8f47")}
         data-testid={`attachment-actions-${attachment.attachment_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -63,7 +67,7 @@ function AttachmentRowActions({ attachment, isAdmin, onDeleteClick }: Attachment
           onClick={() => void copyToClipboard(attachment.attachment_id, "Attachment ID copied")}
         >
           <Copy />
-          Copy attachment ID
+          {uiT("ui.f6251307ade7da43")}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -76,7 +80,7 @@ function AttachmentRowActions({ attachment, isAdmin, onDeleteClick }: Attachment
               onClick={() => onDeleteClick(attachment.attachment_id)}
             >
               <Trash2 />
-              Delete attachment
+              {uiT("ui.fb45068b16d6c71f")}
             </DropdownMenuItem>
           </>
         )}
@@ -99,8 +103,14 @@ export const getAttachmentTableColumns = ({
   {
     id: "attachment_id",
     accessorKey: "attachment_id",
-    meta: { title: "Attachment ID" },
-    header: "Attachment ID",
+    meta: {
+      get title() {
+        return translateUi("ui.b949685bdf56c53b");
+      },
+    },
+    get header() {
+      return translateUi("ui.b949685bdf56c53b");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.attachment_id} variant="plain" />,
@@ -108,8 +118,13 @@ export const getAttachmentTableColumns = ({
   {
     id: "policy_name",
     accessorKey: "policy_name",
-    meta: { title: "Policy", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Policy" />,
+    meta: {
+      get title() {
+        return translateUi("ui.c611981fab983bc6");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.c611981fab983bc6")} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => <StatusBadge tone="info" label={row.original.policy_name} />,
@@ -117,8 +132,15 @@ export const getAttachmentTableColumns = ({
   {
     id: "scope",
     accessorFn: (row) => row.scope ?? "",
-    meta: { title: "Scope", skeleton: "badge" },
-    header: "Scope",
+    meta: {
+      get title() {
+        return translateUi("ui.b073f6c68ef87211");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.b073f6c68ef87211");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {
@@ -127,7 +149,7 @@ export const getAttachmentTableColumns = ({
         return <span className="text-muted-foreground">-</span>;
       }
       if (scope === "*") {
-        return <StatusBadge tone="warning" label="Global (*)" />;
+        return <StatusBadge tone="warning" label={translateUi("ui.39ed4b2e22f06566")} />;
       }
       return (
         <span className="block max-w-40 truncate text-xs" title={scope}>
@@ -199,8 +221,12 @@ export const getAttachmentTableColumns = ({
   {
     id: "priority",
     accessorFn: (row) => row.priority ?? Number.POSITIVE_INFINITY,
-    meta: { title: "Priority" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Priority" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d60dbba079223254");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d60dbba079223254")} />,
     size: 100,
     enableSorting: true,
     cell: ({ row }) =>
@@ -223,11 +249,7 @@ export const getAttachmentTableColumns = ({
     enableSorting: true,
     cell: ({ row }) =>
       row.original.default ? (
-        <StatusBadge
-          tone="info"
-          label={translateUi("ui.21b111cbfe6e")}
-          tooltip="Applied only when no non-default attachment matches"
-        />
+        <StatusBadge tone="info" label={translateUi("ui.21b111cbfe6e")} tooltip={translateUi("ui.59dbe61a989da3fc")} />
       ) : (
         <span className="text-muted-foreground">-</span>
       ),

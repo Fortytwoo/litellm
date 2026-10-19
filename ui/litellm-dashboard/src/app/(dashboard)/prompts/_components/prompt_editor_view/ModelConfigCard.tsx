@@ -44,7 +44,7 @@ const ModelConfigCard: React.FC<ModelConfigCardProps> = ({
       <Dialog open={showConfig} onOpenChange={setShowConfig}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Model Parameters</DialogTitle>
+            <DialogTitle>{uiT("ui.166cfbd5b6effb00")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -67,7 +67,7 @@ const ModelConfigCard: React.FC<ModelConfigCardProps> = ({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="prompt-max-tokens" className="text-sm text-foreground">
-                  Max Tokens
+                  {uiT("ui.c18e6c7f33c41f22")}
                 </label>
                 <Input
                   id="prompt-max-tokens"

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   ArrowLeft,
@@ -48,11 +49,13 @@ function statusLabel(failed: boolean, errors: number): string {
 
 /** One pill for how the run went, so a failure is stated once instead of as a pill, a stat and a red icon. */
 function StatusPill({ summary }: { summary: Summary }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const failed = summary.status === "error";
   const label = statusLabel(failed, summary.error_count);
   return (
     <span
-      title="Status of received spans. More spans may still arrive."
+      title={uiT("ui.e7cd130c62836545")}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-medium",
         failed ? "bg-destructive/10 text-destructive" : "bg-trace-ok text-trace-ok-glyph",
@@ -93,6 +96,8 @@ function RunIcon({ summary }: { summary: Summary }) {
 
 /** "Copy for agent" up front; the link and dataset actions sit behind its chevron. */
 function RunActions({ summary, handoff }: { summary: Summary; handoff: TraceHandoff }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const canAddToDataset = useCanAddToDataset();
   const [copied, setCopied] = useState(false);
   const [addingToDataset, setAddingToDataset] = useState(false);
@@ -107,12 +112,17 @@ function RunActions({ summary, handoff }: { summary: Summary; handoff: TraceHand
           onClick={async () => setCopied(await copyToClipboard(handoff.text, handoff.copied))}
         >
           {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
-          {copied ? "Copied" : "Copy for agent"}
+          {copied ? uiT("ui.8d525e5f158b") : uiT("ui.e2b4176b1e8a2745")}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="outline" size="icon-xs" className="h-7 w-7 shadow-none" aria-label="More run actions" />
+              <Button
+                variant="outline"
+                size="icon-xs"
+                className="h-7 w-7 shadow-none"
+                aria-label={uiT("ui.6d1919664c0c1904")}
+              />
             }
           >
             <ChevronDown className="size-3" />
@@ -124,12 +134,12 @@ function RunActions({ summary, handoff }: { summary: Summary; handoff: TraceHand
               }
             >
               <Link />
-              Copy link
+              {uiT("ui.dbf362d4f210c780")}
             </DropdownMenuItem>
             {canAddToDataset && (
               <DropdownMenuItem onClick={() => setAddingToDataset(true)}>
                 <DatabaseZap />
-                Add run to dataset
+                {uiT("ui.8eaac78b71f9e69f")}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -172,12 +182,14 @@ export function RunHeader({
   onLiveChange,
   signals = [],
 }: RunHeaderProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { summary } = trace;
   return (
     <header className="flex shrink-0 flex-col gap-2 border-b bg-background px-4 pt-3 pb-2.5">
       <div className="flex min-w-0 items-center gap-2">
         {!embedded && (
-          <Button variant="ghost" size="icon-xs" onClick={onBack} aria-label="Back to runs">
+          <Button variant="ghost" size="icon-xs" onClick={onBack} aria-label={uiT("ui.5f3641135a1e889b")}>
             <ArrowLeft className="size-4" />
           </Button>
         )}
@@ -185,7 +197,7 @@ export function RunHeader({
         <h1 className="min-w-0 shrink truncate text-base font-semibold">{traceDisplayName(summary)}</h1>
         {summary.source?.user && <RunUser user={summary.source.user} />}
         {summary.source && <RunSourceLink source={summary.source} />}
-        <IdChip value={summary.trace_id} label="Copy trace ID" />
+        <IdChip value={summary.trace_id} label={uiT("ui.378d0213b944dba5")} />
         <div className="ml-auto flex shrink-0 items-center gap-0.5">
           <Button
             variant="ghost"
@@ -193,8 +205,8 @@ export function RunHeader({
             aria-pressed={live}
             disabled={!canLive}
             onClick={onLiveChange}
-            aria-label="Live updates"
-            title={live ? "Live: refreshes every 30s. Click to pause." : "Paused. Click to follow live."}
+            aria-label={uiT("ui.56bf4f9913500179")}
+            title={live ? uiT("ui.76f9b38efa2c41d4") : uiT("ui.a19ef65821fc0c8e")}
             className="text-muted-foreground"
           >
             <span
@@ -203,15 +215,15 @@ export function RunHeader({
                 live ? "bg-trace-ok-glyph motion-safe:animate-pulse" : "bg-muted-foreground/50",
               )}
             />
-            Live
+            {uiT("ui.b64ac05f17e6")}
           </Button>
           <Button
             variant="ghost"
             size="icon-xs"
             disabled={refreshing}
             onClick={onRefresh}
-            aria-label="Refresh run"
-            title="Refresh"
+            aria-label={uiT("ui.390b3d013c5179b9")}
+            title={uiT("ui.0e9161011702")}
             className="mr-1 text-muted-foreground"
           >
             <RefreshCw className={cn("size-3.5", refreshing && "animate-spin")} />
@@ -223,14 +235,14 @@ export function RunHeader({
         <StatusPill summary={summary} />
         {signals.length > 0 && <SignalPills flags={signals} showScore className="flex-wrap" />}
         <Totals summary={summary} />
-        <TabsList aria-label="Trace view" className="ml-auto group-data-horizontal/tabs:h-7">
+        <TabsList aria-label={uiT("ui.f4dc74e335f04f24")} className="ml-auto group-data-horizontal/tabs:h-7">
           <TabsTrigger value="steps" className="gap-1.5 px-2.5 text-xs">
             <ListTree className="size-3.5" />
-            Steps
+            {uiT("ui.1de3df70ddf4faab")}
           </TabsTrigger>
           <TabsTrigger value="thread" className="gap-1.5 px-2.5 text-xs">
             <MessagesSquare className="size-3.5" />
-            Thread
+            {uiT("ui.5373c7f8a5a69019")}
           </TabsTrigger>
         </TabsList>
       </div>

@@ -25,6 +25,7 @@ export type AssistantMessageUpdate = Partial<
 export interface Conversation {
   id: string;
   title: string;
+  customTitle?: boolean;
   model: string;
   messages: ChatMessage[];
   mcpServerNames: string[];

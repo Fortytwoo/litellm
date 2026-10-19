@@ -101,7 +101,7 @@ const TeamDropdown: React.FC<TeamDropdownProps> = ({
         isFetchingNextPage={isFetchingNextPage}
         placeholder={uiT("ui.b696f7d9c4a8")}
         emptyText={uiT("ui.c83a06f9875f")}
-        loadingText="Loading teams…"
+        loadingText={uiT("ui.e05fe2fbf9983836")}
         disabled={disabled}
         inputId={id}
       />

@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { type ReactNode, useState } from "react";
 import { ArrowLeft, Check, ChevronDown, ChevronUp, Copy, X } from "lucide-react";
@@ -79,7 +80,10 @@ export function DrawerHeader({
         <Button variant="outline" size="sm" onClick={onClose} className="mb-3 max-w-full">
           <ArrowLeft data-icon="inline-start" />
           {backTo.icon}
-          <span className="truncate">Back to {backTo.label}</span>
+          <span className="truncate">
+            {uiT("ui.cd9182ceab27")}
+            {backTo.label}
+          </span>
         </Button>
       )}
       {/* Row 0: Model + Provider with Logo */}
@@ -221,7 +225,7 @@ function CopyableId({
           {value}
           <button
             type="button"
-            aria-label={copied ? uiT("ui.ea61bc15688d") : `Copy ${label}`}
+            aria-label={copied ? uiT("ui.ea61bc15688d") : uiT("supplement.copy", { label })}
             onClick={handleCopy}
             className="ml-1 align-middle text-muted-foreground hover:text-foreground"
           >

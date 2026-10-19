@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { useForm, type Control } from "react-hook-form";
@@ -36,8 +40,18 @@ const argumentLabel = (field: ToolArgumentField): React.ReactNode => (
 );
 
 const BOOLEAN_ITEMS = [
-  { value: true, label: "True" },
-  { value: false, label: "False" },
+  {
+    value: true,
+    get label() {
+      return translateUi("ui.3cbc87c7681f34db");
+    },
+  },
+  {
+    value: false,
+    get label() {
+      return translateUi("ui.60a33e6cf5151f2d");
+    },
+  },
 ];
 
 const booleanTitle = (value: unknown): string | undefined => {
@@ -51,6 +65,8 @@ const JsonArgumentControl: React.FC<{
   prop: InputSchemaProperty;
   control: FormFieldControlProps<ToolArgumentsFormValues, `args.${number}`>;
 }> = ({ field, prop, control }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isObject = prop.type === "object";
   const fallbackPlaceholder = isObject ? `Enter JSON object for ${field.key}` : `Enter JSON array for ${field.key}`;
   return (
@@ -65,7 +81,7 @@ const JsonArgumentControl: React.FC<{
         className="rounded-lg font-mono"
       />
       <p className="text-xs text-muted-foreground">
-        {isObject ? "Provide a valid JSON object." : "Provide a valid JSON array."}
+        {isObject ? uiT("ui.d30a814b01ef597a") : uiT("ui.455a372ce8be03fe")}
       </p>
     </div>
   );
@@ -75,6 +91,8 @@ const ToolArgumentControl: React.FC<{
   field: ToolArgumentField;
   control: FormFieldControlProps<ToolArgumentsFormValues, `args.${number}`>;
 }> = ({ field, control }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const prop = resolveSchemaProperty(field.prop);
 
   if (prop.type === "string" && prop.enum) {
@@ -86,11 +104,11 @@ const ToolArgumentControl: React.FC<{
         className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50 focus:outline-hidden"
       >
         <option value={-1} disabled={field.required}>
-          Select {field.key}
+          {uiT("ui.2a78025de6aa")} {field.key}
         </option>
         {prop.enum.map((option, index) => (
           <option key={option} value={index}>
-            {option === "" ? "Empty string" : option}
+            {option === "" ? uiT("ui.fae5b9633566de0d") : option}
           </option>
         ))}
       </select>
@@ -104,7 +122,7 @@ const ToolArgumentControl: React.FC<{
         type="number"
         step={prop.type === "integer" ? 1 : "any"}
         value={(control.value as number | string) ?? ""}
-        placeholder={prop.description || `Enter ${field.key}`}
+        placeholder={prop.description || uiT("ui.43e95aa600c4c9a9", { v0: String(field.key) })}
         className="rounded-lg"
       />
     );
@@ -113,7 +131,11 @@ const ToolArgumentControl: React.FC<{
   if (prop.type === "boolean") {
     return (
       <Select
-        items={field.required ? BOOLEAN_ITEMS : [{ value: null, label: `Select ${field.key}` }, ...BOOLEAN_ITEMS]}
+        items={
+          field.required
+            ? BOOLEAN_ITEMS
+            : [{ value: null, label: uiT("ui.58661820dfdc4c9f", { v0: String(field.key) }) }, ...BOOLEAN_ITEMS]
+        }
         value={control.value ?? null}
         onValueChange={control.onChange}
       >
@@ -123,12 +145,16 @@ const ToolArgumentControl: React.FC<{
           title={booleanTitle(control.value)}
           className="w-full"
         >
-          <SelectValue placeholder={`Select ${field.key}`} />
+          <SelectValue placeholder={uiT("ui.58661820dfdc4c9f", { v0: String(field.key) })} />
         </SelectTrigger>
         <SelectContent>
-          {!field.required && <SelectItem value={null}>Select {field.key}</SelectItem>}
-          <SelectItem value={true}>True</SelectItem>
-          <SelectItem value={false}>False</SelectItem>
+          {!field.required && (
+            <SelectItem value={null}>
+              {uiT("ui.2a78025de6aa")} {field.key}
+            </SelectItem>
+          )}
+          <SelectItem value={true}>{uiT("ui.3cbc87c7681f34db")}</SelectItem>
+          <SelectItem value={false}>{uiT("ui.60a33e6cf5151f2d")}</SelectItem>
         </SelectContent>
       </Select>
     );
@@ -142,7 +168,7 @@ const ToolArgumentControl: React.FC<{
     <Input
       {...control}
       value={(control.value as string) ?? ""}
-      placeholder={prop.description || `Enter ${field.key}`}
+      placeholder={prop.description || uiT("ui.43e95aa600c4c9a9", { v0: String(field.key) })}
       className="rounded-lg"
     />
   );
@@ -171,7 +197,7 @@ const ToolArgumentFields: React.FC<{
             <Input
               {...field}
               value={(field.value as string) ?? ""}
-              placeholder="Enter input for this tool"
+              placeholder={uiT("ui.5469ad745c4b31c5")}
               className="rounded-lg"
             />
           )}
@@ -184,8 +210,8 @@ const ToolArgumentFields: React.FC<{
     return (
       <div className="rounded-lg border border-border bg-muted py-6 text-center">
         <div className="mx-auto max-w-sm">
-          <h4 className="mb-1 text-sm font-medium text-foreground">No Parameters Required</h4>
-          <p className="text-xs text-muted-foreground">This tool can be called without any input parameters.</p>
+          <h4 className="mb-1 text-sm font-medium text-foreground">{uiT("ui.0048e1a96c17c7bc")}</h4>
+          <p className="text-xs text-muted-foreground">{uiT("ui.38ed28f933229066")}</p>
         </div>
       </div>
     );
@@ -219,6 +245,8 @@ export const ToolArgumentsForm: React.FC<{
   hasRun: boolean;
   onRun: (args: Record<string, unknown>) => void;
 }> = ({ fields, singleInputFallback, isLoading, hasRun, onRun }) => {
+  useDashboardLanguage();
+
   const form = useForm<ToolArgumentsFormValues>({
     defaultValues: { args: initialArgumentValues(fields) },
     resolver: toolArgumentsResolver(fields),
@@ -240,7 +268,7 @@ export const ToolArgumentsForm: React.FC<{
             className="w-full"
           >
             {isLoading && <UiLoadingSpinner className="size-4" />}
-            {callButtonLabel(isLoading, hasRun)}
+            {translateText(callButtonLabel(isLoading, hasRun))}
           </Button>
         </div>
       </form>

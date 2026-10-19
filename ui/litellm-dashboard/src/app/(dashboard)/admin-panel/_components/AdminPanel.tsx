@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Allow proxy admin to add other people to view global spend
@@ -46,16 +48,18 @@ const allowedIPSchema = z.object({
 type AllowedIPFormValues = z.infer<typeof allowedIPSchema>;
 
 const AddAllowedIPForm = ({ onSubmit }: { onSubmit: (values: AllowedIPFormValues) => Promise<void> }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(allowedIPSchema, { defaultValues: { ip: "" } });
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
         <FormField control={form.control} name="ip">
-          {({ ref, ...field }) => <Input ref={ref} placeholder="Enter IP address" {...field} />}
+          {({ ref, ...field }) => <Input ref={ref} placeholder={uiT("ui.3753dc0e24bf7aaf")} {...field} />}
         </FormField>
         <div>
-          <Button type="submit">Add IP Address</Button>
+          <Button type="submit">{uiT("ui.ab26ad1f5a1fe9d5")}</Button>
         </div>
       </FieldGroup>
     </form>
@@ -138,7 +142,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
         // Fetch the updated list of IPs
         const updatedIPs = await getAllowedIPs(accessToken);
         setAllowedIPs(updatedIPs);
-        toast.success("IP address added successfully");
+        toast.success(translateUi("ui.3f3e19537a13eccf"));
       }
     } catch (error) {
       console.error("Error adding IP:", error);
@@ -160,7 +164,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
         // Fetch the updated list of IPs
         const updatedIPs = await getAllowedIPs(accessToken);
         setAllowedIPs(updatedIPs.length > 0 ? updatedIPs : [all_ip_address_allowed]);
-        toast.success("IP address deleted successfully");
+        toast.success(translateUi("ui.2caa327afa2c4163"));
       } catch (error) {
         console.error("Error deleting IP:", error);
         toast.fromError(`Failed to delete IP address ${error}`);
@@ -218,23 +222,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
   const tabItems = [
     {
       key: "sso-settings",
-      label: "SSO Settings",
+      label: uiT("ui.2542ccbb7a84493d"),
       children: <SSOSettings />,
     },
     {
       key: "security-settings",
-      label: "Security Settings",
+      label: uiT("ui.170ded248de8b540"),
       children: (
         <>
           <Card className="block p-6">
-            <h3 className="mb-2 text-base font-semibold text-foreground">✨ Security Settings</h3>
+            <h3 className="mb-2 text-base font-semibold text-foreground">{uiT("ui.63018ed752ca8b63")}</h3>
             <Alert variant="warning">
               <TriangleAlert />
-              <AlertTitle>SSO Configuration Deprecated</AlertTitle>
-              <AlertDescription>
-                Editing SSO Settings on this page is deprecated and will be removed in a future version. Please use the
-                SSO Settings tab for SSO configuration.
-              </AlertDescription>
+              <AlertTitle>{uiT("ui.9b51385fffadaa51")}</AlertTitle>
+              <AlertDescription>{uiT("ui.737c7e24d02c4078")}</AlertDescription>
             </Alert>
             <div
               style={{
@@ -247,12 +248,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
             >
               <div>
                 <Button style={{ width: "150px" }} onClick={() => setIsAddSSOModalVisible(true)}>
-                  {ssoConfigured ? "Edit SSO Settings" : "Add SSO"}
+                  {ssoConfigured ? uiT("ui.ca05b5e008d6b356") : uiT("ui.427af519334adbf3")}
                 </Button>
               </div>
               <div>
                 <Button style={{ width: "150px" }} onClick={handleShowAllowedIPs}>
-                  Allowed IPs
+                  {uiT("ui.2e41da562806549a")}
                 </Button>
               </div>
               <div>
@@ -264,7 +265,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
                       : toast.fromError("Only premium users can configure UI access control")
                   }
                 >
-                  UI Access Control
+                  {uiT("ui.8d34f5434f2b644f")}
                 </Button>
               </div>
             </div>
@@ -286,7 +287,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
             <Dialog open={isAllowedIPModalVisible} onOpenChange={(open) => !open && setIsAllowedIPModalVisible(false)}>
               <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
                 <DialogHeader>
-                  <DialogTitle>Manage Allowed IP Addresses</DialogTitle>
+                  <DialogTitle>{uiT("ui.67ff1af93b47d5a9")}</DialogTitle>
                 </DialogHeader>
                 <Table>
                   <TableHeader>
@@ -312,7 +313,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
                 </Table>
                 <DialogFooter>
                   <Button className="mx-1" onClick={() => setIsAddIPModalVisible(true)}>
-                    Add IP Address
+                    {uiT("ui.ab26ad1f5a1fe9d5")}
                   </Button>
                   <Button onClick={() => setIsAllowedIPModalVisible(false)}>{uiT("ui.7d9eb7acb13e")}</Button>
                 </DialogFooter>
@@ -322,7 +323,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
             <Dialog open={isAddIPModalVisible} onOpenChange={(open) => !open && setIsAddIPModalVisible(false)}>
               <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Add Allowed IP Address</DialogTitle>
+                  <DialogTitle>{uiT("ui.2f984b3e862115e3")}</DialogTitle>
                 </DialogHeader>
                 <AddAllowedIPForm onSubmit={handleAddIP} />
               </DialogContent>
@@ -331,14 +332,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
             <Dialog open={isDeleteIPModalVisible} onOpenChange={(open) => !open && setIsDeleteIPModalVisible(false)}>
               <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Confirm Delete</DialogTitle>
+                  <DialogTitle>{uiT("ui.a7f54311a3e625f5")}</DialogTitle>
                 </DialogHeader>
                 <span className="text-sm text-foreground">
-                  Are you sure you want to delete the IP address: {ipToDelete}?
+                  {uiT("ui.f4236d552003cecb")} {ipToDelete}?
                 </span>
                 <DialogFooter>
                   <Button className="mx-1" onClick={() => confirmDeleteIP()}>
-                    Yes
+                    {uiT("ui.85a39ab345d672ff")}
                   </Button>
                   <Button onClick={() => setIsDeleteIPModalVisible(false)}>{uiT("ui.7d9eb7acb13e")}</Button>
                 </DialogFooter>
@@ -352,13 +353,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
             >
               <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
                 <DialogHeader>
-                  <DialogTitle>UI Access Control Settings</DialogTitle>
+                  <DialogTitle>{uiT("ui.8a9a23fe8ecbdb79")}</DialogTitle>
                 </DialogHeader>
                 <UIAccessControlForm
                   accessToken={accessToken}
                   onSuccess={() => {
                     handleUIAccessControlOk();
-                    toast.success("UI Access Control settings updated successfully");
+                    toast.success(translateUi("ui.cd5a265e82bc6464"));
                   }}
                 />
               </DialogContent>
@@ -366,9 +367,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
           </div>
           <Alert variant="info">
             <Info />
-            <AlertTitle>Login without SSO</AlertTitle>
+            <AlertTitle>{uiT("ui.c150128137c96aff")}</AlertTitle>
             <AlertDescription>
-              If you need to login without sso, you can access{" "}
+              {uiT("ui.0c75065f8c865171")}{" "}
               <a href={nonSssoUrl} target="_blank" rel="noopener noreferrer">
                 <b>{nonSssoUrl}</b>{" "}
               </a>
@@ -379,12 +380,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
     },
     {
       key: "scim",
-      label: "SCIM",
+      label: uiT("ui.f80fdcd27632e81b"),
       children: <SCIMConfig accessToken={accessToken} userID={userID} proxySettings={proxySettings} />,
     },
     {
       key: "ui-settings",
-      label: "UI Settings",
+      label: uiT("ui.2042b39a60a69db1"),
       children: (
         <div className="flex flex-col gap-4">
           <UISettings />
@@ -400,30 +401,30 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
     },
     {
       key: "hashicorp-vault",
-      label: "Hashicorp Vault",
+      label: uiT("ui.03e2d829ad76471e"),
       children: <HashicorpVault />,
     },
     {
       key: "cyberark",
-      label: "CyberArk Conjur",
+      label: uiT("ui.a5e2959fe62d113f"),
       children: <CyberArk />,
     },
     {
       key: "plugins",
-      label: "Plugins",
+      label: uiT("ui.9514b7ff4860ead7"),
       children: <PluginSettings />,
     },
     {
       key: "web-search-interception",
-      label: "Web Search Interception",
+      label: uiT("ui.bda3828192d4d2a1"),
       children: <WebSearchInterceptionSettings />,
     },
   ];
 
   return (
     <div className="w-full m-2 mt-2 p-8">
-      <h2 className="mb-2 text-base font-semibold text-foreground">Admin Access</h2>
-      <p className="mb-4 text-sm text-foreground">Go to &apos;Internal Users&apos; page to add other admins.</p>
+      <h2 className="mb-2 text-base font-semibold text-foreground">{uiT("ui.aa6578c24cd0dfab")}</h2>
+      <p className="mb-4 text-sm text-foreground">{uiT("ui.8b98ee27ca764c2a")}</p>
       <Tabs defaultValue={tabItems[0].key}>
         <TabsList variant="line" className="mb-4 h-auto flex-wrap">
           {tabItems.map((item) => (

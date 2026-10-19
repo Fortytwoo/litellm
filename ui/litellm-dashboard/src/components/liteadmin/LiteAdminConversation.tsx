@@ -31,12 +31,14 @@ interface ConversationProps {
 }
 
 export function LiteAdminConversation({ entries, thinking, open, reviewRef, onAnswer }: ConversationProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <MessageScroller.Provider autoScroll>
       <MessageScroller.Root className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
         <MessageScroller.Viewport
           className="min-h-0 flex-1 overflow-y-auto overscroll-contain data-pending-scroll:invisible"
-          aria-label="LiteAdmin conversation"
+          aria-label={uiT("ui.af5017670500b7ce")}
         >
           <MessageScroller.Content className="flex flex-col gap-4 p-4" aria-busy={thinking}>
             {entries.map((entry) => (
@@ -61,10 +63,10 @@ export function LiteAdminConversation({ entries, thinking, open, reviewRef, onAn
             ))}
             {thinking && (
               <MessageScroller.Item messageId="thinking">
-                <div role="status" aria-label="LiteAdmin is working" className="space-y-2">
+                <div role="status" aria-label={uiT("ui.85154efe0097473d")} className="space-y-2">
                   <Skeleton className="h-3 w-3/4" />
                   <Skeleton className="h-3 w-1/2" />
-                  <span className="sr-only">Working…</span>
+                  <span className="sr-only">{uiT("ui.5474eef8d0f179c7")}</span>
                 </div>
               </MessageScroller.Item>
             )}
@@ -72,14 +74,12 @@ export function LiteAdminConversation({ entries, thinking, open, reviewRef, onAn
         </MessageScroller.Viewport>
         {entries.length === 0 && (
           <div className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-2 p-6">
-            <p className="font-medium">How can I help?</p>
-            <p className="text-sm text-muted-foreground">
-              Check budgets, inspect usage, or manage keys and teams. You review every change before it runs.
-            </p>
+            <p className="font-medium">{uiT("ui.4d35ea21b30d1141")}</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.e8b43cd40b0a6fc3")}</p>
           </div>
         )}
         <MessageScroller.Button
-          aria-label="Jump to latest"
+          aria-label={uiT("ui.867524581f012f0b")}
           className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full shadow-sm data-[active=false]:pointer-events-none data-[active=false]:opacity-0"
           render={<Button variant="outline" size="icon-sm" />}
         >
@@ -163,9 +163,9 @@ function ActionCard({
           <div className="space-y-2">
             <div className="flex items-start gap-2">
               <code className="min-w-0 flex-1 break-all text-xs">{entry.key}</code>
-              <CopyButton value={entry.key} label="Copy generated key" />
+              <CopyButton value={entry.key} label={uiT("ui.357756e19511f1fb")} />
             </div>
-            <p className="text-xs text-muted-foreground">Copy this key now. It stays only in this chat session.</p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.e633e597a27450c3")}</p>
           </div>
         )}
       </CardContent>
@@ -175,7 +175,7 @@ function ActionCard({
             {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button variant={entry.action.destructive ? "destructive" : "default"} onClick={() => answer(true)}>
-            Confirm change
+            {uiT("ui.704ac1d7acd8032b")}
           </Button>
         </CardFooter>
       )}

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ChevronRight, MessageSquareText, TriangleAlert, Wrench } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -43,6 +44,8 @@ interface TraceThreadProps {
 }
 
 export function TraceThread({ trace, accessToken, onOpenStep, paging }: TraceThreadProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { details, entries, complete, loading, failed, hasMore, loadMore } = useConversationDetails(trace, accessToken);
   const pending = pendingConversationBranches(trace.spans, details, Boolean(trace.next_cursor));
   const groups = groupConversation(buildConversation(trace.spans, details, complete, pending), trace.spans);
@@ -76,7 +79,7 @@ export function TraceThread({ trace, accessToken, onOpenStep, paging }: TraceThr
     else loadTracePage?.();
   };
   return (
-    <section aria-label="Trace thread" className="min-h-0 flex-1 overflow-y-auto">
+    <section aria-label={uiT("ui.1cb04f869a45d245")} className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto min-w-0 max-w-3xl space-y-8 px-3 py-4 sm:px-6 sm:py-6">
         {rootErrors.map((span) => (
           <ErrorBlock key={span.span_id} span={span} />
@@ -114,32 +117,41 @@ interface ThreadFooterProps {
 }
 
 function ThreadFooter({ turnCount, busy, stepsFailed, traceFailed, complete, onRetry, onLoadMore }: ThreadFooterProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <>
       {busy && (
         <p role="status" className="text-sm text-muted-foreground">
-          Loading thread…
+          {uiT("ui.0966c6f72dff88b3")}
         </p>
       )}
       {stepsFailed && (
         <div role="alert" className="flex items-center justify-between gap-3 text-sm text-destructive">
-          Could not load some steps of this thread.
+          {uiT("ui.b6fdf3a0f42bde2c")}
           <Button variant="outline" size="sm" onClick={onRetry}>
-            Retry
+            {uiT("ui.942087cc2d41e013")}
           </Button>
         </div>
       )}
       {traceFailed && (
         <p role="alert" className="text-sm text-destructive">
-          Could not load more of this trace. Use Retry or Refresh trace above.
+          {uiT("ui.f99984bf45d8449c")}
         </p>
       )}
-      {complete && !turnCount && <p className="text-sm text-muted-foreground">No conversation content recorded.</p>}
+      {complete && !turnCount && <p className="text-sm text-muted-foreground">{uiT("ui.9e71ec358990f011")}</p>}
       <div className="flex items-center justify-between gap-3 border-t pt-4 text-xs text-muted-foreground">
-        <span>{complete ? "End of thread" : `${turnCount} ${turnCount === 1 ? "turn" : "turns"} loaded`}</span>
+        <span>
+          {complete
+            ? uiT("ui.8903528485d1f186")
+            : uiT("ui.2aec15f228adc553", {
+                v0: String(turnCount),
+                v1: String(turnCount === 1 ? uiT("ui.9b473845f684444f") : uiT("ui.6976a029d065bf7d")),
+              })}
+        </span>
         {onLoadMore && (
           <Button variant="outline" size="sm" onClick={onLoadMore}>
-            Load more
+            {uiT("ui.ac8991ef01019cf5")}
           </Button>
         )}
       </div>
@@ -148,8 +160,10 @@ function ThreadFooter({ turnCount, busy, stepsFailed, traceFailed, complete, onR
 }
 
 function ThreadTurnView({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <article aria-label="Thread turn" className="min-w-0 space-y-3">
+    <article aria-label={uiT("ui.0b189b8b3c2e3cfc")} className="min-w-0 space-y-3">
       {turn.context.length > 0 && <PromptContext count={turn.context.length} turn={turn} />}
       {turn.prompt.map((message, index) => (
         <ConversationMessage key={index} message={message} />
@@ -169,10 +183,12 @@ function ThreadTurnView({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (i
 }
 
 function PromptContext({ count, turn }: { count: number; turn: ThreadTurn }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <details className="group flex justify-end text-xs text-muted-foreground">
       <summary className="ml-auto flex cursor-pointer list-none items-center gap-1.5 hover:text-foreground">
-        Prompt context
+        {uiT("ui.65768aa4ae8a47b1")}
         <MessageSquareText className="size-3.5" />
         <span className="tabular-nums">{count}</span>
         <ChevronRight className="size-3.5 transition-transform group-open:rotate-90" />
@@ -187,6 +203,8 @@ function PromptContext({ count, turn }: { count: number; turn: ThreadTurn }) {
 }
 
 function WorkedBar({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(false);
   const duration = threadDurationMs(turn);
   return (
@@ -197,10 +215,12 @@ function WorkedBar({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: st
         onClick={() => setOpen((value) => !value)}
         className="flex items-center gap-2.5 rounded-md py-1 text-sm text-muted-foreground hover:text-foreground"
       >
-        <span>{duration === null ? "Worked" : `Worked ${fmtMs(duration)}`}</span>
-        <Count icon={MessageSquareText} value={turn.llmCalls} label="model calls" />
-        <Count icon={Wrench} value={turn.toolCalls} label="tool calls" />
-        {turn.failed && <TriangleAlert aria-label="A step failed" className="size-3.5 text-destructive" />}
+        <span>
+          {duration === null ? uiT("ui.e7f93aad5026eeaf") : uiT("ui.f29f5502c4dafba8", { v0: String(fmtMs(duration)) })}
+        </span>
+        <Count icon={MessageSquareText} value={turn.llmCalls} label={uiT("ui.490407477221b1ba")} />
+        <Count icon={Wrench} value={turn.toolCalls} label={uiT("ui.b102cdc6032df9ca")} />
+        {turn.failed && <TriangleAlert aria-label={uiT("ui.7058133a8690eac6")} className="size-3.5 text-destructive" />}
         <ChevronRight className={cn("size-3.5 transition-transform", open && "rotate-90")} />
       </button>
       {open && (
@@ -224,10 +244,14 @@ function Count({ icon: Icon, value, label }: { icon: typeof Wrench; value: numbe
 }
 
 function WorkItem({ work, onOpenStep }: { work: ThreadWork; onOpenStep: (id: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (work.kind === "step") return <ConversationStep item={work.item} onOpenStep={onOpenStep} />;
   return (
     <details className="min-w-0 rounded-md border p-3">
-      <summary className="cursor-pointer text-sm font-medium">Subagent: {work.name}</summary>
+      <summary className="cursor-pointer text-sm font-medium">
+        {uiT("ui.29704ce947db9803")} {work.name}
+      </summary>
       <div className="mt-4 min-w-0 space-y-5 border-l pl-3">
         <ConversationSteps groups={work.groups} onOpenStep={onOpenStep} />
       </div>
@@ -236,6 +260,8 @@ function WorkItem({ work, onOpenStep }: { work: ThreadWork; onOpenStep: (id: str
 }
 
 function ReplyMeta({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const item = turn.replyItem;
   if (!item) return null;
   const tokens = item.span.input_tokens + item.span.output_tokens;
@@ -243,15 +269,19 @@ function ReplyMeta({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: st
     <div className="flex items-center gap-3 px-1 text-xs text-muted-foreground tabular-nums">
       {item.model && <span className="truncate">{item.model}</span>}
       <span>{fmtMs(item.span.duration_ms)}</span>
-      {tokens > 0 && <span>{tokens.toLocaleString()} tok</span>}
+      {tokens > 0 && (
+        <span>
+          {tokens.toLocaleString()} {uiT("ui.1a7674eb4ee78df7")}
+        </span>
+      )}
       <Button
         variant="ghost"
         size="xs"
         className="ml-auto text-muted-foreground"
-        aria-label={`Inspect step ${item.span.name}`}
+        aria-label={uiT("ui.f8047fe968f2e54d", { v0: String(item.span.name) })}
         onClick={() => onOpenStep(item.span.span_id)}
       >
-        Inspect
+        {uiT("ui.e0723a86a5b9408a")}
       </Button>
     </div>
   );

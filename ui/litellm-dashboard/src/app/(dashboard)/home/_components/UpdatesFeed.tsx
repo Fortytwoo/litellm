@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import { useBlogPosts, type BlogPost } from "@/app/(dashboard)/hooks/blogPosts/useBlogPosts";
@@ -33,6 +34,8 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 
 /** Latest posts from the LiteLLM blog RSS feed, via /public/litellm_blog_posts, one row per post. */
 export default function UpdatesFeed({ className }: { className?: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const disabled = useDisableBlogPosts();
   const { data, isLoading, isError, refetch } = useBlogPosts();
   if (disabled) return null;
@@ -43,10 +46,10 @@ export default function UpdatesFeed({ className }: { className?: string }) {
     <section aria-labelledby="home-updates-title" data-testid="home-updates" className={className}>
       <div className="flex items-center justify-between gap-2">
         <h2 id="home-updates-title" className="text-lg font-semibold">
-          Updates
+          {uiT("ui.22e2bada8f1c65cd")}
         </h2>
         <Button variant="ghost" size="sm" render={<a href={BLOG_URL} target="_blank" rel="noopener noreferrer" />}>
-          View all
+          {uiT("ui.30a64216eaeac5d3")}
           <ArrowUpRight className="size-3.5" />
         </Button>
       </div>
@@ -63,13 +66,13 @@ export default function UpdatesFeed({ className }: { className?: string }) {
       )}
       {isError && (
         <div className="flex items-center justify-between gap-2 py-3 text-sm">
-          <span className="text-destructive">Failed to load posts</span>
+          <span className="text-destructive">{uiT("ui.499fd72f8b1be123")}</span>
           <Button variant="outline" size="sm" onClick={() => void refetch()}>
-            Retry
+            {uiT("ui.942087cc2d41e013")}
           </Button>
         </div>
       )}
-      {data && posts.length === 0 && <p className="py-3 text-sm text-muted-foreground">No posts yet</p>}
+      {data && posts.length === 0 && <p className="py-3 text-sm text-muted-foreground">{uiT("ui.f2bd677095e47a53")}</p>}
       {posts.length > 0 && (
         <ol className="m-0 list-none p-0">
           {posts.map((post: BlogPost) => (

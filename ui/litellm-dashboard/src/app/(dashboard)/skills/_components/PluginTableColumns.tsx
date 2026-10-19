@@ -33,12 +33,14 @@ const CATEGORY_BADGE_CLASS: Record<ReturnType<typeof getCategoryBadgeColor>, str
 };
 
 function PluginCategoryBadge({ category }: { category?: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Badge
       variant="outline"
       className={cn("whitespace-nowrap font-normal", CATEGORY_BADGE_CLASS[getCategoryBadgeColor(category)])}
     >
-      {category || "Uncategorized"}
+      {category || uiT("ui.8d40d123b2e1e296")}
     </Badge>
   );
 }
@@ -55,7 +57,7 @@ function PluginRowActions({ plugin, isAdmin, onDeleteClick }: PluginRowActionsPr
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open skill actions"
+        aria-label={uiT("ui.a2b7d3a7b1f092aa")}
         data-testid={`plugin-actions-${plugin.name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -67,7 +69,7 @@ function PluginRowActions({ plugin, isAdmin, onDeleteClick }: PluginRowActionsPr
           onClick={() => void copyToClipboard(plugin.id, "Skill ID copied")}
         >
           <Copy />
-          Copy skill ID
+          {uiT("ui.02a01425287a07dd")}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -101,8 +103,12 @@ export const getPluginTableColumns = ({
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Skill Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Skill Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.72588b0c1d102da3");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.72588b0c1d102da3")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -117,8 +123,14 @@ export const getPluginTableColumns = ({
   {
     id: "version",
     accessorKey: "version",
-    meta: { title: "Version" },
-    header: "Version",
+    meta: {
+      get title() {
+        return translateUi("ui.dd167905de0defca");
+      },
+    },
+    get header() {
+      return translateUi("ui.dd167905de0defca");
+    },
     size: 100,
     enableSorting: false,
     cell: ({ row }) => <span className="text-sm text-muted-foreground">{row.original.version || "N/A"}</span>,
@@ -140,7 +152,7 @@ export const getPluginTableColumns = ({
       const description = row.original.description;
       return (
         <span className="block max-w-72 truncate text-sm text-muted-foreground" title={description ?? undefined}>
-          {description || "No description"}
+          {description || translateUi("ui.bcd8cc53f40e3d4e")}
         </span>
       );
     },
@@ -148,8 +160,15 @@ export const getPluginTableColumns = ({
   {
     id: "category",
     accessorKey: "category",
-    meta: { title: "Category", skeleton: "badge" },
-    header: "Category",
+    meta: {
+      get title() {
+        return translateUi("ui.292c06f0045a45d0");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.292c06f0045a45d0");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <PluginCategoryBadge category={row.original.category ?? undefined} />,
@@ -157,12 +176,22 @@ export const getPluginTableColumns = ({
   {
     id: "enabled",
     accessorKey: "enabled",
-    meta: { title: "Public", skeleton: "badge" },
-    header: "Public",
+    meta: {
+      get title() {
+        return translateUi("ui.591935b15b1c88e2");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.591935b15b1c88e2");
+    },
     size: 100,
     enableSorting: false,
     cell: ({ row }) => (
-      <StatusBadge tone={row.original.enabled ? "success" : "neutral"} label={row.original.enabled ? "Yes" : "No"} />
+      <StatusBadge
+        tone={row.original.enabled ? "success" : "neutral"}
+        label={row.original.enabled ? translateUi("ui.85a39ab345d672ff") : translateUi("ui.1ea442a134b2a184")}
+      />
     ),
   },
   {

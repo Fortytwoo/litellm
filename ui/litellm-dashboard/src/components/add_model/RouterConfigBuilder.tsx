@@ -55,6 +55,8 @@ interface UtteranceInputProps {
 }
 
 const UtteranceInput = ({ value, onChange }: UtteranceInputProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [draft, setDraft] = useState("");
 
   const addUtterances = (input: string) => {
@@ -77,7 +79,7 @@ const UtteranceInput = ({ value, onChange }: UtteranceInputProps) => {
           <span className="truncate">{utterance}</span>
           <button
             type="button"
-            aria-label={`Remove ${utterance}`}
+            aria-label={uiT("ui.86790c6d4f116494", { v0: String(utterance) })}
             className="rounded-full p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
             onClick={() => onChange(value.filter((item) => item !== utterance))}
           >
@@ -86,7 +88,7 @@ const UtteranceInput = ({ value, onChange }: UtteranceInputProps) => {
         </Badge>
       ))}
       <input
-        aria-label="Example Utterances"
+        aria-label={uiT("ui.0680e8279896263a")}
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
         onBlur={() => draft.trim() && addUtterances(draft)}
@@ -105,7 +107,7 @@ const UtteranceInput = ({ value, onChange }: UtteranceInputProps) => {
             addUtterances(pastedText);
           }
         }}
-        placeholder={value.length === 0 ? "Type an utterance and press Enter..." : undefined}
+        placeholder={value.length === 0 ? uiT("ui.27566b861d426705") : undefined}
         className="min-w-48 flex-1 bg-transparent py-0.5 text-sm outline-none placeholder:text-muted-foreground"
       />
     </div>
@@ -211,20 +213,18 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
       <div className="w-full space-y-6">
         <div className="flex w-full flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold">Routes Configuration</h3>
-            <HelpTooltip content="Configure routing logic to automatically select the best model based on user input patterns" />
+            <h3 className="text-lg font-semibold">{uiT("ui.61826999163f2fa8")}</h3>
+            <HelpTooltip content={uiT("ui.29104b955ec5c205")} />
           </div>
           <Button type="button" onClick={addRoute}>
             <Plus data-icon="inline-start" />
-            Add Route
+            {uiT("ui.6b33c7c5710ee33f")}
           </Button>
         </div>
 
         {routes.length === 0 ? (
           <Card>
-            <CardContent className="py-8 text-center text-muted-foreground">
-              No routes configured. Click &quot;Add Route&quot; to get started.
-            </CardContent>
+            <CardContent className="py-8 text-center text-muted-foreground">{uiT("ui.87d796d94390083f")}</CardContent>
           </Card>
         ) : (
           <div className="space-y-3">
@@ -249,12 +249,12 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
                         className={`size-4 shrink-0 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
                       />
                       <span className="truncate text-base font-medium">
-                        Route {index + 1}: {route.model || "Unnamed"}
+                        {uiT("ui.adc74704d65d5cc9")} {index + 1}: {route.model || uiT("ui.e504e61521948e34")}
                       </span>
                     </CollapsibleTrigger>
                     <Button
                       type="button"
-                      aria-label="delete"
+                      aria-label={uiT("ui.6197595503f01ee2")}
                       variant="ghost"
                       size="icon-sm"
                       onClick={() => removeRoute(route.id)}
@@ -270,7 +270,7 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
                         <SearchSelect
                           value={route.model}
                           onValueChange={(model) => updateRoute(route.id, "model", model)}
-                          placeholder="Select model"
+                          placeholder={uiT("ui.1d446005add35afa")}
                           options={modelOptions}
                         />
                       </div>
@@ -281,15 +281,15 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
                           id={`${route.id}-description`}
                           value={route.description}
                           onChange={(event) => updateRoute(route.id, "description", event.target.value)}
-                          placeholder="Describe when this route should be used..."
+                          placeholder={uiT("ui.c65350a7afb48447")}
                           rows={2}
                         />
                       </div>
 
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                          <Label htmlFor={`${route.id}-threshold`}>Score Threshold</Label>
-                          <HelpTooltip content="Minimum similarity score to route to this model (0-1)" />
+                          <Label htmlFor={`${route.id}-threshold`}>{uiT("ui.bb61557095206588")}</Label>
+                          <HelpTooltip content={uiT("ui.9f954f125b5cd30c")} />
                         </div>
                         <Input
                           id={`${route.id}-threshold`}
@@ -307,12 +307,10 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
 
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                          <Label>Example Utterances</Label>
-                          <HelpTooltip content="Training examples for this route. Type an utterance and press Enter to add it." />
+                          <Label>{uiT("ui.0680e8279896263a")}</Label>
+                          <HelpTooltip content={uiT("ui.542e78dadb612ea5")} />
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                          Type an utterance and press Enter to add it. You can also paste multiple lines.
-                        </p>
+                        <p className="text-xs text-muted-foreground">{uiT("ui.703f2fe6a1d5ac91")}</p>
                         <UtteranceInput
                           value={route.utterances}
                           onChange={(utterances) => updateRoute(route.id, "utterances", utterances)}
@@ -328,9 +326,9 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
 
         <Separator />
         <div className="flex w-full items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold">JSON Preview</h3>
+          <h3 className="text-lg font-semibold">{uiT("ui.d4552a58064cbc15")}</h3>
           <Button type="button" variant="link" onClick={() => setShowJsonPreview((visible) => !visible)}>
-            {showJsonPreview ? uiT("ui.ac20a57bfde0") : "Show"}
+            {showJsonPreview ? uiT("ui.ac20a57bfde0") : uiT("ui.0df6f1cad36c49da")}
           </Button>
         </div>
 

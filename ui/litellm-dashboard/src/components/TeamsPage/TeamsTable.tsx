@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
@@ -40,9 +42,15 @@ const toSortOrder = (sorting: SortingState): "asc" | "desc" | undefined => {
 };
 
 const FILTER_LABELS: Record<string, string> = {
-  org_id: "Organization",
-  alias: "Team alias",
-  team_id: "Team ID",
+  get org_id() {
+    return translateUi("ui.d764d42592fc");
+  },
+  get alias() {
+    return translateUi("ui.d7666d583fbc8633");
+  },
+  get team_id() {
+    return translateUi("ui.fa2758a6173a");
+  },
 };
 
 export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDeleteTeam }: TeamsTableProps) {
@@ -166,8 +174,8 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
       enableColumnResizing
       columnResizeMode="onChange"
       isLoading={isPending || isPlaceholderData}
-      loadingMessage="Loading teams..."
-      noDataMessage="No teams found"
+      loadingMessage={uiT("ui.b9176fa052860fdb")}
+      noDataMessage={uiT("ui.c83a06f9875f")}
       fillHeight
       size="compact"
       toolbar={(table) => (
@@ -176,7 +184,7 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
             table={table}
             searchValue={searchInput}
             onSearchChange={handleSearchChange}
-            searchPlaceholder="Search teams by name or ID…"
+            searchPlaceholder={uiT("ui.c050d03d3f332ea0")}
             onRefresh={() => refetch?.()}
             isRefreshing={isFetching}
             onOpenFilters={() => setFiltersOpen(true)}
@@ -191,7 +199,7 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
               data-testid="teams-export-csv"
             >
               <Download />
-              {isExporting ? "Exporting..." : uiT("ui.91f71c14c8d6")}
+              {isExporting ? uiT("ui.639e45361badf069") : uiT("ui.91f71c14c8d6")}
             </Button>
           </DataTableToolbar>
           <DataTableFilterDrawer
@@ -199,7 +207,7 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
             title={uiT("ui.546ebb8eb993")}
-            description="Narrow down your teams"
+            description={uiT("ui.143587509268e518")}
           >
             {({ get, set }) => (
               <>
@@ -208,15 +216,15 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
                     options={orgOptions}
                     value={(get("org_id") as string) || undefined}
                     onValueChange={(value) => set("org_id", value ?? undefined)}
-                    placeholder="Select an organization…"
-                    emptyText="No organizations found"
+                    placeholder={uiT("ui.5cb1ec5044129bd1")}
+                    emptyText={uiT("ui.538995dba7bbf7a5")}
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Team alias">
+                <DataTableFilterField label={uiT("ui.d7666d583fbc8633")}>
                   <Input
                     value={(get("alias") as string) ?? ""}
                     onChange={(event) => set("alias", event.target.value)}
-                    placeholder="Enter team alias…"
+                    placeholder={uiT("ui.2815679b2926cfc8")}
                   />
                 </DataTableFilterField>
                 <DataTableFilterField label={uiT("ui.fa2758a6173a")}>

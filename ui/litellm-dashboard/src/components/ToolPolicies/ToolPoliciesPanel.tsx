@@ -138,7 +138,7 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <MetricCard
-          label="New Today"
+          label={uiT("ui.74dacda0a0b5e451")}
           value={newToday}
           valueColor="text-success"
           subtitle={trendSubtitle}
@@ -148,21 +148,21 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
             </svg>
           }
         />
-        <MetricCard label="Total Tools Discovered" value={totalTools} />
+        <MetricCard label={uiT("ui.1f208e2ae9ab9961")} value={totalTools} />
         <MetricCard
-          label="Blocked Tools"
+          label={uiT("ui.0ea64f56c843ebe0")}
           value={blockedCount}
           valueColor={blockedCount > 0 ? "text-destructive" : undefined}
         />
-        <MetricCard label="Active Teams" value={activeTeamsCount > 0 ? activeTeamsCount : "—"} />
+        <MetricCard label={uiT("ui.b79f23cd4bc288f7")} value={activeTeamsCount > 0 ? activeTeamsCount : "—"} />
       </div>
 
       {needsReviewTools.length > 0 && (
         <div className="bg-warning/10 border border-warning/20 rounded-lg p-4 mb-6">
-          <h2 className="text-sm font-semibold text-warning mb-1">Needs Review</h2>
+          <h2 className="text-sm font-semibold text-warning mb-1">{uiT("ui.d24c776dff88b48b")}</h2>
           <p className="text-sm text-warning mb-3">
-            {needsReviewTools.length} new tool{needsReviewTools.length !== 1 ? "s" : ""} discovered that require policy
-            decisions.
+            {needsReviewTools.length} {uiT("ui.3e8a1f67bd3b896c")}
+            {needsReviewTools.length !== 1 ? "s" : ""} {uiT("ui.58fb6a9fa6466d93")}
           </p>
           <div className="flex flex-wrap gap-2">
             {needsReviewTools.map((tool) => (
@@ -178,7 +178,7 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
                   onClick={() => scrollToToolRow(tool.tool_id)}
                   className="text-warning hover:text-warning/80 font-medium text-xs whitespace-nowrap"
                 >
-                  Review
+                  {uiT("ui.aff0766a5290e117")}
                 </button>
               </span>
             ))}

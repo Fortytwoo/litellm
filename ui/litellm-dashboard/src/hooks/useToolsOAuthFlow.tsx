@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 /**
  * OAuth2 PKCE flow for the Tools screen re-authentication path.
@@ -71,6 +74,8 @@ export const useToolsOAuthFlow = ({
   gatewayMintsClient,
   onSuccess,
 }: UseToolsOAuthFlowOptions): UseToolsOAuthFlowResult => {
+  useDashboardLanguage();
+
   const [status, setStatus] = useState<ToolsOAuthStatus>("idle");
   const [error, setError] = useState<string | null>(null);
   const processingRef = useRef(false);
@@ -218,7 +223,7 @@ export const useToolsOAuthFlow = ({
 
       setStatus("success");
       setError(null);
-      toast.success("Connected successfully");
+      toast.success(translateUi("ui.28d29898bc769fd6"));
       onSuccessRef.current(token.access_token);
     } catch (err) {
       const msg = extractErrorMessage(err);

@@ -6,6 +6,8 @@ import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/compone
 import type { MathRow } from "./usageUnits";
 
 export function CalcPopover({ title, formula, children }: { title: string; formula: string; children: ReactNode }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Popover>
       <PopoverTrigger
@@ -20,7 +22,7 @@ export function CalcPopover({ title, formula, children }: { title: string; formu
         }
       >
         <CircleHelp className="mt-px size-3.5 shrink-0" />
-        How is this calculated?
+        {uiT("ui.72d755b258b88d95")}
       </PopoverTrigger>
       <PopoverContent side="bottom" align="start" className="w-auto min-w-72 max-w-md gap-3">
         <PopoverTitle>{title}</PopoverTitle>

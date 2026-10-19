@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
 import { FolderKanban } from "lucide-react";
@@ -22,16 +23,18 @@ interface ProjectsTableProps {
 const PAGE_SIZE_OPTIONS = [PROJECTS_DEFAULT_PAGE_SIZE, 25, 50];
 
 function EmptyState({ isFiltered }: { isFiltered: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <FolderKanban className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {isFiltered ? "No matching projects" : "No projects yet"}
+        {isFiltered ? uiT("ui.76125d30fd2edde2") : uiT("ui.f83c806522865605")}
       </div>
       <div className="text-sm text-muted-foreground">
-        {isFiltered ? "Try a different search term." : "Create a project to organize keys within your teams."}
+        {isFiltered ? uiT("ui.36b89662c2f6a001") : uiT("ui.5159b26f3e8eb4ee")}
       </div>
     </div>
   );
@@ -45,6 +48,8 @@ export function ProjectsTable({
   teamAliasMap,
   isTeamsLoading,
 }: ProjectsTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, onPaginationChange } = useProjectsTableState();
   const pageSize = PAGE_SIZE_OPTIONS.includes(pagination.pageSize) ? pagination.pageSize : PROJECTS_DEFAULT_PAGE_SIZE;
@@ -80,7 +85,7 @@ export function ProjectsTable({
         />
       )}
       isLoading={isLoading}
-      loadingMessage="Loading projects…"
+      loadingMessage={uiT("ui.6970a1ced73ddb58")}
       noDataMessage={<EmptyState isFiltered={isFiltered} />}
       size="compact"
     />

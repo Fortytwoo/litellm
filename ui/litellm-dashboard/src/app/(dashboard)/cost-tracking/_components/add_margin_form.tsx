@@ -1,3 +1,8 @@
+"use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { CircleHelp } from "lucide-react";
 import { Providers, provider_map } from "@/components/provider_info_helpers";
@@ -38,7 +43,9 @@ interface ProviderOption {
 
 const GLOBAL_OPTION: ProviderOption = {
   value: "global",
-  label: "Global (All Providers)",
+  get label() {
+    return translateUi("ui.deb78ef134843b3c");
+  },
   providerEnum: null,
 };
 
@@ -55,10 +62,12 @@ const buildProviderOptions = (marginConfig: MarginConfig): ProviderOption[] => [
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -75,6 +84,8 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
   onFixedAmountChange,
   onAddProvider,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const providerOptions = buildProviderOptions(marginConfig);
   const selectedOption = providerOptions.find((option) => option.value === selectedProvider) ?? null;
 
@@ -95,9 +106,9 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
             itemToStringLabel={(option: ProviderOption) => option.label}
             isItemEqualToValue={(option: ProviderOption, selected: ProviderOption) => option.value === selected.value}
           >
-            <ComboboxInput id="margin-provider" placeholder="Select provider or 'Global'" className="w-full" />
+            <ComboboxInput id="margin-provider" placeholder={uiT("ui.ab257704b9c6e4d5")} className="w-full" />
             <ComboboxContent>
-              <ComboboxEmpty>No matching providers</ComboboxEmpty>
+              <ComboboxEmpty>{uiT("ui.9c82379afa4faf6e")}</ComboboxEmpty>
               <ComboboxList>
                 {(option: ProviderOption) => (
                   <ComboboxItem key={option.value} value={option}>
@@ -125,11 +136,11 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
           >
             <FieldLabel className="font-normal">
               <RadioGroupItem value="percentage" />
-              Percentage-based
+              {uiT("ui.d4c60b130c7bcc15")}
             </FieldLabel>
             <FieldLabel className="font-normal">
               <RadioGroupItem value="fixed" />
-              Fixed Amount
+              {uiT("ui.bf62a73af501343d")}
             </FieldLabel>
           </RadioGroup>
         </Field>
@@ -180,7 +191,7 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
               (marginType === "fixed" && !fixedAmountValue)
             }
           >
-            Add Provider Margin
+            {uiT("ui.a72815e73bf59bc3")}
           </Button>
         </div>
       </div>

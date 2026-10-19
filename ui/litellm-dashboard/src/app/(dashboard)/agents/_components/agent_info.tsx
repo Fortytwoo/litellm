@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { AgentIdentityFields } from "./AgentIdentityFields";
 import { AgentIdentityDetails } from "./AgentIdentityDetails";
@@ -144,7 +146,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
       }
     } catch (error) {
       console.error("Error fetching agent info:", error);
-      toast.error("Failed to load agent information");
+      toast.error(translateUi("ui.9006afdf9ddeb92b"));
     } finally {
       setIsLoading(false);
     }
@@ -253,12 +255,12 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
         object_permission: buildMcpObjectPermission(values),
         access_group_ids: values.access_group_ids ?? [],
       });
-      toast.success("Agent updated successfully");
+      toast.success(translateUi("ui.91e42f32d66b0a2e"));
       setIsEditing(false);
       fetchAgentInfo();
     } catch (error) {
       console.error("Error updating agent:", error);
-      toast.error("Failed to update agent");
+      toast.error(translateUi("ui.fbf185dd39a4d6e1"));
     } finally {
       setIsSaving(false);
     }
@@ -277,9 +279,9 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
   if (!agent) {
     return (
       <div className="p-4">
-        <div className="text-center">Agent not found</div>
+        <div className="text-center">{uiT("ui.a50ba166a23ade64")}</div>
         <Button onClick={onClose} className="mt-4">
-          Back to Agents List
+          {uiT("ui.88ed38c19911a249")}
         </Button>
       </div>
     );
@@ -328,9 +330,9 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
       <div>
         <Button variant="ghost" onClick={onClose} className="mb-4">
           <ArrowLeft className="size-4" />
-          Back to Agents
+          {uiT("ui.28a2018a409007fc")}
         </Button>
-        <h1 className="text-2xl font-semibold">{agent.agent_name || "Unnamed Agent"}</h1>
+        <h1 className="text-2xl font-semibold">{agent.agent_name || uiT("ui.52da6da0869cc4c5")}</h1>
         <p className="text-sm text-muted-foreground font-mono">{agent.agent_id}</p>
       </div>
 
@@ -356,41 +358,51 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
               isAdmin={isAdmin}
             />
             <DetailList>
-              <DetailItem label="Agent ID">{agent.agent_id}</DetailItem>
-              <DetailItem label="Agent Name">{agent.agent_name}</DetailItem>
-              <DetailItem label="Display Name">{agent.agent_card_params?.name || "-"}</DetailItem>
+              <DetailItem label={uiT("ui.510bce732db77286")}>{agent.agent_id}</DetailItem>
+              <DetailItem label={uiT("ui.28145084c72576a9")}>{agent.agent_name}</DetailItem>
+              <DetailItem label={uiT("ui.18d67c992b71ce69")}>{agent.agent_card_params?.name || "-"}</DetailItem>
               <DetailItem label={uiT("ui.526e0087cc3f")}>{agent.agent_card_params?.description || "-"}</DetailItem>
               <DetailItem label="URL">{agent.agent_card_params?.url || "-"}</DetailItem>
-              <DetailItem label="Version">{agent.agent_card_params?.version || "-"}</DetailItem>
-              <DetailItem label="Protocol Version">{agent.agent_card_params?.protocolVersion || "-"}</DetailItem>
-              <DetailItem label="Streaming">
-                {agent.agent_card_params?.capabilities?.streaming ? "Yes" : "No"}
+              <DetailItem label={uiT("ui.dd167905de0defca")}>{agent.agent_card_params?.version || "-"}</DetailItem>
+              <DetailItem label={uiT("ui.291267b5e04ce1b5")}>
+                {agent.agent_card_params?.protocolVersion || "-"}
+              </DetailItem>
+              <DetailItem label={uiT("ui.a951c5945635e2d3")}>
+                {agent.agent_card_params?.capabilities?.streaming
+                  ? uiT("ui.85a39ab345d672ff")
+                  : uiT("ui.1ea442a134b2a184")}
               </DetailItem>
               {agent.agent_card_params?.capabilities?.pushNotifications && (
-                <DetailItem label="Push Notifications">Yes</DetailItem>
+                <DetailItem label={uiT("ui.3b1776f544c9f4b0")}>{uiT("ui.85a39ab345d672ff")}</DetailItem>
               )}
               {agent.agent_card_params?.capabilities?.stateTransitionHistory && (
-                <DetailItem label="State Transition History">Yes</DetailItem>
+                <DetailItem label={uiT("ui.7cf48623858f12d3")}>{uiT("ui.85a39ab345d672ff")}</DetailItem>
               )}
               <DetailItem label={uiT("ui.66d0f523a379")}>
-                {agent.agent_card_params?.skills?.length || 0} configured
+                {agent.agent_card_params?.skills?.length || 0} {uiT("ui.20158224750041d6")}
               </DetailItem>
               {agent.litellm_params?.model && (
                 <DetailItem label={uiT("ui.5e2c614c23f0")}>{agent.litellm_params.model}</DetailItem>
               )}
               {agent.litellm_params?.make_public !== undefined && (
-                <DetailItem label="Make Public">{agent.litellm_params.make_public ? "Yes" : "No"}</DetailItem>
+                <DetailItem label={uiT("ui.24139936d627112e")}>
+                  {agent.litellm_params.make_public ? uiT("ui.85a39ab345d672ff") : uiT("ui.1ea442a134b2a184")}
+                </DetailItem>
               )}
               {agent.agent_card_params?.iconUrl && (
-                <DetailItem label="Icon URL">{agent.agent_card_params.iconUrl}</DetailItem>
+                <DetailItem label={uiT("ui.5522df36679f818e")}>{agent.agent_card_params.iconUrl}</DetailItem>
               )}
               {agent.agent_card_params?.documentationUrl && (
-                <DetailItem label="Documentation URL">{agent.agent_card_params.documentationUrl}</DetailItem>
+                <DetailItem label={uiT("ui.33db6f919e9e2d29")}>{agent.agent_card_params.documentationUrl}</DetailItem>
               )}
               <DetailItem label={uiT("ui.703406a2fc47")}>{agent.tpm_limit ?? uiT("ui.11dde17d6c3e")}</DetailItem>
               <DetailItem label={uiT("ui.e543e799b809")}>{agent.rpm_limit ?? uiT("ui.11dde17d6c3e")}</DetailItem>
-              <DetailItem label="Session TPM Limit">{agent.session_tpm_limit ?? uiT("ui.11dde17d6c3e")}</DetailItem>
-              <DetailItem label="Session RPM Limit">{agent.session_rpm_limit ?? uiT("ui.11dde17d6c3e")}</DetailItem>
+              <DetailItem label={uiT("ui.49d91a62a1487c10")}>
+                {agent.session_tpm_limit ?? uiT("ui.11dde17d6c3e")}
+              </DetailItem>
+              <DetailItem label={uiT("ui.f08408abc3420f12")}>
+                {agent.session_rpm_limit ?? uiT("ui.11dde17d6c3e")}
+              </DetailItem>
               <DetailItem label={uiT("ui.b0252ccc6e86")}>
                 {agent.access_group_ids?.length ? (
                   <div className="space-y-1">
@@ -415,7 +427,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                 (agent.object_permission.mcp_tool_permissions &&
                   Object.keys(agent.object_permission.mcp_tool_permissions).length > 0)) && (
                 <div style={{ marginTop: 24 }}>
-                  <h3 className="text-lg font-medium">MCP Tool Permissions</h3>
+                  <h3 className="text-lg font-medium">{uiT("ui.747e141ddff53f65")}</h3>
                   <DetailList className="mt-4">
                     {agent.object_permission.mcp_servers && agent.object_permission.mcp_servers.length > 0 && (
                       <DetailItem label={uiT("ui.aab669a72882")}>
@@ -428,16 +440,18 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                     )}
                     {agent.object_permission.mcp_access_groups &&
                       agent.object_permission.mcp_access_groups.length > 0 && (
-                        <DetailItem label="MCP Access Groups">
+                        <DetailItem label={uiT("ui.330da412f455f4e8")}>
                           {agent.object_permission.mcp_access_groups.join(", ")}
                         </DetailItem>
                       )}
                     {agent.object_permission.mcp_toolsets && agent.object_permission.mcp_toolsets.length > 0 && (
-                      <DetailItem label="MCP Toolsets">{agent.object_permission.mcp_toolsets.join(", ")}</DetailItem>
+                      <DetailItem label={uiT("ui.e4dfc68329bd2326")}>
+                        {agent.object_permission.mcp_toolsets.join(", ")}
+                      </DetailItem>
                     )}
                     {agent.object_permission.mcp_tool_permissions &&
                       Object.keys(agent.object_permission.mcp_tool_permissions).length > 0 && (
-                        <DetailItem label="Tool permissions per server">
+                        <DetailItem label={uiT("ui.64762e03dab2f405")}>
                           <div className="space-y-1">
                             {Object.entries(agent.object_permission.mcp_tool_permissions).map(([serverId, tools]) => (
                               <div key={serverId}>
@@ -459,20 +473,21 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                 <h3 className="text-lg font-medium">{uiT("ui.66d0f523a379")}</h3>
                 <DetailList className="mt-4">
                   {agent.agent_card_params.skills.map((skill, index) => (
-                    <DetailItem label={skill.name || `Skill ${index + 1}`} key={index}>
+                    <DetailItem label={skill.name || uiT("ui.df501287d41d1b3f", { v0: String(index + 1) })} key={index}>
                       <div>
                         <div>
-                          <strong>ID:</strong> {skill.id}
+                          <strong>{uiT("ui.3ea36adcd1e02c94")}</strong> {skill.id}
                         </div>
                         <div>
                           <strong>{uiT("ui.0cf2814604b4")}</strong> {skill.description}
                         </div>
                         <div>
-                          <strong>Tags:</strong> {Array.isArray(skill.tags) ? skill.tags.join(", ") : skill.tags}
+                          <strong>{uiT("ui.865658f888f2c502")}</strong>{" "}
+                          {Array.isArray(skill.tags) ? skill.tags.join(", ") : skill.tags}
                         </div>
                         {skill.examples && skill.examples.length > 0 && (
                           <div>
-                            <strong>Examples:</strong>{" "}
+                            <strong>{uiT("ui.1889f03338b79bba")}</strong>{" "}
                             {Array.isArray(skill.examples) ? skill.examples.join(", ") : skill.examples}
                           </div>
                         )}
@@ -497,7 +512,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
             <TabsContent value="settings" keepMounted>
               <Card className="block p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium">Agent Settings</h3>
+                  <h3 className="text-lg font-medium">{uiT("ui.b526bb2e5b8f7f1a")}</h3>
                   {!isEditing && (
                     <Button
                       onClick={() => {
@@ -516,7 +531,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                       <form onSubmit={form.handleSubmit(handleUpdate)}>
                         <FieldGroup className="mb-4">
                           <Field>
-                            <FieldLabel htmlFor="agent-id">Agent ID</FieldLabel>
+                            <FieldLabel htmlFor="agent-id">{uiT("ui.510bce732db77286")}</FieldLabel>
                             <Input id="agent-id" value={agent.agent_id} disabled readOnly />
                           </Field>
                         </FieldGroup>
@@ -627,7 +642,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                     </FormProvider>
                   </TooltipProvider>
                 ) : (
-                  <p>Click &quot;Edit Settings&quot; to modify agent configuration.</p>
+                  <p>{uiT("ui.b12392f3276dc5e1")}</p>
                 )}
               </Card>
             </TabsContent>

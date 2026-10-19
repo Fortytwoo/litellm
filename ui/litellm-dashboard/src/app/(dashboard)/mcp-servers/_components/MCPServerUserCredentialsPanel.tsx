@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -53,14 +55,14 @@ function CredentialsBody({
         className="flex items-center justify-center gap-3 rounded-lg border border-dashed border-border bg-card p-12"
       >
         <UiLoadingSpinner className="size-6 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">Loading user credentials...</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.f1a5af6893bcc43e")}</p>
       </div>
     );
   }
   if (error) {
     return (
       <Alert variant="destructive">
-        <AlertTitle>Could not load user credentials</AlertTitle>
+        <AlertTitle>{uiT("ui.2e853826abba4308")}</AlertTitle>
         <AlertDescription>{error.message}</AlertDescription>
       </Alert>
     );
@@ -69,18 +71,18 @@ function CredentialsBody({
   if (items.length === 0) {
     return (
       <div className="rounded-lg border border-dashed border-border bg-card p-12 text-center">
-        <p className="text-sm text-muted-foreground">No user has a stored credential for this server.</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.217d5ae7658952f3")}</p>
       </div>
     );
   }
   return (
-    <section aria-label="Stored user credentials" className="rounded-lg border border-border bg-card">
+    <section aria-label={uiT("ui.6a428c5ece58bec4")} className="rounded-lg border border-border bg-card">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>{uiT("ui.b512d97e7cbf")}</TableHead>
             <TableHead>{uiT("ui.baaddf70fb5d")}</TableHead>
-            <TableHead>Connected</TableHead>
+            <TableHead>{uiT("ui.22965568d22a14ee")}</TableHead>
             <TableHead>{uiT("ui.f6725f3af08a")}</TableHead>
             <TableHead>{uiT("ui.3a5ecca188c0")}</TableHead>
             {onRevoke ? <TableHead className="text-right">{uiT("ui.ff8059dc6752")}</TableHead> : null}
@@ -91,7 +93,7 @@ function CredentialsBody({
             <TableRow key={item.user_id}>
               <TableCell className="font-mono text-xs">{item.user_id}</TableCell>
               <TableCell>
-                <Badge variant="secondary">{credentialTypeLabel(item.credential_type)}</Badge>
+                <Badge variant="secondary">{translateText(credentialTypeLabel(item.credential_type))}</Badge>
               </TableCell>
               <TableCell className="text-xs">{formatTimestamp(item.connected_at)}</TableCell>
               <TableCell className="text-xs">{formatTimestamp(item.expires_at)}</TableCell>
@@ -102,10 +104,10 @@ function CredentialsBody({
                     variant="outline"
                     size="sm"
                     onClick={() => onRevoke(item)}
-                    aria-label={`Revoke credential for user ${item.user_id}`}
+                    aria-label={uiT("ui.6b29236deb077664", { v0: String(item.user_id) })}
                   >
                     <ShieldOff className="size-4" />
-                    Revoke
+                    {uiT("ui.87e6d00bbf53ec5a")}
                   </Button>
                 </TableCell>
               ) : null}
@@ -152,19 +154,15 @@ export function MCPServerUserCredentialsPanel({
     <div className="space-y-4" data-testid="mcp-server-user-credentials-panel">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-medium">User Credentials</h2>
-          <p className="text-sm text-muted-foreground">
-            Per-user OAuth2 tokens and BYOK API keys stored for this server. Revoking one deletes it from the database
-            and clears the cached copy, so the user must connect again before the gateway will call this server for
-            them.
-          </p>
+          <h2 className="text-lg font-medium">{uiT("ui.8e1a22b849f51bb4")}</h2>
+          <p className="text-sm text-muted-foreground">{uiT("ui.3f9c4273a077aa6e")}</p>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => refetch()}
           disabled={isFetching}
-          aria-label="Refresh user credentials"
+          aria-label={uiT("ui.6ec9d7b9b81d1096")}
         >
           <RefreshCw className={`size-4 ${isFetching ? "animate-spin" : ""}`} />
           {uiT("ui.0e9161011702")}
@@ -173,16 +171,16 @@ export function MCPServerUserCredentialsPanel({
 
       {revoke.isError ? (
         <Alert variant="destructive">
-          <AlertTitle>Could not revoke credential</AlertTitle>
+          <AlertTitle>{uiT("ui.268862cf4e98f2f0")}</AlertTitle>
           <AlertDescription>{revoke.error.message}</AlertDescription>
         </Alert>
       ) : null}
       {revoke.isSuccess ? (
         <Alert>
-          <AlertTitle>Credential revoked</AlertTitle>
+          <AlertTitle>{uiT("ui.f77929c62ac1ddb4")}</AlertTitle>
           <AlertDescription>
-            The stored {credentialTypeLabel(revoke.variables.credential_type)} credential for user{" "}
-            {revoke.variables.user_id} was deleted.
+            {uiT("ui.943db9ddce8d3d1a")} {translateText(credentialTypeLabel(revoke.variables.credential_type))}{" "}
+            {uiT("ui.28e72cd030a775f1")} {revoke.variables.user_id} {uiT("ui.b005db2faf9e79c4")}
           </AlertDescription>
         </Alert>
       ) : null}
@@ -192,12 +190,15 @@ export function MCPServerUserCredentialsPanel({
       <AlertDialog open={pendingItem !== null} onOpenChange={(open) => !open && setPendingItem(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Revoke stored credential</AlertDialogTitle>
+            <AlertDialogTitle>{uiT("ui.831cd064385d8150")}</AlertDialogTitle>
             <AlertDialogDescription>
               {pendingItem
-                ? `This deletes the ${credentialTypeLabel(pendingItem.credential_type)} credential stored for user ${pendingItem.user_id}. `
+                ? uiT("ui.b98bed01f6f7bd12", {
+                    v0: String(credentialTypeLabel(pendingItem.credential_type)),
+                    v1: String(pendingItem.user_id),
+                  })
                 : ""}
-              Their next MCP request to this server fails until they connect again.
+              {uiT("ui.da50f1f2238a08ed")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -205,7 +206,7 @@ export function MCPServerUserCredentialsPanel({
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button variant="destructive" onClick={confirmRevoke} disabled={revoke.isPending}>
-              Revoke
+              {uiT("ui.87e6d00bbf53ec5a")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

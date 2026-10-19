@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { Guardrail } from "./types";
 import { getGuardrailsList } from "../networking";
@@ -12,6 +14,8 @@ interface GuardrailSelectorProps {
 }
 
 const GuardrailSelector: React.FC<GuardrailSelectorProps> = ({ onChange, value, className, accessToken, disabled }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [guardrails, setGuardrails] = useState<Guardrail[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +47,7 @@ const GuardrailSelector: React.FC<GuardrailSelectorProps> = ({ onChange, value, 
     <div className="min-w-0">
       <MultiSelect
         disabled={disabled}
-        placeholder={disabled ? "Setting guardrails is a premium feature." : "Select guardrails"}
+        placeholder={disabled ? uiT("ui.05a8cda01d16d68d") : uiT("ui.2a6961064d004427")}
         onValueChange={handleGuardrailChange}
         value={value}
         loading={loading}

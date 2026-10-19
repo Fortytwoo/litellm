@@ -1,4 +1,5 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
 
 import * as React from "react";
 import {
@@ -162,7 +163,11 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
 
     return (
       <Field data-invalid={invalid || undefined} className={className}>
-        {label !== undefined && <FieldLabel htmlFor={path}>{label}</FieldLabel>}
+        {label !== undefined && (
+          <FieldLabel htmlFor={path}>
+            <LocalizedText>{label}</LocalizedText>
+          </FieldLabel>
+        )}
         {children(controlProps)}
         {hasHelp ? (
           <FieldDescription id={helpId}>{help}</FieldDescription>

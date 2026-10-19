@@ -71,14 +71,14 @@ export function FallbackGroupConfig({
       {/* Primary Model Section */}
       <div className="relative">
         <label htmlFor={primaryModelInputId} className="block text-sm font-semibold text-foreground mb-2">
-          Primary Model <span className="text-destructive">*</span>
+          {uiT("ui.bc2701b024601dd8")} <span className="text-destructive">*</span>
         </label>
         <SearchSelect
           inputId={primaryModelInputId}
           options={availableModels.map((m) => ({ label: m, value: m }))}
           value={group.primaryModel}
           onValueChange={handlePrimaryChange}
-          placeholder="Select primary model"
+          placeholder={uiT("ui.8125aa74c51a4094")}
           emptyText={uiT("ui.a650c298cf44")}
           disabled={disablePrimaryModel}
           className="h-12"
@@ -86,7 +86,7 @@ export function FallbackGroupConfig({
         {!disablePrimaryModel && !group.primaryModel && (
           <div className="mt-2 flex items-center gap-2 text-warning text-xs bg-warning/10 p-2 rounded-sm">
             <AlertCircle className="w-4 h-4" />
-            <span>Select a model to begin configuring fallbacks</span>
+            <span>{uiT("ui.f7bcdf0d0b6b7e34")}</span>
           </div>
         )}
       </div>
@@ -95,7 +95,7 @@ export function FallbackGroupConfig({
       <div className="flex items-center justify-center -my-4 z-raised">
         <div className="bg-indigo-50 text-indigo-500 px-4 py-1 rounded-full text-xs font-bold border border-indigo-100 flex items-center gap-2 shadow-xs dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-900">
           <ArrowDown className="w-4 h-4" />
-          IF FAILS, TRY...
+          {uiT("ui.01a4c148ab4d3166")}
         </div>
       </div>
 
@@ -104,9 +104,9 @@ export function FallbackGroupConfig({
         className={`transition-opacity duration-300 ${!group.primaryModel ? "opacity-50 pointer-events-none" : "opacity-100"}`}
       >
         <label className="block text-sm font-semibold text-foreground mb-2">
-          Fallback Chain <span className="text-destructive">*</span>
+          {uiT("ui.a8fb7169ba1dc989")} <span className="text-destructive">*</span>
           <span className="text-xs text-muted-foreground font-normal ml-2">
-            (Max {maxFallbacks} fallbacks at a time)
+            {uiT("ui.9899e12999350af4")} {maxFallbacks} {uiT("ui.605310a79cbe443b")}
           </span>
         </label>
 
@@ -118,7 +118,9 @@ export function FallbackGroupConfig({
               value={group.fallbackModels}
               onValueChange={handleFallbackSelect}
               placeholder={
-                canAddMoreFallbacks ? "Select fallback models to add..." : `Maximum ${maxFallbacks} fallbacks reached`
+                canAddMoreFallbacks
+                  ? uiT("ui.f01fad698741f622")
+                  : uiT("ui.11edd29770ef27b7", { v0: String(maxFallbacks) })
               }
               emptyText={uiT("ui.a650c298cf44")}
               disabled={!group.primaryModel}
@@ -126,8 +128,8 @@ export function FallbackGroupConfig({
             />
             <p className="text-xs text-muted-foreground mt-1 ml-1">
               {canAddMoreFallbacks
-                ? `Search and select multiple models. Selected models will appear below in order. (${group.fallbackModels.length}/${maxFallbacks} used)`
-                : `Maximum ${maxFallbacks} fallbacks reached. Remove some to add more.`}
+                ? uiT("ui.13426aaf161fdc09", { v0: String(group.fallbackModels.length), v1: String(maxFallbacks) })
+                : uiT("ui.e6a70b7ddf1f6c95", { v0: String(maxFallbacks) })}
             </p>
           </div>
 
@@ -135,11 +137,11 @@ export function FallbackGroupConfig({
           <div className="space-y-2 min-h-[100px]">
             {group.fallbackModels.length === 0 ? (
               <div className="h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center text-muted-foreground">
-                <span className="text-sm">No fallback models selected</span>
-                <span className="text-xs mt-1">Add models from the dropdown above</span>
+                <span className="text-sm">{uiT("ui.06d9070f2ebfc891")}</span>
+                <span className="text-xs mt-1">{uiT("ui.4e1e97553c62c19a")}</span>
               </div>
             ) : (
-              <ol aria-label="Fallback chain" className="space-y-2">
+              <ol aria-label={uiT("ui.a0a6ecf5605831f3")} className="space-y-2">
                 {group.fallbackModels.map((modelValue, index) => (
                   <li
                     key={`${modelValue}-${index}`}
@@ -156,7 +158,7 @@ export function FallbackGroupConfig({
 
                     <button
                       type="button"
-                      aria-label={`Remove ${modelValue}`}
+                      aria-label={uiT("ui.86790c6d4f116494", { v0: String(modelValue) })}
                       onClick={() => removeFallback(index)}
                       className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive p-1"
                     >

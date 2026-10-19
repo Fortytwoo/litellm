@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -33,6 +35,8 @@ function HeaderWithTooltip({ title, tooltip }: { title: string; tooltip: string 
 }
 
 function HeadersCell({ value }: { value: object }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [showHeaders, setShowHeaders] = useState(false);
   const headerString = JSON.stringify(value);
 
@@ -42,7 +46,7 @@ function HeadersCell({ value }: { value: object }) {
       <button
         type="button"
         onClick={() => setShowHeaders(!showHeaders)}
-        aria-label={showHeaders ? "Hide headers" : "Show headers"}
+        aria-label={showHeaders ? uiT("ui.4e3c7f9acbfc6eb4") : uiT("ui.94ced27fb9e1fa9a")}
         className="rounded-sm p-1 hover:bg-muted"
       >
         {showHeaders ? (
@@ -56,8 +60,10 @@ function HeadersCell({ value }: { value: object }) {
 }
 
 function MethodsCell({ methods }: { methods: string[] | undefined }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!methods || methods.length === 0) {
-    return <Badge variant="secondary">ALL</Badge>;
+    return <Badge variant="secondary">{uiT("ui.b5c7aed7cd2a3085")}</Badge>;
   }
   return (
     <div className="flex flex-wrap gap-1">
@@ -84,7 +90,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open endpoint actions"
+        aria-label={uiT("ui.16412647450865b8")}
         data-testid={`endpoint-actions-${endpointId || endpoint.path}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -111,7 +117,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
         </DropdownMenuItem>
         {isFromConfig && (
           <div data-testid="endpoint-config-hint" className="px-2 py-1.5 text-xs text-muted-foreground">
-            {CONFIG_ENDPOINT_HINT}
+            {translateText(CONFIG_ENDPOINT_HINT)}
           </div>
         )}
       </DropdownMenuContent>
@@ -151,20 +157,38 @@ export const getPassThroughEndpointsTableColumns = ({
   },
   {
     id: "source",
-    meta: { title: "Source", skeleton: "badge" },
-    header: "Source",
+    meta: {
+      get title() {
+        return translateUi("ui.0e570ca6fabe24f9");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.0e570ca6fabe24f9");
+    },
     size: 100,
     enableSorting: false,
     cell: ({ row }) => {
       const isFromConfig = row.original.is_from_config ?? false;
-      return <StatusBadge tone={isFromConfig ? "neutral" : "info"} label={isFromConfig ? "Config" : "DB"} />;
+      return (
+        <StatusBadge
+          tone={isFromConfig ? "neutral" : "info"}
+          label={isFromConfig ? translateUi("ui.87e89abb4c1c551f") : translateUi("ui.cf3abc8326646b99")}
+        />
+      );
     },
   },
   {
     id: "path",
     accessorKey: "path",
-    meta: { title: "Path" },
-    header: "Path",
+    meta: {
+      get title() {
+        return translateUi("ui.62fa5a5b0d3c3188");
+      },
+    },
+    get header() {
+      return translateUi("ui.62fa5a5b0d3c3188");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) => (
@@ -176,8 +200,14 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "target",
     accessorKey: "target",
-    meta: { title: "Target" },
-    header: "Target",
+    meta: {
+      get title() {
+        return translateUi("ui.978354db0c00fc78");
+      },
+    },
+    get header() {
+      return translateUi("ui.978354db0c00fc78");
+    },
     size: 240,
     enableSorting: false,
     cell: ({ row }) => (
@@ -188,8 +218,15 @@ export const getPassThroughEndpointsTableColumns = ({
   },
   {
     id: "methods",
-    meta: { title: "Methods", skeleton: "chips" },
-    header: () => <HeaderWithTooltip title="Methods" tooltip="HTTP methods supported by this endpoint" />,
+    meta: {
+      get title() {
+        return translateUi("ui.8696622f344183c4");
+      },
+      skeleton: "chips",
+    },
+    header: () => (
+      <HeaderWithTooltip title={translateUi("ui.8696622f344183c4")} tooltip={translateUi("ui.f2b9d846121adb20")} />
+    ),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <MethodsCell methods={row.original.methods} />,
@@ -197,18 +234,34 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "auth",
     accessorKey: "auth",
-    meta: { title: "Authentication", skeleton: "badge" },
-    header: () => <HeaderWithTooltip title="Authentication" tooltip="LiteLLM Virtual Key required to call endpoint" />,
+    meta: {
+      get title() {
+        return translateUi("ui.66880d2d8216260d");
+      },
+      skeleton: "badge",
+    },
+    header: () => (
+      <HeaderWithTooltip title={translateUi("ui.66880d2d8216260d")} tooltip={translateUi("ui.53068e184c455c60")} />
+    ),
     size: 140,
     enableSorting: false,
     cell: ({ row }) => (
-      <StatusBadge tone={row.original.auth ? "success" : "neutral"} label={row.original.auth ? "Yes" : "No"} />
+      <StatusBadge
+        tone={row.original.auth ? "success" : "neutral"}
+        label={row.original.auth ? translateUi("ui.85a39ab345d672ff") : translateUi("ui.1ea442a134b2a184")}
+      />
     ),
   },
   {
     id: "headers",
-    meta: { title: "Headers" },
-    header: "Headers",
+    meta: {
+      get title() {
+        return translateUi("ui.194e9fe656a1bcab");
+      },
+    },
+    get header() {
+      return translateUi("ui.194e9fe656a1bcab");
+    },
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <HeadersCell value={row.original.headers || {}} />,

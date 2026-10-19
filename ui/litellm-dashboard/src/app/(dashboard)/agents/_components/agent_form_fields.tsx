@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
@@ -47,6 +49,8 @@ interface AgentFormFieldsProps {
 }
 
 const SkillsFieldArray = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<AgentFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: "skills" });
 
@@ -138,19 +142,21 @@ const SkillsFieldArray = () => {
             onClick={() => remove(index)}
           >
             <Trash2 />
-            Remove Skill
+            {uiT("ui.c034ffb78a59bc20")}
           </Button>
         </div>
       ))}
       <Button type="button" variant="outline" className="w-full border-dashed" onClick={() => append({})}>
         <Plus />
-        Add Skill
+        {uiT("ui.f01ec050eca5da4a")}
       </Button>
     </>
   );
 };
 
 const StaticHeadersFieldArray = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<AgentFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: "static_headers" });
 
@@ -164,7 +170,7 @@ const StaticHeadersFieldArray = () => {
                 {...control}
                 ref={ref}
                 className="w-55"
-                placeholder="Header name (e.g. Authorization)"
+                placeholder={uiT("ui.b84955283f70579a")}
                 value={typeof value === "string" ? value : ""}
                 onChange={onChange}
               />
@@ -176,7 +182,7 @@ const StaticHeadersFieldArray = () => {
                 {...control}
                 ref={ref}
                 className="w-65"
-                placeholder="Value (e.g. Bearer token123)"
+                placeholder={uiT("ui.2e1445b1bc70ce9f")}
                 value={typeof value === "string" ? value : ""}
                 onChange={onChange}
               />
@@ -186,7 +192,7 @@ const StaticHeadersFieldArray = () => {
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Remove static header"
+            aria-label={uiT("ui.bc68dcf49aeaa081")}
             className="text-destructive hover:text-destructive/80"
             onClick={() => remove(index)}
           >
@@ -196,13 +202,15 @@ const StaticHeadersFieldArray = () => {
       ))}
       <Button type="button" variant="outline" className="w-full border-dashed" onClick={() => append({})}>
         <Plus />
-        Add Static Header
+        {uiT("ui.5ab7fe67cc263312")}
       </Button>
     </>
   );
 };
 
 const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName = true, visiblePanels }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const shouldShow = (key: string) => !visiblePanels || visiblePanels.includes(key);
 
   return (
@@ -218,7 +226,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
               <Input
                 {...control}
                 ref={ref}
-                placeholder="e.g., customer-support-agent"
+                placeholder={uiT("ui.372237100d4c16fe")}
                 value={typeof value === "string" ? value : ""}
                 onChange={onChange}
               />
@@ -231,7 +239,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         {shouldShow(AGENT_FORM_CONFIG.basic.key) && (
           <AgentFormPanel
             panelKey={AGENT_FORM_CONFIG.basic.key}
-            title={`${AGENT_FORM_CONFIG.basic.title} (Required)`}
+            title={uiT("ui.01a3f3e2b0d2f3a2", { v0: String(AGENT_FORM_CONFIG.basic.title) })}
             panels={panels}
           >
             {AGENT_FORM_CONFIG.basic.fields.map((field) => (
@@ -366,7 +374,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         )}
 
         {shouldShow(AUTH_HEADERS_PANEL_KEY) && (
-          <AgentFormPanel panelKey={AUTH_HEADERS_PANEL_KEY} title="Authentication Headers" panels={panels}>
+          <AgentFormPanel panelKey={AUTH_HEADERS_PANEL_KEY} title={uiT("ui.8110b6f055178b14")} panels={panels}>
             <Field>
               <FieldTitle>
                 {labelWithHint(
@@ -391,7 +399,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
                   id={id}
                   value={Array.isArray(value) ? (value as string[]) : []}
                   onValueChange={onChange}
-                  placeholder="e.g. x-api-key, Authorization"
+                  placeholder={uiT("ui.212b151d8b6c524f")}
                 />
               )}
             </AgentFormField>
@@ -399,7 +407,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         )}
 
         {shouldShow(KILL_SWITCH_PANEL_KEY) && (
-          <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title="Kill Switch" panels={panels}>
+          <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title={uiT("ui.006b49290aa86bfe")} panels={panels}>
             <KillSwitchFormFields />
           </AgentFormPanel>
         )}

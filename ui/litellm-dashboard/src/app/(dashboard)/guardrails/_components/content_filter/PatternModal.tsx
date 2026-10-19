@@ -71,12 +71,12 @@ const PatternModal: React.FC<PatternModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Add prebuilt pattern</DialogTitle>
+          <DialogTitle>{uiT("ui.f49c33b1806e6215")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div>
-            <p className="font-semibold">Pattern type</p>
+            <p className="font-semibold">{uiT("ui.a8443348a4b7c0cf")}</p>
             <Combobox
               items={patternGroups}
               value={selectedPattern}
@@ -84,9 +84,9 @@ const PatternModal: React.FC<PatternModalProps> = ({
               itemToStringLabel={(pattern: PrebuiltPattern) => pattern.display_name}
               filter={matchesPatternQuery}
             >
-              <ComboboxInput className="mt-2 w-full" placeholder="Choose pattern type" />
+              <ComboboxInput className="mt-2 w-full" placeholder={uiT("ui.4bc0a5fcf23ae008")} />
               <ComboboxContent>
-                <ComboboxEmpty>No matching patterns</ComboboxEmpty>
+                <ComboboxEmpty>{uiT("ui.7fc18fc9a9d7c476")}</ComboboxEmpty>
                 <ComboboxList>
                   {(group: PatternGroup) => (
                     <ComboboxGroup key={group.category} items={group.items}>
@@ -107,9 +107,7 @@ const PatternModal: React.FC<PatternModalProps> = ({
 
           <div>
             <p className="font-semibold">{uiT("ui.64cff1319d2f")}</p>
-            <p className="mt-1 mb-2 text-muted-foreground">
-              Choose what action the guardrail should take when this pattern is detected
-            </p>
+            <p className="mt-1 mb-2 text-muted-foreground">{uiT("ui.782a2e817d535857")}</p>
             <Select
               items={ACTION_ITEMS}
               value={patternAction}

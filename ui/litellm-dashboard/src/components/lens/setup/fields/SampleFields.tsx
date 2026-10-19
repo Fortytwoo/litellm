@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Controller, useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,8 @@ import { DurationInput } from "@/components/shared/DurationInput";
 import type { InvestigationInput } from "../investigationSchema";
 
 export function SampleFields() {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     control,
     register,
@@ -18,7 +21,12 @@ export function SampleFields() {
         control={control}
         name="selection.lookback_hours"
         render={({ field }) => (
-          <DurationInput label="Review the last" value={field.value ?? 24} base="hours" onChange={field.onChange} />
+          <DurationInput
+            label={uiT("ui.d00a21bb8c82828c")}
+            value={field.value ?? 24}
+            base="hours"
+            onChange={field.onChange}
+          />
         )}
       />
       {errors.selection?.lookback_hours?.message && (
@@ -27,7 +35,7 @@ export function SampleFields() {
         </p>
       )}
       <label className="grid gap-2 text-sm">
-        Sample (%)
+        {uiT("ui.f05a7282809edf6f")}
         <Input
           {...register("selection.sample_percent", { valueAsNumber: true })}
           type="number"

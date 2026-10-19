@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useWatch, type UseFormReturn } from "react-hook-form";
@@ -241,7 +243,7 @@ const SSOModals: React.FC<SSOModalsProps> = ({
       // Close the main SSO modal and trigger refresh
       handleAddSSOOk();
 
-      toast.success("SSO settings cleared successfully");
+      toast.success(translateUi("ui.0970d74003694903"));
     } catch (error) {
       console.error("Failed to clear SSO settings:", error);
       toast.fromError("Failed to clear SSO settings");
@@ -254,7 +256,7 @@ const SSOModals: React.FC<SSOModalsProps> = ({
       <Dialog open={isAddSSOModalVisible} onOpenChange={(open) => !open && handleAddSSOCancel()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>{ssoConfigured ? "Edit SSO Settings" : "Add SSO"}</DialogTitle>
+            <DialogTitle>{ssoConfigured ? uiT("ui.ca05b5e008d6b356") : uiT("ui.427af519334adbf3")}</DialogTitle>
           </DialogHeader>
           <FormProvider {...form}>
             <form
@@ -268,7 +270,9 @@ const SSOModals: React.FC<SSOModalsProps> = ({
                 {provider ? renderProviderFields(provider) : null}
                 <ProxyAdminEmailField />
                 <ProxyBaseUrlField />
-                {showRoleMappingToggle && <MappingToggleField name="use_role_mappings" label="Use Role Mappings" />}
+                {showRoleMappingToggle && (
+                  <MappingToggleField name="use_role_mappings" label={uiT("ui.7eddcdfb17de2879")} />
+                )}
                 {useRoleMappings && (
                   <>
                     <GroupClaimField />
@@ -293,16 +297,16 @@ const SSOModals: React.FC<SSOModalsProps> = ({
       <Dialog open={isClearConfirmModalVisible} onOpenChange={(open) => !open && setIsClearConfirmModalVisible(false)}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Confirm Clear SSO Settings</DialogTitle>
+            <DialogTitle>{uiT("ui.290713de9bb73c3c")}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to clear all SSO settings? This action cannot be undone.</p>
-          <p>Users will no longer be able to login using SSO after this change.</p>
+          <p>{uiT("ui.096231b352b6a9c9")}</p>
+          <p>{uiT("ui.d1f8cfede03a1482")}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsClearConfirmModalVisible(false)}>
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleClearSSO} variant="destructive">
-              Yes, Clear
+              {uiT("ui.3e49f10693ea762e")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -311,16 +315,16 @@ const SSOModals: React.FC<SSOModalsProps> = ({
       <Dialog open={isInstructionsModalVisible} onOpenChange={(open) => !open && handleInstructionsCancel()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>SSO Setup Instructions</DialogTitle>
+            <DialogTitle>{uiT("ui.f9ca90e998ddc37d")}</DialogTitle>
           </DialogHeader>
-          <p>Follow these steps to complete the SSO setup:</p>
-          <p className="text-sm mt-2">1. DO NOT Exit this TAB</p>
-          <p className="text-sm mt-2">2. Open a new tab, visit your proxy base url</p>
-          <p className="text-sm mt-2">3. Confirm your SSO is configured correctly and you can login on the new Tab</p>
-          <p className="text-sm mt-2">4. If Step 3 is successful, you can close this tab</p>
+          <p>{uiT("ui.3bd99bf0c78a981b")}</p>
+          <p className="text-sm mt-2">{uiT("ui.79d63d365bdaa96e")}</p>
+          <p className="text-sm mt-2">{uiT("ui.1836d1e14649d746")}</p>
+          <p className="text-sm mt-2">{uiT("ui.284ef0d72015fc02")}</p>
+          <p className="text-sm mt-2">{uiT("ui.143d4fbdd5179542")}</p>
           <div style={{ textAlign: "right", marginTop: "10px" }}>
             <Button type="button" onClick={handleInstructionsOk}>
-              Done
+              {uiT("ui.11a6767d5674c7e4")}
             </Button>
           </div>
         </DialogContent>

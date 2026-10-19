@@ -56,9 +56,7 @@ export default function TeamAdminSettingsForm({
   return (
     <form onSubmit={(event) => void submit(event)}>
       <FieldGroup>
-        <p className="text-sm text-muted-foreground">
-          A proxy admin chose which settings team admins can change. Ask a proxy admin to change anything else.
-        </p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.c8493c70639c7132")}</p>
         {TEAM_ADMIN_SETTINGS_FIELDS.filter((name) => editableFields.has(name)).map((name) => (
           <FormField key={name} control={form.control} name={name} label={teamAdminFieldLabel(name)}>
             {({ ref, value, ...field }) => (

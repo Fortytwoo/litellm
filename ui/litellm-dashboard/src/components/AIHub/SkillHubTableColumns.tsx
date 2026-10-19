@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -39,10 +41,12 @@ interface SkillHubRowActionsProps {
 }
 
 function SkillHubRowActions({ skill, onSkillClick }: SkillHubRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open skill actions"
+        aria-label={uiT("ui.a2b7d3a7b1f092aa")}
         data-testid={`skill-hub-actions-${skill.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -51,14 +55,14 @@ function SkillHubRowActions({ skill, onSkillClick }: SkillHubRowActionsProps) {
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="skill-hub-action-details" onClick={() => onSkillClick(skill)}>
           <Info />
-          View details
+          {uiT("ui.d1bf045bb524dae5")}
         </DropdownMenuItem>
         <DropdownMenuItem
           data-testid="skill-hub-action-copy"
           onClick={() => void copyToClipboard(skill.name, "Skill name copied")}
         >
           <Copy />
-          Copy skill name
+          {uiT("ui.4fb99aef4988adb8")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -73,8 +77,12 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Skill Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Skill Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.72588b0c1d102da3");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.72588b0c1d102da3")} />,
     size: 200,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -104,8 +112,13 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "category",
     accessorKey: "category",
-    meta: { title: "Category", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Category" />,
+    meta: {
+      get title() {
+        return translateUi("ui.292c06f0045a45d0");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.292c06f0045a45d0")} />,
     size: 130,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -119,8 +132,12 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "domain",
     accessorKey: "domain",
-    meta: { title: "Domain" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Domain" />,
+    meta: {
+      get title() {
+        return translateUi("ui.79fa33618d8eaa1f");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.79fa33618d8eaa1f")} />,
     size: 130,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -128,8 +145,14 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   },
   {
     id: "source",
-    meta: { title: "Source" },
-    header: "Source",
+    meta: {
+      get title() {
+        return translateUi("ui.0e570ca6fabe24f9");
+      },
+    },
+    get header() {
+      return translateUi("ui.0e570ca6fabe24f9");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) => {
@@ -164,7 +187,7 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
     cell: ({ row }) => (
       <StatusBadge
         tone={row.original.enabled ? "success" : "neutral"}
-        label={row.original.enabled ? "Public" : "Draft"}
+        label={row.original.enabled ? translateUi("ui.591935b15b1c88e2") : translateUi("ui.ebf12ef47cf575b3")}
       />
     ),
   },

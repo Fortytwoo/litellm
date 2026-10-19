@@ -1,4 +1,6 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleHelp, Info } from "lucide-react";
@@ -23,10 +25,12 @@ interface PassThroughGuardrailsSectionProps {
 
 const labelWithHint = (label: React.ReactNode, hint: React.ReactNode): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -66,40 +70,34 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
     <TooltipProvider>
       <Card className="block p-6">
         <h3 className="mb-2 text-lg font-semibold text-foreground">{uiT("ui.443f975eefe8")}</h3>
-        <p className="mb-6 text-sm text-muted-foreground">
-          Configure guardrails to enforce policies on requests and responses. Guardrails are opt-in for passthrough
-          endpoints.
-        </p>
+        <p className="mb-6 text-sm text-muted-foreground">{uiT("ui.1e60bbd851bd3658")}</p>
 
         <Alert variant="info" className="mb-4">
           <Info />
           <AlertTitle>
-            Field-Level Targeting{" "}
+            {uiT("ui.ec589d541e71b56f")}{" "}
             <a
               href="https://docs.litellm.ai/docs/proxy/pass_through_guardrails#field-level-targeting"
               target="_blank"
               rel="noopener noreferrer"
               className="text-info underline hover:text-info/80"
             >
-              (Learn More)
+              {uiT("ui.21ebfff4b313c342")}
             </a>
           </AlertTitle>
           <AlertDescription>
             <div className="space-y-2">
-              <div>
-                Optionally specify which fields to check. If left empty, the entire request/response is sent to the
-                guardrail.
-              </div>
+              <div>{uiT("ui.e03ed755868550a5")}</div>
               <div className="mt-2 space-y-1 text-xs">
-                <div className="font-medium">Common Examples:</div>
+                <div className="font-medium">{uiT("ui.70612292391a0146")}</div>
                 <div>
-                  • <code className="rounded-sm bg-muted px-1">query</code> - Single field
+                  • <code className="rounded-sm bg-muted px-1">query</code> {uiT("ui.b114d77bce0fb5e2")}
                 </div>
                 <div>
-                  • <code className="rounded-sm bg-muted px-1">documents[*].text</code> - All text in documents array
+                  • <code className="rounded-sm bg-muted px-1">documents[*].text</code> {uiT("ui.2e0f004d2ed524be")}
                 </div>
                 <div>
-                  • <code className="rounded-sm bg-muted px-1">messages[*].content</code> - All message contents
+                  • <code className="rounded-sm bg-muted px-1">messages[*].content</code> {uiT("ui.3ec3b630bf003f6e")}
                 </div>
               </div>
             </div>
@@ -124,8 +122,8 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
         {selectedGuardrails.length > 0 && (
           <div className="mt-6 space-y-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-sm font-medium text-foreground">Field Targeting (Optional)</div>
-              <div className="text-xs text-muted-foreground">💡 Tip: Leave empty to check entire payload</div>
+              <div className="text-sm font-medium text-foreground">{uiT("ui.67de6ce64a6a9244")}</div>
+              <div className="text-xs text-muted-foreground">{uiT("ui.4fb5fbe7c7afbc49")}</div>
             </div>
             {selectedGuardrails.map((guardrailName) => (
               <Card key={guardrailName} className="block bg-muted/50 p-4">
@@ -137,12 +135,12 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
                         {labelWithHint(
                           "Request Fields (pre_call)",
                           <div>
-                            <div className="mb-1 font-medium">Specify which request fields to check</div>
+                            <div className="mb-1 font-medium">{uiT("ui.21f8ba63b8d3e601")}</div>
                             <div className="space-y-1 text-xs">
-                              <div>Examples:</div>
-                              <div>• query</div>
-                              <div>• documents[*].text</div>
-                              <div>• messages[*].content</div>
+                              <div>{uiT("ui.1889f03338b79bba")}</div>
+                              <div>{uiT("ui.be9f358ec3d2160e")}</div>
+                              <div>{uiT("ui.1bb1ecd57861b408")}</div>
+                              <div>{uiT("ui.3054cda525ee6af3")}</div>
                             </div>
                           </div>,
                         )}
@@ -155,7 +153,7 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
                           disabled={disabled}
                           onClick={() => appendField(guardrailName, "request_fields", "query")}
                         >
-                          + query
+                          {uiT("ui.02489ff7742ef76e")}
                         </Button>
                         <Button
                           type="button"
@@ -164,13 +162,13 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
                           disabled={disabled}
                           onClick={() => appendField(guardrailName, "request_fields", "documents[*]")}
                         >
-                          + documents[*]
+                          {uiT("ui.0492c95617423b81")}
                         </Button>
                       </div>
                     </div>
                     <TagsInput
                       id={`${guardrailName}-request-fields`}
-                      placeholder="Type field name or use + buttons above (e.g., query, documents[*].text)"
+                      placeholder={uiT("ui.1edf78db09991097")}
                       value={value[guardrailName]?.request_fields ?? []}
                       onValueChange={(fields) => handleFieldChange(guardrailName, "request_fields", fields)}
                       tokenSeparators={[","]}
@@ -186,11 +184,11 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
                         {labelWithHint(
                           "Response Fields (post_call)",
                           <div>
-                            <div className="mb-1 font-medium">Specify which response fields to check</div>
+                            <div className="mb-1 font-medium">{uiT("ui.41883204ca2a0e83")}</div>
                             <div className="space-y-1 text-xs">
-                              <div>Examples:</div>
-                              <div>• results[*].text</div>
-                              <div>• choices[*].message.content</div>
+                              <div>{uiT("ui.1889f03338b79bba")}</div>
+                              <div>{uiT("ui.2b9a84e26f9d819c")}</div>
+                              <div>{uiT("ui.274717920f999bf8")}</div>
                             </div>
                           </div>,
                         )}
@@ -203,13 +201,13 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
                           disabled={disabled}
                           onClick={() => appendField(guardrailName, "response_fields", "results[*]")}
                         >
-                          + results[*]
+                          {uiT("ui.d83fb6ce3dad6f17")}
                         </Button>
                       </div>
                     </div>
                     <TagsInput
                       id={`${guardrailName}-response-fields`}
-                      placeholder="Type field name or use + buttons above (e.g., results[*].text)"
+                      placeholder={uiT("ui.118f7badd07063a2")}
                       value={value[guardrailName]?.response_fields ?? []}
                       onValueChange={(fields) => handleFieldChange(guardrailName, "response_fields", fields)}
                       tokenSeparators={[","]}

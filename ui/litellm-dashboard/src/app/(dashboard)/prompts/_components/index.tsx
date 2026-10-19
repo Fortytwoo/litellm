@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 
@@ -25,13 +29,36 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const ALL_ENVIRONMENTS_LABEL = "All Environments";
 
 const ENVIRONMENT_OPTIONS = [
-  { label: "Development", value: "development" },
-  { label: "Staging", value: "staging" },
-  { label: "Production", value: "production" },
+  {
+    get label() {
+      return translateUi("ui.21b6a798321a49f7");
+    },
+    value: "development",
+  },
+  {
+    get label() {
+      return translateUi("ui.a8e7ac92a1164ad8");
+    },
+    value: "staging",
+  },
+  {
+    get label() {
+      return translateUi("ui.13a7c655a7d4213c");
+    },
+    value: "production",
+  },
 ];
 
 // SelectValue falls back to the raw value unless the root can map it to a label.
-const ENVIRONMENT_ITEMS = [{ label: ALL_ENVIRONMENTS_LABEL, value: null }, ...ENVIRONMENT_OPTIONS];
+const ENVIRONMENT_ITEMS = [
+  {
+    get label() {
+      return translateText(ALL_ENVIRONMENTS_LABEL);
+    },
+    value: null,
+  },
+  ...ENVIRONMENT_OPTIONS,
+];
 
 interface PromptsProps {
   accessToken: string | null;
@@ -127,7 +154,12 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
     setIsDeleting(true);
     try {
       await deletePromptCall(accessToken, promptToDelete.id, promptToDelete.environment);
-      toast.success(`Prompt "${promptToDelete.name}" deleted successfully from ${promptToDelete.environment}`);
+      toast.success(
+        translateUi("ui.10fd4def7b692bf3", undefined, {
+          v0: String(promptToDelete.name),
+          v1: String(promptToDelete.environment),
+        }),
+      );
       fetchPrompts(); // Refresh the list
     } catch (error) {
       console.error("Error deleting prompt:", error);
@@ -169,11 +201,11 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
                 <>
                   <Button onClick={handleAddPrompt} disabled={!accessToken}>
                     <Plus />
-                    Add New Prompt
+                    {uiT("ui.984e22922f4f80eb")}
                   </Button>
                   <Button onClick={handleAddPromptFromFile} disabled={!accessToken} variant="secondary">
                     <Upload />
-                    Upload .prompt File
+                    {uiT("ui.fac2440b127cefce")}
                   </Button>
                 </>
               )}
@@ -184,10 +216,10 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
               onValueChange={(value) => setSelectedEnvironment((value as string | null) ?? undefined)}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={ALL_ENVIRONMENTS_LABEL} />
+                <SelectValue placeholder={translateText(ALL_ENVIRONMENTS_LABEL)} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={null}>{ALL_ENVIRONMENTS_LABEL}</SelectItem>
+                <SelectItem value={null}>{translateText(ALL_ENVIRONMENTS_LABEL)}</SelectItem>
                 {ENVIRONMENT_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -224,10 +256,11 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Prompt</AlertDialogTitle>
+              <AlertDialogTitle>{uiT("ui.3bc4c668a79f6a07")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete the {promptToDelete.environment} copy of prompt: {promptToDelete.name}?
-                This action cannot be undone.
+                {uiT("ui.df017794358fa777")} {promptToDelete.environment} {uiT("ui.acfd784878a55a4b")}{" "}
+                {promptToDelete.name}
+                {uiT("ui.30f98589bee45969")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

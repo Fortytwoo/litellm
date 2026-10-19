@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useId, useState } from "react";
@@ -48,7 +50,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
 
   const handleAuthorize = async () => {
     if (!apiKey.trim()) {
-      toast.error("Please enter your API key");
+      toast.error(translateUi("ui.4363834d36b611c7"));
       return;
     }
     setLoading(true);
@@ -57,7 +59,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
         params: { path: { server_id: server.server_id } },
         body: { credential: apiKey.trim(), save: saveKey },
       });
-      toast.success(`Connected to ${serverDisplayName}`);
+      toast.success(translateUi("ui.2d4f3a0521f98c26", undefined, { v0: String(serverDisplayName) }));
       onSuccess(server.server_id);
       handleClose();
     } catch (e) {
@@ -108,9 +110,11 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 </div>
               </div>
 
-              <h2 className="text-2xl font-bold text-foreground mb-2">Connect {serverDisplayName}</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-2">
+                {uiT("ui.1a2303ede07493ac")} {serverDisplayName}
+              </h2>
               <p className="text-muted-foreground mb-6">
-                LiteLLM needs access to {serverDisplayName} to complete your request.
+                {uiT("ui.33126524556e9d9e")} {serverDisplayName} {uiT("ui.f9105691a766a31d")}
               </p>
 
               {/* How it works */}
@@ -123,10 +127,10 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                     </svg>
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground mb-1">How it works</p>
+                    <p className="font-semibold text-foreground mb-1">{uiT("ui.9c870aa6e5e93270")}</p>
                     <p className="text-muted-foreground text-sm">
-                      LiteLLM acts as a secure bridge. Your requests are routed through our MCP client directly to{" "}
-                      {serverDisplayName}&apos;s API.
+                      {uiT("ui.f8e8058f788fe3ba")} {serverDisplayName}
+                      {uiT("ui.8e4e6b119298ae46")}
                     </p>
                   </div>
                 </div>
@@ -140,7 +144,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                       <path d="M12 2L12 22M2 12L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                       <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
                     </svg>
-                    Requested Access
+                    {uiT("ui.440597f508f37f12")}
                   </p>
                   <ul className="space-y-2">
                     {server.byok_description.map((item, i) => (
@@ -157,7 +161,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 onClick={() => setStep(2)}
                 className="w-full bg-gray-900 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
-                Continue to Authentication <ArrowRight className="size-4" />
+                {uiT("ui.61dec473f5aeff25")} <ArrowRight className="size-4" />
               </button>
               <button
                 onClick={handleClose}
@@ -173,9 +177,9 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 <Key className="size-5 text-info" />
               </div>
 
-              <h2 className="text-2xl font-bold text-foreground mb-2">Provide API Key</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-2">{uiT("ui.69ff348413e35617")}</h2>
               <p className="text-muted-foreground mb-6">
-                Enter your {serverDisplayName} API key to authorize this connection.
+                {uiT("ui.dc4f9af59512fe3c")} {serverDisplayName} {uiT("ui.ac02114f30f9bdb4")}
               </p>
 
               <div className="mb-4">
@@ -184,7 +188,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 </label>
                 <PasswordInput
                   id={apiKeyInputId}
-                  placeholder="Enter your API key"
+                  placeholder={uiT("ui.8e1c7ba669b601e5")}
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   groupClassName="rounded-lg"
@@ -196,7 +200,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                     rel="noopener noreferrer"
                     className="text-info hover:text-info/80 text-sm mt-2 flex items-center gap-1"
                   >
-                    Where do I find my API key? <Link2 className="size-3.5" />
+                    {uiT("ui.b6349a0c118a1b3c")} <Link2 className="size-3.5" />
                   </a>
                 )}
               </div>
@@ -210,17 +214,15 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="text-sm font-medium text-foreground">Save key for future use</span>
+                  <span className="text-sm font-medium text-foreground">{uiT("ui.01cc90113b5c86c9")}</span>
                 </div>
-                <Switch checked={saveKey} onCheckedChange={setSaveKey} aria-label="Save key for future use" />
+                <Switch checked={saveKey} onCheckedChange={setSaveKey} aria-label={uiT("ui.01cc90113b5c86c9")} />
               </div>
 
               {/* Security note */}
               <div className="bg-info/10 rounded-xl p-4 flex items-start gap-3 mb-6">
                 <Lock className="mt-0.5 size-4 shrink-0 text-info" />
-                <p className="text-sm text-info">
-                  Your key is stored securely and transmitted over HTTPS. It is never shared with third parties.
-                </p>
+                <p className="text-sm text-info">{uiT("ui.00f91dba48c65a33")}</p>
               </div>
 
               <button
@@ -228,7 +230,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 disabled={loading}
                 className="w-full bg-info hover:bg-info/80 disabled:opacity-60 text-info-foreground font-medium py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
-                <Lock className="size-4" /> Connect &amp; Authorize
+                <Lock className="size-4" /> {uiT("ui.ea5b258b3beeef1e")}
               </button>
             </div>
           )}

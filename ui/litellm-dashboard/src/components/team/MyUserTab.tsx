@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { formatBudgetReset } from "@/utils/budgetUtils";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -15,9 +19,12 @@ interface MyUserTabProps {
 
 const labelWithTooltip = (label: string, tooltip: string) => (
   <span className="flex items-center gap-1 text-muted-foreground">
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <SimpleTooltip content={tooltip}>
-      <CircleHelp className="size-4" aria-label={`${label} information`} />
+      <CircleHelp
+        className="size-4"
+        aria-label={translateUi("ui.5b694e9a375c120e", undefined, { v0: String(label) })}
+      />
     </SimpleTooltip>
   </span>
 );
@@ -40,7 +47,7 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
   if (isLoading) {
     return (
       <Card>
-        <CardContent className="text-muted-foreground">Loading your membership info…</CardContent>
+        <CardContent className="text-muted-foreground">{uiT("ui.3b7b8fc211a592f8")}</CardContent>
       </Card>
     );
   }
@@ -49,7 +56,7 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
     return (
       <Card>
         <CardContent className="text-destructive">
-          {error instanceof Error ? error.message : "Failed to load your membership info for this team."}
+          {error instanceof Error ? error.message : uiT("ui.32119c6d058c6fcd")}
         </CardContent>
       </Card>
     );
@@ -58,9 +65,7 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
   if (!data) {
     return (
       <Card>
-        <CardContent className="text-muted-foreground">
-          No membership info available for the current user in this team.
-        </CardContent>
+        <CardContent className="text-muted-foreground">{uiT("ui.33fd3ed6f48ac795")}</CardContent>
       </Card>
     );
   }
@@ -87,7 +92,9 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
             <div>
               <span className="text-muted-foreground">{uiT("ui.5c4e91007e9b")}</span>
               <div className="mt-1">
-                <Badge variant={data.role === "admin" ? "default" : "secondary"}>{data.role || "user"}</Badge>
+                <Badge variant={data.role === "admin" ? "default" : "secondary"}>
+                  {data.role || uiT("ui.04f8996da763b7a9")}
+                </Badge>
               </div>
             </div>
           </div>
@@ -104,10 +111,15 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
             <div className="mt-2">
               <h3 className="text-2xl font-semibold">${formatNumber(spend, 4)}</h3>
               <span className="text-muted-foreground">
-                of {maxBudget === null ? uiT("ui.11dde17d6c3e") : `$${formatNumber(maxBudget, 4)}`}
+                {uiT("ui.28391d3bc64ec15c")}{" "}
+                {maxBudget === null ? uiT("ui.11dde17d6c3e") : `$${formatNumber(maxBudget, 4)}`}
               </span>
             </div>
-            {budgetReset && <div className="mt-1 text-muted-foreground">Resets {budgetReset}</div>}
+            {budgetReset && (
+              <div className="mt-1 text-muted-foreground">
+                {uiT("ui.7816b9affc62a9e9")} {budgetReset}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -115,9 +127,13 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
           <CardContent>
             {labelWithTooltip("Rate Limits", "Your per-member rate limits within this team.")}
             <div className="mt-2">
-              <span>TPM: {formatRateLimit(tpmLimit)}</span>
+              <span>
+                {uiT("ui.22506bb2e2fc9c02")} {formatRateLimit(tpmLimit)}
+              </span>
               <br />
-              <span>RPM: {formatRateLimit(rpmLimit)}</span>
+              <span>
+                {uiT("ui.0a9c9fab18f38f0e")} {formatRateLimit(rpmLimit)}
+              </span>
             </div>
           </CardContent>
         </Card>

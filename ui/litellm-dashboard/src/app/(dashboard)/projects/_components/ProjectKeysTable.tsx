@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { OnChangeFn, PaginationState } from "@tanstack/react-table";
 import { KeyRound } from "lucide-react";
@@ -20,13 +21,15 @@ interface ProjectKeysTableProps {
 }
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <KeyRound className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No keys found</div>
-      <div className="text-sm text-muted-foreground">Keys created in this project will show up here.</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.c86a63ee786d4a35")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.cfaed908795d67c6")}</div>
     </div>
   );
 }
@@ -39,6 +42,8 @@ export function ProjectKeysTable({
   pagination,
   onPaginationChange,
 }: ProjectKeysTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const columns = useMemo(() => getProjectKeysTableColumns(), []);
 
   return (
@@ -53,7 +58,7 @@ export function ProjectKeysTable({
       pageSizeOptions={PROJECT_KEYS_PAGE_SIZE_OPTIONS}
       isLoading={isLoading}
       isError={isError}
-      loadingMessage="Loading keys…"
+      loadingMessage={uiT("ui.c902f01addd57274")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

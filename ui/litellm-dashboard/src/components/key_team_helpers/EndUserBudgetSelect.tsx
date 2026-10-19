@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 
@@ -33,6 +34,8 @@ export const EndUserBudgetSelect: React.FC<EndUserBudgetSelectProps> = ({
   onChange,
   canEdit,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: budgets } = useBudgetOptions(accessToken, canEdit);
   const options: SearchSelectOption[] = (budgets ?? []).map((budget) => ({
     label: budget.budget_id,
@@ -43,9 +46,9 @@ export const EndUserBudgetSelect: React.FC<EndUserBudgetSelectProps> = ({
   return (
     <SearchSelect
       inputId={id}
-      aria-label="Default Customer Budget"
-      placeholder="No default budget"
-      emptyText="No budgets found. Create one under Budgets."
+      aria-label={uiT("ui.07ea33873919f740")}
+      placeholder={uiT("ui.071548ec5739e387")}
+      emptyText={uiT("ui.79bf0e13c8b7d8f2")}
       options={options}
       value={value}
       onValueChange={onChange}

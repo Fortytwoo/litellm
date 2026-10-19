@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { OnChangeFn, PaginationState, RowSelectionState } from "@tanstack/react-table";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -53,12 +55,42 @@ const ERROR_TO_STATUS: Record<string, string> = {
 };
 
 const KEYWORD_ERRORS: ReadonlyArray<{ pattern: RegExp; label: string }> = [
-  { pattern: /missing.*api.*key|invalid.*key|unauthorized/i, label: "AuthenticationError: 401" },
-  { pattern: /rate.*limit|too.*many.*requests/i, label: "RateLimitError: 429" },
-  { pattern: /timeout|timed.*out/i, label: "TimeoutError: 408" },
-  { pattern: /not.*found/i, label: "NotFoundError: 404" },
-  { pattern: /forbidden|access.*denied/i, label: "ForbiddenError: 403" },
-  { pattern: /internal.*server.*error/i, label: "InternalServerError: 500" },
+  {
+    pattern: /missing.*api.*key|invalid.*key|unauthorized/i,
+    get label() {
+      return translateUi("ui.2cccf29719fa4690");
+    },
+  },
+  {
+    pattern: /rate.*limit|too.*many.*requests/i,
+    get label() {
+      return translateUi("ui.a1bbef41cbf84f1e");
+    },
+  },
+  {
+    pattern: /timeout|timed.*out/i,
+    get label() {
+      return translateUi("ui.9c45cb8096a9748c");
+    },
+  },
+  {
+    pattern: /not.*found/i,
+    get label() {
+      return translateUi("ui.84ff39f1efd8eede");
+    },
+  },
+  {
+    pattern: /forbidden|access.*denied/i,
+    get label() {
+      return translateUi("ui.30d1e2a82087bb66");
+    },
+  },
+  {
+    pattern: /internal.*server.*error/i,
+    get label() {
+      return translateUi("ui.06be0356965fdc3a");
+    },
+  },
 ];
 
 const truncate = (value: string): string => (value.length > 100 ? `${value.substring(0, 97)}...` : value);
@@ -505,10 +537,8 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Model Health Status</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Run health checks on individual models to verify they are working correctly
-            </p>
+            <h2 className="text-lg font-semibold text-foreground">{uiT("ui.dd64b21682304de2")}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.3482f01305f2c65c")}</p>
           </div>
           <div className="flex items-center gap-3">
             {selectedModelIds.length > 0 && (
@@ -518,7 +548,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
                 onClick={() => setRowSelection({})}
                 data-testid="clear-health-selection"
               >
-                Clear Selection
+                {uiT("ui.c52ff5ea803d5775")}
               </Button>
             )}
             <Button
@@ -528,7 +558,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
               disabled={anyCheckRunning}
               data-testid="run-health-checks"
             >
-              {isPartialSelection ? "Run Selected Checks" : "Run All Checks"}
+              {isPartialSelection ? uiT("ui.fc6a1d900977389b") : uiT("ui.ec2347a3bd2820af")}
             </Button>
           </div>
         </div>
@@ -560,21 +590,23 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>
-              {selectedErrorDetails ? `Health Check Error - ${selectedErrorDetails.modelName}` : "Error Details"}
+              {selectedErrorDetails
+                ? uiT("ui.f10378b6da9e1c90", { v0: String(selectedErrorDetails.modelName) })
+                : uiT("ui.674c0b62eba94a34")}
             </DialogTitle>
-            <DialogDescription>Details returned by the model health check.</DialogDescription>
+            <DialogDescription>{uiT("ui.16442455713d5b0f")}</DialogDescription>
           </DialogHeader>
           {selectedErrorDetails && (
             <div className="space-y-4">
               <div>
-                <span className="font-medium">Error:</span>
+                <span className="font-medium">{uiT("ui.617062906764f3b8")}</span>
                 <div className="mt-2 rounded-md border border-destructive/30 bg-destructive/10 p-3">
                   <span className="text-destructive">{selectedErrorDetails.cleanedError}</span>
                 </div>
               </div>
 
               <div>
-                <span className="font-medium">Full Error Details:</span>
+                <span className="font-medium">{uiT("ui.81d64b410bfa8671")}</span>
                 <div className="mt-2 max-h-96 overflow-y-auto rounded-md border bg-muted/50 p-3">
                   <pre className="whitespace-pre-wrap text-sm text-foreground">{selectedErrorDetails.fullError}</pre>
                 </div>
@@ -599,22 +631,22 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
           <DialogHeader>
             <DialogTitle>
               {selectedSuccessDetails
-                ? `Health Check Response - ${selectedSuccessDetails.modelName}`
-                : "Response Details"}
+                ? uiT("ui.7a9e3fc0e55daf0a", { v0: String(selectedSuccessDetails.modelName) })
+                : uiT("ui.3c5150b631c6fe40")}
             </DialogTitle>
-            <DialogDescription>Response returned by the successful model health check.</DialogDescription>
+            <DialogDescription>{uiT("ui.94b3cc4ac57fa01d")}</DialogDescription>
           </DialogHeader>
           {selectedSuccessDetails && (
             <div className="space-y-4">
               <div>
-                <span className="font-medium">Status:</span>
+                <span className="font-medium">{uiT("ui.755c8b2a9fb11446")}</span>
                 <div className="mt-2 rounded-md border border-primary/30 bg-primary/5 p-3">
-                  <span className="text-foreground">Health check passed successfully</span>
+                  <span className="text-foreground">{uiT("ui.96fd7037bcf09ce2")}</span>
                 </div>
               </div>
 
               <div>
-                <span className="font-medium">Response Details:</span>
+                <span className="font-medium">{uiT("ui.25fa89a808e0fd19")}</span>
                 <div className="mt-2 max-h-96 overflow-y-auto rounded-md border bg-muted/50 p-3">
                   <pre className="whitespace-pre-wrap text-sm text-foreground">
                     {JSON.stringify(selectedSuccessDetails.response, null, 2)}

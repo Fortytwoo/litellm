@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
@@ -33,6 +35,8 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
   jevRequest,
   onTestComplete,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [results, setResults] = React.useState<TargetResult[]>(() => targets.map(() => ({ status: "pending" })));
   const [jevResult, setJevResult] = React.useState<TargetResult>({ status: "pending" });
 
@@ -52,7 +56,7 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
           ? { status: "success" }
           : {
               status: "error",
-              error: `OSS classifier was not reached successfully (routing cause: ${decision.cause ?? "unknown"})`,
+              error: translateUi("ui.bdbb8af5f8958627", undefined, { v0: String(decision.cause ?? "unknown") }),
             },
       );
     };
@@ -79,22 +83,15 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
   }, []);
 
   if (targets.length === 0 && !jevRequest) {
-    return (
-      <p className="text-sm text-muted-foreground">
-        No complexity tiers are configured yet, so there is nothing to test.
-      </p>
-    );
+    return <p className="text-sm text-muted-foreground">{uiT("ui.32bd189a6b5e3fdd")}</p>;
   }
 
   return (
     <div className="space-y-3">
-      <p className="mb-2 text-sm text-muted-foreground">
-        Test Connection sends a minimal request to every configured tier, classifier, default, and embedding model. The
-        classifier probe includes its reasoning effort override.
-      </p>
+      <p className="mb-2 text-sm text-muted-foreground">{uiT("ui.0d8d2fe012315fe8")}</p>
       {jevRequest && (
-        <div role="status" aria-label="OSS classifier connection" className="rounded-lg border p-3 text-sm">
-          <strong>OSS Classifier</strong>
+        <div role="status" aria-label={uiT("ui.b8687c517e98a0dd")} className="rounded-lg border p-3 text-sm">
+          <strong>{uiT("ui.2b508ccdc73ed12d")}</strong>
           <p>
             {jevResult.status === "pending" && "Testing OSS classification"}
             {jevResult.status === "success" && "OSS classification succeeded"}
@@ -125,7 +122,7 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
               <span className="font-medium">{target.labels.join(", ")}</span>{" "}
               <span className="text-muted-foreground">
                 {"->"} {target.modelGroup}
-                {target.mode === "embedding" ? " (embedding)" : ""}
+                {target.mode === "embedding" ? uiT("ui.47c8a18148f4e551") : ""}
               </span>
               {result.status === "error" && (
                 <p className="mt-1 text-xs text-destructive" data-testid="test-error-message">
@@ -154,7 +151,7 @@ export function AutoRouterConnectionTestDialog({
     <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Connection Test Results</DialogTitle>
+          <DialogTitle>{uiT("ui.0ec99e1bdc5ce188")}</DialogTitle>
         </DialogHeader>
         {open && <AutoRouterConnectionTest key={testId} {...props} />}
         <DialogFooter>

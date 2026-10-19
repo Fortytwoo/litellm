@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -37,7 +40,7 @@ const buildValidationPatternRule = (
   try {
     return {
       value: new RegExp(field.validation_pattern),
-      message: field.validation_message || `${field.label} looks incomplete or malformed`,
+      message: field.validation_message || translateUi("ui.afda8cbfcd531f11", undefined, { v0: String(field.label) }),
     };
   } catch {
     return undefined;
@@ -103,56 +106,59 @@ const CredentialField = ({ field }: { field: AgentCredentialFieldMetadata }) => 
   );
 };
 
-const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTypeInfo, panels }) => (
-  <>
-    <FieldGroup className="mb-4">
-      <AgentFormField
-        name="agent_name"
-        label={labelWithHint("Agent Name", "Unique identifier for the agent")}
-        rules={{ required: "Please enter a unique agent name" }}
-      >
-        {({ value, onChange, ref, ...control }) => (
-          <Input
-            {...control}
-            ref={ref}
-            placeholder="e.g., my-langgraph-agent"
-            value={typeof value === "string" ? value : ""}
-            onChange={onChange}
-          />
-        )}
-      </AgentFormField>
+const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTypeInfo, panels }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <>
+      <FieldGroup className="mb-4">
+        <AgentFormField
+          name="agent_name"
+          label={labelWithHint("Agent Name", "Unique identifier for the agent")}
+          rules={{ required: "Please enter a unique agent name" }}
+        >
+          {({ value, onChange, ref, ...control }) => (
+            <Input
+              {...control}
+              ref={ref}
+              placeholder={uiT("ui.62096ca7146392f3")}
+              value={typeof value === "string" ? value : ""}
+              onChange={onChange}
+            />
+          )}
+        </AgentFormField>
 
-      <AgentFormField
-        name="description"
-        label={labelWithHint("Description", "Brief description of what this agent does")}
-      >
-        {({ value, onChange, ref, ...control }) => (
-          <Textarea
-            {...control}
-            ref={ref}
-            rows={2}
-            placeholder="Describe what this agent does..."
-            value={typeof value === "string" ? value : ""}
-            onChange={onChange}
-          />
-        )}
-      </AgentFormField>
+        <AgentFormField
+          name="description"
+          label={labelWithHint("Description", "Brief description of what this agent does")}
+        >
+          {({ value, onChange, ref, ...control }) => (
+            <Textarea
+              {...control}
+              ref={ref}
+              rows={2}
+              placeholder={uiT("ui.5e15ce7fc160ce58")}
+              value={typeof value === "string" ? value : ""}
+              onChange={onChange}
+            />
+          )}
+        </AgentFormField>
 
-      {agentTypeInfo.credential_fields.map((field) => (
-        <CredentialField key={field.key} field={field} />
-      ))}
-    </FieldGroup>
+        {agentTypeInfo.credential_fields.map((field) => (
+          <CredentialField key={field.key} field={field} />
+        ))}
+      </FieldGroup>
 
-    <div className="mb-4 rounded-md border border-border px-4">
-      <AgentFormPanel panelKey={AGENT_FORM_CONFIG.cost.key} title={AGENT_FORM_CONFIG.cost.title} panels={panels}>
-        <CostConfigFields />
-      </AgentFormPanel>
-      <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title="Kill Switch" panels={panels}>
-        <KillSwitchFormFields />
-      </AgentFormPanel>
-    </div>
-  </>
-);
+      <div className="mb-4 rounded-md border border-border px-4">
+        <AgentFormPanel panelKey={AGENT_FORM_CONFIG.cost.key} title={AGENT_FORM_CONFIG.cost.title} panels={panels}>
+          <CostConfigFields />
+        </AgentFormPanel>
+        <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title={uiT("ui.006b49290aa86bfe")} panels={panels}>
+          <KillSwitchFormFields />
+        </AgentFormPanel>
+      </div>
+    </>
+  );
+};
 
 export const buildDynamicAgentData = (
   values: AgentFormValues,
@@ -193,7 +199,9 @@ export const buildDynamicAgentData = (
     agent_card_params: {
       protocolVersion: "1.0",
       name: values.display_name || values.agent_name,
-      description: values.description || `${agentTypeInfo.agent_type_display_name} agent`,
+      description:
+        values.description ||
+        translateUi("ui.d7117ac8b8619c73", undefined, { v0: String(agentTypeInfo.agent_type_display_name) }),
       url: values.api_base || "",
       version: "1.0.0",
       defaultInputModes: ["text"],
@@ -205,7 +213,9 @@ export const buildDynamicAgentData = (
         {
           id: "chat",
           name: "Chat",
-          description: "General chat capability",
+          get description() {
+            return translateUi("ui.f7e11691adb9fa4f");
+          },
           tags: ["chat", "conversation"],
         },
       ],

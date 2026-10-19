@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cva.config";
 import { Plus, Trash2 } from "lucide-react";
@@ -23,6 +25,8 @@ export function AddButton({ children, onClick }: { children: ReactNode; onClick:
 }
 
 export function FormFrame({ validation, children }: { validation: PayloadValidation<unknown>; children: ReactNode }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const issuesId = useId();
 
   return (
@@ -33,7 +37,7 @@ export function FormFrame({ validation, children }: { validation: PayloadValidat
       )}
     >
       <div className="flex items-center gap-2 border-b px-3 py-2">
-        <span className="text-sm font-medium">Request form</span>
+        <span className="text-sm font-medium">{uiT("ui.1ad43bcab4fc8685")}</span>
         <ValidationStatus validation={validation} />
       </div>
       <div className="grid min-h-80 flex-1 content-start gap-4 overflow-auto p-3">{children}</div>

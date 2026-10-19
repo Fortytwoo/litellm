@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -587,7 +589,7 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
         modelData.model_info.id,
       );
 
-      toast.success("Auto router configuration updated successfully");
+      toast.success(translateUi("ui.746bf31dfa5c3d50"));
       const updatedModelData = {
         ...modelData,
         model_name: values.auto_router_name,
@@ -628,7 +630,7 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
       model_info: updatedModelInfo,
     };
 
-    toast.success("Auto router configuration updated successfully");
+    toast.success(translateUi("ui.746bf31dfa5c3d50"));
     onSuccess(updatedModelData);
     onCancel();
   };
@@ -649,13 +651,13 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
 
   const modelChoices: ModelChoice[] = [
     ...modelInfo.map((model) => ({ value: model.model_group, label: model.model_group })),
-    { value: "custom", label: "Enter custom model name" },
+    { value: "custom", label: uiT("ui.49c8ee5374231545") },
   ];
 
   const routerNameField = (
-    <FormField control={form.control} name="auto_router_name" label="Auto Router Name">
+    <FormField control={form.control} name="auto_router_name" label={uiT("ui.6aaf28631c04d310")}>
       {({ ref, ...field }) => (
-        <Input {...field} ref={ref} readOnly={isMemberManaged} placeholder="e.g., auto_router_1, smart_routing" />
+        <Input {...field} ref={ref} readOnly={isMemberManaged} placeholder={uiT("ui.2c584fc37bce5d86")} />
       )}
     </FormField>
   );
@@ -666,10 +668,8 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
           <TooltipProvider>
             <DialogHeader>
-              <DialogTitle>Edit Auto Router Configuration</DialogTitle>
-              <DialogDescription>
-                Edit the auto router configuration including routing logic, default models, and access settings.
-              </DialogDescription>
+              <DialogTitle>{uiT("ui.12e977386ef5e0e7")}</DialogTitle>
+              <DialogDescription>{uiT("ui.c02e17b56658b0f0")}</DialogDescription>
             </DialogHeader>
 
             <form onSubmit={(event) => event.preventDefault()} noValidate>
@@ -730,28 +730,36 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
                       />
                     </div>
 
-                    <FormField control={form.control} name="auto_router_default_model" label="Default Model">
+                    <FormField
+                      control={form.control}
+                      name="auto_router_default_model"
+                      label={uiT("ui.8b4e8774ddf69ec7")}
+                    >
                       {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                         <ModelChoiceCombobox
                           id={id}
                           value={value}
                           onChange={onChange}
                           choices={modelChoices}
-                          placeholder="Select a default model"
+                          placeholder={uiT("ui.8a8e114cff0b888b")}
                           ariaInvalid={ariaInvalid}
                           ariaDescribedBy={ariaDescribedBy}
                         />
                       )}
                     </FormField>
 
-                    <FormField control={form.control} name="auto_router_embedding_model" label="Embedding Model">
+                    <FormField
+                      control={form.control}
+                      name="auto_router_embedding_model"
+                      label={uiT("ui.860ec100606ba01b")}
+                    >
                       {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                         <ModelChoiceCombobox
                           id={id}
                           value={value}
                           onChange={onChange}
                           choices={modelChoices}
-                          placeholder="Select an embedding model"
+                          placeholder={uiT("ui.e2a474683605763b")}
                           ariaInvalid={ariaInvalid}
                           ariaDescribedBy={ariaDescribedBy}
                         />

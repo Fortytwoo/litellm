@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { QueryErrorResetBoundary, useQueryClient, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
@@ -36,10 +37,14 @@ function selectedSpanMissing(trace: Trace, spanId: string | null): boolean {
 }
 
 function RunLoading() {
-  return <LoadingState title="Loading trace…" description="Fetching this run and its steps." />;
+  const { t: uiT } = useDashboardLanguage();
+
+  return <LoadingState title={uiT("ui.5edd83ba94412dcc")} description={uiT("ui.7f8d064cc63a8f8c")} />;
 }
 
 function RunLoadError({ error, onBack, onRetry }: { error: unknown; onBack: () => void; onRetry: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="p-6 text-xs" data-testid="run-view-error">
       <button
@@ -47,12 +52,14 @@ function RunLoadError({ error, onBack, onRetry }: { error: unknown; onBack: () =
         onClick={onBack}
         className="mb-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-3.5" /> Back to traces
+        <ArrowLeft className="size-3.5" /> {uiT("ui.c1e22494df085523")}
       </button>
-      <h1 className="mb-2 text-sm font-medium">Could not load trace</h1>
-      <span className="text-muted-foreground">{error instanceof Error ? error.message : "Unknown error"}</span>
+      <h1 className="mb-2 text-sm font-medium">{uiT("ui.9a2d62c9650f7ff9")}</h1>
+      <span className="text-muted-foreground">
+        {error instanceof Error ? error.message : uiT("ui.27c2ccd962c2b8dc")}
+      </span>
       <Button variant="outline" size="sm" className="ml-3" onClick={onRetry}>
-        Retry
+        {uiT("ui.942087cc2d41e013")}
       </Button>
     </div>
   );
@@ -93,6 +100,8 @@ function LoadedRun({
   showSignals = false,
   switching,
 }: RunViewProps & { switching: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const traces = useTracesApi(accessToken);
   const queryClient = useQueryClient();
   const [live, setLive] = useState(traces.live);
@@ -179,9 +188,9 @@ function LoadedRun({
       <FeedbackPanel summary={trace.summary} accessToken={accessToken} />
       {traceQuery.isRefetchError && (
         <div role="alert" className="flex items-center gap-3 border-b p-3 text-xs text-muted-foreground">
-          Could not refresh this run. Previously received steps are still shown.
+          {uiT("ui.dc5d0399d6010006")}
           <Button variant="outline" size="sm" disabled={manualRead || traceQuery.isFetching} onClick={refreshRun}>
-            Retry refresh
+            {uiT("ui.f819210fd55f97dd")}
           </Button>
         </div>
       )}

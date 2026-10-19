@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useId } from "react";
 import { Save, Plus, X } from "lucide-react";
@@ -119,28 +121,25 @@ const AllowedClientDialog: React.FC<AllowedClientDialogProps> = ({ draft, onChan
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{draft.key === null ? "Add client" : "Edit client"}</DialogTitle>
-          <DialogDescription>
-            The alias is the name shown in the dashboard and gateway logs. The value is the exact JWT claim or header
-            value that identifies the client, such as the OAuth client ID your identity provider issues.
-          </DialogDescription>
+          <DialogTitle>{draft.key === null ? uiT("ui.08553377f210d612") : uiT("ui.63314a49c845e0dd")}</DialogTitle>
+          <DialogDescription>{uiT("ui.34e0f8e09a6a08d4")}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor={aliasId}>Alias</Label>
+            <Label htmlFor={aliasId}>{uiT("ui.b19e02e9502bbe5a")}</Label>
             <Input
               id={aliasId}
               value={draft.alias}
-              placeholder="e.g. Coding CLI"
+              placeholder={uiT("ui.f503b707eb23e32e")}
               onChange={(e) => onChange({ ...draft, alias: e.target.value })}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor={valueId}>Value</Label>
+            <Label htmlFor={valueId}>{uiT("ui.8e37953d23daca5f")}</Label>
             <Input
               id={valueId}
               value={draft.value}
-              placeholder="e.g. 0oa1b2c3d4e5f6g7h8i9"
+              placeholder={uiT("ui.ae7cf838bc717fe8")}
               className="font-mono"
               onChange={(e) => onChange({ ...draft, value: e.target.value })}
             />
@@ -149,14 +148,14 @@ const AllowedClientDialog: React.FC<AllowedClientDialogProps> = ({ draft, onChan
         <DialogFooter>
           {draft.key !== null && (
             <Button type="button" variant="destructive" className="sm:mr-auto" onClick={onRemove}>
-              Remove client
+              {uiT("ui.198fca67d27093c4")}
             </Button>
           )}
           <Button type="button" variant="outline" onClick={onClose}>
             {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button type="button" disabled={isIncomplete(trimClient(draft))} onClick={onCommit}>
-            {draft.key === null ? uiT("ui.9fd728c66c9a") : "Done"}
+            {draft.key === null ? uiT("ui.9fd728c66c9a") : uiT("ui.11a6767d5674c7e4")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -265,7 +264,7 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
       (result): result is PromiseRejectedResult => result.status === "rejected",
     );
     if (failures.length === 0) {
-      toast.success("MCP network settings saved");
+      toast.success(translateUi("ui.5cec04ae04ac4e5a"));
       return;
     }
     failures.forEach((failure) => toast.fromError(failure.reason));
@@ -325,22 +324,19 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
     <div className="space-y-6 p-4">
       <DeprecationBanner featureName="MCP Network Settings and the internal-network-only flag" />
       <div>
-        <p className="text-lg font-semibold">Private IP Ranges</p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Define which IP ranges are part of your private network. Callers from these IPs can see all MCP servers.
-          Callers from any other IP can only see servers marked &quot;Available on Public Internet&quot;.
-        </p>
+        <p className="text-lg font-semibold">{uiT("ui.49b061be186a10b8")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.652acba6b79c78a2")}</p>
       </div>
 
       <Card className="p-6">
         {currentIp && (
           <div className="mb-4 rounded-lg bg-muted p-3">
             <p className="text-sm">
-              Your current IP: <span className="font-mono font-medium">{currentIp}</span>
+              {uiT("ui.7629aa1f38fd1680")} <span className="font-mono font-medium">{currentIp}</span>
             </p>
             {suggestedRange && !privateRanges.includes(suggestedRange) && (
               <div className="mt-1 flex items-center gap-2">
-                <p className="text-sm">Suggested range: </p>
+                <p className="text-sm">{uiT("ui.3cb59055ad7b49c1")} </p>
                 <Button
                   variant="outline"
                   size="sm"
@@ -356,7 +352,7 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
         )}
 
         <div className="mb-2 flex items-center">
-          <p className="text-sm font-medium">Your Private Network Ranges</p>
+          <p className="text-sm font-medium">{uiT("ui.b1252517b703ef76")}</p>
         </div>
         {privateRanges.length > 0 && (
           <div className="mb-2 flex flex-wrap gap-1.5">
@@ -365,7 +361,7 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
                 {range}
                 <button
                   type="button"
-                  aria-label={`Remove ${range}`}
+                  aria-label={uiT("ui.86790c6d4f116494", { v0: String(range) })}
                   onClick={() => setPrivateRanges(privateRanges.filter((r) => r !== range))}
                   className="ml-1 cursor-pointer"
                 >
@@ -377,7 +373,7 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
         )}
         <Input
           value={rangeDraft}
-          placeholder="Leave empty to use defaults: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8"
+          placeholder={uiT("ui.d63033a39dc95c46")}
           onChange={(e) => setRangeDraft(e.target.value)}
           onBlur={commitDraft}
           onKeyDown={(e) => {
@@ -387,34 +383,17 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
             }
           }}
         />
-        <p className="mt-2 text-xs text-muted-foreground">
-          Enter CIDR ranges (e.g., 10.0.0.0/8). When empty, standard private IP ranges are used.
-        </p>
+        <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.64f42ec254092e7b")}</p>
       </Card>
 
       <div>
-        <p className="text-lg font-semibold">Allowed Clients</p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Only the MCP client applications listed here can use the gateway. Leave empty to allow every client. A client
-          that authenticates with a JWT is identified by the claim named in litellm_jwtauth.mcp_client_id_jwt_field in
-          your proxy config (for example azp or client_id), which your identity provider asserts and the client cannot
-          change. Any other client is identified by the request header configured below, if you enable one.
-        </p>
+        <p className="text-lg font-semibold">{uiT("ui.7a5f53883a46e588")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.dcb540e3889aa417")}</p>
       </div>
 
       <Card className="p-6">
-        {storedAllowlistIsMalformed && (
-          <p className="mb-2 text-sm text-destructive">
-            The stored allowlist is not a list of alias and value pairs, so every client is denied. Add the clients you
-            want and save to replace it, or save with the list empty to remove it and allow every client again.
-          </p>
-        )}
-        {storedAllowlistIsEmpty && (
-          <p className="mb-2 text-sm text-destructive">
-            An empty allowlist is currently stored, so every client is denied. Save with the list empty to remove it and
-            allow every client again.
-          </p>
-        )}
+        {storedAllowlistIsMalformed && <p className="mb-2 text-sm text-destructive">{uiT("ui.7d561c8c4a7325ae")}</p>}
+        {storedAllowlistIsEmpty && <p className="mb-2 text-sm text-destructive">{uiT("ui.a833241f83ad521d")}</p>}
         {allowedClients.length > 0 && (
           <div className="mb-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {allowedClients.map((row) => (
@@ -437,27 +416,20 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
           onClick={() => setClientDraft({ key: null, alias: "", value: "" })}
         >
           <Plus />
-          Add client
+          {uiT("ui.08553377f210d612")}
         </Button>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Click a client to edit or remove it. Leave the list empty to allow every client. Every MCP request from an
-          unlisted client, or from one with no resolvable identity, gets a 403.
-        </p>
+        <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.6a88f3961adbb82b")}</p>
 
         <div className="mt-6 mb-2 flex items-center">
-          <p className="text-sm font-medium">Client Identity Header (less secure)</p>
+          <p className="text-sm font-medium">{uiT("ui.800408d5dd1c3005")}</p>
         </div>
         <Input
-          aria-label="Client identity header"
+          aria-label={uiT("ui.85b9dd840ba8d265")}
           value={clientIdHeader}
-          placeholder="Leave empty to identify clients by JWT only, e.g. x-mcp-client"
+          placeholder={uiT("ui.9c2b31ce67bfe6c3")}
           onChange={(e) => setClientIdHeader(e.target.value)}
         />
-        <p className="mt-2 text-xs text-muted-foreground">
-          Optional header whose value names the client for callers without a JWT identity. Clients pick this value
-          themselves, so it is a policy control rather than a security boundary. Without it, callers that do not carry
-          the JWT claim are rejected while the allowlist is set.
-        </p>
+        <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.9964ffb62e141bd0")}</p>
       </Card>
 
       <div className="flex justify-end">

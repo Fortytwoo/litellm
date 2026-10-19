@@ -1,3 +1,5 @@
+"use client";
+import { LocalizedText, useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import React, { useEffect, useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -41,18 +43,20 @@ const ANTHROPIC_1M_HEADERS = JSON.stringify({ extra_headers: { "anthropic-beta":
 
 const publicNameTooltipContent = (
   <div className="flex flex-col gap-2 text-left font-normal">
-    <div>The name you specify in your API calls to LiteLLM Proxy</div>
+    <div>{<LocalizedText id="ui.5fcac17ff8ad9492" />}</div>
     <div>
-      <strong>Example:</strong> If you name your public model <code className={tooltipCodeClassName}>example-name</code>
-      , and choose <code className={tooltipCodeClassName}>openai/qwen-plus-latest</code> as the LiteLLM model
+      <strong>{<LocalizedText id="ui.872887e563e75957" />}</strong> {<LocalizedText id="ui.ed7f55bbff85151e" />}{" "}
+      <code className={tooltipCodeClassName}>example-name</code>
+      {<LocalizedText id="ui.a98dd7b0a02fd48c" />} <code className={tooltipCodeClassName}>openai/qwen-plus-latest</code>{" "}
+      {<LocalizedText id="ui.0449361c7b365b61" />}
     </div>
     <div>
-      <strong>{translateUi("ui.2bad3eeaf33c")}</strong> You make an API call to the LiteLLM proxy with{" "}
+      <strong>{<LocalizedText id="ui.2bad3eeaf33c" />}</strong> {<LocalizedText id="ui.52b20aa6a028fd85" />}{" "}
       <code className={tooltipCodeClassName}>model = &quot;example-name&quot;</code>
     </div>
     <div>
-      <strong>Result:</strong> LiteLLM sends <code className={tooltipCodeClassName}>qwen-plus-latest</code> to the
-      provider
+      <strong>{<LocalizedText id="ui.ccfbca6507781cd9" />}</strong> {<LocalizedText id="ui.6590f61ec3f70c04" />}{" "}
+      <code className={tooltipCodeClassName}>qwen-plus-latest</code> {<LocalizedText id="ui.f5271f5791a750eb" />}
     </div>
   </div>
 );
@@ -95,7 +99,7 @@ const columns: ColumnDef<ModelMapping>[] = [
     accessorKey: "public_name",
     header: () => (
       <span className="flex items-center">
-        Public Model Name
+        {translateUi("ui.dbff03874de84d83")}
         <SimpleTooltip content={publicNameTooltipContent} width="500px" />
       </span>
     ),
@@ -106,14 +110,16 @@ const columns: ColumnDef<ModelMapping>[] = [
     accessorKey: "litellm_model",
     header: () => (
       <span className="flex items-center">
-        LiteLLM Model Name
-        <SimpleTooltip content={<div>The model name LiteLLM will send to the LLM API</div>} width="360px" />
+        {translateUi("ui.1d433b48aec3812b")}
+        <SimpleTooltip content={<div>{translateUi("ui.3f7123028ea6da76")}</div>} width="360px" />
       </span>
     ),
   },
 ];
 
 const ConditionalPublicModelName: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useFormContext<MountedFormValues>();
 
   const modelValue = useWatch({ control: form.control, name: "model" }) || [];
@@ -206,8 +212,8 @@ const ConditionalPublicModelName: React.FC = () => {
       name="model_mappings"
       label={
         <span className="flex items-center">
-          Model Mappings
-          <SimpleTooltip content="Map public model names to LiteLLM model names for load balancing" />
+          {uiT("ui.699787defb5f0cc5")}
+          <SimpleTooltip content={uiT("ui.5ce9ce3c8e4cbfa7")} />
         </span>
       }
       required

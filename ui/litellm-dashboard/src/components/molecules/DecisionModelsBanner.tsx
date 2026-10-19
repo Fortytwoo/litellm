@@ -30,12 +30,13 @@ const DecisionModelsBanner: React.FC = () => {
         <Sparkles className="size-4 text-muted-foreground" />
       </div>
       <div className="min-w-0 flex-1">
-        <h4 className="m-0 text-sm font-semibold text-foreground">Decision models are now supported</h4>
+        <h4 className="m-0 text-sm font-semibold text-foreground">{uiT("ui.0dd3a43ed8f00bcc")}</h4>
         <p className="m-0 mt-0.5 text-xs text-muted-foreground">
-          Call them at <code>/v1/decisions</code> or <code>/v1/systemone</code>, or try them in the Decisions
-          playground.{" "}
+          {uiT("ui.37c52bf6aa924831")} <code>/v1/decisions</code> {uiT("ui.7175517a370b5cd2")}{" "}
+          <code>/v1/systemone</code>
+          {uiT("ui.8370c9ff8afff348")}{" "}
           <a href={DECISIONS_DOCS_URL} target="_blank" rel="noopener noreferrer" className="underline">
-            How to call them
+            {uiT("ui.fb0b1fe59b19aa07")}
           </a>
         </p>
       </div>
@@ -46,7 +47,7 @@ const DecisionModelsBanner: React.FC = () => {
         role="link"
         render={<a href={DECISIONS_PROVIDERS_DOCS_URL} target="_blank" rel="noopener noreferrer" />}
       >
-        Supported providers
+        {uiT("ui.a74c313ba65bb415")}
       </Button>
       <Button
         className="shrink-0"
@@ -54,7 +55,7 @@ const DecisionModelsBanner: React.FC = () => {
         role="link"
         render={<a href={uiHref(SYSTEM_ONE_PLAYGROUND_ROUTE)} />}
       >
-        Try decision models
+        {uiT("ui.4399457eb00bbe6d")}
         <ArrowRight />
       </Button>
       <Button

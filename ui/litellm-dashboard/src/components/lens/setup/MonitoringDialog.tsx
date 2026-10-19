@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { z } from "zod";
 import { Controller } from "react-hook-form";
@@ -29,6 +31,8 @@ export function MonitoringDialog({
   onSave: (settings: Settings) => Promise<void>;
   onClose: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [error, setError] = useState("");
   const form = useZodForm(monitoringSchema, {
     defaultValues: { interval_minutes: settings.interval_minutes ?? 30 },
@@ -53,16 +57,19 @@ export function MonitoringDialog({
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">Keep monitoring</DialogTitle>
-          <DialogDescription>
-            Repeat this investigation with the saved scope, sample, model, and budget.
-          </DialogDescription>
+          <DialogTitle className="text-xl">{uiT("ui.23d90d915f8d2ec6")}</DialogTitle>
+          <DialogDescription>{uiT("ui.78d86f919cc36045")}</DialogDescription>
         </DialogHeader>
         <Controller
           control={control}
           name="interval_minutes"
           render={({ field }) => (
-            <DurationInput label="Check every" value={field.value} onChange={field.onChange} base="minutes" />
+            <DurationInput
+              label={uiT("ui.a0b9aa23865d3a8f")}
+              value={field.value}
+              onChange={field.onChange}
+              base="minutes"
+            />
           )}
         />
         {formState.errors.interval_minutes?.message && (
@@ -70,12 +77,10 @@ export function MonitoringDialog({
             {formState.errors.interval_minutes.message}
           </p>
         )}
-        <p className="text-xs leading-5 text-muted-foreground">
-          Each investigation looks back over the saved time range. The interval starts after the previous run finishes.
-        </p>
+        <p className="text-xs leading-5 text-muted-foreground">{uiT("ui.43cc8a53d031ebb6")}</p>
         {!ready && (
           <p role="status" className="text-sm text-warning">
-            Reconnect the worker before enabling monitoring.
+            {uiT("ui.09548f3de5f6be17")}
           </p>
         )}
         {error && (
@@ -85,10 +90,10 @@ export function MonitoringDialog({
         )}
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button disabled={!formState.isValid || formState.isSubmitting || !ready} onClick={() => void save()}>
-            {formState.isSubmitting ? "Saving…" : "Enable monitoring"}
+            {formState.isSubmitting ? uiT("ui.23e39291d6135814") : uiT("ui.8015a9029681f303")}
           </Button>
         </DialogFooter>
       </DialogContent>

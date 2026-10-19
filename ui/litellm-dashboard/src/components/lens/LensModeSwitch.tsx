@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
 import { Settings } from "lucide-react";
@@ -8,8 +9,17 @@ import type { InvestigationActivity } from "./model/status";
 import { useWorkerConnected } from "./hooks/useWorkerConnected";
 import type { LensList } from "./model/types";
 import { LENS_TABS } from "./route";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 
-const ACTIVITY_LABEL = { running: "An investigation is running", queued: "An investigation is queued" };
+const ACTIVITY_LABEL = {
+  get running() {
+    return translateUi("ui.7aa776853532cd9c");
+  },
+  get queued() {
+    return translateUi("ui.7ac4dc2af50fb85d");
+  },
+};
 
 export function LensModeSwitch({
   activity,
@@ -18,6 +28,7 @@ export function LensModeSwitch({
   activity: InvestigationActivity;
   workers: LensList["workers"] | null;
 }) {
+  const { locale } = useLanguage();
   const connected = useWorkerConnected(workers);
   const settingsTitle = connected ? "Worker connected" : "Connect worker";
   const tabs = Object.entries(LENS_TABS).filter(([view]) => view !== "settings" || workers);
@@ -31,7 +42,7 @@ export function LensModeSwitch({
         <TabsPrimitive.Tab
           key={view}
           value={view}
-          title={view === "settings" ? settingsTitle : undefined}
+          title={view === "settings" ? translateText(settingsTitle, locale) : undefined}
           aria-description={view === "investigations" && activity !== "idle" ? ACTIVITY_LABEL[activity] : undefined}
           className={cn(
             "relative z-raised inline-flex h-full items-center gap-1.5 rounded-md text-xs font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 data-active:text-foreground sm:text-sm",
@@ -42,10 +53,10 @@ export function LensModeSwitch({
             <span className="relative inline-flex">
               <Settings aria-hidden="true" className="size-3.5" />
               {!connected && <StatusDot state="error" className="absolute -top-0.5 -right-0.5 size-1.5" />}
-              <span className="sr-only">{label}</span>
+              <span className="sr-only">{translateText(label, locale)}</span>
             </span>
           ) : (
-            label
+            translateText(label, locale)
           )}
           {view === "investigations" && activity !== "idle" && (
             <span

@@ -1,3 +1,8 @@
+"use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { CircleHelp } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
@@ -33,15 +38,27 @@ const uiAccessControlSchema = z
     ctx.addIssue({
       code: "custom",
       path: ["restricted_sso_group"],
-      message: "Please enter the restricted SSO group",
+      get message() {
+        return translateUi("ui.471c0d40c5b45b3f");
+      },
     });
   });
 
 type UIAccessControlFormValues = z.output<typeof uiAccessControlSchema>;
 
 const UI_ACCESS_MODE_OPTIONS = [
-  { value: "all_authenticated_users", label: "All Authenticated Users" },
-  { value: "restricted_sso_group", label: "Restricted SSO Group" },
+  {
+    value: "all_authenticated_users",
+    get label() {
+      return translateUi("ui.fa2658c8392b34f9");
+    },
+  },
+  {
+    value: "restricted_sso_group",
+    get label() {
+      return translateUi("ui.a16115476d3d955d");
+    },
+  },
 ] as const;
 
 const asRecord = (value: unknown): Record<string, unknown> | null =>
@@ -78,15 +95,19 @@ const toFormValues = (ssoData: unknown): UIAccessControlFormValues | null => {
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
 
 const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, onSuccess }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(uiAccessControlSchema, { defaultValues: {} });
   const [loading, setLoading] = useState(false);
   const uiAccessModeType = useWatch({ control: form.control, name: "ui_access_mode_type" });
@@ -150,9 +171,7 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
     <TooltipProvider>
       <div className="p-4">
         <div className="mb-4">
-          <p className="text-sm text-muted-foreground">
-            Configure who can access the UI interface and how group information is extracted from JWT tokens.
-          </p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.127369e5d19a7f76")}</p>
         </div>
 
         <form onSubmit={form.handleSubmit(submitMountedValues)} noValidate>
@@ -174,7 +193,7 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
                     aria-invalid={ariaInvalid}
                     aria-describedby={ariaDescribedBy}
                   >
-                    <SelectValue placeholder="Select access mode" />
+                    <SelectValue placeholder={uiT("ui.028252c60ceab762")} />
                   </SelectTrigger>
                   <SelectContent>
                     {UI_ACCESS_MODE_OPTIONS.map((option) => (
@@ -188,9 +207,9 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
             </FormField>
 
             {uiAccessModeType === "restricted_sso_group" && (
-              <FormField control={form.control} name="restricted_sso_group" label="Restricted SSO Group">
+              <FormField control={form.control} name="restricted_sso_group" label={uiT("ui.a16115476d3d955d")}>
                 {({ ref, value, ...field }) => (
-                  <Input {...field} ref={ref} value={value ?? ""} placeholder="ui-access-group" />
+                  <Input {...field} ref={ref} value={value ?? ""} placeholder={uiT("ui.63e706264152e6e0")} />
                 )}
               </FormField>
             )}
@@ -203,14 +222,16 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
                 "JWT field name that contains team/group information. Use dot notation to access nested fields.",
               )}
             >
-              {({ ref, value, ...field }) => <Input {...field} ref={ref} value={value ?? ""} placeholder="groups" />}
+              {({ ref, value, ...field }) => (
+                <Input {...field} ref={ref} value={value ?? ""} placeholder={uiT("ui.4ed379d418bb8629")} />
+              )}
             </FormField>
           </FieldGroup>
 
           <div className="mt-4 text-right">
             <Button type="submit" disabled={loading}>
               {loading && <UiLoadingSpinner className="size-4" />}
-              Update UI Access Control
+              {uiT("ui.d658c994b16d0815")}
             </Button>
           </div>
         </form>

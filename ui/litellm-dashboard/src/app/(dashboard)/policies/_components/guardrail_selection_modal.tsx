@@ -49,7 +49,7 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
   // Prepare guardrail info with existence status
   const guardrailsInfo: GuardrailInfo[] = (template?.guardrailDefinitions || []).map((def: any) => ({
     guardrail_name: def.guardrail_name,
-    description: def.guardrail_info?.description || "No description available",
+    description: def.guardrail_info?.description || uiT("ui.aab5e3e77b99b45f"),
     alreadyExists: existingGuardrails.has(def.guardrail_name),
     definition: def,
   }));
@@ -102,11 +102,11 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
             {template?.title}
             {progressInfo && (
               <Badge variant="secondary">
-                Template {progressInfo.current} of {progressInfo.total}
+                {uiT("ui.0575f29df888a27e")} {progressInfo.current} {uiT("ui.28391d3bc64ec15c")} {progressInfo.total}
               </Badge>
             )}
           </DialogTitle>
-          <DialogDescription>Review and select guardrails to create for this template</DialogDescription>
+          <DialogDescription>{uiT("ui.66c2583e12ae8f56")}</DialogDescription>
         </DialogHeader>
 
         <div className="py-4">
@@ -115,13 +115,19 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
             <Info className="size-4 text-muted-foreground" />
             <div className="flex-1">
               <div className="text-sm">
-                <span className="font-medium">{guardrailsInfo.length} total guardrails</span>
+                <span className="font-medium">
+                  {guardrailsInfo.length} {uiT("ui.a3348d168ff5995b")}
+                </span>
                 <span className="mx-2 text-muted-foreground">•</span>
-                <span className="font-medium text-success">{newGuardrailsCount} new</span>
+                <span className="font-medium text-success">
+                  {newGuardrailsCount} {uiT("ui.11507a0e2f5e69d5")}
+                </span>
                 {existingCount > 0 && (
                   <>
                     <span className="mx-2 text-muted-foreground">•</span>
-                    <span className="text-muted-foreground">{existingCount} already exist</span>
+                    <span className="text-muted-foreground">
+                      {existingCount} {uiT("ui.ecb6224a3ff2c981")}
+                    </span>
                   </>
                 )}
               </div>
@@ -129,10 +135,10 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
             {newGuardrailsCount > 0 && (
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={handleSelectAll}>
-                  Select All New
+                  {uiT("ui.0a1f434077923cf8")}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleDeselectAll}>
-                  Deselect All
+                  {uiT("ui.5cd261bcc680ffda")}
                 </Button>
               </div>
             )}
@@ -161,24 +167,26 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-mono text-sm font-medium">{guardrail.guardrail_name}</span>
-                      {guardrail.alreadyExists && <Badge variant="secondary">Already exists</Badge>}
+                      {guardrail.alreadyExists && <Badge variant="secondary">{uiT("ui.2dbc546658ab711d")}</Badge>}
                     </div>
                     <p className="text-sm text-muted-foreground">{guardrail.description}</p>
 
                     {/* Show guardrail type and mode */}
                     <div className="flex gap-2 mt-2">
-                      <Badge variant="outline">{guardrail.definition?.litellm_params?.guardrail || "unknown"}</Badge>
+                      <Badge variant="outline">
+                        {guardrail.definition?.litellm_params?.guardrail || uiT("ui.b23a6a8439c0")}
+                      </Badge>
                       <Badge variant="secondary">
-                        {formatGuardrailMode(guardrail.definition?.litellm_params?.mode) || "unknown"}
+                        {formatGuardrailMode(guardrail.definition?.litellm_params?.mode) || uiT("ui.b23a6a8439c0")}
                       </Badge>
                       {guardrail.definition?.litellm_params?.patterns && (
                         <Badge variant="secondary">
-                          {guardrail.definition.litellm_params.patterns.length} pattern(s)
+                          {guardrail.definition.litellm_params.patterns.length} {uiT("ui.c3d92c469f632638")}
                         </Badge>
                       )}
                       {guardrail.definition?.litellm_params?.categories && (
                         <Badge variant="secondary">
-                          {guardrail.definition.litellm_params.categories.length} category/categories
+                          {guardrail.definition.litellm_params.categories.length} {uiT("ui.b0bc4ae87afec9c2")}
                         </Badge>
                       )}
                     </div>
@@ -190,8 +198,8 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
 
           {guardrailsInfo.length === 0 && (
             <div className="py-8 text-center text-muted-foreground">
-              <p>No guardrails defined for this template.</p>
-              <p className="text-sm mt-2">This template will use existing guardrails in your system.</p>
+              <p>{uiT("ui.e8a9c0793c3d7e65")}</p>
+              <p className="text-sm mt-2">{uiT("ui.e8153a0a942edfa5")}</p>
             </div>
           )}
 
@@ -203,7 +211,8 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
                 <div className="mb-2 flex items-center gap-2">
                   <span className="text-lg">✨</span>
                   <span className="text-sm font-medium">
-                    AI-Discovered Competitors ({template.discoveredCompetitors.length})
+                    {uiT("ui.efa0b7f84e0a0743")}
+                    {template.discoveredCompetitors.length})
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -213,9 +222,7 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
                     </Badge>
                   ))}
                 </div>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  These competitor names will be automatically blocked by the competitor-name-blocker guardrail.
-                </p>
+                <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.75cab5547d465dce")}</p>
               </div>
             </>
           )}
@@ -226,16 +233,13 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
           <div className="text-sm text-muted-foreground">
             {selectedCount > 0 ? (
               <p>
-                <span className="font-medium text-foreground">{selectedCount}</span> guardrail
-                {selectedCount > 1 ? "s" : ""} will be created
+                <span className="font-medium text-foreground">{selectedCount}</span> {uiT("ui.2f0a9e4fec74e596")}
+                {selectedCount > 1 ? "s" : ""} {uiT("ui.85a448899271661f")}
               </p>
             ) : existingCount > 0 ? (
-              <p className="text-success">All guardrails already exist. You can proceed to use this template.</p>
+              <p className="text-success">{uiT("ui.7ccfc6bf1d2beb40")}</p>
             ) : (
-              <p className="text-warning">
-                Select at least one guardrail to create, or click &quot;Use Template&quot; to proceed without creating
-                new guardrails.
-              </p>
+              <p className="text-warning">{uiT("ui.3940799b01a0a51c")}</p>
             )}
           </div>
         </div>
@@ -246,8 +250,11 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
           </Button>
           <Button onClick={handleConfirm} disabled={isLoading || (selectedCount === 0 && existingCount === 0)}>
             {selectedCount > 0
-              ? `Create ${selectedCount} Guardrail${selectedCount > 1 ? "s" : ""} & Use Template`
-              : "Use Template"}
+              ? uiT("ui.b9741930524f729b", {
+                  v0: String(selectedCount),
+                  v1: String(selectedCount > 1 ? uiT("inflections.s") : ""),
+                })
+              : uiT("ui.6a0418f673c8bc5b")}
           </Button>
         </DialogFooter>
       </DialogContent>

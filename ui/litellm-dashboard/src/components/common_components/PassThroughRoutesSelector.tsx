@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { MultiSelect, type MultiSelectOption } from "@/components/shared/MultiSelect";
 import { getPassThroughEndpointsCall } from "../networking";
@@ -27,10 +31,12 @@ const PassThroughRoutesSelector: React.FC<PassThroughRoutesSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select pass through routes",
+  placeholder = translateUi("ui.f921ae0efe05b66e"),
   disabled = false,
   teamId,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [passThroughRoutes, setPassThroughRoutes] = useState<MultiSelectOption[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -60,7 +66,7 @@ const PassThroughRoutesSelector: React.FC<PassThroughRoutesSelectorProps> = ({
       value={value}
       onValueChange={(routes) => onChange?.(routes)}
       placeholder={placeholder}
-      emptyText="No pass through routes found"
+      emptyText={uiT("ui.2446a32ab9ff1a8e")}
       loading={loading}
       allowCustomValues
       disabled={disabled}

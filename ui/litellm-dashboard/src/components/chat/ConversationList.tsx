@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Pencil, Trash2, Search, MessageSquare } from "lucide-react";
@@ -68,7 +70,15 @@ interface ConversationRowProps {
   onRename: (id: string, newTitle: string) => void;
 }
 
+const displayConversationTitle = (conv: Conversation, translate: (key: string) => string): string =>
+  !conv.customTitle && conv.title === "New conversation" && conv.messages.length === 0
+    ? translate("ui.396c946f0c795aa6")
+    : conv.title;
+
 const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSelect, onDelete, onRename }) => {
+  const { t: uiT } = useDashboardLanguage();
+
+  const displayTitle = displayConversationTitle(conv, uiT);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(conv.title);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -82,20 +92,20 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
 
   const startEditing = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setEditValue(conv.title);
+    setEditValue(displayTitle);
     setEditing(true);
   };
 
   const commitRename = () => {
     const trimmed = editValue.trim();
-    if (trimmed && trimmed !== conv.title) {
+    if (trimmed && trimmed !== displayTitle) {
       onRename(conv.id, trimmed);
     }
     setEditing(false);
   };
 
   const cancelEditing = () => {
-    setEditValue(conv.title);
+    setEditValue(displayTitle);
     setEditing(false);
   };
 
@@ -109,7 +119,7 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
     }
   };
 
-  const truncatedTitle = conv.title.length > 40 ? conv.title.slice(0, 40) + "\u2026" : conv.title;
+  const truncatedTitle = displayTitle.length > 40 ? displayTitle.slice(0, 40) + "\u2026" : displayTitle;
 
   return (
     <div
@@ -134,7 +144,7 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
             className={`flex-1 text-[13px] overflow-hidden whitespace-nowrap text-ellipsis ${
               isActive ? "font-medium" : ""
             }`}
-            title={conv.title}
+            title={displayTitle}
           >
             {truncatedTitle}
           </span>
@@ -153,7 +163,7 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
                   }
                 />
                 <TooltipContent side="bottom">
-                  <p>Rename</p>
+                  <p>{uiT("ui.3064d79a295cefe4")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -177,22 +187,22 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
                     }
                   />
                   <TooltipContent side="bottom">
-                    <p>Delete</p>
+                    <p>{uiT("ui.e2d0a54968ea")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this conversation?</AlertDialogTitle>
-                  <AlertDialogDescription>This action cannot be undone</AlertDialogDescription>
+                  <AlertDialogTitle>{uiT("ui.333e9b74d8484f03")}</AlertDialogTitle>
+                  <AlertDialogDescription>{uiT("ui.02ccc0746024031b")}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => onDelete(conv.id)}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    Delete
+                    {uiT("ui.e2d0a54968ea")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -212,6 +222,8 @@ interface SearchModalProps {
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect, onClose }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [query, setQuery] = useState("");
   const [wasOpen, setWasOpen] = useState(open);
 
@@ -236,7 +248,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             autoFocus
-            placeholder="Search conversations\u2026"
+            placeholder={uiT("ui.3a83a9cb9e73a2c4")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-9"
@@ -245,10 +257,11 @@ const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect
 
         <ScrollArea className="max-h-[320px]">
           {filtered.length === 0 ? (
-            <div className="text-center py-6 text-muted-foreground text-sm">No conversations found</div>
+            <div className="text-center py-6 text-muted-foreground text-sm">{uiT("ui.7cd3bc2fc16237f9")}</div>
           ) : (
             filtered.map((conv) => {
-              const truncated = conv.title.length > 55 ? conv.title.slice(0, 55) + "\u2026" : conv.title;
+              const title = displayConversationTitle(conv, uiT);
+              const truncated = title.length > 55 ? title.slice(0, 55) + "\u2026" : title;
               return (
                 <div
                   key={conv.id}
@@ -271,6 +284,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect
 };
 
 const ConversationList: React.FC<Props> = ({ conversations, activeConversationId, onSelect, onDelete, onRename }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   const handleGlobalKeyDown = useCallback((e: KeyboardEvent) => {
@@ -293,15 +308,15 @@ const ConversationList: React.FC<Props> = ({ conversations, activeConversationId
         <ScrollArea className="flex-1 h-0 px-1.5 pt-2">
           {grouped.length === 0 ? (
             <div className="text-center text-muted-foreground/60 text-xs mt-8 px-3">
-              No conversations yet
+              {uiT("ui.0d60084f056eb4cf")}
               <br />
-              Start a new chat above
+              {uiT("ui.c2b61726dda7fb3c")}
             </div>
           ) : (
             grouped.map(({ group, items }) => (
               <div key={group} className="mb-2">
                 <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider px-2 pt-2 pb-1">
-                  {group}
+                  {translateText(group)}
                 </div>
                 {items.map((conv) => (
                   <ConversationRow

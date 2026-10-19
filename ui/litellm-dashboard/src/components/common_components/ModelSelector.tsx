@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Bot } from "lucide-react";
 import { useDebouncedCallback } from "@tanstack/react-pacer/debouncer";
@@ -22,7 +26,7 @@ interface ModelSelectorProps {
 const ModelSelector: React.FC<ModelSelectorProps> = ({
   accessToken,
   value,
-  placeholder = "Select a Model",
+  placeholder = translateUi("ui.aa6bd74e27212b05"),
   onChange,
   disabled = false,
   style,
@@ -30,6 +34,8 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
   showLabel = true,
   labelText = "Select Model",
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [selectedModel, setSelectedModel] = useState<string | null>(value ?? null);
   const [showCustomModelInput, setShowCustomModelInput] = useState<boolean>(false);
   const [modelInfo, setModelInfo] = useState<ModelGroup[]>([]);
@@ -91,7 +97,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
               value: model_group,
               label: model_group,
             })),
-            { value: "custom", label: "Enter custom model" },
+            { value: "custom", label: uiT("ui.97491429f22b70ef") },
           ]}
           value={selectedModel}
           placeholder={placeholder}
@@ -102,7 +108,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
       {showCustomModelInput && (
         <Input
           className="mt-2"
-          placeholder="Enter custom model name"
+          placeholder={uiT("ui.49c8ee5374231545")}
           onChange={(e) => debouncedSelect(e.target.value)}
           disabled={disabled}
         />

@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import {
   Combobox,
@@ -29,9 +33,11 @@ const SearchToolSelector: React.FC<SearchToolSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select search tools (optional)",
+  placeholder = translateUi("ui.c9e6cb18d830e185"),
   disabled = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -80,10 +86,10 @@ const SearchToolSelector: React.FC<SearchToolSelectorProps> = ({
           }
         </ComboboxValue>
         <ComboboxChipsInput placeholder={placeholder} aria-label={placeholder} disabled={disabled} />
-        {value && value.length > 0 && <ComboboxClear aria-label="Clear all search tools" disabled={disabled} />}
+        {value && value.length > 0 && <ComboboxClear aria-label={uiT("ui.bad47bc1ac560601")} disabled={disabled} />}
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>{loading ? "Loading search tools…" : "No search tools found"}</ComboboxEmpty>
+        <ComboboxEmpty>{loading ? uiT("ui.fdfb4551060117ee") : uiT("ui.c769c2853085552a")}</ComboboxEmpty>
         <ComboboxList>
           {(tool: string) => (
             <ComboboxItem key={tool} value={tool}>

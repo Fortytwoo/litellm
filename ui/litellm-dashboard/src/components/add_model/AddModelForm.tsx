@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useProviderFields } from "@/app/(dashboard)/hooks/providers/useProviderFields";
 import { useGuardrails } from "@/app/(dashboard)/hooks/guardrails/useGuardrails";
@@ -120,7 +122,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
       toast.error(extractProxyErrorMessage(error));
       return;
     }
-    toast.success("Credential added successfully");
+    toast.success(translateUi("ui.d266dc90e6652fa2"));
     setIsFederatedCredentialModalOpen(false);
     await queryClient.invalidateQueries({ queryKey: credentialsKeys.all });
     form.setValue("litellm_credential_name", credential.credential_name, { shouldDirty: true });
@@ -192,7 +194,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
 
   return (
     <>
-      <h2 className="mb-4 text-2xl font-semibold text-foreground">Add Model</h2>
+      <h2 className="mb-4 text-2xl font-semibold text-foreground">{uiT("ui.7060e8240675f8ae")}</h2>
 
       <Card>
         <CardContent>
@@ -231,10 +233,8 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                       {!teamAdminSelectedTeam && (
                         <Alert variant="info" className="mb-4">
                           <Info />
-                          <AlertTitle>Team Selection Required</AlertTitle>
-                          <AlertDescription>
-                            As a team admin, you need to select your team first before adding models.
-                          </AlertDescription>
+                          <AlertTitle>{uiT("ui.da85d0c53d6d98aa")}</AlertTitle>
+                          <AlertDescription>{uiT("ui.0c5d7bf6546e324e")}</AlertDescription>
                         </Alert>
                       )}
                     </>
@@ -252,8 +252,10 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                           <SearchSelect
                             inputId={control.id}
                             options={providerOptions}
-                            emptyText={providerMetadataErrorText ?? "No providers found"}
-                            placeholder={isProviderMetadataLoading ? "Loading providers..." : "Select a provider"}
+                            emptyText={providerMetadataErrorText ?? uiT("ui.0bc42eace25559af")}
+                            placeholder={
+                              isProviderMetadataLoading ? uiT("ui.015fc672867a9451") : uiT("ui.71e2ca7b1c9f58dc")
+                            }
                             value={typeof control.value === "string" ? control.value : null}
                             onValueChange={(value) => {
                               control.onChange(value);
@@ -273,7 +275,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                       <ConditionalPublicModelName />
 
                       {/* Select Mode */}
-                      <MountedFormField label="Mode" name="mode" className="mb-1">
+                      <MountedFormField label={uiT("ui.5e23ec6a300dc60a")} name="mode" className="mb-1">
                         {(control) => (
                           <Select
                             items={TEST_MODES}
@@ -283,7 +285,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                               setTestMode(value ?? "");
                             }}
                           >
-                            <SelectTrigger id={control.id} className="w-full" aria-label="Mode">
+                            <SelectTrigger id={control.id} className="w-full" aria-label={uiT("ui.5e23ec6a300dc60a")}>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -300,8 +302,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         <div className="col-span-5" />
                         <div className="col-span-5">
                           <p className="text-sm mb-5 mt-1">
-                            <strong>{uiT("ui.59be71333c96")}</strong> - LiteLLM endpoint to use when health checking
-                            this model{" "}
+                            <strong>{uiT("ui.59be71333c96")}</strong> {uiT("ui.7383461665c67a1c")}{" "}
                             <a
                               href="https://docs.litellm.ai/docs/proxy/health#health"
                               target="_blank"
@@ -316,13 +317,11 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
 
                       {/* Credentials */}
                       <div className="mb-4">
-                        <span className="text-sm text-muted-foreground">
-                          Either select existing credentials OR enter new provider credentials below
-                        </span>
+                        <span className="text-sm text-muted-foreground">{uiT("ui.bdabd34156ff14eb")}</span>
                       </div>
 
                       <MountedFormField
-                        label="Existing Credentials"
+                        label={uiT("ui.c6939b110b6549ac")}
                         name="litellm_credential_name"
                         defaultValue={null}
                         className="mb-4"
@@ -330,7 +329,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         {(control) => (
                           <SearchSelect
                             inputId={control.id}
-                            placeholder="Select or search for existing credentials"
+                            placeholder={uiT("ui.1c1bd81a646a1fc6")}
                             options={credentialSelectOptions}
                             value={(control.value as string | null | undefined) ?? ""}
                             onValueChange={(value) => control.onChange(value === "" ? null : value)}
@@ -343,21 +342,19 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         <>
                           <div className="flex items-center my-4">
                             <div className="grow border-t border-border"></div>
-                            <span className="px-4 text-muted-foreground text-sm">OR</span>
+                            <span className="px-4 text-muted-foreground text-sm">{uiT("ui.829e5b28af38ab33")}</span>
                             <div className="grow border-t border-border"></div>
                           </div>
                           <ProviderSpecificFields selectedProvider={selectedProvider} />
                           {canCreateFederatedCredential && (
                             <div className="mb-4 flex flex-col items-start gap-2">
-                              <span className="text-sm text-muted-foreground">
-                                Workload identity federation is saved as a credential, then attached to this model.
-                              </span>
+                              <span className="text-sm text-muted-foreground">{uiT("ui.80ab193ad39f5eed")}</span>
                               <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => setIsFederatedCredentialModalOpen(true)}
                               >
-                                Use workload identity federation
+                                {uiT("ui.e1c72b96d3cd6db0")}
                               </Button>
                             </div>
                           )}
@@ -365,7 +362,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                       )}
                       <div className="flex items-center my-4">
                         <div className="grow border-t border-border"></div>
-                        <span className="px-4 text-muted-foreground text-sm">Additional Model Info Settings</span>
+                        <span className="px-4 text-muted-foreground text-sm">{uiT("ui.05c6121197cdcb1f")}</span>
                         <div className="grow border-t border-border"></div>
                       </div>
                       {/* Team-only Model Switch - Only show for proxy admins, not team admins */}
@@ -377,14 +374,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                               "Only use this model + credential combination for this team. Useful when teams want to onboard their own OpenAI keys.",
                             )}
                           </FieldLabel>
-                          <SimpleTooltip
-                            content={
-                              !premiumUser
-                                ? "This is an enterprise-only feature. Upgrade to premium to restrict model+credential combinations to a specific team."
-                                : ""
-                            }
-                            side="top"
-                          >
+                          <SimpleTooltip content={!premiumUser ? uiT("ui.1a86eca0d44cd9a2") : ""} side="top">
                             <span className="inline-flex">
                               <Switch
                                 checked={isTeamOnly}
@@ -395,7 +385,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                                   }
                                 }}
                                 disabled={!premiumUser}
-                                aria-label="Team-BYOK Model"
+                                aria-label={uiT("ui.6b0efce2544bdfa5")}
                               />
                             </span>
                           </SimpleTooltip>
@@ -461,12 +451,12 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                     </>
                   )}
                   <div className="flex justify-between items-center mb-4">
-                    <SimpleTooltip content="Get help on our github">
+                    <SimpleTooltip content={uiT("ui.432f534e73f8eb9f")}>
                       <a
                         href="https://github.com/BerriAI/litellm/issues"
                         className="text-sm text-primary hover:underline"
                       >
-                        Need Help?
+                        {uiT("ui.5c799f5aa8a75879")}
                       </a>
                     </SimpleTooltip>
                     <div className="space-x-2">
@@ -477,10 +467,10 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         disabled={isTestingConnection}
                         aria-busy={isTestingConnection}
                       >
-                        Test Connect
+                        {uiT("ui.4fc578b14af334ae")}
                       </Button>
                       <Button data-testid="add-model-btn" type="submit">
-                        Add Model
+                        {uiT("ui.7060e8240675f8ae")}
                       </Button>
                     </div>
                   </div>
@@ -514,7 +504,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
       >
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
           <DialogHeader>
-            <DialogTitle>Connection Test Results</DialogTitle>
+            <DialogTitle>{uiT("ui.0ec99e1bdc5ce188")}</DialogTitle>
           </DialogHeader>
           {/* Only render the ConnectionErrorDisplay when modal is visible and we have a test ID */}
           {isResultModalVisible && (

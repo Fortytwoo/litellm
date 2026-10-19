@@ -1,4 +1,10 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useModelAccessGroupNames } from "@/app/(dashboard)/hooks/models/useModels";
@@ -240,7 +246,7 @@ export default function KeyInfoView({
       const nextSoftBudget =
         formValues.soft_budget === "" || formValues.soft_budget == null ? null : Number(formValues.soft_budget);
       if (nextSoftBudget !== null && !Number.isFinite(nextSoftBudget)) {
-        toast.error("Soft Budget must be a finite number");
+        toast.error(translateUi("ui.6b961a9f7c0bcb5f"));
         return;
       }
       if (nextSoftBudget === previousSoftBudget) {
@@ -269,7 +275,7 @@ export default function KeyInfoView({
             (toolsetId) => !(allMcpToolsets ?? []).some((toolset) => toolset.toolset_id === toolsetId),
           );
         if (unresolvableSelection && Object.keys(mcpEntitlement.mcp_tool_permissions).length > 0) {
-          toast.error("MCP server or toolset list is unavailable, so MCP permissions cannot be saved yet. Retry.");
+          toast.error(translateUi("ui.255b789dcf9ceaa3"));
           return;
         }
         formValues.object_permission = {
@@ -328,7 +334,7 @@ export default function KeyInfoView({
           };
         } catch (error) {
           console.error("Error parsing metadata JSON:", error);
-          toast.error("Invalid metadata JSON");
+          toast.error(translateUi("ui.0a80165df88edc8c"));
           return;
         }
       } else {
@@ -377,9 +383,7 @@ export default function KeyInfoView({
       if (editingMemberKeyAsTeamAdmin) {
         const trimmed = teamAdminMemberKeyPayload(formValues, dirtyFields);
         if (trimmed.kind === "blocked") {
-          toast.error(
-            `Team admins can only change budget fields on other members' keys, not ${trimmed.fields.join(", ")}`,
-          );
+          toast.error(translateUi("ui.bca591447318e975", undefined, { v0: String(trimmed.fields.join(", ")) }));
           return;
         }
         formValues = trimmed.payload;
@@ -393,7 +397,7 @@ export default function KeyInfoView({
       if (onKeyDataUpdate) {
         onKeyDataUpdate(newKeyValues);
       }
-      toast.success("Key updated successfully");
+      toast.success(translateUi("ui.21a32c3dba418146"));
       setIsEditing(false);
       // Refresh key data here if needed
     } catch (error) {
@@ -407,7 +411,7 @@ export default function KeyInfoView({
       setDeleteLoading(true);
       if (!accessToken) return;
       await keyDeleteCall(accessToken as string, currentKeyData.token || currentKeyData.token_id);
-      toast.success("Key deleted successfully");
+      toast.success(translateUi("ui.bc1e0a726616401a"));
       await queryClient.invalidateQueries({ queryKey: keyKeys.lists() });
       if (onDelete) {
         onDelete();
@@ -457,12 +461,12 @@ export default function KeyInfoView({
   // Update the formatTimestamp function to use the desired date format
   const formatTimestamp = (timestamp: string | Date) => {
     const date = new Date(timestamp);
-    const dateStr = date.toLocaleDateString("en-US", {
+    const dateStr = date.toLocaleDateString(getFormattingLocale(), {
       year: "numeric",
       month: "short",
       day: "numeric",
     });
-    const timeStr = date.toLocaleTimeString("en-US", {
+    const timeStr = date.toLocaleTimeString(getFormattingLocale(), {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
@@ -499,7 +503,7 @@ export default function KeyInfoView({
         if (onKeyDataUpdate) {
           onKeyDataUpdate({ spend: 0 });
         }
-        toast.success("Key spend reset to $0");
+        toast.success(translateUi("ui.e8d44173af754d7b"));
         setIsResetSpendModalOpen(false);
       },
       onError: (error) => {
@@ -521,7 +525,7 @@ export default function KeyInfoView({
           if (onKeyDataUpdate) {
             onKeyDataUpdate({ blocked });
           }
-          toast.success(blocked ? "Key blocked" : "Key unblocked");
+          toast.success(blocked ? translateUi("ui.f8b6a82cc848e255") : translateUi("ui.494bbc6bc030d32d"));
           setIsBlockModalOpen(false);
         },
         onError: (error) => {
@@ -592,7 +596,7 @@ export default function KeyInfoView({
         isOpen={isDeleteModalOpen}
         title={uiT("ui.00727245851b")}
         alertMessage="This action is irreversible and will immediately revoke access for any applications using this key."
-        message="Are you sure you want to delete this Virtual Key?"
+        message={uiT("ui.0184cc60593b24ab")}
         resourceInformationTitle="Key Information"
         resourceInformation={[
           {
@@ -629,12 +633,13 @@ export default function KeyInfoView({
             <DialogTitle>{uiT("ui.ca0bb163f216")}</DialogTitle>
           </DialogHeader>
           <p>
-            Reset spend for <strong>{currentKeyData?.key_alias || currentKeyData?.token_id || "this key"}</strong>{" "}
+            {uiT("ui.a2ccee16b0910a36")}{" "}
+            <strong>{currentKeyData?.key_alias || currentKeyData?.token_id || uiT("ui.c9e64db2715f38a5")}</strong>{" "}
             {uiT("ui.663ea1bfffe5")} <strong>$0</strong>?
           </p>
           <p style={{ color: "#666", fontSize: "0.875rem", marginTop: 8 }}>
-            Current spend: <strong>${formatNumberWithCommas(currentKeyData.spend, 4)}</strong>. Spend history is
-            preserved in logs. This resets the current period spend counter, the same as an automatic budget reset.
+            {uiT("ui.a56b5bae4770c46f")} <strong>${formatNumberWithCommas(currentKeyData.spend, 4)}</strong>
+            {uiT("ui.2e7f247f6bb38c93")}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsResetSpendModalOpen(false)}>
@@ -654,7 +659,7 @@ export default function KeyInfoView({
           </DialogHeader>
           <p>
             {isBlocked ? uiT("ui.712da63171e0") : uiT("ui.211d0bb8cf4f")}{" "}
-            <strong>{currentKeyData?.key_alias || currentKeyData?.token_id || "this key"}</strong>?
+            <strong>{currentKeyData?.key_alias || currentKeyData?.token_id || uiT("ui.c9e64db2715f38a5")}</strong>?
           </p>
           <p style={{ color: "#666", fontSize: "0.875rem", marginTop: 8 }}>
             {isBlocked ? uiT("ui.cfc1483a04c5") : uiT("ui.9fb8a464d349")}
@@ -701,11 +706,13 @@ export default function KeyInfoView({
                 <div className="mt-2">
                   <h3 className="text-lg font-medium">${formatNumberWithCommas(currentKeyData.spend, 4)}</h3>
                   <p className="text-sm">
-                    of {budgetDisplay}
+                    {uiT("ui.28391d3bc64ec15c")} {translateText(budgetDisplay)}
                     <InheritedBudgetHint gates={inheritedGates} />
                   </p>
                   {currentKeyData.budget_reset_at && (
-                    <p className="text-sm">Resets {formatTimestamp(currentKeyData.budget_reset_at)}</p>
+                    <p className="text-sm">
+                      {uiT("ui.7816b9affc62a9e9")} {translateText(formatTimestamp(currentKeyData.budget_reset_at))}
+                    </p>
                   )}
                   <p className="text-sm mt-2" data-testid="key-lifetime-spend">
                     {uiT("ui.dee36f20ae21")}
@@ -724,10 +731,7 @@ export default function KeyInfoView({
                         >
                           <Info className="size-3 text-muted-foreground" />
                         </HoverCardTrigger>
-                        <HoverCardContent className="w-80">
-                          Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026 and was not backfilled,
-                          so this key&apos;s lifetime spend only counts usage since that upgrade.
-                        </HoverCardContent>
+                        <HoverCardContent className="w-80">{uiT("ui.19a489d8015f")}</HoverCardContent>
                       </HoverCard>
                     )}
                   </p>
@@ -738,14 +742,18 @@ export default function KeyInfoView({
                 <p className="text-sm">{uiT("ui.ed129d234fd4")}</p>
                 <div className="mt-2">
                   <p className="text-sm">
-                    TPM: {currentKeyData.tpm_limit !== null ? currentKeyData.tpm_limit : uiT("ui.11dde17d6c3e")}
+                    {uiT("ui.22506bb2e2fc9c02")}{" "}
+                    {currentKeyData.tpm_limit !== null ? currentKeyData.tpm_limit : uiT("ui.11dde17d6c3e")}
                   </p>
                   <p className="text-sm">
-                    RPM: {currentKeyData.rpm_limit !== null ? currentKeyData.rpm_limit : uiT("ui.11dde17d6c3e")}
+                    {uiT("ui.0a9c9fab18f38f0e")}{" "}
+                    {currentKeyData.rpm_limit !== null ? currentKeyData.rpm_limit : uiT("ui.11dde17d6c3e")}
                   </p>
-                  <p className="text-sm">TPD (batch): {currentKeyData.tpd_limit ?? uiT("ui.11dde17d6c3e")}</p>
+                  <p className="text-sm">
+                    {uiT("ui.1dbc7e398eaa09e7")} {currentKeyData.tpd_limit ?? uiT("ui.11dde17d6c3e")}
+                  </p>
                   {Boolean(currentKeyData.metadata?.throttle_on_budget_exceeded) && (
-                    <p className="text-sm">Throttle on budget exceeded: Yes</p>
+                    <p className="text-sm">{uiT("ui.5f49516bd8cafb3a")}</p>
                   )}
                 </div>
               </Card>
@@ -812,7 +820,7 @@ export default function KeyInfoView({
                         </div>
                         {!loadingPolicies && policyGuardrails[policy] && policyGuardrails[policy].length > 0 && (
                           <div className="ml-4 pl-3 border-l-2 border-border">
-                            <p className="text-xs text-muted-foreground mb-1">Resolved Guardrails:</p>
+                            <p className="text-xs text-muted-foreground mb-1">{uiT("ui.d9fe6ef6ac99a43e")}</p>
                             <div className="flex flex-wrap gap-1">
                               {policyGuardrails[policy].map((guardrail: string, gIndex: number) => (
                                 <Badge key={gIndex} variant="secondary" className="min-w-0 break-words">
@@ -951,14 +959,14 @@ export default function KeyInfoView({
 
                   <div>
                     <p className="text-sm font-medium">{uiT("ui.d70b9e24bca2")}</p>
-                    <p className="text-sm">{formatTimestamp(currentKeyData.created_at)}</p>
+                    <p className="text-sm">{translateText(formatTimestamp(currentKeyData.created_at))}</p>
                   </div>
 
                   {lastRegeneratedAt && (
                     <div>
                       <p className="text-sm font-medium">{uiT("ui.f7775915d1ba")}</p>
                       <div className="flex items-center gap-2">
-                        <p className="text-sm">{formatTimestamp(lastRegeneratedAt)}</p>
+                        <p className="text-sm">{translateText(formatTimestamp(lastRegeneratedAt))}</p>
                         <Badge variant="secondary">{uiT("ui.690dbe9dc099")}</Badge>
                       </div>
                     </div>
@@ -990,12 +998,16 @@ export default function KeyInfoView({
 
                   <div>
                     <p className="text-sm font-medium">{uiT("ui.85f3d558db12")}</p>
-                    <p className="text-sm">${formatNumberWithCommas(currentKeyData.spend, 4)} USD</p>
+                    <p className="text-sm">
+                      ${formatNumberWithCommas(currentKeyData.spend, 4)} {uiT("ui.a26cdf3a6e709124")}
+                    </p>
                   </div>
 
                   <div>
                     <p className="text-sm font-medium">{uiT("ui.eac3d121beb3")}</p>
-                    <p className="text-sm">${formatNumberWithCommas(currentKeyData.total_spend ?? 0, 4)} USD</p>
+                    <p className="text-sm">
+                      ${formatNumberWithCommas(currentKeyData.total_spend ?? 0, 4)} {uiT("ui.a26cdf3a6e709124")}
+                    </p>
                   </div>
 
                   <div>
@@ -1023,7 +1035,7 @@ export default function KeyInfoView({
                         {Object.entries(currentKeyData.budget_fallbacks).map(([model, fallbacks]) => (
                           <div key={model} className="text-xs text-muted-foreground">
                             <span className="font-medium">{model}</span>
-                            <span className="mx-1 text-muted-foreground">-&gt;</span>
+                            <span className="mx-1 text-muted-foreground">{uiT("ui.71b37b9a8a57b848")}</span>
                             {fallbacks.join(", ")}
                           </div>
                         ))}
@@ -1128,12 +1140,16 @@ export default function KeyInfoView({
                   <div>
                     <p className="text-sm font-medium">{uiT("ui.ed129d234fd4")}</p>
                     <p className="text-sm">
-                      TPM: {currentKeyData.tpm_limit !== null ? currentKeyData.tpm_limit : uiT("ui.11dde17d6c3e")}
+                      {uiT("ui.22506bb2e2fc9c02")}{" "}
+                      {currentKeyData.tpm_limit !== null ? currentKeyData.tpm_limit : uiT("ui.11dde17d6c3e")}
                     </p>
                     <p className="text-sm">
-                      RPM: {currentKeyData.rpm_limit !== null ? currentKeyData.rpm_limit : uiT("ui.11dde17d6c3e")}
+                      {uiT("ui.0a9c9fab18f38f0e")}{" "}
+                      {currentKeyData.rpm_limit !== null ? currentKeyData.rpm_limit : uiT("ui.11dde17d6c3e")}
                     </p>
-                    <p className="text-sm">TPD (batch): {currentKeyData.tpd_limit ?? uiT("ui.11dde17d6c3e")}</p>
+                    <p className="text-sm">
+                      {uiT("ui.1dbc7e398eaa09e7")} {currentKeyData.tpd_limit ?? uiT("ui.11dde17d6c3e")}
+                    </p>
                     <p className="text-sm">
                       {uiT("ui.ee5508890a86")}{" "}
                       {currentKeyData.max_parallel_requests !== null
@@ -1141,32 +1157,32 @@ export default function KeyInfoView({
                         : uiT("ui.11dde17d6c3e")}
                     </p>
                     <p className="text-sm">
-                      Model TPM Limits:{" "}
+                      {uiT("ui.b61dd5427570a908")}{" "}
                       {currentKeyData.metadata?.model_tpm_limit
                         ? JSON.stringify(currentKeyData.metadata.model_tpm_limit)
                         : uiT("ui.11dde17d6c3e")}
                     </p>
                     <p className="text-sm">
-                      Model RPM Limits:{" "}
+                      {uiT("ui.8c264593f8b6150b")}{" "}
                       {currentKeyData.metadata?.model_rpm_limit
                         ? JSON.stringify(currentKeyData.metadata.model_rpm_limit)
                         : uiT("ui.11dde17d6c3e")}
                     </p>
                     <p className="text-sm">
-                      Tag RPM Limits:{" "}
+                      {uiT("ui.de2dca0cb6dcc697")}{" "}
                       {currentKeyData.metadata?.tag_rpm_limit &&
                       Object.keys(currentKeyData.metadata.tag_rpm_limit).length > 0
                         ? JSON.stringify(currentKeyData.metadata.tag_rpm_limit)
                         : uiT("ui.11dde17d6c3e")}
                     </p>
                     <p className="text-sm">
-                      Estimated Output Tokens:{" "}
+                      {uiT("ui.2b33e281c6644dde")}{" "}
                       {currentKeyData.metadata?.default_estimated_output_tokens != null
                         ? String(currentKeyData.metadata.default_estimated_output_tokens)
                         : uiT("ui.21b111cbfe6e")}
                     </p>
                     <p className="text-sm">
-                      Estimated Output Tokens Per Model:{" "}
+                      {uiT("ui.4416c9ba78d22c25")}{" "}
                       {currentKeyData.metadata?.default_estimated_output_tokens_per_model
                         ? JSON.stringify(currentKeyData.metadata.default_estimated_output_tokens_per_model)
                         : uiT("ui.21b111cbfe6e")}

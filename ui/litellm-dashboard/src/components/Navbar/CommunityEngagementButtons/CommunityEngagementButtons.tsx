@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { useDisableShowPrompts } from "@/app/(dashboard)/hooks/useDisableShowPrompts";
 import { buttonVariants } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -9,19 +12,29 @@ import React from "react";
 const COMMUNITY_LINKS = [
   {
     href: "https://www.litellm.ai/support",
-    label: "Join Slack",
-    tooltip: "LiteLLM Slack community",
+    get label() {
+      return translateUi("ui.033266fbae5e96f8");
+    },
+    get tooltip() {
+      return translateUi("ui.804692a53897444d");
+    },
     Icon: Slack,
   },
   {
     href: "https://github.com/BerriAI/litellm",
-    label: "LiteLLM on GitHub",
-    tooltip: "LiteLLM on GitHub",
+    get label() {
+      return translateUi("ui.576ff4b9f9be9924");
+    },
+    get tooltip() {
+      return translateUi("ui.576ff4b9f9be9924");
+    },
     Icon: Github,
   },
 ] as const;
 
 export const CommunityEngagementButtons: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const disableShowPrompts = useDisableShowPrompts();
 
   if (disableShowPrompts) {
@@ -30,7 +43,7 @@ export const CommunityEngagementButtons: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <ButtonGroup aria-label="Community links">
+      <ButtonGroup aria-label={uiT("ui.5edfe472e2ffb7d2")}>
         {COMMUNITY_LINKS.map(({ href, label, tooltip, Icon }) => (
           <Tooltip key={href}>
             <TooltipTrigger

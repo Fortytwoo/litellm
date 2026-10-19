@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
 import { buildPlaygroundHeaders, type CustomHeaders } from "@/components/llm_calls/request_headers";
@@ -65,7 +66,7 @@ export async function makeOpenAIImageEditsRequest(
     }
 
     if (results.length > 1) {
-      toast.success(`Successfully processed ${results.length} images`);
+      toast.success(translateUi("ui.39d000836532fae4", undefined, { v0: String(results.length) }));
     }
   } catch (error: any) {
     console.error("Error making image edit request:", error);

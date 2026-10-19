@@ -44,7 +44,7 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
           }
         >
           <Database className="size-4" />
-          {isExpanded ? "Hide sources" : `Show sources (${totalResults})`}
+          {isExpanded ? uiT("ui.994cfc6ffe8c2969") : uiT("ui.ba29b73484a9bd46", { v0: String(totalResults) })}
           {isExpanded ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
         </CollapsibleTrigger>
 
@@ -55,10 +55,14 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
                 <div key={pageIndex}>
                   <div className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
                     <span className="font-medium">{uiT("ui.090940bae1e2")}</span>
-                    <span className="italic">&quot;{resultPage.search_query}&quot;</span>
+                    <span className="italic">
+                      {uiT("ui.8a331fdde7032f33")}
+                      {resultPage.search_query} {uiT("ui.8a331fdde7032f33")}
+                    </span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">
-                      {resultPage.data.length} result{resultPage.data.length !== 1 ? "s" : ""}
+                      {resultPage.data.length} {uiT("ui.f6a214f7a5fcda0c")}
+                      {resultPage.data.length !== 1 ? "s" : ""}
                     </span>
                   </div>
 
@@ -80,7 +84,9 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
                               />
                               <FileText className="size-3 shrink-0 text-muted-foreground" />
                               <span className="text-xs font-medium text-foreground truncate">
-                                {result.filename || result.file_id || `Result ${resultIndex + 1}`}
+                                {result.filename ||
+                                  result.file_id ||
+                                  uiT("ui.98731cd3dda1f871", { v0: String(resultIndex + 1) })}
                               </span>
                               <span className="text-xs px-2 py-0.5 rounded-sm bg-info/15 text-info font-mono shrink-0">
                                 {result.score.toFixed(3)}
@@ -101,7 +107,9 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
 
                                 {result.attributes && Object.keys(result.attributes).length > 0 && (
                                   <div className="mt-2 pt-2 border-t border-border">
-                                    <div className="text-xs text-muted-foreground mb-1 font-medium">Metadata:</div>
+                                    <div className="text-xs text-muted-foreground mb-1 font-medium">
+                                      {uiT("ui.b17f2c85cb964961")}
+                                    </div>
                                     <div className="space-y-1">
                                       {Object.entries(result.attributes).map(([key, value]) => (
                                         <div key={key} className="text-xs flex gap-2">

@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -43,6 +45,8 @@ function VectorStoreProviderCell({ provider }: { provider: string }) {
 }
 
 function VectorStoreFilesCell({ vectorStore }: { vectorStore: VectorStore }) {
+  useDashboardLanguage();
+
   const ingestedFiles = vectorStore.vector_store_metadata?.ingested_files || [];
   if (ingestedFiles.length === 0) {
     return <span className="text-sm text-muted-foreground">-</span>;
@@ -57,7 +61,7 @@ function VectorStoreFilesCell({ vectorStore }: { vectorStore: VectorStore }) {
   return (
     <CellTooltip
       content={filenames}
-      trigger={<span className="block max-w-60 truncate text-sm text-primary">{displayText}</span>}
+      trigger={<span className="block max-w-60 truncate text-sm text-primary">{translateText(displayText)}</span>}
     />
   );
 }
@@ -75,7 +79,7 @@ function VectorStoreRowActions({ vectorStore, onEdit, onDelete }: VectorStoreRow
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open vector store actions"
+        aria-label={uiT("ui.1ab16d476b683929")}
         data-testid={`vector-store-actions-${vectorStore.vector_store_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -95,7 +99,7 @@ function VectorStoreRowActions({ vectorStore, onEdit, onDelete }: VectorStoreRow
           onClick={() => void copyToClipboard(vectorStore.vector_store_id, "Vector store ID copied")}
         >
           <Copy />
-          Copy vector store ID
+          {uiT("ui.78835efaeb086a80")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -109,7 +113,7 @@ function VectorStoreRowActions({ vectorStore, onEdit, onDelete }: VectorStoreRow
         </DropdownMenuItem>
         {isFromConfig && (
           <div data-testid="vector-store-config-hint" className="px-2 py-1.5 text-xs text-muted-foreground">
-            {CONFIG_STORE_HINT}
+            {translateText(CONFIG_STORE_HINT)}
           </div>
         )}
       </DropdownMenuContent>
@@ -131,8 +135,12 @@ export const getVectorStoreTableColumns = ({
   {
     id: "vector_store_id",
     accessorKey: "vector_store_id",
-    meta: { title: "Vector Store ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Vector Store ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.16df8a63caec40c3");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.16df8a63caec40c3")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -189,19 +197,35 @@ export const getVectorStoreTableColumns = ({
   {
     id: "source",
     accessorFn: (row) => row.is_config ?? false,
-    meta: { title: "Source", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Source" />,
+    meta: {
+      get title() {
+        return translateUi("ui.0e570ca6fabe24f9");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.0e570ca6fabe24f9")} />,
     size: 110,
     enableSorting: true,
     cell: ({ row }) => {
       const isFromConfig = row.original.is_config ?? false;
-      return <StatusBadge tone={isFromConfig ? "neutral" : "info"} label={isFromConfig ? "Config" : "DB"} />;
+      return (
+        <StatusBadge
+          tone={isFromConfig ? "neutral" : "info"}
+          label={isFromConfig ? translateUi("ui.87e89abb4c1c551f") : translateUi("ui.cf3abc8326646b99")}
+        />
+      );
     },
   },
   {
     id: "files",
-    meta: { title: "Files" },
-    header: "Files",
+    meta: {
+      get title() {
+        return translateUi("ui.abc7e9892806b047");
+      },
+    },
+    get header() {
+      return translateUi("ui.abc7e9892806b047");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <VectorStoreFilesCell vectorStore={row.original} />,

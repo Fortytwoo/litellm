@@ -1,4 +1,8 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { StatusBadge } from "@/components/shared/table_cells";
@@ -27,12 +31,12 @@ const AutoRotationView: React.FC<AutoRotationViewProps> = ({
 
   const formatTimestamp = (timestamp: string | Date) => {
     const date = new Date(timestamp);
-    const dateStr = date.toLocaleDateString("en-US", {
+    const dateStr = date.toLocaleDateString(getFormattingLocale(), {
       year: "numeric",
       month: "short",
       day: "numeric",
     });
-    const timeStr = date.toLocaleTimeString("en-US", {
+    const timeStr = date.toLocaleTimeString(getFormattingLocale(), {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
@@ -53,7 +57,9 @@ const AutoRotationView: React.FC<AutoRotationViewProps> = ({
           {autoRotate && rotationInterval && (
             <>
               <p className="text-sm text-muted-foreground">•</p>
-              <p className="text-sm text-muted-foreground">Every {rotationInterval}</p>
+              <p className="text-sm text-muted-foreground">
+                {uiT("ui.9b8617fdfbba933d")} {rotationInterval}
+              </p>
             </>
           )}
         </div>
@@ -66,7 +72,7 @@ const AutoRotationView: React.FC<AutoRotationViewProps> = ({
               <ClockIcon className="h-4 w-4 text-muted-foreground" />
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">{uiT("ui.237b768697d9")}</p>
-                <p className="text-sm text-muted-foreground">{formatTimestamp(lastRotationAt)}</p>
+                <p className="text-sm text-muted-foreground">{translateText(formatTimestamp(lastRotationAt))}</p>
               </div>
             </div>
           )}
@@ -77,7 +83,7 @@ const AutoRotationView: React.FC<AutoRotationViewProps> = ({
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">{uiT("ui.9fe153bf71c5")}</p>
                 <p className="text-sm text-muted-foreground">
-                  {formatTimestamp(nextRotationAt || keyRotationAt || "")}
+                  {translateText(formatTimestamp(nextRotationAt || keyRotationAt || ""))}
                 </p>
               </div>
             </div>

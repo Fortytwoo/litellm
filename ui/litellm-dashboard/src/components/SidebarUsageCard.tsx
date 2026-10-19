@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { useLicenseInfo } from "@/app/(dashboard)/hooks/license/useLicenseInfo";
@@ -128,7 +130,7 @@ export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail 
         </span>
         <span className="min-w-0 flex-1 leading-tight">
           <span className="block text-[13px] font-semibold text-foreground">{uiT("ui.7d3c4ad355c0")}</span>
-          <span className="block truncate text-[11px] text-muted-foreground">{subtitle}</span>
+          <span className="block truncate text-[11px] text-muted-foreground">{translateText(subtitle)}</span>
         </span>
         <ChevronDown className="size-4 flex-none -rotate-90 text-muted-foreground transition-transform group-data-[panel-open]/usage:rotate-0" />
       </CollapsibleTrigger>

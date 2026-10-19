@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 
@@ -18,8 +19,14 @@ function ModeSwitch({
   onChange: (mode: SectionMode) => void;
   title: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <div role="radiogroup" aria-label={`${title} format`} className="flex items-center rounded-md bg-muted p-0.5">
+    <div
+      role="radiogroup"
+      aria-label={uiT("ui.85a3b7b445e106ac", { v0: String(title) })}
+      className="flex items-center rounded-md bg-muted p-0.5"
+    >
       {MODES.map((option) => (
         <button
           key={option}
@@ -51,6 +58,8 @@ interface SectionProps {
 
 /** Collapsible "Input" / "Output" section with a sticky header. */
 export function Section({ title, count, defaultOpen = true, children }: SectionProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(defaultOpen);
   const [mode, setMode] = useState<SectionMode>("Formatted");
   const switchable = typeof children === "function";
@@ -67,7 +76,7 @@ export function Section({ title, count, defaultOpen = true, children }: SectionP
           <span className="text-sm font-semibold text-foreground">{title}</span>{" "}
           {count !== undefined && (
             <span className="text-xs text-muted-foreground">
-              {count} {count === 1 ? "message" : "messages"}
+              {count} {count === 1 ? uiT("ui.ab530a13e4591498") : uiT("ui.f5cccfb737512bed")}
             </span>
           )}
         </button>

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -76,8 +78,18 @@ interface TeamOption {
 }
 
 const MEMBER_ROLE_OPTIONS = [
-  { value: "user", hint: "Can view team info, but not manage it" },
-  { value: "admin", hint: "Can create team keys, add members, and manage settings" },
+  {
+    value: "user",
+    get hint() {
+      return translateUi("ui.4abac11a614d");
+    },
+  },
+  {
+    value: "admin",
+    get hint() {
+      return translateUi("ui.e220fc2c8a8b");
+    },
+  },
 ] as const;
 
 export default function UserInfoView({
@@ -207,7 +219,7 @@ export default function UserInfoView({
         user_id: userId,
       };
       await teamMemberAddCall(accessToken, selectedTeamId, member);
-      toast.success("User added to team successfully");
+      toast.success(translateUi("ui.3cd1d89e20ee"));
       setIsAddTeamModalOpen(false);
       // Re-fetch user data to refresh teams
       const data = await userGetInfoV2(accessToken, userId);
@@ -247,7 +259,7 @@ export default function UserInfoView({
         user_id: userId,
       };
       await teamMemberDeleteCall(accessToken, teamToRemove.team_id, member);
-      toast.success("User removed from team successfully");
+      toast.success(translateUi("ui.3000f3cf1d3c"));
       setIsRemoveTeamModalOpen(false);
       setTeamToRemove(null);
       // Re-fetch user data to refresh teams
@@ -289,7 +301,7 @@ export default function UserInfoView({
       return;
     }
     try {
-      toast.success("Generating password reset link...");
+      toast.success(translateUi("ui.4410d9c39839"));
       const data = await invitationCreateCall(accessToken, userId);
       setInvitationLinkData(data);
       setIsInvitationLinkModalVisible(true);
@@ -303,7 +315,7 @@ export default function UserInfoView({
       if (!accessToken) return;
       setIsDeletingUser(true);
       await userDeleteCall(accessToken, [userId]);
-      toast.success("User deleted successfully");
+      toast.success(translateUi("ui.0886a0785854"));
       if (onDelete) {
         onDelete();
       }
@@ -356,7 +368,7 @@ export default function UserInfoView({
           : userData.object_permission,
       });
 
-      toast.success("User updated successfully");
+      toast.success(translateUi("ui.bdadd472d21f"));
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating user:", error);
@@ -464,7 +476,7 @@ export default function UserInfoView({
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
         title={uiT("ui.d241b1f23e19")}
-        message="Are you sure you want to delete this user? This action cannot be undone."
+        message={uiT("ui.6163b792ebe7")}
         resourceInformationTitle="User Information"
         resourceInformation={[
           { label: uiT("ui.969ccbd3cf63"), value: userData.user_email },
@@ -515,7 +527,7 @@ export default function UserInfoView({
               <div className="mt-2">
                 <h3 className="text-lg font-medium">${formatNumberWithCommas(userData.spend || 0, 2)}</h3>
                 <p>
-                  of{" "}
+                  {uiT("supplement.budgetFraction")}{" "}
                   {userData.max_budget !== null
                     ? `$${formatNumberWithCommas(userData.max_budget, 2)}`
                     : uiT("ui.11dde17d6c3e")}
@@ -556,7 +568,7 @@ export default function UserInfoView({
                                 <Button
                                   variant="ghost"
                                   size="icon-sm"
-                                  aria-label={`Remove from ${team.team_alias || team.team_id}`}
+                                  aria-label={uiT("supplement.removeTeam", { team: team.team_alias || team.team_id })}
                                   onClick={() => handleOpenRemoveTeamModal(team)}
                                   className="text-destructive"
                                 >
@@ -574,7 +586,7 @@ export default function UserInfoView({
                 )}
                 {!isTeamsExpanded && teamDetails.length > 20 && (
                   <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsTeamsExpanded(true)}>
-                    +{teamDetails.length - 20} more
+                    +{teamDetails.length - 20} {uiT("ui.187897ce0afc")}
                   </Button>
                 )}
                 {isTeamsExpanded && teamDetails.length > 20 && (
@@ -764,7 +776,7 @@ export default function UserInfoView({
         isOpen={isRemoveTeamModalOpen}
         title={uiT("ui.81af777fec78")}
         alertMessage="Removing this user from the team will also delete any keys the user created for this team."
-        message="Are you sure you want to remove this user from the team? This action cannot be undone."
+        message={uiT("ui.d417fbffed45")}
         resourceInformationTitle="Team Membership"
         resourceInformation={[
           { label: uiT("ui.5985039f106d"), value: teamToRemove?.team_alias || teamToRemove?.team_id },

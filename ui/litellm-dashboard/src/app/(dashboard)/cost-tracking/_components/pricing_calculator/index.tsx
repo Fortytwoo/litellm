@@ -84,11 +84,11 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
         >
           <label className="flex cursor-pointer items-center gap-2 text-sm">
             <RadioGroupItem value="day" />
-            Per Day
+            {uiT("ui.40331b314cdfc535")}
           </label>
           <label className="flex cursor-pointer items-center gap-2 text-sm">
             <RadioGroupItem value="month" />
-            Per Month
+            {uiT("ui.23ce3a5e05180f6e")}
           </label>
         </RadioGroup>
       </div>
@@ -100,7 +100,8 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
             <TableHead className="w-[18%]">{uiT("ui.c54a41f6d626")}</TableHead>
             <TableHead className="w-[18%]">{uiT("ui.a0a1074faa44")}</TableHead>
             <TableHead className="w-[20%]">
-              Requests/{timePeriod === "day" ? uiT("ui.8f2364e11b8b") : uiT("ui.310ca503ef36")}
+              {uiT("ui.abba2273c6aed37c")}
+              {timePeriod === "day" ? uiT("ui.8f2364e11b8b") : uiT("ui.310ca503ef36")}
             </TableHead>
             <TableHead className="w-[50px]">
               <span className="sr-only">{uiT("ui.ff8059dc6752")}</span>
@@ -115,7 +116,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
                   options={modelOptions}
                   value={record.model || undefined}
                   onValueChange={(value) => handleEntryChange(record.id, "model", value)}
-                  placeholder="Select a model"
+                  placeholder={uiT("ui.fad7a5ffc4902bc2")}
                 />
               </TableCell>
               <TableCell>
@@ -160,7 +161,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label={`Remove model row ${index + 1}`}
+                  aria-label={uiT("ui.393780e95bdcc579", { v0: String(index + 1) })}
                   onClick={() => handleRemoveEntry(record.id)}
                   disabled={entries.length === 1}
                   className="text-destructive"
@@ -176,7 +177,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
             <TableCell colSpan={5}>
               <Button variant="outline" onClick={handleAddEntry} className="w-full border-dashed">
                 <Plus className="size-3.5" />
-                Add Another Model
+                {uiT("ui.d875ee3576e5900d")}
               </Button>
             </TableCell>
           </TableRow>

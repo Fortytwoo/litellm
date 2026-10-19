@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { useMemo, useState, type ReactNode } from "react";
 
@@ -15,11 +17,36 @@ import { TraceList } from "./TraceList";
 import { useStage } from "./useStage";
 
 const STATUS: Record<Job["status"], { label: string; tone: StatusTone }> = {
-  queued: { label: "Queued", tone: "neutral" },
-  running: { label: "Running", tone: "neutral" },
-  completed: { label: "Done", tone: "neutral" },
-  failed: { label: "Failed", tone: "error" },
-  cancelled: { label: "Cancelled", tone: "neutral" },
+  queued: {
+    get label() {
+      return translateUi("ui.661ff40a07e037bb");
+    },
+    tone: "neutral",
+  },
+  running: {
+    get label() {
+      return translateUi("ui.f4ccae29e1bb0c20");
+    },
+    tone: "neutral",
+  },
+  completed: {
+    get label() {
+      return translateUi("ui.11a6767d5674c7e4");
+    },
+    tone: "neutral",
+  },
+  failed: {
+    get label() {
+      return translateUi("ui.031a8f0f659d");
+    },
+    tone: "error",
+  },
+  cancelled: {
+    get label() {
+      return translateUi("ui.d353a99eb4556847");
+    },
+    tone: "neutral",
+  },
 };
 const PANE_TITLE = "text-xs font-semibold text-foreground";
 
@@ -46,6 +73,8 @@ function Stage({
   checks: Settings["checks"];
   children: (listed: readonly Review[], groups: ReturnType<typeof conclusions>, nowReading: ReactNode) => ReactNode;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const legacyReading = running && !activities.length && stageName === "Reading executions";
   const { stage, now, charMs } = useStage(reviews, reading, legacyReading, slots);
   const listed = useMemo(
@@ -61,7 +90,7 @@ function Stage({
     }
     return (
       <p role="status" className="mb-3 px-2 text-xs text-muted-foreground">
-        {stageName || "Starting"}
+        {stageName || uiT("ui.aeed4d26bb5f0c31")}
       </p>
     );
   }
@@ -103,6 +132,8 @@ export function LiveDrawer({
   scope: string;
   waiting?: ReactNode;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [group, setGroup] = useState<string | null>(null);
   const badge = STATUS[status];
   const running = status === "running";
@@ -131,20 +162,22 @@ export function LiveDrawer({
             {(listed, groups, nowReading) => (
               <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-2 md:grid-cols-[minmax(0,55fr)_minmax(0,45fr)] md:grid-rows-1">
                 <section
-                  aria-label="Traces"
+                  aria-label={uiT("ui.998741a58ed2b411")}
                   className="min-h-0 overflow-y-auto border-b px-4 py-4 md:border-r md:border-b-0"
                 >
                   <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-2">
-                    <h2 className={PANE_TITLE}>Traces</h2>
+                    <h2 className={PANE_TITLE}>{uiT("ui.998741a58ed2b411")}</h2>
                     <span className="text-xs leading-relaxed tabular-nums text-muted-foreground">
-                      {done ?? `${reviewed} reviewed`}
+                      {done ?? uiT("ui.9138f73d49d4af7d", { v0: String(reviewed) })}
                       {done && (
                         <>
                           {" "}
                           <ModelName model={model} />
                         </>
                       )}
-                      {reviewed > reviews.length && reviews.length ? ` · ${reviews.length} displayed` : ""}
+                      {reviewed > reviews.length && reviews.length
+                        ? uiT("ui.e7d012efafcabb3f", { v0: String(reviews.length) })
+                        : ""}
                     </span>
                   </div>
                   {nowReading}
@@ -153,21 +186,18 @@ export function LiveDrawer({
                   ) : (
                     !running && (
                       <div className="flex flex-col gap-1 px-2 py-6 text-xs text-muted-foreground">
-                        <p className="text-sm text-foreground">Waiting for the first trace…</p>
+                        <p className="text-sm text-foreground">{uiT("ui.77307604858bfc54")}</p>
                         {waiting}
                       </div>
                     )
                   )}
                 </section>
                 <section
-                  aria-label="Preliminary observations"
+                  aria-label={uiT("ui.335104478ebc8c7c")}
                   className="flex min-h-0 flex-col gap-3 overflow-y-auto px-5 py-4"
                 >
-                  <h2 className={PANE_TITLE}>Preliminary observations</h2>
-                  <p className="text-xs leading-relaxed text-muted-foreground">
-                    First-pass trace observations, grouped by check. Final findings are shown in Findings after the
-                    investigation finishes.
-                  </p>
+                  <h2 className={PANE_TITLE}>{uiT("ui.335104478ebc8c7c")}</h2>
+                  <p className="text-xs leading-relaxed text-muted-foreground">{uiT("ui.db3e0fd05af25dc4")}</p>
                   <ConclusionsPanel
                     groups={groups}
                     total={listed.length}

@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
@@ -41,15 +45,33 @@ type ModelTabSlug =
 const BASE_TAB_KEY = "all-models";
 
 const TAB_LABELS: Record<ModelTabSlug, string> = {
-  add: "Add Model",
-  "auto-routers": "Auto-Routers",
-  "llm-credentials": "LLM Credentials",
-  "pass-through": "Pass-Through Endpoints",
-  health: "Health Status",
-  "retry-settings": "Model Retry Settings",
-  "model-group-alias": "Model Group Alias",
-  "access-group-budgets": "Model Access Group Budgets",
-  "price-data": "Price Data Reload",
+  get add() {
+    return translateUi("ui.7060e8240675f8ae");
+  },
+  get "auto-routers"() {
+    return translateUi("ui.01f4ed9134449365");
+  },
+  get "llm-credentials"() {
+    return translateUi("ui.2268595e97e747aa");
+  },
+  get "pass-through"() {
+    return translateUi("ui.05255da7663b1829");
+  },
+  get health() {
+    return translateUi("ui.97b7a73d47fd543e");
+  },
+  get "retry-settings"() {
+    return translateUi("ui.a5b1f7ae7c1db826");
+  },
+  get "model-group-alias"() {
+    return translateUi("ui.f58e1244e8d21ab5");
+  },
+  get "access-group-budgets"() {
+    return translateUi("ui.72519ce4397bd6e7");
+  },
+  get "price-data"() {
+    return translateUi("ui.f456111be20cdeb0");
+  },
 };
 
 const renderPanel = (key: string) => {
@@ -80,6 +102,8 @@ const renderPanel = (key: string) => {
 };
 
 export default function ModelsAndEndpointsPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userRole, userId: userID, premiumUser, isViewOnly } = useAuthorized();
   const { data: teams } = useTeams();
   const { data: uiSettings } = useUISettings();
@@ -125,7 +149,7 @@ export default function ModelsAndEndpointsPage() {
 
   const allModelsLabel = isAdmin ? "Deployed Models" : "Your Models";
   const tabLabel = (slug: "" | ModelTabSlug): React.ReactNode => {
-    if (!slug) return allModelsLabel;
+    if (!slug) return translateText(allModelsLabel);
     if (slug === "auto-routers" || slug === "access-group-budgets") {
       return (
         <span className="flex items-center gap-2">
@@ -166,13 +190,11 @@ export default function ModelsAndEndpointsPage() {
       <div className="mt-2 flex w-full flex-col gap-2 p-8">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Model Management</h2>
+            <h2 className="text-lg font-semibold">{uiT("ui.2eb7bfd3de3b217a")}</h2>
             {isAdmin ? (
-              <p className="text-sm text-muted-foreground">Add and manage models for the proxy</p>
+              <p className="text-sm text-muted-foreground">{uiT("ui.a4098d1d192f9d9d")}</p>
             ) : (
-              <p className="text-sm text-muted-foreground">
-                View your models and manage routers for teams that allow it.
-              </p>
+              <p className="text-sm text-muted-foreground">{uiT("ui.7d76dee31cf508a2")}</p>
             )}
           </div>
         </div>
@@ -207,9 +229,16 @@ export default function ModelsAndEndpointsPage() {
               </div>
               <div className="flex shrink-0 items-center gap-2 pb-1">
                 {lastRefreshed && (
-                  <span className="text-xs text-muted-foreground">Last Refreshed: {lastRefreshed}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {uiT("ui.3b98c503fa688b18")} {lastRefreshed}
+                  </span>
                 )}
-                <Button variant="ghost" size="icon-sm" onClick={handleRefreshClick} aria-label="Refresh models">
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleRefreshClick}
+                  aria-label={uiT("ui.04903063b2fd6a42")}
+                >
                   <RefreshCw />
                 </Button>
               </div>

@@ -70,12 +70,12 @@ export function AccessGroupsPage() {
           <Boxes />
           {uiT("ui.b0252ccc6e86")}
         </PageHeaderTitle>
-        <PageHeaderDescription>Manage resource permissions for your organization</PageHeaderDescription>
+        <PageHeaderDescription>{uiT("ui.7abb38c480e32aaa")}</PageHeaderDescription>
         {canModify && (
           <PageHeaderControls>
             <Button onClick={() => setIsCreateModalVisible(true)}>
               <Plus className="size-4" />
-              Create Access Group
+              {uiT("ui.e30f3886e51cb79c")}
             </Button>
           </PageHeaderControls>
         )}
@@ -88,13 +88,17 @@ export function AccessGroupsPage() {
               <SearchIcon className="size-4 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Search groups by name, ID, or description..."
+              placeholder={uiT("ui.2e7987527f52684b")}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
             {searchText && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setSearchText("")}>
+                <InputGroupButton
+                  size="icon-xs"
+                  aria-label={uiT("ui.3b7ea51793e9d906")}
+                  onClick={() => setSearchText("")}
+                >
                   <X />
                 </InputGroupButton>
               </InputGroupAddon>
@@ -116,8 +120,8 @@ export function AccessGroupsPage() {
 
       <DeleteResourceModal
         isOpen={!!groupToDelete}
-        title="Delete Access Group"
-        message="Are you sure you want to delete this access group? This action cannot be undone."
+        title={uiT("ui.44c5bb6592fff1c8")}
+        message={uiT("ui.4585895cd1d607bc")}
         resourceInformationTitle="Access Group Information"
         resourceInformation={[
           { label: "ID", value: groupToDelete?.id, code: true },

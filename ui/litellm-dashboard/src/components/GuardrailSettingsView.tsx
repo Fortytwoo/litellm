@@ -37,11 +37,11 @@ export function GuardrailSettingsView({
     <div className="flex flex-col gap-4">
       <div>
         <span className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
-          <Globe2 className="size-4" aria-label="Global guardrail" />
-          Global
+          <Globe2 className="size-4" aria-label={uiT("ui.cdd8465f91f95cb1")} />
+          {uiT("ui.a258b30f88c30650")}
         </span>
         {killSwitchOn ? (
-          <Badge variant="outline">Bypassed for this team</Badge>
+          <Badge variant="outline">{uiT("ui.216081d57a2b0c64")}</Badge>
         ) : globalsRunning.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {globalsRunning.map((name) => (
@@ -49,11 +49,11 @@ export function GuardrailSettingsView({
             ))}
           </div>
         ) : (
-          <span className="block text-sm text-muted-foreground">None configured</span>
+          <span className="block text-sm text-muted-foreground">{uiT("ui.2c04b392f1fcc610")}</span>
         )}
       </div>
       <div>
-        <span className="mb-2 block text-sm font-medium text-foreground">Team-specific</span>
+        <span className="mb-2 block text-sm font-medium text-foreground">{uiT("ui.4a4c0c27686a278e")}</span>
         {nonGlobalOptIns.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {nonGlobalOptIns.map((name) => (
@@ -61,7 +61,7 @@ export function GuardrailSettingsView({
             ))}
           </div>
         ) : (
-          <span className="block text-sm text-muted-foreground">None configured</span>
+          <span className="block text-sm text-muted-foreground">{uiT("ui.2c04b392f1fcc610")}</span>
         )}
       </div>
     </div>
@@ -71,8 +71,8 @@ export function GuardrailSettingsView({
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle>Guardrails Settings</CardTitle>
-          <CardDescription>Global and team-specific guardrails applied to this team</CardDescription>
+          <CardTitle>{uiT("ui.c4a5fac993a3d3e5")}</CardTitle>
+          <CardDescription>{uiT("ui.df26cdc19a59ed54")}</CardDescription>
         </CardHeader>
         <CardContent>{content}</CardContent>
       </Card>
@@ -81,7 +81,7 @@ export function GuardrailSettingsView({
 
   return (
     <div className={cn(className)}>
-      <span className="mb-3 block font-medium text-foreground">Guardrails Settings</span>
+      <span className="mb-3 block font-medium text-foreground">{uiT("ui.c4a5fac993a3d3e5")}</span>
       {content}
     </div>
   );

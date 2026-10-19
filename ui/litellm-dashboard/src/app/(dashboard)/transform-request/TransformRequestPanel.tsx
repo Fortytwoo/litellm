@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowRight, Copy } from "lucide-react";
@@ -104,13 +106,13 @@ ${formattedBody}
 
         // Update state with the formatted curl command
         setTransformedResponse(formattedCurl);
-        toast.success("Request transformed successfully");
+        toast.success(translateUi("ui.a68fd3cb35fb625c"));
       } else {
         // Handle the case where the API returns a different format
         // Try to extract the parts from a string response if needed
         const rawText = typeof data === "string" ? data : JSON.stringify(data);
         setTransformedResponse(rawText);
-        toast.info("Transformed request received in unexpected format");
+        toast.info(translateUi("ui.5070bc531bf856d2"));
       }
     } catch (err) {
       console.error("Error transforming request:", err);
@@ -131,15 +133,13 @@ ${formattedBody}
   return (
     <div className="p-2">
       <h1 className="text-lg font-medium text-foreground">{uiT("ui.a6273fb551f2")}</h1>
-      <p className="text-sm text-muted-foreground">
-        See how LiteLLM transforms your request for the specified provider.
-      </p>
+      <p className="text-sm text-muted-foreground">{uiT("ui.099467f2c3139232")}</p>
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Original Request Panel */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Original Request</CardTitle>
-            <CardDescription>The request you would send to LiteLLM /chat/completions endpoint.</CardDescription>
+            <CardTitle className="text-2xl font-bold">{uiT("ui.0555dfb910945b51")}</CardTitle>
+            <CardDescription>{uiT("ui.82ab699ecb1ee2da")}</CardDescription>
           </CardHeader>
 
           <CardContent>
@@ -148,13 +148,13 @@ ${formattedBody}
               value={originalRequestJSON}
               onChange={(e) => setOriginalRequestJSON(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Press Cmd/Ctrl + Enter to transform"
+              placeholder={uiT("ui.a0706cc6ee5d81bf")}
             />
           </CardContent>
 
           <CardFooter className="justify-end">
             <Button onClick={handleTransform} disabled={isLoading}>
-              <span>Transform</span>
+              <span>{uiT("ui.d2d68041b53daa75")}</span>
               {isLoading ? <UiLoadingSpinner className="size-4" /> : <ArrowRight />}
             </Button>
           </CardFooter>
@@ -163,9 +163,9 @@ ${formattedBody}
         {/* Transformed Request Panel */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Transformed Request</CardTitle>
-            <CardDescription>How LiteLLM transforms your request for the specified provider.</CardDescription>
-            <p className="mt-2 text-xs text-muted-foreground">Note: Sensitive headers are not shown.</p>
+            <CardTitle className="text-2xl font-bold">{uiT("ui.794f68bf41e541e1")}</CardTitle>
+            <CardDescription>{uiT("ui.0878d0e7bd511e16")}</CardDescription>
+            <p className="mt-2 text-xs text-muted-foreground">{uiT("ui.3aca26a62689e7cb")}</p>
           </CardHeader>
 
           <CardContent>
@@ -191,11 +191,11 @@ ${formattedBody}
               <Button
                 variant="ghost"
                 size="icon-sm"
-                aria-label="Copy to clipboard"
+                aria-label={uiT("ui.b749e205302cc219")}
                 className="absolute top-2 right-2"
                 onClick={() => {
                   navigator.clipboard.writeText(transformedResponse || "");
-                  toast.success("Copied to clipboard");
+                  toast.success(translateUi("ui.d37078fe6a1faa15"));
                 }}
               >
                 <Copy />
@@ -206,14 +206,14 @@ ${formattedBody}
       </div>
       <div className="mt-4 text-right">
         <p className="text-sm text-muted-foreground">
-          Found an error? File an issue{" "}
+          {uiT("ui.be1f1c62b33ccbbc")}{" "}
           <a
             className="underline underline-offset-4"
             href="https://github.com/BerriAI/litellm/issues"
             target="_blank"
             rel="noopener noreferrer"
           >
-            here
+            {uiT("ui.fcec91509759ad99")}
           </a>
           .
         </p>

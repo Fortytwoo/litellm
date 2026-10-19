@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   HIDE_AUTO_ROUTER_ANNOUNCEMENT_KEY,
@@ -15,6 +16,8 @@ import React, { useState } from "react";
 export const AUTO_ROUTER_DOCS_URL = "https://docs.litellm.ai/docs/proxy/auto_routing";
 
 export const NotificationsBell: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const hidden = useHideAutoRouterAnnouncement();
   const hasUnread = !hidden;
   const [open, setOpen] = useState(false);
@@ -27,10 +30,8 @@ export const NotificationsBell: React.FC = () => {
 
   const content = (
     <div className="max-w-[280px]">
-      <PopoverTitle className="mt-0! mb-2!">LiteLLM Auto Router</PopoverTitle>
-      <PopoverDescription className="mb-3! text-sm leading-snug">
-        Route every request to the cheapest model that can handle it, no prompt changes needed.
-      </PopoverDescription>
+      <PopoverTitle className="mt-0! mb-2!">{uiT("ui.fff0465adf3dd046")}</PopoverTitle>
+      <PopoverDescription className="mb-3! text-sm leading-snug">{uiT("ui.d0253a6b2bf9fe49")}</PopoverDescription>
       <div className="flex flex-wrap items-center gap-2">
         <a
           className={cn(buttonVariants({ size: "sm" }))}
@@ -38,11 +39,11 @@ export const NotificationsBell: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Read the docs
+          {uiT("ui.559b1cc46027e5bc")}
         </a>
         {hasUnread ? (
           <Button variant="link" size="sm" className="px-1!" onClick={markDismissed}>
-            Mark as read
+            {uiT("ui.50c8b81faf51e7d1")}
           </Button>
         ) : null}
       </div>
@@ -53,7 +54,7 @@ export const NotificationsBell: React.FC = () => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         className="flex! h-9! w-9! items-center justify-center rounded-md! text-muted-foreground transition-colors hover:bg-accent! hover:text-foreground!"
-        aria-label="Notifications"
+        aria-label={uiT("ui.788011833a5a0f22")}
       >
         <span className="relative inline-flex">
           <Bell className="size-4" aria-hidden />

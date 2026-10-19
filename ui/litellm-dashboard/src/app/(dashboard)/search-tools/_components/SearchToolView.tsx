@@ -48,14 +48,14 @@ export const SearchToolView: React.FC<SearchToolViewProps> = ({
         <div>
           <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-muted-foreground" onClick={onBack}>
             <ArrowLeft className="mr-2 size-4" />
-            Back to All Search Tools
+            {uiT("ui.e4812029856121c2")}
           </Button>
           <div className="flex items-center gap-1">
             <h1 className="text-2xl font-semibold text-foreground">{searchTool.search_tool_name}</h1>
             <Button
               variant="ghost"
               size="icon-xs"
-              aria-label="Copy search tool name"
+              aria-label={uiT("ui.1a1141820360a317")}
               className="text-muted-foreground"
               onClick={() => copyToClipboard(searchTool.search_tool_name, "search-tool-name")}
             >
@@ -67,7 +67,7 @@ export const SearchToolView: React.FC<SearchToolViewProps> = ({
             <Button
               variant="ghost"
               size="icon-xs"
-              aria-label="Copy search tool ID"
+              aria-label={uiT("ui.8b2c1ddd8ae6fb49")}
               className="text-muted-foreground"
               onClick={() => copyToClipboard(searchTool.search_tool_id, "search-tool-id")}
             >

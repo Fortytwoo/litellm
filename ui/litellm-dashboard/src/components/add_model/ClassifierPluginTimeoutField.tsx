@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,14 +19,14 @@ const ClassifierPluginTimeoutField: React.FC<ClassifierPluginTimeoutFieldProps> 
   onChange,
   showValidationErrors = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const error = getClassifierPluginTimeoutError("custom", value.classifier_plugin_timeout_ms);
   return (
     <div className="mt-4 space-y-2">
-      <p className="text-sm text-muted-foreground">
-        This router uses a custom classifier plugin set in config.yaml. Pick a classifier below to replace it.
-      </p>
+      <p className="text-sm text-muted-foreground">{uiT("ui.1cf5a02c053bb88e")}</p>
       <Label htmlFor={CLASSIFIER_PLUGIN_TIMEOUT_ID} className="block font-semibold">
-        Classifier plugin timeout (ms)
+        {uiT("ui.9d8a33af4597e0fb")}
       </Label>
       <Input
         id={CLASSIFIER_PLUGIN_TIMEOUT_ID}
@@ -39,9 +41,7 @@ const ClassifierPluginTimeoutField: React.FC<ClassifierPluginTimeoutFieldProps> 
         }
         aria-invalid={Boolean(showValidationErrors && error)}
       />
-      <p className="text-sm text-muted-foreground">
-        Time budget for the plugin call. On expiry the fallback path decides the tier.
-      </p>
+      <p className="text-sm text-muted-foreground">{uiT("ui.a50a5afc4d39c173")}</p>
       {showValidationErrors && error && (
         <p className="text-sm text-destructive" role="alert">
           {error}

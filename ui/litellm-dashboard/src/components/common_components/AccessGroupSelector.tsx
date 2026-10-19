@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,13 +29,15 @@ export interface AccessGroupSelectorProps {
 const AccessGroupSelector: React.FC<AccessGroupSelectorProps> = ({
   value,
   onChange,
-  placeholder = "Select access groups",
+  placeholder = translateUi("ui.969d47d4358e4ce6"),
   disabled = false,
   style,
   className,
   showLabel = false,
   labelText = "Access Group",
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: accessGroups, isLoading, isError } = useAccessGroups();
 
   // ── Loading skeleton ─────────────────────────────────────────────────────
@@ -69,7 +75,7 @@ const AccessGroupSelector: React.FC<AccessGroupSelectorProps> = ({
           value={value}
           onValueChange={onChange ?? (() => {})}
           placeholder={placeholder}
-          emptyText={isError ? "Failed to load access groups" : "No access groups found"}
+          emptyText={isError ? uiT("ui.9921a29f8e3a12f4") : uiT("ui.a17e39b2a7a82dee")}
           disabled={disabled}
           className={`w-full rounded-md ${className ?? ""}`}
         />

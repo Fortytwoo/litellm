@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * The parent pane, showing list of budgets
@@ -69,7 +71,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
     }
     try {
       await deleteBudget.mutateAsync(selectedBudget.budget_id);
-      toast.success("Budget deleted.");
+      toast.success(translateUi("ui.17485cae6229c55a"));
     } catch (error) {
       console.error("Error deleting budget:", error);
       toast.fromError("Failed to delete budget");
@@ -91,20 +93,20 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
             <Wallet />
             {uiT("ui.a1a06e046b0b")}
           </PageHeaderTitle>
-          <PageHeaderDescription>Spend, TPM and RPM limits you can assign to customers.</PageHeaderDescription>
+          <PageHeaderDescription>{uiT("ui.bdfa133ca8dbbf02")}</PageHeaderDescription>
           <PageHeaderControls>
             <PageTabsList>
               {canModify && (
                 <>
                   <Button onClick={() => setIsCreateModelVisible(true)}>
                     <Plus className="size-4" />
-                    Create Budget
+                    {uiT("ui.830a4914b5f7d05c")}
                   </Button>
                   <ToolbarSeparator className="mx-0 h-6" />
                 </>
               )}
               <PageTabsTrigger value="budgets">{uiT("ui.a1a06e046b0b")}</PageTabsTrigger>
-              <PageTabsTrigger value="examples">Examples</PageTabsTrigger>
+              <PageTabsTrigger value="examples">{uiT("ui.e68ee04dff59551b")}</PageTabsTrigger>
             </PageTabsList>
           </PageHeaderControls>
         </PageHeader>
@@ -126,15 +128,15 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
             />
             <DeleteResourceModal
               isOpen={isDeleteModalVisible}
-              title="Delete Budget?"
-              message="Are you sure you want to delete this budget? This action cannot be undone."
+              title={uiT("ui.a116c3a406bea1dc")}
+              message={uiT("ui.506531afaec72061")}
               resourceInformationTitle="Budget Information"
               resourceInformation={[
-                { label: "Budget ID", value: selectedBudget?.budget_id, code: true },
+                { label: uiT("ui.3d9e454838ad423e"), value: selectedBudget?.budget_id, code: true },
                 { label: uiT("ui.3e20f0a04b21"), value: selectedBudget?.max_budget },
                 { label: "TPM", value: selectedBudget?.tpm_limit },
                 { label: "RPM", value: selectedBudget?.rpm_limit },
-                { label: "TPD (batch)", value: selectedBudget?.tpd_limit },
+                { label: uiT("ui.0c592e6340dfc351"), value: selectedBudget?.tpd_limit },
               ]}
               onCancel={handleDeleteCancel}
               onOk={handleDeleteConfirm}
@@ -144,17 +146,17 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
         </TabsContent>
         <TabsContent value="examples" className="min-h-0 flex-1 overflow-y-auto" keepMounted>
           <div className="pt-6">
-            <p className="text-base text-muted-foreground">How to use budget id</p>
+            <p className="text-base text-muted-foreground">{uiT("ui.ce36f20ffc72409b")}</p>
             <Tabs defaultValue="assign-budget">
               <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0">
                 <TabsTrigger value="assign-budget" className="flex-none rounded-none px-4 py-2">
-                  Assign Budget to Customer
+                  {uiT("ui.66b4177fcf71ce30")}
                 </TabsTrigger>
                 <TabsTrigger value="curl" className="flex-none rounded-none px-4 py-2">
-                  Test it (Curl)
+                  {uiT("ui.5783b3f1e7cbf637")}
                 </TabsTrigger>
                 <TabsTrigger value="openai-sdk" className="flex-none rounded-none px-4 py-2">
-                  Test it (OpenAI SDK)
+                  {uiT("ui.ecdc583ea6c5fcad")}
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="assign-budget" keepMounted>

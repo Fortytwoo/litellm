@@ -48,7 +48,7 @@ function ToolsetRowActions({ toolset, isAdmin, onEditClick, onDeleteClick }: Too
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open toolset actions"
+        aria-label={uiT("ui.99eb2ca990631070")}
         data-testid={`toolset-actions-${toolset.toolset_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -60,14 +60,14 @@ function ToolsetRowActions({ toolset, isAdmin, onEditClick, onDeleteClick }: Too
           onClick={() => void copyToClipboard(toolsetEndpointUrl(toolset.toolset_name), "Endpoint URL copied")}
         >
           <Link2 />
-          Copy endpoint URL
+          {uiT("ui.fa26011bf19e1198")}
         </DropdownMenuItem>
         <DropdownMenuItem
           data-testid="toolset-action-copy-id"
           onClick={() => void copyToClipboard(toolset.toolset_id, "Toolset ID copied")}
         >
           <Copy />
-          Copy toolset ID
+          {uiT("ui.f0b8a63dd32edd81")}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -107,8 +107,14 @@ export const getMCPToolsetTableColumns = ({
   {
     id: "toolset_id",
     accessorKey: "toolset_id",
-    meta: { title: "Toolset ID" },
-    header: "Toolset ID",
+    meta: {
+      get title() {
+        return translateUi("ui.e47bdfd8ff67da24");
+      },
+    },
+    get header() {
+      return translateUi("ui.e47bdfd8ff67da24");
+    },
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.toolset_id} />,
@@ -179,7 +185,9 @@ export const getMCPToolsetTableColumns = ({
             </span>
           ))}
           {tools.length > 4 && (
-            <span className="self-center text-xs text-muted-foreground">+{tools.length - 4} more</span>
+            <span className="self-center text-xs text-muted-foreground">
+              +{tools.length - 4} {translateUi("ui.187897ce0afc")}
+            </span>
           )}
         </div>
       );

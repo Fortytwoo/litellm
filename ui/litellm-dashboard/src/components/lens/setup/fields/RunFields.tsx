@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,8 @@ import type { InvestigationInput } from "../investigationSchema";
 import { AnalysisModelField, type AnalysisModelFieldProps } from "./AnalysisModelField";
 
 export function RunFields({ models, gate }: AnalysisModelFieldProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     control,
     register,
@@ -19,14 +22,19 @@ export function RunFields({ models, gate }: AnalysisModelFieldProps) {
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium">
           <input type="checkbox" className="size-4 rounded border-input accent-foreground" {...register("repeat")} />
-          Keep watching for new traces
+          {uiT("ui.a9cfc27b9827ab57")}
         </label>
         {repeat && (
           <Controller
             control={control}
             name="interval"
             render={({ field }) => (
-              <DurationInput label="Check every" value={field.value} onChange={field.onChange} base="minutes" />
+              <DurationInput
+                label={uiT("ui.a0b9aa23865d3a8f")}
+                value={field.value}
+                onChange={field.onChange}
+                base="minutes"
+              />
             )}
           />
         )}
@@ -37,19 +45,19 @@ export function RunFields({ models, gate }: AnalysisModelFieldProps) {
         )}
       </div>
       <details open={!gate.modelValid || undefined}>
-        <summary className="cursor-pointer text-sm font-medium">Advanced options</summary>
+        <summary className="cursor-pointer text-sm font-medium">{uiT("ui.9443ff69463ef46b")}</summary>
         <div className="mt-4 space-y-5">
           <AnalysisModelField models={models} gate={gate} />
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="grid content-start gap-2 text-sm font-medium">
-              Maximum runs (optional)
+              {uiT("ui.c9b788259011e66d")}
               <Input
                 {...register("selection.sample_size", {
                   setValueAs: (value: unknown) => (value == null || value === "" ? null : Number(value)),
                 })}
                 type="number"
                 min="1"
-                placeholder="No limit"
+                placeholder={uiT("ui.f7fcff0d8feaf039")}
               />
               {errors.selection?.sample_size?.message && (
                 <p role="alert" className="text-sm text-destructive">
@@ -64,7 +72,7 @@ export function RunFields({ models, gate }: AnalysisModelFieldProps) {
                   onChange: () => setValue("selection.execution_ids", [], { shouldValidate: true }),
                 })}
               />
-              Choose individual runs
+              {uiT("ui.443b29db47946a62")}
             </label>
           </div>
           {errors.selection?.execution_ids?.message && (
@@ -74,7 +82,7 @@ export function RunFields({ models, gate }: AnalysisModelFieldProps) {
           )}
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="grid content-start gap-2 text-sm font-medium">
-              Monthly limit (USD)
+              {uiT("ui.4d4578b6f9235495")}
               <Input {...register("budget", { valueAsNumber: true })} type="number" min="0.01" step="1" />
               {errors.budget?.message && (
                 <p role="alert" className="text-sm text-destructive">

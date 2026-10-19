@@ -109,7 +109,7 @@ const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, star
   return (
     <Panel
       icon={Users}
-      title="Spend Per User Within Team"
+      title={uiT("ui.eb779b42c115daac")}
       action={
         <Button
           variant="outline"
@@ -122,16 +122,14 @@ const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, star
         </Button>
       }
     >
-      <p className="mb-3 text-xs text-muted-foreground">
-        Attributed per request from spend logs, so it includes JWT/SSO traffic that does not use a virtual key
-      </p>
+      <p className="mb-3 text-xs text-muted-foreground">{uiT("ui.1127a9b67abc7af4")}</p>
       <DataTable
         columns={columns}
         data={rows}
         getRowId={teamUserSpendRowId}
         isLoading={isLoading}
         maxBodyHeight={320}
-        noDataMessage={teamIds.length === 0 ? "Select a team to see spend per user" : "No user spend in this range"}
+        noDataMessage={teamIds.length === 0 ? uiT("ui.1cfb96b3d6f223df") : uiT("ui.06bd31e8b34c6cfc")}
         size="compact"
       />
     </Panel>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
 import { Inbox } from "lucide-react";
@@ -19,13 +20,15 @@ interface GuardrailTableProps {
 const DEFAULT_SORTING: SortingState = [{ id: "created_at", desc: true }];
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No guardrails yet</div>
-      <div className="text-sm text-muted-foreground">Add a guardrail to start filtering requests and responses.</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.8418e4298ef65910")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.0be3ca08c93674b7")}</div>
     </div>
   );
 }
@@ -36,6 +39,8 @@ const GuardrailTable: React.FC<GuardrailTableProps> = ({
   onDeleteClick,
   onGuardrailClick,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
 
   const columns = useMemo(
@@ -53,7 +58,7 @@ const GuardrailTable: React.FC<GuardrailTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading guardrails…"
+      loadingMessage={uiT("ui.fbfdc0dea3023544")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

@@ -46,12 +46,12 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
 
   const columns: ColumnDef<EndpointRow>[] = [
     {
-      header: "Endpoint",
+      header: uiT("ui.3df9726c68ba76d6"),
       accessorKey: "endpoint",
       cell: ({ row }) => <span className="font-mono text-xs text-foreground">{row.original.endpoint}</span>,
     },
     {
-      header: "Successful / Failed",
+      header: uiT("ui.4d8f588766f90960"),
       id: "requests",
       cell: ({ row }) => {
         const record = row.original;
@@ -63,7 +63,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
         return (
           <div className="flex items-center gap-3">
             <div className="relative min-w-16 flex-1">
-              <Meter value={successPercentage} max={totalPercentage || 100} aria-label="Successful requests">
+              <Meter value={successPercentage} max={totalPercentage || 100} aria-label={uiT("ui.ae934d199109b69d")}>
                 <MeterTrack className={failurePercentage > 0 ? "h-1 bg-destructive/70" : "h-1"}>
                   <MeterIndicator className="bg-[#2b3fd6]" />
                 </MeterTrack>
@@ -81,7 +81,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      header: "Total Request",
+      header: uiT("ui.151864cffca93e7d"),
       accessorKey: "api_requests",
       meta: { numeric: true },
       cell: ({ row }) => <span className="tabular-nums">{row.original.api_requests.toLocaleString()}</span>,
@@ -122,10 +122,11 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
   return (
     <Panel
       icon={Route}
-      title="Endpoints"
+      title={uiT("ui.fce7fec2a58c8b49")}
       action={
         <span className="text-xs text-muted-foreground tabular-nums">
-          {dataSource.length.toLocaleString()} {dataSource.length === 1 ? "endpoint" : "endpoints"}
+          {dataSource.length.toLocaleString()}{" "}
+          {dataSource.length === 1 ? uiT("ui.b6bf7bc8d96f3ea9") : uiT("ui.a46c629dd642fe32")}
         </span>
       }
     >
@@ -133,7 +134,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
         columns={columns}
         data={dataSource}
         getRowId={(row) => row.key}
-        noDataMessage="No endpoint usage data"
+        noDataMessage={uiT("ui.d31852ed681b2342")}
         size="compact"
       />
     </Panel>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { ExpandedState, SortingState } from "@tanstack/react-table";
 import { Inbox } from "lucide-react";
@@ -25,15 +26,15 @@ const resolveBaseUrl = (proxyBaseUrl?: string): string => {
 };
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No routing groups yet</div>
-      <div className="text-sm text-muted-foreground">
-        Create a group to load-balance a set of models behind one name.
-      </div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.1f9aac14f4cfc95b")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.7d0667a4e87a50fb")}</div>
     </div>
   );
 }
@@ -45,6 +46,8 @@ const RoutingGroupsTable: React.FC<RoutingGroupsTableProps> = ({
   onDelete,
   proxyBaseUrl,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const baseUrl = resolveBaseUrl(proxyBaseUrl);
@@ -75,7 +78,7 @@ const RoutingGroupsTable: React.FC<RoutingGroupsTableProps> = ({
       getRowCanExpand={() => true}
       renderSubComponent={({ row }) => <RoutingGroupUsagePanel group={row.original} baseUrl={baseUrl} />}
       isLoading={isLoading}
-      loadingMessage="Loading routing groups…"
+      loadingMessage={uiT("ui.7e6456e72ea9b125")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

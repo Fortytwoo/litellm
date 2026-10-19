@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { X } from "lucide-react";
@@ -101,7 +102,7 @@ function BucketTooltip({
         {bucket.total} {bucket.total === 1 ? noun.singular : noun.plural}
         {bucket.failed > 0 && `, ${bucket.failed} failed`}
       </div>
-      <div className="text-info">drag to zoom</div>
+      <div className="text-info">{uiT("ui.c4f77b34c668")}</div>
     </div>
   );
 }
@@ -231,6 +232,8 @@ function TickAxis({ range, width }: { range: TimeWindow; width: number }) {
 
 /** Histogram over the window covered by `buckets`. Drag to select; drag the bracket or its edges to adjust; Esc clears. */
 export function Timeline({ buckets, selection, onSelect, noun }: TimelineProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const bucketCount = buckets.length;
   const [hover, setHover] = useState<number | null>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
@@ -343,7 +346,7 @@ export function Timeline({ buckets, selection, onSelect, noun }: TimelineProps) 
         <button
           type="button"
           onClick={() => onSelect(null)}
-          aria-label="Clear time zoom"
+          aria-label={uiT("ui.2c63e5d12cc4")}
           className="absolute top-1 right-3 inline-flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <X className="size-3" />

@@ -26,7 +26,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
 
   const columns: ColumnDef<BlockedWord>[] = [
     {
-      header: "Keyword",
+      header: uiT("ui.a668022aed26067d"),
       accessorKey: "keyword",
     },
     {
@@ -71,7 +71,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
   ];
 
   if (keywords.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No keywords added.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{uiT("ui.296706b69ab96b3d")}</div>;
   }
 
   return <DataTable data={keywords} columns={columns} getRowId={(row) => row.id} size="compact" />;

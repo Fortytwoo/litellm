@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { Trace, Span, SpanDetail } from "@/components/lens/traces/types";
 import type { Lens, Finding, Job, Settings } from "../../model/types";
 import { withReleaseCases } from "./lensDemoLongTrace";
@@ -173,18 +174,24 @@ export function createLensDemoData(now = Date.now()) {
     {
       id: "failed-lookups",
       check: "recover",
-      title: "Repeated lookups leave customers without an answer",
-      description:
-        "The support agent retries the same unavailable order service three times, then promises to check without answering or offering a handoff.",
+      get title() {
+        return translateUi("ui.f1831e6bd2202a58");
+      },
+      get description() {
+        return translateUi("ui.4c3841410760b406");
+      },
       suggestion: "After repeated failures, explain the problem and offer a handoff.",
       indices: [0, 4],
     },
     {
       id: "safe-handoff",
       check: "recover",
-      title: "A clear handoff helps when the order service is unavailable",
-      description:
-        "The agent explains the service outage and offers a support handoff instead of promising an answer it cannot provide.",
+      get title() {
+        return translateUi("ui.c596fac3e9aab5a1");
+      },
+      get description() {
+        return translateUi("ui.38e45292c68d8950");
+      },
       suggestion: "Keep this fallback for unavailable services.",
       indices: [9],
       kind: "pattern",
@@ -192,18 +199,24 @@ export function createLensDemoData(now = Date.now()) {
     {
       id: "unsupported-claim",
       check: "grounding",
-      title: "Performance claim has no supporting benchmark",
-      description:
-        "The answer claims a 40% performance improvement, but the retrieved documentation contains no comparative benchmark.",
+      get title() {
+        return translateUi("ui.ef5fc5f14ef0c61e");
+      },
+      get description() {
+        return translateUi("ui.bd6cc1c3718315d9");
+      },
       suggestion: "Require a benchmark source for numeric performance claims, or remove the comparison.",
       indices: [1],
     },
     {
       id: "uncertainty",
       check: "grounding",
-      title: "Missing information is acknowledged",
-      description:
-        "When documentation does not establish regional availability, the agent says so and asks the user to verify it.",
+      get title() {
+        return translateUi("ui.3e0810efe60fe6b1");
+      },
+      get description() {
+        return translateUi("ui.1d53628adaf7cc08");
+      },
       suggestion: "Keep stating when a source does not answer the question.",
       indices: [8],
       kind: "pattern",
@@ -211,8 +224,12 @@ export function createLensDemoData(now = Date.now()) {
     {
       id: "release-blocked",
       check: "release",
-      title: "Failing checks correctly block the release",
-      description: "The release agent identifies an unresolved regression and recommends holding the release.",
+      get title() {
+        return translateUi("ui.2e5f5eae56a14100");
+      },
+      get description() {
+        return translateUi("ui.d1c906ecd510a3d5");
+      },
       suggestion: "Continue requiring passing checks before recommending a release.",
       indices: [6],
       kind: "pattern",

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { Tag } from "./types";
 import { tagListCall } from "../networking";
@@ -11,6 +13,8 @@ interface TagSelectorProps {
 }
 
 const TagSelector: React.FC<TagSelectorProps> = ({ onChange, value, className, accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -33,7 +37,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({ onChange, value, className, a
 
   return (
     <MultiSelect
-      placeholder="Select or create tags"
+      placeholder={uiT("ui.7a1e6b30b92b9982")}
       onValueChange={onChange}
       value={value}
       loading={loading}

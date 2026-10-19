@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { ComponentProps, ReactNode } from "react";
 import { CheckCircle2 } from "lucide-react";
@@ -12,15 +13,17 @@ export type WorkerInstallProps = ComponentProps<"div"> & {
 };
 
 export function WorkerInstall({ connected, children, className, ...props }: WorkerInstallProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!connected)
     return (
       <SettingsCard {...props} data-slot="worker-install" className={cn("flex flex-col gap-5", className)}>
         <header className="space-y-1">
-          <h3 className="text-base font-semibold">Connecting Lens</h3>
-          <p className="text-sm text-muted-foreground">Your Lens service connects automatically.</p>
+          <h3 className="text-base font-semibold">{uiT("ui.ce987265ac957fd8")}</h3>
+          <p className="text-sm text-muted-foreground">{uiT("ui.2c78c85c0cf9e4c2")}</p>
         </header>
         <p role="status" className="text-sm text-muted-foreground">
-          Connecting your Lens service… This page updates automatically. Check the service logs if it does not connect.
+          {uiT("ui.39661a31194530f9")}
         </p>
       </SettingsCard>
     );
@@ -34,8 +37,8 @@ export function WorkerInstall({ connected, children, className, ...props }: Work
         <div className="flex size-12 items-center justify-center rounded-full bg-success/10 text-success">
           <CheckCircle2 className="size-6" />
         </div>
-        <h3 className="text-base font-semibold">Worker connected</h3>
-        <p className="text-sm text-muted-foreground">Ready to run investigations.</p>
+        <h3 className="text-base font-semibold">{uiT("ui.ef97ae2ac82650ff")}</h3>
+        <p className="text-sm text-muted-foreground">{uiT("ui.aa1055c4c7f11efd")}</p>
       </header>
       {children}
     </SettingsCard>

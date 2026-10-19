@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -52,9 +54,11 @@ const NEVER_SUCCEEDED = "Never succeeded";
 const NONE = "None";
 
 function HealthStatusBadge({ status }: { status: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const tone = HEALTH_STATUS_TONES[status];
   if (!tone) {
-    return <StatusBadge tone="neutral" label="unknown" />;
+    return <StatusBadge tone="neutral" label={uiT("ui.b23a6a8439c0")} />;
   }
   return <StatusBadge tone={tone} label={status} />;
 }
@@ -248,8 +252,14 @@ export const getHealthChecksTableColumns = ({
   {
     id: "model_name",
     accessorKey: "model_name",
-    meta: { title: "Model Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model Name" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.a501a70a42b98bc7");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.a501a70a42b98bc7")} variant="header-cycle" />
+    ),
     size: 200,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -292,8 +302,15 @@ export const getHealthChecksTableColumns = ({
   {
     id: "health_status",
     accessorKey: "health_status",
-    meta: { title: "Health Status", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Health Status" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.97b7a73d47fd543e");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.97b7a73d47fd543e")} variant="header-cycle" />
+    ),
     size: 170,
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
@@ -310,7 +327,7 @@ export const getHealthChecksTableColumns = ({
         return (
           <div className="flex items-center space-x-2">
             <DotPulse className="size-2 bg-indigo-500" />
-            <span className="text-sm text-muted-foreground">Checking...</span>
+            <span className="text-sm text-muted-foreground">{translateUi("ui.2e5f79bb94a8c40b")}</span>
           </div>
         );
       }
@@ -325,7 +342,7 @@ export const getHealthChecksTableColumns = ({
           <HealthStatusBadge status={model.health_status} />
           {hasSuccessResponse && (
             <DetailButton
-              label="View response details"
+              label={translateUi("ui.3fb73e7d7dcf739b")}
               testId="view-health-success-btn"
               className="text-success hover:bg-success/10 "
               onClick={() => onShowSuccess(displayName, successResponse)}
@@ -338,8 +355,14 @@ export const getHealthChecksTableColumns = ({
   {
     id: "health_error",
     accessorKey: "health_error",
-    meta: { title: "Error Details" },
-    header: "Error Details",
+    meta: {
+      get title() {
+        return translateUi("ui.674c0b62eba94a34");
+      },
+    },
+    get header() {
+      return translateUi("ui.674c0b62eba94a34");
+    },
     size: 240,
     enableSorting: false,
     cell: ({ row }) => {
@@ -348,7 +371,7 @@ export const getHealthChecksTableColumns = ({
       const healthStatus = modelHealthStatuses[modelId];
 
       if (!healthStatus?.error) {
-        return <span className="text-sm text-muted-foreground">No errors</span>;
+        return <span className="text-sm text-muted-foreground">{translateUi("ui.cfa7674387164b15")}</span>;
       }
 
       const cleanedError = healthStatus.error;
@@ -362,7 +385,7 @@ export const getHealthChecksTableColumns = ({
           </span>
           {fullError !== cleanedError && (
             <DetailButton
-              label="View full error details"
+              label={translateUi("ui.1c0b2dd576ecb2a7")}
               testId="view-health-error-btn"
               className="text-destructive hover:bg-destructive/10 "
               onClick={() => onShowError(displayName, cleanedError, fullError)}
@@ -375,8 +398,14 @@ export const getHealthChecksTableColumns = ({
   {
     id: "last_check",
     accessorKey: "last_check",
-    meta: { title: "Last Check" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Last Check" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.2d424737b5706ac6");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.2d424737b5706ac6")} variant="header-cycle" />
+    ),
     size: 170,
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
@@ -394,8 +423,14 @@ export const getHealthChecksTableColumns = ({
   {
     id: "last_success",
     accessorKey: "last_success",
-    meta: { title: "Last Success" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Last Success" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.7854421028eb6156");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.7854421028eb6156")} variant="header-cycle" />
+    ),
     size: 170,
     enableSorting: true,
     sortingFn: (rowA, rowB) => {

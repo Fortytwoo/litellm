@@ -21,8 +21,12 @@ export const getIndexesTableColumns = ({
   {
     id: "index_name",
     accessorKey: "index_name",
-    meta: { title: "Index Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Index Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.0f53d21d5f51a27b");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.0f53d21d5f51a27b")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -34,8 +38,12 @@ export const getIndexesTableColumns = ({
   {
     id: "vector_store_name",
     accessorFn: (row) => row.litellm_params.vector_store_name,
-    meta: { title: "Vector Store" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Vector Store" />,
+    meta: {
+      get title() {
+        return translateUi("ui.ae81a470f59d4a38");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.ae81a470f59d4a38")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -61,8 +69,14 @@ export const getIndexesTableColumns = ({
   {
     id: "vector_store_index",
     accessorFn: (row) => row.litellm_params.vector_store_index,
-    meta: { title: "Provider Index" },
-    header: "Provider Index",
+    meta: {
+      get title() {
+        return translateUi("ui.b8ecf135a0000fee");
+      },
+    },
+    get header() {
+      return translateUi("ui.b8ecf135a0000fee");
+    },
     size: 220,
     enableSorting: false,
     cell: ({ row }) => (

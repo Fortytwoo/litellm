@@ -27,6 +27,8 @@ import { copyToClipboard } from "@/utils/dataUtils";
 import { inferAuthMethod } from "./credential_federation";
 
 function CredentialProviderCell({ provider, federated }: { provider: string | undefined; federated: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!provider) {
     return <span className="text-sm text-muted-foreground">-</span>;
   }
@@ -44,7 +46,7 @@ function CredentialProviderCell({ provider, federated }: { provider: string | un
         />
       ) : null}
       <span className="truncate text-sm">{displayName || provider}</span>
-      {federated && <Badge variant="secondary">Workload identity federation</Badge>}
+      {federated && <Badge variant="secondary">{uiT("ui.9f65dc4c17e6d21e")}</Badge>}
     </div>
   );
 }
@@ -62,7 +64,7 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open credential actions"
+        aria-label={uiT("ui.698ade904461662c")}
         data-testid={`credential-actions-${credential.credential_name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -73,7 +75,7 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
           <>
             <DropdownMenuGroup>
               <DropdownMenuLabel data-testid="credential-config-owned-hint">
-                Defined in config.yaml. Edit the file to change or delete it.
+                {uiT("ui.59fb51a4c13c5529")}
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -92,7 +94,7 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
           onClick={() => void copyToClipboard(credential.credential_name, "Credential name copied")}
         >
           <Copy />
-          Copy credential name
+          {uiT("ui.40ba0964caf458f4")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -124,8 +126,12 @@ export const getCredentialsTableColumns = ({
     {
       id: "credential_name",
       accessorFn: credentialLabel,
-      meta: { title: "Credential Name" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Credential Name" />,
+      meta: {
+        get title() {
+          return translateUi("ui.793f05950149e538");
+        },
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.793f05950149e538")} />,
       size: 260,
       enableSorting: true,
       cell: ({ row }) => (
@@ -160,15 +166,21 @@ export const getCredentialsTableColumns = ({
     {
       id: "source",
       accessorFn: (row) => row.source ?? "db",
-      meta: { title: "Source" },
-      header: "Source",
+      meta: {
+        get title() {
+          return translateUi("ui.0e570ca6fabe24f9");
+        },
+      },
+      get header() {
+        return translateUi("ui.0e570ca6fabe24f9");
+      },
       size: 140,
       enableSorting: false,
       cell: ({ row }) =>
         row.original.source === "config" ? (
-          <StatusBadge tone="neutral" label="Config" />
+          <StatusBadge tone="neutral" label={translateUi("ui.87e89abb4c1c551f")} />
         ) : (
-          <StatusBadge tone="info" label="DB" />
+          <StatusBadge tone="info" label={translateUi("ui.cf3abc8326646b99")} />
         ),
     },
   ];

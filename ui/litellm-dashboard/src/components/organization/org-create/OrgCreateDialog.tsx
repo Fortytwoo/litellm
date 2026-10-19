@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -54,7 +56,7 @@ export const OrgCreateDialog = ({
   const mutation = useMutation({
     mutationFn: (body: OrgCreateBody) => createOrganization(body),
     onSuccess: () => {
-      toast.success("Organization created successfully");
+      toast.success(translateUi("ui.b6da5101c757b03d"));
       queryClient.invalidateQueries({ queryKey: organizationKeys.all });
       closeAndReset();
     },
@@ -79,12 +81,12 @@ export const OrgCreateDialog = ({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Organization</DialogTitle>
+          <DialogTitle>{uiT("ui.e27f45404fb5781d")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={onSubmit} noValidate>
           <FieldGroup>
-            <FormField control={form.control} name="organization_alias" label="Organization Name">
+            <FormField control={form.control} name="organization_alias" label={uiT("ui.4cbd90732447a928")}>
               {({ ref, ...field }) => <Input {...field} ref={ref} />}
             </FormField>
 
@@ -124,26 +126,26 @@ export const OrgCreateDialog = ({
               )}
             </FormField>
 
-            <FormField control={form.control} name="tpm_limit" label="Tokens per minute Limit (TPM)">
+            <FormField control={form.control} name="tpm_limit" label={uiT("ui.fc2295c5aa4194d7")}>
               {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step={1} min={0} />}
             </FormField>
 
-            <FormField control={form.control} name="rpm_limit" label="Requests per minute Limit (RPM)">
+            <FormField control={form.control} name="rpm_limit" label={uiT("ui.78a5a4ba4bb627b1")}>
               {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step={1} min={0} />}
             </FormField>
 
             <FormField
               control={form.control}
               name="vector_stores"
-              label="Allowed Vector Stores"
-              description="Select vector stores this organization can access. Leave empty for access to all vector stores"
+              label={uiT("ui.df02e3f9df6db929")}
+              description={uiT("ui.99740546a8da6342")}
             >
               {(field) => (
                 <VectorStoreSelector
                   value={field.value}
                   onChange={field.onChange}
                   accessToken={accessToken}
-                  placeholder="Select vector stores (optional)"
+                  placeholder={uiT("ui.3881edd7c2157a1f")}
                 />
               )}
             </FormField>
@@ -151,15 +153,15 @@ export const OrgCreateDialog = ({
             <FormField
               control={form.control}
               name="mcp"
-              label="Allowed MCP Servers"
-              description="Select MCP servers, access groups, and toolsets this organization can access. Leave empty for access to all"
+              label={uiT("ui.d9543d4a192d4721")}
+              description={uiT("ui.06d76ae31589c158")}
             >
               {(field) => (
                 <MCPServerSelector
                   value={field.value}
                   onChange={field.onChange}
                   accessToken={accessToken}
-                  placeholder="Select MCP servers and access groups (optional)"
+                  placeholder={uiT("ui.8e140b4041258be6")}
                 />
               )}
             </FormField>
@@ -179,7 +181,7 @@ export const OrgCreateDialog = ({
               {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? uiT("ui.def70944c9bb") : "Create Organization"}
+              {mutation.isPending ? uiT("ui.def70944c9bb") : uiT("ui.e27f45404fb5781d")}
             </Button>
           </DialogFooter>
         </form>

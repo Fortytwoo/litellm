@@ -44,18 +44,15 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
             <PiggyBank />
             {uiT("ui.b32e75776536")}
           </PageHeaderTitle>
-          <PageHeaderDescription>
-            Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers
-            live under Models + Endpoints, on the Auto-Routers tab
-          </PageHeaderDescription>
+          <PageHeaderDescription>{uiT("ui.00ded9e6f19a97aa")}</PageHeaderDescription>
           <PageHeaderControls>
             <PageTabsList>
-              <PageTabsTrigger value="usage">Overall</PageTabsTrigger>
+              <PageTabsTrigger value="usage">{uiT("ui.715b1458abbee52e")}</PageTabsTrigger>
               {canViewProxyWideCostData && (
                 <>
-                  <PageTabsTrigger value="compression">Prompt Compression</PageTabsTrigger>
+                  <PageTabsTrigger value="compression">{uiT("ui.0fb7db479756dc98")}</PageTabsTrigger>
                   <PageTabsTrigger value="caching">{uiT("ui.1823d9572582")}</PageTabsTrigger>
-                  <PageTabsTrigger value="autorouter-usage">Auto-Router</PageTabsTrigger>
+                  <PageTabsTrigger value="autorouter-usage">{uiT("ui.8565508d1eaaa411")}</PageTabsTrigger>
                 </>
               )}
             </PageTabsList>
@@ -67,26 +64,23 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
           className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-lg border border-border bg-muted/50 px-4 py-4"
         >
           <Info className="mt-0.5 size-5 text-primary" aria-hidden="true" />
-          <p className="font-medium text-foreground">This is an experimental dashboard</p>
+          <p className="font-medium text-foreground">{uiT("ui.0bb39b7d40f86b35")}</p>
           <p className="col-start-2 text-sm text-muted-foreground">
-            Have feedback? Join the discussion{" "}
+            {uiT("ui.a59a657904718bf4")}{" "}
             <a
               href="https://github.com/BerriAI/litellm/discussions/32168"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary underline underline-offset-2"
             >
-              here
+              {uiT("ui.fcec91509759ad99")}
             </a>
           </p>
         </div>
 
         {activity.failed && (
           <Alert variant="error">
-            <AlertDescription className="text-inherit">
-              Fetching spend data failed, so the savings below may be empty rather than final. Reload the page to try
-              again.
-            </AlertDescription>
+            <AlertDescription className="text-inherit">{uiT("ui.5a620aa4bed5bb2b")}</AlertDescription>
           </Alert>
         )}
         <TabsContent value="usage" keepMounted={visitedTabs.includes("usage")}>

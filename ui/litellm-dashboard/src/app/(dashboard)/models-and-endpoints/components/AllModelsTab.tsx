@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
@@ -233,12 +235,12 @@ const AllModelsTab = ({
 
   const teamOptions = useMemo(
     () => [
-      { value: PERSONAL_TEAM_VALUE, label: "Personal" },
+      { value: PERSONAL_TEAM_VALUE, label: uiT("ui.845f9286400f4269") },
       ...(teams ?? [])
         .filter((team) => team.team_id)
         .map((team) => ({ value: team.team_id, label: team.team_alias ? team.team_alias : team.team_id })),
     ],
-    [teams],
+    [teams, uiT],
   );
 
   const selectedTeam = useMemo(
@@ -256,7 +258,7 @@ const AllModelsTab = ({
     try {
       setDeleteLoading(true);
       await modelDeleteCall(accessToken, deleteModalModelId);
-      toast.success("Model deleted successfully");
+      toast.success(translateUi("ui.b2372d9648348990"));
       queryClient.invalidateQueries({ queryKey: ["models", "list"] });
       refetchModels();
     } catch (error) {
@@ -274,7 +276,7 @@ const AllModelsTab = ({
       try {
         setPausingModelId(modelId);
         await modelPatchUpdateCall(accessToken, { blocked }, modelId);
-        toast.success(blocked ? "Model paused" : "Model resumed");
+        toast.success(blocked ? translateUi("ui.bbda8c975d513a6c") : translateUi("ui.d96834b14bca81a4"));
         // invalidateQueries already schedules a refetch for active observers
         // on this key — no need to also call refetchModels() (would double-fetch).
         queryClient.invalidateQueries({ queryKey: ["models", "list"] });
@@ -350,17 +352,19 @@ const AllModelsTab = ({
             )}
             {process.env.NEXT_PUBLIC_MANAGED_GATEWAY !== "1" && (selectedTeamValue === PERSONAL_TEAM_VALUE ? (
               <span>
-                To access these models, create a Virtual Key without selecting a team on the{" "}
+                {uiT("ui.79822842f16eeeda")}{" "}
                 <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
-                  Virtual Keys page
+                  {uiT("ui.24b59b380d7057fe")}
                 </a>
                 .
               </span>
             ) : (
               <span>
-                To access these models, create a Virtual Key and select Team as &quot;{teamAccessLabel}&quot; on the{" "}
+                {uiT("ui.5e8c1215e7515379")}
+                {teamAccessLabel}
+                {uiT("ui.da406862d4893f3d")}{" "}
                 <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
-                  Virtual Keys page
+                  {uiT("ui.24b59b380d7057fe")}
                 </a>
                 .
               </span>
@@ -371,19 +375,19 @@ const AllModelsTab = ({
 
       <DeleteResourceModal
         isOpen={!!deleteModalModelId}
-        title="Delete Model"
+        title={uiT("ui.8723bb5a0071d267")}
         alertMessage="This action cannot be undone."
-        message="Are you sure you want to delete this model?"
+        message={uiT("ui.c4ad79f97987d7df")}
         resourceInformationTitle="Model Information"
         resourceInformation={
           modelToDelete
             ? [
                 {
-                  label: "Model Name",
+                  label: uiT("ui.a501a70a42b98bc7"),
                   value: modelToDelete.model_name || "Not Set",
                 },
                 {
-                  label: "LiteLLM Model Name",
+                  label: uiT("ui.1d433b48aec3812b"),
                   value: modelToDelete.litellm_model_name || "Not Set",
                 },
                 {

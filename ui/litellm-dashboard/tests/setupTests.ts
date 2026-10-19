@@ -1,6 +1,13 @@
 import "@testing-library/jest-dom";
 import { cleanup } from "@testing-library/react";
-import { afterEach, vi } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
+import { setActiveLocale } from "@/i18n";
+import { z } from "zod";
+
+beforeEach(() => {
+  setActiveLocale("en");
+  z.config(z.locales.en());
+});
 
 const ensureTestLocalStorage = () => {
   if (typeof window === "undefined" || typeof window.Storage === "undefined") {

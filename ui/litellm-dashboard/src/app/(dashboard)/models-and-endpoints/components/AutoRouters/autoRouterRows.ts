@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { AutoRouterDeployment } from "@/app/(dashboard)/hooks/models/useModels";
 import {
   AutoRouterKind,
@@ -56,14 +57,30 @@ const asStringArray = (value: unknown): string[] =>
 const dedupe = (models: string[]): string[] => Array.from(new Set(models));
 
 const COMPLEXITY_TYPE_LABELS: Record<string, string> = {
-  llm: "LLM Classifier",
-  jev: "OSS Classifier",
-  oss_classifier: "OSS Classifier",
-  capability: "Capability",
-  llm_v2: "Fuse v2",
-  heuristic_first: "Heuristic first",
-  hybrid: "Hybrid",
-  custom: "Custom classifier",
+  get llm() {
+    return translateUi("ui.6e1680c1b9b97d7a");
+  },
+  get jev() {
+    return translateUi("ui.2b508ccdc73ed12d");
+  },
+  get oss_classifier() {
+    return translateUi("ui.2b508ccdc73ed12d");
+  },
+  get capability() {
+    return translateUi("ui.5faf58a69db59058");
+  },
+  get llm_v2() {
+    return translateUi("ui.5de813e4d1c2970c");
+  },
+  get heuristic_first() {
+    return translateUi("ui.8852895e39d1ef73");
+  },
+  get hybrid() {
+    return translateUi("ui.6c67dc13f83949fe");
+  },
+  get custom() {
+    return translateUi("ui.388136e9c41ecf34");
+  },
 };
 
 export const complexityTypeLabel = (config: Record<string, unknown>): string =>

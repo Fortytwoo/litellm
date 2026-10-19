@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useProviderFields } from "@/app/(dashboard)/hooks/providers/useProviderFields";
 import { PasswordInput } from "@/components/shared/PasswordInput";
 import { Input } from "@/components/ui/input";
@@ -88,6 +90,8 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
   hiddenFieldKeys,
   fieldValidators,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const selectedProviderEnum = Providers[selectedProvider as keyof typeof Providers] as Providers;
   const form = useFormContext<MountedFormValues>();
   const credentialsFileRef = React.useRef<HTMLInputElement>(null);
@@ -228,7 +232,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
         <>
           <Button type="button" variant="outline" className="w-fit" onClick={() => credentialsFileRef.current?.click()}>
             <UploadIcon />
-            Click to Upload
+            {uiT("ui.34fa5614731887b4")}
           </Button>
           <input
             ref={credentialsFileRef}
@@ -291,10 +295,10 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
 
   return (
     <>
-      {isLoading && allFields.length === 0 && <p className="text-sm mb-2">Loading provider fields...</p>}
+      {isLoading && allFields.length === 0 && <p className="text-sm mb-2">{uiT("ui.0a650c6e6dd37b0f")}</p>}
       {loadError && allFields.length === 0 && (
         <p className="text-sm mb-2 text-destructive">
-          {loadError instanceof Error ? loadError.message : "Failed to load provider credential fields"}
+          {loadError instanceof Error ? loadError.message : uiT("ui.f2786680774d3842")}
         </p>
       )}
       {allFields.map((field) => (
@@ -315,22 +319,20 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
           </MountedFormField>
 
           {/* Special case for Vertex Credentials help text */}
-          {field.key === "vertex_credentials" && (
-            <p className="text-sm mb-3 mt-1">Give a gcp service account(.json file)</p>
-          )}
+          {field.key === "vertex_credentials" && <p className="text-sm mb-3 mt-1">{uiT("ui.8e73d7e6b9f201ee")}</p>}
 
           {/* Special case for Azure Base Model help text */}
           {field.key === "base_model" && (
             <div className="grid grid-cols-24">
               <p className="col-start-11 col-span-10 text-sm mb-2">
-                The actual model your azure deployment uses. Used for accurate cost tracking. Select name from{" "}
+                {uiT("ui.2a049956d67f4555")}{" "}
                 <a
                   href="https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline-offset-4 hover:underline"
                 >
-                  here
+                  {uiT("ui.fcec91509759ad99")}
                 </a>
               </p>
             </div>

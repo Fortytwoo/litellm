@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Button } from "@/components/ui/button";
 import CopyButton from "@/components/shared/CopyButton";
@@ -49,6 +50,8 @@ export function InvestigationDetail({
   onReviewFinding,
   ...intents
 }: InvestigationDetailProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isLive = useTracesLive();
   const { section, setSection } = useSectionRoute();
   const { setKind, setStatus } = useFindingFilters();
@@ -80,7 +83,7 @@ export function InvestigationDetail({
             {isLive && (
               <CopyButton
                 variant="action"
-                label="Copy for agent"
+                label={uiT("ui.e2b4176b1e8a2745")}
                 copiedLabel="Command copied"
                 value={investigationHandoffText(getProxyBaseUrl(), lens.id, batchId, getAuthHeaderName())}
               />
@@ -111,25 +114,22 @@ export function InvestigationDetail({
         <Tabs value={section} onValueChange={setSection} key={lens.id}>
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b">
             <TabsList variant="line">
-              <TabsTrigger value="findings">Findings</TabsTrigger>
-              <TabsTrigger value="checks">Criteria</TabsTrigger>
+              <TabsTrigger value="findings">{uiT("ui.e171c2ff25b55e5a")}</TabsTrigger>
+              <TabsTrigger value="checks">{uiT("ui.71708699acf8f3b3")}</TabsTrigger>
               <TabsTrigger value="runs">{sourceLabels[batchSettings?.source ?? "traces"]}</TabsTrigger>
-              <TabsTrigger value="activity">History</TabsTrigger>
+              <TabsTrigger value="activity">{uiT("ui.0e76960093379060")}</TabsTrigger>
             </TabsList>
           </div>
           {snapshot.error && (
             <p role="alert" className="text-sm text-destructive">
-              Could not load this run.{" "}
+              {uiT("ui.fa8577fa80ce27ec")}{" "}
               <Button variant="link" onClick={snapshot.refetch}>
-                Retry
+                {uiT("ui.942087cc2d41e013")}
               </Button>
             </p>
           )}
           {missingSnapshot && section !== "activity" && (
-            <p className="text-sm text-muted-foreground">
-              This older batch predates saved result snapshots. Its findings remain available under All accumulated
-              findings.
-            </p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.b11ce539f25154d5")}</p>
           )}
           <FindingsTab lens={lens} job={job} findings={batchFindings}>
             <FindingPanel

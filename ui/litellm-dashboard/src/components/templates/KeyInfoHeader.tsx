@@ -110,7 +110,11 @@ function UserField({ userAlias, userEmail, userId }: { userAlias?: string | null
               <span className="min-w-0 flex-1 truncate font-mono text-xs" title={value}>
                 {value}
               </span>
-              <CopyButton value={value} label={`Copy ${label}`} iconClassName="size-3.5" />
+              <CopyButton
+                value={value}
+                label={uiT("ui.3f3ebff426db5fa6", { v0: String(label) })}
+                iconClassName="size-3.5"
+              />
             </div>
           ) : (
             <span className="font-mono">-</span>
@@ -221,7 +225,9 @@ export function KeyInfoHeader({
             )}
           </div>
           <div className="flex min-w-0 items-center gap-1">
-            <span className="min-w-0 break-words text-muted-foreground">Key ID: {data.keyId}</span>
+            <span className="min-w-0 break-words text-muted-foreground">
+              {uiT("ui.79217bbd4b440387")} {data.keyId}
+            </span>
             <CopyButton value={data.keyId} label={uiT("ui.549ffac239cb")} iconClassName="size-3.5" />
           </div>
         </div>

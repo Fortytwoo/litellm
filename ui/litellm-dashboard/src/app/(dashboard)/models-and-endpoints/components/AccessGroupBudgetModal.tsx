@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { CircleHelp } from "lucide-react";
@@ -18,10 +22,12 @@ import { accessGroupBudgetFormValues, buildAccessGroupBudgetBody, hasAnyBudgetVa
 
 const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -33,7 +39,9 @@ const budgetSchema = z
     budget_duration: z.string().optional(),
   })
   .refine(hasAnyBudgetValue, {
-    message: "Set at least one of max budget, soft budget or reset window",
+    get message() {
+      return translateUi("ui.36d86ec4d3e2d88a");
+    },
     path: ["max_budget"],
   });
 
@@ -60,12 +68,12 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle>
-            {budget ? uiT("ui.464c4ffd019e") : "Set"} budget for &quot;{accessGroup?.access_group}&quot;
+            {budget ? uiT("ui.464c4ffd019e") : uiT("ui.b6f6f3ad07b3c05f")} {uiT("ui.3203d557ecdff8da")}
+            {accessGroup?.access_group} {uiT("ui.8a331fdde7032f33")}
           </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
-          Every key granted this access group by name draws from this one budget. A key that reaches the group&apos;s
-          models through a wildcard or <code>all-proxy-models</code> is not charged against it.
+          {uiT("ui.0a95f1e568d6c233")} <code>all-proxy-models</code> {uiT("ui.ffc06f68c7df49d4")}
         </p>
         <form onSubmit={form.handleSubmit((values) => onSubmit(buildAccessGroupBudgetBody(values)))} noValidate>
           <TooltipProvider>
@@ -110,16 +118,14 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
               </FormField>
             </FieldGroup>
 
-            <p className="mt-3 text-xs text-muted-foreground">
-              A field left blank keeps whatever the budget already has. Use Clear budget to remove the budget itself.
-            </p>
+            <p className="mt-3 text-xs text-muted-foreground">{uiT("ui.1c74cc58eb864884")}</p>
 
             <div className="mt-6 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={onCancel}>
                 {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button type="submit" disabled={isSaving}>
-                {isSaving ? uiT("ui.dc85af8f2b1d") : "Save Budget"}
+                {isSaving ? uiT("ui.dc85af8f2b1d") : uiT("ui.a4cfd6832af6dbf2")}
               </Button>
             </div>
           </TooltipProvider>

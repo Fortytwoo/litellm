@@ -29,6 +29,8 @@ const resolveDefaultRedirect = () => {
 };
 
 const McpOAuthCallbackContent = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const searchParams = useSearchParams();
 
   const payload = useMemo(() => {
@@ -80,13 +82,9 @@ const McpOAuthCallbackContent = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted p-6">
       <div className="max-w-lg w-full rounded-lg bg-card shadow-md p-8 text-center space-y-4">
-        <h1 className="text-xl font-semibold text-foreground">LiteLLM MCP OAuth</h1>
-        <p className="text-sm text-foreground">
-          Authorization complete. You may close this window and return to the LiteLLM dashboard.
-        </p>
-        <p className="text-xs text-muted-foreground">
-          If the window does not close automatically, everything is still saved—you can close it manually.
-        </p>
+        <h1 className="text-xl font-semibold text-foreground">{uiT("ui.f297cfd74df87864")}</h1>
+        <p className="text-sm text-foreground">{uiT("ui.c20968ec5c16e57d")}</p>
+        <p className="text-xs text-muted-foreground">{uiT("ui.d054e791d9e9e7f1")}</p>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import VariableTextArea from "../variable_textarea";
@@ -8,17 +10,14 @@ interface DeveloperMessageCardProps {
 }
 
 const DeveloperMessageCard: React.FC<DeveloperMessageCardProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Card>
       <CardContent className="p-3">
-        <p className="mb-2 text-sm font-medium text-foreground">Developer message</p>
-        <p className="mb-2 text-xs text-muted-foreground">Optional system instructions for the model</p>
-        <VariableTextArea
-          value={value}
-          onChange={onChange}
-          rows={3}
-          placeholder="e.g., You are a helpful assistant..."
-        />
+        <p className="mb-2 text-sm font-medium text-foreground">{uiT("ui.5a2b1eb51db946bf")}</p>
+        <p className="mb-2 text-xs text-muted-foreground">{uiT("ui.6e1ba689c84c6d05")}</p>
+        <VariableTextArea value={value} onChange={onChange} rows={3} placeholder={uiT("ui.cd159961f289b120")} />
       </CardContent>
     </Card>
   );

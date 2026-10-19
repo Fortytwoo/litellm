@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Info } from "lucide-react";
 import React from "react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -23,13 +25,15 @@ export default function DcrBridgeToggle({
   authType?: string | null;
   initialChecked?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!isClientForwardedTokenMode(authType)) return null;
   return (
     <MountedFormField
       label={
         <span className="text-sm font-medium text-foreground flex items-center">
-          Gateway-hosted sign-in (DCR bridge)
-          <SimpleTooltip content="Lets OAuth-only clients like Claude Desktop register and sign in through the gateway. Turn off to relay the upstream server's own OAuth metadata instead (for clients pre-registered with the upstream IdP).">
+          {uiT("ui.3ac796a03ab46c4e")}
+          <SimpleTooltip content={uiT("ui.f451c8e07e59e3e8")}>
             <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
           </SimpleTooltip>
         </span>

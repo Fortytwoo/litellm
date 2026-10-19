@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { watches as defaultWatches } from "../model/watches";
@@ -86,7 +89,7 @@ export function WatchPicker({
   onChange,
   onAddCustom,
   options: watches = defaultWatches,
-  label = "Watch for",
+  label = translateUi("ui.49d6b51485806307"),
   addDisabled = false,
 }: {
   selected: ReadonlySet<string>;
@@ -96,6 +99,8 @@ export function WatchPicker({
   label?: string;
   addDisabled?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [cursor, setCursor] = useState(0);
   const items = useRef<(HTMLButtonElement | null)[]>([]);
   const toggle = (id: string) =>
@@ -126,7 +131,8 @@ export function WatchPicker({
       <div className="flex items-end justify-between gap-3">
         <legend className="text-sm font-medium">{label}</legend>
         <span className="text-xs tabular-nums text-muted-foreground">
-          {watches.filter((watch) => selected.has(watch.id)).length} of {watches.length} selected
+          {watches.filter((watch) => selected.has(watch.id)).length} {uiT("ui.28391d3bc64ec15c")} {watches.length}{" "}
+          {uiT("ui.d7cbbb688b2e506c")}
         </span>
       </div>
       <DotFlow active={activeColors} />
@@ -187,8 +193,8 @@ export function WatchPicker({
         >
           +
         </span>
-        <span className="font-medium">Add your own</span>
-        <span className="text-muted-foreground">describe anything else in plain English</span>
+        <span className="font-medium">{uiT("ui.b1f2e087a654c799")}</span>
+        <span className="text-muted-foreground">{uiT("ui.1afde3133a00e51a")}</span>
       </button>
     </fieldset>
   );

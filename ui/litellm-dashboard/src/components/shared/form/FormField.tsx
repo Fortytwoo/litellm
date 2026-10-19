@@ -1,4 +1,5 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
 
 import * as React from "react";
 import {
@@ -63,9 +64,17 @@ export const FormField = <TFieldValues extends FieldValues, TName extends FieldP
 
         return (
           <Field orientation={orientation} data-invalid={invalid || undefined} className={className}>
-            {label !== undefined && <FieldLabel htmlFor={controlId}>{label}</FieldLabel>}
+            {label !== undefined && (
+              <FieldLabel htmlFor={controlId}>
+                <LocalizedText>{label}</LocalizedText>
+              </FieldLabel>
+            )}
             {children(controlProps)}
-            {description !== undefined && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
+            {description !== undefined && (
+              <FieldDescription id={descriptionId}>
+                <LocalizedText>{description}</LocalizedText>
+              </FieldDescription>
+            )}
             <FieldError id={errorId} errors={[fieldState.error]} />
           </Field>
         );

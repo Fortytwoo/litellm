@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -30,13 +32,15 @@ interface SearchToolRowActionsProps {
 }
 
 function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isFromConfig = tool.is_from_config ?? false;
   const toolId = tool.search_tool_id;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open search tool actions"
+        aria-label={uiT("ui.17cb879e45bf5991")}
         data-testid={`search-tool-actions-${searchToolKey(tool)}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -50,7 +54,7 @@ function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsPr
           onClick={() => toolId && onEdit(toolId)}
         >
           <Pencil />
-          Edit search tool
+          {uiT("ui.96ef8710c5d78e88")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -61,7 +65,7 @@ function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsPr
           onClick={() => toolId && onDelete(toolId)}
         >
           <Trash2 />
-          Delete search tool
+          {uiT("ui.19338c05ace4fad8")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -84,8 +88,12 @@ export const getSearchToolTableColumns = ({
   {
     id: "search_tool_id",
     accessorKey: "search_tool_id",
-    meta: { title: "Search Tool ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Search Tool ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.5b80b5a97113c503");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.5b80b5a97113c503")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -162,13 +170,25 @@ export const getSearchToolTableColumns = ({
   },
   {
     id: "source",
-    meta: { title: "Source", skeleton: "badge" },
-    header: "Source",
+    meta: {
+      get title() {
+        return translateUi("ui.0e570ca6fabe24f9");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.0e570ca6fabe24f9");
+    },
     size: 100,
     enableSorting: false,
     cell: ({ row }) => {
       const isFromConfig = row.original.is_from_config ?? false;
-      return <StatusBadge tone={isFromConfig ? "neutral" : "info"} label={isFromConfig ? "Config" : "DB"} />;
+      return (
+        <StatusBadge
+          tone={isFromConfig ? "neutral" : "info"}
+          label={isFromConfig ? translateUi("ui.87e89abb4c1c551f") : translateUi("ui.cf3abc8326646b99")}
+        />
+      );
     },
   },
   {

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState, useEffect } from "react";
 import AgentBuilderView from "@/app/(dashboard)/playground/components/chat_ui/AgentBuilderView";
@@ -21,6 +22,8 @@ interface ProxySettings {
 }
 
 export default function PlaygroundPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userRole, userId, disabledPersonalKeyCreation, token, isViewOnly } = useAuthorized();
   const [proxySettings, setProxySettings] = useState<ProxySettings | undefined>(undefined);
   const [activeTab, setActiveTab] = useUrlTab(PLAYGROUND_TABS, "chat");
@@ -44,10 +47,8 @@ export default function PlaygroundPage() {
   if (isViewOnly) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-8 text-center">
-        <h1 className="text-2xl font-semibold">Access Denied</h1>
-        <p className="text-muted-foreground">
-          Your role does not have access to the Playground. Ask your proxy admin for access to test models.
-        </p>
+        <h1 className="text-2xl font-semibold">{uiT("ui.d134ca025a6c63b2")}</h1>
+        <p className="text-muted-foreground">{uiT("ui.93fad6d3afd70bd2")}</p>
       </div>
     );
   }
@@ -61,19 +62,19 @@ export default function PlaygroundPage() {
       >
         <TabsList variant="line" className="w-full shrink-0 justify-start overflow-x-auto pb-1">
           <TabsTrigger value="chat" className="flex-none">
-            Chat
+            {uiT("ui.460b3a7da007b7af")}
           </TabsTrigger>
           <TabsTrigger value="compare" className="flex-none">
-            Compare
+            {uiT("ui.e888155d8c7d2e3c")}
           </TabsTrigger>
           <TabsTrigger value="compliance" className="flex-none">
-            Compliance
+            {uiT("ui.4a109cc49467be33")}
           </TabsTrigger>
           <TabsTrigger value="system-one" className="flex-none">
-            <BetaBadge>Decisions</BetaBadge>
+            <BetaBadge>{uiT("ui.cfa6a08af3ed5871")}</BetaBadge>
           </TabsTrigger>
           <TabsTrigger value="agent-builder" className="flex-none">
-            Agent Builder (Experimental)
+            {uiT("ui.44a7dae76442fda2")}
           </TabsTrigger>
         </TabsList>
         <TabsContent

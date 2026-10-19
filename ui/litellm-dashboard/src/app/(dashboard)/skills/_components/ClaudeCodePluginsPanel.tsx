@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -70,11 +72,11 @@ const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessT
     setIsDeleting(true);
     try {
       await deleteClaudeCodePlugin(accessToken, pluginToDelete.name);
-      toast.success(`Skill "${pluginToDelete.displayName}" deleted successfully`);
+      toast.success(translateUi("ui.c46e16d2cb772f48", undefined, { v0: String(pluginToDelete.displayName) }));
       fetchPlugins();
     } catch (error) {
       console.error("Error deleting skill:", error);
-      toast.error("Failed to delete skill");
+      toast.error(translateUi("ui.bb4fb264cd8e4257"));
     } finally {
       setIsDeleting(false);
       setPluginToDelete(null);
@@ -96,12 +98,12 @@ const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessT
           <div className="flex flex-col gap-2 mb-4">
             <h1 className="text-2xl font-bold">{uiT("ui.66d0f523a379")}</h1>
             <p className="text-sm text-muted-foreground">
-              Register Claude Code skills. Published skills appear in the Skill Hub for all users and are served via{" "}
+              {uiT("ui.f258889314acfc9a")}{" "}
               <code className="bg-muted px-1 rounded-sm">/claude-code/marketplace.json</code>.
             </p>
             <div className="mt-2 flex gap-2">
               <Button onClick={() => setIsAddModalVisible(true)} disabled={!accessToken || !isAdmin}>
-                + Add Skill
+                {uiT("ui.b7e61cac6c36387e")}
               </Button>
             </div>
           </div>
@@ -135,11 +137,11 @@ const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessT
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Skill</AlertDialogTitle>
+              <AlertDialogTitle>{uiT("ui.183f22f8449fd1ee")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete skill: <strong>{pluginToDelete.displayName}</strong>?
+                {uiT("ui.e9c613c556a7d889")} <strong>{pluginToDelete.displayName}</strong>?
               </AlertDialogDescription>
-              <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
+              <p className="text-sm text-muted-foreground">{uiT("ui.3d6a45267218977e")}</p>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>

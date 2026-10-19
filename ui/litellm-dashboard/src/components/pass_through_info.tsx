@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { updatePassThroughEndpoint, deletePassThroughEndpointsCall } from "./networking";
@@ -112,6 +114,8 @@ interface PassThroughEndpoint {
 
 // Password field component for headers
 const PasswordField: React.FC<{ value: Record<string, any> }> = ({ value }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [showPassword, setShowPassword] = useState(false);
   const headerString = JSON.stringify(value, null, 2);
 
@@ -124,7 +128,7 @@ const PasswordField: React.FC<{ value: Record<string, any> }> = ({ value }) => {
         onClick={() => setShowPassword(!showPassword)}
         className="p-1 hover:bg-accent rounded-sm"
         type="button"
-        aria-label={showPassword ? "Hide headers" : "Show headers"}
+        aria-label={showPassword ? uiT("ui.4e3c7f9acbfc6eb4") : uiT("ui.94ced27fb9e1fa9a")}
       >
         {showPassword ? (
           <EyeOff className="w-4 h-4 text-muted-foreground" />
@@ -220,7 +224,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
       if (!accessToken || !endpointData?.id) return;
 
       await deletePassThroughEndpointsCall(accessToken, endpointData.id);
-      toast.success("Pass through endpoint deleted successfully");
+      toast.success(translateUi("ui.501ffb884d7e6acb"));
       onClose();
       if (onEndpointUpdated) {
         onEndpointUpdated();
@@ -236,7 +240,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
   }
 
   if (!endpointData) {
-    return <div className="p-4">Pass through endpoint not found</div>;
+    return <div className="p-4">{uiT("ui.9ef52db52b067834")}</div>;
   }
 
   return (
@@ -244,9 +248,11 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
       <div className="flex justify-between items-center mb-6">
         <div>
           <Button onClick={onClose} className="mb-4">
-            ← Back
+            {uiT("ui.aceb696a04c19971")}
           </Button>
-          <h2 className="text-xl font-semibold">Pass Through Endpoint: {endpointData.path}</h2>
+          <h2 className="text-xl font-semibold">
+            {uiT("ui.6d56b8896716251f")} {endpointData.path}
+          </h2>
           <p className="text-sm text-muted-foreground font-mono">{endpointData.id}</p>
         </div>
       </div>
@@ -268,35 +274,35 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
           <TabsContent value="overview" keepMounted>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card className="block p-6">
-                <p className="text-sm">Path</p>
+                <p className="text-sm">{uiT("ui.62fa5a5b0d3c3188")}</p>
                 <div className="mt-2">
                   <h3 className="text-lg font-medium font-mono">{endpointData.path}</h3>
                 </div>
               </Card>
 
               <Card className="block p-6">
-                <p className="text-sm">Target</p>
+                <p className="text-sm">{uiT("ui.978354db0c00fc78")}</p>
                 <div className="mt-2">
                   <h3 className="text-lg font-medium">{endpointData.target}</h3>
                 </div>
               </Card>
 
               <Card className="block p-6">
-                <p className="text-sm">Configuration</p>
+                <p className="text-sm">{uiT("ui.b332c3492d5eb10a")}</p>
                 <div className="mt-2 space-y-2">
                   <div>
                     <Badge variant={endpointData.include_subpath ? "secondary" : "outline"}>
-                      {endpointData.include_subpath ? "Include Subpath" : "Exact Path"}
+                      {endpointData.include_subpath ? uiT("ui.6f9f1c0a5b6fa3fe") : uiT("ui.855334f3289aa345")}
                     </Badge>
                   </div>
                   <div>
                     <Badge variant={endpointData.auth ? "secondary" : "outline"}>
-                      {endpointData.auth ? "Auth Required" : "No Auth"}
+                      {endpointData.auth ? uiT("ui.a0b711bad0559b20") : uiT("ui.ca179d59812eae94")}
                     </Badge>
                   </div>
                   {endpointData.methods && endpointData.methods.length > 0 && (
                     <div>
-                      <p className="text-xs text-muted-foreground">HTTP Methods:</p>
+                      <p className="text-xs text-muted-foreground">{uiT("ui.57d316d24e9889cc")}</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {endpointData.methods.map((method) => (
                           <Badge key={method} variant="secondary">
@@ -308,12 +314,15 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                   )}
                   {(!endpointData.methods || endpointData.methods.length === 0) && (
                     <div>
-                      <p className="text-xs text-muted-foreground">All HTTP methods supported</p>
+                      <p className="text-xs text-muted-foreground">{uiT("ui.f241146d29c1db98")}</p>
                     </div>
                   )}
                   {endpointData.cost_per_request !== undefined && (
                     <div>
-                      <p className="text-sm">Cost per request: ${endpointData.cost_per_request}</p>
+                      <p className="text-sm">
+                        {uiT("ui.1f47188042fd97be")}
+                        {endpointData.cost_per_request}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -332,8 +341,10 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
             {endpointData.headers && Object.keys(endpointData.headers).length > 0 && (
               <Card className="block mt-6 p-6">
                 <div className="flex justify-between items-center">
-                  <p className="text-sm font-medium">Headers</p>
-                  <Badge variant="secondary">{Object.keys(endpointData.headers).length} headers configured</Badge>
+                  <p className="text-sm font-medium">{uiT("ui.194e9fe656a1bcab")}</p>
+                  <Badge variant="secondary">
+                    {Object.keys(endpointData.headers).length} {uiT("ui.eff8eeafe6fae6fe")}
+                  </Badge>
                 </div>
                 <div className="mt-4">
                   <PasswordField value={endpointData.headers} />
@@ -345,7 +356,9 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
               <Card className="block mt-6 p-6">
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-medium">{uiT("ui.443f975eefe8")}</p>
-                  <Badge variant="secondary">{Object.keys(endpointData.guardrails).length} guardrails configured</Badge>
+                  <Badge variant="secondary">
+                    {Object.keys(endpointData.guardrails).length} {uiT("ui.078d43ee509c130f")}
+                  </Badge>
                 </div>
                 <div className="mt-4 space-y-2">
                   {Object.entries(endpointData.guardrails).map(([name, settings]) => (
@@ -353,13 +366,21 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                       <div className="font-medium text-sm">{name}</div>
                       {settings && (settings.request_fields || settings.response_fields) && (
                         <div className="mt-2 text-xs text-muted-foreground space-y-1">
-                          {settings.request_fields && <div>Request fields: {settings.request_fields.join(", ")}</div>}
+                          {settings.request_fields && (
+                            <div>
+                              {uiT("ui.f6848aa21892b2a0")} {settings.request_fields.join(", ")}
+                            </div>
+                          )}
                           {settings.response_fields && (
-                            <div>Response fields: {settings.response_fields.join(", ")}</div>
+                            <div>
+                              {uiT("ui.649e3059868a3a0a")} {settings.response_fields.join(", ")}
+                            </div>
                           )}
                         </div>
                       )}
-                      {!settings && <div className="text-xs text-muted-foreground mt-1">Uses entire payload</div>}
+                      {!settings && (
+                        <div className="text-xs text-muted-foreground mt-1">{uiT("ui.036f62e0ae1f603a")}</div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -372,13 +393,13 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
             <TabsContent value="settings" keepMounted>
               <Card className="block p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium">Pass Through Endpoint Settings</h3>
+                  <h3 className="text-lg font-medium">{uiT("ui.85854825f9416b3b")}</h3>
                   <div className="space-x-2">
                     {!isEditing && (
                       <>
                         <Button onClick={() => setIsEditing(true)}>{uiT("ui.cddc5824575b")}</Button>
                         <Button onClick={handleDeleteEndpoint} variant="destructive">
-                          Delete Endpoint
+                          {uiT("ui.05e97a2deb65bcd8")}
                         </Button>
                       </>
                     )}
@@ -387,13 +408,13 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
 
                 {isEditing ? (
                   <form onSubmit={form.handleSubmit(handleEndpointUpdate)}>
-                    <FormField control={form.control} name="target" label="Target URL">
+                    <FormField control={form.control} name="target" label={uiT("ui.5b341c960fb7166e")}>
                       {({ value, ...field }) => (
                         <Input {...field} placeholder="https://api.example.com" value={value ?? ""} />
                       )}
                     </FormField>
 
-                    <FormField control={form.control} name="headers" label="Headers (JSON)">
+                    <FormField control={form.control} name="headers" label={uiT("ui.0a768a0de4f0124d")}>
                       {({ value, ...field }) => (
                         <Textarea
                           {...field}
@@ -407,17 +428,17 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                     <FormField
                       control={form.control}
                       name="methods"
-                      label="HTTP Methods (Optional)"
+                      label={uiT("ui.200ee3e1b8a71faf")}
                       description={
                         selectedMethods.length === 0
-                          ? "All HTTP methods supported (default)"
-                          : `Only ${selectedMethods.join(", ")} requests will be routed to this endpoint`
+                          ? uiT("ui.c47de8f7320089c5")
+                          : uiT("ui.2b571a1c9b8698db", { v0: String(selectedMethods.join(", ")) })
                       }
                     >
                       {({ value, onChange, ref: _ref, ...field }) => (
                         <Select multiple items={HTTP_METHOD_OPTIONS} value={value} onValueChange={onChange}>
                           <SelectTrigger {...field} className="w-full">
-                            <SelectValue placeholder="Select methods (leave empty for all)">
+                            <SelectValue placeholder={uiT("ui.b6cf4149d927c9a3")}>
                               {(selected: string[]) =>
                                 selected.length === 0 ? "Select methods (leave empty for all)" : selected.join(", ")
                               }
@@ -434,13 +455,13 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                       )}
                     </FormField>
 
-                    <FormField control={form.control} name="include_subpath" label="Include Subpath">
+                    <FormField control={form.control} name="include_subpath" label={uiT("ui.6f9f1c0a5b6fa3fe")}>
                       {({ value, onChange, ref: _ref, ...field }) => (
                         <Switch {...field} checked={value} onCheckedChange={onChange} />
                       )}
                     </FormField>
 
-                    <FormField control={form.control} name="cost_per_request" label="Cost per Request">
+                    <FormField control={form.control} name="cost_per_request" label={uiT("ui.d51cdd5f65da3fa7")}>
                       {({ value, onChange, ref: _ref, ...field }) => (
                         <PrecisionNumberInput
                           {...field}
@@ -458,8 +479,8 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                     <FormField
                       control={form.control}
                       name="timeout"
-                      label="Request Timeout (seconds)"
-                      description="Max time to wait for upstream response. Leave empty to use the global pass_through_request_timeout (default 600s)."
+                      label={uiT("ui.d20c08e869997517")}
+                      description={uiT("ui.83783ba18ec809e7")}
                     >
                       {({ value, onChange, ref: _ref, ...field }) => (
                         <PrecisionNumberInput
@@ -502,45 +523,45 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                 ) : (
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm font-medium">Path</p>
+                      <p className="text-sm font-medium">{uiT("ui.62fa5a5b0d3c3188")}</p>
                       <div className="font-mono">{endpointData.path}</div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Target URL</p>
+                      <p className="text-sm font-medium">{uiT("ui.5b341c960fb7166e")}</p>
                       <div>{endpointData.target}</div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Include Subpath</p>
+                      <p className="text-sm font-medium">{uiT("ui.6f9f1c0a5b6fa3fe")}</p>
                       <Badge variant={endpointData.include_subpath ? "secondary" : "outline"}>
-                        {endpointData.include_subpath ? "Yes" : "No"}
+                        {endpointData.include_subpath ? uiT("ui.85a39ab345d672ff") : uiT("ui.1ea442a134b2a184")}
                       </Badge>
                     </div>
                     {endpointData.cost_per_request !== undefined && (
                       <div>
-                        <p className="text-sm font-medium">Cost per Request</p>
+                        <p className="text-sm font-medium">{uiT("ui.d51cdd5f65da3fa7")}</p>
                         <div>${endpointData.cost_per_request}</div>
                       </div>
                     )}
                     {endpointData.timeout !== undefined && endpointData.timeout !== null && (
                       <div>
-                        <p className="text-sm font-medium">Request Timeout</p>
+                        <p className="text-sm font-medium">{uiT("ui.00eaf86be2967e16")}</p>
                         <div>{endpointData.timeout}s</div>
                       </div>
                     )}
                     <div>
-                      <p className="text-sm font-medium">Authentication Required</p>
+                      <p className="text-sm font-medium">{uiT("ui.732c5220f394086a")}</p>
                       <Badge variant={endpointData.auth ? "secondary" : "outline"}>
-                        {endpointData.auth ? "Yes" : "No"}
+                        {endpointData.auth ? uiT("ui.85a39ab345d672ff") : uiT("ui.1ea442a134b2a184")}
                       </Badge>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Headers</p>
+                      <p className="text-sm font-medium">{uiT("ui.194e9fe656a1bcab")}</p>
                       {endpointData.headers && Object.keys(endpointData.headers).length > 0 ? (
                         <div className="mt-2">
                           <PasswordField value={endpointData.headers} />
                         </div>
                       ) : (
-                        <div className="text-muted-foreground">No headers configured</div>
+                        <div className="text-muted-foreground">{uiT("ui.684dd46b1f1d752d")}</div>
                       )}
                     </div>
                   </div>

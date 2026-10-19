@@ -74,7 +74,7 @@ export function VectorStorePermissions({ vectorStores, accessToken }: VectorStor
       ) : (
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
           <DatabaseIcon className="h-4 w-4 text-muted-foreground" />
-          <p className="text-muted-foreground text-sm">No vector stores configured</p>
+          <p className="text-muted-foreground text-sm">{uiT("ui.760a7fe54d8699a9")}</p>
         </div>
       )}
     </div>

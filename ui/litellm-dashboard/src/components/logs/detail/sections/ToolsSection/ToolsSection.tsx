@@ -48,7 +48,7 @@ export function ToolsSection({ log }: ToolsSectionProps) {
           <div className="flex flex-wrap items-center gap-3">
             <h3 className="text-lg font-medium text-foreground">{uiT("ui.ea93d6a262ec")}</h3>
             <span className="text-sm text-muted-foreground">
-              {totalTools} provided, {calledTools} called
+              {uiT("supplement.provided", { count: totalTools, called: calledTools })}
             </span>
             <span className="text-sm text-muted-foreground">
               • {toolNamePreview}

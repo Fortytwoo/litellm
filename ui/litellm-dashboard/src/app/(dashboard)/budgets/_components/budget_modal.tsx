@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { ChevronRight } from "lucide-react";
 import React from "react";
@@ -29,9 +31,24 @@ const budgetSchema = z.object(budgetShape);
 type BudgetFormValues = z.output<typeof budgetSchema>;
 
 const BUDGET_DURATION_OPTIONS = [
-  { value: "24h", label: "daily" },
-  { value: "7d", label: "weekly" },
-  { value: "30d", label: "monthly" },
+  {
+    value: "24h",
+    get label() {
+      return translateUi("ui.6f31304cdfd0");
+    },
+  },
+  {
+    value: "7d",
+    get label() {
+      return translateUi("ui.8850eced986e");
+    },
+  },
+  {
+    value: "30d",
+    get label() {
+      return translateUi("ui.9169e3ca73ee");
+    },
+  },
 ];
 
 interface BudgetModalProps {
@@ -52,13 +69,13 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
 
   const handleCreate = async (formValues: BudgetFormValues) => {
     try {
-      toast.info("Making API Call");
+      toast.info(translateUi("ui.6bd96a047f1a5dee"));
       await createBudget.mutateAsync(
         applyBudgetPrecision(
           optionalSettingsOpen ? formValues : { ...formValues, max_budget: undefined, budget_duration: undefined },
         ),
       );
-      toast.success("Budget Created");
+      toast.success(translateUi("ui.89c97459cd47172c"));
       form.reset();
       setIsModalVisible(false);
     } catch (error) {
@@ -71,23 +88,23 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
     <Dialog open={isModalVisible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Create Budget</DialogTitle>
+          <DialogTitle>{uiT("ui.830a4914b5f7d05c")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleCreate)} noValidate>
           <FieldGroup>
             <FormField
               control={form.control}
               name="budget_id"
-              label="Budget ID"
-              description="A human-friendly name for the budget"
+              label={uiT("ui.3d9e454838ad423e")}
+              description={uiT("ui.6d65db53ca7f7275")}
             >
               {({ ref, ...field }) => <Input {...field} ref={ref} value={field.value ?? ""} placeholder="" />}
             </FormField>
             <FormField
               control={form.control}
               name="tpm_limit"
-              label="Max Tokens per minute"
-              description="Leave blank for no LiteLLM limit. Provider rate limits still apply."
+              label={uiT("ui.78c899af49666ce5")}
+              description={uiT("ui.e35b85b3d4e874ca")}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input
@@ -103,8 +120,8 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
             <FormField
               control={form.control}
               name="rpm_limit"
-              label="Max Requests per minute"
-              description="Leave blank for no LiteLLM limit. Provider rate limits still apply."
+              label={uiT("ui.a1596aa61f48f958")}
+              description={uiT("ui.e35b85b3d4e874ca")}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input
@@ -120,8 +137,8 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
             <FormField
               control={form.control}
               name="tpd_limit"
-              label="Max Tokens per day (batch)"
-              description="Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM."
+              label={uiT("ui.7ab48ad7509f1bb1")}
+              description={uiT("ui.16449905b98bf857")}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input
@@ -137,7 +154,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
 
             <Collapsible open={optionalSettingsOpen} onOpenChange={setOptionalSettingsOpen} className="mt-20 mb-8">
               <CollapsibleTrigger className="group flex w-full items-center justify-between py-2 text-left">
-                <b>Optional Settings</b>
+                <b>{uiT("ui.22cacf9e2be2ffa0")}</b>
                 <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -179,7 +196,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
           </FieldGroup>
 
           <div style={{ textAlign: "right", marginTop: "10px" }}>
-            <Button type="submit">Create Budget</Button>
+            <Button type="submit">{uiT("ui.830a4914b5f7d05c")}</Button>
           </div>
         </form>
       </DialogContent>

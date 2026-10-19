@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -165,7 +167,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         return;
       }
       try {
-        toast.success("Generating password reset link...");
+        toast.success(translateUi("ui.4410d9c39839"));
         const data = await invitationCreateCall(accessToken, userId);
         setInvitationLinkData(data);
         setIsInvitationLinkModalVisible(true);
@@ -189,7 +191,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
           return { ...previousData, users: updatedUsers };
         });
 
-        toast.success("User deleted successfully");
+        toast.success(translateUi("ui.0886a0785854"));
       } catch (error) {
         console.error("Error deleting user:", error);
         toast.fromError("Failed to delete user");
@@ -359,7 +361,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   data-testid="bulk-edit-users"
                 >
                   {uiT("ui.dea85c7e5f1b")}
-                  {selectedUsers.length} selected)
+                  {uiT("supplement.selected", { count: selectedUsers.length })}
                 </Button>
               )}
             </>
@@ -405,7 +407,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
         title={uiT("ui.d241b1f23e19")}
-        message="Are you sure you want to delete this user? This action cannot be undone."
+        message={uiT("ui.6163b792ebe7")}
         resourceInformationTitle="User Information"
         resourceInformation={[
           { label: uiT("ui.969ccbd3cf63"), value: userToDelete?.user_email },

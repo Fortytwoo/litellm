@@ -1,4 +1,8 @@
 "use client";
+import { getFormattingLocale } from "@/i18n";
+
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { organizationKeys, useOrganization } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
@@ -80,7 +84,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
       };
       await organizationMemberAddCall(accessToken, organizationId, member);
 
-      toast.success("Organization member added successfully");
+      toast.success(translateUi("ui.ed21bd66a150e09b"));
       setIsAddMemberModalVisible(false);
       queryClient.invalidateQueries({ queryKey: organizationKeys.all });
     } catch (error) {
@@ -100,7 +104,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
       };
 
       await organizationMemberUpdateCall(accessToken, organizationId, member);
-      toast.success("Organization member updated successfully");
+      toast.success(translateUi("ui.20b6042a44a29b68"));
       setIsEditMemberModalVisible(false);
       queryClient.invalidateQueries({ queryKey: organizationKeys.all });
     } catch (error) {
@@ -114,7 +118,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
       if (!accessToken) return;
 
       await organizationMemberDeleteCall(accessToken, organizationId, values.user_id);
-      toast.success("Organization member deleted successfully");
+      toast.success(translateUi("ui.72ce7c50245b5642"));
       setIsEditMemberModalVisible(false);
       queryClient.invalidateQueries({ queryKey: organizationKeys.all });
     } catch (error) {
@@ -128,7 +132,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
   }
 
   if (!orgData) {
-    return <div className="p-4">Organization not found</div>;
+    return <div className="p-4">{uiT("ui.00c50f7a04046267")}</div>;
   }
 
   const orgMemberById = new Map((orgData.members || []).map((m) => [m.user_id, m]));
@@ -159,12 +163,12 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
         <div>
           <Button variant="ghost" onClick={onClose} className="mb-4">
             <ArrowLeft className="size-4" />
-            Back to Organizations
+            {uiT("ui.739abb2c74bf5b43")}
           </Button>
           <h1 className="text-xl font-semibold tracking-tight text-foreground">{orgData.organization_alias}</h1>
           <div className="flex items-center gap-1">
             <span className="font-mono text-sm text-muted-foreground">{orgData.organization_id}</span>
-            <CopyButton value={orgData.organization_id} label="Copy organization ID" iconClassName="size-3" />
+            <CopyButton value={orgData.organization_id} label={uiT("ui.517701ed806dc061")} iconClassName="size-3" />
           </div>
         </div>
       </div>
@@ -186,28 +190,38 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardContent>
-                <p className="text-sm text-muted-foreground">Organization Details</p>
+                <p className="text-sm text-muted-foreground">{uiT("ui.7616a02a25e9ffbf")}</p>
                 <div className="mt-2 text-sm text-foreground">
-                  <p>Created: {new Date(orgData.created_at).toLocaleDateString()}</p>
-                  <p>Updated: {new Date(orgData.updated_at).toLocaleDateString()}</p>
-                  <p>Created By: {orgData.created_by}</p>
+                  <p>
+                    {uiT("ui.22d435a3711855db")}{" "}
+                    {new Date(orgData.created_at).toLocaleDateString(getFormattingLocale())}
+                  </p>
+                  <p>
+                    {uiT("ui.29d0051ddd1928e6")}{" "}
+                    {new Date(orgData.updated_at).toLocaleDateString(getFormattingLocale())}
+                  </p>
+                  <p>
+                    {uiT("ui.b9a6204c897efd6d")} {orgData.created_by}
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardContent>
-                <p className="text-sm text-muted-foreground">Budget Status</p>
+                <p className="text-sm text-muted-foreground">{uiT("ui.d29bae05649668aa")}</p>
                 <div className="mt-2 text-sm text-foreground">
                   <p className="text-xl font-semibold">${formatNumberWithCommas(orgData.spend, 4)}</p>
                   <p>
-                    of{" "}
+                    {uiT("ui.28391d3bc64ec15c")}{" "}
                     {orgData.litellm_budget_table.max_budget === null
                       ? uiT("ui.11dde17d6c3e")
                       : `$${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`}
                   </p>
                   {orgData.litellm_budget_table.budget_duration && (
-                    <p className="text-muted-foreground">Reset: {orgData.litellm_budget_table.budget_duration}</p>
+                    <p className="text-muted-foreground">
+                      {uiT("ui.19a37a6d2b12fe28")} {orgData.litellm_budget_table.budget_duration}
+                    </p>
                   )}
                 </div>
               </CardContent>
@@ -217,8 +231,12 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
               <CardContent>
                 <p className="text-sm text-muted-foreground">{uiT("ui.ed129d234fd4")}</p>
                 <div className="mt-2 text-sm text-foreground">
-                  <p>TPM: {orgData.litellm_budget_table.tpm_limit ?? uiT("ui.11dde17d6c3e")}</p>
-                  <p>RPM: {orgData.litellm_budget_table.rpm_limit ?? uiT("ui.11dde17d6c3e")}</p>
+                  <p>
+                    {uiT("ui.22506bb2e2fc9c02")} {orgData.litellm_budget_table.tpm_limit ?? uiT("ui.11dde17d6c3e")}
+                  </p>
+                  <p>
+                    {uiT("ui.0a9c9fab18f38f0e")} {orgData.litellm_budget_table.rpm_limit ?? uiT("ui.11dde17d6c3e")}
+                  </p>
                   {orgData.litellm_budget_table.max_parallel_requests && (
                     <p>
                       {uiT("ui.ee5508890a86")} {orgData.litellm_budget_table.max_parallel_requests}
@@ -281,7 +299,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
               onAddMember={() => setIsAddMemberModalVisible(true)}
               roleColumnTitle="Organization Role"
               extraColumns={orgExtraColumns}
-              emptyText="No members found"
+              emptyText={uiT("ui.a4e937d25742e760")}
             />
           </div>
         </TabsContent>
@@ -290,7 +308,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
           <Card className="max-h-[65vh] overflow-y-auto">
             <CardContent>
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-foreground">Organization Settings</h2>
+                <h2 className="text-lg font-semibold text-foreground">{uiT("ui.cc1d9e616539ee4b")}</h2>
                 {canEditOrg && !isEditing && (
                   <Button onClick={() => setIsEditing(true)}>{uiT("ui.cddc5824575b")}</Button>
                 )}
@@ -307,11 +325,11 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
               ) : (
                 <div className="space-y-4 text-sm">
                   <div>
-                    <p className="font-medium text-foreground">Organization Name</p>
+                    <p className="font-medium text-foreground">{uiT("ui.4cbd90732447a928")}</p>
                     <div>{orgData.organization_alias}</div>
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Organization ID</p>
+                    <p className="font-medium text-foreground">{uiT("ui.1f466322634e2d85")}</p>
                     <div className="font-mono">{orgData.organization_id}</div>
                   </div>
                   <div>
@@ -328,18 +346,25 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                   </div>
                   <div>
                     <p className="font-medium text-foreground">{uiT("ui.ed129d234fd4")}</p>
-                    <div>TPM: {orgData.litellm_budget_table.tpm_limit ?? uiT("ui.11dde17d6c3e")}</div>
-                    <div>RPM: {orgData.litellm_budget_table.rpm_limit ?? uiT("ui.11dde17d6c3e")}</div>
+                    <div>
+                      {uiT("ui.22506bb2e2fc9c02")} {orgData.litellm_budget_table.tpm_limit ?? uiT("ui.11dde17d6c3e")}
+                    </div>
+                    <div>
+                      {uiT("ui.0a9c9fab18f38f0e")} {orgData.litellm_budget_table.rpm_limit ?? uiT("ui.11dde17d6c3e")}
+                    </div>
                   </div>
                   <div>
                     <p className="font-medium text-foreground">{uiT("ui.1c6225ec7092")}</p>
                     <div>
-                      Max:{" "}
+                      {uiT("ui.ef2840cc402ef492")}{" "}
                       {orgData.litellm_budget_table.max_budget !== null
                         ? `$${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`
-                        : "No Limit"}
+                        : uiT("ui.366c2707df5c3c52")}
                     </div>
-                    <div>Reset: {orgData.litellm_budget_table.budget_duration || uiT("ui.6300ef800bb8")}</div>
+                    <div>
+                      {uiT("ui.19a37a6d2b12fe28")}{" "}
+                      {orgData.litellm_budget_table.budget_duration || uiT("ui.6300ef800bb8")}
+                    </div>
                   </div>
 
                   <ObjectPermissionsView
@@ -360,22 +385,22 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
         onCancel={() => setIsAddMemberModalVisible(false)}
         onSubmit={handleMemberAdd}
         accessToken={accessToken}
-        title="Add Organization Member"
+        title={uiT("ui.3c189bde62b6b2d5")}
         roles={[
           {
             label: "org_admin",
             value: "org_admin",
-            description: "Can add and remove members, and change their roles.",
+            description: uiT("ui.72c6127535f9e3e8"),
           },
           {
             label: "internal_user",
             value: "internal_user",
-            description: "Can view/create keys for themselves within organization.",
+            description: uiT("ui.4cfc93a13a0ca63b"),
           },
           {
             label: "internal_user_viewer",
             value: "internal_user_viewer",
-            description: "Can only view their keys within organization.",
+            description: uiT("ui.115f2b1d9686b271"),
           },
         ]}
         defaultRole="internal_user"
@@ -387,11 +412,11 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
         initialData={selectedEditMember}
         mode="edit"
         config={{
-          title: "Edit Member",
+          title: uiT("ui.41d3aafd7a40222c"),
           showEmail: true,
           showUserId: true,
           roleOptions: [
-            { label: "Org Admin", value: "org_admin" },
+            { label: uiT("ui.1eef9046d967a91d"), value: "org_admin" },
             { label: uiT("ui.4a5a8d129e4b"), value: "internal_user" },
             { label: uiT("ui.2e9b2996eb97"), value: "internal_user_viewer" },
           ],

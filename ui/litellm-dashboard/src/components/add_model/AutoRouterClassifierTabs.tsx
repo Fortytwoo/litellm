@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useContext, useId } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -77,10 +79,10 @@ export function ClassifierOption({
       {fresh && exhausted && (
         <DropdownMenuItem
           render={<a href={AUTO_ROUTER_CONTACT_URL} target="_blank" rel="noopener noreferrer" />}
-          aria-label={`Talk to our team about ${label}`}
+          aria-label={uiT("ui.bcedb8f6645e09a5", { v0: String(label) })}
           className="absolute top-9 right-8 cursor-pointer px-0 py-0 text-xs leading-5 font-medium text-blue-600 focus:text-blue-600 hover:underline dark:text-blue-400 dark:focus:text-blue-400"
         >
-          Talk to our team
+          {uiT("ui.5fbc0ca89a619cb7")}
         </DropdownMenuItem>
       )}
     </div>
@@ -145,6 +147,8 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
   judgeModel,
   decisionModel,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = useId();
   const availability = useContext(AutoRouterAvailabilityContext);
   const classifierType = effectiveClassifierType(value);
@@ -179,7 +183,14 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       jev_classifier_config: { ...defaults, ...value.jev_classifier_config, provider, model: defaults.model },
     });
   };
-  const approachLabels: Partial<Record<ClassifierType, string>> = { capability: "Capability", llm_v2: "Fuse v2" };
+  const approachLabels: Partial<Record<ClassifierType, string>> = {
+    get capability() {
+      return translateUi("ui.5faf58a69db59058");
+    },
+    get llm_v2() {
+      return translateUi("ui.5de813e4d1c2970c");
+    },
+  };
   const approachDescription: Partial<Record<ClassifierType, string>> = {
     capability: "Use the efficient model when it is likely to succeed",
     llm_v2: "Use the efficient model when its predicted quality is close enough to the capable model",
@@ -189,9 +200,9 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       <fieldset>
         <legend className="mb-4 flex w-full items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h4 className="m-0 text-xl font-semibold text-foreground">Choose your classifier</h4>
-            <SimpleTooltip content="Choose how requests are evaluated and routed to your tiers">
-              <button type="button" aria-label="About classifiers" className="text-muted-foreground">
+            <h4 className="m-0 text-xl font-semibold text-foreground">{uiT("ui.fd5c195bafa40f76")}</h4>
+            <SimpleTooltip content={uiT("ui.dd50975989f48362")}>
+              <button type="button" aria-label={uiT("ui.14d63cb58395f3e5")} className="text-muted-foreground">
                 <Info className="size-4" />
               </button>
             </SimpleTooltip>
@@ -200,12 +211,12 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
         </legend>
         <RadioGroup value={family} onValueChange={changeFamily} className="grid gap-3 sm:grid-cols-3">
           {[
-            { value: "heuristics", label: "Heuristics", description: "Classify locally, with no API call" },
-            { value: "llm", label: "LLM", description: "Use a judge model to choose a solver" },
+            { value: "heuristics", label: uiT("ui.fe610461f56daafb"), description: uiT("ui.ea13af3dadafb98e") },
+            { value: "llm", label: "LLM", description: uiT("ui.a289ac3bf77d520f") },
             {
               value: "jev",
-              label: "Decisions Model",
-              description: "Use a decision model to choose a tier",
+              label: uiT("ui.111ad5d311001f2c"),
+              description: uiT("ui.c0076b4dbde95226"),
             },
           ].map((option) => (
             <Label
@@ -234,13 +245,13 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       {family === "jev" &&
         (decisionModel ?? (
           <div className="space-y-2">
-            <Label htmlFor={`${id}-decision-model`}>Decision model</Label>
+            <Label htmlFor={`${id}-decision-model`}>{uiT("ui.1e7a941a0dab1722")}</Label>
             <Select
               items={[
-                { value: "jev", label: "Jev" },
-                { value: "laya", label: "Laya" },
-                { value: "bespoke", label: "Bespoke Nimble" },
-                { value: "databricks", label: "Databricks" },
+                { value: "jev", label: uiT("ui.4b23c5040d02a920") },
+                { value: "laya", label: uiT("ui.a4dcbd2a6a16a37d") },
+                { value: "bespoke", label: uiT("ui.4af4225cfbce9548") },
+                { value: "databricks", label: uiT("ui.5b5fea64c7467736") },
               ]}
               value={normalizeJevClassifierConfig(value.jev_classifier_config).provider}
               onValueChange={changeProvider}
@@ -249,23 +260,21 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="jev">Jev</SelectItem>
-                <SelectItem value="laya">Laya</SelectItem>
-                <SelectItem value="bespoke">Bespoke Nimble</SelectItem>
-                <SelectItem value="databricks">Databricks</SelectItem>
+                <SelectItem value="jev">{uiT("ui.4b23c5040d02a920")}</SelectItem>
+                <SelectItem value="laya">{uiT("ui.a4dcbd2a6a16a37d")}</SelectItem>
+                <SelectItem value="bespoke">{uiT("ui.4af4225cfbce9548")}</SelectItem>
+                <SelectItem value="databricks">{uiT("ui.5b5fea64c7467736")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
         ))}
-      {family === "custom" && (
-        <p className="text-sm text-muted-foreground">This router uses a custom classifier plugin</p>
-      )}
+      {family === "custom" && <p className="text-sm text-muted-foreground">{uiT("ui.ad69c868ca335ab0")}</p>}
       {family === "heuristics" && (
         <div className="space-y-2">
-          <Label htmlFor={`${id}-heuristic`}>Heuristic</Label>
+          <Label htmlFor={`${id}-heuristic`}>{uiT("ui.8ea33c597e4ab376")}</Label>
           <ClassifierMenu
             id={`${id}-heuristic`}
-            label="Heuristic"
+            label={uiT("ui.8ea33c597e4ab376")}
             selectedLabel={classifierType === "heuristic_v2" ? "Heuristic v2" : "Rule-based"}
             feature={classifierType === "heuristic_v2" ? "heuristic_v2" : undefined}
             value={classifierType}
@@ -275,30 +284,28 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
           >
             <ClassifierOption
               value="heuristic"
-              label="Rule-based"
-              description="Score requests with local rules to choose a tier, with no API call"
+              label={uiT("ui.6d80010aeb1c2847")}
+              description={uiT("ui.458db9e5eacedb46")}
             />
             <ClassifierOption
               value="heuristic_v2"
-              label="Heuristic v2"
-              description="Use calibrated probabilities to match requests to a tier, with no API call"
+              label={uiT("ui.183bc446ae6a17b0")}
+              description={uiT("ui.cde73557925a9b6e")}
               feature="heuristic_v2"
             />
           </ClassifierMenu>
           <p className="text-xs text-muted-foreground">
-            {classifierType === "heuristic_v2"
-              ? "Use calibrated probabilities to match requests to a tier"
-              : "Match requests using scoring rules. Choose or change tier models freely"}
+            {classifierType === "heuristic_v2" ? uiT("ui.9a958446ad25aeb0") : uiT("ui.a4f6796d0639b2d4")}
           </p>
         </div>
       )}
       {family === "llm" && judgeModel}
       {family === "llm" && (
         <div className="space-y-2">
-          <Label htmlFor={`${id}-approach`}>Routing approach</Label>
+          <Label htmlFor={`${id}-approach`}>{uiT("ui.b34009618629384a")}</Label>
           <ClassifierMenu
             id={`${id}-approach`}
-            label="Routing approach"
+            label={uiT("ui.b34009618629384a")}
             selectedLabel={approachLabels[classifierType] ?? "Complexity"}
             feature={isForecastClassifier(classifierType) ? classifierType : undefined}
             value={isForecastClassifier(classifierType) ? classifierType : "llm"}
@@ -309,24 +316,20 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
               }
             }}
           >
-            <ClassifierOption
-              value="llm"
-              label="Complexity"
-              description="Match task difficulty to a tier, then use one of that tier's models"
-            />
+            <ClassifierOption value="llm" label={uiT("ui.2dcf78dcabca38ef")} description={uiT("ui.71e78862dc541cac")} />
             {family === "llm" && (
               <>
                 <ClassifierOption
                   value="capability"
-                  label="Capability"
-                  description="Use the efficient model when it is likely to succeed; otherwise use the capable model"
+                  label={uiT("ui.5faf58a69db59058")}
+                  description={uiT("ui.346f8d1cd9122c95")}
                   feature="capability"
                   disabled={hasCustomTiers}
                 />
                 <ClassifierOption
                   value="llm_v2"
-                  label="Fuse v2"
-                  description="Use the efficient model when its predicted quality is close enough to the capable model"
+                  label={uiT("ui.5de813e4d1c2970c")}
+                  description={uiT("ui.6d7cd9b177ff64ba")}
                   feature="llm_v2"
                   disabled={hasCustomTiers}
                 />
@@ -334,15 +337,11 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
             )}
           </ClassifierMenu>
           <p className="text-xs text-muted-foreground">
-            {approachDescription[classifierType] ?? "Match task difficulty to a tier"}
+            {approachDescription[classifierType] ?? uiT("ui.596616088f5c4f97")}
           </p>
         </div>
       )}
-      {hasCustomTiers && (
-        <p className="text-xs text-muted-foreground">
-          Restore standard tiers to use Heuristics, Capability, or Fuse v2
-        </p>
-      )}
+      {hasCustomTiers && <p className="text-xs text-muted-foreground">{uiT("ui.2beb4a4be84cdcfa")}</p>}
       {availability.data?.error && !availability.isChecking && (
         <div role="alert" className="space-y-1">
           <p className="text-sm text-destructive">{availability.data.error}</p>
@@ -351,9 +350,9 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       )}
       {availability.isError && (
         <p className="text-xs text-muted-foreground">
-          Could not check availability.{" "}
+          {uiT("ui.ed46d836213a2eb3")}{" "}
           <button type="button" className="underline" onClick={() => availability.refetch?.()}>
-            Retry
+            {uiT("ui.942087cc2d41e013")}
           </button>
         </p>
       )}

@@ -354,7 +354,7 @@ export function Workspace({ usage = false }: { usage?: boolean }) {
               { key: "startTime", label: t("time") },
               { key: "model", label: t("models") },
               { key: "spend", label: t("spend") },
-              { key: "total_tokens", label: "Tokens" },
+              { key: "total_tokens", label: t("tokens") },
               { key: "status", label: t("status") },
             ]}
           />

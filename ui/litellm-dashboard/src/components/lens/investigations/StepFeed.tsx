@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { cn } from "@/lib/cva.config";
 
@@ -13,14 +14,16 @@ const STEP_TONE = {
 } as const;
 
 export function StepFeed({ job }: { job: Job }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const steps = job.steps ?? [];
   return (
     <ol
-      aria-label="Investigation steps"
+      aria-label={uiT("ui.1fc4d0b9d9b3145b")}
       className="max-h-56 space-y-0.5 overflow-y-auto font-mono text-xs"
       data-testid="step-feed"
     >
-      {steps.length === 0 && <li className="text-muted-foreground">Waiting for the worker to start…</li>}
+      {steps.length === 0 && <li className="text-muted-foreground">{uiT("ui.fdc63ca8d58e5a0e")}</li>}
       {[...steps].reverse().map((step, index) => (
         <li
           key={`${step.at}-${index}`}

@@ -37,7 +37,7 @@ export function CommandPaletteHint({ scope, onDismiss }: CommandPaletteHintProps
       <button
         type="button"
         className="ml-0.5 flex size-5 items-center justify-center rounded-full hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        aria-label="Dismiss search hint"
+        aria-label={uiT("ui.79fc5704f860b750")}
         onClick={onDismiss}
       >
         <X className="size-3" aria-hidden="true" />

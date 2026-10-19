@@ -38,7 +38,9 @@ function AuditField({ title, value, children }: { title: string; value: unknown;
     <Card size="sm" role="region" aria-label={title}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {value != null && <CopyButton value={JSON.stringify(value, null, 2)} label={`Copy ${title}`} />}
+        {value != null && (
+          <CopyButton value={JSON.stringify(value, null, 2)} label={uiT("supplement.copy", { label: title })} />
+        )}
       </CardHeader>
       <CardContent>
         <p className="mb-3 text-sm text-muted-foreground">{children}</p>

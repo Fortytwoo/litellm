@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -256,7 +258,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
     <div className="mb-4 rounded-lg border border-border bg-muted/50 p-4">
       <div className="mb-2 flex items-center gap-2">
         <LinkIcon className="size-4 text-primary" />
-        <span className="text-sm font-medium text-foreground">Discover from agent URL</span>
+        <span className="text-sm font-medium text-foreground">{uiT("ui.fe4684ce76e6e377")}</span>
         <TooltipProvider delay={300}>
           <Tooltip>
             <TooltipTrigger
@@ -266,35 +268,30 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                 </span>
               }
             />
-            <TooltipContent>
-              LiteLLM will fetch /.well-known/agent-card.json from this URL and let you pick which skills and
-              capabilities to expose through the proxy.
-            </TooltipContent>
+            <TooltipContent>{uiT("ui.1f31141fd09c8125")}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
       {isParentDriven ? (
         <>
-          <p className="mb-2 text-xs text-muted-foreground">
-            Using the connection details you entered above. We&apos;ll fetch:
-          </p>
+          <p className="mb-2 text-xs text-muted-foreground">{uiT("ui.c9adfbe187fd4170")}</p>
           <div className="mb-3 rounded-sm border border-border bg-background px-3 py-2 font-mono text-xs break-all text-foreground">
             {discoveryRequest!.display_url || effectiveUrl || (
-              <span className="text-muted-foreground italic">Fill in the fields above first</span>
+              <span className="text-muted-foreground italic">{uiT("ui.483e80d6409e23b1")}</span>
             )}
           </div>
           <div className="flex justify-end">
             <Button onClick={handleDiscover} disabled={loading || !effectiveUrl.trim()}>
               {renderDiscoverIcon()}
-              {discoverLabel}
+              {translateText(discoverLabel)}
             </Button>
           </div>
         </>
       ) : (
         <>
           <p className="mb-3 text-xs text-muted-foreground">
-            Paste the upstream agent&apos;s base URL. We&apos;ll try <code>/.well-known/agent-card.json</code>,{" "}
-            <code>/.well-known/agent.json</code>, and <code>/agent.json</code> in order.
+            {uiT("ui.6eeb389b7bf3e2e9")} <code>/.well-known/agent-card.json</code>, <code>/.well-known/agent.json</code>
+            {uiT("ui.4aa9bfd2f175a94a")} <code>/agent.json</code> {uiT("ui.c7cff4fa2b9a1099")}
           </p>
 
           <div className="flex w-full items-center gap-2">
@@ -309,7 +306,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
             />
             <Button onClick={handleDiscover} disabled={loading}>
               {renderDiscoverIcon()}
-              {discoverLabel}
+              {translateText(discoverLabel)}
             </Button>
           </div>
         </>
@@ -318,10 +315,15 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
       {error && (
         <Alert variant="destructive" className="mt-3">
           <CircleAlert />
-          <AlertTitle>Discovery failed</AlertTitle>
+          <AlertTitle>{uiT("ui.a95eb4511f7e574a")}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
           <AlertAction>
-            <Button variant="ghost" size="icon-xs" aria-label="Dismiss error" onClick={() => setError(null)}>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              aria-label={uiT("ui.2db046678b9c9d1d")}
+              onClick={() => setError(null)}
+            >
               <X />
             </Button>
           </AlertAction>
@@ -338,7 +340,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
         <div className="mt-4 rounded-lg border border-border bg-background p-4">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <CircleCheck className="size-4 text-success" />
-            <span className="text-sm font-medium text-foreground">Upstream card loaded</span>
+            <span className="text-sm font-medium text-foreground">{uiT("ui.055dd9c8ef2fb8cd")}</span>
             {card.version && <Badge variant="secondary">v{card.version}</Badge>}
             {card.provider?.organization && <Badge variant="secondary">{card.provider.organization}</Badge>}
           </div>
@@ -346,9 +348,13 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
           <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-2">
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">
-                Name (shown to API clients)
+                {uiT("ui.26f2c8b70edea913")}
               </label>
-              <Input value={editedName} onChange={(e) => setEditedName(e.target.value)} placeholder="Agent name" />
+              <Input
+                value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+                placeholder={uiT("ui.1cfb21871a035769")}
+              />
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.526e0087cc3f")}</label>
@@ -357,7 +363,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
                 rows={2}
-                placeholder="What this agent does"
+                placeholder={uiT("ui.962c87b07f408da1")}
               />
             </div>
           </div>
@@ -374,12 +380,12 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                   }
                 />
                 <Badge variant="secondary">
-                  {selectedSkillCount} / {skillCount} selected
+                  {selectedSkillCount} / {skillCount} {uiT("ui.d7cbbb688b2e506c")}
                 </Badge>
               </div>
               <CollapsibleContent className="pt-2">
                 {skillCount === 0 ? (
-                  <div className="py-6 text-center text-sm text-muted-foreground">Upstream card has no skills</div>
+                  <div className="py-6 text-center text-sm text-muted-foreground">{uiT("ui.49c6583851153b58")}</div>
                 ) : (
                   <div className="space-y-2">
                     {(card.skills ?? []).map((skill, idx) => {
@@ -421,7 +427,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                   render={
                     <button type="button" className="group flex items-center gap-2">
                       <ChevronDown className="size-4 text-muted-foreground transition-transform group-data-[panel-open]:rotate-180" />
-                      <span className="text-sm font-medium text-foreground">Capabilities</span>
+                      <span className="text-sm font-medium text-foreground">{uiT("ui.9460f16ac9b5171e")}</span>
                     </button>
                   }
                 />
@@ -434,10 +440,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                         </span>
                       }
                     />
-                    <TooltipContent>
-                      Only capabilities LiteLLM can faithfully proxy today are listed. Others (push notifications,
-                      extensions) are coming soon.
-                    </TooltipContent>
+                    <TooltipContent>{uiT("ui.50fd952590599b8d")}</TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </div>
@@ -452,7 +455,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                       >
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium text-foreground capitalize">{key}</span>
-                          {!upstreamHas && <Badge variant="outline">not advertised upstream</Badge>}
+                          {!upstreamHas && <Badge variant="outline">{uiT("ui.8e4fb95e243759d8")}</Badge>}
                         </div>
                         <Switch
                           checked={Boolean(selectedCapabilities[key])}

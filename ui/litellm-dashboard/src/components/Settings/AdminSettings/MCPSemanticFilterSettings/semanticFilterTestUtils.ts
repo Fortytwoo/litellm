@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { toast } from "@/lib/toast";
 import { testMCPSemanticFilter } from "@/components/networking";
 
@@ -39,7 +40,7 @@ export const runSemanticFilterTest = async ({
   setTestError: (error: string | null) => void;
 }) => {
   if (!testQuery || !testModel || !accessToken) {
-    toast.error("Please enter a query and select a model");
+    toast.error(translateUi("ui.44e833501e76e357"));
     return;
   }
 
@@ -52,17 +53,17 @@ export const runSemanticFilterTest = async ({
     const parsedResult = parseFilterHeaders(headers);
 
     if (!parsedResult) {
-      toast.warning("Semantic filter is not enabled or no tools were filtered");
+      toast.warning(translateUi("ui.04d0f4a914cb8232"));
       return;
     }
 
     setTestResult(parsedResult);
-    toast.success("Semantic filter test completed successfully");
+    toast.success(translateUi("ui.fcff97aed168d4b5"));
   } catch (error) {
     console.error("Test failed:", error);
     const message = error instanceof Error && error.message ? error.message : "Failed to test semantic filter";
     setTestError(message);
-    toast.error("Failed to test semantic filter");
+    toast.error(translateUi("ui.60bd2c3ade80de1e"));
   } finally {
     setIsTesting(false);
   }

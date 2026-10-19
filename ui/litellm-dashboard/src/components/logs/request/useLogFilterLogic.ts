@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import moment from "moment";
 import { keepPreviousData, useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import type { ColumnFiltersState, PaginationState, SortingState } from "@tanstack/react-table";
@@ -39,21 +40,51 @@ export const LOG_FILTER_IDS = {
 } as const;
 
 export const LOG_FILTER_LABELS: Record<string, string> = {
-  [LOG_FILTER_IDS.TEAM_ID]: "Team ID",
-  [LOG_FILTER_IDS.SPAN_TYPE]: "Span Type",
-  [LOG_FILTER_IDS.STATUS]: "Status",
-  [LOG_FILTER_IDS.CACHE_STATUS]: "Cache",
-  [LOG_FILTER_IDS.CREDENTIAL]: "Credential",
-  [LOG_FILTER_IDS.KEY_ALIAS]: "Key Alias",
-  [LOG_FILTER_IDS.USER_ID]: "User ID",
-  [LOG_FILTER_IDS.END_USER]: "End User",
-  [LOG_FILTER_IDS.ERROR_CODE]: "Error Code",
-  [LOG_FILTER_IDS.ERROR_MESSAGE]: "Error Message",
-  [LOG_FILTER_IDS.KEY_HASH]: "Key Hash",
-  [LOG_FILTER_IDS.SESSION_ID]: "Session ID",
-  [LOG_FILTER_IDS.MODEL_ID]: "Model",
-  [LOG_FILTER_IDS.PUBLIC_MODEL_OR_SEARCH_TOOL]: "Public model / search tool",
-  [LOG_FILTER_IDS.SEARCH]: "Search",
+  get [LOG_FILTER_IDS.TEAM_ID]() {
+    return translateUi("ui.fa2758a6173a");
+  },
+  get [LOG_FILTER_IDS.SPAN_TYPE]() {
+    return translateUi("ui.e6699623199b");
+  },
+  get [LOG_FILTER_IDS.STATUS]() {
+    return translateUi("ui.920e413c7d41");
+  },
+  get [LOG_FILTER_IDS.CACHE_STATUS]() {
+    return translateUi("ui.a76ce82a9749");
+  },
+  get [LOG_FILTER_IDS.CREDENTIAL]() {
+    return translateUi("ui.b1c42b3ce118");
+  },
+  get [LOG_FILTER_IDS.KEY_ALIAS]() {
+    return translateUi("ui.1e7044ffa52d");
+  },
+  get [LOG_FILTER_IDS.USER_ID]() {
+    return translateUi("ui.7967e089a7b9");
+  },
+  get [LOG_FILTER_IDS.END_USER]() {
+    return translateUi("ui.34d41e71490a");
+  },
+  get [LOG_FILTER_IDS.ERROR_CODE]() {
+    return translateUi("ui.468324157558");
+  },
+  get [LOG_FILTER_IDS.ERROR_MESSAGE]() {
+    return translateUi("ui.f789799c8754");
+  },
+  get [LOG_FILTER_IDS.KEY_HASH]() {
+    return translateUi("ui.415fd17d81f2");
+  },
+  get [LOG_FILTER_IDS.SESSION_ID]() {
+    return translateUi("ui.cb9ac5c561da");
+  },
+  get [LOG_FILTER_IDS.MODEL_ID]() {
+    return translateUi("ui.5e2c614c23f0");
+  },
+  get [LOG_FILTER_IDS.PUBLIC_MODEL_OR_SEARCH_TOOL]() {
+    return translateUi("ui.749c5bf2a5da");
+  },
+  get [LOG_FILTER_IDS.SEARCH]() {
+    return translateUi("ui.49c266baaaa7");
+  },
 };
 
 export interface LogsWindow {

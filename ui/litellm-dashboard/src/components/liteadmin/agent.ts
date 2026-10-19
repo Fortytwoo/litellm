@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type OpenAI from "openai";
 import type { ChatMessage } from "@/components/chat/types";
 import { createGatewayClient } from "@/components/llm_calls/gateway_client";
@@ -28,7 +29,9 @@ export function resolveInferenceTarget(candidate: string, managementBaseUrl: str
   const invalid: InferenceTarget = {
     baseUrl: null,
     requiresConsent: false,
-    error: "The gateway must be a valid HTTP(S) URL without credentials, a query, or a fragment.",
+    get error() {
+      return translateUi("ui.1ae23ae50aa6b7b0");
+    },
   };
   try {
     const page = new URL(pageUrl);
@@ -40,7 +43,9 @@ export function resolveInferenceTarget(candidate: string, managementBaseUrl: str
       return {
         baseUrl: null,
         requiresConsent: false,
-        error: "Inference must use HTTPS when the dashboard or management gateway uses HTTPS.",
+        get error() {
+          return translateUi("ui.83eb6d147f20247a");
+        },
       };
     }
     return { baseUrl: target.href, requiresConsent: target.origin !== management.origin, error: null };
@@ -96,7 +101,10 @@ export async function runLiteAdmin(options: LiteAdminOptions, client?: OpenAI): 
     messages: [
       {
         role: "system" as const,
-        content: `${SYSTEM_PROMPT}\nCurrent UTC date: ${new Date().toISOString().slice(0, 10)}.`,
+        content: translateUi("ui.b8bce987a57cbc46", undefined, {
+          v0: String(SYSTEM_PROMPT),
+          v1: String(new Date().toISOString().slice(0, 10)),
+        }),
       },
       ...history,
     ],

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 import { Server } from "lucide-react";
@@ -24,6 +25,8 @@ interface WorkerOption {
 }
 
 const WorkerDropdown: React.FC<WorkerDropdownProps> = ({ onWorkerSwitch }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { isControlPlane, selectedWorker, workers } = useWorker();
 
   if (!isControlPlane || !selectedWorker) return null;
@@ -45,13 +48,13 @@ const WorkerDropdown: React.FC<WorkerDropdownProps> = ({ onWorkerSwitch }) => {
         }
       }}
     >
-      <ComboboxInput className="min-w-[180px]" aria-label="Worker">
+      <ComboboxInput className="min-w-[180px]" aria-label={uiT("ui.a67b04cd5c491d4d")}>
         <InputGroupAddon align="inline-start">
           <Server className="size-4" />
         </InputGroupAddon>
       </ComboboxInput>
       <ComboboxContent>
-        <ComboboxEmpty>No matching workers</ComboboxEmpty>
+        <ComboboxEmpty>{uiT("ui.499bcc55d42009c3")}</ComboboxEmpty>
         <ComboboxList>
           {(option: WorkerOption) => (
             <ComboboxItem key={option.value} value={option} disabled={option.disabled}>

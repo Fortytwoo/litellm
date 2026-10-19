@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleHelp, X } from "lucide-react";
@@ -41,14 +43,14 @@ export function ToolTestPanel({
         properties: {
           input: {
             type: "string",
-            description: "Input for this tool",
+            description: uiT("ui.a1362a7f71518e5d"),
           },
         },
         required: ["input"],
       };
     }
     return tool.inputSchema as InputSchema;
-  }, [tool.inputSchema]);
+  }, [tool.inputSchema, uiT]);
 
   // Check if this is a nested params structure and extract the actual parameters
   const actualSchema: InputSchema = React.useMemo(() => {
@@ -122,7 +124,7 @@ export function ToolTestPanel({
   const handleCopyResult = async () => {
     const success = await copyToClipboard(JSON.stringify(result, null, 2));
     if (success) {
-      toast.success("Result copied to clipboard");
+      toast.success(translateUi("ui.ed3a1663939705ba"));
     } else {
       toast.fromError("Failed to copy result");
     }
@@ -131,7 +133,7 @@ export function ToolTestPanel({
   const handleCopyToolName = async () => {
     const success = await copyToClipboard(tool.name);
     if (success) {
-      toast.success("Tool name copied to clipboard");
+      toast.success(translateUi("ui.62bd8edf1354dcfb"));
     } else {
       toast.fromError("Failed to copy tool name");
     }
@@ -146,17 +148,17 @@ export function ToolTestPanel({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={resolveLogoSrc(tool.mcp_info.logo_url)}
-              alt={`${tool.mcp_info.server_name} logo`}
+              alt={uiT("ui.78e75433bd1b56ea", { v0: String(tool.mcp_info.server_name) })}
               className="w-6 h-6 object-contain"
             />
           )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
-              <h2 className="text-lg font-semibold text-foreground">Test Tool:</h2>
+              <h2 className="text-lg font-semibold text-foreground">{uiT("ui.8a9b8f2f8c27f334")}</h2>
               <div
                 className="group inline-flex items-center space-x-1 bg-muted hover:bg-accent px-3 py-1 rounded-md cursor-pointer transition-colors border border-border"
                 onClick={handleCopyToolName}
-                title="Click to copy tool name"
+                title={uiT("ui.b8a5f57fc14a77d2")}
               >
                 <span className="font-mono text-foreground font-medium text-sm">{tool.name}</span>
                 <svg
@@ -197,13 +199,13 @@ export function ToolTestPanel({
         <div className="bg-card border border-border rounded-lg">
           <div className="border-b border-border px-4 py-2">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-foreground">Input Parameters</h3>
+              <h3 className="text-sm font-semibold text-foreground">{uiT("ui.e8756d05615a8b9a")}</h3>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger
                     render={<CircleHelp className="size-4 cursor-help text-muted-foreground hover:text-foreground" />}
                   />
-                  <TooltipContent>Configure the input parameters for this tool call</TooltipContent>
+                  <TooltipContent>{uiT("ui.e1d4950a14ce1521")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -224,7 +226,7 @@ export function ToolTestPanel({
         {/* Right Column - Tool Result */}
         <div className="bg-card border border-border rounded-lg">
           <div className="border-b border-border px-4 py-2">
-            <h3 className="text-sm font-semibold text-foreground">Tool Result</h3>
+            <h3 className="text-sm font-semibold text-foreground">{uiT("ui.e0b5ee470e3ae1ac")}</h3>
           </div>
 
           <div className="p-4">
@@ -247,10 +249,8 @@ export function ToolTestPanel({
                       />
                     </svg>
                   </div>
-                  <h4 className="text-sm font-medium text-foreground mb-1">Ready to Call Tool</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Configure the input parameters and click &quot;Call Tool&quot; to see the results here.
-                  </p>
+                  <h4 className="text-sm font-medium text-foreground mb-1">{uiT("ui.fdf1c2c908ea6209")}</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{uiT("ui.981c6b95a063c577")}</p>
                 </div>
               </div>
             ) : (
@@ -268,7 +268,7 @@ export function ToolTestPanel({
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg>
-                        <h4 className="text-xs font-medium text-success">Tool executed successfully</h4>
+                        <h4 className="text-xs font-medium text-success">{uiT("ui.ac34f9d7dd007b59")}</h4>
                         {duration !== null && (
                           <span className="text-xs text-success ml-1">• {(duration / 1000).toFixed(2)}s</span>
                         )}
@@ -299,7 +299,7 @@ export function ToolTestPanel({
                         <button
                           onClick={handleCopyResult}
                           className="p-1 hover:bg-success/15 rounded-sm text-success"
-                          title="Copy response"
+                          title={uiT("ui.f0f755afea88944b")}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -328,8 +328,8 @@ export function ToolTestPanel({
                         <div className="animate-spin rounded-full h-8 w-8 border-2 border-border"></div>
                         <div className="animate-spin rounded-full h-8 w-8 border-2 border-info border-t-transparent absolute top-0"></div>
                       </div>
-                      <p className="text-sm font-medium mt-3">Calling tool...</p>
-                      <p className="text-xs text-muted-foreground mt-1">Please wait while we process your request</p>
+                      <p className="text-sm font-medium mt-3">{uiT("ui.7896cdf72205146c")}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{uiT("ui.2367d5b9ecec3b12")}</p>
                     </div>
                   )}
 
@@ -353,7 +353,7 @@ export function ToolTestPanel({
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <h4 className="text-xs font-medium text-destructive">Tool Call Failed</h4>
+                            <h4 className="text-xs font-medium text-destructive">{uiT("ui.ff865abf20b2a9fc")}</h4>
                             {duration !== null && (
                               <span className="text-xs text-destructive">• {(duration / 1000).toFixed(2)}s</span>
                             )}
@@ -380,7 +380,7 @@ export function ToolTestPanel({
                               <div>
                                 <div className="bg-muted px-3 py-1 border-b border-border">
                                   <span className="text-xs font-medium text-foreground uppercase tracking-wide">
-                                    Text Response
+                                    {uiT("ui.1991b24cb41614a6")}
                                   </span>
                                 </div>
                                 <div className="p-3">
@@ -469,7 +469,7 @@ export function ToolTestPanel({
                               <div>
                                 <div className="bg-muted px-3 py-1 border-b border-border">
                                   <span className="text-xs font-medium text-foreground uppercase tracking-wide">
-                                    Image Response
+                                    {uiT("ui.407ff17109d90b87")}
                                   </span>
                                 </div>
                                 <div className="p-3">
@@ -477,7 +477,7 @@ export function ToolTestPanel({
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                       src={content.url}
-                                      alt="Tool result"
+                                      alt={uiT("ui.9bb620efa692f707")}
                                       className="max-w-full h-auto rounded-sm shadow-xs"
                                     />
                                   </div>
@@ -489,7 +489,7 @@ export function ToolTestPanel({
                               <div>
                                 <div className="bg-muted px-3 py-1 border-b border-border">
                                   <span className="text-xs font-medium text-foreground uppercase tracking-wide">
-                                    Embedded Resource
+                                    {uiT("ui.5d1ab590bec05a7b")}
                                   </span>
                                 </div>
                                 <div className="p-3">
@@ -511,7 +511,7 @@ export function ToolTestPanel({
                                     </div>
                                     <div className="flex-1">
                                       <p className="text-xs font-medium text-info">
-                                        Resource Type: {content.resource_type}
+                                        {uiT("ui.fc78d80fc1f9176a")} {content.resource_type}
                                       </p>
                                       {content.url && (
                                         <a
@@ -520,7 +520,7 @@ export function ToolTestPanel({
                                           rel="noopener noreferrer"
                                           className="inline-flex items-center text-xs text-info hover:underline mt-1"
                                         >
-                                          View Resource
+                                          {uiT("ui.6479dddd21af0318")}
                                           <svg className="ml-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                                             <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />

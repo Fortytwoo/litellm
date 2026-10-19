@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export type UploadValidationResult = { ok: true } | { ok: false; error: string };
 
 export const CHAT_ATTACHMENT_ACCEPT = "image/png,image/jpeg,image/jpg,image/gif,image/webp,application/pdf,.pdf";
@@ -56,7 +57,9 @@ function validateSize(file: File, maxBytes: number): UploadValidationResult {
   }
   return {
     ok: false,
-    error: `"${file.name}" is too large. Maximum size is ${formatMb(maxBytes)}.`,
+    get error() {
+      return translateUi("ui.bf87ad39d154dbb5", undefined, { v0: String(file.name), v1: String(formatMb(maxBytes)) });
+    },
   };
 }
 
@@ -64,7 +67,9 @@ export function validateChatAttachment(file: File): UploadValidationResult {
   if (!isImageFile(file) && !isPdfFile(file)) {
     return {
       ok: false,
-      error: `"${file.name}" is not a supported attachment. Use PNG, JPEG, GIF, WebP, or PDF.`,
+      get error() {
+        return translateUi("ui.3ed76f42178dc21e", undefined, { v0: String(file.name) });
+      },
     };
   }
   return validateSize(file, MAX_CHAT_ATTACHMENT_BYTES);
@@ -74,13 +79,17 @@ export function validateImageEditFile(file: File, currentCount: number): UploadV
   if (currentCount >= MAX_IMAGE_EDIT_COUNT) {
     return {
       ok: false,
-      error: `You can upload at most ${MAX_IMAGE_EDIT_COUNT} images.`,
+      get error() {
+        return translateUi("ui.25b5529b9c3c2753", undefined, { v0: String(MAX_IMAGE_EDIT_COUNT) });
+      },
     };
   }
   if (!isImageFile(file)) {
     return {
       ok: false,
-      error: `"${file.name}" is not a supported image. Use PNG, JPEG, GIF, or WebP.`,
+      get error() {
+        return translateUi("ui.0119ebe9e6d29efa", undefined, { v0: String(file.name) });
+      },
     };
   }
   return validateSize(file, MAX_IMAGE_EDIT_BYTES);
@@ -90,7 +99,9 @@ export function validateAudioFile(file: File): UploadValidationResult {
   if (!isAudioFile(file)) {
     return {
       ok: false,
-      error: `"${file.name}" is not a supported audio file. Use MP3, MP4, MPEG, MPGA, M4A, WAV, or WEBM.`,
+      get error() {
+        return translateUi("ui.068fd477076e8d73", undefined, { v0: String(file.name) });
+      },
     };
   }
   return validateSize(file, MAX_AUDIO_BYTES);

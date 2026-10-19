@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useId } from "react";
 import { Plus, X } from "lucide-react";
@@ -9,6 +10,8 @@ import type { InvestigationInput } from "../investigationSchema";
 import type { ScopeOptions } from "../useMatchingActivity";
 
 export function MetadataFilters({ attributes, keys }: Pick<ScopeOptions, "attributes" | "keys">) {
+  const { t: uiT } = useDashboardLanguage();
+
   const id = useId();
   const {
     control,
@@ -24,14 +27,14 @@ export function MetadataFilters({ attributes, keys }: Pick<ScopeOptions, "attrib
           <div className="flex gap-2">
             <Input
               {...register(`selection.filters.${index}.key`)}
-              aria-label={`Metadata key ${index + 1}`}
+              aria-label={uiT("ui.fff1c2a7d05cf78e", { v0: String(index + 1) })}
               list={`${id}-keys`}
-              placeholder="Metadata key"
+              placeholder={uiT("ui.6ed06b931f6bcb7e")}
             />
             <Button
               variant="ghost"
               size="icon"
-              aria-label={`Remove condition ${index + 1}`}
+              aria-label={uiT("ui.682e0cfb4d89b075", { v0: String(index + 1) })}
               onClick={() => remove(index)}
             >
               <X className="size-4" />
@@ -44,9 +47,9 @@ export function MetadataFilters({ attributes, keys }: Pick<ScopeOptions, "attrib
           )}
           <Input
             {...register(`selection.filters.${index}.value`)}
-            aria-label={`Metadata value ${index + 1}`}
+            aria-label={uiT("ui.7ae1bd72bcf1eacd", { v0: String(index + 1) })}
             list={`${id}-values-${index}`}
-            placeholder="Equals"
+            placeholder={uiT("ui.f939ae3d30c69e33")}
           />
           {errors.selection?.filters?.[index]?.value?.message && (
             <p role="alert" className="text-sm text-destructive">
@@ -68,7 +71,7 @@ export function MetadataFilters({ attributes, keys }: Pick<ScopeOptions, "attrib
         ))}
       </datalist>
       <Button variant="outline" size="sm" disabled={filters.length >= 8} onClick={() => append({ key: "", value: "" })}>
-        <Plus className="size-3" /> Add condition
+        <Plus className="size-3" /> {uiT("ui.60a0d83510ea99a1")}
       </Button>
     </>
   );

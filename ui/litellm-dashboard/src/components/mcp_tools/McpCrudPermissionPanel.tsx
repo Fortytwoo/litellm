@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * McpCrudPermissionPanel
  *
@@ -76,6 +78,8 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
   readOnly = false,
   searchFilter = "",
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [collapsed, setCollapsed] = useState<Record<CrudOp, boolean>>({
     read: false,
     create: false,
@@ -182,26 +186,30 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                 <span className="font-semibold text-foreground text-sm">{meta.label}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${RISK_BADGE[meta.risk]}`}>
                   {meta.risk === "high"
-                    ? "High Risk"
+                    ? uiT("ui.2bae5bd387f97c8e")
                     : meta.risk === "medium"
-                      ? "Medium Risk"
+                      ? uiT("ui.c80b467348982295")
                       : meta.risk === "low"
-                        ? "Safe"
-                        : "Unclassified"}
+                        ? uiT("ui.4f9f0dabcd26ae53")
+                        : uiT("ui.1372a3810da5224a")}
                 </span>
                 <span className="text-xs text-muted-foreground ml-1">
-                  {group.filter((t) => effectiveAllowed.has(t.name)).length}/{group.length} allowed
+                  {group.filter((t) => effectiveAllowed.has(t.name)).length}/{group.length} {uiT("ui.eabc01f12ec3e7cb")}
                 </span>
               </button>
 
               {!readOnly && (
                 <div className="flex items-center gap-2 ml-4">
                   <p className="text-xs text-muted-foreground">
-                    {fullyAllowed ? "All on" : partial ? "Partial" : "All off"}
+                    {fullyAllowed
+                      ? uiT("ui.9a1858dbc4617fdc")
+                      : partial
+                        ? uiT("ui.a4d50fb854036548")
+                        : uiT("ui.be938cdb8f8b55d8")}
                   </p>
                   {/* Checkbox supports `indeterminate`; Switch does not. */}
                   <Checkbox
-                    aria-label={`Allow all ${meta.label} tools`}
+                    aria-label={uiT("ui.f9a6e7d22310da7c", { v0: String(meta.label) })}
                     checked={fullyAllowed}
                     indeterminate={partial}
                     onCheckedChange={(checked) => toggleGroup(op, checked)}
@@ -256,7 +264,7 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                             allowed ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"
                           }`}
                         >
-                          {allowed ? "on" : "off"}
+                          {allowed ? uiT("ui.b8d31e852725afb1") : uiT("ui.b4dc66dde806261b")}
                         </span>
                       </div>
                     );

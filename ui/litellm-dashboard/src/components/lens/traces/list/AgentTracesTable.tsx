@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { getCoreRowModel, useReactTable, type ColumnDef, type TableOptions } from "@tanstack/react-table";
 import { ArrowDown, ChevronRight, Plus, Star } from "lucide-react";
@@ -108,20 +111,19 @@ function AgentCell({ run }: { run: TraceSummary }) {
 }
 
 function InputCell({ run }: { run: TraceSummary }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const input = singleLine(previewText(run.input_preview));
   return (
     <div className="flex min-w-0 items-center gap-2">
       {input ? (
         <span className="truncate text-foreground">{input}</span>
       ) : (
-        <span className="truncate text-muted-foreground">No input recorded</span>
+        <span className="truncate text-muted-foreground">{uiT("ui.a80453ac27122b9a")}</span>
       )}
       {run.resolution_limited && (
-        <span
-          className="shrink-0 text-xs text-muted-foreground"
-          title="This run is too large to calculate all totals in this view"
-        >
-          Partial totals
+        <span className="shrink-0 text-xs text-muted-foreground" title={uiT("ui.9e179818ff77e82d")}>
+          {uiT("ui.cd7f4562756f9e64")}
         </span>
       )}
       <span className="hidden max-w-32 min-w-0 shrink-[100] truncate font-mono text-xs text-muted-foreground 2xl:inline">
@@ -132,25 +134,29 @@ function InputCell({ run }: { run: TraceSummary }) {
 }
 
 function FindingCount({ run }: { run: TraceSummary }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const state = useContext(FindingsContext).get(runKey(run));
   if (!state || state.status === "pending")
-    return <Skeleton aria-label="Loading findings" className="ml-auto h-3 w-5" />;
-  if (state.status === "error") return <span title="Could not load findings">Unavailable</span>;
-  if (state.count === null) return <span title="No conclusive investigation for this trace">-</span>;
-  return <span title={`${state.count} findings from completed investigations`}>{state.count.toLocaleString()}</span>;
+    return <Skeleton aria-label={uiT("ui.3b06d3881b0fa92a")} className="ml-auto h-3 w-5" />;
+  if (state.status === "error") return <span title={uiT("ui.7fe44f7e7c7b035f")}>{uiT("ui.ca184496974204a0")}</span>;
+  if (state.count === null) return <span title={uiT("ui.ed1d3570be80ddfd")}>-</span>;
+  return <span title={uiT("ui.78fddda1fc6bacec", { v0: String(state.count) })}>{state.count.toLocaleString()}</span>;
 }
 
 function SignalsHeader() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { configured, onSetUp } = useContext(SignalSetupContext);
-  if (configured || !onSetUp) return <>Signals</>;
+  if (configured || !onSetUp) return <>{uiT("ui.88b01c8a4bff")}</>;
   return (
     <span className="inline-flex items-center gap-2 whitespace-nowrap">
-      Signals
+      {uiT("ui.88b01c8a4bff")}
       <Button
         type="button"
         variant="outline"
         size="xs"
-        aria-label="Set up signals"
+        aria-label={uiT("ui.ea6a48d9b601949d")}
         onClick={(event) => {
           event.stopPropagation();
           onSetUp();
@@ -158,49 +164,58 @@ function SignalsHeader() {
         className="h-5 rounded-full px-2 font-medium tracking-normal normal-case"
       >
         <Plus />
-        Set up
+        {uiT("ui.4da10f1fbb17cac2")}
       </Button>
     </span>
   );
 }
 
 const mutedCell = (label: string, title: string) => (
-  <span className="text-muted-foreground" title={title}>
-    {label}
+  <span className="text-muted-foreground" title={translateText(title)}>
+    {translateText(label)}
   </span>
 );
 
 function SignalsCell({ run }: { run: TraceSummary }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { configured } = useContext(SignalSetupContext);
   const state = useContext(SignalsContext).get(runKey(run));
   const muted = mutedCell;
   if (!configured) return muted("-", "Signals are not set up");
-  if (!state || state.status === "pending") return <Skeleton aria-label="Loading signals" className="h-3 w-16" />;
+  if (!state || state.status === "pending")
+    return <Skeleton aria-label={uiT("ui.ba36829d43afad5a")} className="h-3 w-16" />;
   if (state.status === "error") return muted("Unavailable", "Could not load signals");
   const { status } = state.signals;
   if (status === "unclassified" || status === "pending")
     return muted("Checking", "The System 1 model is checking this run");
   if (status === "failed") return muted("Not checked", "The System 1 model could not check this run");
   const flags = flaggedSignals(state.signals);
-  if (!flags.length) return <span title="No signals detected" />;
+  if (!flags.length) return <span title={uiT("ui.c1681d40c2492e4c")} />;
   return <SignalPills flags={flags} className="overflow-hidden" />;
 }
 
 export const formatScore = (score: number): string => (Number.isInteger(score) ? String(score) : score.toFixed(1));
 
 export function FeedbackScore({ run }: { run: TraceSummary }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const state = useContext(FeedbackContext).get(runKey(run));
   if (!state || state.status === "pending")
-    return <Skeleton aria-label="Loading feedback" className="ml-auto h-3 w-8" />;
-  if (state.status === "error") return <span title="Could not load feedback">Unavailable</span>;
+    return <Skeleton aria-label={uiT("ui.b06ab22a7e9e6b6a")} className="ml-auto h-3 w-8" />;
+  if (state.status === "error") return <span title={uiT("ui.f24265c271d01b5c")}>{uiT("ui.ca184496974204a0")}</span>;
   const { count, average, lowest } = state.summary;
-  if (count === 0 || average == null) return <span title="No feedback yet">—</span>;
+  if (count === 0 || average == null) return <span title={uiT("ui.725e906827e67868")}>—</span>;
   const low = lowest != null && lowest <= LOW_SCORE;
   return (
     <span
       data-testid="feedback-score"
       data-low={low || undefined}
-      title={`User feedback: ${count} ${count === 1 ? "rating" : "ratings"}, lowest ${lowest}/10`}
+      title={uiT("ui.8d6cae293e2f3972", {
+        v0: String(count),
+        v1: String(count === 1 ? uiT("ui.112895d7af6c1253") : uiT("ui.6e8e9fd7a26ff87b")),
+        v2: String(lowest),
+      })}
       className={cn(
         "inline-flex w-16 items-center justify-between rounded px-1.5 py-0.5 tabular-nums",
         low ? "bg-destructive/10 text-destructive" : "bg-muted text-foreground",
@@ -219,7 +234,7 @@ const RUN_COLUMNS: ColumnDef<TraceSummary>[] = [
     enableHiding: false,
     header: () => (
       <span className="inline-flex items-center gap-1 whitespace-nowrap">
-        Time <ArrowDown className="size-2.5" />
+        {translateUi("ui.33b93476cf59")} <ArrowDown className="size-2.5" />
         <span className="font-normal normal-case tracking-normal text-muted-foreground/70">
           {localTimeZoneAbbreviation()}
         </span>
@@ -231,7 +246,9 @@ const RUN_COLUMNS: ColumnDef<TraceSummary>[] = [
       </span>
     ),
     meta: {
-      title: "Time",
+      get title() {
+        return translateUi("ui.33b93476cf59");
+      },
       className: "font-mono tabular-nums text-muted-foreground",
       renderSkeleton: () => <Skeleton className="h-3 w-24" />,
     },
@@ -240,7 +257,9 @@ const RUN_COLUMNS: ColumnDef<TraceSummary>[] = [
     id: "agent",
     size: 160,
     enableHiding: false,
-    header: "Agent",
+    get header() {
+      return translateUi("ui.11b39c93777e");
+    },
     cell: ({ row }) => <AgentCell run={row.original} />,
     meta: {
       renderSkeleton: () => (
@@ -251,53 +270,76 @@ const RUN_COLUMNS: ColumnDef<TraceSummary>[] = [
       ),
     },
   },
-  { id: "input", header: "Input", cell: ({ row }) => <InputCell run={row.original} /> },
+  {
+    id: "input",
+    get header() {
+      return translateUi("ui.36ecb4f86691");
+    },
+    cell: ({ row }) => <InputCell run={row.original} />,
+  },
   {
     id: "signals",
     size: 300,
     header: () => <SignalsHeader />,
     cell: ({ row }) => <SignalsCell run={row.original} />,
-    meta: { title: "Signals", renderSkeleton: () => <Skeleton className="h-3 w-16" /> },
+    meta: {
+      get title() {
+        return translateUi("ui.88b01c8a4bff");
+      },
+      renderSkeleton: () => <Skeleton className="h-3 w-16" />,
+    },
   },
   {
     id: "agents",
     size: 72,
-    header: "Agents",
+    get header() {
+      return translateUi("ui.279b44d2ab4b");
+    },
     cell: ({ row }) => row.original.agent_count.toLocaleString(),
     meta: { numeric: true, className: MUTED_NUM },
   },
   {
     id: "steps",
     size: 74,
-    header: "Steps",
+    get header() {
+      return translateUi("ui.1de3df70ddf4faab");
+    },
     cell: ({ row }) => row.original.span_count.toLocaleString(),
     meta: { numeric: true, className: MUTED_NUM },
   },
   {
     id: "duration",
     size: 86,
-    header: "Duration",
+    get header() {
+      return translateUi("ui.4fc52a3c4c55");
+    },
     cell: ({ row }) => fmtMs(row.original.duration_ms),
     meta: { numeric: true, className: NUM },
   },
   {
     id: "cost",
     size: 80,
-    header: "Cost",
+    get header() {
+      return translateUi("ui.204a5eb2cd28");
+    },
     cell: ({ row }) => <CostCell run={row.original} />,
     meta: { numeric: true, className: NUM },
   },
   {
     id: "findings",
     size: 96,
-    header: "Findings",
+    get header() {
+      return translateUi("ui.e171c2ff25b55e5a");
+    },
     cell: ({ row }) => <FindingCount run={row.original} />,
     meta: { numeric: true, className: NUM },
   },
   {
     id: "feedback",
     size: 96,
-    header: "Feedback",
+    get header() {
+      return translateUi("ui.aac77df347205252");
+    },
     cell: ({ row }) => <FeedbackScore run={row.original} />,
     meta: { numeric: true, className: NUM },
   },
@@ -305,7 +347,7 @@ const RUN_COLUMNS: ColumnDef<TraceSummary>[] = [
     id: "open",
     size: 32,
     enableHiding: false,
-    header: ({ table }) => <DataTableViewOptions table={table} label="Columns" iconOnly />,
+    header: ({ table }) => <DataTableViewOptions table={table} label={translateUi("ui.53aade77cd69")} iconOnly />,
     cell: () => <ChevronRight className="size-3 text-muted-foreground/60" />,
     meta: { className: "px-0", headerClassName: "px-1", renderSkeleton: () => null },
   },
@@ -327,21 +369,23 @@ function LoadMoreRows({ isFetching, onLoadMore }: { isFetching: boolean; onLoadM
 }
 
 function EmptyRuns({ rangeEmpty, onSetUpTracing }: { rangeEmpty: boolean; onSetUpTracing: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!rangeEmpty)
     return (
       <div className="flex items-center justify-center gap-3 py-16 text-xs text-muted-foreground">
-        <span>No runs match these filters.</span>
+        <span>{uiT("ui.aedae6e517ebb7db")}</span>
         <Button size="xs" variant="outline" onClick={onSetUpTracing}>
-          Set up tracing
+          {uiT("ui.bc1fead76b999a20")}
         </Button>
       </div>
     );
   return (
     <div className="flex flex-col items-center gap-1 py-16 text-center">
-      <p className="text-sm font-medium">No runs in this time range</p>
-      <p className="text-xs text-muted-foreground">Connect an agent to start sending traces.</p>
+      <p className="text-sm font-medium">{uiT("ui.6de3a7d8e5db8ab2")}</p>
+      <p className="text-xs text-muted-foreground">{uiT("ui.60c6a0b2901bd8d9")}</p>
       <Button size="sm" className="mt-3" onClick={onSetUpTracing}>
-        Set up tracing
+        {uiT("ui.bc1fead76b999a20")}
       </Button>
     </div>
   );
@@ -380,6 +424,8 @@ export function AgentTracesTable({
   rangeEmpty = false,
   onSetUpTracing,
 }: AgentTracesTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const settled = !isLoading && !error;
   const isEmpty = settled && !hasMore && traces.length === 0;
   const canContinue = settled && hasMore && !isPlaceholder;
@@ -404,7 +450,11 @@ export function AgentTracesTable({
         <SignalsContext.Provider value={signals}>
           <SignalSetupContext.Provider value={{ configured: showSignals, onSetUp: onSetUpSignals }}>
             <InspectorTable.Root table={table} data-testid="runs-table">
-              <InspectorTable.Grid aria-label="Agent runs" aria-busy={isFetching} className="min-w-[900px] text-xs">
+              <InspectorTable.Grid
+                aria-label={uiT("ui.ff243aa977c76dfa")}
+                aria-busy={isFetching}
+                className="min-w-[900px] text-xs"
+              >
                 <InspectorTable.Header />
                 <InspectorTable.Body<TraceSummary>
                   className={bodyClassName(isPlaceholder)}
@@ -433,26 +483,26 @@ export function AgentTracesTable({
               </InspectorTable.Grid>
               {isLoading && (
                 <p role="status" className="sr-only">
-                  Loading runs…
+                  {uiT("ui.8438ea394d1520d9")}
                 </p>
               )}
               {error && (
                 <div role="alert" className="flex items-center justify-center gap-3 py-6 text-xs text-muted-foreground">
                   <span>
-                    {traces.length ? "Could not load more runs" : "Could not load runs"}: {error.message}
+                    {traces.length ? uiT("ui.0fb5637a6d7b3940") : uiT("ui.90854a69ae9af3e3")}: {error.message}
                   </span>
                   {onRetry && (
                     <Button size="xs" variant="outline" disabled={isFetching} onClick={onRetry}>
-                      Retry
+                      {uiT("ui.942087cc2d41e013")}
                     </Button>
                   )}
                 </div>
               )}
               {canContinue && traces.length === 0 && (
                 <div className="flex items-center justify-center gap-3 py-16 text-xs text-muted-foreground">
-                  <span>No loaded runs match these filters.</span>
+                  <span>{uiT("ui.0dbb59bdea02163e")}</span>
                   <Button size="xs" variant="outline" disabled={isFetching} onClick={onLoadMore}>
-                    Load older runs
+                    {uiT("ui.62c006cd6aedcc11")}
                   </Button>
                 </div>
               )}

@@ -339,10 +339,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
       </header>
       {aggregatedFailed && (
         <Alert variant="error" className="mb-3">
-          <AlertDescription className="text-inherit">
-            Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try
-            again.
-          </AlertDescription>
+          <AlertDescription className="text-inherit">{uiT("ui.0f14ea9e179b2ff8")}</AlertDescription>
         </Alert>
       )}
       <div>
@@ -357,26 +354,26 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                       {uiT("ui.d4b1ea5708dd")}
                     </TabsTrigger>
                     <TabsTrigger value="models" className="flex-none px-3">
-                      Model Activity
+                      {uiT("ui.5d951018f1965aea")}
                     </TabsTrigger>
                     <TabsTrigger value="keys" className="flex-none px-3">
-                      Key Activity
+                      {uiT("ui.34ec83da8a639a49")}
                     </TabsTrigger>
                     <TabsTrigger value="mcp" className="flex-none px-3">
-                      MCP Server Activity
+                      {uiT("ui.8d2d4830ec8e3a91")}
                     </TabsTrigger>
                     <TabsTrigger value="endpoints" className="flex-none px-3">
-                      Endpoint Activity
+                      {uiT("ui.2ce27aaefeca3aa3")}
                     </TabsTrigger>
                   </TabsList>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" onClick={() => setIsAiChatOpen(true)}>
                       <Sparkles />
-                      Ask AI
+                      {uiT("ui.ea9e45ac7083cf49")}
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => setIsGlobalExportModalOpen(true)}>
                       <Download />
-                      Export Data
+                      {uiT("ui.2ed227401538531a")}
                     </Button>
                   </div>
                 </div>
@@ -399,8 +396,8 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                       gatewayActivity && gatewayActivity.by_route.length > 0 ? (
                         <Panel
                           testId="gateway-requests-by-endpoint"
-                          title="Gateway Requests by Endpoint"
-                          subtitle="Successful and failed requests per route"
+                          title={uiT("ui.191fab63e02f6025")}
+                          subtitle={uiT("ui.9f25b3f2a57e7964")}
                           bodyClassName="px-2 pt-4"
                         >
                           <StackedUsageChart
@@ -443,8 +440,8 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                         <Search className="size-4 text-muted-foreground" />
                       </InputGroupAddon>
                       <InputGroupInput
-                        aria-label="Search models"
-                        placeholder="Search by model name"
+                        aria-label={uiT("ui.10421935232f54e0")}
+                        placeholder={uiT("ui.d06e5ee7b751e46b")}
                         value={modelQuery}
                         onChange={(event) => setModelQuery(event.target.value)}
                       />
@@ -452,7 +449,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                         <InputGroupAddon align="inline-end">
                           <InputGroupButton
                             size="icon-xs"
-                            aria-label="Clear model search"
+                            aria-label={uiT("ui.406529b2adec1261")}
                             onClick={() => setModelQuery("")}
                           >
                             <X />
@@ -466,7 +463,9 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                   Object.keys(modelMetrics).length > 0 &&
                   Object.keys(filteredModelMetrics).length === 0 ? (
                     <p className="rounded-lg border p-6 text-center text-sm text-muted-foreground">
-                      No models match &quot;{trimmedModelQuery}&quot; in this date range
+                      {uiT("ui.79d716d0ab379dee")}
+                      {trimmedModelQuery}
+                      {uiT("ui.e2ef27ad3b00a6fd")}
                     </p>
                   ) : (
                     <ActivityMetrics
@@ -554,11 +553,11 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
             <>
               {showCredentialBanner && (
                 <Alert variant="info" className="mb-5">
-                  <AlertTitle>Reusable credentials are automatically tracked as tags</AlertTitle>
+                  <AlertTitle>{uiT("ui.9495cca17f59702e")}</AlertTitle>
                   <AlertDescription className="text-inherit">
-                    When a reusable credential is used, it will appear as a tag prefixed with{" "}
+                    {uiT("ui.cce2c33da8242540")}{" "}
                     <code className="rounded bg-black/5 px-1 py-0.5 font-mono text-xs">Credential: </code>
-                    in this view.
+                    {uiT("ui.2ddfed25464bc2c2")}
                   </AlertDescription>
                   <AlertAction>
                     <Button

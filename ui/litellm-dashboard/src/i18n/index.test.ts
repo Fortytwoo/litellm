@@ -21,4 +21,15 @@ describe("dashboard translations", () => {
     expect(t("missing.key", "zh")).toBe("missing.key");
     expect(t("table.page", "zh", { page: 1 })).toBe("第 1 / {{total}} 页");
   });
+
+  it("preserves interpolation arguments in every translated message", () => {
+    for (const key of keys(translations.en)) {
+      const placeholders = t(key, "en").match(/\{\{\w+\}\}/g) ?? [];
+      expect((t(key, "zh").match(/\{\{\w+\}\}/g) ?? []).sort(), key).toEqual(placeholders.sort());
+      const values = Object.fromEntries(placeholders.map((value) => [value.slice(2, -2), "sample-value"]));
+      for (const locale of ["en", "zh"] as const) {
+        expect(t(key, locale, values), `${locale}:${key}`).not.toMatch(/\{\{\w+\}\}/);
+      }
+    }
+  });
 });

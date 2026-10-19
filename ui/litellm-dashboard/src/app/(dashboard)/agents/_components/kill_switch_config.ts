@@ -14,9 +14,24 @@ export const KILL_SWITCH_AUTH_TYPES: readonly { value: KillSwitchAuthType; label
       return translateUi("ui.dc937b598926");
     },
   },
-  { value: "bearer", label: "Bearer token" },
-  { value: "api_key", label: "API key header" },
-  { value: "basic", label: "Basic auth" },
+  {
+    value: "bearer",
+    get label() {
+      return translateUi("ui.b22ac30e61f624d5");
+    },
+  },
+  {
+    value: "api_key",
+    get label() {
+      return translateUi("ui.ca821ab3107aa1da");
+    },
+  },
+  {
+    value: "basic",
+    get label() {
+      return translateUi("ui.ef29d1bde7eb6e30");
+    },
+  },
 ];
 
 export interface KeyValueFormValue {

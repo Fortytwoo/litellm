@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -50,10 +52,10 @@ export function PaginatedMultiSelect({
   hasNextPage = false,
   isLoading = false,
   isFetchingNextPage = false,
-  placeholder = "Search…",
-  emptyText = "No results",
+  placeholder = translateUi("ui.7336265a0467a255"),
+  emptyText = translateUi("ui.a43619f32117"),
   errorText,
-  loadingText = "Loading…",
+  loadingText = translateUi("ui.ba3bbbe10d8b"),
   clearAllLabel,
   disabled = false,
   className,
@@ -61,6 +63,8 @@ export function PaginatedMultiSelect({
   "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedBy,
 }: PaginatedMultiSelectProps) {
+  useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [query, setQuery] = useState("");
   const [pickedOptions, setPickedOptions] = useState<ReadonlyMap<string, SearchSelectOption>>(new Map());

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { getProxyBaseUrl } from "@/components/networking";
 import type { TimeWindow } from "@/components/shared/timeRange/timeRange";
 import type { TraceQueryBody } from "../../types";
@@ -22,7 +23,12 @@ const likePattern = (value: string): string => likeLiteral(value).replaceAll("*"
 const matches = (column: string, pattern: string): string => `${column} ILIKE ${sqlString(pattern)}`;
 const anyMatches = (column: string, pattern: string): string => `arrayExists(x -> ${matches("x", pattern)}, ${column})`;
 
-const STATUS_PREDICATES = { error: "status = 'error'", ok: "status = 'ok'" } as const;
+const STATUS_PREDICATES = {
+  get error() {
+    return translateUi("ui.c54b0198a87014fa");
+  },
+  ok: "status = 'ok'",
+} as const;
 
 /** Status has two values, so a glob over it resolves statically to one, both or neither predicate. */
 function statusPredicate(value: string): string {

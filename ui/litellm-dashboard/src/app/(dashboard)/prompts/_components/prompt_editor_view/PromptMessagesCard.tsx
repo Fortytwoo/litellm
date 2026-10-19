@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import React, { useState } from "react";
 import { PlusIcon, TrashIcon, GripVerticalIcon } from "lucide-react";
@@ -14,8 +16,18 @@ const ROLE_ITEMS = [
       return translateUi("ui.b512d97e7cbf");
     },
   },
-  { value: "assistant", label: "Assistant" },
-  { value: "system", label: "System" },
+  {
+    value: "assistant",
+    get label() {
+      return translateUi("ui.391e405152779acc");
+    },
+  },
+  {
+    value: "system",
+    get label() {
+      return translateUi("ui.6725e7bbcd28f3a8");
+    },
+  },
 ] as const;
 
 interface PromptMessagesCardProps {
@@ -33,6 +45,8 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
   onRemoveMessage,
   onMoveMessage,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
@@ -62,9 +76,10 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
   return (
     <Card className="p-3">
       <div className="mb-2">
-        <p className="text-sm font-medium">Prompt messages</p>
+        <p className="text-sm font-medium">{uiT("ui.4a6e6280929c9408")}</p>
         <p className="text-muted-foreground text-xs mt-1">
-          Use <code className="bg-muted px-1 rounded-sm text-xs">{"{{variable}}"}</code> syntax for template variables
+          {uiT("ui.c36d819e7bc6d2b7")} <code className="bg-muted px-1 rounded-sm text-xs">{"{{variable}}"}</code>{" "}
+          {uiT("ui.0f58605f6a879af6")}
         </p>
       </div>
       <div className="space-y-2">
@@ -89,7 +104,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                 <SelectTrigger
                   size="sm"
                   className="w-[110px] border-0 shadow-none"
-                  aria-label={`Message ${index + 1} role`}
+                  aria-label={uiT("ui.3d3805ad85315320", { v0: String(index + 1) })}
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -106,7 +121,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={`Remove message ${index + 1}`}
+                    aria-label={uiT("ui.c7680ff708058262", { v0: String(index + 1) })}
                     onClick={() => onRemoveMessage(index)}
                   >
                     <TrashIcon size={14} />
@@ -122,7 +137,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                 value={message.content}
                 onChange={(value) => onUpdateMessage(index, "content", value)}
                 rows={3}
-                placeholder="Enter prompt content..."
+                placeholder={uiT("ui.40ca58b7fcdb74c2")}
               />
             </div>
           </div>
@@ -130,7 +145,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
       </div>
       <Button variant="ghost" size="sm" onClick={onAddMessage} className="mt-2">
         <PlusIcon size={14} className="mr-1" />
-        Add message
+        {uiT("ui.f421966ef0b230e4")}
       </Button>
     </Card>
   );

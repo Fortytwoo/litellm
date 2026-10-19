@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React, { useState, useRef, useEffect } from "react";
 import { ExternalLink, ChevronDown } from "lucide-react";
 
@@ -12,7 +15,13 @@ interface DocsMenuProps {
   className?: string;
 }
 
-export const DocsMenu: React.FC<DocsMenuProps> = ({ items, children = "Docs", className = "" }) => {
+export const DocsMenu: React.FC<DocsMenuProps> = ({
+  items,
+  children = translateUi("ui.7af023c43013"),
+  className = "",
+}) => {
+  useDashboardLanguage();
+
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 

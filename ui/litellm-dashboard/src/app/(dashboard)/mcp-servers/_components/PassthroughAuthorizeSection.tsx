@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -54,10 +58,16 @@ export default function PassthroughAuthorizeSection({
   onRemoveStoredAppChange?: (remove: boolean) => void;
   appMayNotMatchUpstream?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!isClientForwardedTokenMode(authType)) return null;
   const authorizeButtonLabels: Record<string, string> = {
-    authorizing: "Waiting for authorization...",
-    exchanging: "Exchanging authorization code...",
+    get authorizing() {
+      return translateUi("ui.349f8287035893da");
+    },
+    get exchanging() {
+      return translateUi("ui.4f6bcb6fba504881");
+    },
   };
   const authorizeButtonLabel = authorizeButtonLabels[oauthFlow.status] ?? "Authorize & Fetch Tools (browser-only)";
   // On edit, "keep existing" only holds when the stored credential class is unchanged; a cross-class
@@ -74,20 +84,10 @@ export default function PassthroughAuthorizeSection({
     : "Switching the auth type discards the previously saved app; enter a client ID here or leave blank to use dynamic client registration.";
   return (
     <div className="rounded-lg border border-dashed border-border p-4 space-y-2 mb-4">
-      <p className="text-sm text-muted-foreground">
-        Callers bring their own upstream token for this auth type, so LiteLLM never stores tokens. To preview tools and
-        configure the tool allowlist, authorize against the upstream here: the token stays in this browser session only
-        and is never saved to LiteLLM. An OAuth app configured below IS saved with the server, so internal users who
-        authorize from the Tools page go through it.
-      </p>
-      {appMayNotMatchUpstream && (
-        <p className="text-sm text-warning">
-          You changed the upstream URL or endpoints; the OAuth app entered here was registered for the previous upstream
-          and may not be valid. Update the client ID, or clear it to use dynamic client registration.
-        </p>
-      )}
+      <p className="text-sm text-muted-foreground">{uiT("ui.5e4a8a1c553969ba")}</p>
+      {appMayNotMatchUpstream && <p className="text-sm text-warning">{uiT("ui.cd82c6325597d0ea")}</p>}
       <MountedFormField
-        label={<span className="text-sm font-medium text-foreground">OAuth Client ID (optional)</span>}
+        label={<span className="text-sm font-medium text-foreground">{uiT("ui.1a208a7b1ae836a1")}</span>}
         name={["credentials", "client_id"]}
         help={clientIdExtra}
       >
@@ -101,7 +101,7 @@ export default function PassthroughAuthorizeSection({
         )}
       </MountedFormField>
       <MountedFormField
-        label={<span className="text-sm font-medium text-foreground">OAuth Client Secret (optional)</span>}
+        label={<span className="text-sm font-medium text-foreground">{uiT("ui.282adb59c517eac3")}</span>}
         name={["credentials", "client_secret"]}
       >
         {(control) => (
@@ -117,7 +117,7 @@ export default function PassthroughAuthorizeSection({
       {isEditing && onRemoveStoredAppChange && (
         <Label className="items-start leading-normal font-normal text-foreground">
           <Checkbox className="mt-0.5" checked={removeStoredApp} onCheckedChange={onRemoveStoredAppChange} />
-          Remove the saved OAuth app on save (the server goes back to dynamic client registration)
+          {uiT("ui.89d726d3603b4b7a")}
         </Label>
       )}
       <Button
@@ -129,10 +129,7 @@ export default function PassthroughAuthorizeSection({
       </Button>
       {oauthFlow.error && <p className="text-sm text-destructive">{oauthFlow.error}</p>}
       {oauthFlow.status === "success" && oauthFlow.tokenResponse?.access_token && (
-        <p className="text-sm text-success">
-          Token held for this browser session. Tools can now be previewed and configured; the token was not saved to
-          LiteLLM.
-        </p>
+        <p className="text-sm text-success">{uiT("ui.e2197b3a82501942")}</p>
       )}
     </div>
   );

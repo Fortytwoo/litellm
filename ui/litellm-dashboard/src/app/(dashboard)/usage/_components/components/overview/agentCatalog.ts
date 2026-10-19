@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import anthropicLogo from "../../../../../../../public/assets/logos/anthropic.svg";
 import cursorLogo from "../../../../../../../public/assets/logos/cursor.svg";
 import copilotLogo from "../../../../../../../public/assets/logos/github_copilot.svg";
@@ -50,8 +51,12 @@ interface AgentFamily {
 const FAMILIES: readonly AgentFamily[] = [
   {
     id: "claude-code",
-    label: "Claude Code",
-    description: "Anthropic's coding agent",
+    get label() {
+      return translateUi("ui.246ef8c1130d56f5");
+    },
+    get description() {
+      return translateUi("ui.f81b1f22505614e3");
+    },
     kind: "agent",
     // No Claude asset ships in the repo, so TopAgents draws the spark tile itself.
     logo: null,
@@ -59,142 +64,232 @@ const FAMILIES: readonly AgentFamily[] = [
   },
   {
     id: "codex",
-    label: "Codex",
-    description: "OpenAI's coding agent",
+    get label() {
+      return translateUi("ui.616efbe96852d8c9");
+    },
+    get description() {
+      return translateUi("ui.6bebd592517c2651");
+    },
     kind: "agent",
     logo: openaiLogo.src,
     match: /^(codex[ _-]|codex$)/i,
   },
   {
     id: "opencode",
-    label: "OpenCode",
-    description: "Open-source terminal coding agent",
+    get label() {
+      return translateUi("ui.3af0e55ccc96d87c");
+    },
+    get description() {
+      return translateUi("ui.62c644cff325b122");
+    },
     kind: "agent",
     logo: opencodeLogo.src,
     match: /^opencode\b/i,
   },
   {
     id: "cursor",
-    label: "Cursor",
-    description: "AI code editor",
+    get label() {
+      return translateUi("ui.2c014f8f8986f1b2");
+    },
+    get description() {
+      return translateUi("ui.5afd2f6744ffbe85");
+    },
     kind: "agent",
     logo: cursorLogo.src,
     match: /^cursor\b/i,
   },
   {
     id: "copilot",
-    label: "GitHub Copilot",
-    description: "GitHub's coding assistant",
+    get label() {
+      return translateUi("ui.ed249d417dcd38db");
+    },
+    get description() {
+      return translateUi("ui.e965397904785701");
+    },
     kind: "agent",
     logo: copilotLogo.src,
     match: /^(github-?copilot|copilot)\b/i,
   },
   {
     id: "hermes",
-    label: "Hermes Agent",
-    description: "Open-source agent",
+    get label() {
+      return translateUi("ui.873e989a3680a01d");
+    },
+    get description() {
+      return translateUi("ui.62fa05f9f90e82e0");
+    },
     kind: "agent",
     logo: hermesLogo.src,
     match: /^hermes\b/i,
   },
-  { id: "grok", label: "Grok", description: "xAI's assistant", kind: "agent", logo: xaiLogo.src, match: /^grok\b/i },
+  {
+    id: "grok",
+    get label() {
+      return translateUi("ui.dca61d32363b091b");
+    },
+    get description() {
+      return translateUi("ui.d6d964496d91ca82");
+    },
+    kind: "agent",
+    logo: xaiLogo.src,
+    match: /^grok\b/i,
+  },
   {
     id: "cline",
-    label: "Cline",
-    description: "Open-source coding agent",
+    get label() {
+      return translateUi("ui.8a91b069ecf8c355");
+    },
+    get description() {
+      return translateUi("ui.eb31c2c23c0833fd");
+    },
     kind: "agent",
     logo: null,
     match: /^cline\b/i,
   },
   {
     id: "kilo-code",
-    label: "Kilo Code",
-    description: "Open-source coding agent",
+    get label() {
+      return translateUi("ui.83abecfdd5cf0b9c");
+    },
+    get description() {
+      return translateUi("ui.eb31c2c23c0833fd");
+    },
     kind: "agent",
     logo: null,
     match: /^kilo[- ]?code\b/i,
   },
   {
     id: "aider",
-    label: "Aider",
-    description: "AI pair programming in the terminal",
+    get label() {
+      return translateUi("ui.ec8ab5e86e32fd83");
+    },
+    get description() {
+      return translateUi("ui.037cbd0948bf2317");
+    },
     kind: "agent",
     logo: null,
     match: /^aider\b/i,
   },
   {
     id: "openai-agents",
-    label: "OpenAI Agents",
-    description: "OpenAI Agents SDK",
+    get label() {
+      return translateUi("ui.b90951441f1013fb");
+    },
+    get description() {
+      return translateUi("ui.cf999aa299db9907");
+    },
     kind: "sdk",
     logo: openaiAgentsLogo.src,
     match: /^agents$/i,
   },
   {
     id: "langchain",
-    label: "LangChain",
-    description: "Agent framework",
+    get label() {
+      return translateUi("ui.63c34d5ded165a69");
+    },
+    get description() {
+      return translateUi("ui.99c7411fffa202b9");
+    },
     kind: "sdk",
     logo: langchainLogo.src,
     match: /^(langchain|langgraph|deepagents)/i,
   },
   {
     id: "pydantic-ai",
-    label: "Pydantic AI",
-    description: "Agent framework",
+    get label() {
+      return translateUi("ui.e6b55c0756869a37");
+    },
+    get description() {
+      return translateUi("ui.99c7411fffa202b9");
+    },
     kind: "sdk",
     logo: pydanticAiLogo.src,
     match: /^pydantic-ai\b/i,
   },
   {
     id: "github-actions",
-    label: "GitHub Actions",
-    description: "CI workflows",
+    get label() {
+      return translateUi("ui.fae83bd48c808f08");
+    },
+    get description() {
+      return translateUi("ui.b12e9de064de3e67");
+    },
     kind: "sdk",
     logo: githubLogo.src,
     match: /^github-actions\b/i,
   },
   {
     id: "litellm",
-    label: "LiteLLM SDK",
-    description: "litellm Python SDK",
+    get label() {
+      return translateUi("ui.21167ea8b5cc04af");
+    },
+    get description() {
+      return translateUi("ui.968a77d2278f282f");
+    },
     kind: "sdk",
     logo: litellmLogo.src,
     match: /^litellm\b/i,
   },
   {
     id: "openai-sdk",
-    label: "OpenAI SDK",
-    description: "OpenAI client library",
+    get label() {
+      return translateUi("ui.c688ca3f868cdd08");
+    },
+    get description() {
+      return translateUi("ui.52bc28b2329ea842");
+    },
     kind: "sdk",
     logo: openaiLogo.src,
     match: /^(openai|asyncopenai)\b/i,
   },
   {
     id: "anthropic-sdk",
-    label: "Anthropic SDK",
-    description: "Anthropic client library",
+    get label() {
+      return translateUi("ui.ee19eb661faec737");
+    },
+    get description() {
+      return translateUi("ui.e47d6e2ed03b4221");
+    },
     kind: "sdk",
     logo: anthropicLogo.src,
     match: /^anthropic\b/i,
   },
   {
     id: "python",
-    label: "Python",
-    description: "Scripts and HTTP clients",
+    get label() {
+      return translateUi("ui.18885f27b5af9012");
+    },
+    get description() {
+      return translateUi("ui.f0ac008569536487");
+    },
     kind: "sdk",
     logo: null,
     match: /^(python|httpx|aiohttp|urllib|requests)/i,
   },
   {
     id: "node",
-    label: "Node.js",
-    description: "Scripts and HTTP clients",
+    get label() {
+      return translateUi("ui.1fc0c785332e80fb");
+    },
+    get description() {
+      return translateUi("ui.f0ac008569536487");
+    },
     kind: "sdk",
     logo: null,
     match: /^(node|bun|deno|axios|undici)\b/i,
   },
-  { id: "curl", label: "curl", description: "Command line", kind: "sdk", logo: null, match: /^curl\b/i },
+  {
+    id: "curl",
+    get label() {
+      return translateUi("ui.427e4b79b1f0fc90");
+    },
+    get description() {
+      return translateUi("ui.c925a11891b84dfc");
+    },
+    kind: "sdk",
+    logo: null,
+    match: /^curl\b/i,
+  },
 ];
 
 const USER_AGENT_PREFIX = /^user[- ]agent:\s*/i;
@@ -228,7 +323,7 @@ const agentFor = (product: string, rows: readonly TagSummaryRow[]): AgentRow => 
   return {
     id: family?.id ?? `ua:${product.toLowerCase()}`,
     label: family?.label ?? product,
-    description: family?.description ?? "Custom client",
+    description: family?.description ?? translateUi("ui.78f9175669e647c2"),
     kind: family?.kind ?? "sdk",
     logo: family?.logo ?? null,
     spend: rows.reduce((sum, row) => sum + (row.total_spend || 0), 0),

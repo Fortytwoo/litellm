@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -44,8 +46,18 @@ interface DictFieldProps {
 }
 
 const BOOLEAN_ITEMS = [
-  { label: "True", value: true },
-  { label: "False", value: false },
+  {
+    get label() {
+      return translateUi("ui.3cbc87c7681f34db");
+    },
+    value: true,
+  },
+  {
+    get label() {
+      return translateUi("ui.60a33e6cf5151f2d");
+    },
+    value: false,
+  },
 ];
 
 const isSecretKey = (fieldKey: string): boolean =>
@@ -61,6 +73,8 @@ const BooleanSelect: React.FC<{ control: GuardrailFieldControlProps; placeholder
   control,
   placeholder,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy } = control;
 
   return (
@@ -73,8 +87,8 @@ const BooleanSelect: React.FC<{ control: GuardrailFieldControlProps; placeholder
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={true}>True</SelectItem>
-        <SelectItem value={false}>False</SelectItem>
+        <SelectItem value={true}>{uiT("ui.3cbc87c7681f34db")}</SelectItem>
+        <SelectItem value={false}>{uiT("ui.60a33e6cf5151f2d")}</SelectItem>
       </SelectContent>
     </Select>
   );
@@ -137,7 +151,7 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
                     id={fieldControl.id}
                     name={fieldControl.name}
                     step={1}
-                    placeholder={`Enter ${entry.key} value`}
+                    placeholder={uiT("ui.e7762646cf7ec78b", { v0: String(entry.key) })}
                     value={asText(fieldControl.value)}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                       fieldControl.onChange(toNumberValue(event.target.value))
@@ -150,7 +164,12 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
               }
 
               if (field.dict_value_type === "boolean") {
-                return <BooleanSelect control={fieldControl} placeholder={`Select ${entry.key} value`} />;
+                return (
+                  <BooleanSelect
+                    control={fieldControl}
+                    placeholder={uiT("ui.a051315a34b06f9c", { v0: String(entry.key) })}
+                  />
+                );
               }
 
               return (
@@ -158,7 +177,7 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
                   id={fieldControl.id}
                   name={fieldControl.name}
                   ref={fieldControl.ref}
-                  placeholder={`Enter ${entry.key} value`}
+                  placeholder={uiT("ui.e7762646cf7ec78b", { v0: String(entry.key) })}
                   value={asText(fieldControl.value)}
                   onChange={fieldControl.onChange}
                   onBlur={fieldControl.onBlur}
@@ -188,7 +207,7 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
             onValueChange={(next: string | null) => next && addEntry(next)}
           >
             <SelectTrigger className="w-50">
-              <SelectValue placeholder="Select category to configure" />
+              <SelectValue placeholder={uiT("ui.a4e5c6ebcb815c32")} />
             </SelectTrigger>
             <SelectContent>
               {availableKeys.map((key) => (
@@ -198,7 +217,7 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
               ))}
             </SelectContent>
           </Select>
-          <span className="text-sm text-muted-foreground">Select a category to add threshold configuration</span>
+          <span className="text-sm text-muted-foreground">{uiT("ui.9b00709eb440e94b")}</span>
         </div>
       )}
     </div>
@@ -301,6 +320,8 @@ const GuardrailOptionalParams: React.FC<GuardrailOptionalParamsProps> = ({
   control,
   values,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const renderField = (fieldKey: string, field: ProviderParam) => {
     const fullFieldKey = `${parentFieldKey}.${fieldKey}`;
     const value = values?.[fieldKey];
@@ -338,10 +359,8 @@ const GuardrailOptionalParams: React.FC<GuardrailOptionalParamsProps> = ({
   return (
     <div className="guardrail-optional-params">
       <div className="mb-8 border-b border-border pb-4">
-        <h3 className="mb-2 text-lg font-semibold text-foreground">Optional Parameters</h3>
-        <p className="text-sm text-muted-foreground">
-          {optionalParams.description || "Configure additional settings for this guardrail provider"}
-        </p>
+        <h3 className="mb-2 text-lg font-semibold text-foreground">{uiT("ui.62b9a48e7ddd5076")}</h3>
+        <p className="text-sm text-muted-foreground">{optionalParams.description || uiT("ui.5f22057736797a97")}</p>
       </div>
 
       <div className="space-y-8">

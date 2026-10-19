@@ -1,5 +1,6 @@
 "use client";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 import { t as translateUi } from "@/i18n";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -68,7 +69,12 @@ export const MODEL_BUDGET_PERIOD_OPTIONS = [
       return translateUi("ui.9b11f6b707d2");
     },
   },
-  { value: "1mo", label: "Calendar month" },
+  {
+    value: "1mo",
+    get label() {
+      return translateUi("ui.9d0aa7fff657e08f");
+    },
+  },
 ];
 
 const DEFAULT_PERIOD = "30d";
@@ -134,13 +140,11 @@ export function ModelMaxBudgetEditor({
     emitChange(entries.map((entry) => (entry.id === id ? { ...entry, ...patch } : entry)));
 
   const usedModels = new Set(entries.map((entry) => entry.model).filter(Boolean));
-  const hintWhenLocked = premiumUser ? undefined : MODEL_MAX_BUDGET_PREMIUM_HINT;
+  const hintWhenLocked = premiumUser ? undefined : translateText(MODEL_MAX_BUDGET_PREMIUM_HINT);
 
   const blurb = (
     <div className="text-xs text-muted-foreground">
-      {premiumUser
-        ? "Cap spend per model over its own window. A budget set on the bare model name also covers the provider-prefixed spelling of that model."
-        : MODEL_MAX_BUDGET_PREMIUM_HINT}
+      {premiumUser ? uiT("ui.efa618431d2b7f75") : translateText(MODEL_MAX_BUDGET_PREMIUM_HINT)}
     </div>
   );
 
@@ -150,7 +154,7 @@ export function ModelMaxBudgetEditor({
         <div className="mb-2">{blurb}</div>
         <Button variant="outline" size="sm" onClick={addEntry} disabled={!premiumUser} title={hintWhenLocked}>
           <Plus className="w-3 h-3" />
-          Add Model Budget
+          {uiT("ui.65131641dda9edab")}
         </Button>
       </div>
     );
@@ -169,7 +173,7 @@ export function ModelMaxBudgetEditor({
               onClick={() => removeEntry(entry.id)}
               disabled={!premiumUser}
               title={hintWhenLocked}
-              aria-label="Remove model budget"
+              aria-label={uiT("ui.1279a77123ad0363")}
               className="absolute top-2 right-2 text-muted-foreground hover:text-destructive transition-colors p-1"
             >
               <X className="w-4 h-4" />
@@ -181,7 +185,7 @@ export function ModelMaxBudgetEditor({
                 options={modelOptions.map((model) => ({ label: model, value: model }))}
                 value={entry.model}
                 onValueChange={(model) => updateEntry(entry.id, { model })}
-                placeholder="Select model"
+                placeholder={uiT("ui.1d446005add35afa")}
                 emptyText={uiT("ui.a650c298cf44")}
                 disabled={!premiumUser}
               />
@@ -203,7 +207,7 @@ export function ModelMaxBudgetEditor({
                     const typed = event.target.valueAsNumber;
                     updateEntry(entry.id, { budgetLimit: Number.isNaN(typed) ? null : typed });
                   }}
-                  placeholder="Max spend ($)"
+                  placeholder={uiT("ui.2f181638c14378b3")}
                   disabled={!premiumUser}
                 />
               </InputGroup>
@@ -227,7 +231,8 @@ export function ModelMaxBudgetEditor({
 
             {spent !== undefined && (
               <div className="text-[11px] text-muted-foreground mt-2 ml-1">
-                Current window spend: ${spent}
+                {uiT("ui.fd3977686bdc0a5f")}
+                {spent}
                 {entry.budgetLimit !== null && ` of $${entry.budgetLimit}`}
               </div>
             )}
@@ -236,7 +241,7 @@ export function ModelMaxBudgetEditor({
       })}
       <Button variant="outline" size="sm" onClick={addEntry} disabled={!premiumUser} title={hintWhenLocked}>
         <Plus className="w-3 h-3" />
-        Add Model Budget
+        {uiT("ui.65131641dda9edab")}
       </Button>
     </div>
   );
@@ -248,10 +253,12 @@ interface ModelMaxBudgetFieldProps extends ModelMaxBudgetEditorProps {
 
 /** The editor with its label, so every form that offers it presents it the same way. */
 export function ModelMaxBudgetField({ hint, ...editorProps }: ModelMaxBudgetFieldProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Field>
       <FieldLabel>
-        <span title={hint}>Per-Model Budgets</span>
+        <span title={hint}>{uiT("ui.d60b24269c388c15")}</span>
       </FieldLabel>
       <ModelMaxBudgetEditor {...editorProps} />
     </Field>

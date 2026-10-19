@@ -51,10 +51,12 @@ interface BudgetRowActionsProps {
 }
 
 function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open budget actions"
+        aria-label={uiT("ui.ee6d059ed99621ef")}
         data-testid={`budget-actions-${budget.budget_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -63,7 +65,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="budget-action-edit" onClick={() => onEditClick(budget)}>
           <Pencil />
-          Edit budget
+          {uiT("ui.8cb99c4d32541f76")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -72,7 +74,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
           onClick={() => onDeleteClick(budget)}
         >
           <Trash2 />
-          Delete budget
+          {uiT("ui.cead2786d57f8584")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -99,8 +101,12 @@ export const getBudgetTableColumns = ({
   {
     id: "budget_id",
     accessorKey: "budget_id",
-    meta: { title: "Budget ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Budget ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.3d9e454838ad423e");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.3d9e454838ad423e")} />,
     cell: ({ row }) => (
       <IdCell value={row.original.budget_id} variant="plain" truncate={false} copyable className="whitespace-nowrap" />
     ),
@@ -140,8 +146,13 @@ export const getBudgetTableColumns = ({
   {
     id: "tpd_limit",
     accessorKey: "tpd_limit",
-    meta: { title: "TPD (batch)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="TPD (batch)" />,
+    meta: {
+      get title() {
+        return translateUi("ui.0c592e6340dfc351");
+      },
+      numeric: true,
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.0c592e6340dfc351")} />,
     size: 110,
     cell: ({ row }) => <RateLimitCell value={row.original.tpd_limit} />,
   },

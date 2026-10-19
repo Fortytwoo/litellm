@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ExportFormat } from "./types";
@@ -8,14 +12,20 @@ interface ExportFormatSelectorProps {
 }
 
 const FORMAT_LABELS: Record<ExportFormat, string> = {
-  csv: "CSV (Excel, Google Sheets)",
-  json: "JSON (includes metadata)",
+  get csv() {
+    return translateUi("ui.64b15435324678f7");
+  },
+  get json() {
+    return translateUi("ui.f3f6bff98049c216");
+  },
 };
 
 const ExportFormatSelector: React.FC<ExportFormatSelectorProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div>
-      <label className="text-sm font-medium text-foreground block mb-2">Format</label>
+      <label className="text-sm font-medium text-foreground block mb-2">{uiT("ui.2f343666aaa88c44")}</label>
       <Select value={value} onValueChange={(next: ExportFormat | null) => next && onChange(next)}>
         <SelectTrigger className="w-full">
           <SelectValue>{FORMAT_LABELS[value]}</SelectValue>

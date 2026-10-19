@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ArrowUpRight, MessagesSquare, UserRound } from "lucide-react";
 
@@ -25,11 +27,35 @@ interface BrandedApp extends SourceApp {
 
 const BRANDED: Readonly<Record<Exclude<SourceType, "custom">, BrandedApp>> = {
   slack: { label: "Slack", logo: slackLogo.src, domains: ["slack.com"] },
-  teams: { label: "Teams", logo: null, domains: ["teams.microsoft.com", "teams.cloud.microsoft"] },
-  discord: { label: "Discord", logo: null, domains: ["discord.com"] },
-  linear: { label: "Linear", logo: linearLogo.src, domains: ["linear.app"] },
+  teams: {
+    get label() {
+      return translateUi("ui.1e1a1c078af2");
+    },
+    logo: null,
+    domains: ["teams.microsoft.com", "teams.cloud.microsoft"],
+  },
+  discord: {
+    get label() {
+      return translateUi("ui.053bc65874ad6098");
+    },
+    logo: null,
+    domains: ["discord.com"],
+  },
+  linear: {
+    get label() {
+      return translateUi("ui.e6950b45d25c2027");
+    },
+    logo: linearLogo.src,
+    domains: ["linear.app"],
+  },
   github: { label: "GitHub", logo: githubLogo.src, domains: ["github.com"] },
-  jira: { label: "Jira", logo: jiraLogo.src, domains: ["atlassian.net"] },
+  jira: {
+    get label() {
+      return translateUi("ui.8b9b0b3f792de8a6");
+    },
+    logo: jiraLogo.src,
+    domains: ["atlassian.net"],
+  },
 };
 
 const onDomain = (hostname: string, domain: string): boolean => hostname === domain || hostname.endsWith(`.${domain}`);
@@ -67,6 +93,8 @@ export function RunUser({ user }: { user: string }) {
 
 /** Links a run back to the conversation that started it, e.g. a Slack thread; hover previews its title. */
 export function RunSourceLink({ source }: { source: Source }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const app = sourceApp(source);
   if (!app) return null;
   return (
@@ -75,17 +103,19 @@ export function RunSourceLink({ source }: { source: Source }) {
         href={source.url}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Open ${app.label} thread`}
+        aria-label={uiT("ui.15913f8d774015dd", { v0: String(app.label) })}
         className={`${chip} shrink-0 transition-colors hover:bg-muted`}
       >
         <AppMark app={app} className="size-3 shrink-0" />
-        <span className="truncate">{app.label} thread</span>
+        <span className="truncate">
+          {app.label} {uiT("ui.39200d1e8a8dbbb6")}
+        </span>
         <ArrowUpRight aria-hidden className="size-3 shrink-0 text-muted-foreground" />
       </HoverCardTrigger>
       <HoverCardContent align="start" className="w-72 p-3">
         <a href={source.url} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-1.5">
           <span className="line-clamp-2 text-sm font-medium text-foreground">
-            {source.title || `Open in ${app.label}`}
+            {source.title || uiT("ui.ff41d18afea3e85d", { v0: String(app.label) })}
           </span>
           <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <AppMark app={app} className="size-3 shrink-0" />

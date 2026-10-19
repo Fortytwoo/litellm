@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React, { useState, useEffect } from "react";
 import {
   guardrail_provider_map,
@@ -56,8 +59,18 @@ interface ProviderParamsResponse {
 }
 
 const BOOLEAN_ITEMS = [
-  { label: "True", value: true },
-  { label: "False", value: false },
+  {
+    get label() {
+      return translateUi("ui.3cbc87c7681f34db");
+    },
+    value: true,
+  },
+  {
+    get label() {
+      return translateUi("ui.60a33e6cf5151f2d");
+    },
+    value: false,
+  },
 ];
 
 const isSecretKey = (fieldKey: string): boolean =>
@@ -90,7 +103,7 @@ const commitObjectField = (raw: string, onChange: (value: unknown) => void): voi
   if (isPlainObject(parsed)) {
     onChange(parsed);
   } else {
-    toast.error("Enter a valid JSON object for this configuration");
+    toast.error(translateUi("ui.c7ea0073ae876b2a"));
   }
 };
 
@@ -108,6 +121,8 @@ interface ProviderFieldInputProps {
 }
 
 const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fieldKey, control }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { id, value, onChange, onBlur, ref, name, ...aria } = control;
 
   if (descriptor.type === "select" && descriptor.options) {
@@ -154,8 +169,8 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
           <SelectValue placeholder={descriptor.description} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={true}>True</SelectItem>
-          <SelectItem value={false}>False</SelectItem>
+          <SelectItem value={true}>{uiT("ui.3cbc87c7681f34db")}</SelectItem>
+          <SelectItem value={false}>{uiT("ui.60a33e6cf5151f2d")}</SelectItem>
         </SelectContent>
       </Select>
     );
@@ -252,6 +267,8 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
   providerParams: providerParamsProp = null,
   value = null,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [loading, setLoading] = useState(false);
   const [providerParams, setProviderParams] = useState<ProviderParamsResponse | null>(providerParamsProp);
   const [error, setError] = useState<string | null>(null);
@@ -301,7 +318,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <UiLoadingSpinner className="size-4" />
-        Loading provider parameters...
+        {uiT("ui.eb1662fcf6cb26e3")}
       </div>
     );
   }
@@ -318,7 +335,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
   const providerFields = providerParams && providerParams[providerKey];
 
   if (!providerFields || Object.keys(providerFields).length === 0) {
-    return <div>No configuration fields available for this provider.</div>;
+    return <div>{uiT("ui.4591b797e880e2c0")}</div>;
   }
 
   // Fields to skip for content filter provider (handled in dedicated steps)

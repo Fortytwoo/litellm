@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useMemo } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -149,10 +153,18 @@ const getEntryOutcome = (entry: GuardrailInformation): EntryOutcome => {
 const isEntrySuccess = (entry: GuardrailInformation): boolean => getEntryOutcome(entry) === "passed";
 
 const OUTCOME_LABEL: Record<EntryOutcome, string> = {
-  passed: "PASSED",
-  flagged: "FLAGGED",
-  failed: "FAILED",
-  not_run: "NOT RUN",
+  get passed() {
+    return translateUi("ui.e5a0eb01db90");
+  },
+  get flagged() {
+    return translateUi("ui.4560e24b53b5d24f");
+  },
+  get failed() {
+    return translateUi("ui.02bd34929917");
+  },
+  get not_run() {
+    return translateUi("ui.8a3e212ee9d24bac");
+  },
 };
 
 const OUTCOME_BADGE_CLASS: Record<EntryOutcome, string> = {
@@ -418,7 +430,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
     for (const e of preCalls) {
       items.push({
         type: "guardrail",
-        label: `Pre-call guardrail: ${getDisplayName(e)}`,
+        label: uiT("supplement.preCall", { name: getDisplayName(e) }),
         offsetMs: offsetOf(e),
         outcome: getEntryOutcome(e),
       });
@@ -441,7 +453,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
     for (const e of duringCalls) {
       items.push({
         type: "guardrail",
-        label: `During-call guardrail: ${getDisplayName(e)}`,
+        label: uiT("supplement.duringCall", { name: getDisplayName(e) }),
         offsetMs: offsetOf(e),
         outcome: getEntryOutcome(e),
       });
@@ -451,7 +463,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
     for (const e of postCalls) {
       items.push({
         type: "guardrail",
-        label: `Post-call guardrail: ${getDisplayName(e)}`,
+        label: uiT("supplement.postCall", { name: getDisplayName(e) }),
         offsetMs: offsetOf(e),
         outcome: getEntryOutcome(e),
       });
@@ -501,7 +513,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
                   </span>
                 )}
                 <span className="text-xs text-muted-foreground font-mono ml-auto shrink-0">
-                  {item.offsetMs === null ? "—" : `T+${item.offsetMs}ms`}
+                  {item.offsetMs === null ? "—" : uiT("ui.c7ddef446029c324", { v0: String(item.offsetMs) })}
                 </span>
               </div>
             </div>
@@ -586,13 +598,14 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
                   : "bg-warning/10 text-warning border border-warning/20"
               }`}
             >
-              {matchCountStr}
+              {translateText(matchCountStr)}
             </span>
           )}
 
           {entry.confidence_score != null && (
             <span className="px-2 py-0.5 bg-muted text-muted-foreground border border-border rounded-sm text-[11px] font-medium shrink-0">
-              {(entry.confidence_score * 100).toFixed(0)}% conf
+              {(entry.confidence_score * 100).toFixed(0)}
+              {uiT("ui.277202d83c24")}
             </span>
           )}
 
@@ -606,16 +619,18 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
                     />
                   }
                 >
-                  Risk {riskScore}/10
+                  {uiT("ui.0711a8d636e4")}
+                  {riskScore}/10
                 </TooltipTrigger>
-                <TooltipContent>{`Risk score: ${riskScore}/10`}</TooltipContent>
+                <TooltipContent>{uiT("supplement.riskScore", { score: riskScore })}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           )}
 
           {textRecords != null && (
             <span className="px-2 py-0.5 bg-muted text-muted-foreground border border-border rounded-sm text-[11px] font-medium shrink-0">
-              {textRecords.toLocaleString()} text record{textRecords === 1 ? "" : "s"}
+              {textRecords.toLocaleString()} {uiT("ui.36d649f2d776")}
+              {textRecords === 1 ? "" : "s"}
             </span>
           )}
 
@@ -778,10 +793,12 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
         <div className="flex items-center gap-4">
           <ShieldIcon />
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Guardrails &amp; Policy Compliance</h3>
+            <h3 className="text-lg font-semibold text-foreground">{uiT("ui.166bc7baa569")}</h3>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-sm text-muted-foreground">
-                {evaluatedCount} guardrail{evaluatedCount !== 1 ? "s" : ""} evaluated
+                {uiT(evaluatedCount === 1 ? "supplement.evaluatedOne" : "supplement.evaluated", {
+                  count: evaluatedCount,
+                })}
               </span>
               <span className="text-muted-foreground">|</span>
               <span
@@ -804,14 +821,14 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${OUTCOME_BADGE_CLASS.flagged}`}
                 >
-                  {flaggedCount} Flagged
+                  {flaggedCount} {uiT("ui.2f1978c6166e")}
                 </span>
               )}
               {notRunCount > 0 && (
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${OUTCOME_BADGE_CLASS.not_run}`}
                 >
-                  {notRunCount} Not run
+                  {notRunCount} {uiT("ui.25f0c23a0878")}
                 </span>
               )}
             </div>

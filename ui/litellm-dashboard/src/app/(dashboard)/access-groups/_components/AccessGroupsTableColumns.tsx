@@ -72,10 +72,12 @@ function AccessGroupRowActions({
   group: AccessGroup;
   onDeleteClick: (group: AccessGroup) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open access group actions"
+        aria-label={uiT("ui.aa85d9ad7530f322")}
         data-testid={`access-group-actions-${group.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -88,7 +90,7 @@ function AccessGroupRowActions({
           onClick={() => onDeleteClick(group)}
         >
           <Trash2 />
-          Delete access group
+          {uiT("ui.bb70405976423a39")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -144,8 +146,14 @@ export const getAccessGroupsTableColumns = ({
     },
     {
       id: "resources",
-      meta: { title: "Resources" },
-      header: "Resources",
+      meta: {
+        get title() {
+          return translateUi("ui.e89b30aa1dc30a6a");
+        },
+      },
+      get header() {
+        return translateUi("ui.e89b30aa1dc30a6a");
+      },
       size: 220,
       enableSorting: false,
       cell: ({ row }) => <ResourcesCell group={row.original} />,

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import moment from "moment";
@@ -84,18 +85,22 @@ function formatDuration(row: LogRow): string {
 }
 
 function StatusBadge({ status }: { status?: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isFailure = status === "failure";
   return (
     <span className={`inline-flex items-center gap-1.5 text-xs ${isFailure ? "text-destructive" : "text-success"}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${isFailure ? "bg-destructive" : "bg-success"}`} />
-      {isFailure ? "Failure" : "Success"}
+      {isFailure ? uiT("ui.7031edbcf9c4") : uiT("ui.c88a0b907419")}
     </span>
   );
 }
 
 function JsonBlock({ value }: { value: unknown }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (value == null || value === "") {
-    return <p className="m-0 text-xs text-muted-foreground">Not available</p>;
+    return <p className="m-0 text-xs text-muted-foreground">{uiT("ui.67a926f7008e2b0e")}</p>;
   }
   const text = typeof value === "string" ? value : JSON.stringify(value, null, 2);
   return (
@@ -123,38 +128,50 @@ function LogsSkeleton() {
 }
 
 function LogsEmpty() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="rounded-lg border border-dashed py-12 text-center text-sm text-muted-foreground">
       <ScrollText className="mx-auto mb-3 h-6 w-6 text-muted-foreground/50" />
-      No logs for this period
+      {uiT("ui.18df85e0e725f5d2")}
     </div>
   );
 }
 
 function LogsError({ onRetry }: { onRetry: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-12 text-center text-sm text-muted-foreground">
       <AlertCircle className="h-6 w-6 text-destructive/70" />
-      Failed to load your logs
+      {uiT("ui.935d696cab519b28")}
       <Button variant="outline" size="sm" onClick={onRetry}>
-        Retry
+        {uiT("ui.942087cc2d41e013")}
       </Button>
     </div>
   );
 }
 
 function LogsTable({ rows, onRowClick }: { rows: LogRow[]; onRowClick: (row: LogRow) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="overflow-hidden rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
-            <TableHead className="text-[11px] font-medium uppercase tracking-wide">Time</TableHead>
-            <TableHead className="text-[11px] font-medium uppercase tracking-wide">Model</TableHead>
-            <TableHead className="text-[11px] font-medium uppercase tracking-wide">Status</TableHead>
-            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">Tokens</TableHead>
-            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">Duration</TableHead>
-            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">Cost</TableHead>
+            <TableHead className="text-[11px] font-medium uppercase tracking-wide">{uiT("ui.33b93476cf59")}</TableHead>
+            <TableHead className="text-[11px] font-medium uppercase tracking-wide">{uiT("ui.5e2c614c23f0")}</TableHead>
+            <TableHead className="text-[11px] font-medium uppercase tracking-wide">{uiT("ui.920e413c7d41")}</TableHead>
+            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">
+              {uiT("logs.tokens")}
+            </TableHead>
+            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">
+              {uiT("ui.4fc52a3c4c55")}
+            </TableHead>
+            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">
+              {uiT("ui.204a5eb2cd28")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -191,39 +208,43 @@ function LogDetailDialog({
   isLoading: boolean;
   onClose: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={!!log} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Request details</DialogTitle>
+          <DialogTitle>{uiT("ui.b6e3369e005b")}</DialogTitle>
           <DialogDescription className="break-all font-mono text-xs">{log?.request_id}</DialogDescription>
         </DialogHeader>
         {log && (
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Model</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">{uiT("ui.5e2c614c23f0")}</div>
                 <div className="text-sm text-foreground">{log.model || "-"}</div>
               </div>
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Cost</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">{uiT("ui.204a5eb2cd28")}</div>
                 <div className="text-sm text-foreground">{formatCost(log.spend)}</div>
               </div>
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Tokens</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">{uiT("logs.tokens")}</div>
                 <div className="text-sm text-foreground">
-                  {formatTokens(log.total_tokens)} ({formatTokens(log.prompt_tokens)} in /{" "}
-                  {formatTokens(log.completion_tokens)} out)
+                  {formatTokens(log.total_tokens)} ({formatTokens(log.prompt_tokens)} {uiT("ui.fa5b5646afcbb366")}{" "}
+                  {formatTokens(log.completion_tokens)} {uiT("ui.6fda708bc698e315")}
                 </div>
               </div>
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Duration</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">{uiT("ui.4fc52a3c4c55")}</div>
                 <div className="text-sm text-foreground">{formatDuration(log)}</div>
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Request</div>
+              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {uiT("ui.59f03d642b41")}
+              </div>
               {isLoading ? (
                 <Skeleton className="h-16 w-full" />
               ) : (
@@ -231,7 +252,9 @@ function LogDetailDialog({
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Response</div>
+              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {uiT("ui.9061383b8e22")}
+              </div>
               {isLoading ? <Skeleton className="h-16 w-full" /> : <JsonBlock value={details?.response} />}
             </div>
           </div>
@@ -242,6 +265,8 @@ function LogDetailDialog({
 }
 
 const LogsPanel: React.FC<Props> = ({ accessToken, userId }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [timeRange, setTimeRange] = useState<TimeRange>("24h");
   const [page, setPage] = useState(1);
   const [selectedLog, setSelectedLog] = useState<LogRow | null>(null);
@@ -287,16 +312,17 @@ const LogsPanel: React.FC<Props> = ({ accessToken, userId }) => {
         <LogsTable rows={rows} onRowClick={setSelectedLog} />
         <div className="mt-3 flex items-center justify-between">
           <p className="m-0 text-xs text-muted-foreground">
-            {total.toLocaleString()} request{total === 1 ? "" : "s"}
-            {totalPages > 1 ? ` · Page ${page} of ${totalPages}` : ""}
+            {total.toLocaleString()} {uiT("ui.1f58b9145b24d108")}
+            {total === 1 ? "" : "s"}
+            {totalPages > 1 ? uiT("ui.e75774f36b6a83ca", { v0: String(page), v1: String(totalPages) }) : ""}
           </p>
           {totalPages > 1 && (
             <div className="flex gap-1">
               <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-                Previous
+                {uiT("ui.a57b08a480b8")}
               </Button>
               <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
-                Next
+                {uiT("ui.1ff57a29d7c9")}
               </Button>
             </div>
           )}
@@ -309,8 +335,10 @@ const LogsPanel: React.FC<Props> = ({ accessToken, userId }) => {
     <div className="w-full">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h2 className="mb-0.5 text-base font-semibold tracking-tight text-foreground">Your Logs</h2>
-          <p className="m-0 text-sm text-muted-foreground">Request logs for your account only</p>
+          <h2 className="mb-0.5 text-base font-semibold tracking-tight text-foreground">
+            {uiT("ui.ceae3d05606a0da8")}
+          </h2>
+          <p className="m-0 text-sm text-muted-foreground">{uiT("ui.a9b045c0e4a359d2")}</p>
         </div>
         <div className="flex gap-1">
           {TIME_RANGE_OPTIONS.map((opt) => (

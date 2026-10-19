@@ -40,7 +40,7 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "created_at",
     accessorFn: (row) => row.created_at ?? "",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Discovered" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.96a5ba634bfc2ed4")} />,
     size: 170,
     enableGlobalFilter: false,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -48,7 +48,7 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "tool_name",
     accessorFn: (row) => row.tool_name,
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tool Name" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.49380bcd29241f72")} />,
     minSize: 200,
     cell: ({ row }) => (
       <IdentityCell
@@ -62,10 +62,15 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "input_policy",
     accessorFn: (row) => row.input_policy,
-    header: ({ column }) => <DataTableSortHeader column={column} title="Input Policy" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.9d54c31179909a71")} />,
     size: 140,
     filterFn: "equalsString",
-    meta: { title: "Input Policy", skeleton: "badge" },
+    meta: {
+      get title() {
+        return translateUi("ui.9d54c31179909a71");
+      },
+      skeleton: "badge",
+    },
     cell: ({ row }) => (
       <PolicySelect
         value={row.original.input_policy}
@@ -79,10 +84,15 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "output_policy",
     accessorFn: (row) => row.output_policy,
-    header: ({ column }) => <DataTableSortHeader column={column} title="Output Policy" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.ec12c1867becb495")} />,
     size: 140,
     filterFn: "equalsString",
-    meta: { title: "Output Policy", skeleton: "badge" },
+    meta: {
+      get title() {
+        return translateUi("ui.ec12c1867becb495");
+      },
+      skeleton: "badge",
+    },
     cell: ({ row }) => (
       <PolicySelect
         value={row.original.output_policy}
@@ -96,7 +106,7 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "call_count",
     accessorFn: (row) => row.call_count ?? 0,
-    header: ({ column }) => <DataTableSortHeader column={column} title="# Calls" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.2aa5522eac07fc95")} />,
     size: 100,
     enableGlobalFilter: false,
     meta: { numeric: true },
@@ -128,10 +138,14 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "key_alias",
     accessorFn: (row) => row.key_alias ?? "",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Key Name" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.750c6798ab7ffc9a")} />,
     size: 150,
     filterFn: "equalsString",
-    meta: { title: "Key Name" },
+    meta: {
+      get title() {
+        return translateUi("ui.750c6798ab7ffc9a");
+      },
+    },
     cell: ({ row }) => <TruncatedText value={row.original.key_alias} className="block max-w-32 truncate" />,
   },
   {
@@ -141,10 +155,7 @@ export const getToolPoliciesTableColumns = ({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger render={<span>{translateUi("ui.b512d97e7cbf")}</span>} />
-          <TooltipContent>
-            The user who owns the key that discovered this tool. Displays the first available value: User Alias, User
-            Email, or User ID.
-          </TooltipContent>
+          <TooltipContent>{translateUi("ui.3393d9d48f37c4d5")}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     ),
@@ -167,7 +178,9 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "user_agent",
     accessorFn: (row) => row.user_agent ?? "",
-    header: "User Agent",
+    get header() {
+      return translateUi("ui.62e013458fd79bac");
+    },
     size: 180,
     enableSorting: false,
     enableGlobalFilter: false,

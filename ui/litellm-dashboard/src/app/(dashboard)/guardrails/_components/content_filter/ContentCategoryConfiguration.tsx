@@ -178,7 +178,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
 
   const columns: ColumnDef<SelectedCategory>[] = [
     {
-      header: "Category",
+      header: uiT("ui.292c06f0045a45d0"),
       accessorKey: "display_name",
       cell: ({ row }) => {
         const category = availableCategories.find((c) => c.name === row.original.category);
@@ -214,7 +214,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       ),
     },
     {
-      header: "Severity Threshold",
+      header: uiT("ui.3b84d530eec69788"),
       accessorKey: "severity_threshold",
       size: 180,
       cell: ({ row }) => (
@@ -225,7 +225,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             value && onCategoryUpdate(row.original.id, "severity_threshold", value)
           }
         >
-          <SelectTrigger size="sm" className="w-full" aria-label="Severity Threshold">
+          <SelectTrigger size="sm" className="w-full" aria-label={uiT("ui.3b84d530eec69788")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -260,10 +260,8 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
     <Card>
       <CardHeader>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <CardTitle>Blocked topics</CardTitle>
-          <p className="text-xs font-normal text-muted-foreground">
-            Select topics to block using keyword and semantic analysis
-          </p>
+          <CardTitle>{uiT("ui.d32fbd895c9744b2")}</CardTitle>
+          <p className="text-xs font-normal text-muted-foreground">{uiT("ui.28e904ae30af2a70")}</p>
         </div>
       </CardHeader>
       <CardContent>
@@ -274,9 +272,9 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             onValueChange={(category: ContentCategory | null) => setSelectedCategoryName(category?.name ?? "")}
             itemToStringLabel={(category: ContentCategory) => category.display_name}
           >
-            <ComboboxInput className="w-full" placeholder="Select a content category" />
+            <ComboboxInput className="w-full" placeholder={uiT("ui.9216cf338d40439c")} />
             <ComboboxContent>
-              <ComboboxEmpty>No matching categories</ComboboxEmpty>
+              <ComboboxEmpty>{uiT("ui.15269886edc236b4")}</ComboboxEmpty>
               <ComboboxList>
                 {(cat: ContentCategory) => (
                   <ComboboxItem key={cat.name} value={cat}>
@@ -299,7 +297,8 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
         {selectedCategoryName && (
           <div className="mb-4 rounded-md border border-border bg-muted/40 p-3">
             <div className="mb-2 text-sm font-medium">
-              Preview: {availableCategories.find((c) => c.name === selectedCategoryName)?.display_name}
+              {uiT("ui.75954c5f4d87da20")}{" "}
+              {availableCategories.find((c) => c.name === selectedCategoryName)?.display_name}
               {categoryFileTypes[selectedCategoryName] && (
                 <span className="ml-2 text-xs font-normal text-muted-foreground">
                   ({categoryFileTypes[selectedCategoryName]?.toUpperCase()})
@@ -307,13 +306,13 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
               )}
             </div>
             {loadingPreviewYaml ? (
-              <div className="p-4 text-center text-muted-foreground">Loading content...</div>
+              <div className="p-4 text-center text-muted-foreground">{uiT("ui.b897b57c0862d659")}</div>
             ) : previewYaml ? (
               <pre className="m-0 max-h-[300px] max-w-full overflow-auto rounded-md border border-border bg-background p-3 text-xs leading-relaxed break-words whitespace-pre-wrap">
                 <code>{previewYaml}</code>
               </pre>
             ) : (
-              <div className="p-2 text-center text-xs text-muted-foreground">Unable to load category content</div>
+              <div className="p-2 text-center text-xs text-muted-foreground">{uiT("ui.be6410aed4ed24ee")}</div>
             )}
           </div>
         )}
@@ -343,18 +342,19 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
                       <ChevronRight className={`size-4 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                       <FileText className="size-4" />
                       <span>
-                        {uiT("ui.dcc839a4015c")} {fileType.toUpperCase()} for {category.display_name}
+                        {uiT("ui.dcc839a4015c")} {fileType.toUpperCase()} {uiT("ui.10c22bcf4c768b51")}{" "}
+                        {category.display_name}
                       </span>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                       {loadingYaml[category.category] ? (
-                        <div className="p-4 text-center text-muted-foreground">Loading content...</div>
+                        <div className="p-4 text-center text-muted-foreground">{uiT("ui.b897b57c0862d659")}</div>
                       ) : categoryYaml[category.category] ? (
                         <pre className="m-0 max-h-[400px] overflow-auto rounded-md bg-muted p-4 text-xs leading-relaxed">
                           <code>{categoryYaml[category.category]}</code>
                         </pre>
                       ) : (
-                        <div className="p-4 text-center text-muted-foreground">Content will load when expanded</div>
+                        <div className="p-4 text-center text-muted-foreground">{uiT("ui.6ed5635d6a71cfcb")}</div>
                       )}
                     </CollapsibleContent>
                   </Collapsible>
@@ -364,7 +364,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           </>
         ) : (
           <div className="rounded-md border border-dashed border-border p-6 text-center text-muted-foreground">
-            No blocked topics selected. Add topics to detect and block harmful content.
+            {uiT("ui.79321097a937dd0e")}
           </div>
         )}
       </CardContent>

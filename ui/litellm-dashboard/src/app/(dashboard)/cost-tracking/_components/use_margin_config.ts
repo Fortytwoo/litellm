@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState, useCallback } from "react";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { toast } from "@/lib/toast";
@@ -30,6 +34,8 @@ export interface AddMarginParams {
 }
 
 export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMarginConfigReturn {
+  useDashboardLanguage();
+
   const [marginConfig, setMarginConfig] = useState<MarginConfig>({});
 
   const fetchMarginConfig = useCallback(async () => {
@@ -73,7 +79,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
         });
 
         if (response.ok) {
-          toast.success("Margin configuration updated successfully");
+          toast.success(translateUi("ui.65e88328f972f58b"));
           await fetchMarginConfig();
         } else {
           const errorData = await response.json();

@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { CircleHelp } from "lucide-react";
@@ -140,10 +144,12 @@ const subPathLockFor = (source: PluginSource["source"] | undefined): SubPathLock
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -174,34 +180,34 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
 
   const handleSubmit = async (values: AddPluginFormValues) => {
     if (!accessToken) {
-      toast.error("No access token available");
+      toast.error(translateUi("ui.86895250093a18e4"));
       return;
     }
 
     if (!urlPreview) {
-      toast.error("Please enter a valid repository or zip archive URL");
+      toast.error(translateUi("ui.8063b1f7e47b4cdf"));
       return;
     }
 
     if (!validatePluginName(values.name)) {
-      toast.error("Skill name must be kebab-case (lowercase letters, numbers, and hyphens only)");
+      toast.error(translateUi("ui.8c30aebe8cf0bff5"));
       return;
     }
 
     if (values.version && !isValidSemanticVersion(values.version)) {
-      toast.error("Version must be in semantic versioning format (e.g., 1.0.0)");
+      toast.error(translateUi("ui.cd3ca39c7c8a085f"));
       return;
     }
 
     if (values.authorEmail && !isValidEmail(values.authorEmail)) {
-      toast.error("Invalid email format");
+      toast.error(translateUi("ui.0bcecf6650e5fa35"));
       return;
     }
 
     setIsSubmitting(true);
     try {
       await registerClaudeCodePlugin(accessToken, buildRegisterRequest(values, urlPreview.parsed));
-      toast.success("Skill registered successfully");
+      toast.success(translateUi("ui.3fb88039f90eb621"));
       form.reset(EMPTY_VALUES);
       setUrlPreview(null);
       setSubPathLock(null);
@@ -209,7 +215,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
       onClose();
     } catch (error) {
       console.error("Error registering skill:", error);
-      toast.error(error instanceof Error && error.message ? error.message : "Failed to register skill");
+      toast.error(error instanceof Error && error.message ? error.message : translateUi("ui.a1b2c9d447b442a7"));
     } finally {
       setIsSubmitting(false);
     }
@@ -226,7 +232,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
     <Dialog open={visible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="top-8 max-h-[calc(100dvh-4rem)] translate-y-0 overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Add New Skill</DialogTitle>
+          <DialogTitle>{uiT("ui.151ebbbeafe79446")}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={form.handleSubmit(handleSubmit)} noValidate className="mt-4">
@@ -287,14 +293,19 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                   )}
                 >
                   {({ ref, ...field }) => (
-                    <Input {...field} ref={ref} placeholder="64 hex characters" className="rounded-lg font-mono" />
+                    <Input
+                      {...field}
+                      ref={ref}
+                      placeholder={uiT("ui.a86e766315201473")}
+                      className="rounded-lg font-mono"
+                    />
                   )}
                 </FormField>
               )}
 
               {urlPreview && (
                 <div className="rounded-lg border border-info/20 bg-info/10 px-3 py-2 text-sm text-info">
-                  Detected: {urlPreview.label}
+                  {uiT("ui.e7987cf0fa3c22d0")} {urlPreview.label}
                 </div>
               )}
 
@@ -314,7 +325,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                   className="flex-1"
                 >
                   {({ ref, ...field }) => (
-                    <Input {...field} ref={ref} placeholder="Productivity" className="rounded-lg" />
+                    <Input {...field} ref={ref} placeholder={uiT("ui.f42bca637cb367c6")} className="rounded-lg" />
                   )}
                 </FormField>
                 <FormField
@@ -323,7 +334,9 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                   label={labelWithHint("Namespace (Optional)", "Sub-grouping within domain (e.g., workflows)")}
                   className="flex-1"
                 >
-                  {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="workflows" className="rounded-lg" />}
+                  {({ ref, ...field }) => (
+                    <Input {...field} ref={ref} placeholder={uiT("ui.45b34f16db605a06")} className="rounded-lg" />
+                  )}
                 </FormField>
               </div>
 
@@ -337,7 +350,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                     {...field}
                     ref={ref}
                     rows={3}
-                    placeholder="A skill that helps with..."
+                    placeholder={uiT("ui.a25231999401b7a0")}
                     maxLength={500}
                     className="rounded-lg"
                   />
@@ -355,12 +368,12 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                       id={id}
                       aria-invalid={ariaInvalid}
                       aria-describedby={ariaDescribedBy}
-                      placeholder="Select or type a category"
+                      placeholder={uiT("ui.f8f489674580752b")}
                       className="w-full rounded-lg"
                       showClear={value != null && value !== ""}
                     />
                     <ComboboxContent>
-                      <ComboboxEmpty>No matching categories</ComboboxEmpty>
+                      <ComboboxEmpty>{uiT("ui.15269886edc236b4")}</ComboboxEmpty>
                       <ComboboxList>
                         {(category: string) => (
                           <ComboboxItem key={category} value={category}>
@@ -379,7 +392,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                 label={labelWithHint("Keywords (Optional)", "Comma-separated list of keywords for search")}
               >
                 {({ ref, ...field }) => (
-                  <Input {...field} ref={ref} placeholder="search, web, api" className="rounded-lg" />
+                  <Input {...field} ref={ref} placeholder={uiT("ui.d2b1c036f762886d")} className="rounded-lg" />
                 )}
               </FormField>
 
@@ -397,7 +410,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
                 label={labelWithHint("Author Name (Optional)", "Name of the skill author or organization")}
               >
                 {({ ref, ...field }) => (
-                  <Input {...field} ref={ref} placeholder="Your Name or Organization" className="rounded-lg" />
+                  <Input {...field} ref={ref} placeholder={uiT("ui.e041633055233f90")} className="rounded-lg" />
                 )}
               </FormField>
 
@@ -418,7 +431,7 @@ const AddPluginForm: React.FC<AddPluginFormProps> = ({ visible, onClose, accessT
               </Button>
               <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
                 {isSubmitting && <UiLoadingSpinner className="size-4" />}
-                {isSubmitting ? uiT("ui.913a8849b60d") : "Add Skill"}
+                {isSubmitting ? uiT("ui.913a8849b60d") : uiT("ui.f01ec050eca5da4a")}
               </Button>
             </div>
           </form>

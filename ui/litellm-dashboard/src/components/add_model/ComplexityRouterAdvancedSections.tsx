@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -87,6 +89,8 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
   tierRows,
   customTierSet,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const classifierType = effectiveClassifierType(value);
   const classificationProps = {
     advancedOnly: true,
@@ -104,7 +108,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "classifier",
-            label: <strong className="text-foreground font-semibold">Classifier tuning</strong>,
+            label: <strong className="text-foreground font-semibold">{uiT("ui.25cf9f63e90936ec")}</strong>,
             children: (
               <ForecastClassifierConfig
                 section="advanced"
@@ -121,7 +125,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "classifier",
-            label: <strong className="text-foreground font-semibold">Classification Method</strong>,
+            label: <strong className="text-foreground font-semibold">{uiT("ui.a7042e1364bd9768")}</strong>,
             children: <ClassificationMethodConfig {...classificationProps} section="classifier" />,
           },
         ]
@@ -130,14 +134,14 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "heuristic",
-            label: <strong className="text-foreground font-semibold">Heuristic tuning</strong>,
+            label: <strong className="text-foreground font-semibold">{uiT("ui.18476df3cb7fbb41")}</strong>,
             children: <ClassificationMethodConfig {...classificationProps} section="heuristic" />,
           },
         ]
       : []),
     {
       key: "adaptive",
-      label: <strong className="text-foreground font-semibold">Adaptive Routing</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.1497a935a630e27e")}</strong>,
       children: (
         <Restricted by={restrictedBy(value, "adaptive")}>
           <AdaptiveRoutingConfig value={value} onChange={onChange} />
@@ -146,44 +150,44 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
     },
     {
       key: "affinity",
-      label: <strong className="text-foreground font-semibold">Affinity</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.5a2e54bbcb99c026")}</strong>,
       children: <AffinityControls value={value} onChange={onChange} />,
     },
     {
       key: "cache-aware",
-      label: <strong className="text-foreground font-semibold">Cache-aware routing</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.d45c5045a8529734")}</strong>,
       children: <CacheAwareRoutingConfig value={value} onChange={onChange} />,
     },
     {
       key: "modality",
-      label: <strong className="text-foreground font-semibold">Modality Routing</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.94262bf3c4d30a5b")}</strong>,
       children: <ModalityRoutingControls value={value} onChange={onChange} />,
     },
     {
       key: "plan-mode",
-      label: <strong className="text-foreground font-semibold">Plan-Mode Override</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.da7a99dffc4f66f7")}</strong>,
       children: (
         <PlanModeOverrideControls value={value} onChange={onChange} planModeTierOptions={planModeTierOptions} />
       ),
     },
     {
       key: "housekeeping",
-      label: <strong className="text-foreground font-semibold">Housekeeping Routing</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.98a086d7e4c682d5")}</strong>,
       children: <HousekeepingRoutingControls value={value} onChange={onChange} />,
     },
     {
       key: "reminder-markers",
-      label: <strong className="text-foreground font-semibold">Ignore Custom Tags</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.c8a1f8dbe8b8fcee")}</strong>,
       children: <ReminderMarkers value={value} onChange={onChange} showValidationErrors={showValidationErrors} />,
     },
     {
       key: "context-window",
-      label: <strong className="text-foreground font-semibold">Context Window Escalation</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.0cd4e951476d4264")}</strong>,
       children: <ContextWindowEscalationConfig value={value} onChange={onChange} />,
     },
     {
       key: "stall-escalation",
-      label: <strong className="text-foreground font-semibold">Stalled Task Escalation</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.3f260a05d0c537ee")}</strong>,
       children: (
         <Restricted by={restrictedBy(value, "stallEscalation")}>
           <StallEscalationConfig value={value} onChange={onChange} />
@@ -192,14 +196,14 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
     },
     {
       key: "response",
-      label: <strong className="text-foreground font-semibold">Response Format</strong>,
+      label: <strong className="text-foreground font-semibold">{uiT("ui.26f1e31b9c70f5bb")}</strong>,
       children: <ResponseFormatControls value={value} onChange={onChange} />,
     },
     ...(onEscalationKeywordsChange
       ? [
           {
             key: "escalation",
-            label: <strong className="text-foreground font-semibold">Escalation Keywords</strong>,
+            label: <strong className="text-foreground font-semibold">{uiT("ui.bed538d7dd9bc498")}</strong>,
             children: (
               <Restricted by={restrictedBy(value, "escalation")}>
                 <EscalationKeywords keywords={escalationKeywords} onChange={onEscalationKeywordsChange} />
@@ -212,7 +216,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "compression",
-            label: <strong className="text-foreground font-semibold">Compression</strong>,
+            label: <strong className="text-foreground font-semibold">{uiT("ui.278b1b2a9c84730f")}</strong>,
             children: <CompressionControls value={autoRouterCompression} onChange={onAutoRouterCompressionChange} />,
           },
         ]
@@ -221,7 +225,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "keyword-semantic",
-            label: <strong className="text-foreground font-semibold">Keyword/Semantic Matching</strong>,
+            label: <strong className="text-foreground font-semibold">{uiT("ui.e19881d337e822d1")}</strong>,
             children: (
               <>
                 {onKeywordTierRulesChange && (
@@ -253,11 +257,14 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
   ];
 
   const groups = [
-    { label: "Heuristic tuning", keys: ["heuristic"] },
-    { label: usesLlmClassifier(classifierType) ? "LLM tuning" : "Classifier tuning", keys: ["classifier"] },
-    { label: "Request preprocessing", keys: ["reminder-markers"] },
+    { label: uiT("ui.18476df3cb7fbb41"), keys: ["heuristic"] },
     {
-      label: "Routing rules and recovery",
+      label: usesLlmClassifier(classifierType) ? uiT("ui.9d1ebe6c39407547") : uiT("ui.25cf9f63e90936ec"),
+      keys: ["classifier"],
+    },
+    { label: uiT("ui.1b1797e1a04c03c3"), keys: ["reminder-markers"] },
+    {
+      label: uiT("ui.a5beb31f585070f6"),
       keys: [
         "modality",
         "plan-mode",
@@ -268,8 +275,8 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
         "keyword-semantic",
       ],
     },
-    { label: "Sessions and efficiency", keys: ["affinity", "adaptive", "cache-aware", "compression"] },
-    { label: "Compatibility", keys: ["response"] },
+    { label: uiT("ui.c94396a09b476de6"), keys: ["affinity", "adaptive", "cache-aware", "compression"] },
+    { label: uiT("ui.b37ddf1f6e0fac69"), keys: ["response"] },
   ].filter(
     (group) =>
       !(hideClassifier && group.keys.includes("classifier")) && sections.some(({ key }) => group.keys.includes(key)),

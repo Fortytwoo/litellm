@@ -1,4 +1,8 @@
 "use client";
+import { translateText } from "@/i18n";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   getFrameworks,
@@ -130,6 +134,8 @@ export default function ComplianceUI({
   fixedModel,
   proxySettings,
 }: ComplianceUIProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const canViewPolicies = useCan("viewPolicies");
   const frameworks = getFrameworks();
 
@@ -202,7 +208,7 @@ export default function ComplianceUI({
     const customFrameworks: ComplianceFramework[] = Array.from(fwMap.entries()).map(([fwName, catMap]) => ({
       name: fwName,
       icon: customPrompts.find((p) => p.framework === fwName)?.categoryIcon ?? "file-text",
-      description: `Custom prompts — ${fwName}.`,
+      description: uiT("ui.c3f79a367bbe86e5", { v0: String(fwName) }),
       categories: Array.from(catMap.entries()).map(([catName, prompts]) => ({
         name: catName,
         icon: prompts[0]?.categoryIcon ?? "file-text",
@@ -478,7 +484,7 @@ export default function ComplianceUI({
         const sysMsg: QuickTestMessage = {
           id: `msg-${Date.now()}-sys`,
           type: "system",
-          text: "Allowed — model response received.",
+          text: translateUi("ui.2c1fe82e08add29b"),
           result: "allowed",
           returnedText: fullResponse,
           timestamp: new Date(),
@@ -518,7 +524,7 @@ export default function ComplianceUI({
       const sysMsg: QuickTestMessage = {
         id: `msg-${Date.now()}-sys`,
         type: "system",
-        text: `Error: ${errorMessage}`,
+        text: translateUi("ui.a507b52e6cbe29ba", undefined, { v0: String(errorMessage) }),
         result: "blocked",
         triggeredBy: errorMessage,
         timestamp: new Date(),
@@ -677,6 +683,7 @@ export default function ComplianceUI({
     window.URL.revokeObjectURL(url);
   };
 
+  const builtInFrameworkNames = new Set(frameworks.map((f) => f.name));
   const filteredFrameworks = allFrameworks
     .map((fw) => ({
       ...fw,
@@ -692,15 +699,9 @@ export default function ComplianceUI({
     .filter((fw) => fw.categories.length > 0);
 
   const hasAnyConfig = selectedPolicies.length > 0 || selectedGuardrails.length > 0;
-  const testButtonLabel = (() => {
-    const parts: string[] = [];
-    if (selectedPolicies.length > 0)
-      parts.push(`${selectedPolicies.length} ${selectedPolicies.length === 1 ? "policy" : "policies"}`);
-    if (selectedGuardrails.length > 0)
-      parts.push(`${selectedGuardrails.length} ${selectedGuardrails.length === 1 ? "guardrail" : "guardrails"}`);
-    if (parts.length === 0) return "Test";
-    return `Test ${parts.join(" & ")}`;
-  })();
+  const testButtonLabel = hasAnyConfig
+    ? uiT("supplement.complianceTestCount", { count: selectedPolicies.length + selectedGuardrails.length })
+    : translateText("Test");
 
   return (
     <div className="w-full h-full p-4 bg-card">
@@ -708,11 +709,9 @@ export default function ComplianceUI({
         {/* Top config */}
         <div className="shrink-0 border-b border-border px-6 py-4">
           <div className="mb-3">
-            <h3 className="text-sm font-semibold text-foreground">Test Configuration</h3>
+            <h3 className="text-sm font-semibold text-foreground">{uiT("ui.6135706d1f477a64")}</h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {canViewPolicies
-                ? "Select policies, guardrails, or both to test against."
-                : "Select guardrails to test against."}
+              {canViewPolicies ? uiT("ui.7f26987bd4bad28c") : uiT("ui.27871eb384088666")}
             </p>
           </div>
 
@@ -721,7 +720,7 @@ export default function ComplianceUI({
               <>
                 <div className="flex-1 min-w-[200px]">
                   <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">
-                    Policies
+                    {uiT("ui.d3ad1f1f8c9c")}
                   </label>
                   {accessToken && (
                     <PolicySelector
@@ -735,7 +734,9 @@ export default function ComplianceUI({
 
                 <div className="flex flex-col items-center pt-6 shrink-0">
                   <div className="w-px h-4 bg-border" />
-                  <span className="text-[10px] font-medium text-muted-foreground my-1">or</span>
+                  <span className="text-[10px] font-medium text-muted-foreground my-1">
+                    {uiT("ui.7175517a370b5cd2")}
+                  </span>
                   <div className="w-px h-4 bg-border" />
                 </div>
               </>
@@ -743,7 +744,7 @@ export default function ComplianceUI({
 
             <div className="flex-1 min-w-[200px]">
               <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">
-                Guardrails
+                {uiT("ui.443f975eefe8")}
               </label>
               <div className="relative">
                 <button
@@ -752,16 +753,16 @@ export default function ComplianceUI({
                   className="w-full flex items-center justify-between border border-border rounded-lg px-3 py-2 text-sm text-left hover:border-ring transition-colors"
                 >
                   <span className={selectedGuardrails.length > 0 ? "text-foreground" : "text-muted-foreground"}>
-                    {selectedGuardrails.length > 0 ? `${selectedGuardrails.length} selected` : "None selected"}
+                    {selectedGuardrails.length > 0
+                      ? uiT("ui.b3edc3b37ecffe19", { v0: String(selectedGuardrails.length) })
+                      : uiT("ui.557832355c8534ab")}
                   </span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </button>
                 {showGuardrailDropdown && (
                   <div className="absolute z-floating top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg py-1 max-h-52 overflow-y-auto">
                     {guardrailOptions.length === 0 ? (
-                      <div className="px-3 py-2 text-xs text-muted-foreground">
-                        No guardrails available. Create guardrails in the Guardrails page.
-                      </div>
+                      <div className="px-3 py-2 text-xs text-muted-foreground">{uiT("ui.f67c2576be747ce1")}</div>
                     ) : (
                       guardrailOptions.map((g) => (
                         <button
@@ -799,7 +800,7 @@ export default function ComplianceUI({
                           type="button"
                           onClick={() => toggleGuardrail(id)}
                           className="hover:text-indigo-900 dark:hover:text-indigo-100"
-                          aria-label="Remove"
+                          aria-label={uiT("ui.c3812fc4acb8")}
                         >
                           <X className="w-2.5 h-2.5" />
                         </button>
@@ -817,7 +818,7 @@ export default function ComplianceUI({
                   onClick={() => batchAbortControllerRef.current?.abort()}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap bg-destructive text-destructive-foreground hover:bg-destructive/80"
                 >
-                  <Square className="w-3.5 h-3.5" /> Stop
+                  <Square className="w-3.5 h-3.5" /> {uiT("ui.cae7d57bc067a514")}
                 </button>
               ) : (
                 <button
@@ -826,12 +827,13 @@ export default function ComplianceUI({
                   disabled={selectedPromptIds.size === 0 || disabledPersonalKeyCreation}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${selectedPromptIds.size === 0 || disabledPersonalKeyCreation ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-info text-info-foreground hover:bg-info/80"}`}
                 >
-                  <Play className="w-3.5 h-3.5" /> Simulate ({selectedPromptIds.size})
+                  <Play className="w-3.5 h-3.5" /> {uiT("ui.7f8a42de863c6726")}
+                  {selectedPromptIds.size})
                 </button>
               )}
               {isRunning && (
                 <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin" /> Running...
+                  <Loader2 className="w-3 h-3 animate-spin" /> {uiT("ui.4977a7e5bb3675c4")}
                 </span>
               )}
               <button
@@ -844,7 +846,7 @@ export default function ComplianceUI({
                 }}
                 className="flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-accent transition-colors"
               >
-                <RotateCcw className="w-3 h-3" /> Reset
+                <RotateCcw className="w-3 h-3" /> {uiT("ui.daee7606b339")}
               </button>
             </div>
           </div>
@@ -857,7 +859,7 @@ export default function ComplianceUI({
             <div className="flex-1 overflow-y-auto min-h-0">
               <div className="px-4 pt-4 pb-2">
                 <div className="flex items-center justify-between mb-2.5">
-                  <h3 className="text-sm font-semibold text-foreground">Test Prompts</h3>
+                  <h3 className="text-sm font-semibold text-foreground">{uiT("ui.14acf7d49af93d31")}</h3>
                   <span className="text-[11px] text-muted-foreground tabular-nums">
                     {selectedPromptIds.size}/{totalPromptCount}
                   </span>
@@ -869,7 +871,7 @@ export default function ComplianceUI({
                     type="text"
                     value={searchPrompt}
                     onChange={(e) => setSearchPrompt(e.target.value)}
-                    placeholder="Search prompts..."
+                    placeholder={uiT("ui.94de799be49a8b77")}
                     className="w-full border border-border rounded-lg pl-8 pr-3 py-1.5 text-xs placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-info"
                   />
                 </div>
@@ -881,7 +883,7 @@ export default function ComplianceUI({
                       onClick={selectAll}
                       className="text-[11px] font-medium text-info hover:text-info/80"
                     >
-                      Select All
+                      {uiT("ui.d1ec69e64b9609d0")}
                     </button>
                     <span className="text-muted-foreground text-[10px]">·</span>
                     <button
@@ -889,7 +891,7 @@ export default function ComplianceUI({
                       onClick={deselectAll}
                       className="text-[11px] font-medium text-muted-foreground hover:text-foreground"
                     >
-                      Clear
+                      {uiT("ui.83b12c2216ef")}
                     </button>
                   </div>
                   <div className="flex items-center gap-1">
@@ -901,7 +903,7 @@ export default function ComplianceUI({
                       }}
                       className={`flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-sm transition-colors ${showAddPrompt ? "bg-info/10 text-info" : "text-muted-foreground hover:bg-accent"}`}
                     >
-                      <Plus className="w-3 h-3" /> Add
+                      <Plus className="w-3 h-3" /> {uiT("ui.9fd728c66c9a")}
                     </button>
                     <button
                       type="button"
@@ -911,7 +913,7 @@ export default function ComplianceUI({
                       }}
                       className={`flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-sm transition-colors ${showCsvUpload ? "bg-info/10 text-info" : "text-muted-foreground hover:bg-accent"}`}
                     >
-                      <Upload className="w-3 h-3" /> CSV
+                      <Upload className="w-3 h-3" /> {uiT("ui.eb6b42f54c42d283")}
                     </button>
                   </div>
                 </div>
@@ -922,7 +924,7 @@ export default function ComplianceUI({
                   <textarea
                     value={newPromptText}
                     onChange={(e) => setNewPromptText(e.target.value)}
-                    placeholder="Enter your test prompt..."
+                    placeholder={uiT("ui.b96ecf937dcf9d4d")}
                     rows={2}
                     className="w-full border border-border rounded-sm px-2.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-info resize-none bg-card"
                   />
@@ -933,14 +935,14 @@ export default function ComplianceUI({
                         onClick={() => setNewPromptExpected("fail")}
                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-sm ${newPromptExpected === "fail" ? "bg-destructive/15 text-destructive" : "bg-muted text-muted-foreground"}`}
                       >
-                        Should Fail
+                        {uiT("ui.a387f50328819622")}
                       </button>
                       <button
                         type="button"
                         onClick={() => setNewPromptExpected("pass")}
                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-sm ${newPromptExpected === "pass" ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"}`}
                       >
-                        Should Pass
+                        {uiT("ui.7b99f3007bf82eea")}
                       </button>
                     </div>
                     <div className="flex items-center gap-1.5">
@@ -952,7 +954,7 @@ export default function ComplianceUI({
                         }}
                         className="text-[11px] text-muted-foreground px-2 py-1"
                       >
-                        Cancel
+                        {uiT("ui.19766ed6ccb2")}
                       </button>
                       <button
                         type="button"
@@ -960,7 +962,7 @@ export default function ComplianceUI({
                         disabled={!newPromptText.trim()}
                         className={`text-[11px] font-medium px-2.5 py-1 rounded-sm ${newPromptText.trim() ? "bg-info text-info-foreground" : "bg-muted text-muted-foreground"}`}
                       >
-                        Add
+                        {uiT("ui.9fd728c66c9a")}
                       </button>
                     </div>
                   </div>
@@ -970,25 +972,25 @@ export default function ComplianceUI({
               {showCsvUpload && (
                 <div className="mx-4 mb-2 border border-info/20 bg-info/5 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-semibold text-foreground">Upload CSV Dataset</span>
+                    <span className="text-[11px] font-semibold text-foreground">{uiT("ui.8199eafade45e756")}</span>
                     <button
                       type="button"
                       onClick={downloadCsvTemplate}
                       className="flex items-center gap-1 text-[10px] font-medium text-info hover:text-info/80"
                     >
-                      <Download className="w-3 h-3" /> Download Template
+                      <Download className="w-3 h-3" /> {uiT("ui.ba22d3638094")}
                     </button>
                   </div>
 
                   <div className="mb-2 p-2 bg-card rounded-sm border border-border">
                     <p className="text-[10px] text-muted-foreground leading-relaxed">
-                      <span className="font-semibold text-muted-foreground">Required columns:</span>{" "}
+                      <span className="font-semibold text-muted-foreground">{uiT("ui.1a13b48fcd8d1c81")}</span>{" "}
                       <code className="bg-muted px-1 rounded-sm text-[10px]">prompt</code>,{" "}
                       <code className="bg-muted px-1 rounded-sm text-[10px]">expected_result</code>{" "}
-                      <span className="text-muted-foreground">(fail or pass)</span>
+                      <span className="text-muted-foreground">{uiT("ui.1701d4fcff8a7cb8")}</span>
                     </p>
                     <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
-                      <span className="font-semibold text-muted-foreground">Optional columns:</span>{" "}
+                      <span className="font-semibold text-muted-foreground">{uiT("ui.ff553c04cc604c58")}</span>{" "}
                       <code className="bg-muted px-1 rounded-sm text-[10px]">framework</code>,{" "}
                       <code className="bg-muted px-1 rounded-sm text-[10px]">category</code>
                     </p>
@@ -1009,7 +1011,7 @@ export default function ComplianceUI({
                     onClick={() => csvInputRef.current?.click()}
                     className="w-full flex items-center justify-center gap-1.5 py-2 border-2 border-dashed border-border rounded-lg text-xs text-muted-foreground hover:border-info hover:text-info transition-colors"
                   >
-                    <Upload className="w-3.5 h-3.5" /> Choose CSV file
+                    <Upload className="w-3.5 h-3.5" /> {uiT("ui.6e67be51ca4fad1e")}
                   </button>
 
                   {csvError && (
@@ -1027,7 +1029,7 @@ export default function ComplianceUI({
                       }}
                       className="text-[11px] text-muted-foreground px-2 py-1"
                     >
-                      Cancel
+                      {uiT("ui.19766ed6ccb2")}
                     </button>
                   </div>
                 </div>
@@ -1055,8 +1057,12 @@ export default function ComplianceUI({
                         )}
                         <CategoryIcon iconKey={fw.icon} className="w-4 h-4 text-muted-foreground shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <span className="text-xs font-semibold text-foreground">{fw.name}</span>
-                          <span className="text-[10px] text-muted-foreground ml-1.5">{fwPromptCount} prompts</span>
+                          <span className="text-xs font-semibold text-foreground">
+                            {builtInFrameworkNames.has(fw.name) ? translateText(fw.name) : fw.name}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground ml-1.5">
+                            {fwPromptCount} {uiT("ui.eb7526362ee7678c")}
+                          </span>
                         </div>
                         {fwSelectedCount > 0 && (
                           <span className="text-[10px] font-medium bg-info/15 text-info px-1.5 py-0.5 rounded-full">
@@ -1071,7 +1077,7 @@ export default function ComplianceUI({
                           }}
                           className="text-[10px] font-medium text-info px-1.5 py-0.5 rounded-sm hover:bg-info/10 shrink-0"
                         >
-                          {fwSelectedCount === fwPromptCount ? "Clear" : "All"}
+                          {fwSelectedCount === fwPromptCount ? uiT("ui.83b12c2216ef") : uiT("ui.a52ace420f21")}
                         </button>
                       </button>
 
@@ -1082,7 +1088,6 @@ export default function ComplianceUI({
                             const selectedInCat = category.prompts.filter((p) => selectedPromptIds.has(p.id)).length;
                             const allCatSelected =
                               selectedInCat === category.prompts.length && category.prompts.length > 0;
-                            const builtInFrameworkNames = new Set(frameworks.map((f) => f.name));
                             const isCustom = !builtInFrameworkNames.has(fw.name);
                             return (
                               <div key={category.name} className="rounded-md overflow-hidden">
@@ -1103,7 +1108,7 @@ export default function ComplianceUI({
                                     />
                                   </span>
                                   <span className="text-[11px] font-medium text-foreground flex-1 min-w-0 truncate">
-                                    {category.name}
+                                    {isCustom ? category.name : translateText(category.name)}
                                   </span>
                                   <span className="text-[10px] text-muted-foreground shrink-0">
                                     {category.prompts.length}
@@ -1126,7 +1131,7 @@ export default function ComplianceUI({
                                         onClick={() => toggleCategoryPrompts(category)}
                                         className="text-[10px] font-medium text-info hover:text-info/80 shrink-0 whitespace-nowrap"
                                       >
-                                        {allCatSelected ? "Clear" : "Select all"}
+                                        {allCatSelected ? uiT("ui.83b12c2216ef") : uiT("ui.1fc9a387654d")}
                                       </button>
                                     </div>
                                     {category.prompts.map((prompt) => (
@@ -1145,7 +1150,9 @@ export default function ComplianceUI({
                                           <span
                                             className={`inline-block mt-0.5 text-[9px] font-semibold px-1 py-0.5 rounded-sm ${prompt.expectedResult === "fail" ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}`}
                                           >
-                                            {prompt.expectedResult === "fail" ? "Should Fail" : "Should Pass"}
+                                            {prompt.expectedResult === "fail"
+                                              ? uiT("ui.a387f50328819622")
+                                              : uiT("ui.7b99f3007bf82eea")}
                                           </span>
                                         </div>
                                         {isCustom && (
@@ -1157,7 +1164,7 @@ export default function ComplianceUI({
                                               deleteCustomPrompt(prompt.id);
                                             }}
                                             className="opacity-0 group-hover:opacity-100 p-0.5 text-muted-foreground hover:text-destructive transition-all shrink-0"
-                                            aria-label="Delete"
+                                            aria-label={uiT("ui.e2d0a54968ea")}
                                           >
                                             <Trash2 className="w-3 h-3" />
                                           </button>
@@ -1187,7 +1194,7 @@ export default function ComplianceUI({
                   onClick={() => setRightTab("quick-test")}
                   className={`relative flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors ${rightTab === "quick-test" ? "text-info" : "text-muted-foreground hover:text-foreground"}`}
                 >
-                  <MessageSquare className="w-3.5 h-3.5" /> Quick Test
+                  <MessageSquare className="w-3.5 h-3.5" /> {uiT("ui.6d0317519ac1e9aa")}
                   {rightTab === "quick-test" && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-info rounded-t" />
                   )}
@@ -1197,7 +1204,7 @@ export default function ComplianceUI({
                   onClick={() => setRightTab("batch-results")}
                   className={`relative flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors ${rightTab === "batch-results" ? "text-info" : "text-muted-foreground hover:text-foreground"}`}
                 >
-                  <ListChecks className="w-3.5 h-3.5" /> Batch Results
+                  <ListChecks className="w-3.5 h-3.5" /> {uiT("ui.b2dcefe9fe26")}
                   {testResults.length > 0 && (
                     <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
                       {testResults.length}
@@ -1215,7 +1222,9 @@ export default function ComplianceUI({
                 <div className="px-5 pt-4 pb-2 shrink-0">
                   {hasAnyConfig ? (
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[11px] font-medium text-muted-foreground">Testing against:</span>
+                      <span className="text-[11px] font-medium text-muted-foreground">
+                        {uiT("ui.f8c723dc69c89401")}
+                      </span>
                       {selectedPolicies.map((id) => (
                         <span key={id} className="text-[11px] bg-info/10 text-info px-2 py-0.5 rounded-sm font-medium">
                           {policyValueToLabel.get(id) ?? id}
@@ -1234,9 +1243,7 @@ export default function ComplianceUI({
                       })}
                     </div>
                   ) : (
-                    <p className="text-[11px] text-muted-foreground">
-                      No policies or guardrails selected — select above to test against specific rules.
-                    </p>
+                    <p className="text-[11px] text-muted-foreground">{uiT("ui.bead689d76a0aef6")}</p>
                   )}
                 </div>
 
@@ -1247,7 +1254,7 @@ export default function ComplianceUI({
                         <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center mx-auto mb-3">
                           <MessageSquare className="w-5 h-5 text-muted-foreground" />
                         </div>
-                        <p className="text-xs text-muted-foreground">Type a prompt below to quickly test it.</p>
+                        <p className="text-xs text-muted-foreground">{uiT("ui.788496105ad22507")}</p>
                       </div>
                     </div>
                   )}
@@ -1266,14 +1273,14 @@ export default function ComplianceUI({
                               ) : (
                                 <CheckCircle2 className="w-3 h-3 inline" />
                               )}
-                              {msg.result === "blocked" ? "Blocked" : "Allowed"}
+                              {msg.result === "blocked" ? uiT("ui.18f2a0947f9d") : uiT("ui.1bb201d188352e9b")}
                               <span className="font-normal mx-0.5">—</span>
                             </span>
                           )}
                           {msg.text}
                           {msg.type === "system" && msg.returnedText != null && (
                             <span className="block mt-1.5 pt-1.5 border-t border-gray-200/60">
-                              <span className="text-muted-foreground">Returned: </span>
+                              <span className="text-muted-foreground">{uiT("ui.eea7e1ef86fd6913")} </span>
                               <span className="font-medium text-foreground break-all">{msg.returnedText}</span>
                             </span>
                           )}
@@ -1298,16 +1305,19 @@ export default function ComplianceUI({
                       value={quickTestInput}
                       onChange={(e) => setQuickTestInput(e.target.value)}
                       onKeyDown={handleQuickTestKeyDown}
-                      placeholder="Enter text to test..."
+                      placeholder={uiT("ui.1575d346d6c8c2f2")}
                       rows={3}
                       className="w-full px-3 pt-3 pb-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden resize-none"
                     />
                     <div className="flex items-center justify-between px-3 pb-2">
                       <span className="text-[10px] text-muted-foreground">
-                        Press <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">Enter</kbd> to
-                        submit ·{" "}
-                        <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">Shift+Enter</kbd> for new
-                        line
+                        {uiT("ui.9ed1273e9b5a")}{" "}
+                        <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">Enter</kbd>{" "}
+                        {uiT("ui.0240fb64fb92d63d")}{" "}
+                        <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">
+                          {uiT("ui.5f5cb2093969715d")}
+                        </kbd>{" "}
+                        {uiT("ui.0cff0f06556e5320")}
                       </span>
                       <span className="text-[10px] text-muted-foreground tabular-nums">{quickTestInput.length}</span>
                     </div>
@@ -1329,7 +1339,7 @@ export default function ComplianceUI({
               <div className="flex-1 flex flex-col overflow-hidden bg-card min-h-0">
                 <div className="px-5 py-3 border-b border-border shrink-0">
                   <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-sm font-semibold text-foreground">Results</h2>
+                    <h2 className="text-sm font-semibold text-foreground">{uiT("ui.219c4a6c86a716e9")}</h2>
                     {testResults.length > 0 && (
                       <div className="flex items-center gap-2">
                         <button
@@ -1338,26 +1348,20 @@ export default function ComplianceUI({
                           disabled={filteredResults.length === 0}
                           className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-2 py-1 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                         >
-                          <Download className="w-3 h-3" /> Export CSV
+                          <Download className="w-3 h-3" /> {uiT("ui.91f71c14c8d6")}
                         </button>
                         <div className="flex items-center gap-2.5 text-[11px]">
                           <span className="flex items-center gap-1 text-success">
                             <CheckCircle2 className="w-3 h-3" />
                             {matchCount}
                           </span>
-                          <span
-                            className="flex items-center gap-1 text-warning"
-                            title="Allowed content that should have been blocked"
-                          >
+                          <span className="flex items-center gap-1 text-warning" title={uiT("ui.5cbe7114e85109ad")}>
                             <AlertTriangle className="w-3 h-3" />
-                            {falseNegativeCount} FN
+                            {falseNegativeCount} {uiT("ui.ac3e88496779bf8a")}
                           </span>
-                          <span
-                            className="flex items-center gap-1 text-destructive"
-                            title="Blocked content that should have been allowed"
-                          >
+                          <span className="flex items-center gap-1 text-destructive" title={uiT("ui.5162f22085003276")}>
                             <X className="w-3 h-3" />
-                            {falsePositiveCount} FP
+                            {falsePositiveCount} {uiT("ui.848951c7610a98af")}
                           </span>
                           {pendingCount > 0 && (
                             <span className="flex items-center gap-1 text-muted-foreground">
@@ -1402,9 +1406,7 @@ export default function ComplianceUI({
                         <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center mx-auto mb-3">
                           <FlaskConical className="w-6 h-6 text-muted-foreground" />
                         </div>
-                        <p className="text-xs text-muted-foreground max-w-[240px]">
-                          Select prompts and click Simulate to run batch compliance tests.
-                        </p>
+                        <p className="text-xs text-muted-foreground max-w-[240px]">{uiT("ui.c1b08235b8a0d578")}</p>
                       </div>
                     </div>
                   ) : (
@@ -1414,22 +1416,22 @@ export default function ComplianceUI({
                           <div className="flex items-center gap-3 text-sm flex-1">
                             <span>
                               <span className="font-semibold text-foreground">{testResults.length}</span>{" "}
-                              <span className="text-muted-foreground">total</span>
+                              <span className="text-muted-foreground">{uiT("ui.11239872d178729a")}</span>
                             </span>
                             <div className="w-px h-4 bg-border" />
                             <span>
                               <span className="font-semibold text-success">{matchCount}</span>{" "}
-                              <span className="text-muted-foreground">correct</span>
+                              <span className="text-muted-foreground">{uiT("ui.15a596e3c98c407e")}</span>
                             </span>
                             <div className="w-px h-4 bg-border" />
-                            <span title="Allowed content that should have been blocked">
+                            <span title={uiT("ui.5cbe7114e85109ad")}>
                               <span className="font-semibold text-warning">{falseNegativeCount}</span>{" "}
-                              <span className="text-muted-foreground">false negative</span>
+                              <span className="text-muted-foreground">{uiT("ui.203841c78480ed80")}</span>
                             </span>
                             <div className="w-px h-4 bg-border" />
-                            <span title="Blocked content that should have been allowed">
+                            <span title={uiT("ui.5162f22085003276")}>
                               <span className="font-semibold text-destructive">{falsePositiveCount}</span>{" "}
-                              <span className="text-muted-foreground">false positive</span>
+                              <span className="text-muted-foreground">{uiT("ui.594d50685604cf6c")}</span>
                             </span>
                           </div>
                           <div
@@ -1441,7 +1443,9 @@ export default function ComplianceUI({
                                   : "bg-destructive/10 border-destructive/20 text-destructive"
                             }`}
                           >
-                            <span className="text-[10px] font-semibold uppercase tracking-wider opacity-90">Score</span>
+                            <span className="text-[10px] font-semibold uppercase tracking-wider opacity-90">
+                              {uiT("ui.38e5a46cbc5a")}
+                            </span>
                             <span>{Math.round((matchCount / completedResults.length) * 100)}%</span>
                           </div>
                         </div>
@@ -1475,13 +1479,15 @@ export default function ComplianceUI({
                                     <span
                                       className={`text-[9px] font-semibold px-1 py-0.5 rounded-sm ${result.expectedResult === "fail" ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}`}
                                     >
-                                      {result.expectedResult === "fail" ? "Expect Block" : "Expect Allow"}
+                                      {result.expectedResult === "fail"
+                                        ? uiT("ui.a12e02b333c17f36")
+                                        : uiT("ui.a7741f2e7c37a445")}
                                     </span>
                                     {result.status === "complete" && (
                                       <span
                                         className={`text-[9px] font-bold px-1 py-0.5 rounded-sm ${result.isMatch ? "bg-success/15 text-success" : "bg-destructive/15 text-destructive"}`}
                                       >
-                                        {result.isMatch ? "✓ Match" : "✗ Gap"}
+                                        {result.isMatch ? uiT("ui.9ab429ec020d6e3a") : uiT("ui.2b010ff6fb8c585a")}
                                       </span>
                                     )}
                                   </div>
@@ -1498,7 +1504,7 @@ export default function ComplianceUI({
                                       });
                                     }}
                                     className="shrink-0 p-0.5 text-muted-foreground hover:text-foreground"
-                                    aria-label={isExpanded ? "Collapse" : "Expand"}
+                                    aria-label={isExpanded ? uiT("ui.be6eb1fc3b05") : uiT("ui.07548c2c6511")}
                                   >
                                     {isExpanded ? (
                                       <ChevronDown className="w-3.5 h-3.5" />
@@ -1512,25 +1518,27 @@ export default function ComplianceUI({
                                 <div className="mt-2 pt-2 border-t border-border text-[11px] space-y-1">
                                   {result.triggeredBy && (
                                     <div>
-                                      <span className="text-muted-foreground">Triggered by:</span>{" "}
+                                      <span className="text-muted-foreground">{uiT("ui.71fcd3ce4b092420")}</span>{" "}
                                       <span className="font-medium text-foreground bg-muted px-1.5 py-0.5 rounded-sm">
                                         {result.triggeredBy}
                                       </span>
                                     </div>
                                   )}
                                   <div>
-                                    <span className="text-muted-foreground">Verdict:</span>{" "}
+                                    <span className="text-muted-foreground">{uiT("ui.7340b6a1a10b038d")}</span>{" "}
                                     <span className={result.isMatch ? "text-success" : "text-destructive"}>
                                       {result.isMatch
-                                        ? "Correctly handled"
+                                        ? uiT("ui.f8cd187aafc764ac")
                                         : result.expectedResult === "fail"
-                                          ? "Gap — should have been blocked"
-                                          : "False positive — incorrectly blocked"}
+                                          ? uiT("ui.745ac0e344126e15")
+                                          : uiT("ui.768bdfc7901fcd4b")}
                                     </span>
                                   </div>
                                   {result.returnedText != null && result.returnedText !== "" && (
                                     <div className="mt-1.5">
-                                      <span className="text-muted-foreground block mb-0.5">LLM response:</span>
+                                      <span className="text-muted-foreground block mb-0.5">
+                                        {uiT("ui.0f513522b5abd441")}
+                                      </span>
                                       <div className="text-foreground bg-muted rounded-sm px-2 py-1.5 border border-border max-h-32 overflow-y-auto whitespace-pre-wrap wrap-break-word">
                                         {result.returnedText}
                                       </div>

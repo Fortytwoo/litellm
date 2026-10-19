@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -16,6 +18,8 @@ interface ClassifierCircuitBreakerConfigProps {
 }
 
 const ClassifierCircuitBreakerConfig: React.FC<ClassifierCircuitBreakerConfigProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [draftCooldown, setDraftCooldown] = React.useState<string | null>(null);
   const enabled = value.circuit_breaker_enabled ?? DEFAULT_CLASSIFIER_CIRCUIT_BREAKER_ENABLED;
 
@@ -35,18 +39,15 @@ const ClassifierCircuitBreakerConfig: React.FC<ClassifierCircuitBreakerConfigPro
         <Switch
           checked={enabled}
           onCheckedChange={(circuit_breaker_enabled) => onChange({ ...value, circuit_breaker_enabled })}
-          aria-label="Classifier circuit breaker"
+          aria-label={uiT("ui.9cd7190492da00e2")}
         />
-        <strong className="font-semibold">Classifier circuit breaker</strong>
+        <strong className="font-semibold">{uiT("ui.9cd7190492da00e2")}</strong>
       </div>
-      <span className="block text-xs text-muted-foreground">
-        After one classifier timeout, use the fallback immediately for every session until a recovery probe succeeds.
-        Enabled by default.
-      </span>
+      <span className="block text-xs text-muted-foreground">{uiT("ui.3e7696744d8ebb60")}</span>
       {enabled && (
         <div>
           <Label htmlFor={COOLDOWN_ID} className="block mb-1 font-semibold">
-            Circuit breaker cooldown (seconds)
+            {uiT("ui.681667173b454180")}
           </Label>
           <Input
             id={COOLDOWN_ID}

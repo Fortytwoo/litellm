@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import LoggingSettings from "../team/LoggingSettings";
@@ -17,23 +19,24 @@ export function PremiumLoggingSettings({
   disabledCallbacks = [],
   onDisabledCallbacksChange,
 }: PremiumLoggingSettingsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!premiumUser) {
     return (
       <div>
         <div className="flex flex-wrap gap-2 mb-3">
           <Badge variant="secondary" className="opacity-50">
-            ✨ langfuse-logging
+            {uiT("ui.904c501abc5802fb")}
           </Badge>
           <Badge variant="secondary" className="opacity-50">
-            ✨ datadog-logging
+            {uiT("ui.c7fd0ae5dba1522e")}
           </Badge>
         </div>
         <div className="p-3 bg-muted border border-border rounded-lg">
           <p className="text-sm text-muted-foreground">
-            Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for
-            all free users. Get a trial key{" "}
+            {uiT("ui.524d25a9e5b14edc")}{" "}
             <a href="https://www.litellm.ai/#pricing" target="_blank" rel="noopener noreferrer" className="underline">
-              here
+              {uiT("ui.fcec91509759ad99")}
             </a>
             .
           </p>

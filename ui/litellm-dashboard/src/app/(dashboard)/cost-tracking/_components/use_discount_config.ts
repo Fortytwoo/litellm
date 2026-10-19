@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState, useCallback } from "react";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { toast } from "@/lib/toast";
@@ -20,6 +24,8 @@ export interface UseDiscountConfigReturn {
 }
 
 export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseDiscountConfigReturn {
+  useDashboardLanguage();
+
   const [discountConfig, setDiscountConfig] = useState<DiscountConfig>({});
 
   const fetchDiscountConfig = useCallback(async () => {
@@ -63,7 +69,7 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
         });
 
         if (response.ok) {
-          toast.success("Discount configuration updated successfully");
+          toast.success(translateUi("ui.d67eb4bce0f40efd"));
           await fetchDiscountConfig();
         } else {
           const errorData = await response.json();

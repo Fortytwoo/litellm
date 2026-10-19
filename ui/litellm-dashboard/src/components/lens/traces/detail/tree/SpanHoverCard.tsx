@@ -1,4 +1,8 @@
 "use client";
+import { getActiveLocale } from "@/i18n";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Check } from "lucide-react";
 
@@ -15,18 +19,42 @@ export const HOVER_OPEN_DELAY_MS = 300;
 const HOVER_CLOSE_DELAY_MS = 100;
 
 const TYPE_LABEL: Record<SpanType, string> = {
-  agent: "Agent",
-  llm: "LLM",
-  tool: "Tool",
-  chain: "Chain",
-  framework: "Framework",
-  retriever: "Retriever",
-  embedding: "Embedding",
-  reranker: "Reranker",
-  guardrail: "Guardrail",
-  evaluator: "Evaluator",
-  prompt: "Prompt",
-  decision: "Decision",
+  get agent() {
+    return translateUi("ui.11b39c93777e");
+  },
+  get llm() {
+    return translateUi("ui.674900a77b798af1");
+  },
+  get tool() {
+    return translateUi("ui.2e53bdcd0740867b");
+  },
+  get chain() {
+    return translateUi("ui.dae0896cbc2c67bf");
+  },
+  get framework() {
+    return translateUi("ui.192eb4525aabd7e2");
+  },
+  get retriever() {
+    return translateUi("ui.ac722b3e8e29bad1");
+  },
+  get embedding() {
+    return translateUi("ui.4c1a0852823452e1");
+  },
+  get reranker() {
+    return translateUi("ui.9db775515ee555b0");
+  },
+  get guardrail() {
+    return translateUi("ui.ba3f7a9c79a7");
+  },
+  get evaluator() {
+    return translateUi("ui.f2a57bad3d4b112c");
+  },
+  get prompt() {
+    return translateUi("ui.5c39123805ffb4e2");
+  },
+  get decision() {
+    return translateUi("ui.640ae4baf96061fe");
+  },
 };
 
 const ABSOLUTE_TIME_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -38,10 +66,13 @@ const ABSOLUTE_TIME_OPTIONS: Intl.DateTimeFormatOptions = {
   second: "2-digit",
   timeZoneName: "short",
 };
-const ABSOLUTE_TIME = new Intl.DateTimeFormat("en-US", ABSOLUTE_TIME_OPTIONS);
+const ABSOLUTE_TIME = {
+  en: new Intl.DateTimeFormat("en-US", ABSOLUTE_TIME_OPTIONS),
+  zh: new Intl.DateTimeFormat("zh-CN", ABSOLUTE_TIME_OPTIONS),
+};
 
 export const absoluteTime = (traceStartMs: number, offsetMs: number): string =>
-  ABSOLUTE_TIME.format(new Date(traceStartMs + offsetMs));
+  ABSOLUTE_TIME[getActiveLocale()].format(new Date(traceStartMs + offsetMs));
 
 export interface HoverFacts {
   name: string;
@@ -107,6 +138,8 @@ function FactSection({ title, children }: { title: string; children: React.React
 }
 
 function HoverCardBody({ facts, traceStartMs }: { facts: HoverFacts; traceStartMs: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-start gap-2">
@@ -119,7 +152,7 @@ function HoverCardBody({ facts, traceStartMs }: { facts: HoverFacts; traceStartM
             {!facts.failed && (
               <span
                 className="grid size-4 shrink-0 place-items-center rounded-full bg-trace-ok p-0.5"
-                aria-label="Success"
+                aria-label={uiT("ui.c88a0b907419")}
               >
                 <Check className="size-3 text-trace-ok-glyph" strokeWidth={2.5} />
               </span>
@@ -131,23 +164,26 @@ function HoverCardBody({ facts, traceStartMs }: { facts: HoverFacts; traceStartM
           </span>
         </div>
       </div>
-      <FactSection title="Time">
+      <FactSection title={uiT("ui.33b93476cf59")}>
         <dl className="flex flex-col gap-1.5">
-          <Fact label="Start" value={absoluteTime(traceStartMs, facts.startMs)} />
-          <Fact label="End" value={absoluteTime(traceStartMs, facts.startMs + facts.durationMs)} />
-          <Fact label="Duration" value={fmtMs(facts.durationMs)} />
+          <Fact label={uiT("ui.e4bb9f1ece9af926")} value={absoluteTime(traceStartMs, facts.startMs)} />
+          <Fact
+            label={uiT("ui.f4db1e48476f6075")}
+            value={absoluteTime(traceStartMs, facts.startMs + facts.durationMs)}
+          />
+          <Fact label={uiT("ui.4fc52a3c4c55")} value={fmtMs(facts.durationMs)} />
         </dl>
       </FactSection>
       {(facts.tokens > 0 || facts.spend != null) && (
-        <FactSection title="Usage">
+        <FactSection title={uiT("ui.8d59829c1e15")}>
           <dl className="flex flex-col gap-1.5">
             {facts.tokens > 0 && <Fact label="Tokens" value={fmtTok(facts.tokens)} />}
-            {facts.spend != null && <Fact label="Cost" value={formatCost(facts.spend)} />}
+            {facts.spend != null && <Fact label={uiT("ui.204a5eb2cd28")} value={formatCost(facts.spend)} />}
           </dl>
         </FactSection>
       )}
       {facts.tags.length > 0 && (
-        <FactSection title="Tags">
+        <FactSection title={uiT("ui.1331275bc537")}>
           <ul className="flex flex-wrap gap-1">
             {facts.tags.map((tag) => (
               <li key={tag} className="rounded-sm bg-trace-tag px-1 py-0.5 text-trace-duration">

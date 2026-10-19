@@ -1,11 +1,37 @@
+import { t as translateUi } from "@/i18n";
 import type { RunWindow } from "./types";
 
 export const RUN_PRESETS = [
-  { label: "Since last run", hours: null },
-  { label: "Last hour", hours: 1 },
-  { label: "Last 24h", hours: 24 },
-  { label: "Last 7d", hours: 168 },
-  { label: "Custom", hours: -1 },
+  {
+    get label() {
+      return translateUi("ui.e0bcc55c6d24528f");
+    },
+    hours: null,
+  },
+  {
+    get label() {
+      return translateUi("ui.a8dfe9d80188");
+    },
+    hours: 1,
+  },
+  {
+    get label() {
+      return translateUi("ui.3033b37ea23466d2");
+    },
+    hours: 24,
+  },
+  {
+    get label() {
+      return translateUi("ui.9976054f2ae7088c");
+    },
+    hours: 168,
+  },
+  {
+    get label() {
+      return translateUi("ui.494ca78f7374");
+    },
+    hours: -1,
+  },
 ] as const;
 
 export type RunPreset = (typeof RUN_PRESETS)[number]["hours"];

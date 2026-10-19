@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -94,7 +96,13 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
                             const { logo, displayName } = getProviderLogoAndName(request.custom_llm_provider);
                             return (
                               <>
-                                {logo && <img src={logo} alt={`${displayName} logo`} className="h-5 w-5 mr-2" />}
+                                {logo && (
+                                  <img
+                                    src={logo}
+                                    alt={uiT("ui.78e75433bd1b56ea", { v0: String(displayName) })}
+                                    className="h-5 w-5 mr-2"
+                                  />
+                                )}
                                 {displayName}
                               </>
                             );
@@ -113,7 +121,7 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
                       </div>
                       <div className="flex">
                         <span className="font-medium w-1/3">{uiT("ui.298d6c7549e4")}</span>
-                        <span>{calculateDuration(request.start_time, request.end_time)}</span>
+                        <span>{translateText(calculateDuration(request.start_time, request.end_time))}</span>
                       </div>
                     </div>
                   </div>
@@ -139,9 +147,11 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                           <div className="flex items-center">
-                            <span className="font-medium mr-2">Result {resultIndex + 1}</span>
+                            <span className="font-medium mr-2">
+                              {uiT("ui.6e7d50e84f47")} {resultIndex + 1}
+                            </span>
                             <span className="text-muted-foreground text-sm">
-                              Score: <span className="font-mono">{result.score.toFixed(4)}</span>
+                              {uiT("ui.9689a814f358")} <span className="font-mono">{result.score.toFixed(4)}</span>
                             </span>
                           </div>
                         </div>

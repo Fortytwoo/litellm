@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { isAdminRole, isProxyAdminRole, isProxyAdminTierRole } from "@/utils/roles";
 import { CircleHelp, Plug, Search } from "lucide-react";
@@ -56,10 +58,30 @@ import { listMCPUserEnvVarStatus } from "@/components/networking";
 export type SortKey = "created_desc" | "updated_desc" | "name_asc" | "health";
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "created_desc", label: "Recently created" },
-  { value: "updated_desc", label: "Recently updated" },
-  { value: "name_asc", label: "Name (A→Z)" },
-  { value: "health", label: "Health (unhealthy first)" },
+  {
+    value: "created_desc",
+    get label() {
+      return translateUi("ui.61df24ec987075ce");
+    },
+  },
+  {
+    value: "updated_desc",
+    get label() {
+      return translateUi("ui.474b2a869ac1477d");
+    },
+  },
+  {
+    value: "name_asc",
+    get label() {
+      return translateUi("ui.ea9056f9baa0eb68");
+    },
+  },
+  {
+    value: "health",
+    get label() {
+      return translateUi("ui.2c2733c5e19fca86");
+    },
+  },
 ];
 
 const HEALTH_RANK: Record<string, number> = {
@@ -137,12 +159,10 @@ function DeleteServerDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete MCP Server?</AlertDialogTitle>
+          <AlertDialogTitle>{uiT("ui.6f8b1680708ef05d")}</AlertDialogTitle>
         </AlertDialogHeader>
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            This action is permanent and cannot be undone. All associated configurations will be removed.
-          </p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.468f3178f0b194e5")}</p>
 
           {server && (
             <dl className="mt-3 space-y-1 rounded-lg border border-border bg-muted p-4">
@@ -168,7 +188,7 @@ function DeleteServerDialog({
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
           <Button variant="destructive" disabled={isDeleting} onClick={onConfirm}>
-            {isDeleting ? "Deleting..." : uiT("ui.e2d0a54968ea")}
+            {isDeleting ? uiT("ui.685ecb984ac29ce8") : uiT("ui.e2d0a54968ea")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -415,7 +435,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
     try {
       setIsDeletingServer(true);
       await deleteMCPServer(accessToken, serverIdToDelete);
-      toast.success("Deleted MCP Server successfully");
+      toast.success(translateUi("ui.a0fc7e2db2ccf251"));
       // If the user is currently viewing the detail page of the server they
       // just deleted, return them to the All Servers list. Otherwise the
       // detail view would stay mounted, fall back to an empty stub server,
@@ -476,7 +496,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
   }, [refetch]);
 
   if (!accessToken || !userRole || !userID) {
-    return <div className="p-6 text-center text-muted-foreground">Missing required authentication parameters.</div>;
+    return <div className="p-6 text-center text-muted-foreground">{uiT("ui.0ad862db295a887b")}</div>;
   }
 
   return (
@@ -512,20 +532,20 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
               <h1 className="text-xl font-semibold">{uiT("ui.aab669a72882")}</h1>
               {filteredServers.length > 0 && <Badge variant="secondary">{filteredServers.length}</Badge>}
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">Configure and manage your MCP servers</p>
+            <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.b463f24a62fd160a")}</p>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Link href={uiHref("connect")} className={cn(buttonVariants({ variant: "outline" }), "shrink-0")}>
               <Plug />
-              My Connections
+              {uiT("ui.789f6e0157b79c5f")}
             </Link>
             {isAdminRole(userRole) ? (
               <>
                 <Button className="shrink-0" variant="secondary" onClick={() => setImportVisible(true)}>
-                  Import from JSON
+                  {uiT("ui.09d8ff540ac2c354")}
                 </Button>
                 <Button className="shrink-0" onClick={() => setDiscoveryVisible(true)}>
-                  + Add New MCP Server
+                  {uiT("ui.c95efec698220139")}
                 </Button>
               </>
             ) : (
@@ -537,7 +557,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                 }}
                 variant="secondary"
               >
-                + Submit MCP Server
+                {uiT("ui.e388e9433bb634a4")}
               </Button>
             )}
           </div>
@@ -566,36 +586,36 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
         <Tabs defaultValue="servers" className="mt-2 w-full">
           <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0">
             <TabsTrigger value="servers" className="flex-none rounded-none px-4 py-2">
-              All Servers
+              {uiT("ui.b5be0854c77e1f3a")}
             </TabsTrigger>
             <TabsTrigger value="toolsets" className="flex-none rounded-none px-4 py-2">
-              Toolsets
+              {uiT("ui.d2d6b120067327d2")}
             </TabsTrigger>
             <TabsTrigger value="connect" className="flex-none rounded-none px-4 py-2">
-              Connect
+              {uiT("ui.1a2303ede07493ac")}
             </TabsTrigger>
             {isAdminRole(userRole) && (
               <>
                 <TabsTrigger value="semantic-filter" className="flex-none rounded-none px-4 py-2">
-                  Semantic Filter
+                  {uiT("ui.a8c57d0bf2895c0d")}
                 </TabsTrigger>
 
                 <TabsTrigger value="tool-search" className="flex-none rounded-none px-4 py-2">
-                  Tool Search
+                  {uiT("ui.d10f50ef117d80d5")}
                 </TabsTrigger>
 
                 <TabsTrigger value="network-settings" className="flex-none rounded-none px-4 py-2">
-                  Network Settings
+                  {uiT("ui.a47d5574d1b5c0c6")}
                 </TabsTrigger>
 
                 <TabsTrigger value="submitted" className="flex-none rounded-none px-4 py-2">
-                  Submitted MCPs
+                  {uiT("ui.103861d138428d1e")}
                 </TabsTrigger>
               </>
             )}
             {isProxyAdminTierRole(userRole) && (
               <TabsTrigger value="connections" className="flex-none rounded-none px-4 py-2">
-                Live Connections
+                {uiT("ui.044dcf23bd5ceff2")}
               </TabsTrigger>
             )}
           </TabsList>
@@ -635,7 +655,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">{teamSelectItems.all}</SelectItem>
-                            <SelectItem value="personal">Personal</SelectItem>
+                            <SelectItem value="personal">{uiT("ui.845f9286400f4269")}</SelectItem>
                             {uniqueTeams.map((team) => (
                               <SelectItem key={team.team_id} value={team.team_id}>
                                 {team.team_alias || team.team_id}
@@ -647,20 +667,17 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                       <div className="h-6 w-px bg-border" />
                       <div className="flex items-center gap-2">
                         <p className="flex items-center text-sm font-medium whitespace-nowrap text-muted-foreground">
-                          Access Group
+                          {uiT("ui.de2abd6b489e37a2")}
                           <Tooltip>
                             <TooltipTrigger
                               render={
                                 <CircleHelp
                                   className="ml-1 size-3.5 text-muted-foreground"
-                                  aria-label="About access groups"
+                                  aria-label={uiT("ui.3b37c831918f8978")}
                                 />
                               }
                             />
-                            <TooltipContent>
-                              An MCP Access Group is a set of users or teams that have permission to access specific MCP
-                              servers. Use access groups to control and organize who can connect to which servers.
-                            </TooltipContent>
+                            <TooltipContent>{uiT("ui.ac99230b3260b588")}</TooltipContent>
                           </Tooltip>
                         </p>
                         <Select
@@ -668,11 +685,11 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                           value={selectedMcpAccessGroup}
                           onValueChange={(v: string | null) => handleMcpAccessGroupChange(v ?? "all")}
                         >
-                          <SelectTrigger className="w-55" aria-label="Access Group">
+                          <SelectTrigger className="w-55" aria-label={uiT("ui.de2abd6b489e37a2")}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="all">All Access Groups</SelectItem>
+                            <SelectItem value="all">{uiT("ui.5cd0180c88870933")}</SelectItem>
                             {uniqueMcpAccessGroups.map((group) => (
                               <SelectItem key={group} value={group}>
                                 {group}
@@ -690,13 +707,15 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                       <Search className="size-4 text-muted-foreground" />
                     </InputGroupAddon>
                     <InputGroupInput
-                      placeholder="Search by name, alias, URL, or ID"
+                      placeholder={uiT("ui.9b4d666c3f5ea6e6")}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </InputGroup>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">Sort</p>
+                    <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">
+                      {uiT("ui.bec69036aa27e7fa")}
+                    </p>
                     <Select
                       items={SORT_OPTIONS}
                       value={sortKey}
@@ -715,21 +734,20 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                     </Select>
                   </div>
                   <div className="ml-auto text-xs text-muted-foreground">
-                    {displayedServers.length} of {filteredServers.length} servers
+                    {displayedServers.length} {uiT("ui.28391d3bc64ec15c")} {filteredServers.length}{" "}
+                    {uiT("ui.8e3dc1afbc3ec556")}
                   </div>
                 </div>
                 <div className="mt-4 w-full">
                   {isLoadingServers ? (
                     <div className="flex items-center justify-center gap-3 rounded-lg border border-dashed border-border bg-card p-12">
                       <UiLoadingSpinner className="size-6 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground">Loading MCP servers...</p>
+                      <p className="text-sm text-muted-foreground">{uiT("ui.ad9662696670490d")}</p>
                     </div>
                   ) : displayedServers.length === 0 ? (
                     <div className="rounded-lg border border-dashed border-border bg-card p-12 text-center">
                       <p className="text-sm text-muted-foreground">
-                        {filteredServers.length === 0
-                          ? "No MCP servers configured. Click '+ Add New MCP Server' to get started."
-                          : "No servers match the current filters or search."}
+                        {filteredServers.length === 0 ? uiT("ui.a6e3debf8c8b342d") : uiT("ui.43c4dd9144c5b651")}
                       </p>
                     </div>
                   ) : (

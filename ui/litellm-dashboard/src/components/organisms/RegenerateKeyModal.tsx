@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { Alert, AlertTitle } from "@/components/shared/Alert";
@@ -50,10 +54,12 @@ const buildSchema = (keyIsExpired: boolean): z.ZodType<RegenerateKeyFormValues, 
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -101,7 +107,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
     try {
       const response = await regenerateKeyCall(accessToken, selectedToken.token || selectedToken.token_id, formValues);
       setRegeneratedKey(response.key);
-      toast.success("Virtual Key regenerated successfully");
+      toast.success(translateUi("ui.f73aceb64edd462b"));
 
       // Build the update payload. Spread the API response first so any new
       // fields it returns (new token, timestamps, etc.) are captured, then
@@ -231,15 +237,19 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                     description={
                       <span className="flex flex-col gap-0.5 text-xs">
                         <span className={keyIsExpired ? "text-destructive" : "text-muted-foreground"}>
-                          Current expiry:{" "}
+                          {uiT("ui.52184862290e953f")}{" "}
                           {selectedToken?.expires ? formatExpiresUtc(selectedToken.expires) : uiT("ui.6300ef800bb8")}
                           {keyIsExpired && " (expired)"}
                         </span>
-                        {newExpiryTime && <span className="text-success">New expiry: {newExpiryTime}</span>}
+                        {newExpiryTime && (
+                          <span className="text-success">
+                            {uiT("ui.35ba9728f9d20025")} {newExpiryTime}
+                          </span>
+                        )}
                       </span>
                     }
                   >
-                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. 30s, 30h, 30d" />}
+                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.3728344a3ec0a8c9")} />}
                   </FormField>
 
                   <FormField
@@ -251,7 +261,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                     )}
                     description={<span className="text-xs">{uiT("ui.ecc2aeb6410e")}</span>}
                   >
-                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. 24h, 2d" />}
+                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.de97a321254c057c")} />}
                   </FormField>
                 </div>
               </FieldGroup>

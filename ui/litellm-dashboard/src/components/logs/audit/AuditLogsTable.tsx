@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -113,7 +114,12 @@ const ACTION_FILTER_ITEMS = [
       return translateUi("ui.d409578af954");
     },
   },
-  ...ACTION_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
+  ...ACTION_OPTIONS.map((option) => ({
+    value: option.value,
+    get label() {
+      return option.label;
+    },
+  })),
 ];
 
 const TABLE_FILTER_ITEMS = [
@@ -123,16 +129,33 @@ const TABLE_FILTER_ITEMS = [
       return translateUi("ui.46d2924e452f");
     },
   },
-  ...TABLE_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
+  ...TABLE_OPTIONS.map((option) => ({
+    value: option.value,
+    get label() {
+      return option.label;
+    },
+  })),
 ];
 
 const FILTER_LABELS: Record<string, string> = {
-  object_id: "Object ID",
-  changed_by: "Changed By",
-  team_id: "Team ID",
-  key_hash: "Key Hash",
-  action: "Action",
-  table_name: "Table",
+  get object_id() {
+    return translateUi("ui.f79ceb0b0078");
+  },
+  get changed_by() {
+    return translateUi("ui.02b8ac805184");
+  },
+  get team_id() {
+    return translateUi("ui.fa2758a6173a");
+  },
+  get key_hash() {
+    return translateUi("ui.415fd17d81f2");
+  },
+  get action() {
+    return translateUi("ui.64cff1319d2f");
+  },
+  get table_name() {
+    return translateUi("ui.16d1c9050a0b");
+  },
 };
 
 const formatFilterValue = (columnId: string, value: unknown): string => {
@@ -198,7 +221,7 @@ export function AuditLogsTable({
       columnFilters={columnFilters}
       onColumnFiltersChange={onColumnFiltersChange}
       isLoading={isLoading}
-      loadingMessage="Loading audit logs…"
+      loadingMessage={uiT("ui.5f0b7b54d786b1f3")}
       noDataMessage={<AuditLogsEmptyState filtered={columnFilters.length > 0 || hasActiveSearch} />}
       size="compact"
       toolbar={(table) => (
@@ -207,7 +230,7 @@ export function AuditLogsTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search audit logs by ID…"
+            searchPlaceholder={uiT("ui.286f0090d3d9")}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
             onOpenFilters={() => setFiltersOpen(true)}

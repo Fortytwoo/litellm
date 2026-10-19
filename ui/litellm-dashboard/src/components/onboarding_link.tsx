@@ -80,11 +80,9 @@ export default function OnboardingModal({
     >
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl" initialFocus={copyButtonRef}>
         <DialogHeader>
-          <DialogTitle>{isInvitation ? "Invitation Link" : "Reset Password Link"}</DialogTitle>
+          <DialogTitle>{isInvitation ? uiT("ui.fedcc0e05a8fc438") : uiT("ui.583eebd8ec11c583")}</DialogTitle>
           <DialogDescription>
-            {isInvitation
-              ? "Copy and send the generated link to onboard this user to the proxy."
-              : "Copy and send the generated link to the user to reset their password."}
+            {isInvitation ? uiT("ui.7dba3acb07d9ae78") : uiT("ui.3677ca4515b0ad92")}
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4">
@@ -94,14 +92,14 @@ export default function OnboardingModal({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor={linkFieldId} className="text-xs font-normal text-muted-foreground">
-              {isInvitation ? "Invitation link" : "Reset password link"}
+              {isInvitation ? uiT("ui.88c3be35063553d5") : uiT("ui.453757e4bd5d43cd")}
             </Label>
             <InputGroup>
               <InputGroupInput id={linkFieldId} readOnly value={invitationUrl} className="font-mono text-xs" />
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   ref={copyButtonRef}
-                  aria-label={isInvitation ? "Copy invitation link" : "Copy password reset link"}
+                  aria-label={isInvitation ? uiT("ui.641dce44f65bbd68") : uiT("ui.485b02054baea56b")}
                   onClick={() => copyToClipboard(invitationUrl)}
                 >
                   <Copy />

@@ -1,4 +1,6 @@
 "use client";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { CircleHelp, Minus, Plus } from "lucide-react";
@@ -33,7 +35,14 @@ export interface CacheControlInjectionPoint {
 
 export const NEW_CACHE_CONTROL_POINT: CacheControlInjectionPoint = { location: "message" };
 
-const LOCATION_ITEMS = [{ value: "message", label: "Message" }] as const;
+const LOCATION_ITEMS = [
+  {
+    value: "message",
+    get label() {
+      return translateUi("ui.2f77668a9dfbf8d5");
+    },
+  },
+] as const;
 
 const ROLE_ITEMS = [
   {
@@ -42,31 +51,44 @@ const ROLE_ITEMS = [
       return translateUi("ui.b512d97e7cbf");
     },
   },
-  { value: "system", label: "System" },
-  { value: "assistant", label: "Assistant" },
+  {
+    value: "system",
+    get label() {
+      return translateUi("ui.6725e7bbcd28f3a8");
+    },
+  },
+  {
+    value: "assistant",
+    get label() {
+      return translateUi("ui.391e405152779acc");
+    },
+  },
 ] as const;
 
-const LabelWithHint: React.FC<{ label: string; hint: string }> = ({ label, hint }) => (
-  <div className="flex items-center">
-    <Label>{label}</Label>
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <button
-              type="button"
-              aria-label={`${label} help`}
-              className="ml-1 inline-flex cursor-help items-center rounded-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          }
-        >
-          <CircleHelp aria-hidden className="size-4" />
-        </TooltipTrigger>
-        <TooltipContent className="max-w-xs whitespace-normal">{hint}</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  </div>
-);
+const LabelWithHint: React.FC<{ label: string; hint: string }> = ({ label, hint }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <div className="flex items-center">
+      <Label>{label}</Label>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <button
+                type="button"
+                aria-label={uiT("ui.b9f4a133392f71cb", { v0: String(label) })}
+                className="ml-1 inline-flex cursor-help items-center rounded-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            }
+          >
+            <CircleHelp aria-hidden className="size-4" />
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs whitespace-normal">{hint}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  );
+};
 
 interface CacheControlInjectionPointsProps {
   value?: CacheControlInjectionPoint[];
@@ -88,7 +110,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
 
   return (
     <div className="ml-6 border-l-2 border-border pl-4">
-      <p className="mb-4 block text-sm text-muted-foreground">{CACHE_CONTROL_DESCRIPTION}</p>
+      <p className="mb-4 block text-sm text-muted-foreground">{translateText(CACHE_CONTROL_DESCRIPTION)}</p>
 
       {points.map((point, index) => (
         <div key={index} className="mb-4 flex items-end gap-4">
@@ -118,7 +140,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a role" />
+                <SelectValue placeholder={uiT("ui.977844fd4358f110")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={null}>{uiT("ui.dc937b598926")}</SelectItem>
@@ -132,7 +154,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
           </div>
 
           <div className="w-[180px] space-y-1">
-            <LabelWithHint label="Index" hint={CACHE_CONTROL_INDEX_HINT} />
+            <LabelWithHint label={uiT("ui.39c3be1198a2fddf")} hint={CACHE_CONTROL_INDEX_HINT} />
             <NumericalInput
               type="number"
               placeholder={uiT("ui.59be71333c96")}
@@ -152,7 +174,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={`Remove injection point ${index + 1}`}
+              aria-label={uiT("ui.f89748b336be726a", { v0: String(index + 1) })}
               className="text-destructive"
               onClick={() => onChange?.(points.filter((_, position) => position !== index))}
             >
@@ -169,7 +191,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
         onClick={() => onChange?.([...points, NEW_CACHE_CONTROL_POINT])}
       >
         <Plus className="mr-2 size-4" />
-        Add Injection Point
+        {uiT("ui.d5385a610c9e8f89")}
       </Button>
     </div>
   );

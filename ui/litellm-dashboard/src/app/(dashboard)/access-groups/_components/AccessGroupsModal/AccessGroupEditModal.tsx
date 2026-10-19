@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -62,7 +64,7 @@ function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGr
         { accessGroupId: accessGroup.access_group_id, params },
         {
           onSuccess: () => {
-            toast.success("Access group updated successfully");
+            toast.success(translateUi("ui.351189bd332bed24"));
             onSuccess?.();
             onCancel();
           },
@@ -89,11 +91,13 @@ function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGr
 }
 
 export function AccessGroupEditModal({ visible, accessGroup, onCancel, onSuccess }: AccessGroupEditModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Edit Access Group</DialogTitle>
+          <DialogTitle>{uiT("ui.aef907bb65e8bce4")}</DialogTitle>
         </DialogHeader>
         <AccessGroupEditForm
           key={accessGroup.access_group_id}

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useMemo, useState } from "react";
@@ -89,12 +91,12 @@ const RoutingGroups: React.FC = () => {
       await saveMutation.mutateAsync(next);
       toast.success(
         drawerMode === "create"
-          ? `Created routing group "${incoming.group_name}"`
-          : `Updated routing group "${incoming.group_name}"`,
+          ? translateUi("ui.f05fdb46edd8f302", undefined, { v0: String(incoming.group_name) })
+          : translateUi("ui.c05efc14cf1845cd", undefined, { v0: String(incoming.group_name) }),
       );
       setDrawerOpen(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save routing group");
+      toast.error(err instanceof Error ? err.message : translateUi("ui.77d426ce7aaf0c8f"));
     }
   };
 
@@ -103,10 +105,10 @@ const RoutingGroups: React.FC = () => {
     const next = groups.filter((g) => g.group_name !== deletingGroup.group_name);
     try {
       await saveMutation.mutateAsync(next);
-      toast.success(`Deleted routing group "${deletingGroup.group_name}"`);
+      toast.success(translateUi("ui.5ec24ab5fb6b538c", undefined, { v0: String(deletingGroup.group_name) }));
       setDeletingGroup(null);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to delete routing group");
+      toast.error(err instanceof Error ? err.message : translateUi("ui.5b8018d2025e45a9"));
     }
   };
 
@@ -120,13 +122,17 @@ const RoutingGroups: React.FC = () => {
                 <Search className="size-4 text-muted-foreground" />
               </InputGroupAddon>
               <InputGroupInput
-                placeholder="Search groups..."
+                placeholder={uiT("ui.2157e1a2aa60f2c8")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               {searchQuery && (
                 <InputGroupAddon align="inline-end">
-                  <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setSearchQuery("")}>
+                  <InputGroupButton
+                    size="icon-xs"
+                    aria-label={uiT("ui.3b7ea51793e9d906")}
+                    onClick={() => setSearchQuery("")}
+                  >
                     <X />
                   </InputGroupButton>
                 </InputGroupAddon>
@@ -144,10 +150,11 @@ const RoutingGroups: React.FC = () => {
               </Button>
               <Button onClick={openCreate}>
                 <Plus />
-                Create Group
+                {uiT("ui.1213394682bfa8c6")}
               </Button>
               <span className="text-sm whitespace-nowrap text-muted-foreground">
-                {uiT("ui.d604310a789a")} {filteredGroups.length} {filteredGroups.length === 1 ? "result" : "results"}
+                {uiT("ui.d604310a789a")} {filteredGroups.length}{" "}
+                {filteredGroups.length === 1 ? uiT("ui.f6a214f7a5fcda0c") : uiT("ui.c099142bc3186ded")}
               </span>
             </div>
           </div>
@@ -179,18 +186,18 @@ const RoutingGroups: React.FC = () => {
       <Dialog open={Boolean(deletingGroup)} onOpenChange={(open) => !open && setDeletingGroup(null)}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Delete routing group?</DialogTitle>
+            <DialogTitle>{uiT("ui.9ac393f2d38d78dd")}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-foreground">
             {deletingGroup?.routing_strategy === "priority" ? (
               <>
-                Calls to <span className="font-medium">{deletingGroup.group_name}</span> will stop working. Direct
-                requests to its member models keep their existing routing behavior. This cannot be undone.
+                {uiT("ui.78bd4cc7158f3be3")} <span className="font-medium">{deletingGroup.group_name}</span>{" "}
+                {uiT("ui.ff9d05528d561228")}
               </>
             ) : (
               <>
-                Models in <span className="font-medium">{deletingGroup?.group_name}</span> will fall back to the
-                proxy&apos;s top-level routing strategy. This cannot be undone.
+                {uiT("ui.28ead3843429f610")} <span className="font-medium">{deletingGroup?.group_name}</span>{" "}
+                {uiT("ui.dedfe93a06539db6")}
               </>
             )}
           </p>

@@ -1,3 +1,7 @@
+"use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +23,8 @@ const sampleAnswer = "The column store is 40% faster than the row store for your
 type EvidenceProps = { highlighted: boolean; onHighlight: () => void };
 
 function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <section
       aria-labelledby="lens-sample-trace"
@@ -26,11 +32,11 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <h3 id="lens-sample-trace" className="font-semibold">
-          Tracing
+          {uiT("ui.69e561abfb584b5e")}
         </h3>
-        <p className="text-xs text-muted-foreground">Sample trace · 14.2s</p>
+        <p className="text-xs text-muted-foreground">{uiT("ui.934d744331c64f3a")}</p>
       </div>
-      <ol className="mt-3 space-y-1.5 text-xs leading-5 sm:text-sm" aria-label="Sample trace timeline">
+      <ol className="mt-3 space-y-1.5 text-xs leading-5 sm:text-sm" aria-label={uiT("ui.c1fc04dc25fecdb4")}>
         {traceSteps.map((item, index) => {
           const linked = item.failed || item.name === "answer";
           const rowClass =
@@ -46,7 +52,7 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
                 <span className="truncate" title={item.name}>
                   {item.name}
                 </span>
-                {item.failed && <span className="sr-only">Failed</span>}
+                {item.failed && <span className="sr-only">{uiT("ui.031a8f0f659d")}</span>}
               </span>
               <span aria-hidden="true" className="relative h-2.5 overflow-hidden rounded-sm bg-muted/70">
                 <span
@@ -68,7 +74,11 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
                   type="button"
                   className={cn(rowClass, styles.evidenceLink)}
                   data-evidence-link=""
-                  aria-label={`${item.name}, ${item.duration} seconds${item.failed ? ", failed" : ""}. Highlight related finding`}
+                  aria-label={uiT("ui.3c090c0c84b0008d", {
+                    v0: String(item.name),
+                    v1: String(item.duration),
+                    v2: String(item.failed ? uiT("ui.ff18811f2706a731") : ""),
+                  })}
                   aria-controls="lens-linked-finding"
                   aria-pressed={highlighted}
                   onClick={onHighlight}
@@ -84,12 +94,12 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
       </ol>
       <div className="mt-3 grid gap-3 border-t pt-3 sm:grid-cols-2">
         <div id="lens-benchmark-output" className={cn(styles.evidenceOutput, "rounded-lg bg-muted/60 p-2.5")}>
-          <p className="text-xs text-muted-foreground">run_benchmark · output</p>
-          <p className="mt-1.5 text-sm leading-4.5">Error: benchmark runner unavailable (503)</p>
+          <p className="text-xs text-muted-foreground">{uiT("ui.c1902dfe253a4f76")}</p>
+          <p className="mt-1.5 text-sm leading-4.5">{uiT("ui.0ee97561047c95e1")}</p>
         </div>
         <div id="lens-answer-output" className={cn(styles.evidenceOutput, "rounded-lg bg-muted/60 p-2.5")}>
-          <p className="text-xs text-muted-foreground">answer · output</p>
-          <p className="mt-1.5 text-sm leading-4.5">“{sampleAnswer}”</p>
+          <p className="text-xs text-muted-foreground">{uiT("ui.e39a9ec4d15b79e4")}</p>
+          <p className="mt-1.5 text-sm leading-4.5">“{translateText(sampleAnswer)}”</p>
         </div>
       </div>
     </section>
@@ -97,6 +107,8 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
 }
 
 function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <section
       aria-labelledby="lens-sample-findings"
@@ -104,9 +116,9 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <h3 id="lens-sample-findings" className="font-semibold">
-          Lens findings
+          {uiT("ui.0473840548068f10")}
         </h3>
-        <p className="text-xs text-muted-foreground">500 sample runs reviewed</p>
+        <p className="text-xs text-muted-foreground">{uiT("ui.03a768c311e958f2")}</p>
       </div>
       <div className="mt-3 divide-y border-t">
         <article id="lens-linked-finding" className={cn(styles.evidenceFinding, "py-3")}>
@@ -120,29 +132,27 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
               onClick={onHighlight}
             >
               <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-rose-500" />
-              Claims numbers it never measured
+              {uiT("ui.8c619925863c881a")}
             </button>
           </h4>
           <div className="ml-4 mt-1.5 space-y-1.5 text-sm leading-4.5">
-            <p className="text-muted-foreground">Reports a speedup even though the benchmark failed.</p>
-            <blockquote className="border-l-2 pl-3 italic">
-              “…40% faster than the row store for your workload.”
-            </blockquote>
+            <p className="text-muted-foreground">{uiT("ui.9ad8c0372dc50263")}</p>
+            <blockquote className="border-l-2 pl-3 italic">{uiT("ui.135feab6cd6516b5")}</blockquote>
             <p>
-              <span className="text-muted-foreground">Next step: </span>Report the failed benchmark instead of
-              estimating.
+              <span className="text-muted-foreground">{uiT("ui.707b05c5e5c7")} </span>
+              {uiT("ui.624d7e19a44eafad")}
             </p>
-            <p className="text-xs text-muted-foreground">38 linked runs · High priority</p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.da50bee100ffa9d7")}</p>
           </div>
         </article>
         <article className="pt-3">
           <h4 className="flex items-start gap-2 text-sm font-semibold">
             <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-amber-500" />
-            Promises to follow up, then stops
+            {uiT("ui.be56b9505961ba6e")}
           </h4>
           <div className="ml-4 mt-1.5 space-y-1.5 text-sm leading-4.5 text-muted-foreground">
-            <p>After an order lookup times out, the agent promises to check and ends the run.</p>
-            <p className="text-xs">12 linked runs · Medium priority</p>
+            <p>{uiT("ui.c43bf3e9dada19dd")}</p>
+            <p className="text-xs">{uiT("ui.f0138f062c3ff701")}</p>
           </div>
         </article>
       </div>
@@ -151,19 +161,19 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
 }
 
 export function LensIntroduction({ onStart }: { onStart: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [highlighted, setHighlighted] = useState(false);
   const toggleEvidence = () => setHighlighted((current) => !current);
   return (
     <section aria-labelledby="lens-introduction" className="rounded-2xl border bg-card p-4 sm:px-6 sm:py-5 xl:px-7">
       <h2 id="lens-introduction" className="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
-        The gateway that helps your agents improve
+        {uiT("ui.74bd37f5bb940d73")}
       </h2>
-      <p className="mt-3 max-w-[780px] text-sm leading-6 text-muted-foreground">
-        Turn recorded agent runs into findings linked to the exact steps, so you know what happened and what to change.
-      </p>
+      <p className="mt-3 max-w-[780px] text-sm leading-6 text-muted-foreground">{uiT("ui.2d4b02511b6c9b34")}</p>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Button className="rounded-lg px-4" onClick={onStart}>
-          Set up Lens
+          {uiT("ui.2863ef560f476451")}
         </Button>
         <a
           href="https://docs.litellm.ai/docs/proxy/lens"
@@ -171,7 +181,7 @@ export function LensIntroduction({ onStart }: { onStart: () => void }) {
           rel="noreferrer"
           className="inline-flex items-center gap-1 px-3 text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
         >
-          Docs <ArrowUpRight aria-hidden="true" className="size-4" />
+          {uiT("ui.7af023c43013")} <ArrowUpRight aria-hidden="true" className="size-4" />
         </a>
       </div>
       <GatewayFlow />

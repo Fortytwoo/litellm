@@ -35,7 +35,7 @@ export default function UsageStatStrip({
           label={uiT("ui.85f3d558db12")}
           value={formatUsd(totals.spend)}
           pending={loading}
-          hint={budget ? `of ${formatUsd(budget)} budget` : "No budget set"}
+          hint={budget ? uiT("ui.e8edc4e854cb6331", { v0: String(formatUsd(budget)) }) : uiT("ui.cc4c45f5d01ec1d9")}
         />
       </StatCell>
       <StatCell trend={<Sparkline data={daily} dataKey="requests" color={BRAND} className="h-14" />}>
@@ -49,7 +49,7 @@ export default function UsageStatStrip({
               <span className={totals.failed > 0 ? "text-destructive tabular-nums" : "tabular-nums"}>
                 {totals.failed.toLocaleString()}
               </span>{" "}
-              failed
+              {uiT("ui.5d28a90f4498a814")}
             </span>
           </div>
         )}
@@ -60,17 +60,21 @@ export default function UsageStatStrip({
           value={loading ? null : formatCompact(totals.tokens)}
           exact={`${totals.tokens.toLocaleString()} tokens`}
           pending={loading}
-          hint={loading ? undefined : `${formatCompact(totals.cacheReadTokens)} cache read`}
+          hint={loading ? undefined : uiT("ui.2dcc56c476170e54", { v0: String(formatCompact(totals.cacheReadTokens)) })}
         />
       </StatCell>
       <StatCell>
         <div className="grid gap-3">
-          <Stat label="Avg cost / request" value={formatUsd(totals.avgCostPerRequest, 4)} pending={loading} />
+          <Stat label={uiT("ui.1bb3d5ae09fcc35e")} value={formatUsd(totals.avgCostPerRequest, 4)} pending={loading} />
           <Stat
-            label="Avg latency"
+            label={uiT("ui.a6ec096b853f735f")}
             value={totals.avgLatencyMs === null ? "—" : formatLatency(totals.avgLatencyMs)}
             pending={loading}
-            hint={totals.successRate === null ? undefined : `${totals.successRate.toFixed(1)}% success rate`}
+            hint={
+              totals.successRate === null
+                ? undefined
+                : uiT("ui.fdf4d7162f129ebc", { v0: String(totals.successRate.toFixed(1)) })
+            }
           />
         </div>
       </StatCell>

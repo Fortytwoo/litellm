@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState, useEffect } from "react";
@@ -131,13 +133,18 @@ export default function PluginSettings() {
         </TableCell>
         <TableCell>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon-sm" aria-label={`Edit ${plugin.name}`} onClick={() => openEdit(idx)}>
+            <Button
+              variant="outline"
+              size="icon-sm"
+              aria-label={uiT("ui.f1be7e63b84c48df", { v0: String(plugin.name) })}
+              onClick={() => openEdit(idx)}
+            >
               <Pencil />
             </Button>
             <Button
               variant="destructive"
               size="icon-sm"
-              aria-label={`Delete ${plugin.name}`}
+              aria-label={translateUi("ui.cd822e072981e849", undefined, { v0: String(plugin.name) })}
               onClick={() => handleDelete(idx)}
             >
               <Trash2 />
@@ -151,29 +158,26 @@ export default function PluginSettings() {
   return (
     <Card>
       <CardHeader>
-        <h4 className="text-base font-semibold text-foreground">Plugins</h4>
-        <p className="text-sm text-foreground">
-          Register external services as plugins. Once added, users can toggle to the plugin from the mode switcher in
-          the top-left of the sidebar.
-        </p>
+        <h4 className="text-base font-semibold text-foreground">{uiT("ui.9514b7ff4860ead7")}</h4>
+        <p className="text-sm text-foreground">{uiT("ui.10149e7564862657")}</p>
         <p className="text-xs text-muted-foreground">
-          Each plugin must expose <code className={INLINE_CODE_CLASS}>GET /api/plugin-manifest</code> returning nav
-          items and capabilities.
+          {uiT("ui.f60d099012e6351c")} <code className={INLINE_CODE_CLASS}>GET /api/plugin-manifest</code>{" "}
+          {uiT("ui.7b22b03ae0704f52")}
         </p>
       </CardHeader>
       <CardContent>
         <Button className="mb-4" onClick={openAdd}>
           <Plus />
-          Add Plugin
+          {uiT("ui.2e6249d193ff0fb7")}
         </Button>
 
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>{uiT("ui.dcd1d5223f73")}</TableHead>
-              <TableHead>Display Name</TableHead>
+              <TableHead>{uiT("ui.18d67c992b71ce69")}</TableHead>
               <TableHead>URL</TableHead>
-              <TableHead>Plugin Key</TableHead>
+              <TableHead>{uiT("ui.f504652effb86f84")}</TableHead>
               <TableHead>{uiT("ui.ff8059dc6752")}</TableHead>
             </TableRow>
           </TableHeader>
@@ -184,29 +188,29 @@ export default function PluginSettings() {
       <Dialog open={modalOpen} onOpenChange={(open) => !open && setModalOpen(false)}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingIndex !== null ? "Edit Plugin" : "Add Plugin"}</DialogTitle>
+            <DialogTitle>{editingIndex !== null ? uiT("ui.b749b8c7c34718da") : uiT("ui.2e6249d193ff0fb7")}</DialogTitle>
           </DialogHeader>
           <form onSubmit={(event) => event.preventDefault()} noValidate style={{ marginTop: 16 }}>
             <FieldGroup>
               <FormField
                 control={form.control}
                 name="name"
-                label="Name (identifier)"
-                description="Used in URLs and config. No spaces. E.g. litellm-platform-plugin"
+                label={uiT("ui.c8d181b33155aab5")}
+                description={uiT("ui.7bd01c98ede8b4d6")}
               >
-                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="litellm-platform-plugin" />}
+                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.433625b1ffe2e298")} />}
               </FormField>
-              <FormField control={form.control} name="display_name" label="Display Name">
-                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="Agent Control Plane" />}
+              <FormField control={form.control} name="display_name" label={uiT("ui.18d67c992b71ce69")}>
+                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={uiT("ui.e5013420ab8cd214")} />}
               </FormField>
-              <FormField control={form.control} name="url" label="URL" description="Base URL of the plugin service">
+              <FormField control={form.control} name="url" label="URL" description={uiT("ui.4bf159c124a9ea22")}>
                 {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="https://your-plugin.example.com" />}
               </FormField>
               <FormField
                 control={form.control}
                 name="plugin_key"
-                label="Plugin Key"
-                description="Optional. The plugin's own credential, injected as Authorization: Bearer <key> only when litellm reverse-proxies API calls to the plugin's backend (/plugin-proxy/<name>/*). Leave blank for plugins that use the forwarded litellm user token (e.g. iframe plugins) — that path uses the user's token, not this key."
+                label={uiT("ui.f504652effb86f84")}
+                description={uiT("ui.ec47259d5e5edb5b")}
               >
                 {({ ref, ...field }) => (
                   <InputGroup>
@@ -215,13 +219,13 @@ export default function PluginSettings() {
                       ref={ref}
                       type={keyVisible ? "text" : "password"}
                       value={field.value ?? ""}
-                      placeholder={editingIndex !== null ? "Leave blank to keep current key" : "sk-... (optional)"}
+                      placeholder={editingIndex !== null ? uiT("ui.82cb58e1d2378ac5") : uiT("ui.0356aac7a5dd56ca")}
                     />
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
                         size="icon-xs"
                         onClick={() => setKeyVisible(!keyVisible)}
-                        aria-label={keyVisible ? "Hide plugin key" : "Show plugin key"}
+                        aria-label={keyVisible ? uiT("ui.4eaf85bd2d6c60f2") : uiT("ui.0c4f3ce46758464a")}
                       >
                         {keyVisible ? <EyeOff /> : <Eye />}
                       </InputGroupButton>

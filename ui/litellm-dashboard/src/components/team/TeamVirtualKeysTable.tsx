@@ -180,7 +180,7 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
       {
         id: "organization_id",
         accessorKey: "organization_id",
-        header: "Organization ID",
+        header: uiT("ui.1f466322634e2d85"),
         size: 140,
         enableSorting: false,
         cell: (info) => {
@@ -341,9 +341,9 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
           const models = info.getValue() as string[];
           const scope = deriveKeyModelScope(info.row.original.allowed_routes, info.row.original.key_type);
           const emptyModelsBadge = !scope.hasModelAccess ? (
-            <SimpleTooltip content={`Scoped to ${scope.label} routes; this key cannot call any models`}>
+            <SimpleTooltip content={uiT("ui.5254286816a971dd", { v0: String(scope.label) })}>
               <Badge variant="secondary" className="mb-1">
-                No model access
+                {uiT("ui.47bff7723801")}
               </Badge>
             </SimpleTooltip>
           ) : (
@@ -363,7 +363,9 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
                         {models.length > 3 && (
                           <button
                             type="button"
-                            aria-label={expandedAccordions[info.row.id] ? "Collapse models" : "Expand models"}
+                            aria-label={
+                              expandedAccordions[info.row.id] ? uiT("ui.5a4b088d252a800d") : uiT("ui.d3491ad376b42c21")
+                            }
                             className="rounded-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             onClick={() =>
                               setExpandedAccordions((prev) => ({
@@ -395,7 +397,8 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
                           )}
                           {models.length > 3 && !expandedAccordions[info.row.id] && (
                             <Badge variant="secondary">
-                              +{models.length - 3} {models.length - 3 === 1 ? "more model" : "more models"}
+                              +{models.length - 3}{" "}
+                              {models.length - 3 === 1 ? uiT("ui.a18677f44f551abf") : uiT("ui.60a165e7b26764fc")}
                             </Badge>
                           )}
                           {expandedAccordions[info.row.id] && (
@@ -434,8 +437,12 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
           const key = row.original;
           return (
             <div>
-              <div>TPM: {key.tpm_limit !== null ? key.tpm_limit : uiT("ui.11dde17d6c3e")}</div>
-              <div>RPM: {key.rpm_limit !== null ? key.rpm_limit : uiT("ui.11dde17d6c3e")}</div>
+              <div>
+                {uiT("ui.22506bb2e2fc9c02")} {key.tpm_limit !== null ? key.tpm_limit : uiT("ui.11dde17d6c3e")}
+              </div>
+              <div>
+                {uiT("ui.0a9c9fab18f38f0e")} {key.rpm_limit !== null ? key.rpm_limit : uiT("ui.11dde17d6c3e")}
+              </div>
             </div>
           );
         },
@@ -477,7 +484,7 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
             enableColumnResizing
             columnResizeMode="onChange"
             isLoading={isLoading || isFetching}
-            loadingMessage="Loading keys..."
+            loadingMessage={uiT("ui.e0c65255e48f")}
             size="compact"
             toolbar={(table) => (
               <>
@@ -485,7 +492,7 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
                   table={table}
                   searchValue={searchInput}
                   onSearchChange={handleSearchChange}
-                  searchPlaceholder="Search by key alias or ID…"
+                  searchPlaceholder={uiT("ui.6b082513627498c0")}
                   onRefresh={() => refetch?.()}
                   isRefreshing={isFetching}
                   onOpenFilters={() => setFiltersOpen(true)}
@@ -496,7 +503,7 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
                   open={filtersOpen}
                   onOpenChange={setFiltersOpen}
                   title={uiT("ui.546ebb8eb993")}
-                  description={`Narrow down keys for ${teamAlias ?? "this team"}`}
+                  description={uiT("ui.fd2b1d8a62749d25", { v0: String(teamAlias ?? "this team") })}
                 >
                   {({ get, set }) => (
                     <>
@@ -504,14 +511,14 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
                         <Input
                           value={(get("user_id") as string) ?? ""}
                           onChange={(event) => set("user_id", event.target.value)}
-                          placeholder="Filter by user ID…"
+                          placeholder={uiT("ui.cbb1af4b9f772810")}
                         />
                       </DataTableFilterField>
                       <DataTableFilterField label={uiT("ui.d54d56ee0a42")}>
                         <Input
                           value={(get("key_hash") as string) ?? ""}
                           onChange={(event) => set("key_hash", event.target.value)}
-                          placeholder="Enter Key ID…"
+                          placeholder={uiT("ui.36e94dae7366c3c6")}
                         />
                       </DataTableFilterField>
                     </>

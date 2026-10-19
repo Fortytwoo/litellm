@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Input } from "@/components/ui/input";
 
@@ -8,13 +10,15 @@ interface VariableInputProps {
 }
 
 const VariableInput: React.FC<VariableInputProps> = ({ extractedVariables, variables, onVariableChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (extractedVariables.length === 0) {
     return null;
   }
 
   return (
     <div className="p-4 border-b border-border bg-accent">
-      <h3 className="text-sm font-semibold text-foreground mb-3">Fill in template variables to start testing</h3>
+      <h3 className="text-sm font-semibold text-foreground mb-3">{uiT("ui.6ace11d1a21d5153")}</h3>
       <div className="space-y-2">
         {extractedVariables.map((varName) => (
           <div key={varName}>
@@ -26,7 +30,7 @@ const VariableInput: React.FC<VariableInputProps> = ({ extractedVariables, varia
             <Input
               value={variables[varName] || ""}
               onChange={(e) => onVariableChange(varName, e.target.value)}
-              placeholder={`Enter value for ${varName}`}
+              placeholder={uiT("ui.54b644b78eec04a1", { v0: String(varName) })}
             />
           </div>
         ))}

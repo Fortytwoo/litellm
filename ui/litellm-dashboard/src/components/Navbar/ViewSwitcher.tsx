@@ -12,7 +12,7 @@ import {
 import { Check, ChevronsUpDown, LayoutGrid } from "lucide-react";
 import { usePluginMode } from "@/contexts/PluginModeContext";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
-import { uiHref } from "@/utils/uiHref";
+import { uiHref, routeSegmentForPathname } from "@/utils/uiHref";
 import moyaiHead from "../../../public/assets/moyai/moyai-head.svg";
 
 const GATEWAY = "ai-gateway";
@@ -20,11 +20,11 @@ const CHAT = "chat";
 const MOYAI = "moyai";
 
 function isRoute(pathname: string, href: string): boolean {
-  return pathname === href || pathname.startsWith(`${href}/`);
+  return routeSegmentForPathname(pathname) === routeSegmentForPathname(href);
 }
 
 function activeLabelFor(isChatRoute: boolean, isMoyaiRoute: boolean, pluginLabel: string | undefined): string {
-  if (isChatRoute) return "Chat";
+  if (isChatRoute) return translateUi("ui.460b3a7da007b7af");
   if (isMoyaiRoute) return "Moyai";
   return pluginLabel ?? translateUi("ui.47219de2f95b");
 }
@@ -70,7 +70,7 @@ export default function ViewSwitcher() {
         key: CHAT,
         label: (
           <div className="flex items-center justify-between gap-6 py-0.5">
-            <span className="font-medium">Chat</span>
+            <span className="font-medium">{uiT("ui.460b3a7da007b7af")}</span>
             {isChatRoute && <Check className="size-4 text-info" />}
           </div>
         ),
@@ -81,9 +81,9 @@ export default function ViewSwitcher() {
         disabled: true,
         label: (
           <div className="flex max-w-[220px] flex-col py-0.5">
-            <span className="font-medium">Chat</span>
+            <span className="font-medium">{uiT("ui.460b3a7da007b7af")}</span>
             <span className="whitespace-normal text-xs leading-snug text-muted-foreground">
-              Admins can enable in Settings
+              {uiT("ui.23c24c05a029f2c0")}
             </span>
           </div>
         ),
@@ -107,8 +107,8 @@ export default function ViewSwitcher() {
           <span className="flex items-center gap-2">
             <img src={moyaiHead.src} alt="" className="h-4 w-auto" />
             <span className="flex flex-col">
-              <span className="font-medium">Moyai</span>
-              <span className="text-xs leading-snug text-muted-foreground">Cloud Coding Agent</span>
+              <span className="font-medium">{uiT("ui.a3b951e5e352050e")}</span>
+              <span className="text-xs leading-snug text-muted-foreground">{uiT("ui.cd1f8edb4711b3c6")}</span>
             </span>
           </span>
           {isMoyaiRoute && <Check className="size-4 text-info" />}

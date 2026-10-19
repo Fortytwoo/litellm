@@ -109,7 +109,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
               <span className="text-sm text-muted-foreground">{uiT("ui.18e872be2359")}</span>
               <span className="text-sm font-semibold text-foreground">
                 {formatCost(totalSpend)}
-                {isCached && " (Cached)"}
+                {isCached && uiT("supplement.cached")}
               </span>
             </div>
           </div>
@@ -136,7 +136,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
                           {formatCost(rawCost)}
                           {rawInputTokens !== undefined && rawInputTokens !== null && (
                             <span className="text-muted-foreground font-normal ml-1">
-                              ({rawInputTokens.toLocaleString()} tokens)
+                              {uiT("supplement.tokens", { count: rawInputTokens.toLocaleString() })}
                             </span>
                           )}
                         </span>
@@ -148,7 +148,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
                             {formatCost(isCached ? 0 : costBreakdown?.cache_read_cost)}
                             {(cacheReadTokens ?? 0) > 0 && (
                               <span className="text-muted-foreground font-normal ml-1">
-                                ({(cacheReadTokens ?? 0).toLocaleString()} tokens)
+                                {uiT("supplement.tokens", { count: (cacheReadTokens ?? 0).toLocaleString() })}
                               </span>
                             )}
                           </span>
@@ -161,7 +161,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
                             {formatCost(isCached ? 0 : costBreakdown?.cache_creation_cost)}
                             {(cacheCreationTokens ?? 0) > 0 && (
                               <span className="text-muted-foreground font-normal ml-1">
-                                ({(cacheCreationTokens ?? 0).toLocaleString()} tokens)
+                                {uiT("supplement.tokens", { count: (cacheCreationTokens ?? 0).toLocaleString() })}
                               </span>
                             )}
                           </span>
@@ -177,7 +177,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
                       {formatCost(inputCost)}
                       {promptTokens !== undefined && (
                         <span className="text-muted-foreground font-normal ml-1">
-                          ({promptTokens.toLocaleString()} prompt tokens)
+                          {uiT("supplement.inputTokens", { count: promptTokens.toLocaleString() })}
                         </span>
                       )}
                     </span>
@@ -190,7 +190,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
                   {formatCost(outputCost)}
                   {completionTokens !== undefined && (
                     <span className="text-muted-foreground font-normal ml-1">
-                      ({completionTokens.toLocaleString()} completion tokens)
+                      {uiT("supplement.outputTokens", { count: completionTokens.toLocaleString() })}
                     </span>
                   )}
                 </span>

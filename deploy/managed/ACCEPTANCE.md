@@ -19,3 +19,11 @@ The real provider acceptance issued 11 upstream HTTP requests. Eight completed, 
 The earlier business UI checks used synthetic data; the real readbacks above supersede those checks for service, directory, account and read-only brand-context access. Platform login, permission mutation, quota-consuming reports, a second real Feishu user and full production cutover were not executed. The isolated Harness test process was closed before this follow-up; its earlier streamed acceptance is retained, and no fresh Harness conversation is claimed
 
 Local evidence includes a successful 66-route production build, focused HTTP transport and native model table tests, the managed Chat integration test and browser readbacks. Private screenshots, credentials, cookies and raw identity records remain outside Git
+
+## Complete Chinese dashboard integration
+
+The managed branch now includes the complete Chinese dashboard at `0f77a8e`. Both merge conflicts retain central cookie transport and the managed custom-proxy restriction. The 141 managed business labels share the native language context and locale dictionaries. The combined dictionaries contain 14,635 keys per language, with no missing translations, placeholder mismatches or unreviewed source candidates
+
+This integration passed 142 focused assertions, the managed production build and the production type check. Comparing the 46 managed integration TypeScript files against the prior managed branch found no new ESLint violations. Synthetic browser checks cover all 62 exported route entries, Chinese and English switching, retention of the raw search query and semantic search submission. Language switching does not submit configuration writes, and managed BFF calls carry no bearer credentials
+
+Deployment replaces only the static export in an image derived from the existing business gateway. It does not change business server code or the native model runtime. The release retains a private compose backup and checks environment and command equality, the existing native container and model catalog, anonymous central-login redirects, anonymous API denial and the published build asset checksum. This localization release does not repeat the earlier real Feishu or paid provider acceptance above

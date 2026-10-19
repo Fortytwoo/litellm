@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 /**
  * Team info tab configuration and permission logic.
  * Extracted for testability - permission rules can be unit tested in isolation.
@@ -13,12 +14,24 @@ export const TEAM_INFO_TAB_KEYS = {
 } as const;
 
 export const TEAM_INFO_TAB_LABELS: Record<string, string> = {
-  [TEAM_INFO_TAB_KEYS.OVERVIEW]: "Overview",
-  [TEAM_INFO_TAB_KEYS.MY_USER]: "My User",
-  [TEAM_INFO_TAB_KEYS.VIRTUAL_KEYS]: "Virtual Keys",
-  [TEAM_INFO_TAB_KEYS.MEMBERS]: "Members",
-  [TEAM_INFO_TAB_KEYS.MEMBER_PERMISSIONS]: "Member Permissions",
-  [TEAM_INFO_TAB_KEYS.SETTINGS]: "Settings",
+  get [TEAM_INFO_TAB_KEYS.OVERVIEW]() {
+    return translateUi("ui.d4b1ea5708dd");
+  },
+  get [TEAM_INFO_TAB_KEYS.MY_USER]() {
+    return translateUi("ui.e40d82a62f3a98b3");
+  },
+  get [TEAM_INFO_TAB_KEYS.VIRTUAL_KEYS]() {
+    return translateUi("ui.d1c0ad6c4bdd");
+  },
+  get [TEAM_INFO_TAB_KEYS.MEMBERS]() {
+    return translateUi("ui.1044a4c056d0");
+  },
+  get [TEAM_INFO_TAB_KEYS.MEMBER_PERMISSIONS]() {
+    return translateUi("ui.fd64b3f7eb43");
+  },
+  get [TEAM_INFO_TAB_KEYS.SETTINGS]() {
+    return translateUi("ui.74a883a037bc");
+  },
 };
 
 /**

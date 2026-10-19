@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 type Metadata = Record<string, unknown> | null | undefined;
 
 type FormValues = Record<string, unknown>;
@@ -53,12 +54,15 @@ export const estimateChecks = {
   positive: {
     isValid: (value: unknown): boolean =>
       value === "" || value === null || value === undefined ? true : isPositiveInteger(Number(value)),
-    message: "Enter a positive integer",
+    get message() {
+      return translateUi("ui.3d9ab01ef789fcdb");
+    },
   },
 };
 
-const asValidatorRule = ({ isValid, message }: { isValid: (value: unknown) => boolean; message: string }) => ({
-  validator: (_: unknown, value: unknown) => (isValid(value) ? Promise.resolve() : Promise.reject(new Error(message))),
+const asValidatorRule = (check: { isValid: (value: unknown) => boolean; message: string }) => ({
+  validator: (_: unknown, value: unknown) =>
+    check.isValid(value) ? Promise.resolve() : Promise.reject(new Error(check.message)),
 });
 
 export const estimateRules = {

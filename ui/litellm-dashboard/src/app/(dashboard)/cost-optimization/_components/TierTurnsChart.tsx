@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 
@@ -84,6 +85,8 @@ interface TierTurnsChartProps {
 }
 
 const TierTurnsChart: React.FC<TierTurnsChartProps> = ({ view, autoRouters }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const group = viewGroup(view);
   const entries = Object.entries(group?.tier_turns ?? {}).filter(([, turns]) => turns > 0);
   if (!group || entries.length === 0) return null;
@@ -100,11 +103,8 @@ const TierTurnsChart: React.FC<TierTurnsChartProps> = ({ view, autoRouters }) =>
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Routing by tier</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Turns each tier served. Turns the classifier sent to the default model belong to no tier and are not counted
-          here, so this can total less than the router&apos;s turns.
-        </p>
+        <CardTitle>{uiT("ui.4422f95b30116cb6")}</CardTitle>
+        <p className="text-sm text-muted-foreground">{uiT("ui.df60287dc0bf71d8")}</p>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-2">
@@ -116,7 +116,7 @@ const TierTurnsChart: React.FC<TierTurnsChartProps> = ({ view, autoRouters }) =>
             colors={colors}
             valueFormatter={(value) => value.toLocaleString()}
             showLabel
-            label={`${total.toLocaleString()} total turns`}
+            label={uiT("ui.7bf99d50994b9527", { v0: String(total.toLocaleString()) })}
           />
           <ul className="flex flex-col gap-6">
             {slices.map((slice, idx) => (

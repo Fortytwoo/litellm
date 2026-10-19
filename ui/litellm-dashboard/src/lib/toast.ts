@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { translateText } from "@/i18n";
 import { toast as sonner } from "sonner";
 import { ApiError, deriveErrorMessage, unwrapProxyErrorMessage } from "@/lib/http/client";
 
@@ -126,8 +127,8 @@ const titleFor = ({ status, proxyType }: ErrorFacts): string => {
 };
 
 const show = (kind: ToastKind, message: ReactNode, options?: ToastOptions): void => {
-  sonner[kind](message, {
-    description: options?.description,
+  sonner[kind](typeof message === "string" ? translateText(message) : message, {
+    description: typeof options?.description === "string" ? translateText(options.description) : options?.description,
     duration: options?.durationMs ?? DEFAULT_DURATION_MS[kind],
   });
 };

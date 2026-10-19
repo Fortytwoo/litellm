@@ -30,6 +30,8 @@ function ProbabilityMeter({
   probability: number;
   selected?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const percentage = Math.round(probability * 100);
   return (
     <div className="grid gap-1.5">
@@ -39,7 +41,7 @@ function ProbabilityMeter({
       </div>
       <div
         role="meter"
-        aria-label={`${label} probability`}
+        aria-label={uiT("ui.7cc623bacd18cfb8", { v0: String(label) })}
         aria-valuenow={percentage}
         aria-valuetext={selected ? `${percentage}%, selected` : `${percentage}%`}
         aria-valuemin={0}
@@ -62,8 +64,11 @@ function AnswerDetails({ answer }: { answer: SystemOneAnswer }) {
     const percentage = Math.round(answer.noul * 100);
     return (
       <div className="grid gap-3">
-        <p className="text-sm font-medium">{percentage}% yes</p>
-        <ProbabilityMeter label="Yes" probability={answer.noul} />
+        <p className="text-sm font-medium">
+          {percentage}
+          {uiT("ui.c6461a1d9a3b91a6")}
+        </p>
+        <ProbabilityMeter label={uiT("ui.85a39ab345d672ff")} probability={answer.noul} />
       </div>
     );
   }
@@ -73,10 +78,13 @@ function AnswerDetails({ answer }: { answer: SystemOneAnswer }) {
     return (
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-muted-foreground">Selected choice</span>
+          <span className="text-xs text-muted-foreground">{uiT("ui.eb5cadfc856da81b")}</span>
           <Badge>{answer.choice}</Badge>
           {answer.confidence !== undefined && (
-            <Badge variant="outline">{Math.round(answer.confidence * 100)}% confidence</Badge>
+            <Badge variant="outline">
+              {Math.round(answer.confidence * 100)}
+              {uiT("ui.5c89e1e680ef7eff")}
+            </Badge>
           )}
         </div>
         <div className="grid gap-3">
@@ -95,7 +103,10 @@ function AnswerDetails({ answer }: { answer: SystemOneAnswer }) {
         <span className="text-xs text-muted-foreground">{uiT("ui.38e5a46cbc5a")}</span>
         <Badge>{SCORE_FORMAT.format(answer.score)}</Badge>
         {answer.confidence !== undefined && (
-          <Badge variant="outline">{Math.round(answer.confidence * 100)}% confidence</Badge>
+          <Badge variant="outline">
+            {Math.round(answer.confidence * 100)}
+            {uiT("ui.5c89e1e680ef7eff")}
+          </Badge>
         )}
       </div>
       <div className="grid gap-3">
@@ -120,9 +131,11 @@ function AnswerDetails({ answer }: { answer: SystemOneAnswer }) {
 }
 
 function OpenAIAnswerDetails({ answer }: { answer: OpenAIDecisionsResponse["answers"][number] }) {
+  const { t: uiT } = useDashboardLanguage();
+
   switch (answer.type) {
     case "refusal":
-      return <p className="text-sm text-muted-foreground">Model refused to answer</p>;
+      return <p className="text-sm text-muted-foreground">{uiT("ui.f5d6752da2d33cea")}</p>;
     case "predicate":
       return <AnswerDetails answer={{ type: "noul", noul: answer.probability }} />;
     case "choice":
@@ -156,8 +169,10 @@ function OpenAIAnswerDetails({ answer }: { answer: OpenAIDecisionsResponse["answ
 }
 
 function RawResponse({ response }: { response: NonNullable<ResponseViewProps["response"]> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <section aria-label="Decisions response JSON">
+    <section aria-label={uiT("ui.fe7f1a8e633f5311")}>
       <pre className="whitespace-pre-wrap wrap-anywhere rounded-md bg-muted p-3 font-mono text-xs">
         {JSON.stringify(response, null, 2)}
       </pre>
@@ -200,6 +215,8 @@ export default function ResponseView({
   error,
   isLoading,
 }: ResponseViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [showRaw, setShowRaw] = useState(false);
 
   if (isLoading) {
@@ -207,7 +224,7 @@ export default function ResponseView({
       <Card>
         <CardContent className="flex items-center justify-center gap-2 py-10 text-sm text-muted-foreground">
           <LoaderCircle className="size-4 animate-spin" />
-          Calculating calibrated probabilities
+          {uiT("ui.1e1c866df92f4e09")}
         </CardContent>
       </Card>
     );
@@ -216,7 +233,7 @@ export default function ResponseView({
   if (error) {
     return (
       <Alert variant="destructive">
-        <AlertTitle>Decisions request failed</AlertTitle>
+        <AlertTitle>{uiT("ui.ace716f474022753")}</AlertTitle>
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     );
@@ -226,8 +243,8 @@ export default function ResponseView({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Calibrated probabilities</CardTitle>
-          <CardDescription>Send a request to see decision answers and probabilities.</CardDescription>
+          <CardTitle>{uiT("ui.c7d2bcbafc3d400b")}</CardTitle>
+          <CardDescription>{uiT("ui.772ae0b635f02c2a")}</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -240,14 +257,15 @@ export default function ResponseView({
       <CardHeader>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="grid gap-1">
-            <CardTitle>{view === "curl" ? "Response JSON" : "Calibrated probabilities"}</CardTitle>
+            <CardTitle>{view === "curl" ? uiT("ui.074303137346910d") : uiT("ui.c7d2bcbafc3d400b")}</CardTitle>
             {model && <CardDescription>{model}</CardDescription>}
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
             {latencyMs !== undefined && <Badge variant="outline">{Math.round(latencyMs)} ms</Badge>}
             {response.usage && (
               <Badge variant="outline">
-                {response.usage.input_tokens} input / {response.usage.output_tokens} output tokens
+                {response.usage.input_tokens} {uiT("ui.7a994109e5b76541")} {response.usage.output_tokens}{" "}
+                {uiT("ui.b6798bcee84a53a9")}
               </Badge>
             )}
           </div>
@@ -261,7 +279,7 @@ export default function ResponseView({
               render={
                 <Button variant="ghost" size="sm">
                   <ChevronDown className="size-4" />
-                  Raw response
+                  {uiT("ui.587372398f62e266")}
                 </Button>
               }
             />

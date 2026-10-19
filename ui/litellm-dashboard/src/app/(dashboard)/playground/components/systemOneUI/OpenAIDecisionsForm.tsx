@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +22,17 @@ import type { OpenAIDecisionsRequest } from "./lib/openAIDecisions";
 import type { PayloadValidation } from "./lib/validatePayload";
 
 const QUESTION_TYPES: readonly DecisionsQuestionType[] = ["predicate", "choice", "score"];
-const TYPE_LABELS = { predicate: "Predicate", choice: "Choice", score: "Score" };
+const TYPE_LABELS = {
+  get predicate() {
+    return translateUi("ui.c403f8fb2b274aa8");
+  },
+  get choice() {
+    return translateUi("ui.efa0389ac6fce142");
+  },
+  get score() {
+    return translateUi("ui.38e5a46cbc5a");
+  },
+};
 
 interface QuestionEditorProps<Q extends DecisionsFormQuestion = DecisionsFormQuestion> {
   question: Q;
@@ -28,12 +40,14 @@ interface QuestionEditorProps<Q extends DecisionsFormQuestion = DecisionsFormQue
 }
 
 function Choices({ question, onChange }: QuestionEditorProps<Extract<DecisionsFormQuestion, { type: "choice" }>>) {
+  const { t: uiT } = useDashboardLanguage();
+
   const choices = question.choices ?? [];
   const write = (next: typeof choices) => onChange({ ...question, choices: next });
 
   return (
     <div className="grid gap-2">
-      <span className="text-sm font-medium">Choices</span>
+      <span className="text-sm font-medium">{uiT("ui.2f75b64ac9163e81")}</span>
       {choices.map((choice, index) => (
         <div key={index} className="grid gap-2 rounded-md border p-2">
           <div className="flex items-center gap-2">
@@ -46,28 +60,31 @@ function Choices({ question, onChange }: QuestionEditorProps<Extract<DecisionsFo
                 }
               }}
             >
-              <SelectTrigger className="w-40" aria-label={`Choice ${index + 1} value type`}>
+              <SelectTrigger className="w-40" aria-label={uiT("ui.9b385ad65b0fcc08", { v0: String(index + 1) })}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="text">Text</SelectItem>
-                <SelectItem value="true">true (boolean)</SelectItem>
-                <SelectItem value="false">false (boolean)</SelectItem>
+                <SelectItem value="text">{uiT("ui.71988c4d8e0803ba")}</SelectItem>
+                <SelectItem value="true">{uiT("ui.ae51a03f624affdc")}</SelectItem>
+                <SelectItem value="false">{uiT("ui.4cfee39a60736aae")}</SelectItem>
               </SelectContent>
             </Select>
             {typeof choice.value === "string" && (
               <Input
-                aria-label={`Choice ${index + 1} value`}
+                aria-label={uiT("ui.e59c2b5037fe776c", { v0: String(index + 1) })}
                 value={choice.value}
                 onChange={(event) => write(replaceAt(choices, index, { ...choice, value: event.target.value }))}
               />
             )}
-            <RemoveButton label={`Remove choice ${index + 1}`} onClick={() => write(removeAt(choices, index))} />
+            <RemoveButton
+              label={uiT("ui.a590444b2bdc463c", { v0: String(index + 1) })}
+              onClick={() => write(removeAt(choices, index))}
+            />
           </div>
           <Input
-            aria-label={`Choice ${index + 1} description`}
+            aria-label={uiT("ui.a5136b1682035d89", { v0: String(index + 1) })}
             value={choice.description ?? ""}
-            placeholder="Optional description"
+            placeholder={uiT("ui.c7b7b7f01360f6a5")}
             onChange={(event) => write(replaceAt(choices, index, { ...choice, description: event.target.value }))}
           />
         </div>
@@ -85,37 +102,44 @@ function Choices({ question, onChange }: QuestionEditorProps<Extract<DecisionsFo
           ])
         }
       >
-        Add choice
+        {uiT("ui.a1827a12bb439024")}
       </AddButton>
     </div>
   );
 }
 
 function Levels({ question, onChange }: QuestionEditorProps<Extract<DecisionsFormQuestion, { type: "score" }>>) {
+  const { t: uiT } = useDashboardLanguage();
+
   const levels = question.levels ?? [];
   const write = (next: typeof levels) => onChange({ ...question, levels: next });
 
   return (
     <div className="grid gap-2">
-      <span className="text-sm font-medium">Levels, lowest first</span>
+      <span className="text-sm font-medium">{uiT("ui.911e176589a08c82")}</span>
       {levels.map((level, index) => (
         <div key={index} className="flex items-center gap-2">
           <Input
-            aria-label={`Level ${index + 1} label`}
+            aria-label={uiT("ui.e67f4620160349bd", { v0: String(index + 1) })}
             value={level.label}
-            placeholder="Label"
+            placeholder={uiT("ui.0e66373f45dcf3dd")}
             onChange={(event) => write(replaceAt(levels, index, { ...level, label: event.target.value }))}
           />
           <Input
-            aria-label={`Level ${index + 1} description`}
+            aria-label={uiT("ui.409144d379120698", { v0: String(index + 1) })}
             value={level.description ?? ""}
-            placeholder="Optional description"
+            placeholder={uiT("ui.c7b7b7f01360f6a5")}
             onChange={(event) => write(replaceAt(levels, index, { ...level, description: event.target.value }))}
           />
-          <RemoveButton label={`Remove level ${index + 1}`} onClick={() => write(removeAt(levels, index))} />
+          <RemoveButton
+            label={uiT("ui.972f9d524c461e85", { v0: String(index + 1) })}
+            onClick={() => write(removeAt(levels, index))}
+          />
         </div>
       ))}
-      <AddButton onClick={() => write([...levels, { label: String(levels.length) }])}>Add level</AddButton>
+      <AddButton onClick={() => write([...levels, { label: String(levels.length) }])}>
+        {uiT("ui.d55a99ac1912686d")}
+      </AddButton>
     </div>
   );
 }
@@ -131,13 +155,16 @@ function QuestionCard({ question, index, onChange, onRemove }: QuestionCardProps
   const instructionsId = useId();
 
   return (
-    <fieldset aria-label={`Question ${index + 1}`} className="grid gap-3 rounded-md border p-3">
+    <fieldset
+      aria-label={uiT("ui.49c0fedf36489ef4", { v0: String(index + 1) })}
+      className="grid gap-3 rounded-md border p-3"
+    >
       <div className="flex flex-wrap items-center gap-2">
         <Input
-          aria-label="Question name"
+          aria-label={uiT("ui.5180bbe3d210160c")}
           className="min-w-0 flex-1"
           value={question.name ?? ""}
-          placeholder="Optional question name"
+          placeholder={uiT("ui.65e054f342b589d3")}
           onChange={(event) => onChange({ ...question, name: event.target.value })}
         />
         <Select
@@ -147,7 +174,7 @@ function QuestionCard({ question, index, onChange, onRemove }: QuestionCardProps
             if (next) onChange(retypeDecisionQuestion(question, next));
           }}
         >
-          <SelectTrigger className="w-36" aria-label="Answer type">
+          <SelectTrigger className="w-36" aria-label={uiT("ui.aff0f8d3121720d7")}>
             <SelectValue>{TYPE_LABELS[question.type]}</SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -158,7 +185,7 @@ function QuestionCard({ question, index, onChange, onRemove }: QuestionCardProps
             ))}
           </SelectContent>
         </Select>
-        <RemoveButton label={`Remove question ${index + 1}`} onClick={onRemove} />
+        <RemoveButton label={uiT("ui.e4db2f5cb2287f10", { v0: String(index + 1) })} onClick={onRemove} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor={instructionsId}>{uiT("ui.934652dce41d")}</Label>
@@ -166,7 +193,7 @@ function QuestionCard({ question, index, onChange, onRemove }: QuestionCardProps
           id={instructionsId}
           rows={2}
           value={question.instructions ?? ""}
-          placeholder="What should the model decide?"
+          placeholder={uiT("ui.81cf41f53c7cf4ba")}
           onChange={(event) => onChange({ ...question, instructions: event.target.value })}
         />
       </div>
@@ -193,9 +220,9 @@ export default function OpenAIDecisionsForm({ value, onChange, validation, onRes
   if (form === undefined) {
     return (
       <FormFrame validation={validation}>
-        <p className="text-sm text-muted-foreground">This request has a shape the form can&apos;t show.</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.f4a0031f2e91d5af")}</p>
         <Button variant="outline" className="w-fit" onClick={onReset}>
-          Reset to example
+          {uiT("ui.04dec147e2e13081")}
         </Button>
       </FormFrame>
     );
@@ -210,7 +237,7 @@ export default function OpenAIDecisionsForm({ value, onChange, validation, onRes
       <div className="grid gap-1.5">
         {Array.isArray(form.input) ? (
           <>
-            <p className="text-sm text-muted-foreground">Input contains messages. Form edits keep them unchanged.</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.920a5e18bb3ee797")}</p>
           </>
         ) : (
           <>
@@ -219,7 +246,7 @@ export default function OpenAIDecisionsForm({ value, onChange, validation, onRes
               id={inputId}
               rows={4}
               value={form.input ?? ""}
-              placeholder="Paste the text the model should decide about"
+              placeholder={uiT("ui.c22c907511b87da3")}
               onChange={(event) => write({ ...form, input: event.target.value })}
             />
           </>
@@ -249,10 +276,10 @@ export default function OpenAIDecisionsForm({ value, onChange, validation, onRes
           ])
         }
       >
-        Add question
+        {uiT("ui.f9496b764efa5ff2")}
       </AddButton>
       <div className="grid gap-1.5">
-        <Label htmlFor={safetyId}>Safety identifier</Label>
+        <Label htmlFor={safetyId}>{uiT("ui.3a9377badc4336d7")}</Label>
         <Input
           id={safetyId}
           value={form.safety_identifier ?? ""}

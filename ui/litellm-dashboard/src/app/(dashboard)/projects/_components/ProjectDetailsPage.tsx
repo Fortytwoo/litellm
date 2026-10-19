@@ -70,7 +70,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         <Button variant="ghost" size="icon" aria-label={uiT("ui.76900f1bfd16")} onClick={onBack} className="mb-4">
           <ArrowLeftIcon className="size-4" />
         </Button>
-        <p className="py-8 text-center text-sm text-muted-foreground">Project not found</p>
+        <p className="py-8 text-center text-sm text-muted-foreground">{uiT("ui.758e8416eb8a3588")}</p>
       </div>
     );
   }
@@ -93,22 +93,24 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               />
             </div>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <span>ID: {project.project_id}</span>
-              <CopyButton value={project.project_id} label="Copy project ID" />
+              <span>
+                {uiT("ui.3ea36adcd1e02c94")} {project.project_id}
+              </span>
+              <CopyButton value={project.project_id} label={uiT("ui.aff9154ca97cdb42")} />
             </div>
           </div>
         </div>
         {canEditProject && (
           <Button onClick={() => setIsEditModalVisible(true)}>
             <EditIcon className="size-4" />
-            Edit Project
+            {uiT("ui.f47434e4c28ef88d")}
           </Button>
         )}
       </div>
 
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Project Details</CardTitle>
+          <CardTitle>{uiT("ui.2ca4637a5b8a2ab0")}</CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
@@ -119,7 +121,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               {new Date(project.created_at).toLocaleString()}
               {project.created_by && (
                 <>
-                  <span>by</span>
+                  <span>{uiT("ui.a7e2d26e8d15814d")}</span>
                   <DefaultProxyAdminTag userId={project.created_by} />
                 </>
               )}
@@ -129,7 +131,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               {new Date(project.updated_at).toLocaleString()}
               {project.updated_by && (
                 <>
-                  <span>by</span>
+                  <span>{uiT("ui.a7e2d26e8d15814d")}</span>
                   <DefaultProxyAdminTag userId={project.updated_by} />
                 </>
               )}
@@ -150,7 +152,9 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
             <div>
               <p className="text-[28px] leading-none font-medium text-foreground">${spend.toFixed(2)}</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {hasLimit ? `of $${maxBudget.toFixed(2)} budget` : "No budget limit"}
+                {hasLimit
+                  ? uiT("ui.f63dadaca4defc5c", { v0: String(maxBudget.toFixed(2)) })
+                  : uiT("ui.040a32701c9e3474")}
               </p>
             </div>
             {hasLimit && (
@@ -161,7 +165,8 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                   </MeterTrack>
                 </Meter>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {(Math.round(spendPercent * 10) / 10).toFixed(1)}% utilized
+                  {(Math.round(spendPercent * 10) / 10).toFixed(1)}
+                  {uiT("ui.cb3c332428f20cca")}
                 </p>
               </div>
             )}
@@ -186,7 +191,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                 style={{ height: Math.max(modelSpendData.length * 40, 120) }}
               />
             ) : (
-              <p className="py-8 text-center text-sm text-muted-foreground">No model spend recorded yet</p>
+              <p className="py-8 text-center text-sm text-muted-foreground">{uiT("ui.5bbe01138adda2c4")}</p>
             )}
           </CardContent>
         </Card>
@@ -215,8 +220,10 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                     <div>
                       <p className="text-base font-medium text-foreground">{teamInfo.team_alias || teamInfo.team_id}</p>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <span>ID: {teamInfo.team_id}</span>
-                        <CopyButton value={teamInfo.team_id} label="Copy team ID" />
+                        <span>
+                          {uiT("ui.3ea36adcd1e02c94")} {teamInfo.team_id}
+                        </span>
+                        <CopyButton value={teamInfo.team_id} label={uiT("ui.dae198e71a511224")} />
                       </div>
                     </div>
 
@@ -231,7 +238,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-sm text-muted-foreground">All models</p>
+                        <p className="text-sm text-muted-foreground">{uiT("ui.0f589c19cd5c9c86")}</p>
                       )}
                     </div>
 
@@ -241,7 +248,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                         <span className="text-xs text-foreground">
                           ${teamSpend.toFixed(2)}
                           <span className="text-muted-foreground">
-                            {teamHasLimit ? ` / $${teamBudget.toFixed(2)}` : " (Unlimited)"}
+                            {teamHasLimit ? ` / $${teamBudget.toFixed(2)}` : uiT("ui.25e23cdb69791d31")}
                           </span>
                         </span>
                       </div>
@@ -265,13 +272,13 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               <div
                 role="status"
                 aria-busy="true"
-                aria-label="Loading team"
+                aria-label={uiT("ui.65cecd1a264fd423")}
                 className="flex items-center justify-center p-4"
               >
                 <UiLoadingSpinner className="size-5 text-muted-foreground" />
               </div>
             ) : (
-              <p className="py-8 text-center text-sm text-muted-foreground">No team assigned</p>
+              <p className="py-8 text-center text-sm text-muted-foreground">{uiT("ui.469aeab1aae9df22")}</p>
             )}
           </CardContent>
         </Card>

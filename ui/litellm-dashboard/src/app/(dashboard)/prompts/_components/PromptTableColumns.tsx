@@ -76,7 +76,7 @@ function PromptRowActions({ prompt, isAdmin, onDeleteClick }: PromptRowActionsPr
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open prompt actions"
+        aria-label={uiT("ui.9cb403aa35e10726")}
         data-testid={`prompt-actions-${prompt.prompt_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -88,7 +88,7 @@ function PromptRowActions({ prompt, isAdmin, onDeleteClick }: PromptRowActionsPr
           onClick={() => void copyToClipboard(prompt.prompt_id, "Prompt ID copied")}
         >
           <Copy />
-          Copy prompt ID
+          {uiT("ui.bc00b2ae922b66dd")}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -130,8 +130,12 @@ export const getPromptTableColumns = ({
   {
     id: "prompt_id",
     accessorKey: "prompt_id",
-    meta: { title: "Prompt ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Prompt ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.79dba348219cfb50");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.79dba348219cfb50")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -192,8 +196,15 @@ export const getPromptTableColumns = ({
   {
     id: "environment",
     accessorKey: "environment",
-    meta: { title: "Environment", skeleton: "badge" },
-    header: "Environment",
+    meta: {
+      get title() {
+        return translateUi("ui.9e471951a1b4106e");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.9e471951a1b4106e");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) => {

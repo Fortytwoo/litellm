@@ -45,7 +45,7 @@ function GuardrailRowActions({ guardrail, onDeleteClick }: GuardrailRowActionsPr
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open guardrail actions"
+        aria-label={uiT("ui.754533d2cb547265")}
         data-testid={`guardrail-actions-${guardrail.guardrail_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -79,8 +79,12 @@ export const getGuardrailTableColumns = ({
   {
     id: "guardrail_id",
     accessorKey: "guardrail_id",
-    meta: { title: "Guardrail ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Guardrail ID" />,
+    meta: {
+      get title() {
+        return translateUi("ui.4327f43f4ab4293c");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.4327f43f4ab4293c")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -127,8 +131,14 @@ export const getGuardrailTableColumns = ({
   },
   {
     id: "mode",
-    meta: { title: "Mode" },
-    header: "Mode",
+    meta: {
+      get title() {
+        return translateUi("ui.5e23ec6a300dc60a");
+      },
+    },
+    get header() {
+      return translateUi("ui.5e23ec6a300dc60a");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) => {
@@ -142,14 +152,23 @@ export const getGuardrailTableColumns = ({
   },
   {
     id: "default_on",
-    meta: { title: "Default On" },
-    header: "Default On",
+    meta: {
+      get title() {
+        return translateUi("ui.53a0a7d96788c7f0");
+      },
+    },
+    get header() {
+      return translateUi("ui.53a0a7d96788c7f0");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {
       const isDefaultOn = !!row.original.litellm_params?.default_on;
       return (
-        <StatusBadge tone={isDefaultOn ? "success" : "neutral"} label={isDefaultOn ? "Default On" : "Default Off"} />
+        <StatusBadge
+          tone={isDefaultOn ? "success" : "neutral"}
+          label={isDefaultOn ? translateUi("ui.53a0a7d96788c7f0") : translateUi("ui.c10a06bc2844ec93")}
+        />
       );
     },
   },

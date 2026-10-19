@@ -33,9 +33,15 @@ export type AvailableCallbacks = Record<string, AvailableCallbackMeta>;
 export const callbackRowMode = (record: CallbackRow): string => record.type || record.mode || "success";
 
 const CALLBACK_MODE_LABELS: Record<string, string> = {
-  success: "Success",
-  failure: "Failure",
-  success_and_failure: "Success & Failure",
+  get success() {
+    return translateUi("ui.c88a0b907419");
+  },
+  get failure() {
+    return translateUi("ui.7031edbcf9c4");
+  },
+  get success_and_failure() {
+    return translateUi("ui.7028681f70a3cb83");
+  },
 };
 
 function callbackModeTone(mode: string): StatusTone {
@@ -56,18 +62,15 @@ function CallbackRowActions({ callback, onTest, onEdit, onDelete }: CallbackRowA
 
   if (callback.read_only) {
     return (
-      <span
-        className="text-xs text-muted-foreground"
-        title="Active callback that was not added through the dashboard. Edit it where it was configured."
-      >
-        Read only
+      <span className="text-xs text-muted-foreground" title={uiT("ui.2865af7ea4539943")}>
+        {uiT("ui.8ac767353080eae7")}
       </span>
     );
   }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open callback actions"
+        aria-label={uiT("ui.d323191620a33620")}
         data-testid={`callback-actions-${callback.name}-${callbackRowMode(callback)}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -76,7 +79,7 @@ function CallbackRowActions({ callback, onTest, onEdit, onDelete }: CallbackRowA
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="callback-action-test" onClick={() => void onTest(callback)}>
           <Play />
-          Test
+          {uiT("ui.532eaabd9574880d")}
         </DropdownMenuItem>
         <DropdownMenuItem data-testid="callback-action-edit" onClick={() => onEdit(callback)}>
           <Pencil />
@@ -108,8 +111,14 @@ export const getLoggingCallbacksTableColumns = ({
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Callback Name" },
-    header: "Callback Name",
+    meta: {
+      get title() {
+        return translateUi("ui.fe82ff7eee20217f");
+      },
+    },
+    get header() {
+      return translateUi("ui.fe82ff7eee20217f");
+    },
     enableSorting: false,
     cell: ({ row }) => {
       const id = row.original.name;
@@ -123,8 +132,15 @@ export const getLoggingCallbacksTableColumns = ({
   },
   {
     id: "mode",
-    meta: { title: "Mode", skeleton: "badge" },
-    header: "Mode",
+    meta: {
+      get title() {
+        return translateUi("ui.5e23ec6a300dc60a");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.5e23ec6a300dc60a");
+    },
     size: 240,
     enableSorting: false,
     cell: ({ row }) => {

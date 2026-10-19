@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 /**
  * Endpoint configuration for CompareUI.
  * Add new endpoints here to extend the comparison functionality.
@@ -39,8 +40,12 @@ export const ENDPOINT_CONFIGS: Record<EndpointIdType, EndpointConfig> = {
     selectorLabel: "Model",
     selectorPlaceholder: "Select a model",
     inputPlaceholder: "Send a prompt to compare models",
-    loadingMessage: "Gathering responses from all models...",
-    validationMessage: "Select a model before sending a message.",
+    get loadingMessage() {
+      return translateUi("ui.1eb4cae8f733b631");
+    },
+    get validationMessage() {
+      return translateUi("ui.7f6f30ecb1dd0fba");
+    },
   },
   [EndpointId.A2A_AGENTS]: {
     id: EndpointId.A2A_AGENTS,
@@ -49,8 +54,12 @@ export const ENDPOINT_CONFIGS: Record<EndpointIdType, EndpointConfig> = {
     selectorLabel: "Agent",
     selectorPlaceholder: "Select an agent",
     inputPlaceholder: "Send a message to compare agents",
-    loadingMessage: "Gathering responses from all agents...",
-    validationMessage: "Select an agent before sending a message.",
+    get loadingMessage() {
+      return translateUi("ui.afc6d29dc9ba5c87");
+    },
+    get validationMessage() {
+      return translateUi("ui.ae8df5d0e284d21d");
+    },
   },
 };
 

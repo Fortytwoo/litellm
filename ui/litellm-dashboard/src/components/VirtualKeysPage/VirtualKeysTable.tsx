@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useKeyInfo } from "@/app/(dashboard)/hooks/keys/useKeyInfo";
@@ -39,11 +41,21 @@ const FILTER_COLUMNS = ["team_id", "org_id", "user_id", "key_hash", "status"] as
 type FilterColumn = (typeof FILTER_COLUMNS)[number];
 
 const FILTER_LABELS: Record<FilterColumn, string> = {
-  team_id: "Team",
-  org_id: "Organization",
-  user_id: "User ID",
-  key_hash: "Key ID",
-  status: "Status",
+  get team_id() {
+    return translateUi("ui.5985039f106d");
+  },
+  get org_id() {
+    return translateUi("ui.d764d42592fc");
+  },
+  get user_id() {
+    return translateUi("ui.7967e089a7b9");
+  },
+  get key_hash() {
+    return translateUi("ui.d54d56ee0a42");
+  },
+  get status() {
+    return translateUi("ui.920e413c7d41");
+  },
 };
 
 const KEY_STATUS_VALUES = ["active", "expired", "revoked", "deleted"] as const;
@@ -51,15 +63,33 @@ type KeyStatusFilter = (typeof KEY_STATUS_VALUES)[number];
 const ALL_STATUSES = "all";
 
 const KEY_STATUS_LABELS: Record<KeyStatusFilter, string> = {
-  active: "Active",
-  expired: "Expired",
-  revoked: "Revoked (blocked)",
-  deleted: "Deleted",
+  get active() {
+    return translateUi("ui.92340695899b");
+  },
+  get expired() {
+    return translateUi("ui.424a2551d356");
+  },
+  get revoked() {
+    return translateUi("ui.74971decac75b173");
+  },
+  get deleted() {
+    return translateUi("ui.b48ff39c2e0f");
+  },
 };
 
 const STATUS_FILTER_ITEMS = [
-  { value: ALL_STATUSES, label: "All statuses" },
-  ...KEY_STATUS_VALUES.map((value) => ({ value, label: KEY_STATUS_LABELS[value] })),
+  {
+    value: ALL_STATUSES,
+    get label() {
+      return translateUi("ui.8ee57323a6f24cc7");
+    },
+  },
+  ...KEY_STATUS_VALUES.map((value) => ({
+    value,
+    get label() {
+      return KEY_STATUS_LABELS[value];
+    },
+  })),
 ];
 
 const isKeyStatusFilter = (value: unknown): value is KeyStatusFilter =>
@@ -216,7 +246,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
 
   if (selectedKeyId) {
     if (!selectedKey && !selectedKeyLoadFailed) {
-      return <div className="p-4 text-sm text-muted-foreground">Loading key...</div>;
+      return <div className="p-4 text-sm text-muted-foreground">{uiT("ui.37571983df845a22")}</div>;
     }
     return (
       <div className="w-full h-full overflow-hidden">
@@ -239,7 +269,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
           <KeyRound />
           {uiT("ui.d1c0ad6c4bdd")}
         </PageHeaderTitle>
-        <PageHeaderDescription>Every key that authenticates requests to the gateway.</PageHeaderDescription>
+        <PageHeaderDescription>{uiT("ui.5b030badd4638a2f")}</PageHeaderDescription>
         {headerActions != null && <PageHeaderControls>{headerActions}</PageHeaderControls>}
       </PageHeader>
       <DataTable
@@ -262,8 +292,8 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
         columnResizeMode="onChange"
         isLoading={isPending || isPlaceholderData}
         isError={isError}
-        loadingMessage="Loading keys..."
-        noDataMessage="No keys found"
+        loadingMessage={uiT("ui.e0c65255e48f")}
+        noDataMessage={uiT("ui.c86a63ee786d4a35")}
         fillHeight
         size="compact"
         toolbar={(table) => (
@@ -272,7 +302,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
               table={table}
               searchValue={searchInput}
               onSearchChange={setSearch}
-              searchPlaceholder="Search by key alias or ID…"
+              searchPlaceholder={uiT("ui.6b082513627498c0")}
               onRefresh={() => refetch?.()}
               isRefreshing={isFetching}
               onOpenFilters={() => setFiltersOpen(true)}
@@ -284,7 +314,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
               title={uiT("ui.546ebb8eb993")}
-              description="Narrow down virtual keys"
+              description={uiT("ui.aed7c19d91143042")}
             >
               {({ get, set }) => (
                 <>
@@ -302,22 +332,22 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
                       options={orgOptions}
                       value={(get("org_id") as string) || undefined}
                       onValueChange={(value) => set("org_id", value ?? undefined)}
-                      placeholder="Select an organization…"
-                      emptyText="No organizations found"
+                      placeholder={uiT("ui.5cb1ec5044129bd1")}
+                      emptyText={uiT("ui.538995dba7bbf7a5")}
                     />
                   </DataTableFilterField>
                   <DataTableFilterField label={uiT("ui.7967e089a7b9")}>
                     <Input
                       value={(get("user_id") as string) ?? ""}
                       onChange={(event) => set("user_id", event.target.value)}
-                      placeholder="Enter User ID…"
+                      placeholder={uiT("ui.b91aedf88365fc6c")}
                     />
                   </DataTableFilterField>
                   <DataTableFilterField label={uiT("ui.d54d56ee0a42")}>
                     <Input
                       value={(get("key_hash") as string) ?? ""}
                       onChange={(event) => set("key_hash", event.target.value)}
-                      placeholder="Enter Key ID…"
+                      placeholder={uiT("ui.36e94dae7366c3c6")}
                     />
                   </DataTableFilterField>
                   <DataTableFilterField label={uiT("ui.920e413c7d41")}>
@@ -327,7 +357,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
                       onValueChange={(value) => set("status", value === ALL_STATUSES ? undefined : value)}
                     >
                       <SelectTrigger className="w-full" aria-label={uiT("ui.920e413c7d41")}>
-                        <SelectValue placeholder="All statuses" />
+                        <SelectValue placeholder={uiT("ui.8ee57323a6f24cc7")} />
                       </SelectTrigger>
                       <SelectContent>
                         {STATUS_FILTER_ITEMS.map((item) => (

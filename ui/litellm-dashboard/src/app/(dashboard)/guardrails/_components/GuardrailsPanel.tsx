@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useState, useEffect } from "react";
@@ -113,7 +115,7 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
     setIsDeleting(true);
     try {
       await deleteGuardrailCall(accessToken, guardrailToDelete.guardrail_id);
-      toast.success(`Guardrail "${guardrailToDelete.guardrail_name}" deleted successfully`);
+      toast.success(translateUi("ui.aa5c47351a806702", undefined, { v0: String(guardrailToDelete.guardrail_name) }));
       await fetchGuardrails();
     } catch (error) {
       console.error("Error deleting guardrail:", error);
@@ -142,18 +144,18 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
           {isAdmin && (
             <>
               <TabsTrigger value="garden" className="flex-none">
-                Guardrail Garden
+                {uiT("ui.aad725649b7aa9ad")}
               </TabsTrigger>
               <TabsTrigger value="guardrails" className="flex-none">
                 {uiT("ui.443f975eefe8")}
               </TabsTrigger>
               <TabsTrigger value="playground" className="flex-none" disabled={!accessToken}>
-                Test Playground
+                {uiT("ui.9f09cec8367ff4d9")}
               </TabsTrigger>
             </>
           )}
           <TabsTrigger value="submitted" className="flex-none">
-            Submitted Guardrails
+            {uiT("ui.e5cac8429a723425")}
           </TabsTrigger>
         </TabsList>
 
@@ -168,17 +170,17 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
                 <DropdownMenu>
                   <DropdownMenuTrigger disabled={!accessToken} className={cn(buttonVariants({ variant: "default" }))}>
                     <Plus />
-                    Add New Guardrail
+                    {uiT("ui.04d9eb9c4eca6102")}
                     <ChevronDown />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-56">
                     <DropdownMenuItem onClick={handleAddGuardrail}>
                       <Plus />
-                      Add Provider Guardrail
+                      {uiT("ui.c9e3628cfbbcfc49")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleAddCustomCodeGuardrail}>
                       <Code />
-                      Create Custom Code Guardrail
+                      {uiT("ui.4e0c3bacfe03b05d")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -216,16 +218,19 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
 
               <DeleteResourceModal
                 isOpen={isDeleteModalOpen}
-                title="Delete Guardrail"
-                message={`Are you sure you want to delete guardrail: ${guardrailToDelete?.guardrail_name}? This action cannot be undone.`}
+                title={uiT("ui.48f330ba65660273")}
+                message={uiT("ui.ac12cdbbad7a9e57", { v0: String(guardrailToDelete?.guardrail_name) })}
                 resourceInformationTitle="Guardrail Information"
                 resourceInformation={[
                   { label: uiT("ui.dcd1d5223f73"), value: guardrailToDelete?.guardrail_name },
                   { label: "ID", value: guardrailToDelete?.guardrail_id, code: true },
                   { label: uiT("ui.472590ae974d"), value: providerDisplayName },
-                  { label: "Mode", value: formatGuardrailMode(guardrailToDelete?.litellm_params.mode) },
                   {
-                    label: "Default On",
+                    label: uiT("ui.5e23ec6a300dc60a"),
+                    value: formatGuardrailMode(guardrailToDelete?.litellm_params.mode),
+                  },
+                  {
+                    label: uiT("ui.53a0a7d96788c7f0"),
                     value: guardrailToDelete?.litellm_params.default_on ? "Yes" : "No",
                   },
                 ]}

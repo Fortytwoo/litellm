@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Check, ChevronDown, ChevronRight, Clock, Copy } from "lucide-react";
@@ -72,7 +74,7 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
 
   return (
     <div className="space-y-3 border-t border-border pt-4">
-      <h3 className="text-sm font-semibold">Results</h3>
+      <h3 className="text-sm font-semibold">{uiT("ui.219c4a6c86a716e9")}</h3>
 
       {/* Success Results */}
       {results &&
@@ -106,7 +108,7 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                         onClick={async () => {
                           const success = await copyToClipboard(result.response_text);
                           if (success) {
-                            toast.success("Result copied to clipboard");
+                            toast.success(translateUi("ui.ed3a1663939705ba"));
                           } else {
                             toast.fromError("Failed to copy result");
                           }
@@ -121,13 +123,15 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                 {!isCollapsed && (
                   <>
                     <div className="rounded-sm border border-success/20 bg-background p-3">
-                      <label className="mb-2 block text-xs font-medium text-muted-foreground">Output Text</label>
+                      <label className="mb-2 block text-xs font-medium text-muted-foreground">
+                        {uiT("ui.e09bc62165fa2df2")}
+                      </label>
                       <div className="font-mono text-sm whitespace-pre-wrap wrap-break-word">
                         {result.response_text}
                       </div>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      <span className="font-medium">Characters:</span> {result.response_text.length}
+                      <span className="font-medium">{uiT("ui.84c6ca51dcc768db")}</span> {result.response_text.length}
                     </div>
                   </>
                 )}
@@ -166,7 +170,7 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                         className="cursor-pointer text-sm font-medium text-destructive"
                         onClick={() => toggleResultCollapse(errorItem.guardrailName)}
                       >
-                        {errorItem.guardrailName} - Error
+                        {errorItem.guardrailName} {uiT("ui.d2cb71d9417ae375")}
                       </p>
                       <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                         <Clock className="size-3" />

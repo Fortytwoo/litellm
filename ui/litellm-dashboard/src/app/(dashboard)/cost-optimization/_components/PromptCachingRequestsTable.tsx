@@ -82,56 +82,48 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
     <Card>
       <CardHeader className="gap-3">
         <div>
-          <CardTitle>Prompt caching requests</CardTitle>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Requests with recorded LiteLLM injection or provider cache reads or writes. A cache hit alone does not
-            establish LiteLLM injection; older logs may not record it.
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Net savings are estimated from logged usage and current configured pricing, after cache-write premiums.
-            Negative values mean caching cost more; unavailable means the request could not be priced.
-          </p>
+          <CardTitle>{uiT("ui.ef7bfaa883c386bf")}</CardTitle>
+          <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.1cdfdc6300b08d68")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{uiT("ui.47eab4ac7e578fa5")}</p>
         </div>
         <Tabs value={filter} onValueChange={changeFilter}>
-          <TabsList aria-label="Prompt caching request filters">
-            <TabsTrigger value="all">All caching</TabsTrigger>
-            <TabsTrigger value="injected">LiteLLM injected</TabsTrigger>
-            <TabsTrigger value="hits">Cache hits</TabsTrigger>
+          <TabsList aria-label={uiT("ui.235f3385a8c262af")}>
+            <TabsTrigger value="all">{uiT("ui.97f1a6a20ff5dce7")}</TabsTrigger>
+            <TabsTrigger value="injected">{uiT("ui.7108cae9c538")}</TabsTrigger>
+            <TabsTrigger value="hits">{uiT("ui.afce0ac33adb8ce6")}</TabsTrigger>
           </TabsList>
         </Tabs>
       </CardHeader>
       <CardContent>
-        {!enabled && <p className="py-8 text-center text-muted-foreground">Select a date range to view requests</p>}
+        {!enabled && <p className="py-8 text-center text-muted-foreground">{uiT("ui.f146d8d0745ddce2")}</p>}
         {enabled && requests.isPending && (
           <p role="status" className="py-8 text-center text-muted-foreground">
-            Loading requests...
+            {uiT("ui.d9d83c66de31d281")}
           </p>
         )}
         {enabled && requests.isError && (
           <div role="alert" className="flex items-center justify-center gap-3 py-8">
-            <p>Could not load prompt caching requests</p>
+            <p>{uiT("ui.050ec41757ba3b37")}</p>
             <Button variant="outline" onClick={() => void requests.refetch()} disabled={requests.isFetching}>
-              Retry
+              {uiT("ui.942087cc2d41e013")}
             </Button>
           </div>
         )}
         {enabled && requests.isSuccess && (
           <>
             {requests.data.requests.length === 0 ? (
-              <p className="py-8 text-center text-muted-foreground">
-                No matching prompt caching requests in this range
-              </p>
+              <p className="py-8 text-center text-muted-foreground">{uiT("ui.5a0232dd6310b0a1")}</p>
             ) : (
-              <Table aria-label="Prompt caching requests">
+              <Table aria-label={uiT("ui.ef7bfaa883c386bf")}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>{uiT("ui.59f03d642b41")}</TableHead>
                     <TableHead>{uiT("ui.5e2c614c23f0")}</TableHead>
-                    <TableHead>LiteLLM injection</TableHead>
-                    <TableHead className="text-right">Cache reads</TableHead>
-                    <TableHead className="text-right">Cache writes</TableHead>
-                    <TableHead className="text-right">Actual cost</TableHead>
-                    <TableHead className="text-right">Net savings</TableHead>
+                    <TableHead>{uiT("ui.306eff8da17852d1")}</TableHead>
+                    <TableHead className="text-right">{uiT("ui.b233917fdc9b8496")}</TableHead>
+                    <TableHead className="text-right">{uiT("ui.cdc296c9c1f598d0")}</TableHead>
+                    <TableHead className="text-right">{uiT("ui.7bd390d2716935af")}</TableHead>
+                    <TableHead className="text-right">{uiT("ui.b9807dd80a431d88")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -154,14 +146,16 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                           {request.model}
                         </span>
                       </TableCell>
-                      <TableCell>{request.gateway_injected ? "Recorded" : "Not recorded"}</TableCell>
+                      <TableCell>
+                        {request.gateway_injected ? uiT("ui.c7175fa7a0db0d3c") : uiT("ui.b37c7879f6c359f6")}
+                      </TableCell>
                       <TableCell className="text-right">{formatNumberWithCommas(request.cache_read_tokens)}</TableCell>
                       <TableCell className="text-right">
                         {formatNumberWithCommas(request.cache_creation_tokens)}
                       </TableCell>
                       <TableCell className="text-right">{usd(request.spend)}</TableCell>
                       <TableCell className="text-right">
-                        {request.net_savings === null ? "Unavailable" : usd(request.net_savings)}
+                        {request.net_savings === null ? uiT("ui.ca184496974204a0") : usd(request.net_savings)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -192,7 +186,9 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                 </Select>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground tabular-nums">Page {page}</span>
+                <span className="text-sm text-muted-foreground tabular-nums">
+                  {uiT("ui.0a30a815d67d7dd2")} {page}
+                </span>
                 <div className="flex items-center gap-1">
                   <Button
                     variant="outline"

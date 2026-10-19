@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
@@ -34,6 +37,8 @@ export interface RunsTabProps {
 
 /** The runs a batch reviewed; each opens its original trace or request in the side panel. */
 export function RunsTab({ lens, job }: RunsTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { runId, selectRun } = useRunEvidenceRoute();
   const [runOffset, setRunOffset] = useState(0);
   const [runFilter, setRunFilter] = useState("all");
@@ -60,10 +65,10 @@ export function RunsTab({ lens, job }: RunsTabProps) {
       <TabsContent value="runs" className="space-y-4 pt-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            {runs.length} selected from {job?.sample?.eligible ?? 0} matching runs
+            {runs.length} {uiT("ui.773d97d9ea09d9b2")} {job?.sample?.eligible ?? 0} {uiT("ui.c49f17453d911e9f")}
           </p>
           <select
-            aria-label="Filter reviewed runs"
+            aria-label={uiT("ui.e52371c63f04fed2")}
             className="h-8 max-w-full rounded-md border bg-background px-2 text-xs sm:max-w-64"
             value={runFilter}
             onChange={(e) => {
@@ -71,10 +76,10 @@ export function RunsTab({ lens, job }: RunsTabProps) {
               setRunOffset(0);
             }}
           >
-            <option value="all">All outcomes</option>
-            <option value="clear">No issue observed</option>
-            <option value="unknown">Insufficient evidence or not reviewed</option>
-            {job?.settings?.context && <option value="expected_behavior">Expected behavior deviation</option>}
+            <option value="all">{uiT("ui.1d7f920d0db49837")}</option>
+            <option value="clear">{uiT("ui.62072bad5d6ad278")}</option>
+            <option value="unknown">{uiT("ui.a6f4cdbc22ccb083")}</option>
+            {job?.settings?.context && <option value="expected_behavior">{uiT("ui.2f749c18daf68064")}</option>}
             {job?.settings?.checks.map((check) => (
               <option key={check.id} value={check.id}>
                 {check.instruction}
@@ -100,7 +105,7 @@ export function RunsTab({ lens, job }: RunsTabProps) {
                 {runTime(run.start_time)}
               </span>
               <span className="col-start-1 row-start-3 text-xs text-muted-foreground sm:col-start-3 sm:row-start-1">
-                {assessmentLabel(assessments.get(run.id))}
+                {translateText(assessmentLabel(assessments.get(run.id)))}
               </span>
               <ChevronRight
                 aria-hidden="true"
@@ -110,9 +115,7 @@ export function RunsTab({ lens, job }: RunsTabProps) {
           ))}
           {!visibleRuns.length && (
             <p className="py-10 text-center text-sm text-muted-foreground">
-              {runs.length
-                ? "No runs match this outcome."
-                : "Selected activity appears here when the worker starts reviewing it."}
+              {runs.length ? uiT("ui.be8987372517800c") : uiT("ui.fbb25d83774b7f9d")}
             </p>
           )}
         </div>
@@ -124,10 +127,11 @@ export function RunsTab({ lens, job }: RunsTabProps) {
               disabled={!runOffset}
               onClick={() => setRunOffset(Math.max(0, runOffset - PAGE))}
             >
-              Previous runs
+              {uiT("ui.f871f70262878484")}
             </Button>
             <span>
-              {runOffset + 1}–{Math.min(runOffset + PAGE, visibleRuns.length)} of {visibleRuns.length}
+              {runOffset + 1}–{Math.min(runOffset + PAGE, visibleRuns.length)} {uiT("ui.28391d3bc64ec15c")}{" "}
+              {visibleRuns.length}
             </span>
             <Button
               size="sm"
@@ -135,12 +139,12 @@ export function RunsTab({ lens, job }: RunsTabProps) {
               disabled={runOffset + PAGE >= visibleRuns.length}
               onClick={() => setRunOffset(runOffset + PAGE)}
             >
-              Next runs
+              {uiT("ui.d8ba708056e95b83")}
             </Button>
           </div>
         )}
       </TabsContent>
-      <Inspector.Panel label="Run details" testId="run-panel">
+      <Inspector.Panel label={uiT("ui.7bbc36905270774e")} testId="run-panel">
         {(run: RunRef) => <EvidenceView lensId={lens.id} evidence={{ id: run.id, span: "" }} />}
       </Inspector.Panel>
     </Inspector.Root>

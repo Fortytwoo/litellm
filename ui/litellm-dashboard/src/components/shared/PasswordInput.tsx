@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { Eye, EyeOff } from "lucide-react";
 import * as React from "react";
@@ -26,7 +27,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
           <InputGroupButton
             size="icon-xs"
             disabled={disabled}
-            aria-label={revealed ? "Hide password" : "Show password"}
+            aria-label={revealed ? translateUi("ui.a60a56c584b3") : translateUi("ui.6aeaa6a53d09")}
             onClick={() => setRevealed((current) => !current)}
           >
             {revealed ? <EyeOff /> : <Eye />}

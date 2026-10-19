@@ -7,6 +7,7 @@ import { cn } from "@/lib/cva.config";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { ChevronDownIcon, XIcon, CheckIcon } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Combobox = ComboboxPrimitive.Root;
 
@@ -32,13 +33,14 @@ const ComboboxTrigger = React.forwardRef<
 });
 ComboboxTrigger.displayName = "ComboboxTrigger";
 
-function ComboboxClear({ className, "aria-label": ariaLabel = "Clear", ...props }: ComboboxPrimitive.Clear.Props) {
+function ComboboxClear({ className, "aria-label": ariaLabel, ...props }: ComboboxPrimitive.Clear.Props) {
+  const { t } = useLanguage();
   return (
     <ComboboxPrimitive.Clear
       data-slot="combobox-clear"
       render={<InputGroupButton variant="ghost" size="icon-xs" />}
       className={cn(className)}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? t("ui.83b12c2216ef")}
       {...props}
     >
       <XIcon className="pointer-events-none" />

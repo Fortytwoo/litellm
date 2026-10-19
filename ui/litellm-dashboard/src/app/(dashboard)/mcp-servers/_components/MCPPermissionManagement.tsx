@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect } from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -53,6 +55,8 @@ const ClearableInput: React.FC<{
 };
 
 const StaticHeadersFieldArray: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<MountedFormValues>();
   const { fields, append, remove } = useFieldArray({ control: listControl(control), name: "static_headers" });
   useMountedName("static_headers");
@@ -69,7 +73,7 @@ const StaticHeadersFieldArray: React.FC = () => {
             {(headerControl) => (
               <ClearableInput
                 control={headerControl}
-                placeholder="Header name (e.g., X-API-Key)"
+                placeholder={uiT("ui.5f9156e6d86d0cf9")}
                 clearLabel="Clear header name"
               />
             )}
@@ -80,7 +84,11 @@ const StaticHeadersFieldArray: React.FC = () => {
             rules={{ validate: { required: requiredRule("Header value is required") } }}
           >
             {(valueControl) => (
-              <ClearableInput control={valueControl} placeholder="Header value" clearLabel="Clear header value" />
+              <ClearableInput
+                control={valueControl}
+                placeholder={uiT("ui.f9a9058c0c22e511")}
+                clearLabel="Clear header value"
+              />
             )}
           </MountedFormField>
           <CircleMinus
@@ -91,7 +99,7 @@ const StaticHeadersFieldArray: React.FC = () => {
       ))}
       <Button variant="outline" className="w-full border-dashed" onClick={() => append({})}>
         <Plus />
-        Add Static Header
+        {uiT("ui.5ab7fe67cc263312")}
       </Button>
     </div>
   );
@@ -102,6 +110,8 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
   mcpServer,
   mountedAuthType,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { setValue } = useFormContext<MountedFormValues>();
   const isOAuth2 = mountedAuthType === AUTH_TYPE.OAUTH2;
   const isNoneAuth = mountedAuthType === AUTH_TYPE.NONE || mountedAuthType == null;
@@ -186,11 +196,9 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
         <span className="flex items-center">
           <span className="flex items-center space-x-2">
             <span className="w-2 h-2 bg-info rounded-full"></span>
-            <span className="text-lg font-semibold text-foreground">Permission Management / Access Control</span>
+            <span className="text-lg font-semibold text-foreground">{uiT("ui.bae278ffd1697eb9")}</span>
           </span>
-          <span className="text-sm text-muted-foreground ml-4">
-            Configure access permissions and security settings (Optional)
-          </span>
+          <span className="text-sm text-muted-foreground ml-4">{uiT("ui.310b1c355765b997")}</span>
         </span>
         <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
       </CollapsibleTrigger>
@@ -199,34 +207,30 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
           <div className="flex items-start justify-between gap-4">
             <div>
               <span className="text-sm font-medium text-foreground flex items-center">
-                Allow All LiteLLM Keys
-                <SimpleTooltip content="When enabled, every API key can access this MCP server.">
+                {uiT("ui.b19d3c55d1c9645e")}
+                <SimpleTooltip content={uiT("ui.7aafce4e411929b4")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
               </span>
-              <p className="text-sm text-muted-foreground mt-1">
-                Enable if this server should be &quot;public&quot; to all keys.
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{uiT("ui.664be2a7bf05c4c2")}</p>
             </div>
             <MountedFormField name="allow_all_keys" defaultValue={mcpServer?.allow_all_keys ?? false} className="mb-0">
-              {(control) => <Switch aria-label="Allow All LiteLLM Keys" {...switchControl(control)} />}
+              {(control) => <Switch aria-label={uiT("ui.b19d3c55d1c9645e")} {...switchControl(control)} />}
             </MountedFormField>
           </div>
 
           <div className="flex items-start justify-between gap-4">
             <div>
               <span className="text-sm font-medium text-foreground flex items-center">
-                Internal network only
-                <SimpleTooltip content="When on, requests must come from your internal network unless the server ID is explicitly published in public_mcp_servers. Turn off to allow public IPs. Authentication and access permissions still apply.">
+                {uiT("ui.3e7ff73d543011e5")}
+                <SimpleTooltip content={uiT("ui.03013ad21cba1e3e")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
               </span>
-              <p className="text-sm text-muted-foreground mt-1">
-                Turn on to restrict public IPs. Explicitly published server IDs remain accessible from public IPs.
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{uiT("ui.ef9a3074561dc69c")}</p>
             </div>
             <MountedFormField name="available_on_public_internet" defaultValue={true} className="mb-0">
-              {(control) => <Switch aria-label="Internal network only" {...invertedSwitchControl(control)} />}
+              {(control) => <Switch aria-label={uiT("ui.3e7ff73d543011e5")} {...invertedSwitchControl(control)} />}
             </MountedFormField>
           </div>
 
@@ -234,23 +238,19 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <span className="text-sm font-medium text-foreground flex items-center">
-                  Delegate auth to upstream (PKCE passthrough)
-                  <SimpleTooltip content="When on, LiteLLM skips its own API key/SSO check for this server and lets the client complete PKCE directly with the upstream MCP server. Only honored when Auth Type is oauth2. No spend tracking or per-key rate limiting will run on this route.">
+                  {uiT("ui.49192cfe7469be3e")}
+                  <SimpleTooltip content={uiT("ui.57496d7421c48c0a")}>
                     <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                   </SimpleTooltip>
                 </span>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Bypass LiteLLM auth so clients authenticate directly with the upstream OAuth MCP server.
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">{uiT("ui.43c2b5a6387a6b8c")}</p>
               </div>
               <MountedFormField
                 name="delegate_auth_to_upstream"
                 defaultValue={mcpServer?.delegate_auth_to_upstream ?? false}
                 className="mb-0"
               >
-                {(control) => (
-                  <Switch aria-label="Delegate auth to upstream (PKCE passthrough)" {...switchControl(control)} />
-                )}
+                {(control) => <Switch aria-label={uiT("ui.49192cfe7469be3e")} {...switchControl(control)} />}
               </MountedFormField>
             </div>
           )}
@@ -259,22 +259,19 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <span className="text-sm font-medium text-foreground flex items-center">
-                  OAuth pass-through
-                  <SimpleTooltip content="When on, this server is treated as an OAuth pass-through: the gateway proxies the upstream /.well-known/oauth-protected-resource metadata, emits spec-compliant 401 challenges when no bearer is supplied, and propagates upstream 401/403 responses. Only honored when Auth Type is None and 'Authorization' is in Extra Headers.">
+                  {uiT("ui.2dfcbd8dd472326a")}
+                  <SimpleTooltip content={uiT("ui.264ed8a71f26ae37")}>
                     <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                   </SimpleTooltip>
                 </span>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Forward upstream OAuth discovery and 401 challenges so clients negotiate OAuth directly with the
-                  upstream MCP server.
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">{uiT("ui.b2f41ed257714e0e")}</p>
               </div>
               <MountedFormField
                 name="oauth_passthrough"
                 defaultValue={mcpServer?.oauth_passthrough ?? false}
                 className="mb-0"
               >
-                {(control) => <Switch aria-label="OAuth pass-through" {...switchControl(control)} />}
+                {(control) => <Switch aria-label={uiT("ui.2dfcbd8dd472326a")} {...switchControl(control)} />}
               </MountedFormField>
             </div>
           )}
@@ -282,20 +279,16 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
           {showInternalDelegatePkceWarning && (
             <Alert variant="warning" className="mb-2">
               <TriangleAlert />
-              <AlertTitle>Internal server with upstream OAuth delegation</AlertTitle>
-              <AlertDescription>
-                This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be
-                able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream
-                provider and network enforce access controls.
-              </AlertDescription>
+              <AlertTitle>{uiT("ui.5526a39a0ff746f3")}</AlertTitle>
+              <AlertDescription>{uiT("ui.ca9c7ce2d28d6b4d")}</AlertDescription>
             </Alert>
           )}
 
           <MountedFormField
             label={
               <span className="text-sm font-medium text-foreground flex items-center">
-                MCP Access Groups
-                <SimpleTooltip content="Specify access groups for this MCP server. Users must be in at least one of these groups to access the server.">
+                {uiT("ui.330da412f455f4e8")}
+                <SimpleTooltip content={uiT("ui.42b8786a8a50efc7")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
               </span>
@@ -307,7 +300,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
               <MultiSelect
                 {...tagsControl(control)}
                 options={availableAccessGroups.map((group) => ({ label: group, value: group }))}
-                placeholder="Select existing groups or type to create new ones"
+                placeholder={uiT("ui.13a4140b64289431")}
                 className="rounded-lg"
               />
             )}
@@ -316,13 +309,13 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
           <MountedFormField
             label={
               <span className="text-sm font-medium text-foreground flex items-center">
-                Extra Headers
-                <SimpleTooltip content="Forward custom headers from incoming requests to this MCP server (e.g., Authorization, X-Custom-Header, User-Agent)">
+                {uiT("ui.3c1aeb3d156fdd97")}
+                <SimpleTooltip content={uiT("ui.967bda3b9218aee7")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
                 {mcpServer?.extra_headers && mcpServer.extra_headers.length > 0 && (
                   <span className="ml-2 text-xs bg-info/15 text-info px-2 py-1 rounded-full">
-                    {mcpServer.extra_headers.length} configured
+                    {mcpServer.extra_headers.length} {uiT("ui.20158224750041d6")}
                   </span>
                 )}
               </span>
@@ -334,8 +327,8 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
                 {...tagsControl(control)}
                 placeholder={
                   mcpServer?.extra_headers && mcpServer.extra_headers.length > 0
-                    ? `Currently: ${mcpServer.extra_headers.join(", ")}`
-                    : "Enter header names (e.g., Authorization, X-Custom-Header)"
+                    ? uiT("ui.e52d2933836a7fbe", { v0: String(mcpServer.extra_headers.join(", ")) })
+                    : uiT("ui.31f9d5fb5c230265")
                 }
                 className="rounded-lg"
               />
@@ -345,8 +338,8 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
           <Field>
             <FieldLabel>
               <span className="text-sm font-medium text-foreground flex items-center">
-                Static Headers
-                <SimpleTooltip content="Send these key-value headers with every request to this MCP server.">
+                {uiT("ui.84ccf938f01589b2")}
+                <SimpleTooltip content={uiT("ui.b196d9532027be0d")}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
               </span>

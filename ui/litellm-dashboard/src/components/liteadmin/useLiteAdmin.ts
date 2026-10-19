@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ChatMessage } from "@/components/chat/types";
@@ -46,6 +49,8 @@ const RESOURCE_QUERIES = new Set([
 ]);
 
 export function useLiteAdmin(session: LiteAdminSession) {
+  useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [entries, setEntries] = useState<ConversationEntry[]>([]);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -108,7 +113,12 @@ export function useLiteAdmin(session: LiteAdminSession) {
       if (entry.kind === "message") return [entry.message];
       if (entry.kind !== "action" || entry.status === "review" || entry.status === "applying") return [];
       const receipt = { operation: entry.action.name, status: entry.status, arguments: entry.action.arguments };
-      return [{ role: "assistant", content: `Gateway action receipt: ${JSON.stringify(receipt)}` }];
+      return [
+        {
+          role: "assistant",
+          content: translateUi("ui.1477c36ab1990a18", undefined, { v0: String(JSON.stringify(receipt)) }),
+        },
+      ];
     });
     setEntries((current) => [...current, { kind: "message", id: message.id, message }]);
     setPhase("thinking");

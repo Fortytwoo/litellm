@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,9 +13,26 @@ import { AnalysisKeySummary } from "./AnalysisKeyDetails";
 import type { LensList, Worker } from "../../model/types";
 
 function workerStatus(worker: Worker, now: number): { state: StatusDotProps["state"]; label: string } {
-  if (!worker.analysis_key_id) return { state: "warn", label: "Billing key required" };
-  if (workerConnected(worker, now)) return { state: "ok", label: "Connected" };
-  return { state: "off", label: `Not connected · last seen ${agoLabel(Date.parse(worker.last_seen), now)}` };
+  if (!worker.analysis_key_id)
+    return {
+      state: "warn",
+      get label() {
+        return translateUi("ui.bb75eefd55a90ef1");
+      },
+    };
+  if (workerConnected(worker, now))
+    return {
+      state: "ok",
+      get label() {
+        return translateUi("ui.22965568d22a14ee");
+      },
+    };
+  return {
+    state: "off",
+    get label() {
+      return translateUi("ui.b9166279714d2ba8", undefined, { v0: String(agoLabel(Date.parse(worker.last_seen), now)) });
+    },
+  };
 }
 
 export type WorkerListProps = ComponentProps<"ul"> & {
@@ -23,6 +42,8 @@ export type WorkerListProps = ComponentProps<"ul"> & {
 };
 
 export function WorkerList({ workers, onEditBilling, onRevoke, className, ...props }: WorkerListProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const now = useNow(5000);
   return (
     <ul
@@ -46,7 +67,7 @@ export function WorkerList({ workers, onEditBilling, onRevoke, className, ...pro
               </div>
               <div className="flex items-center gap-1">
                 <Button variant="outline" size="sm" onClick={() => onEditBilling(worker)}>
-                  Edit access
+                  {uiT("ui.a514a684676a781d")}
                 </Button>
                 <Button
                   variant="ghost"
@@ -54,7 +75,7 @@ export function WorkerList({ workers, onEditBilling, onRevoke, className, ...pro
                   className="text-muted-foreground hover:text-destructive"
                   onClick={() => onRevoke(worker.id)}
                 >
-                  Revoke access
+                  {uiT("ui.ab292ddb87d6ffac")}
                 </Button>
               </div>
             </li>

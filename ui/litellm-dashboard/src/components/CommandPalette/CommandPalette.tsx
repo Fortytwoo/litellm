@@ -98,8 +98,8 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
                   {
                     id: "action:search-keys",
                     kind: "search-keys" as const,
-                    title: "Search virtual keys",
-                    subtitle: "Find a key by alias or ID",
+                    title: uiT("ui.c7deb5faa918d90c"),
+                    subtitle: uiT("ui.82a3da9d217fc7a2"),
                     icon: <KeyRound className="size-4" />,
                     typeLabel: "Action" as const,
                   },
@@ -107,7 +107,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
               },
             ]
           : []),
-        ...(pages.length > 0 ? [{ label: "Pages", entries: pages }] : []),
+        ...(pages.length > 0 ? [{ label: uiT("ui.9046da16aea909ba"), entries: pages }] : []),
       ];
     }
 
@@ -124,7 +124,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       return {
         id: `key:${key.token}`,
         kind: "key",
-        title: key.key_alias || "Unnamed key",
+        title: key.key_alias || uiT("ui.ff75eadaa830f082"),
         subtitle,
         icon: <KeyRound className="size-4" />,
         typeLabel: "Key",
@@ -132,9 +132,11 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       };
     });
     const keysGroup: PaletteGroup = {
-      label: trimmedQuery ? uiT("ui.f0d66a79c138") : "Recent keys",
+      label: trimmedQuery ? uiT("ui.f0d66a79c138") : uiT("ui.379edecb52745fa1"),
       entries: keyEntries,
-      emptyMessage: trimmedQuery ? `No keys match “${trimmedQuery}”` : "No recent keys",
+      emptyMessage: trimmedQuery
+        ? uiT("ui.cf124a65eee00ce4", { v0: String(trimmedQuery) })
+        : uiT("ui.4abd0c002904e07f"),
       isLoading: isLoadingKeys,
     };
 
@@ -143,8 +145,8 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
     const filterEntry: PaletteEntry = {
       id: "action:filter-keys",
       kind: "filter",
-      title: `Filter the keys table for “${trimmedQuery}”`,
-      subtitle: "Open Virtual Keys with this search applied",
+      title: uiT("ui.968e5c481e664f48", { v0: String(trimmedQuery) }),
+      subtitle: uiT("ui.5817c58a371570dd"),
       icon: <Search className="size-4" />,
       typeLabel: "Action",
     };
@@ -152,7 +154,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
     return [
       keysGroup,
       { label: uiT("ui.ff8059dc6752"), entries: [filterEntry] },
-      ...(pages.length > 0 ? [{ label: "Pages", entries: pages }] : []),
+      ...(pages.length > 0 ? [{ label: uiT("ui.9046da16aea909ba"), entries: pages }] : []),
     ];
   }, [isLoadingKeys, keyResults.data?.keys, navMatches, scope, teamAliases, trimmedQuery, uiT]);
   const selectableEntries = useMemo(() => groups.flatMap((group) => group.entries), [groups]);
@@ -217,7 +219,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       return (
         <div className="flex h-20 items-center justify-center gap-2 text-sm text-muted-foreground">
           <LoaderCircle className="size-4 animate-spin" />
-          Searching…
+          {uiT("ui.c31723ab330289fe")}
         </div>
       );
     }
@@ -245,7 +247,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         overlayClassName="bg-black/35 backdrop-blur-sm"
         className="top-[15vh] max-h-[70vh] translate-y-0 gap-0 overflow-hidden rounded-xl border border-border p-0 shadow-2xl sm:max-w-[640px]"
       >
-        <DialogTitle className="sr-only">Command palette</DialogTitle>
+        <DialogTitle className="sr-only">{uiT("ui.0347f794d69ca5c4")}</DialogTitle>
         <div className="flex h-14 items-center gap-3 border-b border-border px-4">
           <Search className="size-4 shrink-0 text-muted-foreground" />
           {scope === "keys" && (
@@ -264,7 +266,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
             aria-activedescendant={activeOptionId}
             aria-autocomplete="list"
             className="h-full min-w-0 flex-1 border-0 bg-transparent text-[15px] outline-none placeholder:text-muted-foreground focus:ring-0"
-            placeholder={scope === "keys" ? "Search keys by alias or ID…" : "Search pages and actions…"}
+            placeholder={scope === "keys" ? uiT("ui.f65a4c430c4e4b58") : uiT("ui.3ccbdd38cf5143ed")}
             value={query}
             onChange={(event) => {
               setQuery(event.currentTarget.value);
@@ -275,11 +277,14 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         <div id="command-palette-results" role="listbox" className="max-h-[400px] overflow-y-auto p-2">
           {hasKeyError && (
             <div className="flex h-20 items-center justify-center text-sm text-muted-foreground">
-              Unable to search keys
+              {uiT("ui.34d10b9bd0703ef3")}
             </div>
           )}
           {!hasKeyError && scope === "global" && trimmedQuery && groups.length === 0 && (
-            <div className="px-2 py-3 text-sm text-muted-foreground">No results for “{trimmedQuery}”</div>
+            <div className="px-2 py-3 text-sm text-muted-foreground">
+              {uiT("ui.63a389a426dcd6d5")}
+              {trimmedQuery}”
+            </div>
           )}
           {!hasKeyError &&
             groups.map((group, groupIndex) => {

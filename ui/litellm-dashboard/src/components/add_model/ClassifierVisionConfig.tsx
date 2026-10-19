@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -16,6 +18,8 @@ interface ClassifierVisionConfigProps {
 }
 
 const ClassifierVisionConfig: React.FC<ClassifierVisionConfigProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [draftMaxImages, setDraftMaxImages] = React.useState<string | null>(null);
   const enabled = value.vision?.enabled ?? DEFAULT_CLASSIFIER_VISION_ENABLED;
 
@@ -49,17 +53,15 @@ const ClassifierVisionConfig: React.FC<ClassifierVisionConfigProps> = ({ value, 
               },
             });
           }}
-          aria-label="Use images for classification"
+          aria-label={uiT("ui.6dc277edbd878667")}
         />
-        <strong className="font-semibold">Use images for classification</strong>
+        <strong className="font-semibold">{uiT("ui.6dc277edbd878667")}</strong>
       </div>
-      <span className="block text-xs text-muted-foreground">
-        Send inline image data to the classifier so it can choose a tier from what the image shows.
-      </span>
+      <span className="block text-xs text-muted-foreground">{uiT("ui.38c751a1fac2eec1")}</span>
       {enabled && (
         <div>
           <Label htmlFor={MAX_IMAGES_ID} className="block mb-1 font-semibold">
-            Maximum images per request
+            {uiT("ui.4d369360fa8284e8")}
           </Label>
           <Input
             id={MAX_IMAGES_ID}

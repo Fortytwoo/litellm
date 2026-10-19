@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -46,7 +47,7 @@ const components: Components = {
   ),
   th: ({ node, ...props }) => <th className="border-b border-border px-2 py-1.5 font-medium" {...props} />,
   td: ({ node, ...props }) => <td className="border-b border-border/60 px-2 py-1.5 align-top" {...props} />,
-  img: ({ alt }) => <span>{alt || "Image omitted"}</span>,
+  img: ({ alt }) => <span>{alt || translateUi("ui.70d79da6fa2c6c82")}</span>,
 };
 
 export function Markdown({ text, className }: { text: string; className?: string }) {

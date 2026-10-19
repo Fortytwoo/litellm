@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Waypoints } from "lucide-react";
@@ -51,9 +55,15 @@ export interface RoutingDecision {
 }
 
 const ROUTER_TYPE_LABELS: Record<string, string> = {
-  complexity: "Auto-Router v2",
-  adaptive: "Adaptive router",
-  quality: "Quality router",
+  get complexity() {
+    return translateUi("ui.faab7169e1ae2161");
+  },
+  get adaptive() {
+    return translateUi("ui.740efff4f57d67b0");
+  },
+  get quality() {
+    return translateUi("ui.ef82c41cae35f5ce");
+  },
 };
 
 /**
@@ -104,26 +114,66 @@ function describeReasoningOverride(tierLabel: string | undefined, floor: number 
 }
 
 const CONSTANT_CAUSE_LABELS: Record<string, string> = {
-  heuristic_scorer: "Heuristic scorer",
-  heuristic_v2: "Heuristic v2",
-  capability_classifier: "Capability",
-  capability_classifier_fallback: "Capable tier, Capability classifier failed",
-  llm_v2_classifier: "FUSE v2",
-  llm_v2_fallback: "Capable tier, FUSE v2 classifier failed",
-  heuristic_first_short_circuit: "Heuristic scorer, classifier skipped",
-  hybrid_short_circuit: "Heuristic scorer, score clear of every boundary",
-  classifier_plugin: "Custom classifier plugin",
-  semantic_keyword_match: "Semantic keyword match",
-  session_affinity_pin: "Pinned to session",
-  session_affinity_escalation: "Escalated from session pin",
-  user_turn_continuation: "Continuation turn, classifier skipped",
-  modality_escalation: "Escalated for image input",
-  modality_pin_override: "Overrode session pin for image input",
-  quality_tier: "Quality tier mapping",
-  bandit: "Adaptive bandit",
-  default_fallback: "Default model, no route matched",
-  classifier_fallback: "Fallback tier, classifier failed",
-  default_model_fallback: "Default model, classifier failed",
+  get heuristic_scorer() {
+    return translateUi("ui.2ec42c3908060267");
+  },
+  get heuristic_v2() {
+    return translateUi("ui.183bc446ae6a17b0");
+  },
+  get capability_classifier() {
+    return translateUi("ui.5faf58a69db59058");
+  },
+  get capability_classifier_fallback() {
+    return translateUi("ui.cdaf79afe10f85df");
+  },
+  get llm_v2_classifier() {
+    return translateUi("ui.91797000a96044a6");
+  },
+  get llm_v2_fallback() {
+    return translateUi("ui.fd9a42504fc2eebb");
+  },
+  get heuristic_first_short_circuit() {
+    return translateUi("ui.ff36e4f99e7b9b60");
+  },
+  get hybrid_short_circuit() {
+    return translateUi("ui.8824601590f28a1a");
+  },
+  get classifier_plugin() {
+    return translateUi("ui.e047f28894106ca9");
+  },
+  get semantic_keyword_match() {
+    return translateUi("ui.8e3060e2bfddf081");
+  },
+  get session_affinity_pin() {
+    return translateUi("ui.775658f204b3776c");
+  },
+  get session_affinity_escalation() {
+    return translateUi("ui.aeb20725e1cfeed3");
+  },
+  get user_turn_continuation() {
+    return translateUi("ui.e8c04e0e4b3934c6");
+  },
+  get modality_escalation() {
+    return translateUi("ui.df18f84e638695a6");
+  },
+  get modality_pin_override() {
+    return translateUi("ui.7d6b5ad2bd9bbad8");
+  },
+  get quality_tier() {
+    return translateUi("ui.7457f9479aae2a50");
+  },
+  get bandit() {
+    return translateUi("ui.824dda5900a2f8c5");
+  },
+  get default_fallback() {
+    return translateUi("ui.f531d70bb09ae1de");
+  },
+  get classifier_fallback() {
+    return translateUi("ui.18d73b7a44ffa47f");
+  },
+  get default_model_fallback() {
+    return translateUi("ui.b881fa4f2255c42b");
+  },
 };
 
 function describeCause(decision: RoutingDecision): string {
@@ -201,19 +251,21 @@ function CapabilityForecast({ decision }: { decision: RoutingDecision }) {
 
   return (
     <div className="mt-3 border-t pt-3">
-      <div className="mb-1 text-sm font-medium">Capability estimates</div>
-      <div className="mb-2 text-xs text-muted-foreground">Efficient model solve chance</div>
-      <PercentageRow label="Raw" value={raw} />
-      <PercentageRow label="Calibrated" value={calibrated} />
+      <div className="mb-1 text-sm font-medium">{uiT("ui.9be04ce1fc1a")}</div>
+      <div className="mb-2 text-xs text-muted-foreground">{uiT("ui.5f7be05d644e")}</div>
+      <PercentageRow label={uiT("ui.848123d14f84")} value={raw} />
+      <PercentageRow label={uiT("ui.0c66fb7bd4db")} value={calibrated} />
       <PercentageRow label={uiT("ui.0da627ada476")} value={threshold} />
-      {boundary && <Row label="Boundary">{boundary}</Row>}
-      {rule && <Row label="Rule">{rule}</Row>}
-      {version && <Row label="Calibration">{version}</Row>}
+      {boundary && <Row label={uiT("ui.fcf4b1a7548c")}>{boundary}</Row>}
+      {rule && <Row label={uiT("ui.62845f31a2fe")}>{rule}</Row>}
+      {version && <Row label={uiT("ui.252526ecd431")}>{version}</Row>}
     </div>
   );
 }
 
 function FuseV2Forecast({ decision }: { decision: RoutingDecision }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     classifier_efficient_p_solve: rawEfficient,
     classifier_capable_p_solve: rawCapable,
@@ -232,14 +284,14 @@ function FuseV2Forecast({ decision }: { decision: RoutingDecision }) {
 
   return (
     <div className="mt-3 border-t pt-3">
-      <div className="mb-1 text-sm font-medium">FUSE v2 estimates</div>
-      <PercentageRow label="Efficient (raw)" value={rawEfficient} />
-      <PercentageRow label="Capable (raw)" value={rawCapable} />
-      <PercentageRow label="Efficient (calibrated)" value={calibratedEfficient} />
-      <PercentageRow label="Capable (calibrated)" value={calibratedCapable} />
-      <PercentageRow label="Applied gap" value={gap} unit=" percentage points" />
-      <PercentageRow label="Allowed gap" value={allowedGap} unit=" percentage points" />
-      {version && <Row label="Calibration">{version}</Row>}
+      <div className="mb-1 text-sm font-medium">{uiT("ui.7cc01eeff843")}</div>
+      <PercentageRow label={uiT("ui.5c34c3ddb625")} value={rawEfficient} />
+      <PercentageRow label={uiT("ui.cba6f1c925f8")} value={rawCapable} />
+      <PercentageRow label={uiT("ui.b243607493bb")} value={calibratedEfficient} />
+      <PercentageRow label={uiT("ui.e85985b0b0f0")} value={calibratedCapable} />
+      <PercentageRow label={uiT("ui.e1f1ba77a9cf")} value={gap} unit=" percentage points" />
+      <PercentageRow label={uiT("ui.31248d7f1be6")} value={allowedGap} unit=" percentage points" />
+      {version && <Row label={uiT("ui.252526ecd431")}>{version}</Row>}
     </div>
   );
 }
@@ -280,7 +332,7 @@ export function RoutingDecisionCard({
 
   return (
     <div className={cn("mb-6 w-full max-w-full overflow-hidden rounded-lg bg-card shadow-sm", className)}>
-      <div className="border-b px-4 py-2.5 text-sm font-medium">Routing</div>
+      <div className="border-b px-4 py-2.5 text-sm font-medium">{uiT("ui.bcba696f3eb1")}</div>
       <div className="px-4 py-3">
         {routerModelName && (
           <div className="mb-2 flex items-center gap-2 text-sm font-medium">
@@ -302,15 +354,15 @@ export function RoutingDecisionCard({
           </Row>
         )}
 
-        {requestType && <Row label="Request type">{requestType}</Row>}
+        {requestType && <Row label={uiT("ui.6db8df2da928")}>{requestType}</Row>}
 
-        <Row label="Decided by">{describeCause(decision)}</Row>
-        {decision.classifier_model && <Row label="Classifier model">{decision.classifier_model}</Row>}
+        <Row label={uiT("ui.33a2ab84fc8c")}>{describeCause(decision)}</Row>
+        {decision.classifier_model && <Row label={uiT("ui.0e721024fb00")}>{decision.classifier_model}</Row>}
         {decision.classifier_confidence != null && (
           <Row label={uiT("ui.6422e3e78f5e")}>{(decision.classifier_confidence * 100).toFixed(1)}%</Row>
         )}
         {decision.classifier_probabilities && (
-          <Row label="Probabilities">
+          <Row label={uiT("ui.f88c5520b576")}>
             {Object.entries(decision.classifier_probabilities).map(([name, probability]) => (
               <div key={name}>
                 {name}: {(probability * 100).toFixed(1)}%
@@ -318,7 +370,9 @@ export function RoutingDecisionCard({
             ))}
           </Row>
         )}
-        {decision.classifier_cost != null && <Row label="Classifier cost">${decision.classifier_cost.toFixed(8)}</Row>}
+        {decision.classifier_cost != null && (
+          <Row label={uiT("ui.0882e3784ecd")}>${decision.classifier_cost.toFixed(8)}</Row>
+        )}
 
         {score !== undefined && (
           <Row label={uiT("ui.38e5a46cbc5a")}>
@@ -327,18 +381,20 @@ export function RoutingDecisionCard({
           </Row>
         )}
 
-        {routedModel && <Row label="Routed to">{routedModel}</Row>}
+        {routedModel && <Row label={uiT("ui.a3e3b5c2b0a3")}>{routedModel}</Row>}
 
-        {escalated !== undefined && <Row label="Escalated">{describeEscalation(escalated, escalationKeyword)}</Row>}
+        {escalated !== undefined && (
+          <Row label={uiT("ui.b710aaaaa7ba")}>{translateText(describeEscalation(escalated, escalationKeyword))}</Row>
+        )}
 
         {forecast && (
           <div className="mt-3 border-t pt-3">
-            <div className="mb-1 text-sm font-medium">Heuristic v2 estimates</div>
-            <Row label="Success by tier">
+            <div className="mb-1 text-sm font-medium">{uiT("ui.64e9ad5d26a1")}</div>
+            <Row label={uiT("ui.da76f47a9cfd")}>
               <span className="flex flex-wrap gap-1">
                 {["SIMPLE", "MEDIUM", "COMPLEX", "REASONING"].map((predictedTier) => (
                   <Badge key={predictedTier} variant="outline" className="font-normal tabular-nums">
-                    {predictedTier} {(forecast.probabilities[predictedTier] * 100).toFixed(1)}%
+                    {translateText(predictedTier)} {(forecast.probabilities[predictedTier] * 100).toFixed(1)}%
                   </Badge>
                 ))}
               </span>
@@ -346,8 +402,8 @@ export function RoutingDecisionCard({
             <Row label={uiT("ui.0da627ada476")}>
               <span className="tabular-nums">{(forecast.threshold * 100).toFixed(1)}%</span>
             </Row>
-            <Row label="Predicted tier">{forecast.predicted_tier}</Row>
-            <Row label="Request type">{forecast.request_type}</Row>
+            <Row label={uiT("ui.232bc8815c7d")}>{forecast.predicted_tier}</Row>
+            <Row label={uiT("ui.6db8df2da928")}>{forecast.request_type}</Row>
           </div>
         )}
 
@@ -355,7 +411,7 @@ export function RoutingDecisionCard({
         <FuseV2Forecast decision={decision} />
 
         {signals && signals.length > 0 && (
-          <Row label="Signals">
+          <Row label={uiT("ui.88b01c8a4bff")}>
             <span className="flex flex-wrap gap-1">
               {signals.map((signal) => (
                 <Badge key={signal} variant="outline" className="font-normal">

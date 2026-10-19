@@ -1,4 +1,8 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { LocalizedText } from "@/contexts/LanguageContext";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
@@ -40,10 +44,12 @@ const SIMILARITY_THRESHOLD_MARKS = [0, 0.3, 0.5, 0.7, 1];
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -76,14 +82,14 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
     updateSettings(formToPayload(formValues), {
       onSuccess: () => {
         form.reset(formValues);
-        toast.success("Settings updated successfully. Changes will be applied across all pods within 10 seconds.");
+        toast.success(translateUi("ui.cd45e5e5d93f5315"));
       },
       onError: (saveError) => toast.fromError(saveError),
     });
   };
 
   if (!accessToken) {
-    return <div className="p-6 text-center text-muted-foreground">Please log in to configure tool search.</div>;
+    return <div className="p-6 text-center text-muted-foreground">{uiT("ui.fcb2e892adfa8962")}</div>;
   }
 
   if (isLoading) {
@@ -99,7 +105,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
   if (isError) {
     return (
       <Alert variant="error" className="mb-6">
-        <AlertTitle>Could not load MCP tool search settings</AlertTitle>
+        <AlertTitle>{uiT("ui.0c5b13908e6baf6b")}</AlertTitle>
         {error instanceof Error && <AlertDescription>{error.message}</AlertDescription>}
       </Alert>
     );
@@ -109,12 +115,9 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
     <div className="w-full">
       <Alert variant="info" className="mb-6">
         <Info />
-        <AlertTitle>Native MCP Tool Search</AlertTitle>
+        <AlertTitle>{uiT("ui.60a18954a408eb60")}</AlertTitle>
         <AlertDescription>
-          Controls the <code>mcp_tool_search</code> virtual tool that native MCP clients call to discover tools. With an
-          embedding model set, tools are ranked by the meaning of their name and description, so a query like
-          &quot;FX&quot; finds a &quot;foreign exchange rates&quot; tool. Without one, keyword matching is used. Callers
-          only ever see tools their key, team and server permissions already allow.
+          {uiT("ui.b56e07038cb30f2e")} <code>mcp_tool_search</code> {uiT("ui.32b0a71fedb66ffc")}
         </AlertDescription>
       </Alert>
 
@@ -122,7 +125,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <Card className="mb-4">
             <CardHeader className="border-b">
-              <CardTitle>Ranking</CardTitle>
+              <CardTitle>{uiT("ui.2ef9d509bd5a5dff")}</CardTitle>
             </CardHeader>
             <CardContent>
               <FieldGroup>
@@ -141,8 +144,8 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                       value={value}
                       onValueChange={onChange}
                       allowClear
-                      placeholder={loadingModels ? "Loading models..." : "Keyword matching (no embedding model)"}
-                      emptyText={loadingModels ? uiT("ui.47d2a515ef2f") : "No embedding models available"}
+                      placeholder={loadingModels ? uiT("ui.802435241f0ac4f5") : uiT("ui.d40bb73d630ca78f")}
+                      emptyText={loadingModels ? uiT("ui.47d2a515ef2f") : uiT("ui.0a6598c0e2ff62a0")}
                       disabled={isUpdating || loadingModels}
                     />
                   )}
@@ -209,7 +212,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
 
           <Card className="mb-4">
             <CardHeader className="border-b">
-              <CardTitle>Core Tools</CardTitle>
+              <CardTitle>{uiT("ui.7c7608de96a37406")}</CardTitle>
             </CardHeader>
             <CardContent>
               <FieldGroup>
@@ -226,7 +229,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                       id={id}
                       ref={ref}
                       value={value}
-                      placeholder={"my_server-get_rates\nmy_server-list_accounts"}
+                      placeholder={uiT("ui.27ae31bb38d67d59")}
                       onChange={(event) => onChange(event.target.value)}
                       onBlur={onBlur}
                       disabled={isUpdating}
@@ -244,7 +247,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
               disabled={!isDirty || isUpdating}
             >
               {isUpdating ? <UiLoadingSpinner className="size-4" /> : <Save />}
-              Save Settings
+              {uiT("ui.ec92e1dc9bb3bf7b")}
             </Button>
           </div>
         </form>

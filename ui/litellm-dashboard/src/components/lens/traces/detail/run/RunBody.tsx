@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { type RefObject, useRef, useState } from "react";
 import { useDefaultLayout } from "react-resizable-panels";
@@ -30,6 +31,8 @@ interface RunBodyProps {
 
 /** Tree + detail pane for one loaded run. Arrows move and fold steps; J/K also move unless the drawer owns them. */
 export function RunBody({ trace, accessToken, selection, embedded, stale, conversationPaging }: RunBodyProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { view, setView, stepQuery, setStepQuery, errorsOnly, setErrorsOnly } = selection;
   const tree = useRunTree(trace, selection);
   const [detailOpen, setDetailOpen] = useState(true);
@@ -45,13 +48,25 @@ export function RunBody({ trace, accessToken, selection, embedded, stale, conver
 
   const active = !stale && view === "steps";
   const pane = { layer: "pane", enabled: active } as const;
-  useShortcut("down", () => tree.moveBy(1), { ...pane, description: "step" });
-  useShortcut("up", () => tree.moveBy(-1), { ...pane, description: "step" });
-  useShortcut("j", () => tree.moveBy(1), { ...pane, enabled: active && !embedded, description: "move" });
-  useShortcut("k", () => tree.moveBy(-1), { ...pane, enabled: active && !embedded, description: "move" });
-  useShortcut("left", () => tree.fold(false), { ...pane, description: "fold" });
-  useShortcut("right", () => tree.fold(true), { ...pane, description: "fold" });
-  useShortcut("escape", () => setDetailOpen(false), { ...pane, enabled: active && detailOpen, description: "close" });
+  useShortcut("down", () => tree.moveBy(1), { ...pane, description: uiT("ui.3e64cc41cf8e07b4") });
+  useShortcut("up", () => tree.moveBy(-1), { ...pane, description: uiT("ui.3e64cc41cf8e07b4") });
+  useShortcut("j", () => tree.moveBy(1), {
+    ...pane,
+    enabled: active && !embedded,
+    description: uiT("ui.683a62ce15fbabb1"),
+  });
+  useShortcut("k", () => tree.moveBy(-1), {
+    ...pane,
+    enabled: active && !embedded,
+    description: uiT("ui.683a62ce15fbabb1"),
+  });
+  useShortcut("left", () => tree.fold(false), { ...pane, description: uiT("ui.255541b1d8c61855") });
+  useShortcut("right", () => tree.fold(true), { ...pane, description: uiT("ui.255541b1d8c61855") });
+  useShortcut("escape", () => setDetailOpen(false), {
+    ...pane,
+    enabled: active && detailOpen,
+    description: uiT("ui.310ff200149b44a3"),
+  });
 
   const openStep = (id: string) => {
     select(id);

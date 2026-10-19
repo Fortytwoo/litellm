@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+import { translateText } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
@@ -62,6 +65,8 @@ interface DynamicParamsFieldsProps {
 }
 
 const DynamicParamsFields: React.FC<DynamicParamsFieldsProps> = ({ params, callbackConfigs, selectedCallback }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { register, control, formState } = useFormContext<CallbackFormValues>();
   const fieldIdPrefix = React.useId();
 
@@ -87,7 +92,7 @@ const DynamicParamsFields: React.FC<DynamicParamsFieldsProps> = ({ params, callb
         return (
           <Field key={param} className="mb-4">
             <FieldLabel htmlFor={fieldId}>
-              <span className="text-sm font-medium text-foreground">{fieldLabel} </span>
+              <span className="text-sm font-medium text-foreground">{translateText(fieldLabel)} </span>
             </FieldLabel>
             {isSelect && (
               <Controller
@@ -101,7 +106,7 @@ const DynamicParamsFields: React.FC<DynamicParamsFieldsProps> = ({ params, callb
                     onValueChange={(selected: string | null) => field.onChange(selected ?? "")}
                   >
                     <SelectTrigger id={fieldId} className="w-full" onBlur={field.onBlur}>
-                      <SelectValue placeholder={`Select ${fieldLabel.toLowerCase()}`} />
+                      <SelectValue placeholder={uiT("ui.58661820dfdc4c9f", { v0: String(fieldLabel.toLowerCase()) })} />
                     </SelectTrigger>
                     <SelectContent>
                       {selectOptions.map((option) => (
@@ -134,21 +139,25 @@ const DynamicParamsFields: React.FC<DynamicParamsFieldsProps> = ({ params, callb
                 <Input
                   id={fieldId}
                   type="password"
-                  placeholder={`Enter your ${fieldLabel.toLowerCase()}`}
+                  placeholder={uiT("ui.d1dc00caf2ba5134", { v0: String(fieldLabel.toLowerCase()) })}
                   {...registration}
                 />
               ) : paramType === "number" ? (
                 <Input
                   id={fieldId}
                   type="number"
-                  placeholder={`Enter ${fieldLabel.toLowerCase()}`}
+                  placeholder={translateUi("ui.43e95aa600c4c9a9", undefined, { v0: String(fieldLabel.toLowerCase()) })}
                   min={0}
                   max={1}
                   step={0.1}
                   {...registration}
                 />
               ) : (
-                <Input id={fieldId} placeholder={`Enter your ${fieldLabel.toLowerCase()}`} {...registration} />
+                <Input
+                  id={fieldId}
+                  placeholder={uiT("ui.d1dc00caf2ba5134", { v0: String(fieldLabel.toLowerCase()) })}
+                  {...registration}
+                />
               ))}
             <FieldError errors={[formState.errors[param]]} />
           </Field>
@@ -191,7 +200,7 @@ export const CallbackSelector: React.FC<CallbackSelectorProps> = ({
       rules={disabled ? undefined : { required: "Please select a callback" }}
       render={({ field, fieldState }) => (
         <Field>
-          <FieldLabel htmlFor={inputId}>Callback</FieldLabel>
+          <FieldLabel htmlFor={inputId}>{uiT("ui.32e8d276eeb97960")}</FieldLabel>
           <Combobox
             items={callbackConfigs}
             value={selectedConfig}
@@ -208,7 +217,7 @@ export const CallbackSelector: React.FC<CallbackSelectorProps> = ({
           >
             <ComboboxInput
               id={inputId}
-              placeholder="Choose a logging callback..."
+              placeholder={uiT("ui.ba8da3f7e7356907")}
               className="w-full"
               disabled={disabled}
               onBlur={field.onBlur}
@@ -444,7 +453,11 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
 
     try {
       await setCallbacksCall(accessToken, payload);
-      toast.success(isEdit ? "Callback updated successfully" : `Callback ${callbackName} added successfully`);
+      toast.success(
+        isEdit
+          ? translateUi("ui.0878cd92a6b7e15b")
+          : translateUi("ui.345e9037d5e2672b", undefined, { v0: String(callbackName) }),
+      );
 
       if (isEdit) {
         setShowEditCallback(false);
@@ -535,7 +548,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
     } catch (error) {
       toast.fromError(error);
     }
-    toast.success("Alerts updated successfully");
+    toast.success(translateUi("ui.f36f46ce09b5abf8"));
   };
 
   const handleDeleteCallback = (callback: any) => {
@@ -551,7 +564,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
     try {
       setIsDeletingCallback(true);
       await deleteCallback(accessToken, callbackToDelete.name);
-      toast.success(`Callback ${callbackToDelete.name} deleted successfully`);
+      toast.success(translateUi("ui.34e9c20bcd222aa0", undefined, { v0: String(callbackToDelete.name) }));
 
       // Refresh the callbacks list
       if (userID && userRole) {
@@ -578,12 +591,12 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       <div className="grid grid-cols-1 gap-2 p-8 w-full mt-2">
         <Tabs defaultValue="logging-callbacks">
           <TabsList variant="line">
-            <TabsTrigger value="logging-callbacks">Logging Callbacks</TabsTrigger>
-            <TabsTrigger value="cloudzero-cost-tracking">CloudZero Cost Tracking</TabsTrigger>
-            <TabsTrigger value="alerting-types">Alerting Types</TabsTrigger>
-            <TabsTrigger value="alerting-settings">Alerting Settings</TabsTrigger>
-            <TabsTrigger value="email-alerts">Email Alerts</TabsTrigger>
-            <TabsTrigger value="ms-teams-alerts">MS Teams Alerts</TabsTrigger>
+            <TabsTrigger value="logging-callbacks">{uiT("ui.4281c8644eddf719")}</TabsTrigger>
+            <TabsTrigger value="cloudzero-cost-tracking">{uiT("ui.f466f351a4a90e1d")}</TabsTrigger>
+            <TabsTrigger value="alerting-types">{uiT("ui.335fec49deab873f")}</TabsTrigger>
+            <TabsTrigger value="alerting-settings">{uiT("ui.6323a7a0b1fbf1fb")}</TabsTrigger>
+            <TabsTrigger value="email-alerts">{uiT("ui.523c86f8dce5e85a")}</TabsTrigger>
+            <TabsTrigger value="ms-teams-alerts">{uiT("ui.dc8b6397899b4e6c")}</TabsTrigger>
           </TabsList>
           <TabsContent value="logging-callbacks" keepMounted>
             <LoggingCallbacksTable
@@ -599,7 +612,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
               onTest={async (cb) => {
                 try {
                   await serviceHealthCheck(accessToken, cb.name);
-                  toast.success("Health check triggered");
+                  toast.success(translateUi("ui.d2b4e648f1cda69e"));
                 } catch (error) {
                   toast.fromError(parseErrorMessage(error));
                 }
@@ -614,10 +627,9 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
           <TabsContent value="alerting-types" keepMounted>
             <Card className="p-6">
               <p className="my-2">
-                Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get
-                Slack webhook urls from{" "}
+                {uiT("ui.af6936d4b7c2218e")}{" "}
                 <a href="https://api.slack.com/messaging/webhooks" target="_blank" style={{ color: "blue" }}>
-                  here
+                  {uiT("ui.fcec91509759ad99")}
                 </a>
               </p>
               <Table>
@@ -625,7 +637,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                   <TableRow>
                     <TableHead></TableHead>
                     <TableHead></TableHead>
-                    <TableHead>Webhook URL (Slack-compatible)</TableHead>
+                    <TableHead>{uiT("ui.0dd59553b166bfc3")}</TableHead>
                   </TableRow>
                 </TableHeader>
 
@@ -644,7 +656,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                           ) : (
                             <Button className="flex items-center justify-center">
                               <a href="https://forms.gle/W3U4PZpJGFHWtHyA9" target="_blank">
-                                ✨ Enterprise Feature
+                                {uiT("ui.98f0d5b56c9308a6")}
                               </a>
                             </Button>
                           )
@@ -683,16 +695,14 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                 onClick={async () => {
                   try {
                     await serviceHealthCheck(accessToken, "slack");
-                    toast.success(
-                      "Alert test triggered. Test request to slack made - check logs/alerts on slack to verify",
-                    );
+                    toast.success(translateUi("ui.a25bfd07650bea86"));
                   } catch (error) {
                     toast.fromError(parseErrorMessage(error));
                   }
                 }}
                 className="mx-2"
               >
-                Test Alerts
+                {uiT("ui.ebc210c5d9eb6703")}
               </Button>
             </Card>
           </TabsContent>
@@ -711,7 +721,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       <Dialog open={showAddCallbacksModal} onOpenChange={(open) => !open && closeAddCallbackModal()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Add Logging Callback</DialogTitle>
+            <DialogTitle>{uiT("ui.5a4cab12bf1a8d65")}</DialogTitle>
           </DialogHeader>
           <a
             href="https://docs.litellm.ai/docs/proxy/logging"
@@ -720,7 +730,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
             style={{ color: "blue" }}
           >
             {" "}
-            LiteLLM Docs: Logging
+            {uiT("ui.1f0d076d612e802c")}
           </a>
 
           <FormProvider {...addForm}>
@@ -742,7 +752,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                   {uiT("ui.19766ed6ccb2")}
                 </Button>
                 <Button type="submit" disabled={isAddingCallback}>
-                  {isAddingCallback ? uiT("ui.913a8849b60d") : "Add Callback"}
+                  {isAddingCallback ? uiT("ui.913a8849b60d") : uiT("ui.46b3900d24541a88")}
                 </Button>
               </div>
             </form>
@@ -753,7 +763,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       <Dialog open={showEditCallback} onOpenChange={(open) => !open && closeEditCallbackModal()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Edit Callback Settings</DialogTitle>
+            <DialogTitle>{uiT("ui.7367e12b2ce2f734")}</DialogTitle>
           </DialogHeader>
           <FormProvider {...editForm}>
             <form onSubmit={editForm.handleSubmit(updateCallbackCall)}>
@@ -793,12 +803,12 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
 
       <DeleteResourceModal
         isOpen={showDeleteConfirmModal}
-        title="Delete Callback"
-        message="Are you sure you want to delete this callback? This action cannot be undone."
+        title={uiT("ui.ea3c6bf0ce8d8c4e")}
+        message={uiT("ui.021c63eb0b91aa45")}
         resourceInformationTitle="Callback Information"
         resourceInformation={[
-          { label: "Callback Name", value: callbackToDelete?.name },
-          { label: "Mode", value: callbackToDelete?.mode || "success" },
+          { label: uiT("ui.fe82ff7eee20217f"), value: callbackToDelete?.name },
+          { label: uiT("ui.5e23ec6a300dc60a"), value: callbackToDelete?.mode || "success" },
         ]}
         onCancel={() => {
           setShowDeleteConfirmModal(false);

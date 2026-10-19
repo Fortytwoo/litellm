@@ -33,10 +33,10 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
   };
 
   return (
-    <div className="mt-4 mb-2" role="group" aria-label="Default model configuration">
+    <div className="mt-4 mb-2" role="group" aria-label={uiT("ui.991684ca0d42e862")}>
       <div className="flex items-center gap-2 mb-2">
-        <strong className="text-base font-semibold">Default Model</strong>
-        <SimpleTooltip content="Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.">
+        <strong className="text-base font-semibold">{uiT("ui.8b4e8774ddf69ec7")}</strong>
+        <SimpleTooltip content={uiT("ui.7dc5bbc90f76a9db")}>
           <Info className="size-4 text-muted-foreground" />
         </SimpleTooltip>
       </div>
@@ -46,12 +46,10 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
         onValueChange={handleDefaultModelChange}
         placeholder={defaultModelPlaceholder}
         emptyText={uiT("ui.a650c298cf44")}
-        aria-label="Default model"
+        aria-label={uiT("ui.3840d9d29421c46c")}
       />
       <span className="block mt-1 text-xs text-muted-foreground">
-        {isForecastClassifier(value.classifier_type)
-          ? "Used when routing cannot find a suitable model. Classifier failures route to the capable solver."
-          : 'Used when the tier the request lands in has no model, and when the classifier fails with "Route to the default model" selected.'}
+        {isForecastClassifier(value.classifier_type) ? uiT("ui.e9f4b25a0fce9c17") : uiT("ui.0e042a42e50c6928")}
       </span>
     </div>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Bot, Check, ChevronsUpDown, Search } from "lucide-react";
 import { useState } from "react";
@@ -32,6 +33,8 @@ const ITEM = "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left te
 
 /** The agent every Lens view is scoped to, like the project switcher in Braintrust. */
 export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const shown = agents.filter((item) => matchesAgent(item, query));
@@ -43,7 +46,7 @@ export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label={`Agent: ${agent}`}
+        aria-label={uiT("ui.fdd47b962bef7d70", { v0: String(agent) })}
         className="inline-flex h-7 max-w-56 items-center gap-1.5 rounded-md border px-2 text-sm font-medium hover:bg-muted"
       >
         <AgentMark agent={agents.find((item) => item.name === agent)} />
@@ -54,8 +57,8 @@ export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
         <div className="relative">
           <Search aria-hidden className="absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
-            aria-label="Find agent"
-            placeholder="Find agent"
+            aria-label={uiT("ui.7c1e5164b4b92e35")}
+            placeholder={uiT("ui.7c1e5164b4b92e35")}
             autoFocus
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -63,8 +66,8 @@ export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
           />
         </div>
         <div className="border-t" />
-        <p className="px-2 pt-1.5 pb-0.5 text-xs text-muted-foreground">Agents</p>
-        <ul aria-label="Agents" className="flex max-h-72 flex-col overflow-y-auto">
+        <p className="px-2 pt-1.5 pb-0.5 text-xs text-muted-foreground">{uiT("ui.279b44d2ab4b")}</p>
+        <ul aria-label={uiT("ui.279b44d2ab4b")} className="flex max-h-72 flex-col overflow-y-auto">
           {shown.map((item) => (
             <li key={item.name}>
               <button type="button" className={ITEM} onClick={() => choose(item.name)}>
@@ -75,7 +78,9 @@ export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
               </button>
             </li>
           ))}
-          {shown.length === 0 && <li className="px-2 py-1.5 text-sm text-muted-foreground">No agents match</li>}
+          {shown.length === 0 && (
+            <li className="px-2 py-1.5 text-sm text-muted-foreground">{uiT("ui.280e2af477f5c953")}</li>
+          )}
         </ul>
       </PopoverContent>
     </Popover>

@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -49,12 +51,14 @@ interface PolicyRowActionsProps {
 }
 
 function PolicyRowActions({ policy, onEditClick, onDeleteClick }: PolicyRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isConfigPolicy = policy.definition_location === "config";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open policy actions"
+        aria-label={uiT("ui.b5a1d9aad43b944a")}
         data-testid={`policy-actions-${policy.policy_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -68,7 +72,7 @@ function PolicyRowActions({ policy, onEditClick, onDeleteClick }: PolicyRowActio
           onClick={() => onEditClick(policy)}
         >
           <Pencil />
-          Edit policy
+          {uiT("ui.18f41a84465f6462")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -79,7 +83,7 @@ function PolicyRowActions({ policy, onEditClick, onDeleteClick }: PolicyRowActio
           onClick={() => onDeleteClick(policy.policy_id, policy.policy_name || "Unnamed Policy")}
         >
           <Trash2 />
-          Delete policy
+          {uiT("ui.b8dff9c6c10035bd")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -115,14 +119,21 @@ export const getPolicyTableColumns = ({
       const isConfigPolicy = row.original.primaryPolicy.definition_location === "config";
       const versionBadge =
         row.original.versionCount > 1 ? (
-          <StatusBadge tone="neutral" label={`${row.original.versionCount} versions`} />
+          <StatusBadge
+            tone="neutral"
+            label={translateUi("ui.9d62e70127b1d2fb", undefined, { v0: String(row.original.versionCount) })}
+          />
         ) : undefined;
       return (
         <IdentityCell
           title={row.original.policy_name}
           titleClassName="max-w-60"
           badge={
-            isConfigPolicy ? <StatusBadge tone="neutral" label="Config" tooltip={CONFIG_POLICY_HINT} /> : versionBadge
+            isConfigPolicy ? (
+              <StatusBadge tone="neutral" label={translateUi("ui.87e89abb4c1c551f")} tooltip={CONFIG_POLICY_HINT} />
+            ) : (
+              versionBadge
+            )
           }
           onClick={isConfigPolicy ? undefined : () => onViewClick(row.original.primaryPolicy.policy_id)}
         />
@@ -157,8 +168,15 @@ export const getPolicyTableColumns = ({
   {
     id: "inherit",
     accessorFn: (row) => row.primaryPolicy.inherit ?? "",
-    meta: { title: "Inherits From", skeleton: "badge" },
-    header: "Inherits From",
+    meta: {
+      get title() {
+        return translateUi("ui.4e5ba090a8f14877");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.4e5ba090a8f14877");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -171,24 +189,44 @@ export const getPolicyTableColumns = ({
   },
   {
     id: "guardrails_add",
-    meta: { title: "Guardrails (Add)", skeleton: "chips" },
-    header: "Guardrails (Add)",
+    meta: {
+      get title() {
+        return translateUi("ui.062b9e5b97b77a5d");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.062b9e5b97b77a5d");
+    },
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <GuardrailChips guardrails={row.original.primaryPolicy.guardrails_add ?? []} tone="success" />,
   },
   {
     id: "guardrails_remove",
-    meta: { title: "Guardrails (Remove)", skeleton: "chips" },
-    header: "Guardrails (Remove)",
+    meta: {
+      get title() {
+        return translateUi("ui.4f7f5ffb0fc4da8f");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.4f7f5ffb0fc4da8f");
+    },
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <GuardrailChips guardrails={row.original.primaryPolicy.guardrails_remove ?? []} tone="error" />,
   },
   {
     id: "model_condition",
-    meta: { title: "Model Condition" },
-    header: "Model Condition",
+    meta: {
+      get title() {
+        return translateUi("ui.1297d22806d36256");
+      },
+    },
+    get header() {
+      return translateUi("ui.1297d22806d36256");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {

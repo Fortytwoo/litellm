@@ -87,7 +87,7 @@ const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels,
                 onBlur={onBlur}
                 className="w-full"
               >
-                <SelectValue placeholder="Select an option" />
+                <SelectValue placeholder={uiT("ui.fb1cbc38fb4060f4")} />
               </SelectTrigger>
               <SelectContent>
                 {options.map((option) => (
@@ -111,7 +111,7 @@ const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels,
                 model.value === other.value
               }
             >
-              <ComboboxInput {...rest} placeholder="Search and select a model..." className="w-full">
+              <ComboboxInput {...rest} placeholder={uiT("ui.f6da2638fed8a0ed")} className="w-full">
                 <ComboboxClear />
               </ComboboxInput>
               <ComboboxContent>

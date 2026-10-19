@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Pause, Play, Settings2, MoreHorizontal, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,33 +38,35 @@ export function InvestigationActions({
   onEnableMonitoring,
   onRunNow,
 }: InvestigationActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label="Investigation actions" />}>
+      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label={uiT("ui.76a1fdb0b29e6341")} />}>
         <MoreHorizontal className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem disabled={busy || hasActiveJob(lens.jobs) || !ready} onClick={onRunNow}>
           <Play />
-          Run now
+          {uiT("ui.0991397702fabb40")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onEdit}>
           <Settings2 />
-          Edit investigation
+          {uiT("ui.1cdde080223f387f")}
         </DropdownMenuItem>
         <DropdownMenuItem disabled={!ready} onClick={onDuplicate}>
           <Copy />
-          Duplicate
+          {uiT("ui.02cdaabfca805d6a")}
         </DropdownMenuItem>
         {lens.settings.enabled ? (
           <DropdownMenuItem disabled={busy} onClick={onPause}>
             <Pause />
-            Pause monitoring
+            {uiT("ui.26d15b0178f26f45")}
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem disabled={!ready || busy} onClick={onEnableMonitoring}>
             <Play />
-            Enable monitoring
+            {uiT("ui.8015a9029681f303")}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

@@ -1,3 +1,7 @@
+"use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,6 +46,8 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
   onCustomServer,
   accessToken,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [servers, setServers] = useState<DiscoverableMCPServer[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -107,11 +113,15 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
         <DialogHeader>
           <div className="flex items-center justify-between border-b border-border pb-4">
             <div className="flex items-center space-x-3">
-              <img src={resolveLogoSrc(mcpLogoImg)} alt="MCP Logo" className="mr-2 size-5 object-contain" />
-              <DialogTitle className="text-xl font-semibold">Add MCP Server</DialogTitle>
+              <img
+                src={resolveLogoSrc(mcpLogoImg)}
+                alt={uiT("ui.c45a65f9c6b89675")}
+                className="mr-2 size-5 object-contain"
+              />
+              <DialogTitle className="text-xl font-semibold">{uiT("ui.2fdba7aa01af420b")}</DialogTitle>
             </div>
             <Button variant="link" size="sm" className="mr-8" onClick={onCustomServer}>
-              + Custom Server
+              {uiT("ui.60a50412b6419f70")}
             </Button>
           </div>
         </DialogHeader>
@@ -128,7 +138,7 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
                   variant={isSelected ? "default" : "outline"}
                   onClick={() => setSelectedCategory(cat)}
                 >
-                  {cat}
+                  {translateText(cat)}
                 </Button>
               );
             })}
@@ -140,7 +150,7 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
               <Search className="size-4 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Search servers..."
+              placeholder={uiT("ui.10ae62d666e9133d")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -157,16 +167,18 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
 
           {error && (
             <div className="py-8 text-center text-muted-foreground">
-              <p className="text-sm">Failed to load servers: {error}</p>
+              <p className="text-sm">
+                {uiT("ui.25e53c4b5f3082bd")} {error}
+              </p>
             </div>
           )}
 
           {!loading && !error && filteredServers.length === 0 && (
             <div className="py-8 text-center text-muted-foreground">
               <p className="text-sm">
-                No servers found.{" "}
+                {uiT("ui.a8b3ef62feba073f")}{" "}
                 <Button variant="link" size="sm" onClick={onCustomServer}>
-                  Add a custom server
+                  {uiT("ui.dbdf06f9d01c6829")}
                 </Button>
               </p>
             </div>

@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Bot, FlaskConical, Link as LinkIcon, MessageSquare, Plus, Save, Trash2 } from "lucide-react";
@@ -86,6 +88,8 @@ function ConnectTabContent({
   createdKeyValue,
   onCreateKey,
 }: ConnectTabContentProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const baseUrl = proxyBaseUrl ?? getConnectTabBaseUrl(proxySettings, customProxyBaseUrl);
   const apiKeyForCurl = createdKeyValue
     ? createdKeyValue.startsWith("Bearer ")
@@ -110,32 +114,25 @@ function ConnectTabContent({
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-1">Proxy base URL</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-1">{uiT("ui.2158125b40e08895")}</h3>
         <p className="text-sm text-muted-foreground font-mono bg-muted px-2 py-1.5 rounded-sm border border-border break-all">
           {baseUrl}
         </p>
       </div>
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-2">Call your agent (cURL)</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-2">{uiT("ui.9ff1435371a1c1de")}</h3>
         <CodeBlock code={curlExample} language="bash" />
       </div>
       <div className="rounded-lg border border-border bg-muted p-4">
-        <h3 className="text-sm font-semibold text-foreground mb-2">Create a key for this agent</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-2">{uiT("ui.f16f18d71e59c993")}</h3>
         <p className="text-sm text-muted-foreground mb-3">
-          Create a virtual key that can only call this agent. The key will be scoped to you (user_id) and restricted to
-          the model <span className="font-mono text-foreground">{agentName}</span>.
+          {uiT("ui.e68dc5c13d583ef0")} <span className="font-mono text-foreground">{agentName}</span>.
         </p>
         <Button onClick={onCreateKey} disabled={creatingKey || disabledPersonalKeyCreation}>
-          Create key for this agent
+          {uiT("ui.7aafe69b2efa3ae2")}
         </Button>
-        {disabledPersonalKeyCreation && (
-          <p className="text-xs text-warning mt-2">Key creation is disabled for your account.</p>
-        )}
-        {createdKeyValue && (
-          <p className="text-xs text-success mt-2">
-            Key created. It is shown in the cURL example above — copy the snippet to use it.
-          </p>
-        )}
+        {disabledPersonalKeyCreation && <p className="text-xs text-warning mt-2">{uiT("ui.5cf010b0475f9e44")}</p>}
+        {createdKeyValue && <p className="text-xs text-success mt-2">{uiT("ui.1ce4a3780288110d")}</p>}
       </div>
     </div>
   );
@@ -391,7 +388,7 @@ export default function AgentBuilderView({
         },
         selectedAgentModelId,
       );
-      toast.success("Agent updated successfully");
+      toast.success(translateUi("ui.91e42f32d66b0a2e"));
       const list = await loadAgents();
       const stillSelected = list.find((a) => getAgentModelId(a) === selectedAgentModelId);
       const target = stillSelected ?? list[0];
@@ -415,7 +412,7 @@ export default function AgentBuilderView({
       const keyValue = response?.key ?? null;
       if (keyValue) {
         setCreatedKeyValue(keyValue);
-        toast.success("Virtual key created. Use it in the curl example below.");
+        toast.success(translateUi("ui.ccadb83afded3285"));
       } else {
         toast.fromError("Key created but value not returned");
       }
@@ -436,7 +433,7 @@ export default function AgentBuilderView({
     setDeleting(true);
     try {
       await modelDeleteCall(accessToken, selectedAgentModelId);
-      toast.success("Agent deleted");
+      toast.success(translateUi("ui.ac4b2793b2e9550a"));
       const list = await loadAgents();
       const remaining = list.filter((a) => getAgentModelId(a) !== selectedAgentModelId);
       setSelectedId(remaining.length > 0 ? getAgentSelectionKey(remaining[0]) : null);
@@ -451,7 +448,7 @@ export default function AgentBuilderView({
   if (!accessToken || !userID || !userRole) {
     return (
       <div className="flex h-full items-center justify-center p-8 text-muted-foreground">
-        Sign in to use Agent Builder.
+        {uiT("ui.3b82a1687cce33e7")}
       </div>
     );
   }
@@ -460,21 +457,20 @@ export default function AgentBuilderView({
     <div className="flex h-full flex-col bg-card text-foreground">
       <div className="flex shrink-0 flex-col border-b border-border">
         <div className="flex h-12 items-center justify-between px-4">
-          <span className="text-sm font-medium text-foreground">Agent Builder</span>
+          <span className="text-sm font-medium text-foreground">{uiT("ui.39bbef74e648e6e6")}</span>
           {isNewAgent ? (
             <Button onClick={handleSaveAgent} disabled={saving || !draftName?.trim() || !draftUnderlyingModel}>
               <Save />
-              Save Agent
+              {uiT("ui.f1c8b3bd4ea9a2b5")}
             </Button>
           ) : (
-            <span className="text-xs text-muted-foreground">Build Agents that pass your compliance requirements.</span>
+            <span className="text-xs text-muted-foreground">{uiT("ui.b276bf9370eac526")}</span>
           )}
         </div>
         <div className="flex items-center gap-2 border-t border-warning/20 bg-warning/10 px-4 py-2 text-xs text-warning">
           <FlaskConical className="size-4 shrink-0 text-warning" />
           <span>
-            Agent Builder is experimental and may change or be removed without notice. We’d love your feedback—email us
-            at{" "}
+            {uiT("ui.cdc5a239d80854e6")}{" "}
             <a href="mailto:product@berri.ai" className="font-medium text-warning underline hover:text-warning/80">
               product@berri.ai
             </a>
@@ -490,7 +486,7 @@ export default function AgentBuilderView({
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {uiT("ui.279b44d2ab4b")}
             </span>
-            <Button variant="ghost" size="icon-sm" onClick={handleAddAgent} aria-label="Add agent">
+            <Button variant="ghost" size="icon-sm" onClick={handleAddAgent} aria-label={uiT("ui.d3e039d4537a6bdb")}>
               <Plus />
             </Button>
           </div>
@@ -522,7 +518,7 @@ export default function AgentBuilderView({
                   onClick={handleAddAgent}
                   className="mb-1 w-full rounded-md border border-dashed border-border px-3 py-2 text-left text-sm text-muted-foreground hover:border-info hover:bg-info/10 hover:text-foreground"
                 >
-                  <Plus className="mr-1 inline size-4" /> New agent
+                  <Plus className="mr-1 inline size-4" /> {uiT("ui.98a23e6db3431d16")}
                 </button>
               </>
             )}
@@ -533,7 +529,7 @@ export default function AgentBuilderView({
         <div className="flex flex-1 flex-col overflow-hidden">
           {selectedId === null && !isNewAgent && agentModels.length === 0 && !loadingAgents && (
             <div className="flex flex-1 items-center justify-center p-8 text-muted-foreground">
-              No agents yet. Add an agent to get started.
+              {uiT("ui.814db427245f23c8")}
             </div>
           )}
           {(selectedId !== null || isNewAgent) && (
@@ -546,19 +542,19 @@ export default function AgentBuilderView({
                 <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0 pl-4">
                   <TabsTrigger value="configure" className="flex-none rounded-none px-4 py-2">
                     <Bot />
-                    Configure
+                    {uiT("ui.6defafa2caa65304")}
                   </TabsTrigger>
                   <TabsTrigger value="chat" disabled={isNewAgent} className="flex-none rounded-none px-4 py-2">
                     <MessageSquare />
-                    Chat
+                    {uiT("ui.460b3a7da007b7af")}
                   </TabsTrigger>
                   <TabsTrigger value="test" disabled={isNewAgent} className="flex-none rounded-none px-4 py-2">
                     <FlaskConical />
-                    Batch Test
+                    {uiT("ui.89ec951feb5f7bbe")}
                   </TabsTrigger>
                   <TabsTrigger value="connect" disabled={isNewAgent} className="flex-none rounded-none px-4 py-2">
                     <LinkIcon />
-                    Connect
+                    {uiT("ui.1a2303ede07493ac")}
                   </TabsTrigger>
                 </TabsList>
 
@@ -572,36 +568,41 @@ export default function AgentBuilderView({
                       <div className="mx-auto max-w-xl space-y-4">
                         {!selectedAgentModelId && selectedAgent && (
                           <div className="rounded-sm border border-warning/20 bg-warning/10 px-3 py-2 text-xs text-warning">
-                            This agent cannot be updated or deleted here (missing model id). Manage it from Models &amp;
-                            Endpoints.
+                            {uiT("ui.d547840d67cfc4bb")}
                           </div>
                         )}
                         <div>
-                          <label className="mb-1 block text-sm font-medium text-foreground">Agent name</label>
+                          <label className="mb-1 block text-sm font-medium text-foreground">
+                            {uiT("ui.1cfb21871a035769")}
+                          </label>
                           <Input
                             value={draftName}
                             onChange={(e) => setDraftName(e.target.value)}
-                            placeholder="My Agent"
+                            placeholder={uiT("ui.72a5fc0f95213827")}
                           />
                         </div>
                         <div>
-                          <label className="mb-1 block text-sm font-medium text-foreground">System prompt</label>
+                          <label className="mb-1 block text-sm font-medium text-foreground">
+                            {uiT("ui.561257c019e5e351")}
+                          </label>
                           <Textarea
                             value={draftSystemPrompt}
                             onChange={(e) => setDraftSystemPrompt(e.target.value)}
-                            placeholder="You are a helpful assistant..."
+                            placeholder={uiT("ui.d7a64bda05402bd0")}
                             rows={6}
                             className="field-sizing-fixed"
                           />
                         </div>
                         <div>
-                          <label className="mb-1 block text-sm font-medium text-foreground">Underlying LLM</label>
+                          <label className="mb-1 block text-sm font-medium text-foreground">
+                            {uiT("ui.21542b2dfd4bdac0")}
+                          </label>
                           <Select
                             value={draftUnderlyingModel ?? null}
                             onValueChange={(model: string | null) => setDraftUnderlyingModel(model ?? undefined)}
                           >
-                            <SelectTrigger className="w-full" aria-label="Underlying LLM">
-                              <SelectValue placeholder="Select model" />
+                            <SelectTrigger className="w-full" aria-label={uiT("ui.21542b2dfd4bdac0")}>
+                              <SelectValue placeholder={uiT("ui.1d446005add35afa")} />
                             </SelectTrigger>
                             <SelectContent>
                               {modelGroups.map((m) => (
@@ -627,7 +628,9 @@ export default function AgentBuilderView({
                             />
                           </div>
                           <div>
-                            <label className="mb-1 block text-sm font-medium text-foreground">Max tokens</label>
+                            <label className="mb-1 block text-sm font-medium text-foreground">
+                              {uiT("ui.409e75c09fccad5d")}
+                            </label>
                             <Input
                               type="number"
                               min={1}
@@ -637,9 +640,11 @@ export default function AgentBuilderView({
                           </div>
                         </div>
                         <div>
-                          <label className="mb-1 block text-sm font-medium text-foreground">MCP servers</label>
+                          <label className="mb-1 block text-sm font-medium text-foreground">
+                            {uiT("ui.22a7559f09bf8f82")}
+                          </label>
                           <MultiSelect
-                            placeholder="Select MCP servers to attach (same format as chat completions API)"
+                            placeholder={uiT("ui.4efc638574b108dd")}
                             value={selectedMCPServerIds}
                             onValueChange={handleMCPServerChange}
                             loading={loadingMCPServers}
@@ -651,9 +656,9 @@ export default function AgentBuilderView({
                           />
                           {selectedAgent && draftTools.length > 0 && (
                             <p className="mt-1 text-xs text-muted-foreground">
-                              {draftTools.length} MCP server{draftTools.length !== 1 ? "s" : ""} saved. Use the same{" "}
-                              <code className="rounded-sm bg-muted px-1">tools</code> array in chat completions when
-                              calling this agent.
+                              {draftTools.length} {uiT("ui.d938c8168e3acbba")}
+                              {draftTools.length !== 1 ? "s" : ""} {uiT("ui.22805c21ecb28f0b")}{" "}
+                              <code className="rounded-sm bg-muted px-1">tools</code> {uiT("ui.24512960284d157d")}
                             </p>
                           )}
                         </div>
@@ -666,7 +671,7 @@ export default function AgentBuilderView({
                                   disabled={saving || !draftName?.trim() || !draftUnderlyingModel}
                                 >
                                   <Save />
-                                  Update Agent
+                                  {uiT("ui.e31cad8ec925cecb")}
                                 </Button>
                                 <Button variant="destructive" onClick={handleDeleteAgent} disabled={deleting}>
                                   <Trash2 />
@@ -676,7 +681,7 @@ export default function AgentBuilderView({
                             )}
                             <Button onClick={() => goToTab("chat")}>
                               <MessageSquare />
-                              Test in Chat
+                              {uiT("ui.9c187b70cb57d772")}
                             </Button>
                           </div>
                         )}
@@ -700,7 +705,7 @@ export default function AgentBuilderView({
                       />
                     ) : (
                       <div className="flex flex-1 items-center justify-center text-muted-foreground">
-                        Save an agent first to test in Chat.
+                        {uiT("ui.2e449ccfaeb26a83")}
                       </div>
                     )}
                   </div>
@@ -717,7 +722,7 @@ export default function AgentBuilderView({
                       />
                     ) : (
                       <div className="flex flex-1 items-center justify-center text-muted-foreground">
-                        Select an agent to run batch tests.
+                        {uiT("ui.0db683812e909420")}
                       </div>
                     )}
                   </div>
@@ -738,7 +743,7 @@ export default function AgentBuilderView({
                       />
                     ) : (
                       <div className="flex flex-1 items-center justify-center text-muted-foreground">
-                        Select an agent to see how to connect.
+                        {uiT("ui.505198df2ab24011")}
                       </div>
                     )}
                   </div>
@@ -752,9 +757,11 @@ export default function AgentBuilderView({
       <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete agent</AlertDialogTitle>
+            <AlertDialogTitle>{uiT("ui.602cc4da981d5dad")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{selectedAgent?.model_name}&quot;? This cannot be undone.
+              {uiT("ui.1b09c571364fb75e")}
+              {selectedAgent?.model_name}
+              {uiT("ui.dcf95f6ec0b4c130")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

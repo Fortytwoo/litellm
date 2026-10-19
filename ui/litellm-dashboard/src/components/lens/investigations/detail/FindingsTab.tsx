@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { ReactNode } from "react";
 import { ChevronRight, CheckCircle2 } from "lucide-react";
@@ -41,6 +44,8 @@ export interface FindingsTabProps {
 }
 
 export function FindingsTab({ lens, job, findings, children }: FindingsTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { kind, setKind, status, setStatus } = useFindingFilters();
   const { findingId, setFindingId } = useFindingRoute();
   const active = activeJob(lens.jobs) !== undefined;
@@ -59,30 +64,30 @@ export function FindingsTab({ lens, job, findings, children }: FindingsTabProps)
     >
       <TabsContent value="findings" className="pt-4 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex gap-1" aria-label="Finding category">
+          <div className="flex gap-1" aria-label={uiT("ui.8fb9455f11342b49")}>
             <Button size="sm" variant={kind === "issue" ? "secondary" : "ghost"} onClick={() => setKind("issue")}>
-              Needs attention ({openCount("issue")})
+              {uiT("ui.41b551ee391c0be3")}
+              {openCount("issue")})
             </Button>
             <Button size="sm" variant={kind === "pattern" ? "secondary" : "ghost"} onClick={() => setKind("pattern")}>
-              Patterns ({openCount("pattern")})
+              {uiT("ui.6bfaee1be8246e3f")}
+              {openCount("pattern")})
             </Button>
           </div>
           <select
-            aria-label="Finding status"
+            aria-label={uiT("ui.8305745743d971ee")}
             className="rounded-md border bg-background px-2 py-1 text-xs"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            <option value="open">Open</option>
-            <option value="resolved">Resolved</option>
-            <option value="dismissed">Dismissed</option>
-            <option value="all">All statuses</option>
+            <option value="open">{uiT("ui.ed077f3d8125")}</option>
+            <option value="resolved">{uiT("ui.5be3c2c8354e1eb9")}</option>
+            <option value="dismissed">{uiT("ui.9d74727714dba768")}</option>
+            <option value="all">{uiT("ui.8ee57323a6f24cc7")}</option>
           </select>
         </div>
         <p className="text-xs text-muted-foreground">
-          {kind === "issue"
-            ? "Problems worth investigating, highest priority first."
-            : "Useful behavior and trends. These do not necessarily need a fix."}
+          {kind === "issue" ? uiT("ui.4e11d2bc66cdf297") : uiT("ui.90587623e3beb9ad")}
         </p>
         <div className="divide-y border-y">
           {visible.map((f) => (
@@ -99,15 +104,18 @@ export function FindingsTab({ lens, job, findings, children }: FindingsTabProps)
               <span
                 data-state={f.priority ?? "medium"}
                 className={cn("mt-1 size-2 shrink-0 rounded-full", priorityColors[f.priority ?? "medium"])}
-                aria-label={`${f.priority} priority`}
+                aria-label={uiT("ui.a72b7b9ba2d95d08", { v0: String(f.priority) })}
               />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium">{f.title}</p>
                 <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{f.description}</p>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  {f.occurrences?.length ?? 0} affected {f.occurrences?.length === 1 ? "trace" : "traces"} ·{" "}
+                  {f.occurrences?.length ?? 0} {uiT("ui.19b6357dad532cc2")}{" "}
+                  {f.occurrences?.length === 1 ? uiT("ui.eafe895eb8119e6e") : uiT("ui.b5ac69fc467c01f3")} ·{" "}
                   {(f.investigation_runs?.length ?? 0) > 1 && `${f.investigation_runs.length} investigation runs · `}
-                  {f.kind === "issue" ? `${f.priority} priority` : "Pattern"}
+                  {f.kind === "issue"
+                    ? uiT("ui.a72b7b9ba2d95d08", { v0: String(f.priority) })
+                    : uiT("ui.4288ade73ff9d328")}
                 </p>
               </div>
               <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
@@ -116,8 +124,12 @@ export function FindingsTab({ lens, job, findings, children }: FindingsTabProps)
           {visible.length === 0 && (
             <div className="px-6 py-14 text-center">
               <CheckCircle2 className="mx-auto mb-3 size-5 text-muted-foreground" />
-              <p className="text-sm font-medium">{emptyFindingTitle(active, !!lens.last_scan_at, job?.status)}</p>
-              <p className="mt-2 text-xs text-muted-foreground">{emptyFindingDescription(active, job)}</p>
+              <p className="text-sm font-medium">
+                {translateText(emptyFindingTitle(active, !!lens.last_scan_at, job?.status))}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {translateText(emptyFindingDescription(active, job))}
+              </p>
             </div>
           )}
         </div>

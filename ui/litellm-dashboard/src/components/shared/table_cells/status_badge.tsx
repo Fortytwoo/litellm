@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translateText } from "@/i18n";
 
 import { useEntityLinkClick } from "@/components/shared/EntityLink";
 import { Badge } from "@/components/ui/badge";
@@ -28,21 +30,25 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ tone, label, tooltip, dataTestId, className, href }: StatusBadgeProps) {
+  const { locale } = useLanguage();
+  const displayLabel = translateText(label, locale);
   const badgeClassName = cn("whitespace-nowrap font-normal", TONE_CLASS[tone], className);
   const badge = href ? (
     <LinkedStatusBadge href={href} dataTestId={dataTestId} className={badgeClassName}>
-      {label}
+      {displayLabel}
     </LinkedStatusBadge>
   ) : (
     <Badge variant="outline" data-testid={dataTestId} className={badgeClassName}>
-      {label}
+      {displayLabel}
     </Badge>
   );
 
   if (!tooltip) {
     return badge;
   }
-  return <CellTooltip content={tooltip} trigger={badge} />;
+  return (
+    <CellTooltip content={typeof tooltip === "string" ? translateText(tooltip, locale) : tooltip} trigger={badge} />
+  );
 }
 
 interface LinkedStatusBadgeProps {

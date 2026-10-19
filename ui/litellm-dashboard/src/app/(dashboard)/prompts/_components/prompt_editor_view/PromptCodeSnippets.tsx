@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React, { useState } from "react";
 import { CodeIcon, CopyIcon } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -10,9 +13,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const LANGUAGE_ITEMS = [
-  { value: "curl", label: "cURL" },
-  { value: "python", label: "Python (OpenAI SDK)" },
-  { value: "javascript", label: "JavaScript (OpenAI SDK)" },
+  {
+    value: "curl",
+    get label() {
+      return translateUi("ui.addc90cfd45b0f45");
+    },
+  },
+  {
+    value: "python",
+    get label() {
+      return translateUi("ui.87d0227ecd5dabf7");
+    },
+  },
+  {
+    value: "javascript",
+    get label() {
+      return translateUi("ui.3175f6ca5e81de96");
+    },
+  },
 ] as const;
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -38,6 +56,8 @@ const PromptCodeSnippets: React.FC<PromptCodeSnippetsProps> = ({
   environment,
   proxySettings,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const syntaxTheme = useSyntaxTheme(coy);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<"curl" | "python" | "javascript">("curl");
@@ -252,18 +272,18 @@ main();`;
     <>
       <Button variant="outline" onClick={showModal}>
         <CodeIcon />
-        Get Code
+        {uiT("ui.0e5a9bae4baaa90b")}
       </Button>
 
       <Dialog open={isModalVisible} onOpenChange={(open) => !open && handleCancel()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Generated Code</DialogTitle>
+            <DialogTitle>{uiT("ui.2b30133421f8727b")}</DialogTitle>
           </DialogHeader>
           <div className="flex justify-between items-center mb-4">
             <div>
               <label htmlFor="prompt-code-language" className="font-medium block mb-1 text-foreground">
-                Language
+                {uiT("ui.a4fe65264ef7dbb3")}
               </label>
               <Select
                 items={LANGUAGE_ITEMS}
@@ -286,19 +306,19 @@ main();`;
               variant="outline"
               onClick={() => {
                 navigator.clipboard.writeText(generatedCode);
-                toast.success("Copied to clipboard!");
+                toast.success(translateUi("ui.916fa4a51e4d90e0"));
               }}
             >
               <CopyIcon />
-              Copy to Clipboard
+              {uiT("ui.fa8f2b6c07fb514c")}
             </Button>
           </div>
 
           <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(String(value))}>
-            <TabsList aria-label="Generated code type">
-              <TabsTrigger value="basic">Basic</TabsTrigger>
-              <TabsTrigger value="messages">With Messages</TabsTrigger>
-              <TabsTrigger value="version">With Version</TabsTrigger>
+            <TabsList aria-label={uiT("ui.7bd28d987680e719")}>
+              <TabsTrigger value="basic">{uiT("ui.0e35f6e9742e074d")}</TabsTrigger>
+              <TabsTrigger value="messages">{uiT("ui.8be4102ef3ba45fc")}</TabsTrigger>
+              <TabsTrigger value="version">{uiT("ui.2d0326c1283ef519")}</TabsTrigger>
             </TabsList>
           </Tabs>
 

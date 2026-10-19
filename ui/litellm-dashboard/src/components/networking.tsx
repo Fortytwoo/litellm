@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 // Shared date formatter for daily activity endpoints
 export const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -413,7 +414,7 @@ export const handleError = async (errorData: string | any) => {
     // Convert errorData to string if it isn't already
     const errorString = typeof errorData === "string" ? errorData : JSON.stringify(errorData);
     if (errorString.includes("Authentication Error - Expired Key")) {
-      toast.info("UI Session Expired. Logging out.");
+      toast.info(translateUi("ui.5f4a4218ffdd3cd1"));
       lastErrorTime = currentTime;
       clearTokenCookies();
       const browserLocation = getWindowLocation();
@@ -695,7 +696,7 @@ export const modelCreateCall = async (accessToken: string, formValues: Model) =>
     toast.dismiss();
 
     // Sequential success messages
-    toast.success(`Model ${formValues.model_name} created successfully`);
+    toast.success(translateUi("ui.499b564cb915d861", undefined, { v0: String(formValues.model_name) }));
 
     return data;
   } catch (error) {
@@ -2220,7 +2221,12 @@ export const testConnectionRequest = async (
       } else {
         return {
           status: "error",
-          message: data.error?.message || `Connection test failed: ${response.status} ${response.statusText}`,
+          message:
+            data.error?.message ||
+            translateUi("ui.4c6fe6f29499b43f", undefined, {
+              v0: String(response.status),
+              v1: String(response.statusText),
+            }),
         };
       }
     }
@@ -3328,7 +3334,7 @@ export const updateConfigFieldSetting = async (accessToken: string, fieldName: s
       config_type: "general_settings",
     };
     const data = await apiClient.post(`/config/field/update`, { accessToken, body: formData });
-    toast.success("Successfully updated value!");
+    toast.success(translateUi("ui.982293eae28341c4"));
     return data;
     // Handle success - you might want to update some state or UI based on the created key
   } catch (error) {
@@ -3344,7 +3350,7 @@ export const deleteConfigFieldSetting = async (accessToken: string, fieldName: s
       config_type: "general_settings",
     };
     const data = await apiClient.post(`/config/field/delete`, { accessToken, body: formData });
-    toast.success("Field reset on proxy");
+    toast.success(translateUi("ui.5e55d4f25720641c"));
     return data;
     // Handle success - you might want to update some state or UI based on the created key
   } catch (error) {
@@ -5076,7 +5082,7 @@ export const listMCPTools = async (
     return {
       tools: [],
       error: "network_error",
-      message: error instanceof Error ? error.message : "Failed to fetch MCP tools",
+      message: error instanceof Error ? error.message : translateUi("ui.7eb72cc338c8406d"),
       stack_trace: null,
     };
   }
@@ -5089,7 +5095,9 @@ export const listMCPTools = async (
     return {
       tools: [],
       error: "parse_error",
-      message: "Failed to parse MCP tools response",
+      get message() {
+        return translateUi("ui.2a3ae9bd82ac047c");
+      },
       status: response.status,
       statusText: response.statusText,
       stack_trace: null,
@@ -5105,7 +5113,7 @@ export const listMCPTools = async (
     const errorMessage = (data && (data.message || data.error)) || "Failed to fetch MCP tools";
     return {
       tools: [],
-      error: (data && data.error) || `http_${response.status}`,
+      error: (data && data.error) || translateUi("ui.2700632e3e757166", undefined, { v0: String(response.status) }),
       message: errorMessage,
       status: response.status,
       statusText: response.statusText,
@@ -6464,7 +6472,7 @@ export const updatePassThroughEndpoint = async (
     }
 
     const data = await response.json();
-    toast.success("Pass through endpoint updated successfully");
+    toast.success(translateUi("ui.32050dc23144a8a9"));
     return data;
   } catch (error) {
     console.error("Failed to update pass through endpoint:", error);
@@ -6550,7 +6558,12 @@ export const testMCPToolsListRequest = async (
         tools: [],
         error: "request_failed",
         status: response.status,
-        message: data.message || `MCP tools list failed: ${response.status} ${response.statusText}`,
+        message:
+          data.message ||
+          translateUi("ui.7ebd09f6f7376bd1", undefined, {
+            v0: String(response.status),
+            v1: String(response.statusText),
+          }),
       };
     }
 

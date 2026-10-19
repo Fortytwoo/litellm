@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 import { TriangleAlert } from "lucide-react";
@@ -10,6 +11,8 @@ interface DebugWarningBannerProps {
 }
 
 export const DebugWarningBanner: React.FC<DebugWarningBannerProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: healthData } = useHealthReadinessDetails(accessToken);
 
   // Only show banner if detailed debug mode is explicitly enabled
@@ -20,11 +23,11 @@ export const DebugWarningBanner: React.FC<DebugWarningBannerProps> = ({ accessTo
   return (
     <Alert variant="warning" className="rounded-none border-x-0 border-t-0">
       <TriangleAlert className="size-4" aria-hidden />
-      <AlertTitle>Performance Warning: Detailed Debug Mode Active</AlertTitle>
+      <AlertTitle>{uiT("ui.f1d19b10ce563ee6")}</AlertTitle>
       <AlertDescription>
-        Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive
-        diagnostic information and will significantly degrade performance. It should only be used for troubleshooting
-        and disabled in production environments.
+        {uiT("ui.90149bdbaae54dd0")}
+        <code>LITELLM_LOG=DEBUG</code>
+        {uiT("ui.15efaa483c99f6c8")}
       </AlertDescription>
     </Alert>
   );

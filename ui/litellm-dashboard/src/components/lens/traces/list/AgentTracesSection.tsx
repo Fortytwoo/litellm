@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import moment from "moment";
 import { skipToken, useQuery } from "@tanstack/react-query";
@@ -77,12 +78,16 @@ function useTracingSetup(traces: AgentTracesResult, isActive: boolean, rangeChan
 }
 
 function TraceHistoryError({ history }: { history: ReturnType<typeof useTraceAvailability> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!history.error) return null;
   return (
     <div role="alert" className="flex items-center justify-between gap-4 border-b px-3 py-3 text-sm">
-      <p>Could not check earlier traces. {history.error.message}</p>
+      <p>
+        {uiT("ui.403079c9529c3ac9")} {history.error.message}
+      </p>
       <Button variant="outline" size="sm" disabled={history.isFetching} onClick={() => void history.refetch()}>
-        Retry trace check
+        {uiT("ui.f727d98e5ef6ed12")}
       </Button>
     </div>
   );
@@ -99,6 +104,8 @@ export function AgentTracesSection({
   canViewFindings,
   onSetUpSignals,
 }: AgentTracesSectionProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const live = useTracesLive();
   const { trace: openTrace, openTrace: openRun, selection, fullScreen, setFullScreen } = useOpenTraceRouting();
   const { query, setQuery, agent, status } = useRunFilterRouting();
@@ -165,7 +172,7 @@ export function AgentTracesSection({
           onClick={() => setShowSetup(false)}
           className="mb-3 text-sm text-muted-foreground hover:text-foreground"
         >
-          ← Back to traces
+          {uiT("ui.0dc8fa2142079824")}
         </button>
         <TracingSetupCard detail={null} connected {...setupProps} />
       </div>
@@ -186,7 +193,7 @@ export function AgentTracesSection({
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card">
         {checkHistory && <TraceHistoryError history={history} />}
         <TracesReceived received={setup.received} />
-        <Inspector.Panel label="Trace details" testId="run-drawer">
+        <Inspector.Panel label={uiT("ui.b3dbdc36217770b6")} testId="run-drawer">
           {(shown: TraceRef) => (
             <RunView
               traceId={shown.traceId}
@@ -211,8 +218,8 @@ export function AgentTracesSection({
             variant="ghost"
             size="icon-sm"
             className="h-full w-10 shrink-0 rounded-none border-l"
-            aria-label="Refresh traces"
-            title="Refresh traces"
+            aria-label={uiT("ui.94fe27419af0857e")}
+            title={uiT("ui.94fe27419af0857e")}
             disabled={traces.isFetching}
             onClick={checkTraces}
           >
@@ -256,34 +263,43 @@ export function AgentTracesSection({
 }
 
 function TracesReceived({ received }: { received: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!received) return null;
   return (
     <p role="status" className="border-b px-3 py-3 text-sm text-emerald-700 dark:text-emerald-400">
-      Traces received. Select a run to inspect it.
+      {uiT("ui.708f5f94d6634d08")}
     </p>
   );
 }
 
 function TraceCounts({ runs }: { runs: readonly TraceSummary[] }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 px-3 pt-2 text-xs text-muted-foreground">
       <span>
-        {runs.length} {runs.length === 1 ? "run" : "runs"} from {new Set(runs.flatMap(traceAgentNames)).size} agents
+        {runs.length} {runs.length === 1 ? uiT("ui.acba25512100f80b") : uiT("ui.1f64fff08d787e73")}{" "}
+        {uiT("ui.75857a45899985be")} {new Set(runs.flatMap(traceAgentNames)).size} {uiT("ui.8c70b25cbbbe8e79")}
       </span>
     </div>
   );
 }
 
 function TraceFooter({ runs, hasMore }: { runs: readonly TraceSummary[]; hasMore: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-      {runs.length} {runs.length === 1 ? "run" : "runs"}
-      {hasMore ? " loaded" : ""}
+      {runs.length} {runs.length === 1 ? uiT("ui.acba25512100f80b") : uiT("ui.1f64fff08d787e73")}
+      {hasMore ? uiT("ui.7e3f38261c55aaae") : ""}
     </footer>
   );
 }
 
 function TracingSetupAction({ available, live, onSetup }: { available: boolean; live: boolean; onSetup: () => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!available) return null;
   return (
     <Button
@@ -293,7 +309,7 @@ function TracingSetupAction({ available, live, onSetup }: { available: boolean; 
       disabled={!live}
       onClick={onSetup}
     >
-      Set up tracing
+      {uiT("ui.bc1fead76b999a20")}
     </Button>
   );
 }

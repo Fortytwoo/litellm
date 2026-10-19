@@ -31,7 +31,7 @@ function RoutingGroupRowActions({ group, onEdit, onDelete }: RoutingGroupRowActi
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open actions for ${group.group_name}`}
+        aria-label={uiT("ui.45ad2792453510ba", { v0: String(group.group_name) })}
         data-testid={`routing-group-actions-${group.group_name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -69,8 +69,13 @@ export const getRoutingGroupsTableColumns = ({
   {
     id: "group_name",
     accessorKey: "group_name",
-    meta: { title: "Group Name", skeleton: "text" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Group Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.8e7526fdcc5cc34f");
+      },
+      skeleton: "text",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.8e7526fdcc5cc34f")} />,
     size: 240,
     enableSorting: true,
     cell: ({ row }) => (
@@ -95,8 +100,13 @@ export const getRoutingGroupsTableColumns = ({
   {
     id: "routing_strategy",
     accessorKey: "routing_strategy",
-    meta: { title: "Strategy", skeleton: "text" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Strategy" />,
+    meta: {
+      get title() {
+        return translateUi("ui.6b27710dfaafdcec");
+      },
+      skeleton: "text",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.6b27710dfaafdcec")} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => (

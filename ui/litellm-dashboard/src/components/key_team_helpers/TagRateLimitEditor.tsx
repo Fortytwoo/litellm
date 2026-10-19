@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,6 +58,8 @@ interface TagRateLimitEditorProps {
 }
 
 export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const addRow = () => {
     onChange([...value, { id: newRowId(), tag: "", rpm_limit: null }]);
   };
@@ -73,14 +77,14 @@ export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps)
       {value.map((row, idx) => (
         <div key={row.id} style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
           <Input
-            aria-label="Tag"
+            aria-label={uiT("ui.1503916a2ab2b0fd")}
             value={row.tag}
             onChange={(e) => updateRow(idx, "tag", e.target.value)}
-            placeholder="Tag (e.g. cell-1)"
+            placeholder={uiT("ui.ffc0902e051d2cb6")}
             style={{ width: 180 }}
           />
           <Input
-            aria-label="RPM limit"
+            aria-label={uiT("ui.66ed38c61404cd73")}
             type="number"
             min={0}
             value={row.rpm_limit ?? ""}
@@ -88,7 +92,12 @@ export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps)
             placeholder="RPM"
             style={{ width: 120 }}
           />
-          <Button variant="destructive" size="sm" aria-label="Remove tag limit" onClick={() => removeRow(idx)}>
+          <Button
+            variant="destructive"
+            size="sm"
+            aria-label={uiT("ui.cec04ed154310998")}
+            onClick={() => removeRow(idx)}
+          >
             ✕
           </Button>
         </div>
@@ -101,7 +110,7 @@ export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps)
           addRow();
         }}
       >
-        + Add Tag Limit
+        {uiT("ui.22d1368c86c95085")}
       </Button>
     </div>
   );

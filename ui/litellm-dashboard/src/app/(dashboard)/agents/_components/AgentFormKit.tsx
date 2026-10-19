@@ -1,4 +1,8 @@
 "use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import * as React from "react";
 import { ChevronRight, CircleHelp } from "lucide-react";
@@ -106,10 +110,12 @@ export type AgentFieldName = FieldPath<AgentFormValues>;
 
 export const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
   <>
-    {label}
+    <LocalizedText>{label}</LocalizedText>
     <Tooltip>
       <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
-      <TooltipContent>{hint}</TooltipContent>
+      <TooltipContent>
+        <LocalizedText>{hint}</LocalizedText>
+      </TooltipContent>
     </Tooltip>
   </>
 );
@@ -164,14 +170,22 @@ export const AgentFormField = ({
 
     return (
       <Field data-invalid={invalid || undefined} className={className}>
-        {label !== undefined && <FieldLabel htmlFor={controlId}>{label}</FieldLabel>}
+        {label !== undefined && (
+          <FieldLabel htmlFor={controlId}>
+            <LocalizedText>{label}</LocalizedText>
+          </FieldLabel>
+        )}
         {children({
           ...field,
           id: controlId,
           "aria-invalid": invalid || undefined,
           "aria-describedby": describedBy,
         })}
-        {description !== undefined && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
+        {description !== undefined && (
+          <FieldDescription id={descriptionId}>
+            <LocalizedText>{description}</LocalizedText>
+          </FieldDescription>
+        )}
         <FieldError id={errorId} errors={[fieldState.error]} />
       </Field>
     );
@@ -282,9 +296,11 @@ export const AgentTagsInput = ({
   value,
   onValueChange,
   placeholder,
-  emptyText = "No matching options",
+  emptyText = translateUi("ui.39a118fc69d4f129"),
   ...props
 }: AgentTagsInputProps) => {
+  useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [query, setQuery] = React.useState("");
   const pendingRef = React.useRef("");
@@ -396,9 +412,11 @@ export const AgentMultiSelect = ({
   value,
   onValueChange,
   placeholder,
-  emptyText = "No matching options",
+  emptyText = translateUi("ui.39a118fc69d4f129"),
   ...props
 }: AgentMultiSelectProps) => {
+  useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const items = [...options];
   const selected = value.map((item) => items.find((option) => option.value === item) ?? { label: item, value: item });

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
@@ -46,6 +48,8 @@ interface BudgetWindowsEditorProps {
 }
 
 export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const addWindow = () => {
     onChange([...value, { budget_duration: "24h", max_budget: null }]);
   };
@@ -101,7 +105,7 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
                       updateWindow(idx, "max_budget", Number(typed.toFixed(2)));
                     }
                   }}
-                  placeholder="Max spend ($)"
+                  placeholder={uiT("ui.2f181638c14378b3")}
                 />
               </InputGroup>
               <Button
@@ -125,7 +129,7 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
           addWindow();
         }}
       >
-        + Add Budget Window
+        {uiT("ui.a8847d1bb2e0774f")}
       </Button>
     </div>
   );

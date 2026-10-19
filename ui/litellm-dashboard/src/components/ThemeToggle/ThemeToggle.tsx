@@ -5,11 +5,13 @@ import { useTheme } from "next-themes";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ThemeToggle: React.FC = () => {
+  const { t } = useLanguage();
   const { setTheme, resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
-  const label = isDark ? "Switch to light mode" : "Switch to dark mode (beta)";
+  const label = isDark ? t("ui.bfa0cab91d75f7a4") : t("ui.71573d901236d1c1");
 
   return (
     <Button

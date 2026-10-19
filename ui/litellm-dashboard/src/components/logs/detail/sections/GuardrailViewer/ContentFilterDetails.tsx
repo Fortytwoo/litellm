@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 
@@ -153,7 +154,7 @@ const ContentFilterDetails: React.FC<ContentFilterDetailsProps> = ({ response })
               <div key={idx} className="p-3 bg-muted rounded-md">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <KV label={uiT("ui.506256322089")}>{detection.pattern_name || "unknown"}</KV>
+                    <KV label={uiT("ui.506256322089")}>{detection.pattern_name || uiT("ui.b23a6a8439c0")}</KV>
                   </div>
                   <div className="space-y-1">
                     <KV label={uiT("ui.7d9fda4ea853")}>
@@ -176,7 +177,7 @@ const ContentFilterDetails: React.FC<ContentFilterDetailsProps> = ({ response })
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <KV label={uiT("ui.cc0d4aae087f")} mono>
-                      {detection.keyword || "unknown"}
+                      {detection.keyword || uiT("ui.b23a6a8439c0")}
                     </KV>
                     {detection.description && <KV label={uiT("ui.0cf2814604b4")}>{detection.description}</KV>}
                   </div>
@@ -200,9 +201,9 @@ const ContentFilterDetails: React.FC<ContentFilterDetailsProps> = ({ response })
               <div key={idx} className="p-3 bg-muted rounded-md">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <KV label={uiT("ui.b330d6701b55")}>{detection.category || "unknown"}</KV>
+                    <KV label={uiT("ui.b330d6701b55")}>{detection.category || uiT("ui.b23a6a8439c0")}</KV>
                     <KV label={uiT("ui.cc0d4aae087f")} mono>
-                      {detection.keyword || "unknown"}
+                      {detection.keyword || uiT("ui.b23a6a8439c0")}
                     </KV>
                     {detection.severity && (
                       <KV label={uiT("ui.ce9bf63abbec")}>

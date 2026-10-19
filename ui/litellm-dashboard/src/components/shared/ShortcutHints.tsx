@@ -1,4 +1,7 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Fragment, type ReactNode } from "react";
 import { useHotkeysContext } from "react-hotkeys-hook";
@@ -17,7 +20,9 @@ const KEY_LABELS: Readonly<Record<string, string>> = {
   arrowdown: "↓",
   arrowleft: "←",
   arrowright: "→",
-  escape: "Esc",
+  get escape() {
+    return translateUi("ui.52f878edb34fa14f");
+  },
 };
 const ARROWS: readonly string[] = ["arrowup", "arrowdown", "arrowleft", "arrowright"];
 
@@ -69,12 +74,21 @@ function Kbd({ children }: { children: ReactNode }) {
 
 /** The shortcuts active right now, read from what is bound rather than typed by hand. */
 export function ShortcutHints({ className }: { className?: string }) {
+  const { t: uiT } = useDashboardLanguage();
+  const descriptionFor = (description: string): string => {
+    if (description === "close") return uiT("supplement.closeHint");
+    if (["log", "key", "user", "trace", "team", "agent"].includes(description)) {
+      return uiT("supplement." + description + "Noun");
+    }
+    return description;
+  };
+
   const { hotkeys } = useHotkeysContext();
   const hints = shortcutHints(hotkeys);
   if (hints.length === 0) return null;
   return (
     <div
-      aria-label="Keyboard shortcuts"
+      aria-label={uiT("ui.e9bef0b0f3c2")}
       data-slot="shortcut-hints"
       className={cn("flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground", className)}
     >
@@ -86,7 +100,7 @@ export function ShortcutHints({ className }: { className?: string }) {
               <Kbd>{keyLabel(key)}</Kbd>
             </Fragment>
           ))}{" "}
-          {hint.description}
+          {descriptionFor(hint.description)}
         </span>
       ))}
     </div>

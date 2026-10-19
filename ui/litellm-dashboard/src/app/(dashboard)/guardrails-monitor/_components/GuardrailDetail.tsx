@@ -111,9 +111,9 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
       <div>
         <Button variant="link" onClick={onBack} className="mb-4 pl-0">
           <ArrowLeft className="size-4" />
-          Back to Overview
+          {uiT("ui.9a306336cc311afe")}
         </Button>
-        <p className="text-destructive">Failed to load guardrail details.</p>
+        <p className="text-destructive">{uiT("ui.b24a4ac0bde5d2d5")}</p>
       </div>
     );
   }
@@ -136,7 +136,7 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
       <div className="mb-6">
         <Button variant="link" onClick={onBack} className="mb-4 pl-0">
           <ArrowLeft className="size-4" />
-          Back to Overview
+          {uiT("ui.9a306336cc311afe")}
         </Button>
 
         <div className="flex items-start justify-between">
@@ -157,7 +157,7 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
               variant="outline"
               size="icon"
               onClick={() => setEvaluationModalOpen(true)}
-              title="Evaluation settings"
+              title={uiT("ui.e13ec39861e94096")}
             >
               <Settings className="size-4" />
             </Button>
@@ -177,16 +177,18 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
 
         <TabsContent value="overview" className="mt-4 space-y-6">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <MetricCard label="Requests Evaluated" value={data.requestsEvaluated.toLocaleString()} />
+            <MetricCard label={uiT("ui.43c03dd85ea21764")} value={data.requestsEvaluated.toLocaleString()} />
             <MetricCard
-              label="Fail Rate"
+              label={uiT("ui.d9a9a9fb96f91624")}
               value={`${data.failRate}%`}
               valueColor={data.failRate > 15 ? "text-destructive" : data.failRate > 5 ? "text-warning" : "text-success"}
-              subtitle={`${Math.round((data.requestsEvaluated * data.failRate) / 100).toLocaleString()} blocked`}
+              subtitle={uiT("ui.ccc5ca3de9eb8fbc", {
+                v0: String(Math.round((data.requestsEvaluated * data.failRate) / 100).toLocaleString()),
+              })}
               icon={data.failRate > 15 ? <TriangleAlert className="size-4 text-destructive" /> : undefined}
             />
             <MetricCard
-              label="Avg. latency added"
+              label={uiT("ui.3d6a2a50a922b13c")}
               value={data.avgLatency != null ? `${Math.round(data.avgLatency)}ms` : "—"}
               valueColor={
                 data.avgLatency != null
@@ -197,7 +199,7 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
                       : "text-success"
                   : "text-muted-foreground"
               }
-              subtitle={data.avgLatency != null ? "Per request (avg)" : uiT("ui.3b41ba9c7cb8")}
+              subtitle={data.avgLatency != null ? uiT("ui.18b8aedc7857cbf8") : uiT("ui.3b41ba9c7cb8")}
             />
           </div>
 

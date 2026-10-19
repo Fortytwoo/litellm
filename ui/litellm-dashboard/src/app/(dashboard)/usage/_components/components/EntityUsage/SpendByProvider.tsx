@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { STACKED_USAGE_PALETTE } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -87,6 +89,8 @@ const columns: ColumnDef<ProviderSpendData>[] = [
  * usage views.
  */
 export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendData[] }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const sorted = [...rows].sort((a, b) => b.spend - a.spend);
   const total = sorted.reduce((sum, row) => sum + row.spend, 0);
   const shareOf = (spend: number) => (total > 0 ? (spend / total) * 100 : 0);
@@ -97,7 +101,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
       {visible.length > 0 && (
         <div className="grid gap-2.5">
           <div className="flex items-baseline justify-between gap-3">
-            <span className="text-xs text-muted-foreground">Total provider spend</span>
+            <span className="text-xs text-muted-foreground">{uiT("ui.6c06865cf39e6412")}</span>
             <span data-testid="provider-spend-total" className="text-sm font-semibold tabular-nums">
               ${formatNumberWithCommas(total, 2)}
             </span>
@@ -117,7 +121,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
             {visible.slice(0, 6).map((row, index) => (
               <span key={row.provider} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <span className="size-2 rounded-[2px]" style={{ backgroundColor: colorOf(index) }} />
-                <span className="text-foreground">{row.provider || "unknown"}</span>
+                <span className="text-foreground">{row.provider || uiT("ui.b23a6a8439c0")}</span>
                 <span className="tabular-nums">{shareOf(row.spend).toFixed(1)}%</span>
               </span>
             ))}
@@ -128,7 +132,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
         columns={columns}
         data={sorted}
         getRowId={(row) => row.provider}
-        noDataMessage="No provider usage data"
+        noDataMessage={uiT("ui.36ab3c70ae1a916f")}
         size="compact"
       />
     </div>
@@ -164,6 +168,8 @@ function ToggleField({
 }
 
 const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChanging, providerSpend }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [includeZeroSpend, setIncludeZeroSpend] = useState(false);
   const [includeUnknown, setIncludeUnknown] = useState(false);
 
@@ -187,16 +193,20 @@ const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChangi
   return (
     <Panel
       icon={Server}
-      title="Spend by Provider"
+      title={uiT("ui.e71e16260fa037f3")}
       className="h-full"
       action={
         <div className="flex flex-wrap items-center gap-3">
-          <ToggleField label="Show Zero Spend" checked={includeZeroSpend} onCheckedChange={setIncludeZeroSpend} />
           <ToggleField
-            label="Show Unknown"
+            label={uiT("ui.8b85c698784d8fbb")}
+            checked={includeZeroSpend}
+            onCheckedChange={setIncludeZeroSpend}
+          />
+          <ToggleField
+            label={uiT("ui.24019a7bf8fbf9d2")}
             checked={includeUnknown}
             onCheckedChange={setIncludeUnknown}
-            hint="Requests that failed to route to a provider"
+            hint={uiT("ui.4ad6f3ffe9d41d6a")}
           />
         </div>
       }

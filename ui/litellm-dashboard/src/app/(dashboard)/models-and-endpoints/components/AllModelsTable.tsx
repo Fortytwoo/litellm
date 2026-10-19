@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
@@ -35,12 +37,18 @@ const MODEL_TABLE_BODY_HEIGHT = 600;
 const ALL_PROXY_MODELS_LABEL = "All Proxy Models";
 
 const FILTER_LABELS: Record<string, string> = {
-  [MODEL_NAME_COLUMN_ID]: "Public Model Name",
-  [ACCESS_GROUPS_COLUMN_ID]: "Model Access Group",
+  get [MODEL_NAME_COLUMN_ID]() {
+    return translateUi("ui.dbff03874de84d83");
+  },
+  get [ACCESS_GROUPS_COLUMN_ID]() {
+    return translateUi("ui.0d23fa3b30db7beb");
+  },
 };
 
 const VIEW_MODE_LABELS: Record<ModelViewMode, string> = {
-  current_team: "Current Team Models",
+  get current_team() {
+    return translateUi("ui.866f8d1a315c62d9");
+  },
   all: ALL_PROXY_MODELS_LABEL,
 };
 
@@ -93,9 +101,7 @@ function EmptyState() {
         <Search className="size-5 text-muted-foreground" />
       </div>
       <div className="text-base font-semibold text-foreground">{uiT("ui.a650c298cf44")}</div>
-      <div className="max-w-80 text-sm text-muted-foreground">
-        No models match your search or filters. Try resetting them.
-      </div>
+      <div className="max-w-80 text-sm text-muted-foreground">{uiT("ui.a75f7d3a0be2a677")}</div>
     </div>
   );
 }
@@ -166,18 +172,18 @@ export function AllModelsTable({
   const modelGroupOptions = useMemo(
     () => [
       { label: ALL_PROXY_MODELS_LABEL, value: ALL_MODEL_GROUPS_VALUE },
-      { label: "Wildcard Models (*)", value: WILDCARD_MODEL_GROUP_VALUE },
+      { label: uiT("ui.6c556c16acf858d0"), value: WILDCARD_MODEL_GROUP_VALUE },
       ...availableModelGroups.map((group) => ({ label: group, value: group })),
     ],
-    [availableModelGroups],
+    [availableModelGroups, uiT],
   );
 
   const accessGroupOptions = useMemo(
     () => [
-      { label: "All Model Access Groups", value: ALL_MODEL_GROUPS_VALUE },
+      { label: uiT("ui.d754c8ee14a783a9"), value: ALL_MODEL_GROUPS_VALUE },
       ...availableModelAccessGroups.map((accessGroup) => ({ label: accessGroup, value: accessGroup })),
     ],
-    [availableModelAccessGroups],
+    [availableModelAccessGroups, uiT],
   );
 
   const formatFilterValue = (columnId: string, value: unknown): string => {
@@ -212,7 +218,7 @@ export function AllModelsTable({
       enableColumnResizing
       maxBodyHeight={MODEL_TABLE_BODY_HEIGHT}
       isLoading={isLoading}
-      loadingMessage="Loading models…"
+      loadingMessage={uiT("ui.cc8b4624f7659c68")}
       noDataMessage={<EmptyState />}
       size="compact"
       toolbar={(table) => (
@@ -221,7 +227,7 @@ export function AllModelsTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search model names…"
+            searchPlaceholder={uiT("ui.652dd4cff67e4f4e")}
             onOpenFilters={() => setFiltersOpen(true)}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
@@ -231,7 +237,7 @@ export function AllModelsTable({
             <Select value={selectedTeamValue} onValueChange={(value) => onTeamChange(String(value))}>
               <SelectTrigger
                 size="sm"
-                aria-label="Current team"
+                aria-label={uiT("ui.3a9ac38b7a21b956")}
                 data-testid="models-team-select"
                 className="gap-2 bg-secondary"
               >
@@ -281,8 +287,8 @@ export function AllModelsTable({
             <Button
               variant="outline"
               size="icon-sm"
-              aria-label="Model Settings"
-              title="Model Settings"
+              aria-label={uiT("ui.739715ca3e9f3186")}
+              title={uiT("ui.739715ca3e9f3186")}
               data-testid="models-settings-trigger"
               onClick={onOpenModelSettings}
             >
@@ -294,32 +300,32 @@ export function AllModelsTable({
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
             title={uiT("ui.546ebb8eb993")}
-            description="Narrow down models + endpoints"
+            description={uiT("ui.2494b84caf6cf80b")}
             resetLabel="Reset Filters"
             onReset={onResetFilters}
           >
             {({ get, set }) => (
               <>
-                <DataTableFilterField label="Public Model Name">
+                <DataTableFilterField label={uiT("ui.dbff03874de84d83")}>
                   <SearchSelect
                     options={modelGroupOptions}
                     value={(get(MODEL_NAME_COLUMN_ID) as string) ?? ALL_MODEL_GROUPS_VALUE}
                     onValueChange={(value) =>
                       set(MODEL_NAME_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
-                    placeholder="Filter by Public Model Name"
+                    placeholder={uiT("ui.81158d2cf5f0fd33")}
                     emptyText={uiT("ui.a650c298cf44")}
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Model Access Group">
+                <DataTableFilterField label={uiT("ui.0d23fa3b30db7beb")}>
                   <SearchSelect
                     options={accessGroupOptions}
                     value={(get(ACCESS_GROUPS_COLUMN_ID) as string) ?? ALL_MODEL_GROUPS_VALUE}
                     onValueChange={(value) =>
                       set(ACCESS_GROUPS_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
-                    placeholder="Filter by Model Access Group"
-                    emptyText="No model access groups found"
+                    placeholder={uiT("ui.2d3f226582c94684")}
+                    emptyText={uiT("ui.eafa058eb974747a")}
                   />
                 </DataTableFilterField>
               </>

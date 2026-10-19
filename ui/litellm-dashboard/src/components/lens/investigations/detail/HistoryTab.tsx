@@ -1,4 +1,7 @@
 "use client";
+import { translateText } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { ListRow } from "@/components/shared/ListRow";
 
 import { useState } from "react";
@@ -35,6 +38,8 @@ function HistoryContent({
   offset,
   setOffset,
 }: HistoryTabProps & { offset: number; setOffset: (offset: number) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const history = useRunHistory(lens, offset, offset > 0);
   const { openRun } = useRunRoute();
   const rows = history.data ?? lens.jobs;
@@ -42,9 +47,9 @@ function HistoryContent({
     <>
       {history.error && (
         <p role="alert" className="text-sm text-destructive">
-          Could not load run history.{" "}
+          {uiT("ui.f7d2eed2d9141563")}{" "}
           <Button variant="link" size="sm" onClick={() => void history.refetch()}>
-            Retry
+            {uiT("ui.942087cc2d41e013")}
           </Button>
         </p>
       )}
@@ -59,8 +64,13 @@ function HistoryContent({
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">{when(j.created_at)}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {j.coverage?.screened ?? 0} runs reviewed
-                {j.findings != null && <> · {j.findings.length} findings</>}
+                {j.coverage?.screened ?? 0} {uiT("ui.177d7d80ad7e487c")}
+                {j.findings != null && (
+                  <>
+                    {" "}
+                    · {j.findings.length} {uiT("ui.8aa3c4ce3ccdfe89")}
+                  </>
+                )}
                 <ScanDuration job={j} />
               </p>
               {j.error && (
@@ -74,7 +84,7 @@ function HistoryContent({
                 data-state={j.status === "failed" ? "failed" : "other"}
                 className="capitalize data-[state=failed]:text-destructive"
               >
-                {runStatus(j)}
+                {translateText(runStatus(j))}
               </p>
               <p className="mt-1">{money(j.cost ?? 0)}</p>
             </div>
@@ -85,7 +95,7 @@ function HistoryContent({
       {(offset > 0 || (history.data?.length ?? 0) >= PAGE) && (
         <div className="flex justify-between">
           <Button variant="ghost" size="sm" disabled={!offset} onClick={() => setOffset(Math.max(0, offset - PAGE))}>
-            Newer runs
+            {uiT("ui.30f9801bce0418c6")}
           </Button>
           <Button
             variant="ghost"
@@ -93,7 +103,7 @@ function HistoryContent({
             disabled={(history.data?.length ?? 0) < PAGE}
             onClick={() => setOffset(offset + PAGE)}
           >
-            Older runs
+            {uiT("ui.5a0522cb269a08f8")}
           </Button>
         </div>
       )}

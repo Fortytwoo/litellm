@@ -39,7 +39,7 @@ export function ToolItem({ tool }: ToolItemProps) {
 
         <div className="flex items-center gap-2">
           <Badge variant={tool.called ? "default" : "secondary"}>
-            {tool.called ? "called" : uiT("ui.57404b32f9ef")}
+            {tool.called ? uiT("supplement.calledLabel") : uiT("ui.57404b32f9ef")}
           </Badge>
           {expanded ? (
             <ChevronDown className="size-3 text-muted-foreground" />

@@ -1,3 +1,7 @@
+"use client";
+import { t as translateUi } from "@/i18n";
+
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "@/lib/toast";
 import { TokenUsage } from "@/components/chat_ui/ResponseMetrics";
@@ -6,6 +10,8 @@ import { convertToDotPrompt, extractVariables } from "../utils";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 
 export const useConversation = (prompt: any, accessToken: string | null) => {
+  useDashboardLanguage();
+
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
@@ -182,9 +188,21 @@ export const useConversation = (prompt: any, accessToken: string | null) => {
         setMessages((prev) => {
           const lastMsg = prev[prev.length - 1];
           if (lastMsg && lastMsg.role === "assistant" && lastMsg.content === "") {
-            return [...prev.slice(0, -1), { role: "assistant", content: `Error: ${error.message}` }];
+            return [
+              ...prev.slice(0, -1),
+              {
+                role: "assistant",
+                content: translateUi("ui.a507b52e6cbe29ba", undefined, { v0: String(error.message) }),
+              },
+            ];
           }
-          return [...prev, { role: "assistant", content: `Error: ${error.message}` }];
+          return [
+            ...prev,
+            {
+              role: "assistant",
+              content: translateUi("ui.a507b52e6cbe29ba", undefined, { v0: String(error.message) }),
+            },
+          ];
         });
       }
     } finally {
@@ -198,14 +216,14 @@ export const useConversation = (prompt: any, accessToken: string | null) => {
       abortController.abort();
       setAbortController(null);
       setIsLoading(false);
-      toast.info("Request cancelled");
+      toast.info(translateUi("ui.7108183f1888b7c9"));
     }
   };
 
   const handleClearConversation = () => {
     setMessages([]);
     setVariablesFilled(false);
-    toast.success("Chat history cleared.");
+    toast.success(translateUi("ui.e98f0631a5868306"));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
