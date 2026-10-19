@@ -1,3 +1,4 @@
+import { managedFetch as fetch } from "@/lib/http/managedSession";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { getProxyBaseUrl } from "@/components/networking";
 

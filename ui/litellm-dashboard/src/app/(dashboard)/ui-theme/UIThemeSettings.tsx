@@ -1,4 +1,5 @@
 "use client";
+import { managedFetch as fetch } from "@/lib/http/managedSession";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { createQueryKeys } from "../common/queryKeysFactory";
+import { managedFetch as fetch } from "@/lib/http/managedSession";
 import useAuthorized from "../useAuthorized";
 import { proxyBaseUrl, getGlobalLitellmHeaderName, deriveErrorMessage, handleError } from "@/components/networking";
 

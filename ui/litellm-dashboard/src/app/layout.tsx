@@ -14,8 +14,8 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "对话审计后台",
-  description: "对话审计与用量管理",
+  title: "AI 网关",
+  description: "模型、工具与授权管理",
   icons: { icon: "/get_favicon" },
 };
 

@@ -23,6 +23,7 @@ import { isProxyAdminRole } from "@/utils/roles";
 import { ChevronsUpDown, Crown, IdCard, KeyRound, LogOut, Mail, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { CentralAccount } from "@/components/managed-gateway/CentralAccount";
 
 const RELEASE_NOTES_URL = "https://docs.litellm.ai/release_notes";
 
@@ -87,7 +88,7 @@ interface SidebarAccountMenuProps {
   collapsed?: boolean;
 }
 
-const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, collapsed = false }) => {
+const NativeSidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, collapsed = false }) => {
   const { t: uiT } = useDashboardLanguage();
 
   const {
@@ -301,4 +302,10 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
   );
 };
 
+const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = (props) =>
+  process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? (
+    <CentralAccount collapsed={props.collapsed ?? false} />
+  ) : (
+    <NativeSidebarAccountMenu {...props} />
+  );
 export default SidebarAccountMenu;

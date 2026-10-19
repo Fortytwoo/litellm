@@ -67,7 +67,7 @@ export default function ApiKeysDashboard() {
     <Page className="h-full">
       <VirtualKeysTable
         headerActions={
-          isViewOnly ? undefined : (
+          isViewOnly || process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? undefined : (
             <CreateKey
               team={null}
               teams={teams}

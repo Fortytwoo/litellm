@@ -33,7 +33,7 @@ export default function HomePage() {
     <Page>
       <PageHeader>
         <PageHeaderTitle>{uiT("ui.3a78695388b3")}</PageHeaderTitle>
-        {!isViewOnly && (
+        {!isViewOnly && process.env.NEXT_PUBLIC_MANAGED_GATEWAY !== "1" && (
           <PageHeaderControls>
             <Button render={<a href={uiHref("api-keys?create=true")} />}>
               <Plus />

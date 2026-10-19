@@ -12,6 +12,7 @@ import { ModelData } from "@/components/model_dashboard/types";
 import { toast } from "@/lib/toast";
 import { isProxyAdminRole } from "@/utils/roles";
 import { uiHref } from "@/utils/uiHref";
+import { useCopy } from "@/components/managed-gateway/locale";
 import { modelDeleteCall, modelPatchUpdateCall } from "@/components/networking";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
@@ -82,6 +83,7 @@ const AllModelsTab = ({
   setSelectedTeamId,
 }: AllModelsTabProps) => {
   const { t: uiT } = useDashboardLanguage();
+  const gatewayT = useCopy();
 
   const { data: modelCostMapData, isLoading: isLoadingModelCostMap } = useModelCostMap();
   const { accessToken, userId, userRole, isViewOnly } = useAuthorized();
@@ -341,7 +343,12 @@ const AllModelsTab = ({
         {modelViewMode === "current_team" && (
           <div className="flex items-start gap-2 px-1 text-xs text-muted-foreground">
             <Info className="mt-0.5 size-3.5 shrink-0" />
-            {selectedTeamValue === PERSONAL_TEAM_VALUE ? (
+            {process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" && (
+              <a href={uiHref("gateway-grants")} className="font-medium text-info hover:underline">
+                {gatewayT("explicitGrant")}
+              </a>
+            )}
+            {process.env.NEXT_PUBLIC_MANAGED_GATEWAY !== "1" && (selectedTeamValue === PERSONAL_TEAM_VALUE ? (
               <span>
                 To access these models, create a Virtual Key without selecting a team on the{" "}
                 <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
@@ -357,7 +364,7 @@ const AllModelsTab = ({
                 </a>
                 .
               </span>
-            )}
+            ))}
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import type { paths } from "./schema";
 import { ApiError, deriveErrorMessage, retryAfterMs } from "./client";
 import { getAuthHeaderName, getAuthToken, getRequestBaseUrl, reportError } from "./runtime";
 import { resolveRequestUrl } from "./resolveApiBase";
+import { managedRequest } from "./managedSession";
 
 const BaseAwareRequest = function (url: string, init?: RequestInit): Request {
   const target = resolveRequestUrl(url, {
@@ -74,7 +75,7 @@ const middleware: Middleware = {
  */
 export const fetchClient = createFetchClient<paths>({
   Request: BaseAwareRequest,
-  fetch: (request) => globalThis.fetch(request),
+  fetch: async (request) => globalThis.fetch(await managedRequest(request)),
 });
 fetchClient.use(middleware);
 

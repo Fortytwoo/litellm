@@ -1,0 +1,15 @@
+model_list: []
+general_settings:
+  disable_env_credential_login: true
+  disable_master_key_return: true
+litellm_settings:
+  disable_aiohttp_transport: true
+  num_retries: 0
+  request_timeout: 60
+  turn_off_message_logging: true
+  store_audit_logs: false
+router_settings:
+  redis_host: os.environ/REDIS_HOST
+  redis_port: os.environ/REDIS_PORT
+  num_retries: 0
+  timeout: 60

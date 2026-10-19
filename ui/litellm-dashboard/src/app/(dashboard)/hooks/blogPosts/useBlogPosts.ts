@@ -1,3 +1,4 @@
+import { managedFetch as fetch } from "@/lib/http/managedSession";
 import { getProxyBaseUrl } from "@/components/networking";
 import { useQuery } from "@tanstack/react-query";
 

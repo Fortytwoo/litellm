@@ -7,6 +7,7 @@ import {
   type QueryKey,
 } from "@tanstack/react-query";
 import { createQueryKeys } from "../common/queryKeysFactory";
+import { managedFetch as fetch } from "@/lib/http/managedSession";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName, deriveErrorMessage, handleError } from "@/components/networking";
 import { KeyResponse } from "@/components/key_team_helpers/key_list";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";

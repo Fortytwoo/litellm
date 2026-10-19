@@ -9,6 +9,8 @@
  * header name, the logout side effect) is injected through createApiClient.
  */
 
+import { managedRequest } from "./managedSession";
+
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export type QueryValue = string | number | boolean | null | undefined;
@@ -176,7 +178,9 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
       init.body = JSON.stringify(body);
     }
 
-    const response = await doFetch(url, init);
+    const managed = process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1";
+    const target = managed ? new URL(url, globalThis.location?.origin).toString() : url;
+    const response = managed ? await doFetch(await managedRequest(new Request(target, init))) : await doFetch(target, init);
 
     if (!response.ok) {
       const raw = await response.text();

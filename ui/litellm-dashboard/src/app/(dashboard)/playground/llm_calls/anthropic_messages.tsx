@@ -7,6 +7,7 @@ import { MCPServer, MCPToolset } from "@/components/mcp_tools/types";
 import { getProxyBaseUrl } from "@/components/networking";
 import { toast } from "@/lib/toast";
 import { extractPromptCacheTokens } from "@/utils/promptCacheUsage";
+import { managedFetch } from "@/lib/http/managedSession";
 
 const toTokenUsage = (usage: Anthropic.Usage): TokenUsage => ({
   completionTokens: usage.output_tokens,
@@ -51,6 +52,7 @@ export async function makeAnthropicMessagesRequest(
   const headers = buildPlaygroundHeaders(tags, customHeaders);
 
   const client = new Anthropic({
+    ...(process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? { fetch: managedFetch, maxRetries: 0 } : {}),
     apiKey: accessToken,
     baseURL: proxyBaseUrl,
     dangerouslyAllowBrowser: true,

@@ -49,6 +49,7 @@ import {
   rolesWithWriteAccess,
 } from "../utils/roles";
 import BetaBadge from "./BetaBadge";
+import { gatewayText } from "@/components/managed-gateway/locale";
 
 const ICON = { strokeWidth: 1.75 } as const;
 
@@ -499,3 +500,99 @@ export const menuGroups: MenuGroup[] = [
     ],
   },
 ];
+
+if (process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1") {
+  menuGroups.push(
+    {
+      get groupLabel() {
+        return gatewayText("mcp");
+      },
+      items: [
+        {
+          key: "gateway-services",
+          page: "gateway-services",
+          get label() {
+            return gatewayText("services");
+          },
+          icon: <Server {...ICON} />,
+        },
+        {
+          key: "gateway-tools",
+          page: "gateway-tools",
+          get label() {
+            return gatewayText("tools");
+          },
+          icon: <Search {...ICON} />,
+        },
+      ],
+    },
+    {
+      get groupLabel() {
+        return gatewayText("access");
+      },
+      items: [
+        {
+          key: "gateway-apis",
+          page: "gateway-apis",
+          get label() {
+            return gatewayText("apis");
+          },
+          roles: all_admin_roles,
+          icon: <KeyRound {...ICON} />,
+        },
+        {
+          key: "gateway-grants",
+          page: "gateway-grants",
+          get label() {
+            return gatewayText("grants");
+          },
+          roles: all_admin_roles,
+          icon: <Users {...ICON} />,
+        },
+        {
+          key: "gateway-members",
+          page: "gateway-members",
+          get label() {
+            return gatewayText("members");
+          },
+          roles: all_admin_roles,
+          icon: <Users {...ICON} />,
+        },
+        {
+          key: "gateway-departments",
+          page: "gateway-departments",
+          get label() {
+            return gatewayText("departments");
+          },
+          roles: all_admin_roles,
+          icon: <Building2 {...ICON} />,
+        },
+        {
+          key: "gateway-accounts",
+          page: "gateway-accounts",
+          get label() {
+            return gatewayText("accounts");
+          },
+          icon: <Database {...ICON} />,
+        },
+        {
+          key: "gateway-audit",
+          page: "gateway-audit",
+          get label() {
+            return gatewayText("audit");
+          },
+          roles: all_admin_roles,
+          icon: <ScrollText {...ICON} />,
+        },
+        {
+          key: "gateway-overview",
+          page: "gateway-overview",
+          get label() {
+            return gatewayText("overview");
+          },
+          icon: <House {...ICON} />,
+        },
+      ],
+    },
+  );
+}

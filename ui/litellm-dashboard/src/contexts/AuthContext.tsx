@@ -6,6 +6,8 @@ import { clearTokenCookies, getCookie } from "@/utils/cookieUtils";
 import { isJwtExpired } from "@/utils/jwtUtils";
 import { effectiveSessionRole } from "@/utils/roles";
 import { getUiConfig, setGlobalLitellmHeaderName } from "@/components/networking";
+import { gateway, str, strings } from "@/lib/http/managedGateway";
+import { COOKIE_SESSION, setManagedCsrf } from "@/lib/http/managedSession";
 
 function deleteCookie(name: string, path = "/") {
   document.cookie = `${name}=; Max-Age=0; Path=${path}`;
@@ -38,6 +40,71 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? (
+    <CentralAuthProvider>{children}</CentralAuthProvider>
+  ) : (
+    <NativeAuthProvider>{children}</NativeAuthProvider>
+  );
+}
+
+function CentralAuthProvider({ children }: { children: React.ReactNode }) {
+  const [authLoading, setAuthLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [userID, setUserID] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState("");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [premiumUser, setPremiumUser] = useState(false);
+  const [showSSOBanner, setShowSSOBanner] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    async function load() {
+      try {
+        const me = await gateway("me", { signal: controller.signal });
+        setManagedCsrf(str(me.csrf_token));
+        const snapshot = await gateway("snapshot", { signal: controller.signal });
+        await getUiConfig();
+        if (controller.signal.aborted) return;
+        setUserID(str(me.subject));
+        setUserRole(strings(snapshot.permissions).includes("models.write") ? "Admin" : "Internal User");
+        setToken(COOKIE_SESSION);
+        setAccessToken(COOKIE_SESSION);
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setToken(null);
+          setAccessToken(null);
+        }
+        void error;
+      } finally {
+        if (!controller.signal.aborted) setAuthLoading(false);
+      }
+    }
+    void load();
+    return () => controller.abort();
+  }, []);
+  const value: AuthContextValue = {
+    authLoading,
+    token,
+    userID,
+    userRole,
+    userEmail,
+    accessToken,
+    premiumUser,
+    disabledPersonalKeyCreation: true,
+    showSSOBanner,
+    passwordResetRequired: false,
+    setToken,
+    setUserID,
+    setUserRole,
+    setUserEmail,
+    setAccessToken,
+    setPremiumUser,
+    setShowSSOBanner,
+  };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+function NativeAuthProvider({ children }: { children: React.ReactNode }) {
   const [authLoading, setAuthLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
   const [userID, setUserID] = useState<string | null>(null);

@@ -1,7 +1,7 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders as render } from "@/../tests/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ChatUI from "./ChatUI";
 import * as fetchModelsModule from "@/components/llm_calls/fetch_models";
 import { makeOpenAIChatCompletionRequest } from "@/components/llm_calls/chat_completion";
@@ -57,6 +57,7 @@ async function selectComboboxOption(placeholder: string, optionLabel: string) {
 }
 
 describe("ChatUI", () => {
+  afterEach(() => vi.unstubAllEnvs());
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
@@ -80,6 +81,14 @@ describe("ChatUI", () => {
       />,
     );
     expect(screen.getByText("Test Key")).toBeInTheDocument();
+  });
+
+  it("uses the authenticated session when personal keys are centrally managed", async () => {
+    vi.stubEnv("NEXT_PUBLIC_MANAGED_GATEWAY", "1");
+    render(<ChatUI accessToken="managed-cookie-session" token="managed-cookie-session" userRole="Admin" userID="owner" disabledPersonalKeyCreation />);
+    await waitFor(() => expect(fetchModelsModule.fetchAvailableModels).toHaveBeenCalledWith("managed-cookie-session"));
+    expect(screen.queryByPlaceholderText("Enter custom Virtual Key")).not.toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Optional: Enter custom proxy URL (e.g., http://localhost:5000)")).toBeDisabled();
   });
 
   it("should show the voice selector when the endpoint type is audio_speech", async () => {

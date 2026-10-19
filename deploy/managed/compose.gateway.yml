@@ -1,0 +1,62 @@
+services:
+  budget:
+    image: ${MANAGED_GATEWAY_IMAGE:-managed-gateway-e2e:20261019}
+    entrypoint: [python, /app/e2e/tests/managed_model_budget_proxy.py]
+    environment:
+      E2E_BUDGET_PATH: /budget/reservations.sqlite3
+    volumes:
+      - ./data/budget:/budget
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '2'}
+  gateway:
+    image: ${MANAGED_GATEWAY_IMAGE:-managed-gateway-e2e:20261019}
+    env_file: gateway.env
+    ports:
+      - 127.0.0.1:18353:8000
+    volumes:
+      - ./data/gateway:/state
+      - ./target.json:/run/secrets/target.json:ro
+    depends_on:
+      litellm:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 768m
+    cpus: 1
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '2'}
+  frpc:
+    image: fatedier/frpc:v0.69.0
+    network_mode: host
+    command: [-c, /etc/frp/frpc.toml]
+    volumes:
+      - ./frpc.toml:/etc/frp/frpc.toml:ro
+      - /mnt/data/sub2api/secrets/frp-token:/run/secrets/frp-token:ro
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 64m
+    cpus: 0.25
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '2'}

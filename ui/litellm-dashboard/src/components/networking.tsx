@@ -128,6 +128,7 @@ import type {
   TraceListQuery,
   TracePage,
 } from "./lens/traces/types";
+import { COOKIE_SESSION, managedFetch as fetch } from "@/lib/http/managedSession";
 import {
   createApiClient,
   deriveErrorMessage,
@@ -509,7 +510,7 @@ export const apiClient = createApiClient({
 
 registerBaseUrlGetter(getProxyBaseUrl);
 registerAuthHeaderNameGetter(getGlobalLitellmHeaderName);
-registerAuthTokenGetter(() => decodeToken(getCookie("token"))?.key ?? null);
+registerAuthTokenGetter(() => process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? COOKIE_SESSION : decodeToken(getCookie("token"))?.key ?? null);
 registerErrorHandler(handleError);
 
 export const makeModelGroupPublic = async (accessToken: string, modelGroups: string[]) => {

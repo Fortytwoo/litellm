@@ -1,0 +1,15 @@
+# Managed gateway deployment
+
+This deployment uses the pinned v1.106.0 model runtime with a separate PostgreSQL database and Redis instance. The public console uses the application's existing authorization server and server-held management credentials. Neither the native login form nor the model runtime's management port is a public entry point
+
+Create a private `.env` in the deployment directory with independently generated `POSTGRES_PASSWORD`, `LITELLM_MASTER_KEY` and `LITELLM_SALT_KEY`. Preserve this file and the data directories for restart and restore. Do not change the salt key after storing provider credentials. Copy `compose.yml` and `litellm-config.yaml` to that directory, then run `docker-compose -p ai-gateway-e2e up -d`
+
+The model runtime binds only to loopback port 18352. The authenticated application forwards permitted model requests and performs server-side authorization for every management action. Provider credentials and personal model keys must never reach the console's browser storage or model-visible tools
+
+The E2E deployment does not replace a production service. Keep at least 15 GiB free before starting, restrict containers to the declared resource limits, and retain the previous application image and database backups. Raw traces, environment files and authentication state remain in private storage
+
+Build the native dashboard with `NEXT_PUBLIC_MANAGED_GATEWAY=1 npm run build`. On Windows worktrees whose dependencies are a junction outside the project, use `npm run build -- --webpack`. Serve the complete `out` directory through the authenticated gateway using `MCP_CONSOLE_REACT_ROOT`. Business routes live under the existing dashboard layout, and the normal non-managed build retains the original native authentication behavior
+
+Central browser authentication uses a non-secret readiness marker for existing native UI hooks. All requests authenticate through the HttpOnly BFF cookie, strip bearer headers, attach CSRF on writes and reject other origins. Provider credentials, native management keys and personal model keys stay on the server. Native Playground Chat uses the explicitly granted personal key through the BFF; native user creation does not generate additional keys
+
+The pinned runtime uses the supported `disable_aiohttp_transport` setting to avoid premature closure of Messages streams observed with its default aiohttp transport. Runtime, browser SDK and Harness acceptance retries are disabled. `compose.gateway.yml` is an isolated acceptance overlay whose gateway image includes the gateway repository's `tests/console_workflows_e2e_server.py` and `tests/managed_model_budget_proxy.py`. Its business tools and account directory are synthetic. It is not a production migration configuration

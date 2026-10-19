@@ -188,6 +188,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
   } = useChatHistory({ simplified });
   // codeql[js/clear-text-storage-of-sensitive-data]
   const [apiKeySource, setApiKeySource] = useState<"session" | "custom">(() => {
+    if (process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1") return "session";
     const saved = getSecureItem("apiKeySource");
     if (saved) {
       try {
@@ -200,7 +201,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
   });
   const [apiKey, setApiKey] = useState<string>(() => getSecureItem("apiKey") || "");
   const [customProxyBaseUrl, setCustomProxyBaseUrl] = useState<string>(
-    () => sessionStorage.getItem("customProxyBaseUrl") || "",
+    () => process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? "" : sessionStorage.getItem("customProxyBaseUrl") || "",
   );
   const [inputMessage, setInputMessage] = useState("");
   const [selectedModel, setSelectedModel] = useState<string | null | undefined>(simplified ? fixedModel : null);
@@ -1334,6 +1335,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     <Input
                       className="h-8 pl-8"
                       placeholder="Optional: Enter custom proxy URL (e.g., http://localhost:5000)"
+                      disabled={process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1"}
                       value={customProxyBaseUrl}
                       onChange={(event) => {
                         setCustomProxyBaseUrl(event.target.value);

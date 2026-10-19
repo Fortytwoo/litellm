@@ -7,8 +7,32 @@ import { buildLoginUrlWithReturn, getLoginUrl, storeReturnUrl } from "@/utils/re
 import { useCallback, useEffect, useMemo } from "react";
 import { effectiveSessionRole, formatUserRole, isViewOnlySessionRole } from "@/utils/roles";
 import { useUIConfig } from "./uiConfig/useUIConfig";
+import { useAuth } from "@/contexts/AuthContext";
 
-const useAuthorized = () => {
+function useCentralAuthorized() {
+  const auth = useAuth();
+  useEffect(() => {
+    if (!auth.authLoading && !auth.accessToken) window.location.replace("/admin/login");
+  }, [auth.authLoading, auth.accessToken]);
+  return {
+    isLoading: auth.authLoading,
+    isAuthorized: !!auth.accessToken,
+    token: auth.token,
+    accessToken: auth.accessToken,
+    userId: auth.userID,
+    userEmail: auth.userEmail,
+    userRole: auth.userRole,
+    userRoleLabel: formatUserRole(auth.userRole),
+    isViewOnly: isViewOnlySessionRole(auth.userRole),
+    premiumUser: false,
+    disabledPersonalKeyCreation: true,
+    loginMethod: "central_sso",
+    showSSOBanner: false,
+    passwordResetRequired: false,
+  };
+}
+
+const useLegacyAuthorized = () => {
   const { data: uiConfig, isLoading: isUIConfigLoading } = useUIConfig();
 
   const token = typeof document !== "undefined" ? getCookie("token") : null;
@@ -56,4 +80,5 @@ const useAuthorized = () => {
   };
 };
 
+const useAuthorized = process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" ? useCentralAuthorized : useLegacyAuthorized;
 export default useAuthorized;

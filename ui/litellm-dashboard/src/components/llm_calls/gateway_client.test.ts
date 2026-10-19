@@ -3,7 +3,11 @@ import { registerAuthHeaderNameGetter } from "@/lib/http/runtime";
 import { createGatewayClient } from "./gateway_client";
 
 vi.mock("@/components/networking", () => ({ getProxyBaseUrl: () => "https://management.example/root" }));
-afterEach(() => registerAuthHeaderNameGetter(() => "Authorization"));
+afterEach(() => {
+  registerAuthHeaderNameGetter(() => "Authorization");
+  vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
+});
 
 it.each(["Authorization", "x-session-key"])(
   "uses the gateway's %s header and retains root paths and caller headers",
@@ -48,4 +52,18 @@ it("retains explicit SDK options and an intentionally supplied Playground author
   expect(new Headers(fetchImpl.mock.calls[0][1]?.headers).get("Authorization")).toBe(
     "Bearer explicit-playground-token",
   );
+});
+
+it("uses the cookie transport without SDK retries in the managed console", async () => {
+  vi.stubEnv("NEXT_PUBLIC_MANAGED_GATEWAY", "1");
+  vi.stubGlobal("location", { origin: "https://management.example" });
+  const nativeFetch = vi.fn(async () => new Response(JSON.stringify({ data: [] }), { headers: { "Content-Type": "application/json" } }));
+  vi.stubGlobal("fetch", nativeFetch);
+  const client = createGatewayClient({ accessToken: "managed-cookie-session" });
+  await client.models.list();
+  expect(client.maxRetries).toBe(0);
+  const request = nativeFetch.mock.calls[0][0] as Request;
+  expect(request.url).toBe("https://management.example/admin/native/root/models");
+  expect(request.headers.has("authorization")).toBe(false);
+  expect(request.credentials).toBe("same-origin");
 });

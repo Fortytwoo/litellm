@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gateway
+      POSTGRES_DB: gateway
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U gateway -d gateway]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    mem_limit: 768m
+    cpus: 1
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '2'
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: [redis-server, --appendonly, 'yes', --maxmemory, 128mb, --maxmemory-policy, noeviction]
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    mem_limit: 256m
+    cpus: 0.5
+    logging: *logging
+  litellm:
+    image: ghcr.io/berriai/litellm@sha256:2e4c0371f3a8c28e4da131d77abaa8341cd3b0c2fcc4d34d7c5900431af7b9d0
+    restart: unless-stopped
+    command: [--config, /app/managed-config.yaml, --port, '4000', --num_workers, '1']
+    environment:
+      DATABASE_URL: postgresql://gateway:${POSTGRES_PASSWORD:?required}@postgres:5432/gateway
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?required}
+      LITELLM_SALT_KEY: ${LITELLM_SALT_KEY:?required}
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      STORE_MODEL_IN_DB: 'True'
+      LITELLM_LOG: ERROR
+    ports:
+      - 127.0.0.1:18352:4000
+    volumes:
+      - ./litellm-config.yaml:/app/managed-config.yaml:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, python3, -c, "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 3g
+    cpus: 2
+    logging: *logging
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: ${GATEWAY_TEST_SUBNET:-10.252.110.0/24}
