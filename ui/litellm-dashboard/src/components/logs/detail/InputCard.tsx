@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * InputCard - Displays all input messages with token count and cost
@@ -37,7 +38,7 @@ export function InputCard({ messages, promptTokens, inputCost }: InputCardProps)
   const handleCopy = () => {
     const content = lastMessage?.content || "";
     navigator.clipboard.writeText(content);
-    toast.success("Input copied");
+    toast.success(uiT("ui.d22471573fac"));
   };
 
   return (

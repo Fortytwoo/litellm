@@ -11,3 +11,5 @@ Keep the existing proxy configuration and secrets outside this repository. Set g
 First run the image on a loopback preview port with the same backend version. Check individual account logins, admin access, member isolation, the readiness warning flag and rejection of old environment credentials. Back up configuration, environment and image references before switching the production gateway. The SSO adapter should serve this dashboard directly, with the previous compiled-text localization override removed
 
 Focused verification covers translation key parity and interpolation, switching languages without losing draft input or conversation content, persistence, pagination, dates, token counts and environment-login warning visibility. Browser verification covers request listing, details, filters and user management. Preserve the previous image and restricted configuration backup for rollback
+
+See [I18N_STATUS.md](I18N_STATUS.md) for the current source coverage, known gaps and repeatable audit command

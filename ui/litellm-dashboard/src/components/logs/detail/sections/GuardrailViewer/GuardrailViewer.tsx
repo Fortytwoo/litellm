@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useMemo } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -418,7 +419,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
     for (const e of preCalls) {
       items.push({
         type: "guardrail",
-        label: `Pre-call guardrail: ${getDisplayName(e)}`,
+        label: uiT("supplement.preCall", { name: getDisplayName(e) }),
         offsetMs: offsetOf(e),
         outcome: getEntryOutcome(e),
       });
@@ -441,7 +442,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
     for (const e of duringCalls) {
       items.push({
         type: "guardrail",
-        label: `During-call guardrail: ${getDisplayName(e)}`,
+        label: uiT("supplement.duringCall", { name: getDisplayName(e) }),
         offsetMs: offsetOf(e),
         outcome: getEntryOutcome(e),
       });
@@ -451,7 +452,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
     for (const e of postCalls) {
       items.push({
         type: "guardrail",
-        label: `Post-call guardrail: ${getDisplayName(e)}`,
+        label: uiT("supplement.postCall", { name: getDisplayName(e) }),
         offsetMs: offsetOf(e),
         outcome: getEntryOutcome(e),
       });
@@ -592,7 +593,8 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
 
           {entry.confidence_score != null && (
             <span className="px-2 py-0.5 bg-muted text-muted-foreground border border-border rounded-sm text-[11px] font-medium shrink-0">
-              {(entry.confidence_score * 100).toFixed(0)}% conf
+              {(entry.confidence_score * 100).toFixed(0)}
+              {uiT("ui.277202d83c24")}
             </span>
           )}
 
@@ -606,16 +608,18 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
                     />
                   }
                 >
-                  Risk {riskScore}/10
+                  {uiT("ui.0711a8d636e4")}
+                  {riskScore}/10
                 </TooltipTrigger>
-                <TooltipContent>{`Risk score: ${riskScore}/10`}</TooltipContent>
+                <TooltipContent>{uiT("supplement.riskScore", { score: riskScore })}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           )}
 
           {textRecords != null && (
             <span className="px-2 py-0.5 bg-muted text-muted-foreground border border-border rounded-sm text-[11px] font-medium shrink-0">
-              {textRecords.toLocaleString()} text record{textRecords === 1 ? "" : "s"}
+              {textRecords.toLocaleString()} {uiT("ui.36d649f2d776")}
+              {textRecords === 1 ? "" : "s"}
             </span>
           )}
 
@@ -778,10 +782,10 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
         <div className="flex items-center gap-4">
           <ShieldIcon />
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Guardrails &amp; Policy Compliance</h3>
+            <h3 className="text-lg font-semibold text-foreground">{uiT("ui.166bc7baa569")}</h3>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-sm text-muted-foreground">
-                {evaluatedCount} guardrail{evaluatedCount !== 1 ? "s" : ""} evaluated
+                {uiT("supplement.evaluated", { count: evaluatedCount })}
               </span>
               <span className="text-muted-foreground">|</span>
               <span
@@ -804,14 +808,14 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${OUTCOME_BADGE_CLASS.flagged}`}
                 >
-                  {flaggedCount} Flagged
+                  {flaggedCount} {uiT("ui.2f1978c6166e")}
                 </span>
               )}
               {notRunCount > 0 && (
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${OUTCOME_BADGE_CLASS.not_run}`}
                 >
-                  {notRunCount} Not run
+                  {notRunCount} {uiT("ui.25f0c23a0878")}
                 </span>
               )}
             </div>

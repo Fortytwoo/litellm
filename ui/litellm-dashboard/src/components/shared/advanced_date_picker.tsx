@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { Calendar, Clock } from "lucide-react";
@@ -35,7 +36,9 @@ const relativeTimeOptions: RelativeTimeOption[] = [
     }),
   },
   {
-    label: "Last 7 days",
+    get label() {
+      return translateUi("ui.0603deca4fcb");
+    },
     shortLabel: "7d",
     getValue: () => ({
       from: moment().subtract(7, "days").startOf("day").toDate(),
@@ -43,7 +46,9 @@ const relativeTimeOptions: RelativeTimeOption[] = [
     }),
   },
   {
-    label: "Last 30 days",
+    get label() {
+      return translateUi("ui.f8f03fb441b8");
+    },
     shortLabel: "30d",
     getValue: () => ({
       from: moment().subtract(30, "days").startOf("day").toDate(),
@@ -51,7 +56,9 @@ const relativeTimeOptions: RelativeTimeOption[] = [
     }),
   },
   {
-    label: "Month to date",
+    get label() {
+      return translateUi("ui.baa1edbd05c5");
+    },
     shortLabel: "MTD",
     getValue: () => ({
       from: moment().startOf("month").toDate(),
@@ -59,7 +66,9 @@ const relativeTimeOptions: RelativeTimeOption[] = [
     }),
   },
   {
-    label: "Year to date",
+    get label() {
+      return translateUi("ui.757fd1902294");
+    },
     shortLabel: "YTD",
     getValue: () => ({
       from: moment().startOf("year").toDate(),
@@ -74,12 +83,13 @@ const relativeTimeOptions: RelativeTimeOption[] = [
 const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
   value,
   onValueChange,
-  label = "Select Time Range",
+  label,
   className,
   showTimeRange = true,
   align = "right",
 }) => {
-  const { t: uiT } = useDashboardLanguage();
+  const { t: uiT, locale } = useDashboardLanguage();
+  const displayLabel = label ?? uiT("supplement.chooseRange");
 
   const [isOpen, setIsOpen] = useState(false);
   const [tempValue, setTempValue] = useState<DateRangePickerValue>(value);
@@ -126,15 +136,15 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
     const end = moment(endDate, "YYYY-MM-DD");
 
     if (!start.isValid() || !end.isValid()) {
-      return { isValid: false, error: "Invalid date format" };
+      return { isValid: false, error: uiT("ui.94c6d67bfc6c") };
     }
 
     if (end.isBefore(start)) {
-      return { isValid: false, error: "End date cannot be before start date" };
+      return { isValid: false, error: uiT("ui.e309b05148b6") };
     }
 
     return { isValid: true, error: "" };
-  }, [startDate, endDate]);
+  }, [startDate, endDate, uiT]);
 
   const validation = validateDateRange();
 
@@ -166,15 +176,19 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
     };
   }, [isOpen]);
 
-  const formatDisplayRange = useCallback((from: Date | undefined, to: Date | undefined) => {
-    if (!from || !to) return "Select date range";
+  const formatDisplayRange = useCallback(
+    (from: Date | undefined, to: Date | undefined) => {
+      if (!from || !to) return uiT("supplement.chooseDates");
 
-    const formatDateTime = (date: Date) => {
-      return moment(date).format("D MMM, HH:mm");
-    };
+      const formatDateTime = (date: Date) =>
+        moment(date)
+          .locale(locale === "zh" ? "zh-cn" : "en")
+          .format("D MMM, HH:mm");
 
-    return `${formatDateTime(from)} - ${formatDateTime(to)}`;
-  }, []);
+      return `${formatDateTime(from)} - ${formatDateTime(to)}`;
+    },
+    [locale, uiT],
+  );
 
   // CRITICAL: Apply the same date adjustment logic as the original component
   const adjustDateRange = useCallback((newValue: DateRangePickerValue): DateRangePickerValue => {
@@ -286,7 +300,7 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      {label && <p className="text-sm font-medium text-foreground whitespace-nowrap">{label}</p>}
+      {displayLabel && <p className="text-sm font-medium text-foreground whitespace-nowrap">{displayLabel}</p>}
       <div className="relative" ref={dropdownRef}>
         {/* Main input display */}
         <button
@@ -326,7 +340,7 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
               {/* Left side - Relative time options */}
               <div className="w-1/2 border-r border-border">
                 <div className="p-3 border-b border-border">
-                  <span className="text-sm font-semibold text-foreground">Relative time</span>
+                  <span className="text-sm font-semibold text-foreground">{uiT("ui.e5fe302dbf75")}</span>
                 </div>
                 <div className="h-[350px] overflow-y-auto">
                   {relativeTimeOptions.map((option) => {
@@ -350,7 +364,16 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
                             isSelected ? "text-info bg-info/15" : "text-muted-foreground bg-muted"
                           }`}
                         >
-                          {option.shortLabel}
+                          {uiT(
+                            "supplement." +
+                              ({
+                                today: "todayShort",
+                                "7d": "weekShort",
+                                "30d": "monthShort",
+                                MTD: "mtdShort",
+                                YTD: "ytdShort",
+                              }[option.shortLabel] ?? "chooseRange"),
+                          )}
                         </span>
                       </button>
                     );
@@ -363,14 +386,14 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
                 <div className="p-3.5 border-b border-border">
                   <div className="flex items-center gap-2">
                     <Calendar className="size-4 text-muted-foreground" />
-                    <span className="text-sm font-semibold text-foreground">Start and end dates</span>
+                    <span className="text-sm font-semibold text-foreground">{uiT("ui.d0d19295cb5a")}</span>
                   </div>
                 </div>
 
                 <div className="p-6 space-y-6 pb-20">
                   {/* Start date */}
                   <div>
-                    <label className="text-sm text-foreground mb-1 block">Start date</label>
+                    <label className="text-sm text-foreground mb-1 block">{uiT("ui.8169693101a4")}</label>
                     <input
                       type="date"
                       value={startDate}
@@ -385,7 +408,7 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
 
                   {/* End date */}
                   <div>
-                    <label className="text-sm text-foreground mb-1 block">End date</label>
+                    <label className="text-sm text-foreground mb-1 block">{uiT("ui.14303aa0c4a0")}</label>
                     <input
                       type="date"
                       value={endDate}
@@ -419,12 +442,16 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
                   {tempValue.from && tempValue.to && validation.isValid && (
                     <div className="bg-info/10 p-3 rounded-md space-y-1">
                       <div className="text-xs text-info">
-                        <span className="font-medium">From:</span>{" "}
-                        {moment(tempValue.from).format("MMM D, YYYY [at] HH:mm:ss")}
+                        <span className="font-medium">{uiT("ui.dc45d36f35e8")}</span>{" "}
+                        {moment(tempValue.from).format(
+                          locale === "zh" ? "YYYY年M月D日 HH:mm:ss" : "MMM D, YYYY [at] HH:mm:ss",
+                        )}
                       </div>
                       <div className="text-xs text-info">
-                        <span className="font-medium">To:</span>{" "}
-                        {moment(tempValue.to).format("MMM D, YYYY [at] HH:mm:ss")}
+                        <span className="font-medium">{uiT("ui.2b5fc5c94f64")}</span>{" "}
+                        {moment(tempValue.to).format(
+                          locale === "zh" ? "YYYY年M月D日 HH:mm:ss" : "MMM D, YYYY [at] HH:mm:ss",
+                        )}
                       </div>
                     </div>
                   )}

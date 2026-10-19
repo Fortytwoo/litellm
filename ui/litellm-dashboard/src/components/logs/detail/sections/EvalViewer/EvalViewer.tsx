@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleCheck, CircleX, FlaskConical } from "lucide-react";
@@ -102,12 +103,14 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
           <div className="flex items-center gap-2">
             {entry.judge_model && (
               <span className="text-muted-foreground" style={{ fontSize: 12 }}>
-                Judge: {entry.judge_model}
+                {uiT("ui.a0266d632f82")}
+                {entry.judge_model}
               </span>
             )}
             {entry.iteration != null && (
               <span className="text-muted-foreground" style={{ fontSize: 12 }}>
-                Iter: {entry.iteration + 1}
+                {uiT("ui.6565bad359a7")}
+                {entry.iteration + 1}
               </span>
             )}
           </div>
@@ -117,7 +120,8 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
       <CardContent>
         {entry.eval_error && (
           <span className="text-warning" style={{ display: "block", marginBottom: 8, fontSize: 12 }}>
-            Judge error: {entry.eval_error}
+            {uiT("ui.e9bd8a5ebae7")}
+            {entry.eval_error}
           </span>
         )}
 
@@ -209,7 +213,8 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
           </Table>
         ) : (
           <span className="text-muted-foreground" style={{ fontSize: 12 }}>
-            Score: {entry.overall_score?.toFixed(1)} — no per-criterion breakdown available.
+            {uiT("ui.9689a814f358")}
+            {entry.overall_score?.toFixed(1)} {uiT("ui.002fb1583e3f")}
           </span>
         )}
       </CardContent>

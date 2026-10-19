@@ -85,7 +85,7 @@ export function MultiSelect({
   const customOptionExists = safeOptions.some((option) => option.value.toLowerCase() === customOption.toLowerCase());
   const items =
     allowCustomValues && customOption && !customOptionExists
-      ? [...safeOptions, { label: `Create "${customOption}"`, value: customOption }]
+      ? [...safeOptions, { label: uiT("supplement.createOption", { value: customOption }), value: customOption }]
       : safeOptions;
 
   const canClear = (selected: MultiSelectOption[]) => selected.length > 0 && !disabled && !loading;

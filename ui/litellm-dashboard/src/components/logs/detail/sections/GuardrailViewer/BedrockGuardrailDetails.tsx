@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 
@@ -260,7 +261,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
             return (
               <Section
                 key={idx}
-                title={`Assessment #${idx + 1}`}
+                title={uiT("supplement.assessment", { count: idx + 1 })}
                 defaultOpen
                 right={
                   <div className="flex items-center gap-3">
@@ -400,7 +401,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                             >
                               <div className="flex items-center gap-2">
                                 {chip(r.action ?? "N/A", r.detected ? "red" : "slate")}
-                                <span className="font-medium">{r.name ?? "regex"}</span>
+                                <span className="font-medium">{r.name ?? uiT("ui.42d58222b328")}</span>
                                 <span className="font-mono text-xs break-all">{r.regex}</span>
                               </div>
                               <div className="flex items-center gap-2">
@@ -424,7 +425,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                         <div key={i} className="px-3 py-1.5 bg-muted rounded-md text-xs">
                           <div className="flex items-center gap-2">
                             {chip(t.action ?? "N/A", t.detected ? "red" : "slate")}
-                            <span className="font-medium">{t.name ?? "topic"}</span>
+                            <span className="font-medium">{t.name ?? uiT("ui.23d611a6f6f8")}</span>
                             {t.type && chip(t.type, "slate")}
                             {boolPill(t.detected)}
                           </div>

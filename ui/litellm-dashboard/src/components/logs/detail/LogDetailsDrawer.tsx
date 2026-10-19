@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useMemo, useState } from "react";
 import { Bot, Check, Copy, Sparkles, Wrench } from "lucide-react";
@@ -95,7 +96,7 @@ function TraceEventRow({ row, isSelected, onClick }: TraceEventRowProps) {
         {row.total_tokens ? (
           <>
             <span>·</span>
-            <span>{row.total_tokens} tok</span>
+            <span>{row.total_tokens} Token</span>
           </>
         ) : null}
       </div>
@@ -318,7 +319,9 @@ export function LogDetailsDrawer({
         style={{ width: DRAWER_WIDTH }}
       >
         <SheetTitle className="sr-only">
-          {logEntry?.request_id ? `Request ${logEntry.request_id} details` : uiT("ui.b6e3369e005b")}
+          {logEntry?.request_id
+            ? uiT("supplement.requestDetails", { id: logEntry.request_id })
+            : uiT("ui.b6e3369e005b")}
         </SheetTitle>
         <div style={{ height: "100%" }} className="flex relative">
           {!isSidebarCollapsed && (
@@ -350,7 +353,7 @@ export function LogDetailsDrawer({
                   </div>
                 </div>
                 <div className="mt-1 text-[11px] text-muted-foreground font-mono">
-                  {logsForList.length} req
+                  {uiT("supplement.requests", { count: logsForList.length })}
                   {[
                     isSessionMode
                       ? llmCount
@@ -364,7 +367,7 @@ export function LogDetailsDrawer({
                       ? mcpCount
                       : logsForList.filter((row) => MCP_CALL_TYPES.includes(row.call_type)).length,
                   ].map((count, i) => {
-                    const label = [" LLM", " Agent", " MCP"][i];
+                    const label = [" LLM", " " + uiT("nav.agents"), " MCP"][i];
                     return count > 0 ? (
                       <span key={label}>
                         <span className="mx-1.5">·</span>
@@ -384,12 +387,12 @@ export function LogDetailsDrawer({
                 </div>
                 {isSessionMode && (
                   <div className="text-[11px] text-muted-foreground font-mono whitespace-nowrap">
-                    {cacheHitCount}/{logsForList.length} cached
+                    {cacheHitCount}/{logsForList.length} {uiT("ui.3673014e72b6")}
                   </div>
                 )}
                 {isSessionMode && sessionTruncated && (
                   <div className="mt-1 text-[11px] text-warning font-mono">
-                    Showing most recent {logsForList.length} of {sessionTotalCount}
+                    {uiT("supplement.recent", { count: logsForList.length, total: sessionTotalCount })}
                   </div>
                 )}
                 {isSessionMode && (

@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
@@ -382,7 +383,7 @@ export function UserEditView({
               onChange={setModelMaxBudget}
               availableModels={userModels}
               usage={userData.user_info?.model_max_budget_usage}
-              hint="Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds."
+              hint={uiT("ui.b1c6d6497da1")}
             />
           )}
 

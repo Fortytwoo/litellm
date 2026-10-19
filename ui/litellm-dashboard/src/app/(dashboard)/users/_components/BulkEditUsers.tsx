@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useId, useState } from "react";
 import { userBulkUpdateUserCall, teamBulkMemberAddCall, Member } from "@/components/networking";
@@ -198,7 +199,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
         }
 
         if (failedTeams.length > 0) {
-          toast.warning(`Failed to add users to ${failedTeams.length} team(s)`);
+          toast.warning(uiT("supplement.failedTeams", { count: failedTeams.length }));
         }
       }
 
@@ -227,7 +228,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>
-            {updateAllUsers ? uiT("ui.2f8adcc8eade") : `Bulk Edit ${selectedUsers.length} User(s)`}
+            {updateAllUsers ? uiT("ui.2f8adcc8eade") : uiT("supplement.bulkUsers", { count: selectedUsers.length })}
           </DialogTitle>
         </DialogHeader>
         {allowAllUsers && (
@@ -294,8 +295,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         <div className="mb-4">
           <p className="text-sm text-foreground">
-            <strong>{uiT("ui.4de0bc28403b")}</strong> Fill in the fields below with the values you want to apply to all
-            selected users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.
+            <strong>{uiT("ui.4de0bc28403b")}</strong> {uiT("ui.9e349782c05d")}
           </p>
         </div>
 
@@ -357,10 +357,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                     <span className="text-xs text-muted-foreground">{uiT("ui.f2bf6a2c89dc")}</span>
                   </div>
 
-                  <span className="text-xs text-muted-foreground">
-                    Users will be added with &quot;user&quot; role by default. All users will be added to each selected
-                    team.
-                  </span>
+                  <span className="text-xs text-muted-foreground">{uiT("ui.30b49ddb6be0")}</span>
                 </>
               )}
             </div>
@@ -384,7 +381,9 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
         {loading && (
           <div className="mt-2.5 text-center">
             <span className="text-sm text-foreground">
-              Updating {updateAllUsers ? uiT("ui.60b8363d43c8") : selectedUsers.length} user(s)...
+              {uiT("supplement.updatingUsers", {
+                count: updateAllUsers ? uiT("ui.60b8363d43c8") : selectedUsers.length,
+              })}
             </span>
           </div>
         )}

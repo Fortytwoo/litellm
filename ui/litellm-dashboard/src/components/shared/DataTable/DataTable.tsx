@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
@@ -362,7 +363,7 @@ function DefaultEmptyState() {
         <SearchX className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">{uiT("ui.a43619f32117")}</div>
-      <div className="text-sm text-muted-foreground">No rows match your search or filters.</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.ed0e36157387")}</div>
     </div>
   );
 }

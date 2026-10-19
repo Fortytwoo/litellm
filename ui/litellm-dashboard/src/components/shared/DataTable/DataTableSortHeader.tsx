@@ -54,7 +54,7 @@ export function DataTableSortHeader<TData, TValue>({
               <button
                 type="button"
                 data-testid={`sort-trigger-${column.id}`}
-                aria-label={`Sort options for ${column.id}`}
+                aria-label={uiT("supplement.sort", { field: typeof title === "string" ? title : column.id })}
                 onClick={(event) => event.stopPropagation()}
                 className={cn(
                   "inline-flex size-6 items-center justify-center rounded-md hover:bg-muted",
@@ -125,8 +125,20 @@ export function DataTableMultiSortHeader<TData>({ table, fields, className }: Da
   const sorted: false | SortDirection = activeField === undefined ? false : activeDirection;
 
   const options = fields.flatMap((field) => [
-    { key: `${field.id}-asc`, id: field.id, desc: false, label: `${field.label} ascending`, Icon: ChevronUp },
-    { key: `${field.id}-desc`, id: field.id, desc: true, label: `${field.label} descending`, Icon: ChevronDown },
+    {
+      key: `${field.id}-asc`,
+      id: field.id,
+      desc: false,
+      label: uiT("supplement.ascending", { field: field.label }),
+      Icon: ChevronUp,
+    },
+    {
+      key: `${field.id}-desc`,
+      id: field.id,
+      desc: true,
+      label: uiT("supplement.descending", { field: field.label }),
+      Icon: ChevronDown,
+    },
   ]);
 
   const segmentClass = (isActive: boolean): string => {
@@ -160,7 +172,7 @@ export function DataTableMultiSortHeader<TData>({ table, fields, className }: Da
             <button
               type="button"
               data-testid={`sort-trigger-${fields[0]?.id ?? "field"}`}
-              aria-label={`Sort options for ${fields.map((field) => field.label).join(" or ")}`}
+              aria-label={uiT("supplement.sort", { field: fields.map((field) => field.label).join(" / ") })}
               onClick={(event) => event.stopPropagation()}
               className={cn(
                 "inline-flex size-6 items-center justify-center rounded-md hover:bg-muted",

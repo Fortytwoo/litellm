@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 
@@ -78,7 +79,10 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                     <span className="font-medium mr-2">{entity.entity_type}</span>
-                    <span className={`font-mono ${getScoreColor(entity.score)}`}>Score: {entity.score.toFixed(2)}</span>
+                    <span className={`font-mono ${getScoreColor(entity.score)}`}>
+                      {uiT("ui.9689a814f358")}
+                      {entity.score.toFixed(2)}
+                    </span>
                   </div>
                   <span className="text-xs text-muted-foreground">
                     {uiT("ui.64b368ff8076")} {entity.start}-{entity.end}
@@ -96,7 +100,8 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                         <div className="flex">
                           <span className="font-medium w-1/3">{uiT("ui.64b368ff8076")}</span>
                           <span>
-                            Characters {entity.start}-{entity.end}
+                            {uiT("ui.6fac39e2845b")}
+                            {entity.start}-{entity.end}
                           </span>
                         </div>
                         <div className="flex">

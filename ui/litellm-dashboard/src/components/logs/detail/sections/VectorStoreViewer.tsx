@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -139,9 +140,13 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                           <div className="flex items-center">
-                            <span className="font-medium mr-2">Result {resultIndex + 1}</span>
+                            <span className="font-medium mr-2">
+                              {uiT("ui.6e7d50e84f47")}
+                              {resultIndex + 1}
+                            </span>
                             <span className="text-muted-foreground text-sm">
-                              Score: <span className="font-mono">{result.score.toFixed(4)}</span>
+                              {uiT("ui.9689a814f358")}
+                              <span className="font-mono">{result.score.toFixed(4)}</span>
                             </span>
                           </div>
                         </div>

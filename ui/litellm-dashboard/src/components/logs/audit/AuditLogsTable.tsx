@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -207,7 +208,7 @@ export function AuditLogsTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search audit logs by ID…"
+            searchPlaceholder={uiT("ui.286f0090d3d9")}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
             onOpenFilters={() => setFiltersOpen(true)}

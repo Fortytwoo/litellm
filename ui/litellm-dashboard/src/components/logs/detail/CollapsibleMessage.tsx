@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * CollapsibleMessage - Collapsible message with arrow and char count
  * Used for system messages
@@ -14,6 +16,8 @@ interface CollapsibleMessageProps {
 }
 
 export function CollapsibleMessage({ label, content, defaultExpanded = false }: CollapsibleMessageProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const charCount = content?.length || 0;
 
@@ -29,8 +33,10 @@ export function CollapsibleMessage({ label, content, defaultExpanded = false }: 
         ) : (
           <ChevronRight className="size-3 shrink-0 text-muted-foreground" />
         )}
-        <span className="text-[10px] uppercase tracking-[0.5px] text-muted-foreground">{label}</span>
-        <span className="text-[10px] text-muted-foreground">({charCount.toLocaleString()} chars)</span>
+        <span className="text-[10px] uppercase tracking-[0.5px] text-muted-foreground">{roleLabel(label, uiT)}</span>
+        <span className="text-[10px] text-muted-foreground">
+          {uiT("supplement.characters", { count: charCount.toLocaleString() })}
+        </span>
       </CollapsibleTrigger>
 
       <CollapsibleContent
@@ -41,4 +47,9 @@ export function CollapsibleMessage({ label, content, defaultExpanded = false }: 
       </CollapsibleContent>
     </Collapsible>
   );
+}
+
+function roleLabel(label: string, translate: (key: string) => string): string {
+  const role = label.toLowerCase();
+  return ["user", "assistant", "system", "tool"].includes(role) ? translate("supplement." + role + "Role") : label;
 }

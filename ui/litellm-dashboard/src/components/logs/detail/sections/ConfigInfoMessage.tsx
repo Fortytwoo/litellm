@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 
@@ -33,9 +34,9 @@ export const ConfigInfoMessage: React.FC<ConfigInfoMessageProps> = ({ show }) =>
       <div>
         <h4 className="text-sm font-medium text-info">{uiT("ui.a80e09a8e8a6")}</h4>
         <p className="text-sm text-info mt-1">
-          To view request and response details, enable prompt storage in your LiteLLM configuration by adding the
-          following to your <code className="bg-info/15 px-1 py-0.5 rounded-sm">proxy_config.yaml</code> file, or toggle
-          the setting in <strong>{uiT("ui.6540be759889")}</strong>.
+          {uiT("ui.2586278c4e68")}
+          <code className="bg-info/15 px-1 py-0.5 rounded-sm">proxy_config.yaml</code> {uiT("ui.bcd00f1950a3")}
+          <strong>{uiT("ui.6540be759889")}</strong>.
         </p>
         <pre className="mt-2 bg-card p-3 rounded-sm border border-info/20 text-xs font-mono overflow-auto">
           {`general_settings:

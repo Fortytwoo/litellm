@@ -1,19 +1,23 @@
+import { t as translateUi } from "@/i18n";
 import { z } from "zod";
 
 const isBlank = (value: string): boolean => value.trim() === "";
 
 const amountOrEmpty = z
   .string()
-  .refine(
-    (value) => isBlank(value) || (Number.isFinite(Number(value)) && Number(value) >= 0),
-    "Must be a non-negative number",
-  );
+  .refine((value) => isBlank(value) || (Number.isFinite(Number(value)) && Number(value) >= 0), {
+    error: () => translateUi("supplement.nonNegative"),
+  });
 
 const defaultTeamRowSchema = z.object({
   team_id: z
     .string()
     .nullable()
-    .pipe(z.string({ error: "Select a team" }).min(1, "Select a team")),
+    .pipe(
+      z
+        .string({ error: () => translateUi("supplement.selectTeam") })
+        .min(1, { error: () => translateUi("supplement.selectTeam") }),
+    ),
   max_budget_in_team: amountOrEmpty,
   user_role: z.enum(["user", "admin"]),
 });
@@ -38,7 +42,9 @@ export const defaultUserSettingsSchema = z.object(defaultUserSettingsShape).supe
   repeatedRows.forEach((index) =>
     ctx.addIssue({
       code: "custom",
-      message: "This team is already listed",
+      get message() {
+        return translateUi("ui.f0a171a36c85");
+      },
       path: ["teams", index, "team_id"],
     }),
   );

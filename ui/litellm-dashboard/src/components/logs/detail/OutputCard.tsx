@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * OutputCard - Displays output message with token count and cost
@@ -27,7 +28,7 @@ export function OutputCard({ message, completionTokens, outputCost }: OutputCard
     if (!message) return;
 
     navigator.clipboard.writeText(message.content || "");
-    toast.success("Output copied");
+    toast.success(uiT("ui.fe4fe7e78f1d"));
   };
 
   return (

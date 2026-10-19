@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { setActiveLocale } from "@/i18n";
 
 import { DataTable } from "@/components/shared/DataTable";
 
@@ -8,6 +9,7 @@ import type { LogEntry } from "../types";
 import { getRequestLogsTableColumns } from "./RequestLogsTableColumns";
 
 const { copyToClipboardMock } = vi.hoisted(() => ({ copyToClipboardMock: vi.fn() }));
+beforeEach(() => setActiveLocale("en"));
 
 vi.mock("@/utils/dataUtils", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/utils/dataUtils")>()),

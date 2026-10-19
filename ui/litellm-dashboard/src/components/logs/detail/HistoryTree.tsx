@@ -33,8 +33,7 @@ export function HistoryTree({ messages }: HistoryTreeProps) {
           <ChevronRight className="size-3 shrink-0 text-muted-foreground" />
         )}
         <span className="text-[10px] uppercase tracking-[0.5px] text-muted-foreground">
-          {uiT("ui.0c3a9197eb08")}
-          {messages.length} message{messages.length !== 1 ? "s" : ""})
+          {uiT(messages.length === 1 ? "supplement.historyOne" : "supplement.history", { count: messages.length })}
         </span>
       </CollapsibleTrigger>
 

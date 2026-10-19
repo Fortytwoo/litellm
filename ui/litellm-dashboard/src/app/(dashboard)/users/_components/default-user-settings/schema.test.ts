@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { setActiveLocale } from "@/i18n";
 
 import { defaultUserSettingsSchema, type DefaultUserSettingsFormValues } from "./schema";
 
@@ -17,6 +18,16 @@ const issuesFor = (input: DefaultUserSettingsFormValues) => {
 };
 
 describe("defaultUserSettingsSchema", () => {
+  beforeEach(() => setActiveLocale("en"));
+
+  it("resolves validation messages in the current language after the schema was created", () => {
+    setActiveLocale("zh");
+    expect(issuesFor(values({ max_budget: "-1" }))).toEqual([{ path: ["max_budget"], message: "必须为非负数" }]);
+    setActiveLocale("en");
+    expect(issuesFor(values({ max_budget: "-1" }))).toEqual([
+      { path: ["max_budget"], message: "Must be a non-negative number" },
+    ]);
+  });
   it("accepts settings with no default teams", () => {
     expect(defaultUserSettingsSchema.safeParse(values()).success).toBe(true);
   });

@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
@@ -163,7 +164,7 @@ export function UsersTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search by email or ID…"
+            searchPlaceholder={uiT("ui.6688287ebdd5")}
             onOpenFilters={() => setFiltersOpen(true)}
             filterLabels={FILTER_LABELS}
             formatFilterValue={formatFilterValue}

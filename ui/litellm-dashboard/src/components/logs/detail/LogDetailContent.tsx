@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { Check, ChevronDown, ChevronRight, CircleAlert, Copy, Info } from "lucide-react";
@@ -111,7 +112,7 @@ export function LogDetailContent({
     if (hasError && errorInfo) {
       return {
         error: {
-          message: errorInfo.error_message || "An error occurred",
+          message: errorInfo.error_message || uiT("ui.ddf785b79c42"),
           type: errorInfo.error_class || "error",
           code: errorInfo.error_code || "unknown",
           param: null,
@@ -217,9 +218,7 @@ export function LogDetailContent({
       {isLoadingDetails ? (
         <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6 p-8 text-center">
           <UiLoadingSpinner className="inline-block size-5" />
-          <div style={{ marginTop: 8, color: "var(--color-muted-foreground)" }}>
-            Loading request &amp; response data...
-          </div>
+          <div style={{ marginTop: 8, color: "var(--color-muted-foreground)" }}>{uiT("ui.802ce2789d42")}</div>
         </div>
       ) : null}
       {!isLoadingDetails && hasClassifierAudit && (
@@ -371,6 +370,8 @@ function UserIdentity({ userId, email }: { userId: string; email?: string }) {
 }
 
 function GuardrailLabel({ label, maskedCount }: { label: string; maskedCount: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const handleClick = () => {
     const el = document.getElementById("guardrail-section");
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -381,7 +382,11 @@ function GuardrailLabel({ label, maskedCount }: { label: string; maskedCount: nu
       <a onClick={handleClick} style={{ cursor: "pointer" }}>
         {label}
       </a>
-      {maskedCount > 0 && <Badge variant="secondary">{maskedCount} masked</Badge>}
+      {maskedCount > 0 && (
+        <Badge variant="secondary">
+          {maskedCount} {uiT("ui.30e15b29b07c")}
+        </Badge>
+      )}
     </span>
   );
 }
@@ -415,7 +420,13 @@ function MetricLabel({ label, tooltip, docsUrl }: { label: string; tooltip: stri
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger
-            render={<span role="img" aria-label={`${label} info`} className="inline-flex text-muted-foreground" />}
+            render={
+              <span
+                role="img"
+                aria-label={uiT("supplement.info", { label })}
+                className="inline-flex text-muted-foreground"
+              />
+            }
           >
             <Info className="size-3.5" />
           </TooltipTrigger>
@@ -772,6 +783,8 @@ const guardrailJumpLinkOutcome = (evaluated: unknown[]): keyof typeof GUARDRAIL_
 };
 
 export function GuardrailJumpLink({ guardrailEntries }: { guardrailEntries: any[] }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const statuses = guardrailEntries.map((e) => e?.guardrail_status || e?.status);
   const evaluated = statuses.filter((s) => !isNotRunStatus(s));
   const notRunCount = statuses.length - evaluated.length;
@@ -798,9 +811,8 @@ export function GuardrailJumpLink({ guardrailEntries }: { guardrailEntries: any[
           fontWeight: 500,
         }}
       >
-        {glyph} {evaluated.length} guardrail
-        {evaluated.length !== 1 ? "s" : ""} evaluated
-        {notRunCount > 0 ? `, ${notRunCount} not run` : ""}
+        {glyph} {uiT("supplement.evaluated", { count: evaluated.length })}
+        {notRunCount > 0 ? uiT("supplement.notRun", { count: notRunCount }) : ""}
         <span style={{ fontSize: 11, opacity: 0.7 }}>{"\u2193"}</span>
       </div>
     </div>

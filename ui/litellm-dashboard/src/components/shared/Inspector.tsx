@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
@@ -185,6 +186,8 @@ function useExitPresence<T>(item: T | null, itemKey: (item: T) => string) {
 }
 
 function ResizeHandle({ noun, width, onResize }: { noun: string; width: number; onResize: (width: number) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [dragging, setDragging] = useState(false);
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -207,7 +210,11 @@ function ResizeHandle({ noun, width, onResize }: { noun: string; width: number; 
     <div
       role="separator"
       aria-orientation="vertical"
-      aria-label={`Resize ${noun} panel`}
+      aria-label={uiT("supplement.resize", {
+        noun: ["log", "key", "user", "trace", "team", "agent"].includes(noun)
+          ? uiT("supplement." + noun + "Noun")
+          : noun,
+      })}
       aria-valuenow={width}
       aria-valuemin={MIN_WIDTH}
       tabIndex={0}
@@ -254,17 +261,30 @@ function HeaderButton({
 }
 
 function Header() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { index, total, noun, step, close, fullScreen, setFullScreen } = useInspector();
+  const localizedNoun = ["log", "key", "user", "trace", "team", "agent"].includes(noun)
+    ? uiT("supplement." + noun + "Noun")
+    : noun;
   return (
     <div data-slot="inspector-header" className="flex h-[37px] shrink-0 items-center gap-1 border-b border-border px-2">
-      <HeaderButton label="Close (Esc)" onClick={close}>
+      <HeaderButton label={uiT("ui.961b2a04403e")} onClick={close}>
         <ChevronsRight className="size-4" />
       </HeaderButton>
       <span className="mx-1 h-4 w-px bg-border" />
-      <HeaderButton label={`Next ${noun} (J)`} disabled={index < 0 || index >= total - 1} onClick={() => step(1)}>
+      <HeaderButton
+        label={uiT("supplement.next", { noun: localizedNoun })}
+        disabled={index < 0 || index >= total - 1}
+        onClick={() => step(1)}
+      >
         <ChevronDown className="size-4" />
       </HeaderButton>
-      <HeaderButton label={`Previous ${noun} (K)`} disabled={index <= 0} onClick={() => step(-1)}>
+      <HeaderButton
+        label={uiT("supplement.previous", { noun: localizedNoun })}
+        disabled={index <= 0}
+        onClick={() => step(-1)}
+      >
         <ChevronUp className="size-4" />
       </HeaderButton>
       {index >= 0 && (
@@ -274,12 +294,12 @@ function Header() {
       )}
       <div className="ml-auto flex items-center gap-1">
         <HeaderButton
-          label={fullScreen ? "Exit full screen" : "Enter full screen"}
+          label={fullScreen ? uiT("ui.897e0cf78b80") : uiT("ui.5a74219758ed")}
           onClick={() => setFullScreen(!fullScreen)}
         >
           {fullScreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
         </HeaderButton>
-        <HeaderButton label={`Close ${noun} (Esc)`} onClick={close}>
+        <HeaderButton label={uiT("supplement.close", { noun: localizedNoun })} onClick={close}>
           <X className="size-4" />
         </HeaderButton>
       </div>

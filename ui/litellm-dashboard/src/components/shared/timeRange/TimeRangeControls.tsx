@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ChevronDown, Pause, Play } from "lucide-react";
 import moment from "moment";
@@ -17,7 +19,10 @@ import { isLive, presetLabel, RANGE_PRESETS, type RelativeRange, type TimeWindow
 const RANGE_LABEL_FORMAT = "MMM D, h:mm A";
 
 const fixedRangeLabel = (range: TimeWindow): string =>
-  `${moment(range.startMs).format(RANGE_LABEL_FORMAT)} to ${moment(range.endMs).format(RANGE_LABEL_FORMAT)}`;
+  translateUi("supplement.fixedRange", undefined, {
+    start: moment(range.startMs).format(RANGE_LABEL_FORMAT),
+    end: moment(range.endMs).format(RANGE_LABEL_FORMAT),
+  });
 
 /** A zoom or a paused range names its actual bounds; a live range names its preset. */
 const rangeLabel = (range: RelativeRange, zoom: TimeWindow | null): string => {
@@ -43,13 +48,15 @@ export function TimeRangeControls({
   showLive = true,
   onLiveChange,
 }: TimeRangeControlsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const live = isLive(range);
   const label = rangeLabel(range, zoom);
   return (
     <div className="flex min-w-0 max-w-full items-stretch border-l border-border">
       <DropdownMenu>
         <DropdownMenuTrigger
-          aria-label="Time range"
+          aria-label={uiT("ui.58acc5109e03")}
           className={cn(SEGMENT, "min-w-0 justify-between text-foreground hover:bg-muted/60 sm:min-w-40")}
           title={label}
           data-testid="time-range-trigger"
@@ -82,7 +89,7 @@ export function TimeRangeControls({
           )}
         >
           {live ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
-          Live
+          {uiT("ui.b64ac05f17e6")}
         </button>
       )}
     </div>

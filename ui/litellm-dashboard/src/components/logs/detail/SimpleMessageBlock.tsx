@@ -3,6 +3,7 @@
  * Used for messages in tree view and last user message
  */
 
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/cva.config";
 import { ToolCall } from "./prettyMessagesTypes";
 import { SimpleToolCallBlock } from "./SimpleToolCallBlock";
@@ -15,6 +16,7 @@ interface SimpleMessageBlockProps {
 }
 
 export function SimpleMessageBlock({ label, content, toolCalls, isCompact = false }: SimpleMessageBlockProps) {
+  const { t: uiT } = useDashboardLanguage();
   // Don't show "null" for empty content
   const displayContent = content && content !== "null" && content.length > 0 ? content : null;
   const hasToolCalls = toolCalls && toolCalls.length > 0;
@@ -26,7 +28,9 @@ export function SimpleMessageBlock({ label, content, toolCalls, isCompact = fals
 
   return (
     <div className={cn(isCompact && "mb-2")}>
-      <span className="mb-[3px] block text-[10px] uppercase tracking-[0.5px] text-muted-foreground">{label}</span>
+      <span className="mb-[3px] block text-[10px] uppercase tracking-[0.5px] text-muted-foreground">
+        {roleLabel(label, uiT)}
+      </span>
 
       {displayContent && (
         <div
@@ -49,4 +53,9 @@ export function SimpleMessageBlock({ label, content, toolCalls, isCompact = fals
       )}
     </div>
   );
+}
+
+function roleLabel(label: string, translate: (key: string) => string): string {
+  const role = label.toLowerCase();
+  return ["user", "assistant", "system", "tool"].includes(role) ? translate("supplement." + role + "Role") : label;
 }

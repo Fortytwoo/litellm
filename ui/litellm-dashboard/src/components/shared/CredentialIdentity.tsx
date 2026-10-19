@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import type { ReactNode } from "react";
 
 import type { CredentialItem } from "@/components/networking";
@@ -32,8 +34,10 @@ interface AttachedCredentialProps {
 }
 
 export function AttachedCredential({ credentialName, credentials }: AttachedCredentialProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!credentialName) {
-    return <>Manual</>;
+    return <>{uiT("ui.b0b9fe24ffa9")}</>;
   }
   return (
     <CredentialIdentity

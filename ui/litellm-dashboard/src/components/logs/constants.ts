@@ -85,8 +85,12 @@ export const SPAN_TYPE_LABELS: Record<string, string> = {
 };
 
 export const CREDENTIAL_LABELS: Record<string, string> = {
-  true: "Client OAuth token",
-  false: "Configured key",
+  get true() {
+    return translateUi("supplement.clientOauth");
+  },
+  get false() {
+    return translateUi("supplement.configuredKey");
+  },
 };
 
 export const QUICK_SELECT_OPTIONS: { label: string; value: number; unit: string }[] = [

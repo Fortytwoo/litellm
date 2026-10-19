@@ -1,4 +1,5 @@
 "use client";
+
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * RealtimePrettyView - Structured pretty view for OpenAI Realtime API logs
@@ -175,7 +176,7 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
           </span>
           {turnCount > 0 && (
             <Badge variant="secondary" style={{ margin: 0, fontWeight: 500 }}>
-              {turnCount} {turnCount === 1 ? "turn" : "turns"}
+              {uiT(turnCount === 1 ? "supplement.turnOne" : "supplement.turns", { count: turnCount })}
             </Badge>
           )}
           {session.voice && (
@@ -220,7 +221,10 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
             <ConfigRow label={uiT("ui.8999b13d165e")} value={session.output_audio_format} />
             {session.turn_detection && <ConfigRow label={uiT("ui.cfeaf4c444d8")} value={session.turn_detection.type} />}
             {session.tools && session.tools.length > 0 && (
-              <ConfigRow label={uiT("ui.ea93d6a262ec")} value={`${session.tools.length} tool(s)`} />
+              <ConfigRow
+                label={uiT("ui.ea93d6a262ec")}
+                value={uiT("supplement.tools", { count: session.tools.length })}
+              />
             )}
           </div>
 
@@ -345,11 +349,11 @@ function ResponseTurn({ response, index }: { response: RealtimeResponse; index: 
         }}
       >
         <Badge variant={response.status === "completed" ? "secondary" : "outline"} style={{ margin: 0 }}>
-          {response.status || "unknown"}
+          {response.status || uiT("ui.b23a6a8439c0")}
         </Badge>
         {usage && (
           <span className="text-muted-foreground" style={{ fontSize: 11 }}>
-            {usage.input_tokens ?? 0} in / {usage.output_tokens ?? 0} out tokens
+            {uiT("supplement.usage", { input: usage.input_tokens ?? 0, output: usage.output_tokens ?? 0 })}
           </span>
         )}
         {response.conversation_id && (
@@ -358,7 +362,7 @@ function ResponseTurn({ response, index }: { response: RealtimeResponse; index: 
               <TooltipTrigger
                 render={<span className="text-muted-foreground" style={{ fontSize: 11, cursor: "help" }} />}
               >
-                conv: {response.conversation_id.slice(0, 12)}...
+                {uiT("supplement.conversation")} {response.conversation_id.slice(0, 12)}...
               </TooltipTrigger>
               <TooltipContent>{response.conversation_id}</TooltipContent>
             </Tooltip>

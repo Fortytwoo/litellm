@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import type { ComponentProps } from "react";
 
@@ -25,10 +26,12 @@ export function PageHeaderDescription({ className, ...props }: ComponentProps<"p
 }
 
 export function PageHeaderControls({ className, ...props }: ComponentProps<"div">) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div
       role="group"
-      aria-label="Page controls"
+      aria-label={uiT("ui.0345a7792468")}
       className={cn("mt-5 flex min-h-9 items-center gap-2", className)}
       {...props}
     />
