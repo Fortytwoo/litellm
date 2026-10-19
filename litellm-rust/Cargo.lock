@@ -4141,6 +4141,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "litellm-integrations"
+version = "0.1.0"
+dependencies = [
+ "litellm-llms-types",
+ "rstest",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "litellm-llms"
 version = "0.1.0"
 dependencies = [
@@ -4187,6 +4197,7 @@ dependencies = [
  "serde_json",
  "serde_with",
  "strum",
+ "unicode-properties",
 ]
 
 [[package]]
