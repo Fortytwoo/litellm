@@ -6,6 +6,8 @@ Real business readback returned two healthy upstream services, 92 tools, seven F
 
 The secondary gateway reads the existing department snapshot without synchronizing Feishu and has its own durable lease-finalization queue. Console sessions, native model storage and encrypted model delivery remain independent. The current real user's native key owner was reconciled to the production subject identifier, preserving the key, spend, limits and model list. No real provider call or report export was added. Changes submitted through the business permission pages now affect the shared store
 
+Final browser checks covered all five business management pages without JavaScript errors or failed requests. Clicking semantic search returned 20 real tools after correcting its submit action. Anonymous pages redirected to central login, anonymous APIs returned HTTP 401, and browser storage contained no personal model key
+
 The current operator completed real central Feishu login. The isolated Harness application used its dedicated client and callback on port 3083, reused the central browser login, received its explicit model catalog and completed a streamed conversation. The renderer received no personal model key
 
 Browser acceptance covered native home, deployed models, Virtual Keys, model insights, usage and request logs. Native Playground Chat completed a streamed DeepSeek reply without entering a key. The business routes passed service display, nested tool arguments and inline results, stable candidate import for test account number 4, department authorization save and audit pagination
