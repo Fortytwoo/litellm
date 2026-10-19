@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -154,6 +156,8 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   onUserCreated,
   isEmbedded = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [uiSettings, setUISettings] = useState<UISettings | null>(null);
   const defaultValues = isEmbedded ? EMBEDDED_DEFAULTS : STANDALONE_DEFAULTS;
@@ -245,7 +249,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   }));
 
   const userEmailField = (
-    <FormField control={form.control} name="user_email" label="User Email">
+    <FormField control={form.control} name="user_email" label={uiT("ui.5809bbd8a352")}>
       {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
     </FormField>
   );
@@ -254,7 +258,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
     <FormField
       control={form.control}
       name="team_id"
-      label="Team"
+      label={uiT("ui.5985039f106d")}
       description="If selected, user will be added as a 'user' role to the team."
     >
       {({ id, value, onChange }) => <TeamDropdown id={id} value={value} onChange={onChange} />}
@@ -262,9 +266,9 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   );
 
   const metadataField = (
-    <FormField control={form.control} name="metadata" label="Metadata">
+    <FormField control={form.control} name="metadata" label={uiT("ui.9eddf573cb50")}>
       {({ ref, value, ...control }) => (
-        <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder="Enter metadata as JSON" />
+        <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder={uiT("ui.10b479100f50")} />
       )}
     </FormField>
   );
@@ -315,7 +319,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
             {sendInviteEmailField}
           </FieldGroup>
           <div className="mt-4 text-right">
-            <Button type="submit">Create User</Button>
+            <Button type="submit">{uiT("ui.80532ec0b622")}</Button>
           </div>
         </form>
       </TooltipProvider>
@@ -326,12 +330,12 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   return (
     <>
       <Button type="button" onClick={() => setIsModalVisible(true)}>
-        + Invite User
+        {uiT("ui.ca31218f08ee")}
       </Button>
       <Dialog open={isModalVisible} onOpenChange={(open) => !open && handleCancel()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Invite User</DialogTitle>
+            <DialogTitle>{uiT("ui.19fa22d99577")}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-3">
             <p className="mb-1 text-sm text-foreground">Create a User who can own keys</p>
@@ -352,7 +356,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                 <FormField
                   control={form.control}
                   name="organization_ids"
-                  label="Organization"
+                  label={uiT("ui.d764d42592fc")}
                   description="The user will be added to the selected organization(s)."
                 >
                   {({ id, value, onChange }) => (
@@ -406,13 +410,13 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                       {({ value, onChange }) => (
                         <MultiSelect
                           options={[
-                            { label: "All Proxy Models", value: "all-proxy-models" },
-                            { label: "No Default Models", value: "no-default-models" },
+                            { label: uiT("ui.72d4bf586944"), value: "all-proxy-models" },
+                            { label: uiT("ui.c1bf1f7a4789"), value: "no-default-models" },
                             ...userModels.map((model) => ({ label: getModelDisplayName(model), value: model })),
                           ]}
                           value={value ?? []}
                           onValueChange={onChange}
-                          placeholder="Select models"
+                          placeholder={uiT("ui.9fcdcf02670c")}
                         />
                       )}
                     </FormField>
@@ -423,7 +427,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
               <div className="mt-4 text-right">
                 <Button type="submit">
                   <UserPlus />
-                  Invite User
+                  {uiT("ui.19fa22d99577")}
                 </Button>
               </div>
             </form>

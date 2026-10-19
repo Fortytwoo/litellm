@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -48,7 +49,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    header: "Timestamp",
+    get header() {
+      return translateUi("ui.115a2cc92c10");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.updated_at} />,
@@ -56,7 +59,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
   {
     id: "action",
     accessorKey: "action",
-    header: "Action",
+    get header() {
+      return translateUi("ui.64cff1319d2f");
+    },
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
@@ -66,7 +71,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
   {
     id: "table_name",
     accessorKey: "table_name",
-    header: "Table",
+    get header() {
+      return translateUi("ui.16d1c9050a0b");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) => (
@@ -76,7 +83,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
   {
     id: "object_id",
     accessorKey: "object_id",
-    header: "Object ID",
+    get header() {
+      return translateUi("ui.f79ceb0b0078");
+    },
     minSize: 220,
     enableSorting: false,
     cell: ({ row }) => (
@@ -91,7 +100,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
   {
     id: "changed_by",
     accessorKey: "changed_by",
-    header: "Changed By",
+    get header() {
+      return translateUi("ui.02b8ac805184");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) => <DefaultProxyAdminTag userId={row.original.changed_by} />,
@@ -99,7 +110,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
   {
     id: "changed_by_api_key",
     accessorKey: "changed_by_api_key",
-    header: "API Key (Hash)",
+    get header() {
+      return translateUi("ui.fce4ec3d2dcf");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.changed_by_api_key} variant="plain" />,

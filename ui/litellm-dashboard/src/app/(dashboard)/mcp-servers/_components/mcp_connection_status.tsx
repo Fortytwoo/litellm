@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleCheck, CircleAlert, RefreshCw, Wrench, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -27,6 +29,8 @@ const MCPConnectionStatus: React.FC<MCPConnectionStatusProps> = ({
   canFetchTools,
   fetchTools,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isPreviewForbidden = toolsErrorStatus === 403;
   // Don't show anything if required fields aren't filled
   if (!canFetchTools && !formValues.url && !formValues.spec_path) {
@@ -84,7 +88,7 @@ const MCPConnectionStatus: React.FC<MCPConnectionStatusProps> = ({
               {toolsError && !isPreviewForbidden && (
                 <div className="flex items-center gap-1 text-destructive">
                   <CircleAlert className="size-4" />
-                  <p className="text-sm font-medium">Failed</p>
+                  <p className="text-sm font-medium">{uiT("ui.031a8f0f659d")}</p>
                 </div>
               )}
             </div>

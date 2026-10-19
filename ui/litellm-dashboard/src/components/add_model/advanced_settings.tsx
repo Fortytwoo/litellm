@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -82,6 +84,8 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   tagsList,
   accessToken,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [customPricing, setCustomPricing] = React.useState(false);
   const [pricingModel, setPricingModel] = React.useState<"per_token" | "per_second">("per_token");
   const [showCacheControl, setShowCacheControl] = React.useState(false);
@@ -151,7 +155,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               name="guardrails"
               label={
                 <span>
-                  Guardrails{" "}
+                  {uiT("ui.443f975eefe8")}{" "}
                   <SimpleTooltip content="Apply safety guardrails to this key to filter content or enforce policies">
                     <a
                       href="https://docs.litellm.ai/docs/proxy/guardrails/quick_start"
@@ -180,11 +184,11 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               )}
             </MountedFormField>
 
-            <MountedFormField name="tags" label="Tags" className="mb-4">
+            <MountedFormField name="tags" label={uiT("ui.1331275bc537")} className="mb-4">
               {(control) => (
                 <MultiSelect
                   id={control.id}
-                  placeholder="Select or enter tags"
+                  placeholder={uiT("ui.ece0d183110d")}
                   emptyText="Type to add a tag"
                   value={(control.value as string[] | undefined) ?? []}
                   onValueChange={control.onChange}
@@ -426,7 +430,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                     rel="noopener noreferrer"
                     className="text-primary underline-offset-4 hover:underline"
                   >
-                    Learn more
+                    {uiT("ui.1445799c033a")}
                   </a>
                 </span>,
               )}

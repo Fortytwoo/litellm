@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleCheck, CircleX, FlaskConical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +32,8 @@ interface EvalViewerProps {
 }
 
 export default function EvalViewer({ data }: EvalViewerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const entries: EvalInformation[] = Array.isArray(data) ? data : [data];
 
   if (!entries.length) return null;
@@ -39,7 +43,7 @@ export default function EvalViewer({ data }: EvalViewerProps) {
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
         <FlaskConical className="size-4" style={{ color: "#6366f1" }} />
         <span className="font-semibold" style={{ fontSize: 15 }}>
-          LLM Judge Results
+          {uiT("ui.5cd71e22592c")}
         </span>
       </div>
 
@@ -51,6 +55,8 @@ export default function EvalViewer({ data }: EvalViewerProps) {
 }
 
 function EvalEntryCard({ entry }: { entry: EvalInformation }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const passed = entry.passed;
   const scoreColor = passed ? "#52c41a" : "#ff4d4f";
 
@@ -71,7 +77,9 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
               <CircleX className="size-4" style={{ color: "#ff4d4f" }} />
             )}
             <span className="font-semibold">{entry.eval_name}</span>
-            <Badge variant={passed ? "secondary" : "destructive"}>{passed ? "PASSED" : "FAILED"}</Badge>
+            <Badge variant={passed ? "secondary" : "destructive"}>
+              {passed ? uiT("ui.e5a0eb01db90") : uiT("ui.02bd34929917")}
+            </Badge>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger
@@ -85,10 +93,7 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
                   {entry.overall_score?.toFixed(0)} / 100
                   {entry.threshold != null && ` (threshold: ${entry.threshold})`}
                 </TooltipTrigger>
-                <TooltipContent>
-                  Weighted average of all criterion scores. Each criterion has a weight (%) set when the eval was
-                  created — higher-weight criteria count more toward the final score.
-                </TooltipContent>
+                <TooltipContent>{uiT("ui.efb1f1d18dc2")}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
@@ -120,22 +125,20 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead style={{ width: 160 }}>Criterion</TableHead>
-                <TableHead style={{ width: 65 }}>Weight</TableHead>
-                <TableHead style={{ width: 65 }}>Score</TableHead>
+                <TableHead style={{ width: 160 }}>{uiT("ui.3162a17a51df")}</TableHead>
+                <TableHead style={{ width: 65 }}>{uiT("ui.81d27ef6d503")}</TableHead>
+                <TableHead style={{ width: 65 }}>{uiT("ui.38e5a46cbc5a")}</TableHead>
                 <TableHead style={{ width: 75 }}>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger render={<span style={{ borderBottom: "1px dashed #aaa", cursor: "help" }} />}>
-                        Weighted
+                        {uiT("ui.ec0fad25382b")}
                       </TooltipTrigger>
-                      <TooltipContent>
-                        Score × Weight — how much each criterion contributes to the final score
-                      </TooltipContent>
+                      <TooltipContent>{uiT("ui.6492efb77142")}</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </TableHead>
-                <TableHead>Comment</TableHead>
+                <TableHead>{uiT("ui.44f5e3fbec57")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -189,7 +192,7 @@ function EvalEntryCard({ entry }: { entry: EvalInformation }) {
                 <TableRow>
                   <TableCell>
                     <span className="font-semibold" style={{ fontSize: 12 }}>
-                      Total
+                      {uiT("ui.c9b3c38247f7")}
                     </span>
                   </TableCell>
                   <TableCell />

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -25,6 +26,8 @@ interface MemoryViewProps {
 const DEFAULT_PAGE_SIZE = 50;
 
 export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch] = useDebouncedValue(searchInput, { wait: DEBOUNCE_WAIT_MS });
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: DEFAULT_PAGE_SIZE });
@@ -178,7 +181,7 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       <div className="flex flex-col gap-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground">Memory</h1>
+            <h1 className="text-2xl font-semibold text-foreground">{uiT("ui.c3963aedaac6")}</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Inspect what your agents have stored under{" "}
               <code className="rounded-sm border border-border bg-muted px-1 py-0.5 font-mono text-xs text-foreground">
@@ -234,10 +237,10 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
         resourceInformation={
           deleteRow
             ? [
-                { label: "Key", value: deleteRow.key, code: true },
+                { label: uiT("ui.99a52df3ff3d"), value: deleteRow.key, code: true },
                 { label: "Memory ID", value: deleteRow.memory_id, code: true },
-                { label: "User ID", value: deleteRow.user_id ?? "-", code: true },
-                { label: "Team ID", value: deleteRow.team_id ?? "-", code: true },
+                { label: uiT("ui.7967e089a7b9"), value: deleteRow.user_id ?? "-", code: true },
+                { label: uiT("ui.fa2758a6173a"), value: deleteRow.team_id ?? "-", code: true },
               ]
             : []
         }

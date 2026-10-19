@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Globe2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +23,8 @@ export function GuardrailSettingsView({
   variant = "card",
   className = "",
 }: GuardrailSettingsViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const optedOutSet = new Set(optedOutGlobalGuardrails);
   const globalsRunning = Array.from(globalGuardrailNames).filter((n) => !optedOutSet.has(n));
   const nonGlobalOptIns = teamGuardrails.filter((n) => !globalGuardrailNames.has(n));
@@ -28,7 +32,7 @@ export function GuardrailSettingsView({
   const isEmpty = !killSwitchOn && globalsRunning.length === 0 && nonGlobalOptIns.length === 0;
 
   const content = isEmpty ? (
-    <span className="block text-muted-foreground">No guardrails configured</span>
+    <span className="block text-muted-foreground">{uiT("ui.06b64f696c9c")}</span>
   ) : (
     <div className="flex flex-col gap-4">
       <div>

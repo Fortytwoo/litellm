@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleAlert, Info } from "lucide-react";
 import { z } from "zod";
@@ -27,6 +29,8 @@ const onboardingSchema = z.object({
 type OnboardingFormValues = z.infer<typeof onboardingSchema>;
 
 export function OnboardingFormBody({ variant, userEmail, isPending, claimError, onSubmit }: OnboardingFormBodyProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(onboardingSchema, { defaultValues: { password: "" } });
   const emailFieldId = React.useId();
   const isResetPassword = variant === "reset_password";
@@ -76,7 +80,7 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
               <FormField
                 control={form.control}
                 name="password"
-                label="Password"
+                label={uiT("ui.e7cf3ef4f17c")}
                 description={isResetPassword ? "Enter your new password" : "Create a password for your account"}
               >
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} />}

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Save } from "lucide-react";
 import { useWatch } from "react-hook-form";
@@ -45,6 +46,8 @@ export default function TeamAdminSettingsForm({
   onCancel,
   onSave,
 }: TeamAdminSettingsFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(teamAdminSettingsSchema, { defaultValues: initialValues });
   const draft = useWatch({ control: form.control });
   const hasChanges = Object.keys(teamAdminSettingsChanges(draft, initialValues, editableFields)).length > 0;
@@ -67,11 +70,11 @@ export default function TeamAdminSettingsForm({
 
       <div className="mt-6 flex items-center justify-end gap-2">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSaving}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
         <Button type="submit" disabled={isSaving || !hasChanges}>
           {isSaving ? <UiLoadingSpinner className="size-4" /> : <Save className="size-4" />}
-          Save Changes
+          {uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </form>

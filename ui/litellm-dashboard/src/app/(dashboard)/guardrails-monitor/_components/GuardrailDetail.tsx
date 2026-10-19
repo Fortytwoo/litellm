@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Settings, Shield, TriangleAlert } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -29,6 +31,8 @@ const STATUS_TONE: Record<string, StatusTone> = {
 };
 
 export function GuardrailDetail({ guardrailId, onBack, accessToken = null, startDate, endDate }: GuardrailDetailProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [activeTab, setActiveTab] = useState("overview");
   const [evaluationModalOpen, setEvaluationModalOpen] = useState(false);
   const [logsPage] = useState(1);
@@ -92,7 +96,12 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
 
   if (detailLoading && !detailData) {
     return (
-      <div role="status" aria-busy="true" aria-label="Loading" className="flex items-center justify-center py-12">
+      <div
+        role="status"
+        aria-busy="true"
+        aria-label={uiT("ui.dc380888c4e2")}
+        className="flex items-center justify-center py-12"
+      >
         <UiLoadingSpinner className="size-8 text-primary" />
       </div>
     );
@@ -159,10 +168,10 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as string)}>
         <TabsList variant="line">
           <TabsTrigger value="overview" className="flex-none">
-            Overview
+            {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           <TabsTrigger value="logs" className="flex-none">
-            Logs
+            {uiT("ui.ea2100dc89ae")}
           </TabsTrigger>
         </TabsList>
 
@@ -188,7 +197,7 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
                       : "text-success"
                   : "text-muted-foreground"
               }
-              subtitle={data.avgLatency != null ? "Per request (avg)" : "No data"}
+              subtitle={data.avgLatency != null ? "Per request (avg)" : uiT("ui.3b41ba9c7cb8")}
             />
           </div>
 

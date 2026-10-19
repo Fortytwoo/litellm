@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
 import { useModelHub, useModelsInfo } from "@/app/(dashboard)/hooks/models/useModels";
 import { useQueryClient } from "@tanstack/react-query";
@@ -72,6 +74,8 @@ export default function ModelInfoView({
   onModelUpdate,
   modelAccessGroups,
 }: ModelInfoViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [localModelData, setLocalModelData] = useState<any>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -446,7 +450,7 @@ export default function ModelInfoView({
           <ArrowLeft className="size-4" />
           Back to Models
         </Button>
-        <p className="text-sm">Loading...</p>
+        <p className="text-sm">{uiT("ui.47d2a515ef2f")}</p>
       </div>
     );
   }
@@ -640,7 +644,7 @@ export default function ModelInfoView({
       <Tabs defaultValue="overview">
         <TabsList variant="line" className="mb-6 h-auto w-full justify-start rounded-none border-b p-0">
           <TabsTrigger value="overview" className="flex-none rounded-none px-4 py-2">
-            Overview
+            {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           <TabsTrigger value="raw" className="flex-none rounded-none px-4 py-2">
             Raw JSON
@@ -652,18 +656,21 @@ export default function ModelInfoView({
             {/* Overview Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
               <Card className="block p-6">
-                <p className="text-sm">Provider</p>
+                <p className="text-sm">{uiT("ui.472590ae974d")}</p>
                 <div className="mt-2 flex items-center space-x-2">
                   {modelData.provider && <Logo provider={modelData.provider} className="w-4 h-4" />}
-                  <h3 className="text-lg font-medium">{modelData.provider || "Not Set"}</h3>
+                  <h3 className="text-lg font-medium">{modelData.provider || uiT("ui.8290035d4cf4")}</h3>
                 </div>
               </Card>
               <Card className="block p-6">
                 <p className="text-sm">LiteLLM Model</p>
                 <div className="mt-2 overflow-hidden">
-                  <SimpleTooltip content={modelData.litellm_model_name || "Not Set"} className="w-full min-w-0">
+                  <SimpleTooltip
+                    content={modelData.litellm_model_name || uiT("ui.8290035d4cf4")}
+                    className="w-full min-w-0"
+                  >
                     <div className="break-all text-sm font-medium leading-relaxed cursor-pointer">
-                      {modelData.litellm_model_name || "Not Set"}
+                      {modelData.litellm_model_name || uiT("ui.8290035d4cf4")}
                     </div>
                   </SimpleTooltip>
                 </div>
@@ -685,14 +692,14 @@ export default function ModelInfoView({
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                Created At{" "}
+                {uiT("ui.3d44337010bf")}{" "}
                 {modelData.model_info.created_at
                   ? new Date(modelData.model_info.created_at).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
                     })
-                  : "Not Set"}
+                  : uiT("ui.8290035d4cf4")}
               </div>
               <div className="flex items-center gap-x-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -703,7 +710,7 @@ export default function ModelInfoView({
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                Created By {modelData.model_info.created_by || "Not Set"}
+                {uiT("ui.dfd60b9aa5ca")} {modelData.model_info.created_by || uiT("ui.8290035d4cf4")}
               </div>
             </div>
 
@@ -720,7 +727,7 @@ export default function ModelInfoView({
                   {canEditModel ? (
                     !isEditing && (
                       <Button onClick={() => setIsEditing(true)} className="flex items-center">
-                        Edit Settings
+                        {uiT("ui.cddc5824575b")}
                       </Button>
                     )
                   ) : (
@@ -752,7 +759,7 @@ export default function ModelInfoView({
                   teams={assignableTeams}
                 />
               ) : (
-                <p className="text-sm">Loading...</p>
+                <p className="text-sm">{uiT("ui.47d2a515ef2f")}</p>
               )}
             </Card>
           </TabsContent>
@@ -783,11 +790,11 @@ export default function ModelInfoView({
             value: modelData?.litellm_model_name || "Not Set",
           },
           {
-            label: "Provider",
+            label: uiT("ui.472590ae974d"),
             value: modelData?.provider || "Not Set",
           },
           {
-            label: "Created By",
+            label: uiT("ui.dfd60b9aa5ca"),
             value: modelData?.model_info?.created_by || "Not Set",
           },
         ]}
@@ -819,7 +826,7 @@ export default function ModelInfoView({
             />
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCredentialModalOpen(false)}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -868,7 +875,7 @@ export default function ModelInfoView({
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAutoRouterTestModalOpen(false)}>
-              Close
+              {uiT("ui.7d9eb7acb13e")}
             </Button>
           </DialogFooter>
         </DialogContent>

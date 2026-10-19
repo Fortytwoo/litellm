@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { ServerIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +27,8 @@ export function MCPServerPermissions({
   inheritedMcpServers = [],
   accessToken,
 }: MCPServerPermissionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [mcpServerDetails, setMCPServerDetails] = useState<MCPServer[]>([]);
   const [toolsetDetails, setToolsetDetails] = useState<MCPToolset[]>([]);
   const [expandedServers, setExpandedServers] = useState<Set<string>>(new Set());
@@ -135,9 +139,13 @@ export function MCPServerPermissions({
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <ServerIcon className="h-4 w-4 text-info" />
-        <p className="text-sm font-semibold text-foreground">MCP Servers</p>
+        <p className="text-sm font-semibold text-foreground">{uiT("ui.aab669a72882")}</p>
         <Badge variant={blocksAllMcpServers ? "destructive" : "secondary"}>
-          {blocksAllMcpServers ? "Blocked" : grantsAllProxyMcpServers ? "All" : totalCount}
+          {blocksAllMcpServers
+            ? uiT("ui.18f2a0947f9d")
+            : grantsAllProxyMcpServers
+              ? uiT("ui.a52ace420f21")
+              : totalCount}
         </Badge>
       </div>
 

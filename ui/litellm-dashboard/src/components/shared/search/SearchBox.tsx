@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import "prosemirror-view/style/prosemirror.css";
 
@@ -276,6 +277,8 @@ export type SearchBoxSuggestionsProps = ComponentProps<"div">;
  * `children` render in the footer beside the key hints, e.g. a `CopyCommand`.
  */
 function Suggestions({ className, children, ...props }: SearchBoxSuggestionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { listId, menu, activeId, icon, ops } = useSearchBox();
   const pick = useEditorEventCallback((view, item: Suggestion<string>) => applySuggestion(view, item));
   if (!menu) return null;
@@ -322,7 +325,7 @@ function Suggestions({ className, children, ...props }: SearchBoxSuggestionsProp
         <span className="flex items-center gap-1">
           <Kbd>↑</Kbd>
           <Kbd>↓</Kbd>
-          Navigate
+          {uiT("ui.5ea5fbe811db")}
         </span>
         <span className="flex items-center gap-1">
           <Kbd>

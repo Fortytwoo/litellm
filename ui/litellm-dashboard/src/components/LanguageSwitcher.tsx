@@ -1,26 +1,19 @@
 "use client";
 
-import React from "react";
-import { Button } from "antd";
+import { Languages } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-/**
- * Inline language toggle used in navbar.
- * Shows the opposite language (中文 ↔ English).
- */
 export function LanguageSwitcher() {
   const { locale, setLocale, t } = useLanguage();
-
-  const toggle = () => setLocale(locale === "en" ? "zh" : "en");
-
   return (
     <Button
-      type="text"
-      size="small"
-      onClick={toggle}
-      className="text-gray-600 hover:text-gray-900"
+      variant="ghost"
+      size="sm"
+      onClick={() => setLocale(locale === "en" ? "zh" : "en")}
       title={t("language.label")}
     >
+      <Languages className="size-4" />
       {t("language.switch_to")}
     </Button>
   );

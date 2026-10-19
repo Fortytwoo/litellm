@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { parseIdentityForForm } from "./agent_identity";
 /**
  * Shared configuration for agent form fields
@@ -56,7 +57,9 @@ export const AGENT_FORM_CONFIG: {
       },
       {
         name: "description",
-        label: "Description",
+        get label() {
+          return translateUi("ui.526e0087cc3f");
+        },
         type: "textarea",
         required: false,
         placeholder: "Describe what this agent does...",
@@ -92,11 +95,15 @@ export const AGENT_FORM_CONFIG: {
   },
   skills: {
     key: "skills",
-    title: "Skills",
+    get title() {
+      return translateUi("ui.66d0f523a379");
+    },
     fields: [
       {
         name: "skills",
-        label: "Skills",
+        get label() {
+          return translateUi("ui.66d0f523a379");
+        },
         type: "list",
         defaultValue: [],
       },
@@ -220,14 +227,18 @@ export const SKILL_FIELD_CONFIG = {
   },
   description: {
     name: "description",
-    label: "Description",
+    get label() {
+      return translateUi("ui.526e0087cc3f");
+    },
     required: true,
     placeholder: "What this skill does",
     rows: 2,
   },
   tags: {
     name: "tags",
-    label: "Tags",
+    get label() {
+      return translateUi("ui.1331275bc537");
+    },
     required: true,
     placeholder: "Type a tag and press Enter",
   },

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useRef, useState } from "react";
 import { StatusBadge } from "@/components/shared/table_cells";
@@ -27,6 +28,8 @@ export interface DecisionTestSectionProps {
 }
 
 const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, model, checks }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [input, setInput] = useState("");
   const [runs, setRuns] = useState<DecisionTestRun[]>([]);
   const [running, setRunning] = useState(false);
@@ -123,7 +126,7 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
                     {visible.length > 0 && (
                       <StatusBadge
                         tone={DECISION_TEST_CHIP_TONE[decisionTestOverall(visible)]}
-                        label={decisionTestOverall(visible) === "block" ? "Block" : "Pass"}
+                        label={decisionTestOverall(visible) === "block" ? uiT("ui.211d0bb8cf4f") : "Pass"}
                       />
                     )}
                   </div>

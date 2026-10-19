@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +46,8 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
   isLoading = false,
   accessToken,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [parameterValues, setParameterValues] = useState<Record<string, string>>({});
   const [competitorMode, setCompetitorMode] = useState<"ai" | "manual">("ai");
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
@@ -299,7 +303,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
                       value={selectedModel}
                       onValueChange={setSelectedModel}
                       placeholder={isLoadingModels ? "Loading models..." : "Select a model to generate names"}
-                      emptyText="No models found"
+                      emptyText={uiT("ui.a650c298cf44")}
                       disabled={isLoadingModels}
                     />
                   </div>
@@ -391,7 +395,7 @@ const TemplateParameterModal: React.FC<TemplateParameterModalProps> = ({
 
         <DialogFooter>
           <Button variant="secondary" onClick={onCancel} disabled={isLoading}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={handleConfirm} disabled={!canContinue || isLoading}>
             {isLoading ? "Creating guardrails..." : "Continue"}

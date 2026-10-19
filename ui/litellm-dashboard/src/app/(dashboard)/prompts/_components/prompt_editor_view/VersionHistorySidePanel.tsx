@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { getPromptVersions, PromptSpec } from "@/components/networking";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +24,8 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
   activeVersionId,
   onSelectVersion,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [versions, setVersions] = useState<PromptSpec[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -90,7 +94,7 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
     >
       <Button type="button" variant="ghost" size="icon-sm" className="absolute top-4 right-4" onClick={onClose}>
         <XIcon />
-        <span className="sr-only">Close</span>
+        <span className="sr-only">{uiT("ui.7d9eb7acb13e")}</span>
       </Button>
       <header className="flex flex-col gap-1.5 p-4">
         <h2 id="version-history-title" className="font-medium text-foreground">
@@ -140,7 +144,7 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
                       <Badge variant="secondary">{getVersionNumber(item)}</Badge>
                       {index === 0 && <Badge>Latest</Badge>}
                     </div>
-                    {isSelected && <Badge variant="secondary">Active</Badge>}
+                    {isSelected && <Badge variant="secondary">{uiT("ui.92340695899b")}</Badge>}
                   </div>
 
                   <div className="flex flex-col gap-1">

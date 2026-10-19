@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch, type UseFormReturn } from "react-hook-form";
 import { toast } from "@/lib/toast";
@@ -231,6 +233,8 @@ interface ProviderParamsResponse {
 }
 
 const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, accessToken, onSuccess, preset }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<GuardrailFormValues>({ defaultValues: INITIAL_VALUES });
   const watchedMode = useWatch({ control: form.control, name: "mode" });
   const [loading, setLoading] = useState(false);
@@ -1292,7 +1296,9 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                           {step.optional && !isCurrent && (
                             <span className="text-[11px] text-muted-foreground">optional</span>
                           )}
-                          {isDone && <span className="text-[11px] text-info hover:underline">Edit</span>}
+                          {isDone && (
+                            <span className="text-[11px] text-info hover:underline">{uiT("ui.464c4ffd019e")}</span>
+                          )}
                         </div>
 
                         {/* Expanded form content for current step */}
@@ -1307,16 +1313,16 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
             {/* Bottom bar */}
             <div className="flex items-center justify-end space-x-3 border-t border-border px-6 py-3">
               <Button type="button" variant="outline" onClick={handleClose}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               {currentStep > 0 && (
                 <Button type="button" variant="outline" onClick={prevStep}>
-                  Previous
+                  {uiT("ui.a57b08a480b8")}
                 </Button>
               )}
               {currentStep < stepConfigs.length - 1 ? (
                 <Button type="button" onClick={nextStep}>
-                  Next
+                  {uiT("ui.1ff57a29d7c9")}
                 </Button>
               ) : (
                 <Button type="button" onClick={handleSubmit} disabled={loading}>

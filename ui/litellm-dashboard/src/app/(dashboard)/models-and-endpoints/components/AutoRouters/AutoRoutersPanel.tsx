@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -35,6 +36,8 @@ export function AutoRoutersPanel({
   teams,
   createScope,
 }: AutoRoutersPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const canCreate = createScope !== "forbidden";
   const { data: deployments, isLoading } = useAutoRouters();
   const invalidateAutoRouters = useInvalidateAutoRouters();
@@ -129,8 +132,8 @@ export function AutoRoutersPanel({
           message={`Are you sure you want to delete "${deletingRouter.name}"? Any client still calling this model name will start failing.`}
           resourceInformationTitle="Auto router"
           resourceInformation={[
-            { label: "Name", value: deletingRouter.name },
-            { label: "Type", value: deletingRouter.typeLabel },
+            { label: uiT("ui.dcd1d5223f73"), value: deletingRouter.name },
+            { label: uiT("ui.baaddf70fb5d"), value: deletingRouter.typeLabel },
             { label: "ID", value: deletingRouter.id },
           ]}
           onCancel={() => setDeletingRouter(null)}

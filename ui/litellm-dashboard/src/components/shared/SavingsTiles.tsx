@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useMemo } from "react";
 
@@ -32,6 +33,8 @@ const useSavingsTotals = (results: DailyData[]) =>
   );
 
 const SavingsTiles = ({ results, isLoading }: { results: DailyData[]; isLoading: boolean }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const totals = useSavingsTotals(results);
 
   return (
@@ -39,7 +42,7 @@ const SavingsTiles = ({ results, isLoading }: { results: DailyData[]; isLoading:
       <SummaryCard
         label="Total recorded savings"
         value={usd(totals.total)}
-        hint={isLoading ? "Loading..." : "Compression + prompt caching + auto-router"}
+        hint={isLoading ? uiT("ui.47d2a515ef2f") : "Compression + prompt caching + auto-router"}
         info="The sum of recorded savings in the three tiles beside it. Auto-router requests without an estimate are excluded. Its caching term is the LiteLLM-injected share; caching supplied by clients or providers appears only in the caching tile's Total figure."
       />
       <SummaryCard
@@ -52,7 +55,7 @@ const SavingsTiles = ({ results, isLoading }: { results: DailyData[]; isLoading:
         label="Prompt caching savings"
         value={usd(totals.gatewayAttributedCaching)}
         hint="LiteLLM injected"
-        secondary={{ label: "Total", value: usd(totals.caching) }}
+        secondary={{ label: uiT("ui.c9b3c38247f7"), value: usd(totals.caching) }}
         info="What caching saved against paying the input rate for every token: the discount on tokens served from cache, less the premium providers charge to write a cache entry. The headline figure is the share LiteLLM earned by inserting the breakpoints itself, through configured injection points or auto prompt caching. The total beside it also counts requests that arrived with their own cache_control and providers that cache implicitly. Either can be negative on traffic that writes more cache than it reuses, which is why the headline is not always the smaller of the two."
       />
       <SummaryCard

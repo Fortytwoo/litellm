@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { CircleCheck, ChevronDown, MinusCircle, TriangleAlert, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
@@ -25,14 +28,18 @@ const actionConfig: Record<
     color: "text-destructive",
     bg: "bg-destructive/10",
     border: "border-destructive/20",
-    label: "Blocked",
+    get label() {
+      return translateUi("ui.18f2a0947f9d");
+    },
   },
   passed: {
     icon: CircleCheck,
     color: "text-success",
     bg: "bg-success/10",
     border: "border-success/20",
-    label: "Passed",
+    get label() {
+      return translateUi("ui.436fe71bb956");
+    },
   },
   flagged: {
     icon: TriangleAlert,
@@ -64,6 +71,8 @@ export function LogViewer({
   startDate = "",
   endDate = "",
 }: LogViewerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sampleSize, setSampleSize] = useState(10);
   const [activeFilter, setActiveFilter] = useState<string>(filterAction);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
@@ -118,11 +127,11 @@ export function LogViewer({
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h3 className="text-base font-semibold text-foreground">
-              {guardrailName ? `Logs — ${guardrailName}` : "Request Logs"}
+              {guardrailName ? `Logs — ${guardrailName}` : uiT("ui.0df118694f09")}
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
               {logsLoading
-                ? "Loading…"
+                ? uiT("ui.ba3bbbe10d8b")
                 : logs.length > 0
                   ? `Showing ${displayLogs.length} of ${total} entries`
                   : "No logs for this period. Select a guardrail and date range."}

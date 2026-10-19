@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,8 @@ interface Props {
 }
 
 export default function CustomDimensionRows({ rows, disabled, onChange, onWeight, onAdd, onRemove }: Props) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [draft, setDraft] = useState<{ id: string; raw: string } | null>(null);
   const update = (id: string, patch: Partial<CustomDimensionRow>) =>
     onChange(rows.map((row) => (row.id === id ? { ...row, ...patch } : row)));
@@ -46,11 +50,11 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
               onClick={() => onRemove(row.id)}
             >
               <Trash2 />
-              Remove
+              {uiT("ui.c3812fc4acb8")}
             </Button>
           </div>
           <div className="space-y-1">
-            <Label htmlFor={`${row.id}-name`}>Name</Label>
+            <Label htmlFor={`${row.id}-name`}>{uiT("ui.dcd1d5223f73")}</Label>
             <Input
               id={`${row.id}-name`}
               value={row.name}
@@ -59,7 +63,7 @@ export default function CustomDimensionRows({ rows, disabled, onChange, onWeight
             />
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Label htmlFor={`${row.id}-weight`}>Weight</Label>
+            <Label htmlFor={`${row.id}-weight`}>{uiT("ui.81d27ef6d503")}</Label>
             <Slider
               min={0}
               max={1}

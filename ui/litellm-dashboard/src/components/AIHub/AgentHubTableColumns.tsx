@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, Info, MoreHorizontal } from "lucide-react";
@@ -94,8 +95,13 @@ export const getAgentHubTableColumns = ({ onAgentClick }: AgentHubTableColumnsDe
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description", className: "hidden md:table-cell" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Description" />,
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+      className: "hidden md:table-cell",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.526e0087cc3f")} />,
     size: 240,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -131,8 +137,15 @@ export const getAgentHubTableColumns = ({ onAgentClick }: AgentHubTableColumnsDe
   },
   {
     id: "skills",
-    meta: { title: "Skills", skeleton: "chips" },
-    header: "Skills",
+    meta: {
+      get title() {
+        return translateUi("ui.66d0f523a379");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.66d0f523a379");
+    },
     size: 180,
     enableSorting: false,
     cell: ({ row }) => {
@@ -221,7 +234,7 @@ export const getAgentHubTableColumns = ({ onAgentClick }: AgentHubTableColumnsDe
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

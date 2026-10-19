@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ExternalLinkIcon, SearchIcon } from "@heroicons/react/outline";
 import { SortingState } from "@tanstack/react-table";
@@ -69,6 +71,8 @@ function PublicHubEmptyState({ title, body }: { title: string; body: string }) {
 }
 
 const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [proxyConfigured, setProxyConfigured] = useState<boolean>(false);
   const [agentHubData, setAgentHubData] = useState<AgentCard[] | null>(null);
@@ -375,7 +379,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
             <Card className="p-8 bg-card border border-border rounded-lg shadow-xs">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="public-hub-tabs">
                 <TabsList>
-                  <TabsTrigger value="models">Model Hub</TabsTrigger>
+                  <TabsTrigger value="models">{uiT("ui.378755ff1951")}</TabsTrigger>
                   {hasAgents && <TabsTrigger value="agents">Agent Hub</TabsTrigger>}
                   {hasMcpServers && <TabsTrigger value="mcp">MCP Hub</TabsTrigger>}
                   <TabsTrigger value="skills">Skill Hub</TabsTrigger>
@@ -413,7 +417,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                       </div>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium mb-3 text-foreground">Provider:</p>
+                      <p className="text-sm font-medium mb-3 text-foreground">{uiT("ui.672f1efd8b87")}</p>
                       <Combobox
                         multiple
                         items={modelFacets.providers}
@@ -573,7 +577,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
 
                     <div className="mt-8 text-center">
                       <p className="text-sm text-muted-foreground">
-                        Showing {filteredAgentData.length} of {agentHubData?.length || 0} agents
+                        {uiT("ui.d604310a789a")} {filteredAgentData.length} of {agentHubData?.length || 0} agents
                       </p>
                     </div>
                   </TabsContent>
@@ -640,7 +644,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
 
                     <div className="mt-8 text-center">
                       <p className="text-sm text-muted-foreground">
-                        Showing {filteredMcpData.length} of {mcpHubData?.length || 0} MCP servers
+                        {uiT("ui.d604310a789a")} {filteredMcpData.length} of {mcpHubData?.length || 0} MCP servers
                       </p>
                     </div>
                   </TabsContent>
@@ -798,7 +802,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                   {/* Rate Limits */}
                   {(selectedModel.tpm || selectedModel.rpm) && (
                     <div>
-                      <p className="text-lg font-semibold mb-4">Rate Limits</p>
+                      <p className="text-lg font-semibold mb-4">{uiT("ui.ed129d234fd4")}</p>
                       <div className="grid grid-cols-2 gap-4">
                         {selectedModel.tpm && (
                           <div>
@@ -926,7 +930,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                         <p>{selectedAgent.version}</p>
                       </div>
                       <div className="col-span-2">
-                        <p className="font-medium">Description:</p>
+                        <p className="font-medium">{uiT("ui.0cf2814604b4")}</p>
                         <p>{selectedAgent.description}</p>
                       </div>
                       {selectedAgent.url && (
@@ -964,7 +968,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                   {/* Skills */}
                   {selectedAgent.skills && selectedAgent.skills.length > 0 && (
                     <div>
-                      <p className="text-lg font-semibold mb-4">Skills</p>
+                      <p className="text-lg font-semibold mb-4">{uiT("ui.66d0f523a379")}</p>
                       <div className="space-y-4">
                         {selectedAgent.skills.map((skill, index) => (
                           <div key={index} className="border border-border rounded-lg p-4">
@@ -1019,7 +1023,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                   {/* Documentation */}
                   {selectedAgent.documentationUrl && (
                     <div>
-                      <p className="text-lg font-semibold mb-4">Documentation</p>
+                      <p className="text-lg font-semibold mb-4">{uiT("ui.c205924de0fe")}</p>
                       <a
                         href={selectedAgent.documentationUrl}
                         target="_blank"
@@ -1241,7 +1245,7 @@ print(response.model_dump(mode='json', exclude_none=True))`;
                         </Badge>
                       </div>
                       <div className="col-span-2">
-                        <p className="font-medium">Description:</p>
+                        <p className="font-medium">{uiT("ui.0cf2814604b4")}</p>
                         <p>{selectedMcpServer.mcp_info?.description || "-"}</p>
                       </div>
                     </div>

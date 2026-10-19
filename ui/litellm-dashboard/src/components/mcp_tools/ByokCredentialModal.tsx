@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useId, useState } from "react";
 import { toast } from "@/lib/toast";
@@ -26,6 +27,8 @@ interface ByokCredentialModalProps {
 }
 
 export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server, open, onClose, onSuccess }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [step, setStep] = useState<1 | 2>(1);
   const [apiKey, setApiKey] = useState("");
   const [saveKey, setSaveKey] = useState(true);
@@ -78,7 +81,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 onClick={() => setStep(1)}
                 className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm"
               >
-                <ArrowLeft className="size-3.5" /> Back
+                <ArrowLeft className="size-3.5" /> {uiT("ui.76900f1bfd16")}
               </button>
             ) : (
               <div />
@@ -160,7 +163,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                 onClick={handleClose}
                 className="mt-3 w-full text-muted-foreground hover:text-foreground text-sm py-2"
               >
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </button>
             </div>
           ) : (
@@ -177,7 +180,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
 
               <div className="mb-4">
                 <label htmlFor={apiKeyInputId} className="block text-sm font-semibold text-foreground mb-2">
-                  {serverDisplayName} API Key
+                  {serverDisplayName} {uiT("ui.23189d55f697")}
                 </label>
                 <PasswordInput
                   id={apiKeyInputId}

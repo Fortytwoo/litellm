@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useId } from "react";
 import { PlusCircleIcon, PencilIcon, TrashIcon } from "@heroicons/react/outline";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,8 @@ const ModelAliasManager: React.FC<ModelAliasManagerProps> = ({
   onAliasUpdate,
   showExampleConfig = true,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [aliases, setAliases] = useState<AliasItem[]>([]);
   const [newAlias, setNewAlias] = useState<{ aliasName: string; targetModel: string | null }>({
     aliasName: "",
@@ -202,7 +206,7 @@ const ModelAliasManager: React.FC<ModelAliasManagerProps> = ({
               <TableRow>
                 <TableHead className="py-1 h-8">Alias Name</TableHead>
                 <TableHead className="py-1 h-8">Target Model</TableHead>
-                <TableHead className="py-1 h-8">Actions</TableHead>
+                <TableHead className="py-1 h-8">{uiT("ui.ff8059dc6752")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -241,10 +245,10 @@ const ModelAliasManager: React.FC<ModelAliasManagerProps> = ({
                       <TableCell className="py-0.5 whitespace-nowrap">
                         <div className="flex space-x-2">
                           <Button variant="secondary" size="xs" onClick={handleUpdateAlias}>
-                            Save
+                            {uiT("ui.1509f561f241")}
                           </Button>
                           <Button variant="outline" size="xs" onClick={handleCancelEdit}>
-                            Cancel
+                            {uiT("ui.19766ed6ccb2")}
                           </Button>
                         </div>
                       </TableCell>

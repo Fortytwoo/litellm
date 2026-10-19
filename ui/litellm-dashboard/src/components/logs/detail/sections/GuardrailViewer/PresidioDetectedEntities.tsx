@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 
 interface RecognitionMetadata {
@@ -24,6 +26,8 @@ const getScoreColor = (score: number): string => {
 };
 
 const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [entityListExpanded, setEntityListExpanded] = useState(true);
   const [expandedEntities, setExpandedEntities] = useState<Record<number, boolean>>({});
 
@@ -47,7 +51,10 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
-        <h4 className="font-medium">Detected Entities ({entities.length})</h4>
+        <h4 className="font-medium">
+          {uiT("ui.87ab39bc7278")}
+          {entities.length})
+        </h4>
       </div>
 
       {entityListExpanded && (
@@ -74,7 +81,7 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                     <span className={`font-mono ${getScoreColor(entity.score)}`}>Score: {entity.score.toFixed(2)}</span>
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    Position: {entity.start}-{entity.end}
+                    {uiT("ui.64b368ff8076")} {entity.start}-{entity.end}
                   </span>
                 </div>
 
@@ -83,17 +90,17 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                     <div className="grid grid-cols-2 gap-4 mb-2">
                       <div className="space-y-2">
                         <div className="flex">
-                          <span className="font-medium w-1/3">Entity Type:</span>
+                          <span className="font-medium w-1/3">{uiT("ui.596fce9729d6")}</span>
                           <span>{entity.entity_type}</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium w-1/3">Position:</span>
+                          <span className="font-medium w-1/3">{uiT("ui.64b368ff8076")}</span>
                           <span>
                             Characters {entity.start}-{entity.end}
                           </span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium w-1/3">Confidence:</span>
+                          <span className="font-medium w-1/3">{uiT("ui.170d7271521a")}</span>
                           <span className={getScoreColor(entity.score)}>{entity.score.toFixed(2)}</span>
                         </div>
                       </div>
@@ -102,11 +109,11 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                         {entity.recognition_metadata && (
                           <>
                             <div className="flex">
-                              <span className="font-medium w-1/3">Recognizer:</span>
+                              <span className="font-medium w-1/3">{uiT("ui.b077697dc28b")}</span>
                               <span>{entity.recognition_metadata.recognizer_name}</span>
                             </div>
                             <div className="flex overflow-hidden">
-                              <span className="font-medium w-1/3">Identifier:</span>
+                              <span className="font-medium w-1/3">{uiT("ui.604b65ff9c91")}</span>
                               <span className="truncate text-xs font-mono">
                                 {entity.recognition_metadata.recognizer_identifier}
                               </span>
@@ -115,7 +122,7 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                         )}
                         {entity.analysis_explanation && (
                           <div className="flex">
-                            <span className="font-medium w-1/3">Explanation:</span>
+                            <span className="font-medium w-1/3">{uiT("ui.3631a9d98be2")}</span>
                             <span>{entity.analysis_explanation}</span>
                           </div>
                         )}

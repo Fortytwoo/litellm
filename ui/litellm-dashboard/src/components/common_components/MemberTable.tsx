@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import type { ColumnDef, ColumnFiltersState } from "@tanstack/react-table";
 import { Crown, Info, User, UserPlus } from "lucide-react";
 import React, { useState } from "react";
@@ -131,27 +134,37 @@ const buildColumns = ({
   {
     id: "user_alias",
     accessorFn: (member) => member.user_alias || undefined,
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dcd1d5223f73")} />,
     sortingFn: "text",
     sortUndefined: "last",
     enableGlobalFilter: true,
-    meta: { title: "Name" },
+    meta: {
+      get title() {
+        return translateUi("ui.dcd1d5223f73");
+      },
+    },
     cell: ({ row }) => row.original.user_alias || <span className="text-muted-foreground">-</span>,
   },
   {
     id: "user_email",
     accessorFn: (member) => member.user_email || undefined,
-    header: ({ column }) => <DataTableSortHeader column={column} title="User Email" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.5809bbd8a352")} />,
     sortingFn: "text",
     sortUndefined: "last",
     enableGlobalFilter: true,
-    meta: { title: "User Email" },
+    meta: {
+      get title() {
+        return translateUi("ui.5809bbd8a352");
+      },
+    },
     cell: ({ row }) => row.original.user_email || "-",
   },
   {
     id: "user_id",
     accessorFn: (member) => member.user_id ?? undefined,
-    header: "User ID",
+    get header() {
+      return translateUi("ui.7967e089a7b9");
+    },
     enableSorting: false,
     enableGlobalFilter: true,
     cell: ({ row }) =>
@@ -181,7 +194,9 @@ const buildColumns = ({
   ...extraColumns.map(extraColumnDef),
   {
     id: "actions",
-    header: "Actions",
+    get header() {
+      return translateUi("ui.ff8059dc6752");
+    },
     size: ACTIONS_COLUMN_WIDTH,
     enableSorting: false,
     enableGlobalFilter: false,
@@ -228,6 +243,8 @@ export default function MemberTable({
   resetSpendDisabledReason,
   emptyText,
 }: MemberTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -254,7 +271,8 @@ export default function MemberTable({
   return (
     <div className="flex w-full flex-col gap-2">
       <span className="inline-flex text-sm text-foreground">
-        {members.length} Member{members.length !== 1 ? "s" : ""}
+        {members.length} {uiT("ui.7c968fb71f50")}
+        {members.length !== 1 ? "s" : ""}
       </span>
       <DataTable
         data={members}
@@ -269,7 +287,7 @@ export default function MemberTable({
         onGlobalFilterChange={setGlobalFilter}
         noDataMessage={
           <span className="text-muted-foreground">
-            {isNarrowed ? "No members match your search or filters" : emptyText ?? "No data"}
+            {isNarrowed ? "No members match your search or filters" : emptyText ?? uiT("ui.3b41ba9c7cb8")}
           </span>
         }
         toolbar={(table) => (
@@ -286,7 +304,7 @@ export default function MemberTable({
               table={table}
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
-              title="Filters"
+              title={uiT("ui.546ebb8eb993")}
               description="Narrow down members"
             >
               {({ get, set }) => (
@@ -316,7 +334,7 @@ export default function MemberTable({
       {onAddMember && canEdit && (
         <Button onClick={onAddMember} className="self-start">
           <UserPlus className="size-4" />
-          Add Member
+          {uiT("ui.e7d80d8f7fda")}
         </Button>
       )}
     </div>

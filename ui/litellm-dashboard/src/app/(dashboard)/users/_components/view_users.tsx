@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -58,6 +60,8 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
   teams,
   orgAdminOrgIds,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isProxyAdmin = userRole ? isProxyAdminRole(userRole) : false;
   const queryClient = useQueryClient();
 
@@ -343,7 +347,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   variant={selectionMode ? "default" : "outline"}
                   data-testid="toggle-user-selection"
                 >
-                  {selectionMode ? "Cancel Selection" : "Select Users"}
+                  {selectionMode ? uiT("ui.7e0c74a0aa00") : uiT("ui.beb4043a05e3")}
                 </Button>
               )}
 
@@ -354,7 +358,8 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   disabled={selectedUsers.length === 0}
                   data-testid="bulk-edit-users"
                 >
-                  Bulk Edit ({selectedUsers.length} selected)
+                  {uiT("ui.dea85c7e5f1b")}
+                  {selectedUsers.length} selected)
                 </Button>
               )}
             </>
@@ -366,10 +371,10 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         <Tabs defaultValue="users" className="gap-0">
           <TabsList variant="line" className="mb-4">
             <TabsTrigger value="users" className="flex-none data-active:text-primary after:bg-primary">
-              Users
+              {uiT("ui.6b0cc904d081")}
             </TabsTrigger>
             <TabsTrigger value="default-settings" className="flex-none data-active:text-primary after:bg-primary">
-              Default User Settings
+              {uiT("ui.021d7bfda9c4")}
             </TabsTrigger>
           </TabsList>
 
@@ -379,11 +384,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
 
           <TabsContent value="default-settings" keepMounted>
             {!userID || !userRole || !accessToken ? (
-              <div
-                className="flex h-64 items-center justify-center"
-                role="status"
-                aria-label="Loading default user settings"
-              >
+              <div className="flex h-64 items-center justify-center" role="status" aria-label={uiT("ui.b517b6b812ab")}>
                 <div className="w-full max-w-lg space-y-3">
                   <Skeleton className="h-5 w-1/3" />
                   <Skeleton className="h-5 w-full" />
@@ -403,20 +404,20 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
       {/* Existing Modals */}
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete User?"
+        title={uiT("ui.d241b1f23e19")}
         message="Are you sure you want to delete this user? This action cannot be undone."
         resourceInformationTitle="User Information"
         resourceInformation={[
-          { label: "Email", value: userToDelete?.user_email },
-          { label: "User ID", value: userToDelete?.user_id, code: true },
+          { label: uiT("ui.969ccbd3cf63"), value: userToDelete?.user_email },
+          { label: uiT("ui.7967e089a7b9"), value: userToDelete?.user_id, code: true },
           {
-            label: "Global Proxy Role",
+            label: uiT("ui.1720a0bdf895"),
             value:
               (userToDelete?.user_role && possibleUIRoles?.[userToDelete.user_role]?.ui_label) ||
               userToDelete?.user_role ||
               "-",
           },
-          { label: "Total Spend (USD)", value: userToDelete?.spend?.toFixed(2) },
+          { label: uiT("ui.c33ab4e98f55"), value: userToDelete?.spend?.toFixed(2) },
         ]}
         onCancel={cancelDelete}
         onOk={confirmDelete}

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { FormField } from "@/components/shared/form/FormField";
@@ -32,6 +34,8 @@ interface CacheFormFieldProps {
 }
 
 const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels, isSecretConfigured = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useFormContext<CacheFormValues>();
   const placeholder = isSecretConfigured ? SECRET_ALREADY_SET_PLACEHOLDER : field.helpText;
 
@@ -111,7 +115,7 @@ const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels,
                 <ComboboxClear />
               </ComboboxInput>
               <ComboboxContent>
-                <ComboboxEmpty>No models found</ComboboxEmpty>
+                <ComboboxEmpty>{uiT("ui.a650c298cf44")}</ComboboxEmpty>
                 <ComboboxList>
                   {(model: EmbeddingModelOption) => (
                     <ComboboxItem key={model.value} value={model} title={model.label}>

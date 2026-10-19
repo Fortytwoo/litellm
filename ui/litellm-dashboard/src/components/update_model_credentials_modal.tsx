@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -35,6 +37,8 @@ export default function UpdateModelCredentialsModal({
   modelId,
   onUpdated,
 }: UpdateModelCredentialsModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(updateCredentialsSchema, { defaultValues: EMPTY_VALUES });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -96,7 +100,7 @@ export default function UpdateModelCredentialsModal({
           </FieldGroup>
           <div className="flex justify-end items-center mt-4 gap-2.5">
             <Button type="button" variant="outline" onClick={close}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="submit" disabled={isSaving}>
               {isSaving && <UiLoadingSpinner className="size-4" />}

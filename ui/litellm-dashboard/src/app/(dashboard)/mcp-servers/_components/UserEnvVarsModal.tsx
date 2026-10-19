@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleAlert, Info } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -51,6 +53,8 @@ const emptyValues = (required: readonly MCPUserEnvVarSpec[]): Record<string, str
   Object.fromEntries(required.map((spec) => [spec.name, ""]));
 
 const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, onCancel, onClear, onSubmit }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(buildSchema(required), { defaultValues: emptyValues(required) });
 
   return (
@@ -84,11 +88,11 @@ const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, o
       <div className="mt-6 flex items-center justify-end gap-2 border-t border-border pt-2">
         {onClear && (
           <Button type="button" variant="destructive" className="mr-auto" onClick={onClear} disabled={isSaving}>
-            Clear
+            {uiT("ui.83b12c2216ef")}
           </Button>
         )}
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSaving}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
         <Button type="submit" disabled={isSaving}>
           {isSaving && <UiLoadingSpinner className="mr-2 size-4" />}
@@ -107,6 +111,8 @@ const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, o
  * description as the placeholder.
  */
 const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, accessToken, onClose, onSaved }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [confirmingClear, setConfirmingClear] = React.useState(false);
   const close = () => {
@@ -222,7 +228,7 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
             </AlertDialogHeader>
             <AlertDialogFooter>
               <Button variant="outline" onClick={() => setConfirmingClear(false)}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button variant="destructive" onClick={confirmClear}>
                 Clear credentials

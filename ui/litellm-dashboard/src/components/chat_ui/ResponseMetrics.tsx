@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import {
   ArrowDownToLine,
@@ -57,9 +59,11 @@ function MetricItem({ label, tooltip, icon, value }: MetricItemProps) {
 }
 
 function ResponseCacheIndicator() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <MetricItem
-      label="Response Cache"
+      label={uiT("ui.f98832fd0834")}
       tooltip={RESPONSE_CACHE_TOOLTIP}
       icon={<History className="size-3" aria-hidden="true" />}
       value="Hit"
@@ -99,6 +103,8 @@ function PromptCacheChips({ usage }: { usage?: TokenUsage }) {
 }
 
 const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, totalLatency, usage, toolName }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!timeToFirstToken && !totalLatency && !usage) return null;
 
   return (
@@ -152,7 +158,7 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.totalTokens !== undefined && (
         <MetricItem
-          label="Total"
+          label={uiT("ui.c9b3c38247f7")}
           tooltip="Total tokens"
           icon={<Hash className="size-3" aria-hidden="true" />}
           value={String(usage.totalTokens)}
@@ -161,8 +167,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {typeof usage?.cost === "number" && Number.isFinite(usage.cost) && (
         <MetricItem
-          label="Cost"
-          tooltip="Cost"
+          label={uiT("ui.204a5eb2cd28")}
+          tooltip={uiT("ui.204a5eb2cd28")}
           icon={<DollarSign className="size-3" aria-hidden="true" />}
           value={`$${usage.cost.toFixed(6)}`}
         />

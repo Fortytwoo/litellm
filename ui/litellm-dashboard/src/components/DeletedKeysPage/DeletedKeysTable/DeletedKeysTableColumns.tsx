@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -33,8 +34,14 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "token",
     accessorKey: "token",
-    meta: { title: "Key ID" },
-    header: "Key ID",
+    meta: {
+      get title() {
+        return translateUi("ui.d54d56ee0a42");
+      },
+    },
+    get header() {
+      return translateUi("ui.d54d56ee0a42");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.token} variant="plain" />,
@@ -42,8 +49,14 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "key_alias",
     accessorKey: "key_alias",
-    meta: { title: "Key Alias" },
-    header: "Key Alias",
+    meta: {
+      get title() {
+        return translateUi("ui.1e7044ffa52d");
+      },
+    },
+    get header() {
+      return translateUi("ui.1e7044ffa52d");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -61,8 +74,14 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "team_alias",
     accessorKey: "team_alias",
-    meta: { title: "Team Alias" },
-    header: "Team Alias",
+    meta: {
+      get title() {
+        return translateUi("ui.85cf10057e87");
+      },
+    },
+    get header() {
+      return translateUi("ui.85cf10057e87");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <TruncatedTextCell value={row.original.team_alias} />,
@@ -70,8 +89,13 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend (USD)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Spend (USD)" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d1b5ad72df63");
+      },
+      numeric: true,
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d1b5ad72df63")} />,
     size: 100,
     enableSorting: true,
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
@@ -79,17 +103,32 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "max_budget",
     accessorKey: "max_budget",
-    meta: { title: "Budget (USD)", numeric: true },
-    header: "Budget (USD)",
+    meta: {
+      get title() {
+        return translateUi("ui.e9b19e9155c8");
+      },
+      numeric: true,
+    },
+    get header() {
+      return translateUi("ui.e9b19e9155c8");
+    },
     size: 110,
     enableSorting: false,
-    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={0} emptyText="Unlimited" showZero />,
+    cell: ({ row }) => (
+      <MoneyCell value={row.original.max_budget} decimals={0} emptyText={translateUi("ui.11dde17d6c3e")} showZero />
+    ),
   },
   {
     id: "user_email",
     accessorKey: "user_email",
-    meta: { title: "User Email" },
-    header: "User Email",
+    meta: {
+      get title() {
+        return translateUi("ui.5809bbd8a352");
+      },
+    },
+    get header() {
+      return translateUi("ui.5809bbd8a352");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <TruncatedTextCell value={row.original.user_email} />,
@@ -97,8 +136,14 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "user_id",
     accessorKey: "user_id",
-    meta: { title: "User ID" },
-    header: "User ID",
+    meta: {
+      get title() {
+        return translateUi("ui.7967e089a7b9");
+      },
+    },
+    get header() {
+      return translateUi("ui.7967e089a7b9");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <UserLinkCell userId={row.original.user_id} />,
@@ -106,8 +151,12 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: {
+      get title() {
+        return translateUi("ui.3d44337010bf");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.3d44337010bf")} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -115,8 +164,14 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: "Created By" },
-    header: "Created By",
+    meta: {
+      get title() {
+        return translateUi("ui.dfd60b9aa5ca");
+      },
+    },
+    get header() {
+      return translateUi("ui.dfd60b9aa5ca");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <UserLinkCell userId={row.original.created_by} />,
@@ -124,8 +179,12 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "deleted_at",
     accessorKey: "deleted_at",
-    meta: { title: "Deleted At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Deleted At" />,
+    meta: {
+      get title() {
+        return translateUi("ui.ecf8c7651cb7");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.ecf8c7651cb7")} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.deleted_at} precision="date" />,
@@ -133,8 +192,14 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
   {
     id: "deleted_by",
     accessorKey: "deleted_by",
-    meta: { title: "Deleted By" },
-    header: "Deleted By",
+    meta: {
+      get title() {
+        return translateUi("ui.279b259e414d");
+      },
+    },
+    get header() {
+      return translateUi("ui.279b259e414d");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <UserLinkCell userId={row.original.deleted_by} />,

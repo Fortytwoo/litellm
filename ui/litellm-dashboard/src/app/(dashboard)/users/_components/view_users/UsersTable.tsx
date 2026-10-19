@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   ColumnFiltersState,
@@ -57,13 +58,15 @@ const FILTER_LABELS: Record<string, string> = {
 };
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Users className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No users found</div>
-      <div className="text-sm text-muted-foreground">Try adjusting your search or filters.</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.bf1e104fb3c8")}</div>
+      <div className="text-sm text-muted-foreground">{uiT("ui.ff762330c43e")}</div>
     </div>
   );
 }
@@ -89,6 +92,8 @@ export function UsersTable({
   onDeleteUser,
   onResetPassword,
 }: UsersTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const columns = useMemo(() => {
@@ -167,43 +172,43 @@ export function UsersTable({
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
-            description="Narrow down your users"
+            title={uiT("ui.546ebb8eb993")}
+            description={uiT("ui.1516b662c930")}
           >
             {({ get, set }) => (
               <>
-                <DataTableFilterField label="User ID">
+                <DataTableFilterField label={uiT("ui.7967e089a7b9")}>
                   <Input
                     value={(get("user_id") as string) ?? ""}
                     onChange={(event) => set("user_id", event.target.value)}
-                    placeholder="Enter user ID…"
+                    placeholder={uiT("ui.76e537b8d0dc")}
                     data-testid="users-filter-user-id"
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="SSO ID">
+                <DataTableFilterField label={uiT("ui.b76f39051ffc")}>
                   <Input
                     value={(get("sso_user_id") as string) ?? ""}
                     onChange={(event) => set("sso_user_id", event.target.value)}
-                    placeholder="Enter SSO ID…"
+                    placeholder={uiT("ui.4acc3b8b3821")}
                     data-testid="users-filter-sso-id"
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Role">
+                <DataTableFilterField label={uiT("ui.14736a2eb9f4")}>
                   <SearchSelect
                     options={roleOptions}
                     value={(get("user_role") as string) || undefined}
                     onValueChange={(value) => set("user_role", value ?? undefined)}
-                    placeholder="Select a role…"
-                    emptyText="No roles found"
+                    placeholder={uiT("ui.b34820333f26")}
+                    emptyText={uiT("ui.7a309c67fad2")}
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Team">
+                <DataTableFilterField label={uiT("ui.5985039f106d")}>
                   <SearchSelect
                     options={teamOptions}
                     value={(get("team") as string) || undefined}
                     onValueChange={(value) => set("team", value ?? undefined)}
-                    placeholder="Select a team…"
-                    emptyText="No teams found"
+                    placeholder={uiT("ui.d16c308a2ff9")}
+                    emptyText={uiT("ui.c83a06f9875f")}
                   />
                 </DataTableFilterField>
               </>

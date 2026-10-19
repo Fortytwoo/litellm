@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import * as React from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
@@ -49,6 +50,8 @@ function DialogContent({
   showCloseButton?: boolean;
   overlayClassName?: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DialogPortal>
       <DialogOverlay className={overlayClassName} forceRender={Boolean(overlayClassName)} />
@@ -67,7 +70,7 @@ function DialogContent({
             render={<Button variant="ghost" className="absolute top-4 right-4" size="icon-sm" />}
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{uiT("ui.7d9eb7acb13e")}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -87,6 +90,8 @@ function DialogFooter({
 }: React.ComponentProps<"div"> & {
   showCloseButton?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div
       data-slot="dialog-footer"
@@ -94,7 +99,9 @@ function DialogFooter({
       {...props}
     >
       {children}
-      {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Close</DialogPrimitive.Close>}
+      {showCloseButton && (
+        <DialogPrimitive.Close render={<Button variant="outline" />}>{uiT("ui.7d9eb7acb13e")}</DialogPrimitive.Close>
+      )}
     </div>
   );
 }

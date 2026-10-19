@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { getAutoRouterAssembledPromptCall } from "@/components/networking";
@@ -76,6 +78,8 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
   tierSource,
   contextWindowSize,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [isOpen, setIsOpen] = useState(false);
   const [instructionDraft, setInstructionDraft] = useState("");
@@ -283,7 +287,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
 
           <DialogFooter className="mt-4">
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="button" onClick={handleSave}>
               Save prompt

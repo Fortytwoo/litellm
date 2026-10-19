@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Eye, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +20,8 @@ const ImpactPopover: React.FC<{ attachment: PolicyAttachment; accessToken: strin
   attachment,
   accessToken,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [impact, setImpact] = useState<ImpactResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -71,7 +75,7 @@ const ImpactPopover: React.FC<{ attachment: PolicyAttachment; accessToken: strin
         {loading ? (
           <div className="flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground">
             <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
-            Loading...
+            {uiT("ui.47d2a515ef2f")}
           </div>
         ) : impact ? (
           <div className="text-xs">

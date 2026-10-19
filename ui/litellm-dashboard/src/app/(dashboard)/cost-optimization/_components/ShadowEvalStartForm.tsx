@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useMemo, useState } from "react";
 
@@ -223,6 +224,8 @@ const buildStartBody = (inputs: StartBodyInputs) => ({
 });
 
 export const StartForm: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [apiKeyIds, setApiKeyIds] = useState<string[]>([]);
   const [teamIds, setTeamIds] = useState<string[]>([]);
@@ -379,7 +382,7 @@ export const StartForm: React.FC = () => {
               )}
             </div>
           </Field>
-          <Field label="Duration">
+          <Field label={uiT("ui.4fc52a3c4c55")}>
             <Select value={durationDays} onValueChange={(v: string | null) => setDurationDays(v ?? "7")}>
               <SelectTrigger className="w-full">
                 <SelectValue>{DURATION_OPTIONS.find((o) => o.value === durationDays)?.label}</SelectValue>

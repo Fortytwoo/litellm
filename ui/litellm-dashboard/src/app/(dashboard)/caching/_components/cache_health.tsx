@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -74,6 +76,8 @@ interface ErrorDetails {
 
 // Update HealthCheckDetails component to handle errors
 const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   // Initialize with safe default values
   let errorDetails: ErrorDetails | null = null;
   let parsedLitellmParams: any = {};
@@ -189,7 +193,7 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
                         Error Details
                       </td>
                     </tr>
-                    <TableClickableErrorField label="Error Message" value={errorDetails.message} />
+                    <TableClickableErrorField label={uiT("ui.f789799c8754")} value={errorDetails.message} />
                     <TableClickableErrorField label="Traceback" value={errorDetails.traceback} />
                   </>
                 )}

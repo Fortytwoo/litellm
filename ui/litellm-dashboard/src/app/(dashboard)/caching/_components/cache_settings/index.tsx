@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
 import { ChevronRight } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -30,6 +32,8 @@ const toRedisType = (value: unknown): RedisType =>
   REDIS_TYPES.includes(value as RedisType) ? (value as RedisType) : "node";
 
 const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<CacheFormValues>({ defaultValues: buildInitialValues({}) });
   const [redisType, setRedisType] = useState<RedisType>("node");
   const [advancedOpen, setAdvancedOpen] = useState(false);
@@ -242,7 +246,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
           {isTesting ? "Testing..." : "Test Connection"}
         </Button>
         <Button size="sm" onClick={handleSaveChanges} disabled={isSaving} className="text-sm font-medium">
-          {isSaving ? "Saving..." : "Save Changes"}
+          {isSaving ? uiT("ui.dc85af8f2b1d") : uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </div>

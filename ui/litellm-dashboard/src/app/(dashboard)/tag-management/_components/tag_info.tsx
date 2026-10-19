@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState, useEffect } from "react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -56,6 +57,8 @@ interface TagEditFormProps {
 }
 
 const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userModels, onCancel, onSave }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [budgetSectionOpen, setBudgetSectionOpen] = useState(false);
   const form = useZodForm(tagEditSchema, {
     defaultValues: {
@@ -79,7 +82,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
           {({ ref, ...field }) => <Input {...field} ref={ref} />}
         </FormField>
 
-        <FormField control={form.control} name="description" label="Description">
+        <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
           {({ ref, value, ...field }) => <Textarea {...field} ref={ref} value={value ?? ""} rows={4} />}
         </FormField>
 
@@ -109,7 +112,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
             <FormField
               control={form.control}
               name="max_budget"
-              label="Max Budget (USD)"
+              label={uiT("ui.afa99ea4a8c3")}
               description="Maximum amount in USD this tag can spend"
             >
               {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -118,7 +121,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
             <FormField
               control={form.control}
               name="budget_duration"
-              label="Reset Budget"
+              label={uiT("ui.66b0753db929")}
               description="How often the budget should reset"
             >
               {({ id, value, onChange }) => (
@@ -146,9 +149,9 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
 
       <div className="flex justify-end space-x-2">
         <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
-        <Button type="submit">Save Changes</Button>
+        <Button type="submit">{uiT("ui.35322b5bb5a2")}</Button>
       </div>
     </form>
   );
@@ -163,6 +166,8 @@ interface TagInfoViewProps {
 }
 
 const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, is_admin, editTag }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [tagDetails, setTagDetails] = useState<Tag | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(editTag);
   const [userModels, setUserModels] = useState<string[]>([]);
@@ -226,7 +231,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
   };
 
   if (!tagDetails) {
-    return <div>Loading...</div>;
+    return <div>{uiT("ui.47d2a515ef2f")}</div>;
   }
 
   return (
@@ -278,18 +283,18 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
               <CardTitle>Tag Details</CardTitle>
               <div className="space-y-4 mt-4">
                 <div>
-                  <p className="font-medium">Name</p>
+                  <p className="font-medium">{uiT("ui.dcd1d5223f73")}</p>
                   <p>{tagDetails.name}</p>
                 </div>
                 <div>
-                  <p className="font-medium">Description</p>
+                  <p className="font-medium">{uiT("ui.526e0087cc3f")}</p>
                   <p>{tagDetails.description || "-"}</p>
                 </div>
                 <div>
                   <p className="font-medium">Allowed Models</p>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {!tagDetails.models || tagDetails.models.length === 0 ? (
-                      <Badge variant="secondary">All Models</Badge>
+                      <Badge variant="secondary">{uiT("ui.77781174637c")}</Badge>
                     ) : (
                       tagDetails.models.map((modelId) => (
                         <Badge key={modelId} variant="secondary">
@@ -302,11 +307,11 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                   </div>
                 </div>
                 <div>
-                  <p className="font-medium">Created</p>
+                  <p className="font-medium">{uiT("ui.d70b9e24bca2")}</p>
                   <p>{tagDetails.created_at ? new Date(tagDetails.created_at).toLocaleString() : "-"}</p>
                 </div>
                 <div>
-                  <p className="font-medium">Last Updated</p>
+                  <p className="font-medium">{uiT("ui.048c7f2ef9aa")}</p>
                   <p>{tagDetails.updated_at ? new Date(tagDetails.updated_at).toLocaleString() : "-"}</p>
                 </div>
               </div>
@@ -321,7 +326,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                   {tagDetails.litellm_budget_table.max_budget !== undefined &&
                     tagDetails.litellm_budget_table.max_budget !== null && (
                       <div>
-                        <p className="font-medium">Max Budget</p>
+                        <p className="font-medium">{uiT("ui.3e20f0a04b21")}</p>
                         <p>${tagDetails.litellm_budget_table.max_budget}</p>
                       </div>
                     )}
@@ -334,14 +339,14 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                   {tagDetails.litellm_budget_table.tpm_limit !== undefined &&
                     tagDetails.litellm_budget_table.tpm_limit !== null && (
                       <div>
-                        <p className="font-medium">TPM Limit</p>
+                        <p className="font-medium">{uiT("ui.703406a2fc47")}</p>
                         <p>{tagDetails.litellm_budget_table.tpm_limit.toLocaleString()}</p>
                       </div>
                     )}
                   {tagDetails.litellm_budget_table.rpm_limit !== undefined &&
                     tagDetails.litellm_budget_table.rpm_limit !== null && (
                       <div>
-                        <p className="font-medium">RPM Limit</p>
+                        <p className="font-medium">{uiT("ui.e543e799b809")}</p>
                         <p>{tagDetails.litellm_budget_table.rpm_limit.toLocaleString()}</p>
                       </div>
                     )}

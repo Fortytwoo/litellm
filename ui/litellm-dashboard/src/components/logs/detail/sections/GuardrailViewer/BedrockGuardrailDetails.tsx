@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 
 export type BedrockGuardrailAction = "NONE" | "GUARDRAIL_INTERVENED";
@@ -169,6 +171,8 @@ const Divider: React.FC = () => <div className="my-3 border-t" />;
 
 /** ====== Main component ====== */
 export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailResponse }> = ({ response }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!response) return null;
 
   const outputs: BedrockOutputContent[] = (response.outputs ?? response.output ?? []) as BedrockOutputContent[];
@@ -208,17 +212,17 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
       <div className="border rounded-lg p-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <KV label="Action:">{chip(response.action ?? "N/A", actionTone)}</KV>
-            {response.actionReason && <KV label="Action Reason:">{response.actionReason}</KV>}
+            <KV label={uiT("ui.7d9fda4ea853")}>{chip(response.action ?? "N/A", actionTone)}</KV>
+            {response.actionReason && <KV label={uiT("ui.54846c6ee93b")}>{response.actionReason}</KV>}
             {response.blockedResponse && (
-              <KV label="Blocked Response:">
+              <KV label={uiT("ui.e607e694ad77")}>
                 <span className="italic">{response.blockedResponse}</span>
               </KV>
             )}
           </div>
           <div className="space-y-2">
-            <KV label="Coverage:">{coverageChips}</KV>
-            <KV label="Usage:">{usagePills}</KV>
+            <KV label={uiT("ui.c79fb7487ef4")}>{coverageChips}</KV>
+            <KV label={uiT("ui.2bad3eeaf33c")}>{usagePills}</KV>
           </div>
         </div>
 
@@ -226,11 +230,11 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
         {outputs.length > 0 && (
           <>
             <Divider />
-            <h4 className="font-medium mb-2">Outputs</h4>
+            <h4 className="font-medium mb-2">{uiT("ui.e7ce99764a2d")}</h4>
             <div className="space-y-2">
               {outputs.map((o, i) => (
                 <div key={i} className="p-3 bg-muted rounded-md">
-                  <div className="text-sm whitespace-pre-wrap">{o.text ?? <em>(non-text output)</em>}</div>
+                  <div className="text-sm whitespace-pre-wrap">{o.text ?? <em>{uiT("ui.79c811d71afa")}</em>}</div>
                 </div>
               ))}
             </div>
@@ -269,9 +273,9 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                 {/* Word policy */}
                 {assess.wordPolicy && (
                   <div className="mb-3">
-                    <h6 className="font-medium mb-2">Word Policy</h6>
+                    <h6 className="font-medium mb-2">{uiT("ui.0ce7343bc1ec")}</h6>
                     {(assess.wordPolicy.customWords?.length ?? 0) > 0 && (
-                      <Section title="Custom Words" defaultOpen>
+                      <Section title={uiT("ui.3fc1f4653d62")} defaultOpen>
                         <div className="space-y-2">
                           {assess.wordPolicy.customWords!.map((w, i) => (
                             <div key={i} className="flex justify-between items-center p-2 bg-muted rounded-sm">
@@ -286,7 +290,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                       </Section>
                     )}
                     {(assess.wordPolicy.managedWordLists?.length ?? 0) > 0 && (
-                      <Section title="Managed Word Lists" defaultOpen={false}>
+                      <Section title={uiT("ui.b6224e213608")} defaultOpen={false}>
                         <div className="space-y-2">
                           {assess.wordPolicy.managedWordLists!.map((w, i) => (
                             <div key={i} className="flex justify-between items-center p-2 bg-muted rounded-sm">
@@ -307,16 +311,16 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                 {/* Content policy */}
                 {assess.contentPolicy?.filters?.length ? (
                   <div className="mb-3">
-                    <h6 className="font-medium mb-2">Content Policy</h6>
+                    <h6 className="font-medium mb-2">{uiT("ui.c1c99075f309")}</h6>
                     <div className="overflow-x-auto">
                       <table className="min-w-full text-sm">
                         <thead>
                           <tr className="text-left text-muted-foreground">
-                            <th className="py-1 pr-4">Type</th>
-                            <th className="py-1 pr-4">Action</th>
-                            <th className="py-1 pr-4">Detected</th>
-                            <th className="py-1 pr-4">Strength</th>
-                            <th className="py-1 pr-4">Confidence</th>
+                            <th className="py-1 pr-4">{uiT("ui.baaddf70fb5d")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.64cff1319d2f")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.756a8ba97dce")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.63ee3a1b965a")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.6422e3e78f5e")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -338,16 +342,16 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                 {/* Contextual grounding */}
                 {assess.contextualGroundingPolicy?.filters?.length ? (
                   <div className="mb-3">
-                    <h6 className="font-medium mb-2">Contextual Grounding</h6>
+                    <h6 className="font-medium mb-2">{uiT("ui.ff80030e1553")}</h6>
                     <div className="overflow-x-auto">
                       <table className="min-w-full text-sm">
                         <thead>
                           <tr className="text-left text-muted-foreground">
-                            <th className="py-1 pr-4">Type</th>
-                            <th className="py-1 pr-4">Action</th>
-                            <th className="py-1 pr-4">Detected</th>
-                            <th className="py-1 pr-4">Score</th>
-                            <th className="py-1 pr-4">Threshold</th>
+                            <th className="py-1 pr-4">{uiT("ui.baaddf70fb5d")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.64cff1319d2f")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.756a8ba97dce")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.38e5a46cbc5a")}</th>
+                            <th className="py-1 pr-4">{uiT("ui.0da627ada476")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -369,9 +373,9 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                 {/* Sensitive Information */}
                 {assess.sensitiveInformationPolicy && (
                   <div className="mb-3">
-                    <h6 className="font-medium mb-2">Sensitive Information</h6>
+                    <h6 className="font-medium mb-2">{uiT("ui.7daa83aa2e46")}</h6>
                     {(assess.sensitiveInformationPolicy.piiEntities?.length ?? 0) > 0 && (
-                      <Section title="PII Entities" defaultOpen>
+                      <Section title={uiT("ui.d8d419d1c0e7")} defaultOpen>
                         <div className="space-y-2">
                           {assess.sensitiveInformationPolicy.piiEntities!.map((p, i) => (
                             <div key={i} className="flex justify-between items-center p-2 bg-muted rounded-sm">
@@ -387,7 +391,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                       </Section>
                     )}
                     {(assess.sensitiveInformationPolicy.regexes?.length ?? 0) > 0 && (
-                      <Section title="Custom Regexes" defaultOpen={false}>
+                      <Section title={uiT("ui.3dcb690a9d1c")} defaultOpen={false}>
                         <div className="space-y-2">
                           {assess.sensitiveInformationPolicy.regexes!.map((r, i) => (
                             <div
@@ -414,7 +418,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                 {/* Topic policy */}
                 {assess.topicPolicy?.topics?.length ? (
                   <div className="mb-3">
-                    <h6 className="font-medium mb-2">Topic Policy</h6>
+                    <h6 className="font-medium mb-2">{uiT("ui.44c915bca4c8")}</h6>
                     <div className="flex flex-wrap gap-2">
                       {assess.topicPolicy.topics!.map((t, i) => (
                         <div key={i} className="px-3 py-1.5 bg-muted rounded-md text-xs">
@@ -432,11 +436,13 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
 
                 {/* Invocation metrics */}
                 {assess.invocationMetrics && (
-                  <Section title="Invocation Metrics" defaultOpen={false}>
+                  <Section title={uiT("ui.5feb8e571a62")} defaultOpen={false}>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <KV label="Latency (ms)">{assess.invocationMetrics.guardrailProcessingLatency ?? "—"}</KV>
-                        <KV label="Coverage:">
+                        <KV label={uiT("ui.09c30aa3a474")}>
+                          {assess.invocationMetrics.guardrailProcessingLatency ?? "—"}
+                        </KV>
+                        <KV label={uiT("ui.c79fb7487ef4")}>
                           <div className="flex flex-wrap gap-2">
                             {assess.invocationMetrics.guardrailCoverage?.textCharacters &&
                               chip(
@@ -456,7 +462,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
                         </KV>
                       </div>
                       <div className="space-y-2">
-                        <KV label="Usage:">
+                        <KV label={uiT("ui.2bad3eeaf33c")}>
                           <div className="flex flex-wrap gap-2">
                             {assess.invocationMetrics.usage &&
                               Object.entries(assess.invocationMetrics.usage).map(([k, v]) =>
@@ -478,7 +484,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
 
                 {/* Automated reasoning (fallback render) */}
                 {assess.automatedReasoningPolicy?.findings?.length ? (
-                  <Section title="Automated Reasoning Findings" defaultOpen={false}>
+                  <Section title={uiT("ui.cac3344dff26")} defaultOpen={false}>
                     <div className="space-y-2">
                       {assess.automatedReasoningPolicy.findings!.map((f, i) => (
                         <pre key={i} className="bg-muted rounded-sm p-2 text-xs overflow-x-auto">
@@ -495,7 +501,7 @@ export const BedrockGuardrailDetails: React.FC<{ response: BedrockGuardrailRespo
       ) : null}
 
       {/* Raw JSON (for debugging / completeness) */}
-      <Section title="Raw Bedrock Guardrail Response" defaultOpen={false}>
+      <Section title={uiT("ui.ce2a515d6d82")} defaultOpen={false}>
         <pre className="bg-muted rounded-sm p-3 text-xs overflow-x-auto">{JSON.stringify(response, null, 2)}</pre>
       </Section>
     </div>

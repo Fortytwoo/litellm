@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   type Cell,
@@ -44,6 +45,7 @@ import { cn, cva } from "@/lib/cva.config";
 
 import "./columnMeta";
 import { DataTablePagination, DEFAULT_PAGE_SIZE_OPTIONS } from "./DataTablePagination";
+import { localizedColumns } from "./localizedColumns";
 import type {
   ColumnPinnedSide,
   DataTableProps,
@@ -352,12 +354,14 @@ function MessageRow({
 }
 
 function DefaultEmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <SearchX className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No results</div>
+      <div className="text-sm font-medium text-foreground">{uiT("ui.a43619f32117")}</div>
       <div className="text-sm text-muted-foreground">No rows match your search or filters.</div>
     </div>
   );
@@ -468,6 +472,7 @@ function usePageClamp(
 function useDataTableInstance<TData extends RowData, TValue>(
   props: DataTableResolvedProps<TData, TValue>,
 ): Table<TData> {
+  const { locale } = useDashboardLanguage();
   const {
     data,
     columns,
@@ -526,9 +531,10 @@ function useDataTableInstance<TData extends RowData, TValue>(
   const columnPinning = React.useMemo(() => derivePinning(columns), [columns]);
   const expansionGuard = renderSubComponent !== undefined ? getRowCanExpand : undefined;
 
+  const displayColumns = React.useMemo(() => localizedColumns(columns, locale), [columns, locale]);
   const tableOptions: TableOptions<TData> = {
     data,
-    columns,
+    columns: displayColumns,
     state: {
       sorting: sortingState.value,
       pagination: paginationState.value,

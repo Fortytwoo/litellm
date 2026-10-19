@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Allow proxy admin to add other people to view global spend
  * Use this to avoid sharing master key with others
@@ -65,6 +67,8 @@ interface AdminPanelProps {
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { premiumUser, accessToken, userId: userID } = useAuthorized();
   const form = useSSOSettingsForm("admin-panel");
   const [isAddSSOModalVisible, setIsAddSSOModalVisible] = useState(false);
@@ -287,8 +291,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>IP Address</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
+                      <TableHead>{uiT("ui.3c3de0c91c5f")}</TableHead>
+                      <TableHead className="text-right">{uiT("ui.64cff1319d2f")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -298,7 +302,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
                         <TableCell className="text-right">
                           {ip !== all_ip_address_allowed && (
                             <Button onClick={() => handleDeleteIP(ip)} variant="destructive" size="sm">
-                              Delete
+                              {uiT("ui.e2d0a54968ea")}
                             </Button>
                           )}
                         </TableCell>
@@ -310,7 +314,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
                   <Button className="mx-1" onClick={() => setIsAddIPModalVisible(true)}>
                     Add IP Address
                   </Button>
-                  <Button onClick={() => setIsAllowedIPModalVisible(false)}>Close</Button>
+                  <Button onClick={() => setIsAllowedIPModalVisible(false)}>{uiT("ui.7d9eb7acb13e")}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -336,7 +340,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
                   <Button className="mx-1" onClick={() => confirmDeleteIP()}>
                     Yes
                   </Button>
-                  <Button onClick={() => setIsDeleteIPModalVisible(false)}>Close</Button>
+                  <Button onClick={() => setIsDeleteIPModalVisible(false)}>{uiT("ui.7d9eb7acb13e")}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -391,7 +395,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
     },
     {
       key: "logging-settings",
-      label: "Logging Settings",
+      label: uiT("ui.f5d87a5328ff"),
       children: <LoggingSettings />,
     },
     {

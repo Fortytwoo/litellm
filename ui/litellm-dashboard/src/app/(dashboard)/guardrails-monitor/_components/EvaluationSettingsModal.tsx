@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Play } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { fetchAvailableModels, type ModelGroup } from "@/components/llm_calls/fetch_models";
@@ -47,6 +49,8 @@ export function EvaluationSettingsModal({
   accessToken,
   onRunEvaluation,
 }: EvaluationSettingsModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [prompt, setPrompt] = useState(DEFAULT_PROMPT);
   const [schema, setSchema] = useState(DEFAULT_SCHEMA);
   const [model, setModel] = useState<string | null>(null);
@@ -137,7 +141,7 @@ export function EvaluationSettingsModal({
           </div>
 
           <div>
-            <p className="mb-1.5 text-sm font-medium text-foreground">Model</p>
+            <p className="mb-1.5 text-sm font-medium text-foreground">{uiT("ui.5e2c614c23f0")}</p>
             <SearchSelect
               options={modelSelectOptions}
               value={model ?? undefined}
@@ -150,7 +154,7 @@ export function EvaluationSettingsModal({
 
         <DialogFooter className="border-t border-border pt-4">
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={handleRun} disabled={!model}>
             <Play className="size-4" />

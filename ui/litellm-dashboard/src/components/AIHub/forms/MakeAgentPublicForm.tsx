@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +28,8 @@ const MakeAgentPublicForm: React.FC<MakeAgentPublicFormProps> = ({
   agentHubData,
   onSuccess,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedAgents, setSelectedAgents] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
@@ -224,8 +228,8 @@ const MakeAgentPublicForm: React.FC<MakeAgentPublicFormProps> = ({
 
         <div className="bg-info/10 border border-info/20 rounded-lg p-3">
           <p className="text-sm text-info">
-            Total: <strong>{selectedAgents.size}</strong> agent{selectedAgents.size !== 1 ? "s" : ""} will be made
-            public
+            {uiT("ui.18e872be2359")} <strong>{selectedAgents.size}</strong> agent{selectedAgents.size !== 1 ? "s" : ""}{" "}
+            will be made public
           </p>
         </div>
       </div>
@@ -247,13 +251,13 @@ const MakeAgentPublicForm: React.FC<MakeAgentPublicFormProps> = ({
     return (
       <div className="flex justify-between mt-6">
         <Button variant="outline" onClick={currentStep === 0 ? handleClose : handlePrevious}>
-          {currentStep === 0 ? "Cancel" : "Previous"}
+          {currentStep === 0 ? uiT("ui.19766ed6ccb2") : uiT("ui.a57b08a480b8")}
         </Button>
 
         <div className="flex space-x-2">
           {currentStep === 0 && (
             <Button onClick={handleNext} disabled={selectedAgents.size === 0}>
-              Next
+              {uiT("ui.1ff57a29d7c9")}
             </Button>
           )}
 

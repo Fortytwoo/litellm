@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 
 export interface SummaryTile {
@@ -33,20 +34,45 @@ export const buildSummaryTiles = (metadata: SpendSummaryMetadata, showFlatCost: 
   return [
     showFlatCost
       ? {
-          title: "Total Cost",
+          get title() {
+            return translateUi("ui.dfa5cc738da2");
+          },
           value: `$${formatNumberWithCommas(metadata.total_spend + flatCost, 2)}`,
           tooltip: TOTAL_COST_TOOLTIP,
           expandable: true,
         }
-      : { title: "Total Spend", value: `$${formatNumberWithCommas(metadata.total_spend, 2)}` },
-    { title: "Total Requests", value: metadata.total_api_requests.toLocaleString() },
+      : {
+          get title() {
+            return translateUi("ui.00c71c737b6c");
+          },
+          value: `$${formatNumberWithCommas(metadata.total_spend, 2)}`,
+        },
     {
-      title: "Successful Requests",
+      get title() {
+        return translateUi("ui.37e751d178cb");
+      },
+      value: metadata.total_api_requests.toLocaleString(),
+    },
+    {
+      get title() {
+        return translateUi("ui.bcc7bb078ec3");
+      },
       value: metadata.total_successful_requests.toLocaleString(),
       className: "text-success",
     },
-    { title: "Failed Requests", value: metadata.total_failed_requests.toLocaleString(), className: "text-destructive" },
-    { title: "Total Tokens", value: metadata.total_tokens.toLocaleString() },
+    {
+      get title() {
+        return translateUi("ui.e2886352d535");
+      },
+      value: metadata.total_failed_requests.toLocaleString(),
+      className: "text-destructive",
+    },
+    {
+      get title() {
+        return translateUi("ui.cd41bf0d3e9a");
+      },
+      value: metadata.total_tokens.toLocaleString(),
+    },
   ];
 };
 

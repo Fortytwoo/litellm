@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Modal for editing an existing fallback entry
  * Lets the user add/remove models from a primary model's fallback chain
@@ -42,6 +44,8 @@ export default function EditFallbacks({
   onClose,
   maxFallbacks = 10,
 }: EditFallbacksProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [group, setGroup] = useState<FallbackGroup>(() => toGroup(fallbackEntry));
   const [isSaving, setIsSaving] = useState(false);
 
@@ -89,11 +93,11 @@ export default function EditFallbacks({
       />
       <div className="flex items-center justify-end space-x-3 pt-6 mt-6 border-t border-border">
         <Button variant="outline" onClick={onClose} disabled={isSaving}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
         <Button onClick={handleSave} disabled={isSaving || group.fallbackModels.length === 0}>
           {isSaving ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Pencil className="w-4 h-4" />}
-          {isSaving ? "Saving Changes..." : "Save Changes"}
+          {isSaving ? "Saving Changes..." : uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </AddFallbacksModal>

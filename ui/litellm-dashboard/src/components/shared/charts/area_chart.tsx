@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import * as React from "react";
 import { Area, AreaChart as RechartsAreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -38,6 +39,8 @@ export function AreaChart<TDatum extends Record<string, unknown>>({
   className,
   style,
 }: AreaChartProps<TDatum>) {
+  const { t: uiT } = useDashboardLanguage();
+
   const gradientId = React.useId().replace(/:/g, "");
 
   if (data.length === 0) {
@@ -46,7 +49,7 @@ export function AreaChart<TDatum extends Record<string, unknown>>({
         className={cn("flex h-80 w-full items-center justify-center rounded-lg border border-dashed", className)}
         style={style}
       >
-        <p className="text-sm text-muted-foreground">No data</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.3b41ba9c7cb8")}</p>
       </div>
     );
   }

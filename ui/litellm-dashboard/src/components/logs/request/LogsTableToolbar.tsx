@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import moment from "moment";
 import { CalendarDays } from "lucide-react";
@@ -43,6 +44,8 @@ interface LogsTimeRangePickerProps {
 }
 
 export function LogsTimeRangePicker({ value, onValueChange }: LogsTimeRangePickerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(false);
 
   const selectedOption = QUICK_SELECT_OPTIONS.find(
@@ -84,7 +87,7 @@ export function LogsTimeRangePicker({ value, onValueChange }: LogsTimeRangePicke
               className="w-full justify-start font-normal"
               onClick={() => onValueChange({ ...value, isCustomDate: !value.isCustomDate })}
             >
-              Custom Range
+              {uiT("ui.dc1af1cbd2ae")}
             </Button>
           </div>
         </PopoverContent>
@@ -98,7 +101,7 @@ export function LogsTimeRangePicker({ value, onValueChange }: LogsTimeRangePicke
             value={value.startTime}
             onChange={(event) => onValueChange({ ...value, startTime: event.target.value })}
           />
-          <span className="text-sm text-muted-foreground">to</span>
+          <span className="text-sm text-muted-foreground">{uiT("ui.663ea1bfffe5")}</span>
           <Input
             type="datetime-local"
             className="w-auto"

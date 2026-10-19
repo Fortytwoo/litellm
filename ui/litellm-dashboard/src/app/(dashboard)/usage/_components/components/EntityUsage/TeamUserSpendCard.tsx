@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Download, Users } from "lucide-react";
@@ -31,40 +34,60 @@ interface TeamUserSpendCardProps {
 const QUIET_HEADER = { headerClassName: "font-normal" };
 
 const columns: ColumnDef<TeamUserSpendRow>[] = [
-  { header: "Team", accessorFn: teamLabel, id: "team", meta: QUIET_HEADER, cell: ({ row }) => teamLabel(row.original) },
   {
-    header: "User",
+    get header() {
+      return translateUi("ui.5985039f106d");
+    },
+    accessorFn: teamLabel,
+    id: "team",
+    meta: QUIET_HEADER,
+    cell: ({ row }) => teamLabel(row.original),
+  },
+  {
+    get header() {
+      return translateUi("ui.b512d97e7cbf");
+    },
     accessorFn: userLabel,
     id: "user",
     meta: QUIET_HEADER,
     cell: ({ row }) => <span className="font-medium text-foreground">{userLabel(row.original)}</span>,
   },
   {
-    header: "Spend",
+    get header() {
+      return translateUi("ui.85f3d558db12");
+    },
     accessorKey: "spend",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
   },
   {
-    header: "Requests",
+    get header() {
+      return translateUi("ui.ada27592c957");
+    },
     accessorKey: "api_requests",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => row.original.api_requests.toLocaleString(),
   },
   {
-    header: "Successful",
+    get header() {
+      return translateUi("ui.f3686bb328c6");
+    },
     accessorKey: "successful_requests",
     meta: { numeric: true, className: "text-success", ...QUIET_HEADER },
     cell: ({ row }) => row.original.successful_requests.toLocaleString(),
   },
   {
-    header: "Failed",
+    get header() {
+      return translateUi("ui.031a8f0f659d");
+    },
     accessorKey: "failed_requests",
     meta: { numeric: true, className: "text-destructive", ...QUIET_HEADER },
     cell: ({ row }) => row.original.failed_requests.toLocaleString(),
   },
   {
-    header: "Tokens",
+    get header() {
+      return translateUi("ui.a039dfb9628b");
+    },
     accessorKey: "total_tokens",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => row.original.total_tokens.toLocaleString(),
@@ -72,6 +95,8 @@ const columns: ColumnDef<TeamUserSpendRow>[] = [
 ];
 
 const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, startTime, endTime, teamIds }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const hasTeams = teamIds.length > 0;
   const { data, isLoading } = useQuery({
     queryKey: ["teamSpendByUser", startTime?.toISOString(), endTime?.toISOString(), teamIds],
@@ -93,7 +118,7 @@ const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, star
           onClick={() => data && downloadCsv(buildTeamUserSpendCsv(data), teamUserSpendCsvFileName(data))}
         >
           <Download />
-          Download CSV
+          {uiT("ui.a4023b89022f")}
         </Button>
       }
     >

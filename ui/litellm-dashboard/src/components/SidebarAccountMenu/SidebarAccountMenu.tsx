@@ -1,3 +1,6 @@
+"use client";
+import { LocalizedText } from "@/contexts/LanguageContext";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useHealthReadinessDetails } from "@/app/(dashboard)/hooks/healthReadiness/useHealthReadinessDetails";
 import { useDisableBlogPosts } from "@/app/(dashboard)/hooks/useDisableBlogPosts";
@@ -85,6 +88,8 @@ interface SidebarAccountMenuProps {
 }
 
 const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, collapsed = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     userId,
     userEmail,
@@ -118,28 +123,28 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
   const toggles = [
     {
       key: "disableShowNewBadge",
-      label: "Hide New Feature Indicators",
+      label: uiT("ui.48f75644db39"),
       ariaLabel: "Toggle hide new feature indicators",
       checked: disableShowNewBadge,
       onCheckedChange: (checked: boolean) => setFlag("disableShowNewBadge", checked),
     },
     {
       key: "disableShowPrompts",
-      label: "Hide All Prompts",
+      label: uiT("ui.f5be3ed6e14f"),
       ariaLabel: "Toggle hide all prompts",
       checked: disableShowPrompts,
       onCheckedChange: (checked: boolean) => setFlag("disableShowPrompts", checked),
     },
     {
       key: "disableBlogPosts",
-      label: "Hide Blog Posts",
+      label: uiT("ui.e53bc1935093"),
       ariaLabel: "Toggle hide blog posts",
       checked: disableBlogPosts,
       onCheckedChange: (checked: boolean) => setFlag("disableBlogPosts", checked),
     },
     {
       key: "disableBouncingIcon",
-      label: "Hide Bouncing Icon",
+      label: uiT("ui.af83f908cb90"),
       ariaLabel: "Toggle hide bouncing icon",
       checked: disableBouncingIcon,
       onCheckedChange: (checked: boolean) => setFlag("disableBouncingIcon", checked),
@@ -171,7 +176,11 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
           <>
             <span className="min-w-0 flex-1 leading-tight">
               <span className="block truncate text-[13px] font-medium text-sidebar-foreground">{displayName}</span>
-              {userRole && <span className="block truncate text-[11px] text-muted-foreground">{userRole}</span>}
+              {userRole && (
+                <span className="block truncate text-[11px] text-muted-foreground">
+                  <LocalizedText text={userRole} />
+                </span>
+              )}
             </span>
             <ChevronsUpDown size={16} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
           </>
@@ -191,7 +200,7 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
             <span
               className="animate-bounce text-lg leading-none"
               style={{ animationDuration: "2s" }}
-              title="Thanks for using LiteLLM!"
+              title={uiT("ui.c09a4af193cd")}
               aria-hidden
             >
               🌴
@@ -210,26 +219,28 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
         </div>
 
         <div className="flex flex-col px-3 py-2">
-          <InfoRow icon={<Crown className="size-[17px]" />} label="Tier">
+          <InfoRow icon={<Crown className="size-[17px]" />} label={uiT("ui.cb9e8664edea")}>
             {premiumUser ? (
               <Badge variant="outline" className="gap-1 border-warning/30 bg-warning/10 text-warning">
                 <Crown />
-                Premium
+                {uiT("ui.de88c121a82a")}
               </Badge>
             ) : (
-              <Badge variant="secondary" className="gap-1" title="Upgrade to Premium for advanced features">
+              <Badge variant="secondary" className="gap-1" title={uiT("ui.336d719f6bcf")}>
                 <Crown />
-                Standard
+                {uiT("ui.ef6691545d2c")}
               </Badge>
             )}
           </InfoRow>
-          <InfoRow icon={<ShieldCheck className="size-[17px]" />} label="Role">
-            <Badge variant="secondary">{userRole}</Badge>
+          <InfoRow icon={<ShieldCheck className="size-[17px]" />} label={uiT("ui.14736a2eb9f4")}>
+            <Badge variant="secondary">
+              <LocalizedText text={userRole} />
+            </Badge>
           </InfoRow>
-          <InfoRow icon={<Mail className="size-[17px]" />} label="Email">
+          <InfoRow icon={<Mail className="size-[17px]" />} label={uiT("ui.969ccbd3cf63")}>
             <MonoValue value={userEmail} copyLabel="Copy email" />
           </InfoRow>
-          <InfoRow icon={<IdCard className="size-[17px]" />} label="User ID">
+          <InfoRow icon={<IdCard className="size-[17px]" />} label={uiT("ui.7967e089a7b9")}>
             <MonoValue value={userId} copyLabel="Copy user ID" />
           </InfoRow>
         </div>
@@ -250,12 +261,12 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
           ))}
           {premiumUser === true && canUseLiteAdmin && (
             <div className="flex h-[38px] items-center justify-between gap-3 px-3">
-              <span className="text-[13px] text-foreground">Hide LiteAdmin</span>
+              <span className="text-[13px] text-foreground">{uiT("ui.d9b317e2590c")}</span>
               <Switch
                 size="sm"
                 checked={disableLiteAdmin}
                 onCheckedChange={setDisableLiteAdmin}
-                aria-label="Toggle hide LiteAdmin"
+                aria-label={uiT("ui.ae09408600bf")}
               />
             </div>
           )}
@@ -273,7 +284,7 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
             className="h-[42px] w-full justify-start gap-2.5 rounded-none px-3 text-sm font-medium text-foreground"
           >
             <KeyRound className="size-[19px] text-muted-foreground" />
-            Change Password
+            {uiT("ui.a949f4623074")}
           </Button>
         )}
 
@@ -283,7 +294,7 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
           className="h-[42px] w-full justify-start gap-2.5 rounded-none px-3 text-sm font-medium text-foreground"
         >
           <LogOut className="size-[19px] text-muted-foreground" />
-          Logout
+          {uiT("ui.d0527e4b3d65")}
         </Button>
       </PopoverContent>
     </Popover>

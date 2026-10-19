@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { SearchSelect, type SearchSelectOption } from "@/components/shared/SearchSelect";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -79,6 +81,8 @@ export default function CredentialModal({
   initialAuthMethod,
   providerLocked = false,
 }: CredentialModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isEdit = mode === "edit";
   const [selectedProvider, setSelectedProvider] = useState<string | null>(
     (existingCredential?.credential_info.custom_llm_provider as Providers) ?? initialProvider ?? Providers.OpenAI,
@@ -265,7 +269,7 @@ export default function CredentialModal({
 
                 <div>
                   <Button variant="outline" className="mr-2.5" onClick={closeAndReset}>
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </Button>
                   <Button type="submit">{isEdit ? "Update Credential" : "Add Credential"}</Button>
                 </div>

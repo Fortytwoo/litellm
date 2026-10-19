@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowRight, Sparkles, X } from "lucide-react";
 
@@ -9,6 +11,8 @@ import { Button } from "@/components/ui/button";
 const STORAGE_KEY = "hideDecisionModelsBanner";
 
 const DecisionModelsBanner: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [dismissed, setDismissed] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem(STORAGE_KEY) === "true";
@@ -62,7 +66,7 @@ const DecisionModelsBanner: React.FC = () => {
           localStorage.setItem(STORAGE_KEY, "true");
         }}
         className="shrink-0"
-        aria-label="Dismiss banner"
+        aria-label={uiT("ui.ea8c089e16a3")}
       >
         <X />
       </Button>

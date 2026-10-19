@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,15 +45,17 @@ interface PresetPickerProps {
 }
 
 function PresetPicker({ activePreset, onPick }: PresetPickerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Select value={activePreset?.id ?? CUSTOM_PRESET} onValueChange={onPick}>
       <SelectTrigger className="w-56" aria-label="Example">
-        <SelectValue>{activePreset?.label ?? "Custom"}</SelectValue>
+        <SelectValue>{activePreset?.label ?? uiT("ui.494ca78f7374")}</SelectValue>
       </SelectTrigger>
       <SelectContent>
         {activePreset === undefined && (
           <SelectItem value={CUSTOM_PRESET} disabled>
-            Custom
+            {uiT("ui.494ca78f7374")}
           </SelectItem>
         )}
         {DECISION_PRESETS.map((preset) => (
@@ -70,6 +73,8 @@ function getCustomProxyBaseUrl(): string | undefined {
 }
 
 export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation = false }: SystemOneUIProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [apiKeySource, setApiKeySource] = useState<ApiKeySource>(disabledPersonalKeyCreation ? "custom" : "session");
   const [customApiKey, setCustomApiKey] = useState("");
   const effectiveApiKey = apiKeySource === "session" ? accessToken || "" : customApiKey.trim();
@@ -211,19 +216,19 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
               disabled={disabledPersonalKeyCreation}
             >
               <SelectTrigger className="w-44" aria-label="Virtual Key Source">
-                <SelectValue>{apiKeySource === "custom" ? "Virtual Key" : "Current UI Session"}</SelectValue>
+                <SelectValue>{apiKeySource === "custom" ? uiT("ui.3af334745cdc") : "Current UI Session"}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="session" disabled={!accessToken}>
                   Current UI Session
                 </SelectItem>
-                <SelectItem value="custom">Virtual Key</SelectItem>
+                <SelectItem value="custom">{uiT("ui.3af334745cdc")}</SelectItem>
               </SelectContent>
             </Select>
             {apiKeySource === "custom" && (
               <Input
                 type="password"
-                aria-label="Virtual Key"
+                aria-label={uiT("ui.3af334745cdc")}
                 value={customApiKey}
                 onChange={(event) => setCustomApiKey(event.target.value)}
                 placeholder="Enter Virtual Key"
@@ -292,7 +297,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
               disabled={rawPayload === clearedPayload}
             >
               <Eraser />
-              Clear
+              {uiT("ui.83b12c2216ef")}
             </Button>
             <div className="ml-auto flex items-center gap-2">
               {isLoading && (

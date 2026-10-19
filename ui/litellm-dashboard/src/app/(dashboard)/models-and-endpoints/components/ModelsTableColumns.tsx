@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CredentialIdentity } from "@/components/shared/CredentialIdentity";
@@ -117,9 +119,11 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
 }
 
 function CredentialsHeader() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <span className="flex items-center gap-1">
-      Credentials
+      {uiT("ui.d48a617c7da5")}
       <HoverCard>
         <HoverCardTrigger
           render={
@@ -384,8 +388,14 @@ export const getModelsTableColumns = ({
   {
     id: MODEL_ID_COLUMN_ID,
     accessorFn: (row) => row.model_info.id,
-    meta: { title: "Model ID" },
-    header: "Model ID",
+    meta: {
+      get title() {
+        return translateUi("ui.089ef2b6dbb3");
+      },
+    },
+    get header() {
+      return translateUi("ui.089ef2b6dbb3");
+    },
     enableSorting: false,
     size: 140,
     minSize: 90,
@@ -412,7 +422,11 @@ export const getModelsTableColumns = ({
   {
     id: CREDENTIALS_COLUMN_ID,
     accessorFn: (row) => row.litellm_params?.litellm_credential_name ?? "",
-    meta: { title: "Credentials" },
+    meta: {
+      get title() {
+        return translateUi("ui.d48a617c7da5");
+      },
+    },
     header: () => <CredentialsHeader />,
     enableSorting: false,
     size: 180,
@@ -430,8 +444,13 @@ export const getModelsTableColumns = ({
   {
     id: CREATED_BY_COLUMN_ID,
     accessorFn: (row) => row.model_info.created_by ?? "",
-    meta: { title: "Created By", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created By" />,
+    meta: {
+      get title() {
+        return translateUi("ui.dfd60b9aa5ca");
+      },
+      skeleton: "twoLine",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dfd60b9aa5ca")} />,
     enableSorting: true,
     size: 180,
     minSize: 110,
@@ -440,8 +459,12 @@ export const getModelsTableColumns = ({
   {
     id: UPDATED_AT_COLUMN_ID,
     accessorFn: (row) => row.model_info.updated_at ?? "",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    meta: {
+      get title() {
+        return translateUi("ui.e35c8e4f5cb5");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.e35c8e4f5cb5")} />,
     enableSorting: true,
     size: 140,
     minSize: 100,
@@ -460,8 +483,14 @@ export const getModelsTableColumns = ({
   {
     id: TEAM_ID_COLUMN_ID,
     accessorFn: (row) => row.model_info.team_id ?? "",
-    meta: { title: "Team ID" },
-    header: "Team ID",
+    meta: {
+      get title() {
+        return translateUi("ui.fa2758a6173a");
+      },
+    },
+    get header() {
+      return translateUi("ui.fa2758a6173a");
+    },
     enableSorting: false,
     size: 140,
     minSize: 90,
@@ -500,8 +529,16 @@ export const getModelsTableColumns = ({
   },
   {
     id: "actions",
-    meta: { title: "Actions", className: "text-right", headerClassName: "text-right" },
-    header: "Actions",
+    meta: {
+      get title() {
+        return translateUi("ui.ff8059dc6752");
+      },
+      className: "text-right",
+      headerClassName: "text-right",
+    },
+    get header() {
+      return translateUi("ui.ff8059dc6752");
+    },
     enableSorting: false,
     enableHiding: false,
     enableResizing: false,

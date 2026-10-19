@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, CircleHelp, Lock } from "lucide-react";
 import { z } from "zod";
@@ -79,6 +81,8 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
   is_admin,
   editVectorStore,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(vectorStoreEditSchema, { defaultValues: EMPTY_VALUES });
   const [vectorStoreDetails, setVectorStoreDetails] = useState<VectorStore | null>(null);
   const [loadFailed, setLoadFailed] = useState<boolean>(false);
@@ -180,7 +184,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
   }
 
   if (!vectorStoreDetails) {
-    return <div>Loading...</div>;
+    return <div>{uiT("ui.47d2a515ef2f")}</div>;
   }
 
   const canEdit = is_admin && !vectorStoreDetails.is_config;
@@ -195,7 +199,9 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
             Back to Vector Stores
           </Button>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold">Vector Store ID: {vectorStoreDetails.vector_store_id}</h1>
+            <h1 className="text-xl font-semibold">
+              {uiT("ui.6b25b4e7f343")} {vectorStoreDetails.vector_store_id}
+            </h1>
             <StatusBadge
               tone={vectorStoreDetails.is_config ? "neutral" : "info"}
               label={vectorStoreDetails.is_config ? "Config" : "DB"}
@@ -222,7 +228,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
       <Tabs defaultValue="details">
         <TabsList variant="line" className="mb-6 h-auto w-full justify-start rounded-none p-0">
           <TabsTrigger value="details" className="flex-none rounded-none px-4 py-2">
-            Details
+            {uiT("ui.45989de49fb7")}
           </TabsTrigger>
           <TabsTrigger value="test" className="flex-none rounded-none px-4 py-2">
             Test Vector Store
@@ -248,7 +254,11 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
                           {({ ref, value, ...field }) => <Input {...field} ref={ref} value={value ?? ""} />}
                         </FormField>
 
-                        <FormField control={form.control} name="vector_store_description" label="Description">
+                        <FormField
+                          control={form.control}
+                          name="vector_store_description"
+                          label={uiT("ui.526e0087cc3f")}
+                        >
                           {({ ref, value, ...field }) => <Textarea {...field} ref={ref} value={value ?? ""} rows={4} />}
                         </FormField>
 
@@ -336,9 +346,9 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
 
                       <div className="mt-6 flex justify-end space-x-2">
                         <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
-                          Cancel
+                          {uiT("ui.19766ed6ccb2")}
                         </Button>
-                        <Button type="submit">Save Changes</Button>
+                        <Button type="submit">{uiT("ui.35322b5bb5a2")}</Button>
                       </div>
                     </form>
                   </TooltipProvider>
@@ -359,15 +369,15 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
                       <p>{vectorStoreDetails.vector_store_id}</p>
                     </div>
                     <div>
-                      <p className="font-medium">Name</p>
+                      <p className="font-medium">{uiT("ui.dcd1d5223f73")}</p>
                       <p>{vectorStoreDetails.vector_store_name || "-"}</p>
                     </div>
                     <div>
-                      <p className="font-medium">Description</p>
+                      <p className="font-medium">{uiT("ui.526e0087cc3f")}</p>
                       <p>{vectorStoreDetails.vector_store_description || "-"}</p>
                     </div>
                     <div>
-                      <p className="font-medium">Provider</p>
+                      <p className="font-medium">{uiT("ui.472590ae974d")}</p>
                       <div className="flex items-center space-x-2 mt-1">
                         {(() => {
                           const provider = vectorStoreDetails.custom_llm_provider || "bedrock";
@@ -383,19 +393,19 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
                       </div>
                     </div>
                     <div>
-                      <p className="font-medium">Metadata</p>
+                      <p className="font-medium">{uiT("ui.9eddf573cb50")}</p>
                       <div className="bg-muted p-3 rounded-sm mt-2 font-mono text-xs overflow-auto max-h-48">
                         <pre>{metadataString}</pre>
                       </div>
                     </div>
                     <div>
-                      <p className="font-medium">Created</p>
+                      <p className="font-medium">{uiT("ui.d70b9e24bca2")}</p>
                       <p>
                         {vectorStoreDetails.created_at ? new Date(vectorStoreDetails.created_at).toLocaleString() : "-"}
                       </p>
                     </div>
                     <div>
-                      <p className="font-medium">Last Updated</p>
+                      <p className="font-medium">{uiT("ui.048c7f2ef9aa")}</p>
                       <p>
                         {vectorStoreDetails.updated_at ? new Date(vectorStoreDetails.updated_at).toLocaleString() : "-"}
                       </p>

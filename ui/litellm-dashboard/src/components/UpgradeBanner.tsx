@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import { ArrowUpCircle, X } from "lucide-react";
@@ -34,6 +35,8 @@ export const describeRelease = ({ new_features, bug_fixes, other_updates }: Late
   ].join(", ");
 
 export const UpgradeBannerView: React.FC<UpgradeBannerViewProps> = ({ currentVersion, latestRelease }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [dismissedVersion, setDismissedVersion] = useState<string | null>(null);
 
   if (!currentVersion || !latestRelease || !isNewerVersion(currentVersion, latestRelease.version)) {
@@ -62,7 +65,7 @@ export const UpgradeBannerView: React.FC<UpgradeBannerViewProps> = ({ currentVer
       </AlertTitle>
       <AlertDescription>Your current version is v{currentVersion}</AlertDescription>
       <AlertAction>
-        <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={handleClose}>
+        <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.7d9eb7acb13e")} onClick={handleClose}>
           <X className="size-4" />
         </Button>
       </AlertAction>

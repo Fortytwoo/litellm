@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { isAdminRole } from "@/utils/roles";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -46,6 +48,8 @@ type EditSearchToolFormValues = z.infer<typeof editSearchToolSchema>;
 const EMPTY_EDIT_VALUES: EditSearchToolFormValues = { search_tool_name: "", search_provider: "" };
 
 const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     data: searchTools,
     isLoading: isLoadingTools,
@@ -198,13 +202,18 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
           )}
         </FormField>
 
-        <FormField control={form.control} name="api_key" label="API Key" description="API key for the search provider">
+        <FormField
+          control={form.control}
+          name="api_key"
+          label={uiT("ui.23189d55f697")}
+          description="API key for the search provider"
+        >
           {({ ref, value, ...field }) => (
             <PasswordInput {...field} ref={ref} value={value ?? ""} placeholder="Enter API key" />
           )}
         </FormField>
 
-        <FormField control={form.control} name="description" label="Description">
+        <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
           {({ ref, value, ...field }) => (
             <Textarea {...field} ref={ref} value={value ?? ""} rows={3} placeholder="Description of this search tool" />
           )}
@@ -261,13 +270,13 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
         resourceInformation={
           toolToDelete
             ? [
-                { label: "Name", value: toolToDelete.search_tool_name },
+                { label: uiT("ui.dcd1d5223f73"), value: toolToDelete.search_tool_name },
                 { label: "ID", value: toolToDelete.search_tool_id, code: true },
                 {
-                  label: "Provider",
+                  label: uiT("ui.472590ae974d"),
                   value: providerInfo?.ui_friendly_name || toolToDelete.litellm_params.search_provider,
                 },
-                { label: "Description", value: toolToDelete.search_tool_info?.description || "-" },
+                { label: uiT("ui.526e0087cc3f"), value: toolToDelete.search_tool_info?.description || "-" },
               ]
             : []
         }
@@ -308,14 +317,14 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
                 setSelectedToolId(null);
               }}
             >
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
-            <Button onClick={handleEditSubmit}>OK</Button>
+            <Button onClick={handleEditSubmit}>{uiT("ui.565339bc4d33")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <h1 className="text-lg font-semibold text-foreground">Search Tools</h1>
+      <h1 className="text-lg font-semibold text-foreground">{uiT("ui.fe89927555f6")}</h1>
       <p className="mt-2 text-sm text-muted-foreground">Configure and manage your search providers</p>
       {isAdminRole(userRole) && (
         <Button className="mt-4 mb-4" variant="outline" onClick={() => setCreateModalVisible(true)}>

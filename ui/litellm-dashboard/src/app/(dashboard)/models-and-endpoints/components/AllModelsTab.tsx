@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
@@ -80,6 +81,8 @@ const AllModelsTab = ({
   setSelectedModelId,
   setSelectedTeamId,
 }: AllModelsTabProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: modelCostMapData, isLoading: isLoadingModelCostMap } = useModelCostMap();
   const { accessToken, userId, userRole, isViewOnly } = useAuthorized();
   const { data: teams, isLoading: isLoadingTeams } = useTeams();
@@ -377,11 +380,11 @@ const AllModelsTab = ({
                   value: modelToDelete.litellm_model_name || "Not Set",
                 },
                 {
-                  label: "Provider",
+                  label: uiT("ui.472590ae974d"),
                   value: modelToDelete.provider || "Not Set",
                 },
                 {
-                  label: "Created By",
+                  label: uiT("ui.dfd60b9aa5ca"),
                   value: modelToDelete.model_info?.created_by || "Not Set",
                 },
               ]

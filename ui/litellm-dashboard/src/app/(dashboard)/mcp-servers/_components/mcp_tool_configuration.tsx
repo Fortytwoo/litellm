@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Wrench, CircleCheck, Search, Pencil } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -69,6 +71,8 @@ const ToolRow: React.FC<ToolRowProps> = ({
   onDisplayNameChange,
   onDescriptionChange,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const displayNameValue = toolNameToDisplayName[tool.name] || "";
   const isDisplayNameInvalid = displayNameValue !== "" && !TOOL_DISPLAY_NAME_PATTERN.test(displayNameValue);
 
@@ -85,7 +89,9 @@ const ToolRow: React.FC<ToolRowProps> = ({
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium">{toolNameToDisplayName[tool.name] || tool.name}</p>
-              <Badge variant={isEnabled ? "secondary" : "outline"}>{isEnabled ? "Enabled" : "Disabled"}</Badge>
+              <Badge variant={isEnabled ? "secondary" : "outline"}>
+                {isEnabled ? uiT("ui.92c1cdfdf4cb") : uiT("ui.75081b593d15")}
+              </Badge>
               {toolNameToDisplayName[tool.name] && <Badge variant="secondary">Custom name</Badge>}
             </div>
             {(toolNameToDescription[tool.name] || tool.description) && (
@@ -131,7 +137,7 @@ const ToolRow: React.FC<ToolRowProps> = ({
             )}
           </div>
           <div>
-            <p className="mb-1 block text-xs font-medium">Description</p>
+            <p className="mb-1 block text-xs font-medium">{uiT("ui.526e0087cc3f")}</p>
             <Textarea
               className="field-sizing-fixed"
               placeholder={tool.description || "No description"}
@@ -169,6 +175,8 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
   externalCanFetch,
   isEditMode = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const previousToolsRef = useRef<ToolEntry[]>([]);
   const [toolSearchTerm, setToolSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"crud" | "flat">("crud");
@@ -558,7 +566,7 @@ const MCPToolConfiguration: React.FC<MCPToolConfigurationProps> = ({
                       <>
                         <div className="flex items-center justify-between px-1 pt-2">
                           <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                            {pinnedFiltered.length > 0 ? "All tools" : "Tools"}
+                            {pinnedFiltered.length > 0 ? "All tools" : uiT("ui.ea93d6a262ec")}
                           </p>
                           <div className="flex gap-2">
                             <Button variant="link" size="sm" onClick={handleEnableRest}>

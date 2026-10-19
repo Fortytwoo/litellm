@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { ChevronRight, FileText, Plus, Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -54,6 +56,8 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
   pendingSelection,
   onPendingSelectionChange,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   // Use controlled state if parent provides it, otherwise use local state
   const [localSelectedCategoryName, setLocalSelectedCategoryName] = React.useState<string>("");
   const selectedCategoryName = pendingSelection !== undefined ? pendingSelection : localSelectedCategoryName;
@@ -187,7 +191,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       },
     },
     {
-      header: "Action",
+      header: uiT("ui.64cff1319d2f"),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -196,7 +200,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           value={row.original.action}
           onValueChange={(value: string | null) => value && onCategoryUpdate(row.original.id, "action", value)}
         >
-          <SelectTrigger size="sm" className="w-full" aria-label="Action">
+          <SelectTrigger size="sm" className="w-full" aria-label={uiT("ui.64cff1319d2f")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -241,7 +245,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       cell: ({ row }) => (
         <Button variant="outline" size="sm" onClick={() => onCategoryRemove(row.original.id)}>
           <Trash2 />
-          Remove
+          {uiT("ui.c3812fc4acb8")}
         </Button>
       ),
     },
@@ -287,7 +291,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           </Combobox>
           <Button onClick={handleAddCategory} disabled={!selectedCategoryName}>
             <Plus />
-            Add
+            {uiT("ui.9fd728c66c9a")}
           </Button>
         </div>
 
@@ -339,7 +343,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
                       <ChevronRight className={`size-4 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                       <FileText className="size-4" />
                       <span>
-                        View {fileType.toUpperCase()} for {category.display_name}
+                        {uiT("ui.dcc839a4015c")} {fileType.toUpperCase()} for {category.display_name}
                       </span>
                     </CollapsibleTrigger>
                     <CollapsibleContent>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -13,6 +14,8 @@ import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 type LogsTab = "request logs" | "audit logs" | "deleted keys" | "deleted teams";
 
 export default function LogsPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userRole, userId, token, premiumUser } = useAuthorized();
   const [activeTab, setActiveTab] = useState<LogsTab>("request logs");
   const canViewAuditLogs = useCan("viewAuditLogs");
@@ -23,7 +26,12 @@ export default function LogsPage() {
 
   if (credentialsPending || identityPending) {
     return (
-      <div role="status" aria-busy="true" aria-label="Loading" className="flex h-64 items-center justify-center">
+      <div
+        role="status"
+        aria-busy="true"
+        aria-label={uiT("ui.dc380888c4e2")}
+        className="flex h-64 items-center justify-center"
+      >
         <UiLoadingSpinner className="size-8 text-primary" />
       </div>
     );
@@ -33,10 +41,10 @@ export default function LogsPage() {
     <Page className="h-full">
       <PageTabs value={activeTab} onValueChange={(value: LogsTab) => setActiveTab(value)}>
         <PageTabsList>
-          <PageTabsTrigger value="request logs">Request Logs</PageTabsTrigger>
-          {canViewAuditLogs && <PageTabsTrigger value="audit logs">Audit Logs</PageTabsTrigger>}
-          <PageTabsTrigger value="deleted keys">Deleted Keys</PageTabsTrigger>
-          {canViewDeletedTeams && <PageTabsTrigger value="deleted teams">Deleted Teams</PageTabsTrigger>}
+          <PageTabsTrigger value="request logs">{uiT("ui.0df118694f09")}</PageTabsTrigger>
+          {canViewAuditLogs && <PageTabsTrigger value="audit logs">{uiT("ui.5428d7fe5929")}</PageTabsTrigger>}
+          <PageTabsTrigger value="deleted keys">{uiT("ui.aea7ad49cb41")}</PageTabsTrigger>
+          {canViewDeletedTeams && <PageTabsTrigger value="deleted teams">{uiT("ui.fb7d37ebdd02")}</PageTabsTrigger>}
         </PageTabsList>
 
         <PageTabsContent value="request logs" keepMounted>

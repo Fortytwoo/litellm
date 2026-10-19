@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { z } from "zod";
 import { keyCreateCall } from "./networking";
@@ -28,6 +30,8 @@ const scimTokenSchema = z.object({
 type SCIMTokenFormValues = z.infer<typeof scimTokenSchema>;
 
 const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySettings }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(scimTokenSchema, { defaultValues: { key_alias: "" } });
   const [isCreatingToken, setIsCreatingToken] = useState(false);
   const [tokenData, setTokenData] = useState<any>(null);
@@ -107,7 +111,7 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                 <CopyToClipboard text={scimBaseUrl} onCopy={() => toast.success("URL copied to clipboard")}>
                   <Button type="button" className="ml-2 flex items-center">
                     <Copy />
-                    Copy
+                    {uiT("ui.e21f935f11d7")}
                   </Button>
                 </CopyToClipboard>
               </div>
@@ -167,7 +171,7 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
                     <CopyToClipboard text={tokenData.key} onCopy={() => toast.success("Token copied to clipboard")}>
                       <Button type="button" className="flex items-center">
                         <Copy />
-                        Copy
+                        {uiT("ui.e21f935f11d7")}
                       </Button>
                     </CopyToClipboard>
                   </div>

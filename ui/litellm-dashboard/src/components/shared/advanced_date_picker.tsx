@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cva.config";
@@ -22,7 +25,9 @@ interface RelativeTimeOption {
 
 const relativeTimeOptions: RelativeTimeOption[] = [
   {
-    label: "Today",
+    get label() {
+      return translateUi("ui.2b065c7c9ce4");
+    },
     shortLabel: "today",
     getValue: () => ({
       from: moment().startOf("day").toDate(),
@@ -74,6 +79,8 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
   showTimeRange = true,
   align = "right",
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isOpen, setIsOpen] = useState(false);
   const [tempValue, setTempValue] = useState<DateRangePickerValue>(value);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -426,10 +433,10 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
                 <div className="absolute bottom-4 right-4">
                   <div className="flex gap-2">
                     <Button variant="secondary" onClick={handleCancel}>
-                      Cancel
+                      {uiT("ui.19766ed6ccb2")}
                     </Button>
                     <Button onClick={handleApply} disabled={!tempValue.from || !tempValue.to || !validation.isValid}>
-                      Apply
+                      {uiT("ui.31e392d1c037")}
                     </Button>
                   </div>
                 </div>

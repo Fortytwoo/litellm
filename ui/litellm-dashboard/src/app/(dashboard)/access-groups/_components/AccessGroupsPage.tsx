@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Page, PageContent } from "@/components/shared/Page";
 import { AccessGroupResponse, useAccessGroups } from "@/app/(dashboard)/hooks/accessGroups/useAccessGroups";
 import { useDeleteAccessGroup } from "@/app/(dashboard)/hooks/accessGroups/useDeleteAccessGroup";
@@ -32,6 +34,8 @@ function mapResponseToAccessGroup(r: AccessGroupResponse): AccessGroup {
 }
 
 export function AccessGroupsPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { userRole } = useAuthorized();
   // Admin Viewer follows the read-parity rule: see access groups, no writes.
   const canModify = isProxyAdminRole(userRole ?? "");
@@ -64,7 +68,7 @@ export function AccessGroupsPage() {
       <PageHeader>
         <PageHeaderTitle>
           <Boxes />
-          Access Groups
+          {uiT("ui.b0252ccc6e86")}
         </PageHeaderTitle>
         <PageHeaderDescription>Manage resource permissions for your organization</PageHeaderDescription>
         {canModify && (
@@ -117,8 +121,8 @@ export function AccessGroupsPage() {
         resourceInformationTitle="Access Group Information"
         resourceInformation={[
           { label: "ID", value: groupToDelete?.id, code: true },
-          { label: "Name", value: groupToDelete?.name },
-          { label: "Description", value: groupToDelete?.description || "—" },
+          { label: uiT("ui.dcd1d5223f73"), value: groupToDelete?.name },
+          { label: uiT("ui.526e0087cc3f"), value: groupToDelete?.description || "—" },
         ]}
         onCancel={() => setGroupToDelete(null)}
         onOk={() => {

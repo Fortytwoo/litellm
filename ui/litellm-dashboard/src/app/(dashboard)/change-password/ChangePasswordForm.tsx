@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import { CircleAlert } from "lucide-react";
@@ -32,6 +33,8 @@ const changePasswordSchema = z
 type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 
 export function ChangePasswordForm() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, passwordResetRequired } = useAuthorized();
   const form = useZodForm(changePasswordSchema, {
     defaultValues: { currentPassword: "", newPassword: "", confirmNewPassword: "" },
@@ -67,7 +70,7 @@ export function ChangePasswordForm() {
     <div className="mx-auto mt-10 w-full max-w-md">
       <Card>
         <CardContent>
-          <h3 className="text-2xl font-semibold text-foreground">Change Password</h3>
+          <h3 className="text-2xl font-semibold text-foreground">{uiT("ui.a949f4623074")}</h3>
           <p className="text-sm text-muted-foreground">
             Enter your current password and choose a new one. The new password must meet this proxy&apos;s password
             policy.
@@ -90,7 +93,7 @@ export function ChangePasswordForm() {
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="current-password" />}
               </FormField>
 
-              <FormField control={form.control} name="newPassword" label="New Password">
+              <FormField control={form.control} name="newPassword" label={uiT("ui.7c451e0f436d")}>
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="new-password" />}
               </FormField>
 
@@ -109,7 +112,7 @@ export function ChangePasswordForm() {
             <div className="mt-8">
               <Button type="submit" disabled={isPending}>
                 {isPending && <UiLoadingSpinner className="size-4" role="img" aria-label="loading" />}
-                Change Password
+                {uiT("ui.a949f4623074")}
               </Button>
             </div>
           </form>

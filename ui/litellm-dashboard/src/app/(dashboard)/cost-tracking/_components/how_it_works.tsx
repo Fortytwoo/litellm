@@ -1,9 +1,13 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useMemo } from "react";
 import CodeBlock from "@/components/CodeBlock";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const HowItWorks: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [responseCost, setResponseCost] = useState("");
   const [discountAmount, setDiscountAmount] = useState("");
 
@@ -133,7 +137,7 @@ const HowItWorks: React.FC = () => {
                 <code className="font-mono text-xs text-foreground">${calculatedDiscount.finalCost}</code>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-xs text-muted-foreground">Discount Amount:</p>
+                <p className="text-xs text-muted-foreground">{uiT("ui.2443bfe02939")}</p>
                 <code className="font-mono text-xs text-foreground">${calculatedDiscount.discountAmount}</code>
               </div>
               <div className="flex items-center justify-between border-t border-border pt-2">

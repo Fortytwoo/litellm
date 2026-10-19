@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useId } from "react";
 import { Switch } from "@/components/ui/switch";
 
@@ -8,6 +10,8 @@ interface TagFilteringToggleProps {
 }
 
 const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, routerFieldsMetadata, onToggle }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const toggleId = useId();
 
   return (
@@ -28,7 +32,7 @@ const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, router
                   rel="noopener noreferrer"
                   className="text-info hover:text-info/80 underline"
                 >
-                  Learn more
+                  {uiT("ui.1445799c033a")}
                 </a>
               </>
             )}

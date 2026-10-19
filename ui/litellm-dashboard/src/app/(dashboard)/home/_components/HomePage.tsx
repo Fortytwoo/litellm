@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ArrowRight, Plus, Rocket, Sparkles } from "lucide-react";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -20,6 +21,8 @@ import { HOME_USAGE_DAYS, useHomeUsage } from "./useHomeUsage";
 const LEADERBOARD = { metric: "tokens", dimension: "model_groups" } as const;
 
 export default function HomePage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { isViewOnly } = useAuthorized();
   const usage = useHomeUsage();
   const blog = useBlogPosts();
@@ -29,7 +32,7 @@ export default function HomePage() {
   return (
     <Page>
       <PageHeader>
-        <PageHeaderTitle>Home</PageHeaderTitle>
+        <PageHeaderTitle>{uiT("ui.3a78695388b3")}</PageHeaderTitle>
         {!isViewOnly && (
           <PageHeaderControls>
             <Button render={<a href={uiHref("api-keys?create=true")} />}>

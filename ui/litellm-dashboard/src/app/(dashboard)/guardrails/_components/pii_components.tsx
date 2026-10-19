@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { EyeOff, Filter, Info, Ban, X } from "lucide-react";
 import { PiiEntityCategory } from "@/components/guardrails/types";
@@ -140,11 +142,13 @@ export const PiiEntityList: React.FC<PiiEntityListProps> = ({
   onActionSelect,
   entityToCategoryMap,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="overflow-hidden rounded-lg border border-border shadow-xs">
       <div className="flex border-b border-border bg-muted/40 px-5 py-3">
         <span className="flex-1 font-semibold">PII Type</span>
-        <span className="w-32 text-right font-semibold">Action</span>
+        <span className="w-32 text-right font-semibold">{uiT("ui.64cff1319d2f")}</span>
       </div>
       <div className="max-h-[400px] overflow-y-auto">
         {entities.length === 0 ? (
@@ -176,7 +180,10 @@ export const PiiEntityList: React.FC<PiiEntityListProps> = ({
                     onValueChange={(value: string | null) => value && onActionSelect(entity, value)}
                     disabled={!isSelected}
                   >
-                    <SelectTrigger className={`w-[120px] ${isSelected ? "" : "opacity-50"}`} aria-label="Action">
+                    <SelectTrigger
+                      className={`w-[120px] ${isSelected ? "" : "opacity-50"}`}
+                      aria-label={uiT("ui.64cff1319d2f")}
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

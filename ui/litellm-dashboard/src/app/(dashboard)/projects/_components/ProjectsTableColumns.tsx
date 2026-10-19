@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { LayersIcon } from "lucide-react";
@@ -79,8 +80,12 @@ export const getProjectsTableColumns = ({
   {
     id: "project_alias",
     accessorFn: (row) => row.project_alias ?? "",
-    meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.dcd1d5223f73");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dcd1d5223f73")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -92,8 +97,12 @@ export const getProjectsTableColumns = ({
   {
     id: "team",
     accessorFn: (row) => teamAliasMap.get(row.team_id ?? "") ?? "",
-    meta: { title: "Team" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Team" />,
+    meta: {
+      get title() {
+        return translateUi("ui.5985039f106d");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.5985039f106d")} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => (
@@ -102,8 +111,15 @@ export const getProjectsTableColumns = ({
   },
   {
     id: "models",
-    meta: { title: "Models", skeleton: "badge" },
-    header: "Models",
+    meta: {
+      get title() {
+        return translateUi("ui.d17d2d78d76e");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.d17d2d78d76e");
+    },
     size: 110,
     enableSorting: false,
     cell: ({ row }) => <ProjectModelsCell project={row.original} />,
@@ -111,14 +127,21 @@ export const getProjectsTableColumns = ({
   {
     id: "status",
     accessorKey: "blocked",
-    meta: { title: "Status", skeleton: "badge" },
-    header: "Status",
+    meta: {
+      get title() {
+        return translateUi("ui.920e413c7d41");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.920e413c7d41");
+    },
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
       <StatusBadge
         tone={row.original.blocked ? "error" : "success"}
-        label={row.original.blocked ? "Blocked" : "Active"}
+        label={row.original.blocked ? translateUi("ui.18f2a0947f9d") : translateUi("ui.92340695899b")}
       />
     ),
   },
@@ -126,8 +149,12 @@ export const getProjectsTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d70b9e24bca2");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d70b9e24bca2")} />,
     size: 140,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -135,8 +162,14 @@ export const getProjectsTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated" },
-    header: "Updated",
+    meta: {
+      get title() {
+        return translateUi("ui.3a5ecca188c0");
+      },
+    },
+    get header() {
+      return translateUi("ui.3a5ecca188c0");
+    },
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.updated_at} precision="date" />,

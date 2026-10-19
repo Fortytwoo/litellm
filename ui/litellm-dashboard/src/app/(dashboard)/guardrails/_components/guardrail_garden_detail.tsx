@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,6 +23,8 @@ interface GuardrailDetailViewProps {
 }
 
 const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack, accessToken, onGuardrailCreated }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isAddFormVisible, setIsAddFormVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -47,7 +51,10 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
       ]
     : [];
 
-  const tabs = [{ key: "overview", label: "Overview" }, ...(card.eval ? [{ key: "eval", label: "Eval Results" }] : [])];
+  const tabs = [
+    { key: "overview", label: uiT("ui.d4b1ea5708dd") },
+    ...(card.eval ? [{ key: "eval", label: "Eval Results" }] : []),
+  ];
 
   return (
     <div className="mx-auto max-w-[960px]">
@@ -100,7 +107,7 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
         <div className="flex gap-16">
           {/* Left column — overview + details table */}
           <div className="min-w-0 flex-1">
-            <h2 className="m-0 mb-3 text-lg font-normal text-foreground">Overview</h2>
+            <h2 className="m-0 mb-3 text-lg font-normal text-foreground">{uiT("ui.d4b1ea5708dd")}</h2>
             <p className="m-0 mb-8 text-sm leading-[1.7] text-foreground">{card.description}</p>
 
             <h2 className="m-0 mb-1 text-lg font-normal text-foreground">Guardrail Details</h2>
@@ -134,14 +141,14 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
 
             {/* Type */}
             <div className="mb-7">
-              <div className="mb-1 text-xs text-muted-foreground">Type</div>
+              <div className="mb-1 text-xs text-muted-foreground">{uiT("ui.baaddf70fb5d")}</div>
               <div className="text-[13px] text-foreground">{CATEGORY_LABELS[card.category].type}</div>
             </div>
 
             {/* Tags — pill style like Vertex */}
             {card.tags.length > 0 && (
               <div className="mb-7">
-                <div className="mb-2 text-xs text-muted-foreground">Tags</div>
+                <div className="mb-2 text-xs text-muted-foreground">{uiT("ui.1331275bc537")}</div>
                 <div className="flex flex-wrap gap-1.5">
                   {card.tags.map((tag) => (
                     <span

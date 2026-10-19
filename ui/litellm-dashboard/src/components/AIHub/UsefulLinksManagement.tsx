@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import TableIconActionButton from "@/components/common_components/IconActionButton/TableIconActionButtons/TableIconActionButton";
 import { toast } from "@/lib/toast";
 import { isAdminRole } from "@/utils/roles";
@@ -21,6 +23,8 @@ interface Link {
 }
 
 const UsefulLinksManagement: React.FC<UsefulLinksManagementProps> = ({ accessToken, userRole }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [links, setLinks] = useState<Link[]>([]);
   const [newLink, setNewLink] = useState({ url: "", displayName: "" });
   const [editingLink, setEditingLink] = useState<Link | null>(null);
@@ -320,7 +324,7 @@ const UsefulLinksManagement: React.FC<UsefulLinksManagementProps> = ({ accessTok
                     onClick={handleCancelRearranging}
                     className="text-xs bg-muted text-muted-foreground px-3 py-1.5 rounded-sm hover:bg-accent"
                   >
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </button>
                 </div>
               )}
@@ -333,7 +337,7 @@ const UsefulLinksManagement: React.FC<UsefulLinksManagementProps> = ({ accessTok
                   <TableRow>
                     <TableHead className="py-1 h-8">Display Name</TableHead>
                     <TableHead className="py-1 h-8">URL</TableHead>
-                    <TableHead className="py-1 h-8">Actions</TableHead>
+                    <TableHead className="py-1 h-8">{uiT("ui.ff8059dc6752")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -373,13 +377,13 @@ const UsefulLinksManagement: React.FC<UsefulLinksManagementProps> = ({ accessTok
                                 onClick={handleUpdateLink}
                                 className="text-xs bg-info/10 text-info px-2 py-1 rounded-sm hover:bg-info/15"
                               >
-                                Save
+                                {uiT("ui.1509f561f241")}
                               </button>
                               <button
                                 onClick={handleCancelEdit}
                                 className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-sm hover:bg-accent"
                               >
-                                Cancel
+                                {uiT("ui.19766ed6ccb2")}
                               </button>
                             </div>
                           </TableCell>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import CodeBlock from "@/components/CodeBlock";
@@ -42,6 +44,8 @@ const MakeMCPPublicForm: React.FC<MakeMCPPublicFormProps> = ({
   mcpHubData,
   onSuccess,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [selection, setSelection] = useState<PublicationSelection | null>(null);
   const [loading, setLoading] = useState(false);
@@ -312,13 +316,13 @@ const MakeMCPPublicForm: React.FC<MakeMCPPublicFormProps> = ({
     return (
       <div className="flex justify-between mt-6">
         <Button variant="outline" onClick={currentStep === 0 ? handleClose : handlePrevious}>
-          {currentStep === 0 ? "Cancel" : "Previous"}
+          {currentStep === 0 ? uiT("ui.19766ed6ccb2") : uiT("ui.a57b08a480b8")}
         </Button>
 
         <div className="flex space-x-2">
           {currentStep === 0 && (
             <Button onClick={handleNext} disabled={!canManagePublication}>
-              Next
+              {uiT("ui.1ff57a29d7c9")}
             </Button>
           )}
 

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { LoaderCircle } from "lucide-react";
 import React from "react";
 
@@ -53,6 +55,8 @@ const ModelRetrySettingsTab = ({
   handleSaveRetrySettings,
   isSaving = false,
 }: ModelRetrySettingsTabProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isGlobalScope = selectedModelGroup === "global";
   const scopeItems = [
     { value: "global", label: "Global Default" },
@@ -150,7 +154,7 @@ const ModelRetrySettingsTab = ({
                   />
                   {!isGlobalScope && hasOverride && (
                     <Button variant="ghost" size="xs" onClick={() => setModelOverride(retryPolicyKey, null)}>
-                      Reset
+                      {uiT("ui.daee7606b339")}
                     </Button>
                   )}
                 </td>
@@ -161,7 +165,7 @@ const ModelRetrySettingsTab = ({
       </table>
       <Button onClick={handleSaveRetrySettings} disabled={isSaving}>
         {isSaving && <LoaderCircle className="animate-spin" />}
-        Save
+        {uiT("ui.1509f561f241")}
       </Button>
     </div>
   );

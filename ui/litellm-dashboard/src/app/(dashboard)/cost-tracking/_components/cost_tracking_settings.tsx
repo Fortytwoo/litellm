@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import {
@@ -56,6 +58,8 @@ const SectionHeader: React.FC<{ title: string; description: string }> = ({ title
 );
 
 const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, userRole, accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [selectedProvider, setSelectedProvider] = useState<string | undefined>(undefined);
   const [newDiscount, setNewDiscount] = useState<string>("");
   const [isFetching, setIsFetching] = useState(true);
@@ -363,9 +367,9 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isRemoving}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isRemoving}>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
               <Button variant="destructive" onClick={handleConfirmRemoval} disabled={isRemoving}>
-                {isRemoving ? "Removing…" : "Remove"}
+                {isRemoving ? "Removing…" : uiT("ui.c3812fc4acb8")}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

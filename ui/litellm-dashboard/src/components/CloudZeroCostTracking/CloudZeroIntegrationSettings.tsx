@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCloudZeroDryRun } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroDryRun";
 import { useCloudZeroExport } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroExport";
 import { useCloudZeroDeleteSettings } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroSettings";
@@ -43,6 +45,8 @@ const DetailRow = ({ label, children }: DetailRowProps) => (
 const NotConfigured = () => <span className="text-muted-foreground italic">Not configured</span>;
 
 export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: CloudZeroIntegrationSettingsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -131,17 +135,17 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
             <CardTitle className="flex items-center gap-2 text-lg">
               CloudZero Configuration
               <Badge variant="secondary" className="capitalize">
-                {settings.status || "Active"}
+                {settings.status || uiT("ui.92340695899b")}
               </Badge>
             </CardTitle>
             <CardAction className="flex gap-2">
               <Button variant="outline" onClick={handleEdit}>
                 <Pencil />
-                Edit
+                {uiT("ui.464c4ffd019e")}
               </Button>
               <Button variant="destructive" onClick={handleDeleteClick}>
                 <Trash2 />
-                Delete
+                {uiT("ui.e2d0a54968ea")}
               </Button>
             </CardAction>
           </CardHeader>
@@ -160,7 +164,7 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
             </dl>
 
             <div className="mt-6 flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">Actions</span>
+              <span className="text-sm text-muted-foreground">{uiT("ui.ff8059dc6752")}</span>
               <Separator className="flex-1" />
             </div>
 
@@ -201,9 +205,9 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={exportMutation.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={exportMutation.isPending}>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
             <Button onClick={handleExport} disabled={exportMutation.isPending}>
-              Export
+              {uiT("ui.3664895579f0")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

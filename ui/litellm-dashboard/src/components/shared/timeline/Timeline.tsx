@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { X } from "lucide-react";
 import moment from "moment";
@@ -85,6 +86,8 @@ function BucketTooltip({
   bucketCount: number;
   noun: ItemNoun;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div
       className="pointer-events-none absolute top-full z-floating mt-1 rounded-md border border-border bg-popover px-2.5 py-1.5 font-mono text-xs text-popover-foreground shadow-md"
@@ -92,7 +95,7 @@ function BucketTooltip({
       role="tooltip"
     >
       <div>
-        {moment(bucket.startMs).format(EDGE_FORMAT)} to {moment(bucket.endMs).format("HH:mm")}
+        {moment(bucket.startMs).format(EDGE_FORMAT)} {uiT("ui.663ea1bfffe5")} {moment(bucket.endMs).format("HH:mm")}
       </div>
       <div>
         {bucket.total} {bucket.total === 1 ? noun.singular : noun.plural}

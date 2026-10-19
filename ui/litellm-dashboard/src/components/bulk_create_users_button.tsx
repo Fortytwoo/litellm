@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -56,6 +58,8 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
   possibleUIRoles,
   onUsersCreated,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [parsedData, setParsedData] = useState<UserData[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -473,28 +477,28 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
         <div>
           <div className="flex items-center">
             <XCircleIcon className="h-5 w-5 text-destructive mr-2" />
-            <span className="text-destructive">Invalid</span>
+            <span className="text-destructive">{uiT("ui.96c34a0719eb")}</span>
           </div>
           {record.error && <span className="text-sm text-destructive ml-7">{record.error}</span>}
         </div>
       );
     }
     if (!record.status || record.status === "pending") {
-      return <span className="text-muted-foreground">Pending</span>;
+      return <span className="text-muted-foreground">{uiT("ui.331551b0de41")}</span>;
     }
     if (record.status === "success") {
       return (
         <div>
           <div className="flex items-center">
             <CheckCircleIcon className="h-5 w-5 text-success mr-2" />
-            <span className="text-success">Success</span>
+            <span className="text-success">{uiT("ui.c88a0b907419")}</span>
           </div>
           {record.invitation_link && (
             <div className="mt-1">
               <div className="flex items-center">
                 <span className="text-xs text-muted-foreground truncate max-w-[150px]">{record.invitation_link}</span>
                 <CopyToClipboard text={record.invitation_link} onCopy={() => toast.success("Invitation link copied!")}>
-                  <button className="ml-1 text-info text-xs hover:text-info/80">Copy</button>
+                  <button className="ml-1 text-info text-xs hover:text-info/80">{uiT("ui.e21f935f11d7")}</button>
                 </CopyToClipboard>
               </div>
             </div>
@@ -506,7 +510,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
       <div>
         <div className="flex items-center">
           <XCircleIcon className="h-5 w-5 text-destructive mr-2" />
-          <span className="text-destructive">Failed</span>
+          <span className="text-destructive">{uiT("ui.031a8f0f659d")}</span>
         </div>
         {record.error && <span className="text-sm text-destructive ml-7">{JSON.stringify(record.error)}</span>}
       </div>
@@ -520,13 +524,13 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
   return (
     <>
       <Button className="mb-0" onClick={() => setIsModalVisible(true)}>
-        + Bulk Invite Users
+        {uiT("ui.13b1b78fd9fc")}
       </Button>
 
       <Dialog open={isModalVisible} onOpenChange={(open) => !open && setIsModalVisible(false)}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Bulk Invite Users</DialogTitle>
+            <DialogTitle>{uiT("ui.c614a4ce955d")}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col">
             {/* Step indicator */}
@@ -536,20 +540,20 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   <div className="w-8 h-8 rounded-full bg-info text-info-foreground flex items-center justify-center mr-3">
                     1
                   </div>
-                  <h3 className="text-lg font-medium">Download and fill the template</h3>
+                  <h3 className="text-lg font-medium">{uiT("ui.07697ef40bac")}</h3>
                 </div>
 
                 <div className="ml-11 mb-6">
-                  <p className="mb-4">Add multiple users at once by following these steps:</p>
+                  <p className="mb-4">{uiT("ui.337f322c043c")}</p>
                   <ol className="list-decimal list-inside space-y-2 ml-2 mb-4">
-                    <li>Download our CSV template</li>
+                    <li>{uiT("ui.72c1c18fea86")}</li>
                     <li>Add your users&apos; information to the spreadsheet</li>
-                    <li>Save the file and upload it here</li>
-                    <li>After creation, download the results file containing the Virtual Keys for each user</li>
+                    <li>{uiT("ui.f3c8d422f2c0")}</li>
+                    <li>{uiT("ui.63869c6ef185")}</li>
                   </ol>
 
                   <div className="bg-muted p-4 rounded-md border border-border mb-4">
-                    <h4 className="font-medium mb-2">Template Column Names</h4>
+                    <h4 className="font-medium mb-2">{uiT("ui.8c66b1b8f926")}</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-destructive mt-1.5 mr-2 shrink-0"></div>
@@ -609,7 +613,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
 
                   <Button size="lg" className="w-full md:w-auto">
                     <Download className="size-4" />
-                    Download CSV Template
+                    {uiT("ui.11439f2e30cb")}
                   </Button>
                 </div>
 
@@ -617,7 +621,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   <div className="w-8 h-8 rounded-full bg-info text-info-foreground flex items-center justify-center mr-3">
                     2
                   </div>
-                  <h3 className="text-lg font-medium">Upload your completed CSV</h3>
+                  <h3 className="text-lg font-medium">{uiT("ui.a8568309635c")}</h3>
                 </div>
 
                 <div className="ml-11">
@@ -643,7 +647,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         </div>
                         <Button variant="outline" size="sm" onClick={removeSelectedFile} className="flex items-center">
                           <Trash2 className="size-4" />
-                          Remove
+                          {uiT("ui.c3812fc4acb8")}
                         </Button>
                       </div>
 
@@ -658,7 +662,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                             <div className="w-full bg-border rounded-full h-1.5">
                               <div className="bg-info h-1.5 rounded-full w-full animate-pulse"></div>
                             </div>
-                            <span className="ml-2 text-xs text-info">Processing...</span>
+                            <span className="ml-2 text-xs text-info">{uiT("ui.f40a853e58a1")}</span>
                           </div>
                         )
                       )}
@@ -682,10 +686,12 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                           onChange={handleFileInputChange}
                         />
                         <Upload className="size-[30px] text-muted-foreground mb-2" />
-                        <p className="mb-1">Drag and drop your CSV file here</p>
+                        <p className="mb-1">{uiT("ui.77dfb2466f23")}</p>
                         <p className="text-sm text-muted-foreground mb-3">or</p>
-                        <span className={buttonVariants({ variant: "outline", size: "sm" })}>Browse files</span>
-                        <p className="text-xs text-muted-foreground mt-4">Only CSV files (.csv) are supported</p>
+                        <span className={buttonVariants({ variant: "outline", size: "sm" })}>
+                          {uiT("ui.c8bb105f0101")}
+                        </span>
+                        <p className="text-xs text-muted-foreground mt-4">{uiT("ui.1ac84c653239")}</p>
                       </div>
                     </label>
                   )}
@@ -695,11 +701,9 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       <div className="flex items-start">
                         <ExclamationIcon className="h-5 w-5 shrink-0 text-warning mr-2 mt-0.5" />
                         <div className="min-w-0">
-                          <strong className="text-warning">CSV Structure Error</strong>
+                          <strong className="text-warning">{uiT("ui.0a9eb18b6adb")}</strong>
                           <p className="text-warning mt-1 mb-0 break-words">{csvStructureError}</p>
-                          <p className="text-warning mt-2 mb-0">
-                            Please download our template and ensure your CSV follows the required format.
-                          </p>
+                          <p className="text-warning mt-2 mb-0">{uiT("ui.e8d986adfac4")}</p>
                         </div>
                       </div>
                     </div>
@@ -714,8 +718,8 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   </div>
                   <h3 className="text-lg font-medium">
                     {parsedData.some((user) => user.status === "success" || user.status === "failed")
-                      ? "User Creation Results"
-                      : "Review and create users"}
+                      ? uiT("ui.0924629e6073")
+                      : uiT("ui.dce5dfb82d12")}
                   </h3>
                 </div>
 
@@ -727,12 +731,9 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         <p className="text-destructive font-medium break-words">{parseError}</p>
                         {parsedData.some((user) => !user.isValid) && (
                           <ul className="mt-2 list-disc list-inside text-destructive text-sm">
-                            <li>Check the table below for specific errors in each row</li>
-                            <li>
-                              Common issues include invalid email formats, missing required fields, or incorrect role
-                              values
-                            </li>
-                            <li>Fix these issues in your CSV file and upload again</li>
+                            <li>{uiT("ui.fd362313c76e")}</li>
+                            <li>{uiT("ui.581be755c2c5")}</li>
+                            <li>{uiT("ui.c0ff2b432184")}</li>
                           </ul>
                         )}
                       </div>
@@ -745,19 +746,19 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                     <div className="flex items-center">
                       {parsedData.some((user) => user.status === "success" || user.status === "failed") ? (
                         <div className="flex items-center">
-                          <p className="text-lg font-medium mr-3">Creation Summary</p>
+                          <p className="text-lg font-medium mr-3">{uiT("ui.2893c248fb4a")}</p>
                           <p className="text-sm bg-success/15 text-success px-2 py-1 rounded-sm mr-2">
-                            {parsedData.filter((d) => d.status === "success").length} Successful
+                            {parsedData.filter((d) => d.status === "success").length} {uiT("ui.f3686bb328c6")}
                           </p>
                           {parsedData.some((d) => d.status === "failed") && (
                             <p className="text-sm bg-destructive/15 text-destructive px-2 py-1 rounded-sm">
-                              {parsedData.filter((d) => d.status === "failed").length} Failed
+                              {parsedData.filter((d) => d.status === "failed").length} {uiT("ui.031a8f0f659d")}
                             </p>
                           )}
                         </div>
                       ) : (
                         <div className="flex items-center">
-                          <p className="text-lg font-medium mr-3">User Preview</p>
+                          <p className="text-lg font-medium mr-3">{uiT("ui.c870b94bc6fa")}</p>
                           <p className="text-sm bg-info/15 text-info px-2 py-1 rounded-sm">
                             {parsedData.filter((d) => d.isValid).length} of {parsedData.length} users valid
                           </p>
@@ -768,13 +769,15 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                     {!parsedData.some((user) => user.status === "success" || user.status === "failed") && (
                       <div className="flex space-x-3">
                         <Button variant="outline" onClick={resetParsedData}>
-                          Back
+                          {uiT("ui.76900f1bfd16")}
                         </Button>
                         <Button
                           onClick={handleBulkCreate}
                           disabled={parsedData.filter((d) => d.isValid).length === 0 || isProcessing}
                         >
-                          {isProcessing ? "Creating..." : `Create ${parsedData.filter((d) => d.isValid).length} Users`}
+                          {isProcessing
+                            ? uiT("ui.def70944c9bb")
+                            : `Create ${parsedData.filter((d) => d.isValid).length} Users`}
                         </Button>
                       </div>
                     )}
@@ -787,11 +790,11 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                           <CheckCircleIcon className="h-5 w-5 text-info" />
                         </div>
                         <div>
-                          <p className="font-medium text-info">User creation complete</p>
+                          <p className="font-medium text-info">{uiT("ui.7a85e7d483b6")}</p>
                           <p className="block text-sm text-info mt-1">
-                            <span className="font-medium">Next step:</span> Download the credentials file containing
-                            Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM requests
-                            through LiteLLM.
+                            <span className="font-medium">{uiT("ui.707b05c5e5c7")}</span> Download the credentials file
+                            containing Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM
+                            requests through LiteLLM.
                           </p>
                         </div>
                       </div>
@@ -802,12 +805,12 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-20">Row</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Role</TableHead>
-                          <TableHead>Teams</TableHead>
-                          <TableHead className={NUMERIC_CELL_CLASS}>Budget</TableHead>
-                          <TableHead>Status</TableHead>
+                          <TableHead className="w-20">{uiT("ui.95110d74c4c0")}</TableHead>
+                          <TableHead>{uiT("ui.969ccbd3cf63")}</TableHead>
+                          <TableHead>{uiT("ui.14736a2eb9f4")}</TableHead>
+                          <TableHead>{uiT("ui.1e1a1c078af2")}</TableHead>
+                          <TableHead className={NUMERIC_CELL_CLASS}>{uiT("ui.1c6225ec7092")}</TableHead>
+                          <TableHead>{uiT("ui.920e413c7d41")}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -836,7 +839,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         onClick={() => setPageIndex(currentPage - 1)}
                         disabled={currentPage === 0}
                       >
-                        Previous
+                        {uiT("ui.a57b08a480b8")}
                       </Button>
                       <Button
                         variant="outline"
@@ -844,7 +847,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                         onClick={() => setPageIndex(currentPage + 1)}
                         disabled={currentPage >= pageCount - 1}
                       >
-                        Next
+                        {uiT("ui.1ff57a29d7c9")}
                       </Button>
                     </div>
                   )}
@@ -852,13 +855,15 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   {!parsedData.some((user) => user.status === "success" || user.status === "failed") && (
                     <div className="flex justify-end mt-4">
                       <Button variant="outline" onClick={resetParsedData} className="mr-3">
-                        Back
+                        {uiT("ui.76900f1bfd16")}
                       </Button>
                       <Button
                         onClick={handleBulkCreate}
                         disabled={parsedData.filter((d) => d.isValid).length === 0 || isProcessing}
                       >
-                        {isProcessing ? "Creating..." : `Create ${parsedData.filter((d) => d.isValid).length} Users`}
+                        {isProcessing
+                          ? uiT("ui.def70944c9bb")
+                          : `Create ${parsedData.filter((d) => d.isValid).length} Users`}
                       </Button>
                     </div>
                   )}
@@ -866,11 +871,11 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   {parsedData.some((user) => user.status === "success" || user.status === "failed") && (
                     <div className="flex justify-end mt-4">
                       <Button variant="outline" onClick={resetParsedData} className="mr-3">
-                        Start New Bulk Import
+                        {uiT("ui.fdaba0874395")}
                       </Button>
                       <Button onClick={downloadResults}>
                         <Download className="size-4" />
-                        Download User Credentials
+                        {uiT("ui.ae029471d82a")}
                       </Button>
                     </div>
                   )}

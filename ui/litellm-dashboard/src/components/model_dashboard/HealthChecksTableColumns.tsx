@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Info, Play, RefreshCw } from "lucide-react";
@@ -222,8 +223,14 @@ export const getHealthChecksTableColumns = ({
   {
     id: "model_id",
     accessorFn: (row) => row.model_info?.id ?? "",
-    meta: { title: "Model ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model ID" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.089ef2b6dbb3");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.089ef2b6dbb3")} variant="header-cycle" />
+    ),
     size: 220,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -258,8 +265,14 @@ export const getHealthChecksTableColumns = ({
   {
     id: "team_id",
     accessorFn: (row) => row.model_info?.team_id ?? "",
-    meta: { title: "Team Alias" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Team Alias" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.85cf10057e87");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.85cf10057e87")} variant="header-cycle" />
+    ),
     size: 160,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -399,8 +412,14 @@ export const getHealthChecksTableColumns = ({
   },
   {
     id: "actions",
-    meta: { title: "Actions", className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    meta: {
+      get title() {
+        return translateUi("ui.ff8059dc6752");
+      },
+      className: "text-right",
+      headerClassName: "text-right",
+    },
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 80,
     enableSorting: false,
     enableHiding: false,

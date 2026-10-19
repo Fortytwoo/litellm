@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { z } from "zod";
 import { Policy, PolicyCreateRequest, PolicyUpdateRequest } from "@/components/policies/types";
@@ -197,6 +199,8 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
   createPolicy,
   updatePolicy,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(policySchema, { defaultValues: EMPTY_VALUES });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resolvedGuardrails, setResolvedGuardrails] = useState<string[]>([]);
@@ -348,7 +352,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
           <div className="mt-6 flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={handleClose}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="button" onClick={handleModeConfirm}>
               {selectedMode === "flow_builder" ? "Continue to Builder" : "Create Policy"}
@@ -380,7 +384,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 )}
               </FormField>
 
-              <FormField control={form.control} name="description" label="Description">
+              <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
                 {({ ref, ...control }) => (
                   <Textarea {...control} ref={ref} rows={2} placeholder="Describe what this policy does..." />
                 )}
@@ -411,7 +415,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 )}
               </FormField>
 
-              <SectionHeading label="Guardrails" />
+              <SectionHeading label={uiT("ui.443f975eefe8")} />
 
               <FormField
                 control={form.control}
@@ -540,7 +544,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
             <div className="mt-6 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={handleClose}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button
                 type="button"

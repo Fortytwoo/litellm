@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { VectorStoreSearchResponse } from "@/components/chat_ui/types";
 import { ChevronDown, ChevronRight, Database, FileText } from "lucide-react";
@@ -9,6 +11,8 @@ interface SearchResultsDisplayProps {
 }
 
 export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isExpanded, setIsExpanded] = useState(true);
   const [expandedResults, setExpandedResults] = useState<Record<string, boolean>>({});
 
@@ -50,7 +54,7 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
               {searchResults.map((resultPage, pageIndex) => (
                 <div key={pageIndex}>
                   <div className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
-                    <span className="font-medium">Query:</span>
+                    <span className="font-medium">{uiT("ui.090940bae1e2")}</span>
                     <span className="italic">&quot;{resultPage.search_query}&quot;</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">

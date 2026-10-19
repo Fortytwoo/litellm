@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { CircleHelp } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -43,6 +44,8 @@ interface MemoryEditModalProps {
 }
 
 export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, initialRow, onClose, onSave }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(memorySchema, { defaultValues: EMPTY_MEMORY, mode: "onChange" });
   const [submitting, setSubmitting] = useState(false);
 
@@ -113,7 +116,7 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
                 name="metadata"
                 label={labelWithHint(
                   <span>
-                    Metadata <span className="text-muted-foreground">(optional JSON)</span>
+                    {uiT("ui.9eddf573cb50")} <span className="text-muted-foreground">(optional JSON)</span>
                   </span>,
                   "Optional structured metadata — must be valid JSON if provided.",
                 )}
@@ -133,10 +136,10 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
               onClose();
             }}
           >
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={handleOk} disabled={submitting} aria-busy={submitting}>
-            {mode === "create" ? "Create" : "Save"}
+            {mode === "create" ? uiT("ui.4759498ac2a7") : uiT("ui.1509f561f241")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,5 +1,11 @@
+import { t as translateUi } from "@/i18n";
 export const ACTION_ITEMS = [
-  { value: "BLOCK", label: "Block" },
+  {
+    value: "BLOCK",
+    get label() {
+      return translateUi("ui.211d0bb8cf4f");
+    },
+  },
   { value: "MASK", label: "Mask" },
 ] as const;
 

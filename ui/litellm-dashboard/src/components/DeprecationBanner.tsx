@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -12,6 +13,8 @@ interface DeprecationBannerProps {
 }
 
 export const DeprecationBanner: React.FC<DeprecationBannerProps> = ({ featureName }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isClosed, setIsClosed] = useState(false);
 
   if (isClosed) {
@@ -41,7 +44,7 @@ export const DeprecationBanner: React.FC<DeprecationBannerProps> = ({ featureNam
       </div>
       <button
         type="button"
-        aria-label="Close"
+        aria-label={uiT("ui.7d9eb7acb13e")}
         onClick={() => setIsClosed(true)}
         className="shrink-0 rounded-md p-0.5 text-muted-foreground transition-colors hover:text-foreground"
       >

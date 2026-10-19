@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -23,12 +25,16 @@ interface PatternTableProps {
 }
 
 const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, onRemove }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const columns: ColumnDef<Pattern>[] = [
     {
-      header: "Type",
+      header: uiT("ui.baaddf70fb5d"),
       accessorKey: "type",
       size: 100,
-      cell: ({ row }) => <Badge variant="secondary">{row.original.type === "prebuilt" ? "Prebuilt" : "Custom"}</Badge>,
+      cell: ({ row }) => (
+        <Badge variant="secondary">{row.original.type === "prebuilt" ? "Prebuilt" : uiT("ui.494ca78f7374")}</Badge>
+      ),
     },
     {
       header: "Pattern name",
@@ -46,7 +52,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
         ),
     },
     {
-      header: "Action",
+      header: uiT("ui.64cff1319d2f"),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -55,7 +61,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
           value={row.original.action}
           onValueChange={(value: string | null) => value && onActionChange(row.original.id, value as "BLOCK" | "MASK")}
         >
-          <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+          <SelectTrigger size="sm" className="w-[120px]" aria-label={uiT("ui.64cff1319d2f")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -75,7 +81,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
       cell: ({ row }) => (
         <Button variant="ghost" size="sm" onClick={() => onRemove(row.original.id)}>
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </Button>
       ),
     },

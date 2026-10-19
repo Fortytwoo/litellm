@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -9,11 +10,13 @@ import { useCommandPalette } from "./CommandPaletteProvider";
 import { useShortcutLabel } from "./useShortcutLabel";
 
 export function CommandPaletteTrigger({ mobile = false }: { mobile?: boolean }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const pathname = usePathname();
   const { open, setOpen } = useCommandPalette();
   const shortcut = useShortcutLabel();
   const isKeysRoute = paletteScopeForRoute(routeSegmentForPathname(pathname)) === "keys";
-  const label = isKeysRoute ? "Search keys…" : "Search or jump to…";
+  const label = isKeysRoute ? uiT("ui.de973d355b14") : uiT("ui.22e6cbc402ef");
 
   if (mobile) {
     return (
@@ -21,7 +24,7 @@ export function CommandPaletteTrigger({ mobile = false }: { mobile?: boolean }) 
         variant="ghost"
         size="icon"
         className="size-11 md:hidden"
-        aria-label="Search"
+        aria-label={uiT("ui.49c266baaaa7")}
         aria-expanded={open}
         onClick={() => setOpen(true)}
       >

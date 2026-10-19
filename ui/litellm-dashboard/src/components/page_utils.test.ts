@@ -3,11 +3,14 @@
  * This catches issues when leftnav structure changes but page_utils/page_metadata aren't updated
  */
 
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
+import { setActiveLocale } from "@/i18n";
 import { getAvailablePages } from "./page_utils";
 import { menuGroups } from "./leftnav";
 import { pageDescriptions } from "./page_metadata";
 import { internalUserRoles } from "@/utils/roles";
+
+beforeEach(() => setActiveLocale("en"));
 
 /**
  * Check if a page is accessible to internal users

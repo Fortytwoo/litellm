@@ -1,61 +1,64 @@
-/**
- * LiteLLM i18n - Lightweight translation system
- *
- * Supports English (default) and Chinese (中文).
- * Uses React Context for state + localStorage for persistence.
- * Zero external dependencies.
- */
-
 import en from "./locales/en.json";
 import zh from "./locales/zh.json";
 
 export type Locale = "en" | "zh";
-/** Supports arbitrarily nested JSON, not just flat two-level maps */
-export type TranslationMap = Record<string, string | Record<string, string>>;
-
-const translations: Record<Locale, TranslationMap> = { en, zh };
-
-/**
- * Resolve a dotted key like "nav.dashboard" against the current locale.
- */
-export function t(key: string, locale?: Locale): string {
-  let resolvedLocale: Locale;
-  if (locale) {
-    resolvedLocale = locale;
-  } else {
-    try {
-      const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-      resolvedLocale = (stored === "zh" || stored === "en") ? stored as Locale : DEFAULT_LOCALE;
-    } catch {
-      resolvedLocale = DEFAULT_LOCALE;
-    }
-  }
-
-  const map = translations[resolvedLocale] || translations.en;
-  const parts = key.split(".");
-  let current: any = map;
-  for (const part of parts) {
-    if (current == null) break;
-    current = current[part];
-  }
-  if (typeof current === "string") return current;
-
-  // Fallback to English
-  let fallback: any = translations.en;
-  for (const part of parts) {
-    if (fallback == null) break;
-    fallback = fallback[part];
-  }
-  if (typeof fallback === "string") return fallback;
-
-  return key;
-}
-
-export const SUPPORTED_LOCALES: { value: Locale; label: string }[] = [
-  { value: "en", label: "English" },
-  { value: "zh", label: "中文" },
-];
+export type TranslationMap = { readonly [key: string]: string | TranslationMap };
+export type TranslationValues = Readonly<Record<string, string | number>>;
 
 export const LOCALE_STORAGE_KEY = "litellm_locale";
 export const DEFAULT_LOCALE: Locale = "zh";
-export { translations };
+export const SUPPORTED_LOCALES: readonly { value: Locale; label: string }[] = [
+  { value: "en", label: "English" },
+  { value: "zh", label: "中文" },
+];
+export const translations: Readonly<Record<Locale, TranslationMap>> = { en, zh };
+
+let activeLocale: Locale = DEFAULT_LOCALE;
+const listeners = new Set<() => void>();
+const displayKeys = new Map(
+  [...Object.entries(en.ui), ...Object.entries(zh.ui)].flatMap(([key, value]) => [
+    [value, "ui." + key] as const,
+    [value.trim(), "ui." + key] as const,
+  ]),
+);
+
+export function translateText(value: string, locale: Locale = activeLocale): string {
+  const key = displayKeys.get(value);
+  return key ? t(key, locale) : value;
+}
+
+export function getActiveLocale(): Locale {
+  return activeLocale;
+}
+
+export function setActiveLocale(locale: Locale): void {
+  activeLocale = locale;
+  listeners.forEach((listener) => listener());
+}
+
+export function subscribeLocale(listener: () => void, initialLocale: Locale): () => void {
+  listeners.add(listener);
+  try {
+    const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+    setActiveLocale(stored === "en" || stored === "zh" ? stored : initialLocale);
+  } catch {
+    setActiveLocale(initialLocale);
+  }
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function resolve(map: TranslationMap, key: string): string | undefined {
+  const value = key
+    .split(".")
+    .reduce<
+      string | TranslationMap | undefined
+    >((entry, part) => (typeof entry === "object" ? entry[part] : undefined), map);
+  return typeof value === "string" ? value : undefined;
+}
+
+export function t(key: string, locale: Locale = activeLocale, values: TranslationValues = {}): string {
+  const message = resolve(translations[locale], key) ?? resolve(translations.en, key) ?? key;
+  return message.replace(/\{\{(\w+)\}\}/g, (placeholder, name: string) => String(values[name] ?? placeholder));
+}

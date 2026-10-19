@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import React, { useMemo, useState } from "react";
 import { ArrowRight, Bot } from "lucide-react";
@@ -23,9 +24,24 @@ const CHART_SERIES = 6;
 /** Below this share of tokens carrying a User-Agent, say so rather than imply the list is the whole picture. */
 const COVERAGE_NOTE_BELOW = 0.5;
 const METRICS = [
-  { value: "tokens", label: "Tokens" },
-  { value: "spend", label: "Spend" },
-  { value: "requests", label: "Requests" },
+  {
+    value: "tokens",
+    get label() {
+      return translateUi("ui.a039dfb9628b");
+    },
+  },
+  {
+    value: "spend",
+    get label() {
+      return translateUi("ui.85f3d558db12");
+    },
+  },
+  {
+    value: "requests",
+    get label() {
+      return translateUi("ui.ada27592c957");
+    },
+  },
 ] as const satisfies readonly { value: UsageMetric; label: string }[];
 
 /** Brand-tinted monograms for runtimes that have no logo file, so a top spender never shows a blank tile. */

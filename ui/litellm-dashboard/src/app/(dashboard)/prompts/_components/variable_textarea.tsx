@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { PencilIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +17,8 @@ interface VariableTextAreaProps {
 }
 
 const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, placeholder, rows = 4, className }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [editingVariable, setEditingVariable] = useState<{
     oldName: string;
     start: number;
@@ -121,7 +125,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
                   />
                   <div className="flex gap-2 mt-2">
                     <Button size="sm" onClick={handleVariableEdit}>
-                      Save
+                      {uiT("ui.1509f561f241")}
                     </Button>
                     <Button
                       variant="outline"
@@ -131,7 +135,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
                         setNewVariableName("");
                       }}
                     >
-                      Cancel
+                      {uiT("ui.19766ed6ccb2")}
                     </Button>
                   </div>
                 </div>

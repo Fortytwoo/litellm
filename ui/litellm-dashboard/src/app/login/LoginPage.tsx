@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useLogin } from "@/app/(dashboard)/hooks/login/useLogin";
 import { useUIConfig } from "@/app/(dashboard)/hooks/uiConfig/useUIConfig";
@@ -32,6 +33,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 function SsoEnabledNotice() {
+  const { t: uiT } = useDashboardLanguage();
+
   const [dismissed, setDismissed] = useState(false);
 
   if (dismissed) {
@@ -48,7 +51,7 @@ function SsoEnabledNotice() {
         environment configuration.
       </AlertTitle>
       <AlertAction>
-        <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={() => setDismissed(true)}>
+        <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.7d9eb7acb13e")} onClick={() => setDismissed(true)}>
           <X className="size-4" />
         </Button>
       </AlertAction>
@@ -57,6 +60,8 @@ function SsoEnabledNotice() {
 }
 
 function LoginPageContent() {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isLoading, setIsLoading] = useState(true);
   const { data: uiConfig, isLoading: isConfigLoading } = useUIConfig();
   const loginMutation = useLogin();
@@ -295,7 +300,7 @@ function LoginPageContent() {
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="password" label="Password">
+                  <FormField control={form.control} name="password" label={uiT("ui.e7cf3ef4f17c")}>
                     {({ ref, ...field }) => (
                       <PasswordInput
                         {...field}

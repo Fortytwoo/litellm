@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -32,6 +34,8 @@ const defaultToolJson = `{
 }`;
 
 const ToolModal: React.FC<ToolModalProps> = ({ visible, initialJson, onSave, onClose }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [json, setJson] = useState(initialJson || defaultToolJson);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,9 +79,9 @@ const ToolModal: React.FC<ToolModalProps> = ({ visible, initialJson, onSave, onC
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
-          <Button onClick={handleSave}>Add</Button>
+          <Button onClick={handleSave}>{uiT("ui.9fd728c66c9a")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

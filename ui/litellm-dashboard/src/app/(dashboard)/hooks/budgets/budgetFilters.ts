@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import type { ColumnFilter, ColumnFiltersState } from "@tanstack/react-table";
 
 export const BUDGET_DURATION_UNSET = "__unset__";
@@ -7,7 +8,12 @@ export const BUDGET_DURATION_FILTER_OPTIONS: readonly { value: string; label: st
   { value: "24h", label: "daily" },
   { value: "7d", label: "weekly" },
   { value: "30d", label: "monthly" },
-  { value: BUDGET_DURATION_UNSET, label: "Not set" },
+  {
+    value: BUDGET_DURATION_UNSET,
+    get label() {
+      return translateUi("ui.4895f73177ab");
+    },
+  },
 ];
 
 export interface MaxBudgetFilterValue {

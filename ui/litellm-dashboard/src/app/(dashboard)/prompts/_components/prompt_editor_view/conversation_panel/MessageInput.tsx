@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +24,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
   onKeyDown,
   onCancel,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center flex-1 bg-background border border-border rounded-xl px-3 py-1 min-h-[44px]">
@@ -49,7 +53,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
       {isLoading && (
         <Button type="button" variant="destructive" onClick={onCancel}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
       )}
     </div>

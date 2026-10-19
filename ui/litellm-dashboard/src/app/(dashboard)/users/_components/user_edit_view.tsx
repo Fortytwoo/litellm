@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
 import { all_admin_roles } from "@/utils/roles";
@@ -160,6 +162,8 @@ export function UserEditView({
   objectPermission,
   premiumUser = false,
 }: UserEditViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const canEditMcpPermissions = !isBulkEdit && all_admin_roles.includes(userRole || "");
   const [unlimitedBudget, setUnlimitedBudget] = useState(false);
   const [modelMaxBudget, setModelMaxBudget] = useSeededState<ModelMaxBudget>(
@@ -207,8 +211,8 @@ export function UserEditView({
   };
 
   const modelOptions = [
-    { label: "All Proxy Models", value: "all-proxy-models" },
-    { label: "No Default Models", value: "no-default-models" },
+    { label: uiT("ui.72d4bf586944"), value: "all-proxy-models" },
+    { label: uiT("ui.c1bf1f7a4789"), value: "no-default-models" },
     ...userModels.map((model) => ({ label: getModelDisplayName(model), value: model })),
   ];
 
@@ -223,18 +227,18 @@ export function UserEditView({
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FieldGroup>
           {!isBulkEdit && (
-            <FormField control={form.control} name="user_id" label="User ID">
+            <FormField control={form.control} name="user_id" label={uiT("ui.7967e089a7b9")}>
               {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} disabled />}
             </FormField>
           )}
 
           {!isBulkEdit && (
-            <FormField control={form.control} name="user_email" label="Email">
+            <FormField control={form.control} name="user_email" label={uiT("ui.969ccbd3cf63")}>
               {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
             </FormField>
           )}
 
-          <FormField control={form.control} name="user_alias" label="User Alias">
+          <FormField control={form.control} name="user_alias" label={uiT("ui.846f00988e00")}>
             {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
           </FormField>
 
@@ -280,7 +284,7 @@ export function UserEditView({
                 options={modelOptions}
                 value={value}
                 onValueChange={onChange}
-                placeholder="Select models"
+                placeholder={uiT("ui.9fcdcf02670c")}
                 disabled={!all_admin_roles.includes(userRole || "")}
               />
             )}
@@ -291,10 +295,10 @@ export function UserEditView({
             name="max_budget"
             label={
               <>
-                Max Budget (USD)
+                {uiT("ui.afa99ea4a8c3")}
                 <label className="ml-3 inline-flex items-center gap-2 font-normal">
                   <Checkbox checked={unlimitedBudget} onCheckedChange={handleUnlimitedBudgetChange} />
-                  Unlimited Budget
+                  {uiT("ui.fa0a17765321")}
                 </label>
               </>
             }
@@ -308,13 +312,13 @@ export function UserEditView({
                 value={value ?? ""}
                 onChange={(event) => onChange(event.target.value)}
                 onWheel={(event) => event.currentTarget.blur()}
-                placeholder="Enter a numerical value"
+                placeholder={uiT("ui.3154bfe4269c")}
                 disabled={unlimitedBudget}
               />
             )}
           </FormField>
 
-          <FormField control={form.control} name="budget_duration" label="Reset Budget">
+          <FormField control={form.control} name="budget_duration" label={uiT("ui.66b0753db929")}>
             {({ id, value, onChange }) => <BudgetDurationDropdown id={id} value={value} onChange={onChange} />}
           </FormField>
 
@@ -338,7 +342,7 @@ export function UserEditView({
                     value={value ?? ""}
                     onChange={(event) => onChange(event.target.value)}
                     onWheel={(event) => event.currentTarget.blur()}
-                    placeholder="Unlimited"
+                    placeholder={uiT("ui.11dde17d6c3e")}
                   />
                 )}
               </FormField>
@@ -361,7 +365,7 @@ export function UserEditView({
                     value={value ?? ""}
                     onChange={(event) => onChange(event.target.value)}
                     onWheel={(event) => event.currentTarget.blur()}
-                    placeholder="Unlimited"
+                    placeholder={uiT("ui.11dde17d6c3e")}
                   />
                 )}
               </FormField>
@@ -382,9 +386,9 @@ export function UserEditView({
             />
           )}
 
-          <FormField control={form.control} name="metadata" label="Metadata">
+          <FormField control={form.control} name="metadata" label={uiT("ui.9eddf573cb50")}>
             {({ ref, value, ...control }) => (
-              <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder="Enter metadata as JSON" />
+              <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder={uiT("ui.10b479100f50")} />
             )}
           </FormField>
 
@@ -403,7 +407,7 @@ export function UserEditView({
                     onChange={onChange}
                     value={value}
                     accessToken={accessToken || ""}
-                    placeholder="Select MCP servers or access groups (optional)"
+                    placeholder={uiT("ui.932feda2a896")}
                   />
                 )}
               </FormField>
@@ -422,9 +426,9 @@ export function UserEditView({
 
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="secondary" type="button" onClick={onCancel}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit">{uiT("ui.35322b5bb5a2")}</Button>
         </div>
       </form>
     </TooltipProvider>

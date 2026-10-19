@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -22,8 +23,14 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "team_alias",
     accessorKey: "team_alias",
-    meta: { title: "Team Name" },
-    header: "Team Name",
+    meta: {
+      get title() {
+        return translateUi("ui.6ed5a592c422");
+      },
+    },
+    get header() {
+      return translateUi("ui.6ed5a592c422");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -41,8 +48,14 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "team_id",
     accessorKey: "team_id",
-    meta: { title: "Team ID" },
-    header: "Team ID",
+    meta: {
+      get title() {
+        return translateUi("ui.fa2758a6173a");
+      },
+    },
+    get header() {
+      return translateUi("ui.fa2758a6173a");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.team_id} variant="plain" />,
@@ -50,8 +63,12 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d70b9e24bca2");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d70b9e24bca2")} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -59,8 +76,13 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend (USD)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Spend (USD)" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d1b5ad72df63");
+      },
+      numeric: true,
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d1b5ad72df63")} />,
     size: 100,
     enableSorting: true,
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
@@ -68,17 +90,33 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "max_budget",
     accessorKey: "max_budget",
-    meta: { title: "Budget (USD)", numeric: true },
-    header: "Budget (USD)",
+    meta: {
+      get title() {
+        return translateUi("ui.e9b19e9155c8");
+      },
+      numeric: true,
+    },
+    get header() {
+      return translateUi("ui.e9b19e9155c8");
+    },
     size: 110,
     enableSorting: false,
-    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={0} emptyText="Unlimited" showZero />,
+    cell: ({ row }) => (
+      <MoneyCell value={row.original.max_budget} decimals={0} emptyText={translateUi("ui.11dde17d6c3e")} showZero />
+    ),
   },
   {
     id: "models",
     accessorKey: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: {
+      get title() {
+        return translateUi("ui.d17d2d78d76e");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.d17d2d78d76e");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) => <ModelsCell models={row.original.models} />,
@@ -86,8 +124,14 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "organization_id",
     accessorKey: "organization_id",
-    meta: { title: "Organization" },
-    header: "Organization",
+    meta: {
+      get title() {
+        return translateUi("ui.d764d42592fc");
+      },
+    },
+    get header() {
+      return translateUi("ui.d764d42592fc");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -98,8 +142,12 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "deleted_at",
     accessorKey: "deleted_at",
-    meta: { title: "Deleted At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Deleted At" />,
+    meta: {
+      get title() {
+        return translateUi("ui.ecf8c7651cb7");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.ecf8c7651cb7")} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.deleted_at} precision="date" />,
@@ -107,8 +155,14 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "deleted_by",
     accessorKey: "deleted_by",
-    meta: { title: "Deleted By" },
-    header: "Deleted By",
+    meta: {
+      get title() {
+        return translateUi("ui.279b259e414d");
+      },
+    },
+    get header() {
+      return translateUi("ui.279b259e414d");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {

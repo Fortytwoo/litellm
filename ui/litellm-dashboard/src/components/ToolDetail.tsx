@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ArrowLeft, History, Wrench } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -57,6 +58,8 @@ function getDefaultLogsDateRange(): { start: string; end: string } {
 }
 
 export function ToolDetail({ toolName, onBack, accessToken }: ToolDetailProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [overrideSaving, setOverrideSaving] = useState(false);
   const [inputPolicySaving, setInputPolicySaving] = useState(false);
@@ -330,7 +333,7 @@ export function ToolDetail({ toolName, onBack, accessToken }: ToolDetailProps) {
                     {!ov.team_id && !ov.key_hash ? "—" : ""}
                   </span>
                   <Button variant="link" size="sm" disabled={overrideSaving} onClick={() => handleRemoveOverride(ov)}>
-                    Remove
+                    {uiT("ui.c3812fc4acb8")}
                   </Button>
                 </li>
               ))}
@@ -351,7 +354,7 @@ export function ToolDetail({ toolName, onBack, accessToken }: ToolDetailProps) {
                     onChange={() => setBlockScope("team")}
                     className="align-middle"
                   />
-                  Team
+                  {uiT("ui.5985039f106d")}
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 text-sm">
                   <input
@@ -360,12 +363,14 @@ export function ToolDetail({ toolName, onBack, accessToken }: ToolDetailProps) {
                     onChange={() => setBlockScope("key")}
                     className="align-middle"
                   />
-                  Key
+                  {uiT("ui.99a52df3ff3d")}
                 </label>
               </div>
             </div>
             <div>
-              <span className="mb-2 block text-sm font-medium">{blockScope === "team" ? "Team" : "Key"}</span>
+              <span className="mb-2 block text-sm font-medium">
+                {blockScope === "team" ? uiT("ui.5985039f106d") : uiT("ui.99a52df3ff3d")}
+              </span>
               {blockScope === "team" ? (
                 <TeamDropdown value={blockTeamId ?? undefined} onChange={(id) => setBlockTeamId(id || null)} />
               ) : (

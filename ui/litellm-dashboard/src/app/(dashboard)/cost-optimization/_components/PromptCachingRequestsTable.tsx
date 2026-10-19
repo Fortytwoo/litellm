@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -33,6 +34,8 @@ interface PromptCachingRequestsTableProps {
 }
 
 export default function PromptCachingRequestsTable({ accessToken, dateValue }: PromptCachingRequestsTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [filter, setFilter] = useState<RequestFilter>("all");
   const [pageSize, setPageSize] = useState(10);
   const window = activityWindow(dateValue, new Date());
@@ -122,8 +125,8 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
               <Table aria-label="Prompt caching requests">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Request</TableHead>
-                    <TableHead>Model</TableHead>
+                    <TableHead>{uiT("ui.59f03d642b41")}</TableHead>
+                    <TableHead>{uiT("ui.5e2c614c23f0")}</TableHead>
                     <TableHead>LiteLLM injection</TableHead>
                     <TableHead className="text-right">Cache reads</TableHead>
                     <TableHead className="text-right">Cache writes</TableHead>
@@ -167,7 +170,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
             )}
             <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Rows per page</span>
+                <span>{uiT("ui.141b69f95916")}</span>
                 <Select
                   value={String(pageSize)}
                   onValueChange={(value) => {
@@ -176,7 +179,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                     }
                   }}
                 >
-                  <SelectTrigger size="sm" aria-label="Rows per page" className="w-[4.5rem]">
+                  <SelectTrigger size="sm" aria-label={uiT("ui.141b69f95916")} className="w-[4.5rem]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -194,7 +197,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                   <Button
                     variant="outline"
                     size="icon-sm"
-                    aria-label="Go to previous page"
+                    aria-label={uiT("ui.2865e0f438b4")}
                     disabled={page === 1}
                     onClick={() => setPagination({ scope, cursors: cursors.slice(0, -1) })}
                   >
@@ -203,7 +206,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                   <Button
                     variant="outline"
                     size="icon-sm"
-                    aria-label="Go to next page"
+                    aria-label={uiT("ui.7e021afbf6ac")}
                     disabled={!requests.data.has_more || !nextCursor}
                     onClick={() => nextCursor && setPagination({ scope, cursors: [...cursors, nextCursor] })}
                   >

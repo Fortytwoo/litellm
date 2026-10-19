@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import type { RoleMappings as RoleMappingsType } from "@/app/(dashboard)/hooks/sso/useSSOSettings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/DataTable";
@@ -15,6 +17,8 @@ interface RoleMappingRow {
 }
 
 export default function RoleMappings({ roleMappings }: { roleMappings: RoleMappingsType | undefined }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!roleMappings) {
     return null;
   }
@@ -23,7 +27,7 @@ export default function RoleMappings({ roleMappings }: { roleMappings: RoleMappi
     {
       id: "role",
       accessorKey: "role",
-      header: "Role",
+      header: uiT("ui.14736a2eb9f4"),
       cell: ({ row }) => <strong className="font-semibold">{defaultRoleDisplayNames[row.original.role]}</strong>,
     },
     {
@@ -58,7 +62,7 @@ export default function RoleMappings({ roleMappings }: { roleMappings: RoleMappi
               </div>
             </div>
             <div>
-              <h5 className="mb-2 text-base font-semibold text-foreground">Default Role</h5>
+              <h5 className="mb-2 text-base font-semibold text-foreground">{uiT("ui.5bcfbd6bd78a")}</h5>
               <div>
                 <strong className="font-semibold">{defaultRoleDisplayNames[roleMappings.default_role]}</strong>
               </div>

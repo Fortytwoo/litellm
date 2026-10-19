@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { type FC, type KeyboardEvent, type MouseEvent } from "react";
 import { Check, CircleAlert, Ellipsis, Trash2, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -56,6 +58,8 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
   onDelete,
   stdioEnabled = true,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const alias = server.alias || server.server_name || "";
   const name = server.server_name || alias || server.server_id;
   // Logo is sourced exclusively from the admin-set `mcp_info.logo_url`.
@@ -192,7 +196,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     }}
                   >
                     <Trash2 />
-                    Delete
+                    {uiT("ui.e2d0a54968ea")}
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
@@ -348,6 +352,8 @@ const HealthChip: FC<HealthChipProps> = ({
   error,
   dotClass,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (isLoadingHealth || isRechecking) {
     return (
       <Badge variant="outline" className="text-muted-foreground">
@@ -384,7 +390,7 @@ const HealthChip: FC<HealthChipProps> = ({
         {lastCheck && <div className="mb-1 text-xs">Last check: {new Date(lastCheck).toLocaleString()}</div>}
         {error && (
           <div className="text-xs">
-            <div className="mb-1 font-medium">Error</div>
+            <div className="mb-1 font-medium">{uiT("ui.54a0e8c17ebb")}</div>
             <div className="wrap-break-word">{error}</div>
           </div>
         )}

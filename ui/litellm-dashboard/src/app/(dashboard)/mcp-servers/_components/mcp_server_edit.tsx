@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -107,6 +109,8 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
   existingServers,
   stdioEnabled = true,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const initialStaticHeaders = React.useMemo(() => {
     if (!mcpServer.static_headers) {
       return [];
@@ -871,7 +875,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                     />
                   )}
                 </MountedFormField>
-                <MountedFormField label="Description" name="description">
+                <MountedFormField label={uiT("ui.526e0087cc3f")} name="description">
                   {(control) => (
                     <Input
                       {...textControl(control)}
@@ -1348,10 +1352,10 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
 
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={handleCancel}>
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </Button>
                   <Button type="submit" disabled={isOAuthPending}>
-                    Save Changes
+                    {uiT("ui.35322b5bb5a2")}
                   </Button>
                 </div>
               </form>
@@ -1365,10 +1369,10 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
 
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={handleCancel}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button onClick={() => void submitForm()} disabled={isOAuthPending}>
-                Save Changes
+                {uiT("ui.35322b5bb5a2")}
               </Button>
             </div>
           </div>

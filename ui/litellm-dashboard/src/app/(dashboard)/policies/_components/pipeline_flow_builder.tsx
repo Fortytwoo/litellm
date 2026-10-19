@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React, { useState } from "react";
 import { toast } from "@/lib/toast";
 import { Button } from "@/components/ui/button";
@@ -37,7 +40,12 @@ function getPromptsForTestSource(source: string): CompliancePrompt[] {
 const ACTION_OPTIONS = [
   { label: "Next Step", value: "next" },
   { label: "Allow", value: "allow" },
-  { label: "Block", value: "block" },
+  {
+    get label() {
+      return translateUi("ui.211d0bb8cf4f");
+    },
+    value: "block",
+  },
   { label: "Custom Response", value: "modify_response" },
 ];
 
@@ -274,6 +282,8 @@ const StepCard: React.FC<StepCardProps> = ({
   onDelete,
   availableGuardrails,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const guardrailOptions = availableGuardrails.map((g) => ({
     label: g.guardrail_name || g.guardrail_id,
     value: g.guardrail_name || g.guardrail_id,
@@ -338,7 +348,7 @@ const StepCard: React.FC<StepCardProps> = ({
             marginBottom: 6,
           }}
         >
-          Guardrail
+          {uiT("ui.ba3f7a9c79a7")}
         </label>
         <SearchSelect
           options={guardrailOptions}
@@ -364,7 +374,7 @@ const StepCard: React.FC<StepCardProps> = ({
             marginBottom: 6,
           }}
         >
-          Action
+          {uiT("ui.64cff1319d2f")}
         </label>
         <Select value={step.on_pass} onValueChange={(value) => onChange({ on_pass: value as PipelineStep["on_pass"] })}>
           <SelectTrigger className="w-full">
@@ -415,7 +425,7 @@ const StepCard: React.FC<StepCardProps> = ({
             marginBottom: 6,
           }}
         >
-          Action
+          {uiT("ui.64cff1319d2f")}
         </label>
         <Select value={step.on_fail} onValueChange={(value) => onChange({ on_fail: value as PipelineStep["on_fail"] })}>
           <SelectTrigger className="w-full">
@@ -466,7 +476,7 @@ const StepCard: React.FC<StepCardProps> = ({
             marginBottom: 6,
           }}
         >
-          Action
+          {uiT("ui.64cff1319d2f")}
         </label>
         <Select
           value={step.on_error ?? null}
@@ -822,6 +832,8 @@ const testSourceOptions = [
 ];
 
 const PipelineTestPanel: React.FC<PipelineTestPanelProps> = ({ pipeline, accessToken, onClose }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [testSource, setTestSource] = useState<string>(TEST_SOURCE_QUICK);
   const [testMessage, setTestMessage] = useState("Hello, can you help me?");
   const [isRunning, setIsRunning] = useState(false);
@@ -1048,7 +1060,7 @@ const PipelineTestPanel: React.FC<PipelineTestPanelProps> = ({ pipeline, accessT
                     </span>
                   </div>
                   <div style={{ fontSize: 12, color: "var(--color-muted-foreground)" }}>
-                    Action: {ACTION_LABELS[step.action_taken] || step.action_taken}
+                    {uiT("ui.7d9fda4ea853")} {ACTION_LABELS[step.action_taken] || step.action_taken}
                     {step.duration_seconds != null && (
                       <span style={{ marginLeft: 8 }}>({(step.duration_seconds * 1000).toFixed(0)}ms)</span>
                     )}
@@ -1472,6 +1484,8 @@ export const FlowBuilderPage: React.FC<FlowBuilderPageProps> = ({
   onSelectVersion,
   onVersionStatusUpdated,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isEditing = !!editingPolicy?.policy_id;
   const showVersionsSidebar = !!editingPolicy?.policy_name;
 
@@ -1649,7 +1663,7 @@ export const FlowBuilderPage: React.FC<FlowBuilderPageProps> = ({
           >
             <ArrowLeft style={{ width: 18, height: 18, color: "var(--color-muted-foreground)" }} />
           </button>
-          <span style={{ fontSize: 14, color: "var(--color-muted-foreground)" }}>Policies</span>
+          <span style={{ fontSize: 14, color: "var(--color-muted-foreground)" }}>{uiT("ui.d3ad1f1f8c9c")}</span>
           <span style={{ fontSize: 14, color: "var(--color-border)" }}>/</span>
           <Input
             placeholder="Policy name..."
@@ -1674,7 +1688,7 @@ export const FlowBuilderPage: React.FC<FlowBuilderPageProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary" onClick={onBack}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button variant="secondary" onClick={() => setShowTestPanel(!showTestPanel)}>
             {showTestPanel ? "Hide Test" : "Test Pipeline"}

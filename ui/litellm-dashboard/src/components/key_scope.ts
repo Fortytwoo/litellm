@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export interface KeyModelScope {
   hasModelAccess: boolean;
   label: string | null;
@@ -7,7 +8,12 @@ const MANAGEMENT_ROUTES_PRESET = "management_routes";
 const INFO_ROUTES_PRESET = "info_routes";
 const SCIM_ROUTE_PREFIX = "/scim";
 
-const MANAGEMENT_SCOPE: KeyModelScope = { hasModelAccess: false, label: "Management" };
+const MANAGEMENT_SCOPE: KeyModelScope = {
+  hasModelAccess: false,
+  get label() {
+    return translateUi("ui.e51248773b9a");
+  },
+};
 const READ_ONLY_SCOPE: KeyModelScope = { hasModelAccess: false, label: "Read-only" };
 const SCIM_SCOPE: KeyModelScope = { hasModelAccess: false, label: "SCIM" };
 const FULL_MODEL_ACCESS: KeyModelScope = { hasModelAccess: true, label: null };

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { CircleAlert, Inbox } from "lucide-react";
@@ -92,6 +94,8 @@ const ContextCombobox: React.FC<ContextComboboxProps> = ({ id, value, onChange, 
 );
 
 const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<PolicyTestFormValues>({ defaultValues: EMPTY_VALUES });
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ResolveResult | null>(null);
@@ -171,7 +175,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
 
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <FieldGroup className="grid grid-cols-2 gap-4">
-            <FormField control={form.control} name="team_alias" label="Team Alias">
+            <FormField control={form.control} name="team_alias" label={uiT("ui.85cf10057e87")}>
               {({ id, value, onChange }) => (
                 <ContextCombobox
                   id={id}
@@ -182,7 +186,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                 />
               )}
             </FormField>
-            <FormField control={form.control} name="key_alias" label="Key Alias">
+            <FormField control={form.control} name="key_alias" label={uiT("ui.1e7044ffa52d")}>
               {({ id, value, onChange }) => (
                 <ContextCombobox
                   id={id}
@@ -193,7 +197,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                 />
               )}
             </FormField>
-            <FormField control={form.control} name="model" label="Model">
+            <FormField control={form.control} name="model" label={uiT("ui.5e2c614c23f0")}>
               {({ id, value, onChange }) => (
                 <ContextCombobox
                   id={id}
@@ -204,7 +208,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                 />
               )}
             </FormField>
-            <FormField control={form.control} name="tags" label="Tags">
+            <FormField control={form.control} name="tags" label={uiT("ui.1331275bc537")}>
               {({ id, value, onChange, onBlur }) => (
                 <TokenSelect
                   id={id}
@@ -224,7 +228,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
               Simulate
             </Button>
             <Button type="button" variant="secondary" onClick={handleReset}>
-              Reset
+              {uiT("ui.daee7606b339")}
             </Button>
           </div>
         </form>
@@ -275,7 +279,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                       </Badge>
                     ))
                   ) : (
-                    <span className="text-muted-foreground text-sm">None</span>
+                    <span className="text-muted-foreground text-sm">{uiT("ui.dc937b598926")}</span>
                   )}
                 </div>
               </div>
@@ -307,7 +311,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                               ))}
                             </div>
                           ) : (
-                            <span className="text-muted-foreground">None</span>
+                            <span className="text-muted-foreground">{uiT("ui.dc937b598926")}</span>
                           )}
                         </td>
                       </tr>
@@ -323,7 +327,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
       {hasSearched && !result && !isLoading && (
         <Alert variant="error">
           <CircleAlert />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>{uiT("ui.54a0e8c17ebb")}</AlertTitle>
           <AlertDescription>Failed to resolve policies. Check the proxy logs.</AlertDescription>
         </Alert>
       )}

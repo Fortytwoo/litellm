@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,8 @@ import { groupNameByModel } from "./modelOwnership";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const RoutingGroups: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data, isLoading, refetch, isFetching } = useRoutingGroups();
   const { data: routerFields } = useRouterFields();
   const { data: modelHub } = useModelHub();
@@ -49,7 +52,7 @@ const RoutingGroups: React.FC = () => {
     if (routerFields?.routing_group_strategies?.length) return routerFields.routing_group_strategies;
     const fromFields = routerFields?.fields?.find((f) => f.field_name === "routing_strategy")?.options;
     return fromFields ?? [];
-  }, [data?.availableStrategies, routerFields]);
+  }, [data, routerFields]);
 
   const strategyDescriptions = routerFields?.routing_strategy_descriptions ?? {};
 
@@ -137,14 +140,14 @@ const RoutingGroups: React.FC = () => {
                 aria-busy={isFetching && !isLoading}
               >
                 <RefreshCw />
-                Refresh
+                {uiT("ui.0e9161011702")}
               </Button>
               <Button onClick={openCreate}>
                 <Plus />
                 Create Group
               </Button>
               <span className="text-sm whitespace-nowrap text-muted-foreground">
-                Showing {filteredGroups.length} {filteredGroups.length === 1 ? "result" : "results"}
+                {uiT("ui.d604310a789a")} {filteredGroups.length} {filteredGroups.length === 1 ? "result" : "results"}
               </span>
             </div>
           </div>
@@ -193,7 +196,7 @@ const RoutingGroups: React.FC = () => {
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeletingGroup(null)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button
               onClick={confirmDelete}
@@ -201,7 +204,7 @@ const RoutingGroups: React.FC = () => {
               disabled={saveMutation.isPending}
               aria-busy={saveMutation.isPending}
             >
-              Delete
+              {uiT("ui.e2d0a54968ea")}
             </Button>
           </DialogFooter>
         </DialogContent>

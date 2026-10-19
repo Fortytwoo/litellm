@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { MCPServer } from "@/components/mcp_tools/types";
 
@@ -16,11 +17,15 @@ export interface FieldGroup {
 
 export const FIELD_GROUPS: FieldGroup[] = [
   {
-    label: "Documentation",
+    get label() {
+      return translateUi("ui.c205924de0fe");
+    },
     fields: [
       {
         key: "description",
-        label: "Description",
+        get label() {
+          return translateUi("ui.526e0087cc3f");
+        },
         description: "Must have a non-empty description",
         check: (s) => !!s.description?.trim(),
       },

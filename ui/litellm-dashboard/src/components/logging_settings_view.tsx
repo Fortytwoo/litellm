@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { CogIcon, BanIcon } from "@heroicons/react/outline";
@@ -23,6 +25,8 @@ export function LoggingSettingsView({
   variant = "card",
   className = "",
 }: LoggingSettingsViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const getLoggingDisplayName = (callbackName: string) => {
     // Find the display name for the callback
     const callbackDisplayName = Object.entries(callback_map).find(([_, value]) => value === callbackName)?.[0];
@@ -61,7 +65,7 @@ export function LoggingSettingsView({
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <CogIcon className="h-4 w-4 text-info" />
-          <span className="font-semibold text-foreground">Logging Integrations</span>
+          <span className="font-semibold text-foreground">{uiT("ui.4267c017a8f6")}</span>
           <Badge variant="secondary">{loggingConfigs.length}</Badge>
         </div>
 
@@ -98,7 +102,7 @@ export function LoggingSettingsView({
         ) : (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
             <CogIcon className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground text-sm">No logging integrations configured</span>
+            <span className="text-muted-foreground text-sm">{uiT("ui.baab64189c19")}</span>
           </div>
         )}
       </div>
@@ -107,7 +111,7 @@ export function LoggingSettingsView({
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <BanIcon className="h-4 w-4 text-destructive" />
-          <span className="font-semibold text-foreground">Disabled Callbacks</span>
+          <span className="font-semibold text-foreground">{uiT("ui.0394db0d5502")}</span>
           <Badge variant="destructive">{disabledCallbacks.length}</Badge>
         </div>
 
@@ -130,10 +134,10 @@ export function LoggingSettingsView({
                     />
                     <div>
                       <span className="block font-medium text-destructive">{displayName}</span>
-                      <span className="block text-xs text-destructive">Disabled for this key</span>
+                      <span className="block text-xs text-destructive">{uiT("ui.c3d148957e0d")}</span>
                     </div>
                   </div>
-                  <Badge variant="destructive">Disabled</Badge>
+                  <Badge variant="destructive">{uiT("ui.75081b593d15")}</Badge>
                 </div>
               );
             })}
@@ -141,7 +145,7 @@ export function LoggingSettingsView({
         ) : (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
             <BanIcon className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground text-sm">No callbacks disabled</span>
+            <span className="text-muted-foreground text-sm">{uiT("ui.3ebe0a5be1c8")}</span>
           </div>
         )}
       </div>
@@ -153,10 +157,8 @@ export function LoggingSettingsView({
       <div className={`bg-card border border-border rounded-lg p-6 ${className}`}>
         <div className="flex items-center gap-2 mb-6">
           <div>
-            <span className="block font-semibold text-foreground">Logging Settings</span>
-            <span className="block text-xs text-muted-foreground">
-              Active logging integrations and disabled callbacks for this key
-            </span>
+            <span className="block font-semibold text-foreground">{uiT("ui.f5d87a5328ff")}</span>
+            <span className="block text-xs text-muted-foreground">{uiT("ui.85426600fabe")}</span>
           </div>
         </div>
         {content}
@@ -166,7 +168,7 @@ export function LoggingSettingsView({
 
   return (
     <div className={`${className}`}>
-      <span className="block font-medium text-foreground mb-3">Logging Settings</span>
+      <span className="block font-medium text-foreground mb-3">{uiT("ui.f5d87a5328ff")}</span>
       {content}
     </div>
   );

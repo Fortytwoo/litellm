@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import React, { useState, useEffect, useCallback } from "react";
 import {
@@ -27,7 +29,9 @@ type MCPStatus = "active" | "pending_review" | "rejected";
 
 const STATUS_CONFIG: Record<MCPStatus, { label: string; bg: string; text: string; dot: string }> = {
   active: {
-    label: "Active",
+    get label() {
+      return translateUi("ui.92340695899b");
+    },
     bg: "bg-success/10",
     text: "text-success",
     dot: "bg-success",
@@ -82,6 +86,8 @@ type ConfirmDialogProps = {
 };
 
 function ConfirmDialog({ action, serverName, isCurrentlyActive, onConfirm, onCancel }: ConfirmDialogProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [reviewNotes, setReviewNotes] = useState("");
   const isApprove = action === "approve";
   const rejectBody = isCurrentlyActive
@@ -126,7 +132,7 @@ function ConfirmDialog({ action, serverName, isCurrentlyActive, onConfirm, onCan
             onClick={onCancel}
             className="flex-1 border border-border text-foreground hover:bg-accent text-sm font-medium py-2 rounded-md transition-colors"
           >
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </button>
           <button
             type="button"
@@ -154,6 +160,8 @@ type SubmissionRulesPanelProps = {
 };
 
 function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving, disabled }: SubmissionRulesPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [expanded, setExpanded] = useState(false);
   const activeLabels = MCP_REQUIRED_FIELD_DEFS.filter((f) => requiredFields.includes(f.key));
 
@@ -254,7 +262,7 @@ function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving, disa
               onClick={() => setExpanded(false)}
               className="px-4 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-md hover:bg-accent transition-colors"
             >
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </button>
           </div>
         </div>
@@ -489,6 +497,8 @@ interface MCPSubmissionsTabProps {
 }
 
 export function MCPSubmissionsTab({ accessToken }: MCPSubmissionsTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [summary, setSummary] = useState<MCPSubmissionsSummary>(EMPTY_SUMMARY);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | MCPStatus>("all");
@@ -601,7 +611,7 @@ export function MCPSubmissionsTab({ accessToken }: MCPSubmissionsTabProps) {
       <div className="grid grid-cols-4 gap-4 mb-6">
         <StatCard label="Total Submitted" value={summary.total} color="text-foreground" />
         <StatCard label="Pending Review" value={summary.pending_review} color="text-warning" />
-        <StatCard label="Active" value={summary.active} color="text-success" />
+        <StatCard label={uiT("ui.92340695899b")} value={summary.active} color="text-success" />
         <StatCard label="Rejected" value={summary.rejected} color="text-destructive" />
       </div>
 
@@ -623,7 +633,7 @@ export function MCPSubmissionsTab({ accessToken }: MCPSubmissionsTabProps) {
         >
           <option value="all">All Status</option>
           <option value="pending_review">Pending Review</option>
-          <option value="active">Active</option>
+          <option value="active">{uiT("ui.92340695899b")}</option>
           <option value="rejected">Rejected</option>
         </select>
       </div>

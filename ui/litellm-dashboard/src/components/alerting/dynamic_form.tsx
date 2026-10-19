@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { CircleCheck, Trash2 } from "lucide-react";
@@ -33,6 +35,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   handleSubmit,
   premiumUser,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<AlertingFormValues>({ defaultValues: {} });
 
   const onFinish = (formData: AlertingFormValues) => {
@@ -113,7 +117,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             ) : value.stored_in_db == false ? (
               <Badge variant="outline">In Config</Badge>
             ) : (
-              <Badge variant="outline">Not Set</Badge>
+              <Badge variant="outline">{uiT("ui.8290035d4cf4")}</Badge>
             )}
           </TableCell>
           <TableCell>

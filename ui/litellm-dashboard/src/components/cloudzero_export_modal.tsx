@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { CircleCheck, FileDown } from "lucide-react";
 import { z } from "zod";
@@ -36,6 +38,8 @@ interface CloudZeroSettingsView {
 type ExportType = "cloudzero" | "csv";
 
 const CloudZeroExportModal: React.FC<CloudZeroExportModalProps> = ({ isOpen, onClose, accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(cloudZeroSettingsSchema, {
     defaultValues: { api_key: "", connection_id: "" },
   });
@@ -322,7 +326,7 @@ const CloudZeroExportModal: React.FC<CloudZeroExportModalProps> = ({ isOpen, onC
           {/* Action Buttons */}
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="secondary" onClick={handleModalClose}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button
               type="button"
@@ -331,7 +335,7 @@ const CloudZeroExportModal: React.FC<CloudZeroExportModalProps> = ({ isOpen, onC
               aria-busy={loading || exportLoading}
             >
               {(loading || exportLoading) && <UiLoadingSpinner className="size-4" />}
-              {exportType === "cloudzero" ? "Export to CloudZero" : "Export CSV"}
+              {exportType === "cloudzero" ? "Export to CloudZero" : uiT("ui.91f71c14c8d6")}
             </Button>
           </div>
         </div>

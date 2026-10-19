@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useContext, useId } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -49,6 +51,8 @@ export function ClassifierOption({
   disabled?: boolean;
   unlimited?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const state = useContext(AutoRouterAvailabilityContext);
   const allowance = state.data?.allowances.find((entry) => entry.key === feature);
   const fresh = !state.isPending && !state.isError && !state.isChecking;
@@ -62,7 +66,9 @@ export function ClassifierOption({
             {feature ? (
               <AutoRouterAllowanceLabel feature={feature} />
             ) : (
-              unlimited && <span className="shrink-0 text-xs leading-5 text-muted-foreground">Unlimited</span>
+              unlimited && (
+                <span className="shrink-0 text-xs leading-5 text-muted-foreground">{uiT("ui.11dde17d6c3e")}</span>
+              )
             )}
           </span>
           <span className={`text-xs leading-5 text-muted-foreground ${exhausted ? "pr-28" : ""}`}>{description}</span>
@@ -98,6 +104,8 @@ export function ClassifierMenu({
   onValueChange: (value: string) => void;
   children: React.ReactNode;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -109,7 +117,7 @@ export function ClassifierMenu({
         {feature ? (
           <AutoRouterAllowanceLabel feature={feature} />
         ) : (
-          <span className="text-xs text-muted-foreground">Unlimited</span>
+          <span className="text-xs text-muted-foreground">{uiT("ui.11dde17d6c3e")}</span>
         )}
         <ChevronDownIcon className="size-4 text-muted-foreground" />
       </DropdownMenuTrigger>

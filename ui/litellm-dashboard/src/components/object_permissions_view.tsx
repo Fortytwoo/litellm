@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import VectorStorePermissions from "./permissions/VectorStorePermissions";
 import MCPServerPermissions from "./permissions/MCPServerPermissions";
@@ -22,6 +24,8 @@ export function ObjectPermissionsView({
   className = "",
   accessToken,
 }: ObjectPermissionsViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const vectorStores = objectPermission?.vector_stores || [];
   const mcpServers = objectPermission?.mcp_servers || [];
   const mcpAccessGroups = objectPermission?.mcp_access_groups || [];
@@ -60,7 +64,7 @@ export function ObjectPermissionsView({
         )}
       </div>
       <div className="min-w-0 rounded-md border border-border p-4">
-        <p className="text-sm font-medium text-foreground">Skills</p>
+        <p className="text-sm font-medium text-foreground">{uiT("ui.66d0f523a379")}</p>
         {skills.length === 0 ? (
           <p className="mt-1 block text-xs text-muted-foreground">
             No private skills granted. Only enabled (public) Claude Code plugins are visible.

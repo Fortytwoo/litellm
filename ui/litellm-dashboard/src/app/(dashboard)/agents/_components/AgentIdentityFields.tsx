@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React, { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import { apiClient } from "@/components/networking";
@@ -16,11 +19,23 @@ const EXECUTION_MODE_OPTIONS = [
   { value: "both", label: "Both" },
 ];
 const EXECUTION_OPTIONS = [
-  { value: "enabled", label: "Enabled" },
-  { value: "disabled", label: "Disabled" },
+  {
+    value: "enabled",
+    get label() {
+      return translateUi("ui.92c1cdfdf4cb");
+    },
+  },
+  {
+    value: "disabled",
+    get label() {
+      return translateUi("ui.75081b593d15");
+    },
+  },
 ];
 
 export const AgentIdentityFields = ({ accessToken }: { accessToken: string | null }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const provider = useWatch<AgentFormValues>({ name: "identity_provider" });
   const mode = useWatch<AgentFormValues>({ name: "execution_mode" });
   const showScopes = mode !== "autonomous" && mode !== undefined;
@@ -170,7 +185,7 @@ export const AgentIdentityFields = ({ accessToken }: { accessToken: string | nul
               }}
               description={
                 <>
-                  Open{" "}
+                  {uiT("ui.ed077f3d8125")}{" "}
                   <a
                     className="underline"
                     href="https://entra.microsoft.com/#view/Microsoft_AAD_IAM/StartboardApplicationsMenuBlade/~/AppAppsPreview"

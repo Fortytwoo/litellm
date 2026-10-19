@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { KeyRound } from "lucide-react";
 import { KeyResponse } from "@/components/key_team_helpers/key_list";
@@ -11,11 +13,13 @@ interface AgentVirtualKeysProps {
 }
 
 const AgentVirtualKeys: React.FC<AgentVirtualKeysProps> = ({ keys, isLoading, onKeyClick }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="mt-6">
-      <h4 className="text-base font-semibold text-foreground">Virtual Keys</h4>
+      <h4 className="text-base font-semibold text-foreground">{uiT("ui.d1c0ad6c4bdd")}</h4>
       {isLoading ? (
-        <p className="mt-2 text-sm text-muted-foreground">Loading keys...</p>
+        <p className="mt-2 text-sm text-muted-foreground">{uiT("ui.e0c65255e48f")}</p>
       ) : keys.length === 0 ? (
         <p className="mt-2 text-sm text-muted-foreground">No virtual key assigned to this agent.</p>
       ) : (

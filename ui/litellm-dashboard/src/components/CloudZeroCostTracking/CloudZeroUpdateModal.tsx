@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useEffect } from "react";
 import { z } from "zod";
 
@@ -30,6 +32,8 @@ const updateSchema = z.object({
 });
 
 export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }: CloudZeroUpdateModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const form = useZodForm(updateSchema, { defaultValues: EMPTY_CLOUDZERO_FORM_VALUES });
   const updateMutation = useCloudZeroUpdateSettings(accessToken || "");
@@ -97,7 +101,7 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
         </TooltipProvider>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel} disabled={updateMutation.isPending}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button
             onClick={() => void form.handleSubmit(handleSubmit)()}

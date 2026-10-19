@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, UserPlus } from "lucide-react";
@@ -52,8 +53,12 @@ export const getAvailableTeamsTableColumns = ({
   {
     id: "team_alias",
     accessorKey: "team_alias",
-    meta: { title: "Team Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Team Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.6ed5a592c422");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.6ed5a592c422")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -63,8 +68,14 @@ export const getAvailableTeamsTableColumns = ({
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+    },
+    get header() {
+      return translateUi("ui.526e0087cc3f");
+    },
     size: 280,
     enableSorting: false,
     cell: ({ row }) => {
@@ -79,8 +90,12 @@ export const getAvailableTeamsTableColumns = ({
   {
     id: "members",
     accessorFn: (team) => team.members_with_roles.length,
-    meta: { title: "Members" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Members" />,
+    meta: {
+      get title() {
+        return translateUi("ui.1044a4c056d0");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.1044a4c056d0")} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => (
@@ -89,8 +104,14 @@ export const getAvailableTeamsTableColumns = ({
   },
   {
     id: "models",
-    meta: { title: "Models" },
-    header: "Models",
+    meta: {
+      get title() {
+        return translateUi("ui.d17d2d78d76e");
+      },
+    },
+    get header() {
+      return translateUi("ui.d17d2d78d76e");
+    },
     size: 260,
     enableSorting: false,
     cell: ({ row }) => <ModelsCell models={row.original.models} />,
@@ -98,7 +119,7 @@ export const getAvailableTeamsTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

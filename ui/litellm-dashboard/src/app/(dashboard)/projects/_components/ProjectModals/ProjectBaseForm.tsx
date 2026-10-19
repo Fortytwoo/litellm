@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useState } from "react";
 import { useFieldArray, useWatch, type UseFormReturn } from "react-hook-form";
@@ -41,6 +42,8 @@ interface ProjectBaseFormProps {
 export type { ProjectFormValues } from "./projectFormSchema";
 
 export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: ProjectBaseFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userId, userRole } = useAuthorized();
   const { data: teams } = useTeams();
 
@@ -108,7 +111,7 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
   }));
 
   const modelOptions = [
-    { value: ALL_TEAM_MODELS, label: "All Team Models" },
+    { value: ALL_TEAM_MODELS, label: uiT("ui.48f6183707a2") },
     ...modelsToPick.map((model) => ({ value: model, label: getModelDisplayName(model) })),
   ];
   const modelsPlaceholder = selectedTeam ? "Select models" : "Select a team first";
@@ -126,7 +129,7 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
             )}
           </FormField>
 
-          <FormField control={form.control} name="team_id" label="Team">
+          <FormField control={form.control} name="team_id" label={uiT("ui.5985039f106d")}>
             {({ id, value, onChange, ref: _ref, ...field }) => (
               <SearchSelect
                 {...field}
@@ -137,14 +140,14 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
                   onChange(next);
                   handleTeamChange(next);
                 }}
-                placeholder="Search or select a team"
+                placeholder={uiT("ui.b696f7d9c4a8")}
                 allowClear
               />
             )}
           </FormField>
         </div>
 
-        <FormField control={form.control} name="description" label="Description">
+        <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
           {({ ref, ...field }) => (
             <Textarea
               {...field}
@@ -194,7 +197,7 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
         </FormField>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+          <FormField control={form.control} name="max_budget" label={uiT("ui.afa99ea4a8c3")}>
             {({ ref, value, onChange, ...field }) => (
               <InputGroup>
                 <InputGroupAddon>
@@ -263,7 +266,7 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
           <FormField
             control={form.control}
             name="guardrails"
-            label="Guardrails"
+            label={uiT("ui.443f975eefe8")}
             description="Select existing guardrails or enter new ones"
           >
             {({ id, value, onChange }) => (
@@ -285,32 +288,32 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
               key={field.id}
               className="mb-2 grid grid-cols-1 items-start gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))_auto]"
             >
-              <FormField control={form.control} name={`modelLimits.${index}.model`} label="Model">
+              <FormField control={form.control} name={`modelLimits.${index}.model`} label={uiT("ui.5e2c614c23f0")}>
                 {({ ref, ...control }) => (
                   <Input {...control} value={control.value ?? ""} ref={ref} placeholder="Model name (e.g. gpt-4)" />
                 )}
               </FormField>
-              <FormField control={form.control} name={`modelLimits.${index}.tpm`} label="TPM Limit">
+              <FormField control={form.control} name={`modelLimits.${index}.tpm`} label={uiT("ui.703406a2fc47")}>
                 {({ ref, value, onChange, ...control }) => (
                   <Input
                     {...control}
                     ref={ref}
                     type="number"
                     min={0}
-                    placeholder="TPM Limit"
+                    placeholder={uiT("ui.703406a2fc47")}
                     value={value ?? ""}
                     onChange={(event) => onChange(toOptionalNumber(event.target.value))}
                   />
                 )}
               </FormField>
-              <FormField control={form.control} name={`modelLimits.${index}.rpm`} label="RPM Limit">
+              <FormField control={form.control} name={`modelLimits.${index}.rpm`} label={uiT("ui.e543e799b809")}>
                 {({ ref, value, onChange, ...control }) => (
                   <Input
                     {...control}
                     ref={ref}
                     type="number"
                     min={0}
-                    placeholder="RPM Limit"
+                    placeholder={uiT("ui.e543e799b809")}
                     value={value ?? ""}
                     onChange={(event) => onChange(toOptionalNumber(event.target.value))}
                   />
@@ -366,12 +369,12 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
 
           <Separator className="my-4" />
 
-          <p className="mb-3 text-sm font-semibold text-foreground">Metadata</p>
+          <p className="mb-3 text-sm font-semibold text-foreground">{uiT("ui.9eddf573cb50")}</p>
           {metadata.fields.map((field, index) => (
             <div key={field.id} className="mb-2 flex items-start gap-2">
               <FormField control={form.control} name={`metadata.${index}.key`}>
                 {({ ref, ...control }) => (
-                  <Input {...control} value={control.value ?? ""} ref={ref} placeholder="Key" />
+                  <Input {...control} value={control.value ?? ""} ref={ref} placeholder={uiT("ui.99a52df3ff3d")} />
                 )}
               </FormField>
               <FormField control={form.control} name={`metadata.${index}.value`}>

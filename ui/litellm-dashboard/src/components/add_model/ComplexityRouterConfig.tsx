@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import RoutingOptions from "./RoutingOptions";
 import ClassifierPrimarySettings from "./ClassifierPrimarySettings";
 import { AutoRouterAllowanceNote } from "./AutoRouterAvailability";
@@ -110,7 +113,9 @@ export const CLASSIFICATION_RUBRIC_DESCRIPTIONS: Record<ClassificationRubric, { 
         "ordinary engineering to the most expensive tier.",
     },
     agentic: {
-      label: "Agentic",
+      get label() {
+        return translateUi("ui.7b1f65c25801");
+      },
       description:
         "Anchors routine installs, builds, multi-file edits, and standard debugging at " +
         "Medium, so ordinary engineering does not route to your most expensive tier. Suits agent, terminal, and " +
@@ -291,36 +296,41 @@ const TierRowHeader: React.FC<{
   editing: boolean;
   isCustomSet: boolean;
   onRemove: () => void;
-}> = ({ row, index, rowCount, label, description, editing, isCustomSet, onRemove }) => (
-  <div className="flex items-center gap-2 mb-2">
-    <strong className="text-base font-semibold">{label} Tier</strong>
-    <SimpleTooltip
-      content={
-        row.definition.trim() ||
-        description ||
-        "A tier you defined. The classifier routes requests matching its definition here."
-      }
-    >
-      <Info className="size-4 text-muted-foreground" />
-    </SimpleTooltip>
-    <span className="text-xs text-muted-foreground">
-      Tier {index + 1} of {rowCount} &middot; {rowOrigin(row, isCustomSet)}
-    </span>
-    {editing && (
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-destructive hover:text-destructive/80"
-        aria-label={`Remove the ${activeTierName(row) || `tier ${index + 1}`} tier`}
-        disabled={rowCount <= MIN_TIER_COUNT}
-        onClick={onRemove}
+}> = ({ row, index, rowCount, label, description, editing, isCustomSet, onRemove }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <div className="flex items-center gap-2 mb-2">
+      <strong className="text-base font-semibold">
+        {label} {uiT("ui.cb9e8664edea")}
+      </strong>
+      <SimpleTooltip
+        content={
+          row.definition.trim() ||
+          description ||
+          "A tier you defined. The classifier routes requests matching its definition here."
+        }
       >
-        <Trash2 />
-        Remove
-      </Button>
-    )}
-  </div>
-);
+        <Info className="size-4 text-muted-foreground" />
+      </SimpleTooltip>
+      <span className="text-xs text-muted-foreground">
+        {uiT("ui.cb9e8664edea")} {index + 1} of {rowCount} &middot; {rowOrigin(row, isCustomSet)}
+      </span>
+      {editing && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-destructive hover:text-destructive/80"
+          aria-label={`Remove the ${activeTierName(row) || `tier ${index + 1}`} tier`}
+          disabled={rowCount <= MIN_TIER_COUNT}
+          onClick={onRemove}
+        >
+          <Trash2 />
+          {uiT("ui.c3812fc4acb8")}
+        </Button>
+      )}
+    </div>
+  );
+};
 
 const TierRowEditFields: React.FC<{
   row: TierRow;
@@ -626,6 +636,8 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
   onAutoRouterCompressionChange,
   showValidationErrors = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const forecast = isForecastClassifier(value.classifier_type);
   const tierHeading = creationFlow ? "Define your tiers" : "Models by tier";
   const customTierSet = value.custom_tier_set;
@@ -783,7 +795,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                         value={row.models}
                         onValueChange={(models: string[]) => setRowModels(row, models)}
                         placeholder={`Select model(s) for ${label.toLowerCase()} queries`}
-                        emptyText="No models found"
+                        emptyText={uiT("ui.a650c298cf44")}
                         className={tierMissing ? "w-full border-destructive" : "w-full"}
                       />
                       <TierModelEffortRows

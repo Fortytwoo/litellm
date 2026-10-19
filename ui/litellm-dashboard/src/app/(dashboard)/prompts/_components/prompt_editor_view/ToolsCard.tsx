@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import { Tool } from "./types";
@@ -12,13 +14,15 @@ interface ToolsCardProps {
 }
 
 const ToolsCard: React.FC<ToolsCardProps> = ({ tools, onAddTool, onEditTool, onRemoveTool }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Card className="p-3">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-sm font-medium">Tools</p>
+        <p className="text-sm font-medium">{uiT("ui.ea93d6a262ec")}</p>
         <Button variant="ghost" size="sm" onClick={onAddTool}>
           <PlusIcon size={14} className="mr-1" />
-          Add
+          {uiT("ui.9fd728c66c9a")}
         </Button>
       </div>
       {tools.length === 0 ? (
@@ -33,7 +37,7 @@ const ToolsCard: React.FC<ToolsCardProps> = ({ tools, onAddTool, onEditTool, onR
               </div>
               <div className="flex items-center space-x-1 ml-2">
                 <Button variant="ghost" size="sm" onClick={() => onEditTool(index)}>
-                  Edit
+                  {uiT("ui.464c4ffd019e")}
                 </Button>
                 <Button
                   variant="ghost"

@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, Info, MoreHorizontal } from "lucide-react";
@@ -106,8 +107,13 @@ export const getMCPHubTableColumns = ({ onServerClick }: MCPHubTableColumnsDeps)
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description", className: "hidden md:table-cell" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Description" />,
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+      className: "hidden md:table-cell",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.526e0087cc3f")} />,
     size: 240,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -146,8 +152,13 @@ export const getMCPHubTableColumns = ({ onServerClick }: MCPHubTableColumnsDeps)
   {
     id: "status",
     accessorKey: "status",
-    meta: { title: "Status", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Status" />,
+    meta: {
+      get title() {
+        return translateUi("ui.920e413c7d41");
+      },
+      skeleton: "badge",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.920e413c7d41")} />,
     size: 110,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -161,8 +172,16 @@ export const getMCPHubTableColumns = ({ onServerClick }: MCPHubTableColumnsDeps)
   },
   {
     id: "allowed_tools",
-    meta: { title: "Tools", skeleton: "chips", className: "hidden lg:table-cell" },
-    header: "Tools",
+    meta: {
+      get title() {
+        return translateUi("ui.ea93d6a262ec");
+      },
+      skeleton: "chips",
+      className: "hidden lg:table-cell",
+    },
+    get header() {
+      return translateUi("ui.ea93d6a262ec");
+    },
     size: 180,
     enableSorting: false,
     cell: ({ row }) => {
@@ -189,8 +208,13 @@ export const getMCPHubTableColumns = ({ onServerClick }: MCPHubTableColumnsDeps)
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: "Created By", className: "hidden xl:table-cell" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created By" />,
+    meta: {
+      get title() {
+        return translateUi("ui.dfd60b9aa5ca");
+      },
+      className: "hidden xl:table-cell",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dfd60b9aa5ca")} />,
     size: 140,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -220,7 +244,7 @@ export const getMCPHubTableColumns = ({ onServerClick }: MCPHubTableColumnsDeps)
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

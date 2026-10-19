@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -106,6 +108,8 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
   onTemplatesLoaded,
   accessToken,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [templates, setTemplates] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -204,7 +208,7 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
                 <span className="text-sm font-semibold">Categories</span>
                 {selectedTags.size > 0 && (
                   <button onClick={handleClearAll} className="text-xs text-primary hover:underline">
-                    Clear all
+                    {uiT("ui.29a390f9237e")}
                   </button>
                 )}
               </div>
@@ -232,7 +236,7 @@ const PolicyTemplates: React.FC<PolicyTemplatesProps> = ({
         <div className="flex-1">
           {selectedTags.size > 0 && (
             <div className="mb-4 text-sm text-muted-foreground">
-              Showing {filteredTemplates.length} of {templates.length} templates
+              {uiT("ui.d604310a789a")} {filteredTemplates.length} of {templates.length} templates
             </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

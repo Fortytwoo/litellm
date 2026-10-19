@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { apiClient } from "@/components/networking";
@@ -120,6 +122,8 @@ export const AutoRouterAllowanceNote = ({ feature, label }: { feature: string; l
 };
 
 export const AutoRouterLimits = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const state = useContext(AutoRouterAvailabilityContext);
   const limits = [
     ["heuristic_v2", "Heuristic v2 routers"],
@@ -144,7 +148,7 @@ export const AutoRouterLimits = () => {
             <div key={key} className="flex items-center justify-between gap-3">
               <dt>{label}</dt>
               <dd className="shrink-0 tabular-nums text-muted-foreground">
-                {availabilityLabel(state, key) ?? "Unlimited"}
+                {availabilityLabel(state, key) ?? uiT("ui.11dde17d6c3e")}
               </dd>
             </div>
           ))}

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Inbox, ShieldAlert } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -141,19 +142,21 @@ function DurationFilter({ selected, onChange }: { selected: string[]; onChange: 
 }
 
 function BudgetFilterFields({ get, set }: FilterDraft) {
+  const { t: uiT } = useDashboardLanguage();
+
   const maxBudget = (get("max_budget") as MaxBudgetFilterValue | undefined) ?? {};
   const created = (get("created_at") as CreatedAtFilterValue | undefined) ?? {};
   const unlimitedOnly = maxBudget.unlimitedOnly === true;
 
   return (
     <>
-      <DataTableFilterField label="Reset">
+      <DataTableFilterField label={uiT("ui.daee7606b339")}>
         <DurationFilter
           selected={(get("budget_duration") as string[] | undefined) ?? []}
           onChange={(selected) => set("budget_duration", selected)}
         />
       </DataTableFilterField>
-      <DataTableFilterField label="Max Budget (USD)">
+      <DataTableFilterField label={uiT("ui.afa99ea4a8c3")}>
         <div className="flex items-center gap-2">
           <Input
             type="number"
@@ -187,7 +190,7 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
           Unlimited only
         </Label>
       </DataTableFilterField>
-      <DataTableFilterField label="Created">
+      <DataTableFilterField label={uiT("ui.d70b9e24bca2")}>
         <div className="flex items-center gap-2">
           <Input
             type="date"
@@ -210,6 +213,8 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
 }
 
 const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick, onDeleteClick }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const columns = useMemo(
@@ -259,7 +264,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick,
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
+            title={uiT("ui.546ebb8eb993")}
             description="Narrow down your budgets"
           >
             {(draft) => <BudgetFilterFields {...draft} />}

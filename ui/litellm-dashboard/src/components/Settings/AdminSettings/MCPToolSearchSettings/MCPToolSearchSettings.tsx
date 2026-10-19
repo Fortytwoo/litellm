@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   useMCPToolSearchSettings,
@@ -48,6 +49,8 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
 );
 
 export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSettingsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data, isLoading, isError, error } = useMCPToolSearchSettings();
   const { mutate: updateSettings, isPending: isUpdating } = useUpdateMCPToolSearchSettings();
   const form = useForm<ToolSearchFormValues>({ defaultValues: DEFAULT_FORM_VALUES });
@@ -139,7 +142,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                       onValueChange={onChange}
                       allowClear
                       placeholder={loadingModels ? "Loading models..." : "Keyword matching (no embedding model)"}
-                      emptyText={loadingModels ? "Loading..." : "No embedding models available"}
+                      emptyText={loadingModels ? uiT("ui.47d2a515ef2f") : "No embedding models available"}
                       disabled={isUpdating || loadingModels}
                     />
                   )}

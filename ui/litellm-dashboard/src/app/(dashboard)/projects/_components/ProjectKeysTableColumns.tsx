@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -47,8 +48,14 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created" },
-    header: "Created",
+    meta: {
+      get title() {
+        return translateUi("ui.d70b9e24bca2");
+      },
+    },
+    get header() {
+      return translateUi("ui.d70b9e24bca2");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -56,8 +63,14 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   {
     id: "last_active",
     accessorKey: "last_active",
-    meta: { title: "Last Active" },
-    header: "Last Active",
+    meta: {
+      get title() {
+        return translateUi("ui.b6dc1b957942");
+      },
+    },
+    get header() {
+      return translateUi("ui.b6dc1b957942");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.last_active} precision="date" fallback="Never" />,

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import * as React from "react";
 import { Maximize2Icon, Minimize2Icon } from "lucide-react";
@@ -44,6 +45,8 @@ function ResizableSheetContent({
   minWidthPercent = 40,
   ...props
 }: ResizableSheetContentProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [width, setWidth] = React.useState(() => readStoredWidth(storageKey, defaultWidthPercent, minWidthPercent));
   const widthRef = React.useRef(width);
   const lastNonFullWidthRef = React.useRef(defaultWidthPercent);
@@ -134,7 +137,7 @@ function ResizableSheetContent({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize drawer"
+        aria-label={uiT("ui.5735afe40a5e")}
         data-slot="sheet-resize-handle"
         className="absolute inset-y-0 left-0 hidden w-1.5 cursor-col-resize touch-none select-none hover:bg-border focus-visible:bg-border focus-visible:outline-none sm:block"
         tabIndex={0}
@@ -148,7 +151,7 @@ function ResizableSheetContent({
         variant="ghost"
         size="icon-sm"
         className="absolute top-4 right-14 hidden sm:inline-flex"
-        aria-label={isFull ? "Collapse drawer" : "Expand drawer"}
+        aria-label={isFull ? uiT("ui.266be0690947") : uiT("ui.f27af4e1ebe9")}
         onClick={toggle}
       >
         {isFull ? <Minimize2Icon /> : <Maximize2Icon />}

@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -101,8 +102,13 @@ export const getPolicyTableColumns = ({
   {
     id: "policy_name",
     accessorKey: "policy_name",
-    meta: { title: "Name", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: {
+      get title() {
+        return translateUi("ui.dcd1d5223f73");
+      },
+      skeleton: "twoLine",
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dcd1d5223f73")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => {
@@ -126,8 +132,14 @@ export const getPolicyTableColumns = ({
   {
     id: "description",
     accessorFn: (row) => row.primaryPolicy.description ?? "",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+    },
+    get header() {
+      return translateUi("ui.526e0087cc3f");
+    },
     size: 220,
     enableSorting: false,
     cell: ({ row }) => {
@@ -194,8 +206,12 @@ export const getPolicyTableColumns = ({
   {
     id: "created_at",
     accessorFn: (row) => row.primaryPolicy.created_at ?? "",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: {
+      get title() {
+        return translateUi("ui.3d44337010bf");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.3d44337010bf")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.primaryPolicy.created_at} />,
@@ -205,7 +221,7 @@ export const getPolicyTableColumns = ({
         {
           id: "actions",
           meta: { className: "text-right", headerClassName: "text-right" },
-          header: () => <span className="sr-only">Actions</span>,
+          header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
           size: 64,
           enableSorting: false,
           enableHiding: false,

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { getProviderLogoAndName, Providers, providerLogoMap } from "@/components/provider_info_helpers";
 import milvusLogo from "../../public/assets/logos/milvus.svg";
 import mongodbLogo from "../../public/assets/logos/mongodb.svg";
@@ -62,7 +63,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   pg_vector: [
     {
       name: "api_base",
-      label: "API Base",
+      get label() {
+        return translateUi("ui.0c9c3591f7c3");
+      },
       tooltip: "Enter the base URL of your deployed litellm-pgvector server (e.g., http://your-server:8000)",
       placeholder: "http://your-deployed-server:8000",
       required: true,
@@ -70,7 +73,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
     },
     {
       name: "api_key",
-      label: "API Key",
+      get label() {
+        return translateUi("ui.23189d55f697");
+      },
       tooltip: "Enter the API key from your deployed litellm-pgvector server",
       placeholder: "your-deployed-api-key",
       required: true,
@@ -121,7 +126,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   openai: [
     {
       name: "api_key",
-      label: "API Key",
+      get label() {
+        return translateUi("ui.23189d55f697");
+      },
       tooltip: "Enter your OpenAI API key",
       placeholder: "sk-...",
       required: true,
@@ -131,7 +138,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   azure: [
     {
       name: "api_key",
-      label: "API Key",
+      get label() {
+        return translateUi("ui.23189d55f697");
+      },
       tooltip: "Enter your Azure OpenAI API key",
       placeholder: "your-azure-api-key",
       required: true,
@@ -139,7 +148,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
     },
     {
       name: "api_base",
-      label: "API Base",
+      get label() {
+        return translateUi("ui.0c9c3591f7c3");
+      },
       tooltip: "Enter your Azure OpenAI endpoint (e.g., https://your-resource.openai.azure.com/)",
       placeholder: "https://your-resource.openai.azure.com/",
       required: true,
@@ -149,7 +160,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
   milvus: [
     {
       name: "api_key",
-      label: "API Key",
+      get label() {
+        return translateUi("ui.23189d55f697");
+      },
       tooltip:
         "To obtain a token, you should use a colon (:) to concatenate the username and password that you use to access your Milvus instance (e.g., username:password)",
       placeholder: "username:password or api key",
@@ -158,7 +171,9 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
     },
     {
       name: "api_base",
-      label: "API Base",
+      get label() {
+        return translateUi("ui.0c9c3591f7c3");
+      },
       tooltip: "Enter your Milvus endpoint (e.g., https://your-milvus-endpoint.com/)",
       placeholder: "https://your-milvus-endpoint.com/",
       required: true,

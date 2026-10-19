@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +36,8 @@ const SampleList: React.FC<SampleListProps> = ({ label, samples, totalCount }) =
 );
 
 const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, isDefault = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const isGlobal = impactResult.affected_keys_count === -1;
   const qualifier = isDefault ? "up to " : "";
 
@@ -66,14 +70,14 @@ const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, i
             )}
             {impactResult.sample_keys.length > 0 && (
               <SampleList
-                label="Keys"
+                label={uiT("ui.f0d66a79c138")}
                 samples={impactResult.sample_keys}
                 totalCount={impactResult.affected_keys_count}
               />
             )}
             {impactResult.sample_teams.length > 0 && (
               <SampleList
-                label="Teams"
+                label={uiT("ui.1e1a1c078af2")}
                 samples={impactResult.sample_teams}
                 totalCount={impactResult.affected_teams_count}
               />

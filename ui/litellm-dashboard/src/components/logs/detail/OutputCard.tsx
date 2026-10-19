@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * OutputCard - Displays output message with token count and cost
  * Datadog-style: header with icon/metrics, content below
@@ -17,6 +19,8 @@ interface OutputCardProps {
 }
 
 export function OutputCard({ message, completionTokens, outputCost }: OutputCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleCopy = () => {
@@ -43,9 +47,13 @@ export function OutputCard({ message, completionTokens, outputCost }: OutputCard
       >
         <div className="px-4 py-3">
           {message ? (
-            <SimpleMessageBlock label="ASSISTANT" content={message.content} toolCalls={message.toolCalls} />
+            <SimpleMessageBlock
+              label={uiT("ui.ac1c297327ac")}
+              content={message.content}
+              toolCalls={message.toolCalls}
+            />
           ) : (
-            <span className="text-[13px] text-muted-foreground italic">No response data available</span>
+            <span className="text-[13px] text-muted-foreground italic">{uiT("ui.545c815d18b7")}</span>
           )}
         </div>
       </div>

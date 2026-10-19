@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import React from "react";
 import { FormProvider, useFormContext, useWatch, type UseFormReturn } from "react-hook-form";
@@ -440,20 +442,32 @@ export const GroupClaimField = () => {
 
 const DEFAULT_ROLE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
   { value: "internal_user_viewer", label: "Internal Viewer" },
-  { value: "internal_user", label: "Internal User" },
+  {
+    value: "internal_user",
+    get label() {
+      return translateUi("ui.4a5a8d129e4b");
+    },
+  },
   { value: "proxy_admin_viewer", label: "Admin Viewer" },
-  { value: "proxy_admin", label: "Proxy Admin" },
+  {
+    value: "proxy_admin",
+    get label() {
+      return translateUi("ui.a9d8d98fc06c");
+    },
+  },
 ];
 
 const providerOptionLabel = (value: string) =>
   ssoProviderDisplayNames[value] || value.charAt(0).toUpperCase() + value.slice(1) + " SSO";
 
 export const RoleMappingTeamFields = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<SSOSettingsFormValues>();
 
   return (
     <>
-      <FormField control={control} name="default_role" label="Default Role">
+      <FormField control={control} name="default_role" label={uiT("ui.5bcfbd6bd78a")}>
         {({ value, onChange, onBlur, id, ...rest }) => (
           <Select value={(value as string) ?? ""} onValueChange={onChange}>
             <SelectTrigger

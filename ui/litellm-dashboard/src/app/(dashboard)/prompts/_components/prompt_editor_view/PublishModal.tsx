@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { LoaderCircleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,8 @@ const PublishModal: React.FC<PublishModalProps> = ({
   onPublish,
   onCancel,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent>
@@ -37,7 +41,7 @@ const PublishModal: React.FC<PublishModalProps> = ({
         </DialogHeader>
         <div className="py-4">
           <label htmlFor="publish-prompt-name" className="mb-2 block">
-            Name
+            {uiT("ui.dcd1d5223f73")}
           </label>
           <Input
             id="publish-prompt-name"
@@ -53,7 +57,7 @@ const PublishModal: React.FC<PublishModalProps> = ({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={onPublish} disabled={isSaving}>
             {isSaving && <LoaderCircleIcon className="animate-spin" />}

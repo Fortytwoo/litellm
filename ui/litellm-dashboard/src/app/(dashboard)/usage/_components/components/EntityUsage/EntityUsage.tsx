@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { StackedUsageChart, type StackedUsageScale } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -60,8 +63,18 @@ const TILE_TRENDS: Readonly<Record<string, string>> = {
   "Total Tokens": "tokens",
 };
 const GRANULARITY_OPTIONS = [
-  { value: "day", label: "Daily" },
-  { value: "week", label: "Weekly" },
+  {
+    value: "day",
+    get label() {
+      return translateUi("ui.b36c2611dcdf");
+    },
+  },
+  {
+    value: "week",
+    get label() {
+      return translateUi("ui.2975132481a7");
+    },
+  },
 ] as const satisfies readonly { value: Granularity; label: string }[];
 const SCALE_OPTIONS = [
   { value: "linear", label: "Linear" },
@@ -132,6 +145,8 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   dateValue,
   isOrgAdmin = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { teams } = useTeams();
   const teamList = useMemo(() => teams ?? [], [teams]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -371,31 +386,31 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         cell: ({ row }) => <ShareBar value={row.original.metrics.spend} max={maxEntitySpend} />,
       },
       {
-        header: "Spend",
+        header: uiT("ui.85f3d558db12"),
         accessorKey: "metrics.spend",
         meta: { numeric: true, ...QUIET_HEADER },
         cell: ({ row }) => <MoneyCell value={row.original.metrics.spend} decimals={4} />,
       },
       {
-        header: "Successful",
+        header: uiT("ui.f3686bb328c6"),
         accessorKey: "metrics.successful_requests",
         meta: { numeric: true, className: "text-success", ...QUIET_HEADER },
         cell: ({ row }) => row.original.metrics.successful_requests.toLocaleString(),
       },
       {
-        header: "Failed",
+        header: uiT("ui.031a8f0f659d"),
         accessorKey: "metrics.failed_requests",
         meta: { numeric: true, className: "text-destructive", ...QUIET_HEADER },
         cell: ({ row }) => row.original.metrics.failed_requests.toLocaleString(),
       },
       {
-        header: "Tokens",
+        header: uiT("ui.a039dfb9628b"),
         accessorKey: "metrics.total_tokens",
         meta: { numeric: true, ...QUIET_HEADER },
         cell: ({ row }) => row.original.metrics.total_tokens.toLocaleString(),
       },
     ],
-    [capitalizedEntityLabel, maxEntitySpend],
+    [capitalizedEntityLabel, maxEntitySpend, uiT],
   );
 
   const chev = "size-3 text-muted-foreground";
@@ -481,7 +496,8 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
               {METRIC_TITLE[breakdown.metric]} by {modelViewType === "groups" ? "model" : "deployment"}
             </h3>
             <p className="text-xs text-muted-foreground">
-              {granularity === "day" ? "Daily" : "Weekly"} {breakdown.metric}, top 8 stacked
+              {granularity === "day" ? uiT("ui.b36c2611dcdf") : uiT("ui.2975132481a7")} {breakdown.metric}, top 8
+              stacked
               {stackFlatCost ? ", flat cost on top" : ""}
             </p>
           </div>
@@ -598,7 +614,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   );
 
   const tabs: readonly { key: string; label: string; content: ReactNode }[] = [
-    { key: "cost", label: "Cost", content: costPanel },
+    { key: "cost", label: uiT("ui.204a5eb2cd28"), content: costPanel },
     {
       key: "models",
       label: entityType === "agent" ? "Request / Token Consumption" : "Model Activity",

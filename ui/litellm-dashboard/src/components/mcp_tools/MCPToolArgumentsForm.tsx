@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import React, { forwardRef, useImperativeHandle, useMemo } from "react";
 import { CircleHelp } from "lucide-react";
 import { useForm, type Resolver, type ResolverResult } from "react-hook-form";
@@ -308,7 +309,7 @@ const MCPToolArgumentsForm = forwardRef<MCPToolArgumentsFormRef, MCPToolArgument
               name="args.0"
               label={
                 <span>
-                  Input <span className="text-destructive">*</span>
+                  {translateUi("ui.36ecb4f86691")} <span className="text-destructive">*</span>
                 </span>
               }
             >

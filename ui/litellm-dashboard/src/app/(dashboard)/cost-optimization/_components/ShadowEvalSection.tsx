@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import React, { useMemo, useState } from "react";
 
@@ -98,7 +100,7 @@ const jobModelScope = (job: ShadowEvalJob): React.ReactNode =>
 const jobHeadline = (job: ShadowEvalJob): React.ReactNode =>
   job.direction === "reverse" ? (
     <>
-      Comparing <span className="font-mono text-xs">{jobRouters(job)}</span> to{" "}
+      Comparing <span className="font-mono text-xs">{jobRouters(job)}</span> {translateUi("ui.663ea1bfffe5")}{" "}
       <span className="font-mono text-xs">{job.baseline_model}</span> on {job.shadow_percentage}% of{" "}
       <span className="font-mono text-xs">{shadowedTargetsLabel(job)}</span> traffic{jobModelScope(job)}
     </>
@@ -260,12 +262,14 @@ const VerdictBar: React.FC<{ direction: ShadowEvalDirection; results: NonNullabl
 };
 
 const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>Target</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead>{uiT("ui.920e413c7d41")}</TableHead>
           {["Budget used", "Router wins", `${otherArmLabel(job.direction)} wins`].map((label) => (
             <TableHead key={label} className="text-right">
               {label}
@@ -455,6 +459,8 @@ const PreviousJob: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
 };
 
 const PreviousJobs: React.FC<{ jobs: readonly ShadowEvalJob[] }> = ({ jobs }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(false);
   if (jobs.length === 0) return null;
   return (
@@ -466,7 +472,7 @@ const PreviousJobs: React.FC<{ jobs: readonly ShadowEvalJob[] }> = ({ jobs }) =>
         className="flex w-full items-center justify-between gap-3 px-6 py-3 text-left hover:bg-muted/50"
       >
         <span className="text-sm font-medium text-foreground">Previous evaluations ({jobs.length})</span>
-        <span className="text-xs text-muted-foreground">{open ? "Hide" : "Show"}</span>
+        <span className="text-xs text-muted-foreground">{open ? uiT("ui.ac20a57bfde0") : "Show"}</span>
       </button>
       {open && (
         <div className="border-t">

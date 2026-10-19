@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * SectionHeader - Datadog-style header with icon, label, metrics, and copy
  */
@@ -28,6 +30,8 @@ export function SectionHeader({
   onToggleCollapse,
   turnCount,
 }: SectionHeaderProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const summary = (
     <>
       {onToggleCollapse &&
@@ -43,15 +47,26 @@ export function SectionHeader({
         ) : (
           <span className="text-sm opacity-60 grayscale">✨</span>
         )}
-        <span className="text-sm font-medium">{type === "input" ? "Input" : "Output"}</span>
+        <span className="text-sm font-medium">
+          {type === "input" ? uiT("ui.36ecb4f86691") : uiT("ui.b2439bcb8dee")}
+        </span>
       </div>
 
-      {tokens !== undefined && <span className="text-xs text-muted-foreground">Tokens: {tokens.toLocaleString()}</span>}
+      {tokens !== undefined && (
+        <span className="text-xs text-muted-foreground">
+          {uiT("logs.tokensLabel", { tokens: tokens.toLocaleString() })}
+        </span>
+      )}
 
-      {cost !== undefined && <span className="text-xs text-muted-foreground">Cost: ${cost.toFixed(6)}</span>}
+      {cost !== undefined && (
+        <span className="text-xs text-muted-foreground">
+          {uiT("ui.564970ae3734")}
+          {cost.toFixed(6)}
+        </span>
+      )}
 
       {turnCount !== undefined && turnCount > 0 && (
-        <span className="text-xs text-muted-foreground">Turns: {turnCount}</span>
+        <span className="text-xs text-muted-foreground">{uiT("logs.turnsLabel", { turns: turnCount })}</span>
       )}
     </>
   );
@@ -82,7 +97,7 @@ export function SectionHeader({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label={type === "input" ? "Copy input" : "Copy output"}
+              aria-label={type === "input" ? uiT("ui.f5b9c167e606") : uiT("ui.8577c32cb26f")}
               onClick={(e) => {
                 e.stopPropagation();
                 onCopy();
@@ -92,7 +107,7 @@ export function SectionHeader({
         >
           <Copy />
         </TooltipTrigger>
-        <TooltipContent>Copy</TooltipContent>
+        <TooltipContent>{uiT("ui.e21f935f11d7")}</TooltipContent>
       </Tooltip>
     </div>
   );

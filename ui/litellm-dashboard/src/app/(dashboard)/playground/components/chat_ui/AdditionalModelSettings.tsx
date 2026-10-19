@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Info } from "lucide-react";
 import React, { useEffect, useId, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,6 +39,8 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
   onStreamingChange,
   showAdvancedParams = true,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [internalUseAdvancedParams, setInternalUseAdvancedParams] = useState(false);
   const useAdvancedParams =
     externalUseAdvancedParams !== undefined ? externalUseAdvancedParams : internalUseAdvancedParams;
@@ -170,7 +174,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
                   rel="noopener noreferrer"
                   className="text-info hover:text-info/80"
                 >
-                  Learn more
+                  {uiT("ui.1445799c033a")}
                 </a>
               </p>
             </PopoverContent>
@@ -186,7 +190,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <label htmlFor={temperatureId} className={cn("text-sm", disabledTextColor)}>
-                  Temperature
+                  {uiT("ui.b958ce8b871a")}
                 </label>
                 <Tooltip>
                   <TooltipTrigger aria-label="Help: Temperature">
@@ -217,7 +221,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
               step={0.1}
               value={localTemperature}
               disabled={!useAdvancedParams}
-              aria-label="Temperature"
+              aria-label={uiT("ui.b958ce8b871a")}
               className="w-full accent-primary disabled:cursor-not-allowed"
               onChange={(event) => handleTemperatureChange(Number(event.target.value))}
             />

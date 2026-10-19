@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, MoreHorizontal, Trash2 } from "lucide-react";
@@ -137,32 +138,60 @@ export const getAttachmentTableColumns = ({
   },
   {
     id: "teams",
-    meta: { title: "Teams", skeleton: "chips" },
-    header: "Teams",
+    meta: {
+      get title() {
+        return translateUi("ui.1e1a1c078af2");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.1e1a1c078af2");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.teams ?? []} />,
   },
   {
     id: "keys",
-    meta: { title: "Keys", skeleton: "chips" },
-    header: "Keys",
+    meta: {
+      get title() {
+        return translateUi("ui.f0d66a79c138");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.f0d66a79c138");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.keys ?? []} />,
   },
   {
     id: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: {
+      get title() {
+        return translateUi("ui.d17d2d78d76e");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.d17d2d78d76e");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.models ?? []} />,
   },
   {
     id: "tags",
-    meta: { title: "Tags", skeleton: "chips" },
-    header: "Tags",
+    meta: {
+      get title() {
+        return translateUi("ui.1331275bc537");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.1331275bc537");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.tags ?? []} />,
@@ -184,13 +213,21 @@ export const getAttachmentTableColumns = ({
   {
     id: "default",
     accessorFn: (row) => (row.default ? 1 : 0),
-    meta: { title: "Default" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Default" />,
+    meta: {
+      get title() {
+        return translateUi("ui.21b111cbfe6e");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.21b111cbfe6e")} />,
     size: 100,
     enableSorting: true,
     cell: ({ row }) =>
       row.original.default ? (
-        <StatusBadge tone="info" label="Default" tooltip="Applied only when no non-default attachment matches" />
+        <StatusBadge
+          tone="info"
+          label={translateUi("ui.21b111cbfe6e")}
+          tooltip="Applied only when no non-default attachment matches"
+        />
       ) : (
         <span className="text-muted-foreground">-</span>
       ),
@@ -198,8 +235,12 @@ export const getAttachmentTableColumns = ({
   {
     id: "created_at",
     accessorFn: (row) => row.created_at ?? "",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: {
+      get title() {
+        return translateUi("ui.3d44337010bf");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.3d44337010bf")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -207,7 +248,7 @@ export const getAttachmentTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 88,
     enableSorting: false,
     enableHiding: false,

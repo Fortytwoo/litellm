@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMemo, useState } from "react";
 
@@ -36,6 +37,8 @@ interface ScopedSavingsTabProps {
 }
 
 const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote }: ScopedSavingsTabProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { dateValue, onDateChange, results, loading, failed } = useScopedDailyActivityRange(
     accessToken,
     scope,
@@ -100,7 +103,7 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
 
       <Card>
         <CardHeader>
-          <CardTitle>Savings</CardTitle>
+          <CardTitle>{uiT("ui.ed46218066a7")}</CardTitle>
           <CardDescription>{savingsSubtitle}</CardDescription>
           <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
             <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />

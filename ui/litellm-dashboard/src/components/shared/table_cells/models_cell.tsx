@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { deriveKeyModelScope } from "@/components/key_scope";
 import { getModelDisplayName } from "@/components/key_team_helpers/fetch_available_models_team_key";
@@ -24,6 +25,8 @@ const formatModel = (model: string): string => {
 };
 
 export function ModelsCell({ models, maxVisible = 3, allowedRoutes, keyType }: ModelsCellProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!Array.isArray(models) || models.length === 0) {
     const scope = deriveKeyModelScope(allowedRoutes, keyType);
     if (!scope.hasModelAccess) {
@@ -38,7 +41,7 @@ export function ModelsCell({ models, maxVisible = 3, allowedRoutes, keyType }: M
         />
       );
     }
-    return <Badge variant="secondary">All Proxy Models</Badge>;
+    return <Badge variant="secondary">{uiT("ui.72d4bf586944")}</Badge>;
   }
 
   const visible = models.slice(0, maxVisible);

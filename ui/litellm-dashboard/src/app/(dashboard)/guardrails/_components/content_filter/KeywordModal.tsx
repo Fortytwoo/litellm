@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -29,6 +31,8 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
   onAdd,
   onCancel,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
@@ -48,7 +52,7 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
           </div>
 
           <div>
-            <p className="font-semibold">Action</p>
+            <p className="font-semibold">{uiT("ui.64cff1319d2f")}</p>
             <p className="mt-1 mb-2 text-muted-foreground">
               Choose what action the guardrail should take when this keyword is detected
             </p>
@@ -57,7 +61,7 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
               value={action}
               onValueChange={(value: string | null) => value && onActionChange(value as "BLOCK" | "MASK")}
             >
-              <SelectTrigger className="w-full" aria-label="Action">
+              <SelectTrigger className="w-full" aria-label={uiT("ui.64cff1319d2f")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -84,9 +88,9 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
 
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
-          <Button onClick={onAdd}>Add</Button>
+          <Button onClick={onAdd}>{uiT("ui.9fd728c66c9a")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 
@@ -25,6 +26,8 @@ function formatTimestamp(ts?: string): string {
 }
 
 export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Sheet
       open={!!row}
@@ -34,7 +37,7 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
     >
       <SheetContent className="overflow-y-auto data-[side=right]:w-full data-[side=right]:max-w-full data-[side=right]:sm:w-[720px] data-[side=right]:sm:max-w-full">
         <SheetHeader className="border-b">
-          <SheetTitle>{row ? <code className={CODE_CLASS}>{row.key}</code> : "Memory"}</SheetTitle>
+          <SheetTitle>{row ? <code className={CODE_CLASS}>{row.key}</code> : uiT("ui.c3963aedaac6")}</SheetTitle>
         </SheetHeader>
         {row && (
           <div className="flex flex-col gap-4 px-4 pb-4">
@@ -44,13 +47,13 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
                 <code className={CODE_CLASS}>{row.memory_id}</code>
               </div>
               <div>
-                <span className={`block ${LABEL_CLASS}`}>User ID</span>
+                <span className={`block ${LABEL_CLASS}`}>{uiT("ui.7967e089a7b9")}</span>
                 <span className={row.user_id ? "text-sm text-foreground" : "text-sm text-muted-foreground"}>
                   {row.user_id ?? "-"}
                 </span>
               </div>
               <div>
-                <span className={`block ${LABEL_CLASS}`}>Team ID</span>
+                <span className={`block ${LABEL_CLASS}`}>{uiT("ui.fa2758a6173a")}</span>
                 <span className={row.team_id ? "text-sm text-foreground" : "text-sm text-muted-foreground"}>
                   {row.team_id ?? "-"}
                 </span>
@@ -62,18 +65,18 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
             </div>
             {row.metadata !== undefined && row.metadata !== null && (
               <div>
-                <span className={LABEL_CLASS}>Metadata</span>
+                <span className={LABEL_CLASS}>{uiT("ui.9eddf573cb50")}</span>
                 <p className={`${BLOCK_CLASS} text-xs`}>{JSON.stringify(row.metadata, null, 2)}</p>
               </div>
             )}
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span>
-                Created {formatTimestamp(row.created_at)}
+                {uiT("ui.d70b9e24bca2")} {formatTimestamp(row.created_at)}
                 {row.created_by ? ` by ${row.created_by}` : ""}
               </span>
               <span aria-hidden="true">·</span>
               <span>
-                Updated {formatTimestamp(row.updated_at)}
+                {uiT("ui.3a5ecca188c0")} {formatTimestamp(row.updated_at)}
                 {row.updated_by ? ` by ${row.updated_by}` : ""}
               </span>
             </div>

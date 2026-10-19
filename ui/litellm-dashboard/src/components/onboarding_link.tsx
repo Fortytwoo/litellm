@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useId, useRef } from "react";
 import { Copy } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -59,6 +61,8 @@ export default function OnboardingModal({
   invitationLinkData,
   modalType = "invitation",
 }: OnboardingProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const linkFieldId = useId();
   const copyButtonRef = useRef<HTMLButtonElement>(null);
   const isInvitation = modalType === "invitation";
@@ -85,7 +89,7 @@ export default function OnboardingModal({
         </DialogHeader>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <p className="text-xs text-muted-foreground">User ID</p>
+            <p className="text-xs text-muted-foreground">{uiT("ui.7967e089a7b9")}</p>
             <p className="font-mono text-sm break-all">{invitationLinkData?.user_id}</p>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -101,7 +105,7 @@ export default function OnboardingModal({
                   onClick={() => copyToClipboard(invitationUrl)}
                 >
                   <Copy />
-                  Copy
+                  {uiT("ui.e21f935f11d7")}
                 </InputGroupButton>
               </InputGroupAddon>
             </InputGroup>

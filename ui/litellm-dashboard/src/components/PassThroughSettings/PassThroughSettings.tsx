@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import {
   AlertDialog,
@@ -38,6 +40,8 @@ export interface passThroughItem {
 }
 
 const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, userRole, userID, premiumUser }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [generalSettings, setGeneralSettings] = useState<passThroughItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedEndpointId, setSelectedEndpointId] = useState<string | null>(null);
@@ -152,9 +156,9 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
             <Button variant="destructive" onClick={confirmDelete}>
-              Delete
+              {uiT("ui.e2d0a54968ea")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

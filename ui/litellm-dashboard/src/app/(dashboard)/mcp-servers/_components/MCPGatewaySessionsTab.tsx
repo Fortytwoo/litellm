@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -92,6 +93,8 @@ function GroupCountTable({
   labelHeader: string;
   onDisconnectUser?: (userId: string) => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <section aria-label={title} className="rounded-lg border border-border bg-card">
       <h3 className="border-b border-border px-4 py-2 text-sm font-semibold text-foreground">{title}</h3>
@@ -100,7 +103,7 @@ function GroupCountTable({
           <TableRow>
             <TableHead>{labelHeader}</TableHead>
             <TableHead className="text-right">Sessions</TableHead>
-            {onDisconnectUser ? <TableHead className="text-right">Actions</TableHead> : null}
+            {onDisconnectUser ? <TableHead className="text-right">{uiT("ui.ff8059dc6752")}</TableHead> : null}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -132,6 +135,8 @@ function SessionsBody({
   isLoading: boolean;
   onDisconnect: ((selector: MCPGatewaySessionSelector) => void) | null;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (isLoading) {
     return (
       <div
@@ -167,7 +172,7 @@ function SessionsBody({
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <StatCard label="Live sessions" value={data.total_sessions} />
         <StatCard label="AI clients" value={data.by_client.length} />
-        <StatCard label="Users" value={data.by_user.length} />
+        <StatCard label={uiT("ui.6b0cc904d081")} value={data.by_user.length} />
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <GroupCountTable title="Sessions by AI client" labelHeader="Client" groups={data.by_client} />
@@ -185,15 +190,15 @@ function SessionsBody({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Session</TableHead>
+              <TableHead>{uiT("ui.6959b4159575")}</TableHead>
               <TableHead>Client</TableHead>
-              <TableHead>User</TableHead>
+              <TableHead>{uiT("ui.b512d97e7cbf")}</TableHead>
               <TableHead>Key alias</TableHead>
-              <TableHead>Team</TableHead>
+              <TableHead>{uiT("ui.5985039f106d")}</TableHead>
               <TableHead>Client IP</TableHead>
               <TableHead className="text-right">Idle</TableHead>
               <TableHead className="text-right">In flight</TableHead>
-              {onDisconnect ? <TableHead className="text-right">Actions</TableHead> : null}
+              {onDisconnect ? <TableHead className="text-right">{uiT("ui.ff8059dc6752")}</TableHead> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -257,6 +262,8 @@ interface MCPGatewaySessionsTabProps {
 }
 
 export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewaySessionsTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [pendingSelector, setPendingSelector] = useState<MCPGatewaySessionSelector | null>(null);
   const queryOptions = {
@@ -295,7 +302,7 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
           aria-label="Refresh live connections"
         >
           <RefreshCw className={`size-4 ${isFetching ? "animate-spin" : ""}`} />
-          Refresh
+          {uiT("ui.0e9161011702")}
         </Button>
       </div>
 
@@ -333,7 +340,7 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button variant="outline" onClick={() => setPendingSelector(null)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button variant="destructive" onClick={confirmDisconnect} disabled={terminate.isPending}>
               Disconnect

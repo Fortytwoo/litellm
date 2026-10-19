@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
@@ -41,10 +44,30 @@ const readNumber = (raw: unknown): number | null => {
 const readPeriod = (raw: unknown): string | null => (typeof raw === "string" && raw !== "" ? raw : null);
 
 export const MODEL_BUDGET_PERIOD_OPTIONS = [
-  { value: "1h", label: "Hourly" },
-  { value: "24h", label: "Daily" },
-  { value: "7d", label: "Weekly" },
-  { value: "30d", label: "Monthly" },
+  {
+    value: "1h",
+    get label() {
+      return translateUi("ui.eab0cd8fdf9b");
+    },
+  },
+  {
+    value: "24h",
+    get label() {
+      return translateUi("ui.b36c2611dcdf");
+    },
+  },
+  {
+    value: "7d",
+    get label() {
+      return translateUi("ui.2975132481a7");
+    },
+  },
+  {
+    value: "30d",
+    get label() {
+      return translateUi("ui.9b11f6b707d2");
+    },
+  },
   { value: "1mo", label: "Calendar month" },
 ];
 
@@ -90,6 +113,8 @@ export function ModelMaxBudgetEditor({
   premiumUser,
   usage,
 }: ModelMaxBudgetEditorProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [entries, setEntries] = useState<ModelBudgetEntry[]>(() => modelMaxBudgetToEntries(value));
 
   const emitChange = (updated: ModelBudgetEntry[]) => {
@@ -151,13 +176,13 @@ export function ModelMaxBudgetEditor({
             </button>
 
             <div className="mb-3">
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Model</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">{uiT("ui.5e2c614c23f0")}</label>
               <SearchSelect
                 options={modelOptions.map((model) => ({ label: model, value: model }))}
                 value={entry.model}
                 onValueChange={(model) => updateEntry(entry.id, { model })}
                 placeholder="Select model"
-                emptyText="No models found"
+                emptyText={uiT("ui.a650c298cf44")}
                 disabled={!premiumUser}
               />
             </div>

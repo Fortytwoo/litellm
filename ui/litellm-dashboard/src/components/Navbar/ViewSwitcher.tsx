@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { usePathname } from "next/navigation";
 import {
@@ -23,7 +26,7 @@ function isRoute(pathname: string, href: string): boolean {
 function activeLabelFor(isChatRoute: boolean, isMoyaiRoute: boolean, pluginLabel: string | undefined): string {
   if (isChatRoute) return "Chat";
   if (isMoyaiRoute) return "Moyai";
-  return pluginLabel ?? "AI Gateway";
+  return pluginLabel ?? translateUi("ui.47219de2f95b");
 }
 
 interface ViewSwitcherItem {
@@ -34,6 +37,8 @@ interface ViewSwitcherItem {
 }
 
 export default function ViewSwitcher() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { mode, setMode, plugins } = usePluginMode();
   const { data: uiSettings } = useUISettings();
   const pathname = usePathname();
@@ -49,7 +54,7 @@ export default function ViewSwitcher() {
   const activeLabel = activeLabelFor(isChatRoute, isMoyaiRoute, plugins.find((p) => p.name === mode)?.display_name);
 
   const modeEntries = [
-    { key: GATEWAY, label: "AI Gateway" },
+    { key: GATEWAY, label: uiT("ui.47219de2f95b") },
     ...plugins.map((p) => ({ key: p.name, label: p.display_name })),
   ];
 

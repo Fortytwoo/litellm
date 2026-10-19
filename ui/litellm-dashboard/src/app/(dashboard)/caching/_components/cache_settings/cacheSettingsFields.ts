@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export type CacheFieldType =
   | "string"
   | "password"
@@ -125,7 +126,9 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   },
   {
     name: "password",
-    label: "Password",
+    get label() {
+      return translateUi("ui.e7cf3ef4f17c");
+    },
     type: "password",
     section: "connection",
     helpText: "Redis server password",

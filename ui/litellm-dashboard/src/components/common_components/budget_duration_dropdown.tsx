@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -30,6 +32,8 @@ const BudgetDurationDropdown: React.FC<BudgetDurationDropdownProps> = ({
   placeholder = "n/a",
   showNeverResets = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Select items={DURATION_LABELS} value={value || null} onValueChange={onChange}>
       <SelectTrigger id={id} className={`w-full ${className}`} style={style}>
@@ -37,7 +41,9 @@ const BudgetDurationDropdown: React.FC<BudgetDurationDropdownProps> = ({
       </SelectTrigger>
       <SelectContent>
         <SelectItem value={null}>{placeholder}</SelectItem>
-        {showNeverResets ? <SelectItem value={NEVER_RESETS_BUDGET_DURATION}>Never resets</SelectItem> : null}
+        {showNeverResets ? (
+          <SelectItem value={NEVER_RESETS_BUDGET_DURATION}>{uiT("ui.f95c8af3735c")}</SelectItem>
+        ) : null}
         <SelectItem value="1h">hourly</SelectItem>
         <SelectItem value="24h">daily</SelectItem>
         <SelectItem value="7d">weekly</SelectItem>

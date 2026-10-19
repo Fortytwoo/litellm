@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { PageContent } from "@/components/shared/Page";
 import { useState } from "react";
 import { PaginationState } from "@tanstack/react-table";
@@ -9,6 +11,8 @@ import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { DeletedKeysTable } from "./DeletedKeysTable/DeletedKeysTable";
 
 export default function DeletedKeysPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { premiumUser } = useAuthorized();
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 50 });
 
@@ -19,7 +23,7 @@ export default function DeletedKeysPage() {
       {!premiumUser && (
         <Alert className="shrink-0">
           <Info />
-          <AlertTitle>Coming soon to Enterprise</AlertTitle>
+          <AlertTitle>{uiT("ui.04ed5d8219ac")}</AlertTitle>
           <AlertDescription>
             Deleted key auditing is graduating from beta into our Enterprise audit &amp; compliance suite.
           </AlertDescription>

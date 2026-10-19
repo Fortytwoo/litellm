@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
 import { Alert, AlertDescription, AlertTitle, AlertAction } from "@/components/shared/Alert";
 import { Button } from "@/components/ui/button";
@@ -87,6 +89,8 @@ interface PoliciesPanelProps {
 }
 
 const PoliciesPanel: React.FC<PoliciesPanelProps> = ({ accessToken, userRole }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [policiesList, setPoliciesList] = useState<Policy[]>([]);
   const [attachmentsList, setAttachmentsList] = useState<PolicyAttachment[]>([]);
   const [guardrailsList, setGuardrailsList] = useState<Guardrail[]>([]);
@@ -445,7 +449,7 @@ const PoliciesPanel: React.FC<PoliciesPanelProps> = ({ accessToken, userRole }) 
             Templates
           </TabsTrigger>
           <TabsTrigger value="policies" className="flex-none rounded-none px-4 py-2">
-            Policies
+            {uiT("ui.d3ad1f1f8c9c")}
           </TabsTrigger>
           <TabsTrigger value="attachments" className="flex-none rounded-none px-4 py-2">
             Attachments
@@ -523,9 +527,9 @@ const PoliciesPanel: React.FC<PoliciesPanelProps> = ({ accessToken, userRole }) 
             message={`Are you sure you want to delete policy: ${policyToDelete?.policy_name}? This action cannot be undone.`}
             resourceInformationTitle="Policy Information"
             resourceInformation={[
-              { label: "Name", value: policyToDelete?.policy_name },
+              { label: uiT("ui.dcd1d5223f73"), value: policyToDelete?.policy_name },
               { label: "ID", value: policyToDelete?.policy_id, code: true },
-              { label: "Description", value: policyToDelete?.description || "-" },
+              { label: uiT("ui.526e0087cc3f"), value: policyToDelete?.description || "-" },
               { label: "Inherits From", value: policyToDelete?.inherit || "-" },
             ]}
             onCancel={handleDeleteCancel}
@@ -546,19 +550,20 @@ const PoliciesPanel: React.FC<PoliciesPanelProps> = ({ accessToken, userRole }) 
                 <strong>Global (*)</strong> - Applies to all requests
               </li>
               <li>
-                <strong>Teams</strong> - Applies only to specific teams
+                <strong>{uiT("ui.1e1a1c078af2")}</strong> - Applies only to specific teams
               </li>
               <li>
-                <strong>Keys</strong> - Applies only to specific API keys (supports wildcards like dev-*)
+                <strong>{uiT("ui.f0d66a79c138")}</strong> - Applies only to specific API keys (supports wildcards like
+                dev-*)
               </li>
               <li>
-                <strong>Models</strong> - Applies only when specific models are used
+                <strong>{uiT("ui.d17d2d78d76e")}</strong> - Applies only when specific models are used
               </li>
               <li>
-                <strong>Tags</strong> - Matches tags from key/team <code>metadata.tags</code> or tags passed dynamically
-                in the request body (<code>metadata.tags</code>). Use this to enforce policies across groups, e.g.
-                &quot;all keys tagged <code>healthcare</code> get HIPAA guardrails.&quot; Supports wildcards (
-                <code>prod-*</code>).
+                <strong>{uiT("ui.1331275bc537")}</strong> - Matches tags from key/team <code>metadata.tags</code> or
+                tags passed dynamically in the request body (<code>metadata.tags</code>). Use this to enforce policies
+                across groups, e.g. &quot;all keys tagged <code>healthcare</code> get HIPAA guardrails.&quot; Supports
+                wildcards (<code>prod-*</code>).
               </li>
             </ul>
             <a

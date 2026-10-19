@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMCPSemanticFilterSettings } from "@/app/(dashboard)/hooks/mcpSemanticFilterSettings/useMCPSemanticFilterSettings";
 import { useUpdateMCPSemanticFilterSettings } from "@/app/(dashboard)/hooks/mcpSemanticFilterSettings/useUpdateMCPSemanticFilterSettings";
@@ -81,6 +82,8 @@ const parseTopK = (raw: string, rawAsNumber: number): number | null =>
   raw === "" || Number.isNaN(rawAsNumber) ? null : rawAsNumber;
 
 const SaveSuccessAlert = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [dismissed, setDismissed] = useState(false);
 
   if (dismissed) {
@@ -92,7 +95,7 @@ const SaveSuccessAlert = () => {
       <CircleCheck />
       <AlertTitle>Settings saved successfully</AlertTitle>
       <AlertAction>
-        <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={() => setDismissed(true)}>
+        <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.7d9eb7acb13e")} onClick={() => setDismissed(true)}>
           <X className="size-4" />
         </Button>
       </AlertAction>
@@ -101,6 +104,8 @@ const SaveSuccessAlert = () => {
 };
 
 export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFilterSettingsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data, isLoading, isError, error } = useMCPSemanticFilterSettings();
   const {
     mutate: updateSettings,
@@ -284,7 +289,7 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
                               onValueChange={(selected) => commitChange(onChange, selected)}
                               allowClear={false}
                               placeholder={loadingModels ? "Loading models..." : "Select embedding model"}
-                              emptyText={loadingModels ? "Loading..." : "No embedding models available"}
+                              emptyText={loadingModels ? uiT("ui.47d2a515ef2f") : "No embedding models available"}
                               disabled={isUpdating || loadingModels}
                             />
                           )}

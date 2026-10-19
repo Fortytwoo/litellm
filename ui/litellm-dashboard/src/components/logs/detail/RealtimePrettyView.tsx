@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * RealtimePrettyView - Structured pretty view for OpenAI Realtime API logs
  * Displays session config, conversation turns, and token usage
@@ -82,6 +84,8 @@ export function isRealtimeResponse(response: any): boolean {
 }
 
 export function RealtimePrettyView({ response, metrics }: RealtimePrettyViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const events: RealtimeEvent[] = response?.results || [];
   const usage = response?.usage;
 
@@ -114,7 +118,7 @@ export function RealtimePrettyView({ response, metrics }: RealtimePrettyViewProp
             fontSize: 13,
           }}
         >
-          No recognized realtime events found
+          {uiT("ui.cb75c7a2198f")}
         </div>
       )}
     </div>
@@ -122,6 +126,8 @@ export function RealtimePrettyView({ response, metrics }: RealtimePrettyViewProp
 }
 
 function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCount: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
@@ -162,7 +168,7 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Settings className="size-3.5 text-muted-foreground" />
-            <span style={{ fontWeight: 500, fontSize: 14 }}>Session</span>
+            <span style={{ fontWeight: 500, fontSize: 14 }}>{uiT("ui.6959b4159575")}</span>
           </div>
           <span className="text-muted-foreground" style={{ fontSize: 12 }}>
             {session.model}
@@ -206,15 +212,15 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
               fontSize: 13,
             }}
           >
-            <ConfigRow label="Model" value={session.model} />
-            <ConfigRow label="Voice" value={session.voice} />
-            <ConfigRow label="Temperature" value={session.temperature} />
-            <ConfigRow label="Max Output Tokens" value={session.max_response_output_tokens} />
-            <ConfigRow label="Input Audio Format" value={session.input_audio_format} />
-            <ConfigRow label="Output Audio Format" value={session.output_audio_format} />
-            {session.turn_detection && <ConfigRow label="Turn Detection" value={session.turn_detection.type} />}
+            <ConfigRow label={uiT("ui.5e2c614c23f0")} value={session.model} />
+            <ConfigRow label={uiT("ui.87bf2bc08589")} value={session.voice} />
+            <ConfigRow label={uiT("ui.b958ce8b871a")} value={session.temperature} />
+            <ConfigRow label={uiT("ui.e9d8976be660")} value={session.max_response_output_tokens} />
+            <ConfigRow label={uiT("ui.f7805b63895f")} value={session.input_audio_format} />
+            <ConfigRow label={uiT("ui.8999b13d165e")} value={session.output_audio_format} />
+            {session.turn_detection && <ConfigRow label={uiT("ui.cfeaf4c444d8")} value={session.turn_detection.type} />}
             {session.tools && session.tools.length > 0 && (
-              <ConfigRow label="Tools" value={`${session.tools.length} tool(s)`} />
+              <ConfigRow label={uiT("ui.ea93d6a262ec")} value={`${session.tools.length} tool(s)`} />
             )}
           </div>
 
@@ -230,7 +236,7 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
                   marginBottom: 4,
                 }}
               >
-                Instructions
+                {uiT("ui.934652dce41d")}
               </span>
               <div
                 style={{
@@ -316,6 +322,8 @@ function ConversationCard({
 }
 
 function ResponseTurn({ response, index }: { response: RealtimeResponse; index: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const outputs = response.output || [];
   const usage = response.usage;
 
@@ -364,13 +372,19 @@ function ResponseTurn({ response, index }: { response: RealtimeResponse; index: 
       ))}
 
       {/* Token breakdown if available */}
-      {usage?.input_token_details && <TokenBreakdown label="Input" details={usage.input_token_details} />}
-      {usage?.output_token_details && <TokenBreakdown label="Output" details={usage.output_token_details} />}
+      {usage?.input_token_details && (
+        <TokenBreakdown label={uiT("ui.36ecb4f86691")} details={usage.input_token_details} />
+      )}
+      {usage?.output_token_details && (
+        <TokenBreakdown label={uiT("ui.b2439bcb8dee")} details={usage.output_token_details} />
+      )}
     </div>
   );
 }
 
 function OutputMessage({ output }: { output: RealtimeOutputItem }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const contents = output.content || [];
   const hasTranscripts = contents.some((c) => c.transcript || c.text);
 
@@ -388,7 +402,7 @@ function OutputMessage({ output }: { output: RealtimeOutputItem }) {
           marginBottom: 3,
         }}
       >
-        {output.role?.toUpperCase() || "ASSISTANT"}
+        {output.role?.toUpperCase() || uiT("ui.ac1c297327ac")}
       </span>
       {contents.map((c, cIdx) => {
         const text = c.transcript || c.text;
@@ -440,6 +454,8 @@ function OutputMessage({ output }: { output: RealtimeOutputItem }) {
 }
 
 function TokenBreakdown({ label, details }: { label: string; details: Record<string, any> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const entries = Object.entries(details).filter(
     ([, v]) => typeof v === "number" || (typeof v === "object" && v !== null),
   );
@@ -452,7 +468,7 @@ function TokenBreakdown({ label, details }: { label: string; details: Record<str
         className="text-muted-foreground"
         style={{ fontSize: 10, letterSpacing: "0.5px", textTransform: "uppercase" }}
       >
-        {label} Token Breakdown
+        {label} {uiT("ui.c26ddab833c1")}
       </span>
       <div
         style={{

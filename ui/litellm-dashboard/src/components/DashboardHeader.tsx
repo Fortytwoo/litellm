@@ -28,10 +28,13 @@ import { Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import { CommandPaletteTrigger } from "@/components/CommandPalette/CommandPaletteTrigger";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Top bar for the dashboard shell. Sits only over the content column (the brand
 // lives in the sidebar header); mirrors the design's breadcrumb-left / tools-right layout.
 export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: ReactNode }) {
+  const { t } = useLanguage();
   const { title } = getBreadcrumb(usePathname());
   const isDesktop = useMediaQuery("(min-width: 768px)", { initializeWithValue: false });
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
@@ -75,6 +78,7 @@ export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: Rea
         <LiteAdmin />
         <DocsLink />
         <BlogDropdown />
+        <LanguageSwitcher />
         {!hideCommunityLinks && <CommunityEngagementButtons />}
         <ToolbarSeparator />
         <ThemeToggle />
@@ -84,11 +88,13 @@ export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: Rea
         <CommandPaletteTrigger mobile />
         <NotificationsBell />
         <Popover open={!isDesktop && mobileToolsOpen} onOpenChange={setMobileToolsOpen}>
-          <PopoverTrigger render={<Button variant="ghost" size="icon" className="size-11" aria-label="More options" />}>
+          <PopoverTrigger
+            render={<Button variant="ghost" size="icon" className="size-11" aria-label={t("nav.moreOptions")} />}
+          >
             <Ellipsis />
           </PopoverTrigger>
           <PopoverContent align="end" className="max-w-[calc(100vw-2rem)]">
-            <PopoverTitle>Gateway tools</PopoverTitle>
+            <PopoverTitle>{t("nav.gatewayTools")}</PopoverTitle>
             <ViewSwitcher />
             {showWorkerSwitch && <WorkerDropdown onWorkerSwitch={handleWorkerSwitch} />}
             <div className="flex flex-wrap items-center gap-2">
@@ -96,6 +102,7 @@ export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: Rea
               <ThemeToggle />
               <DocsLink />
               <BlogDropdown />
+              <LanguageSwitcher />
               {!hideCommunityLinks && <CommunityEngagementButtons />}
             </div>
           </PopoverContent>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { updatePassThroughEndpoint, deletePassThroughEndpointsCall } from "./networking";
 import { Eye, EyeOff } from "lucide-react";
@@ -142,6 +144,8 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
   premiumUser = false,
   onEndpointUpdated,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [endpointData, setEndpointData] = useState<PassThroughEndpoint | null>(initialEndpointData);
   const [loading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -228,7 +232,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
   };
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return <div className="p-4">{uiT("ui.47d2a515ef2f")}</div>;
   }
 
   if (!endpointData) {
@@ -250,11 +254,11 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
       <Tabs defaultValue="overview">
         <TabsList variant="line" className="mb-4 h-auto w-full justify-start rounded-none border-b p-0">
           <TabsTrigger value="overview" className="flex-none rounded-none px-4 py-2">
-            Overview
+            {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           {isAdmin && (
             <TabsTrigger value="settings" className="flex-none rounded-none px-4 py-2">
-              Settings
+              {uiT("ui.74a883a037bc")}
             </TabsTrigger>
           )}
         </TabsList>
@@ -340,7 +344,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
             {endpointData.guardrails && Object.keys(endpointData.guardrails).length > 0 && (
               <Card className="block mt-6 p-6">
                 <div className="flex justify-between items-center">
-                  <p className="text-sm font-medium">Guardrails</p>
+                  <p className="text-sm font-medium">{uiT("ui.443f975eefe8")}</p>
                   <Badge variant="secondary">{Object.keys(endpointData.guardrails).length} guardrails configured</Badge>
                 </div>
                 <div className="mt-4 space-y-2">
@@ -372,7 +376,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                   <div className="space-x-2">
                     {!isEditing && (
                       <>
-                        <Button onClick={() => setIsEditing(true)}>Edit Settings</Button>
+                        <Button onClick={() => setIsEditing(true)}>{uiT("ui.cddc5824575b")}</Button>
                         <Button onClick={handleDeleteEndpoint} variant="destructive">
                           Delete Endpoint
                         </Button>
@@ -490,9 +494,9 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
 
                     <div className="mt-6 flex justify-end gap-2">
                       <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
-                        Cancel
+                        {uiT("ui.19766ed6ccb2")}
                       </Button>
-                      <Button type="submit">Save Changes</Button>
+                      <Button type="submit">{uiT("ui.35322b5bb5a2")}</Button>
                     </div>
                   </form>
                 ) : (

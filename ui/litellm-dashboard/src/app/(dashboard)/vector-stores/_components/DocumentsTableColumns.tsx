@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, MoreHorizontal, Trash2 } from "lucide-react";
@@ -18,7 +20,12 @@ import { copyToClipboard } from "@/utils/dataUtils";
 const STATUS_CONFIG: Record<DocumentUpload["status"], { tone: StatusTone; label: string }> = {
   uploading: { tone: "info", label: "Uploading" },
   done: { tone: "success", label: "Ready" },
-  error: { tone: "error", label: "Error" },
+  error: {
+    tone: "error",
+    get label() {
+      return translateUi("ui.54a0e8c17ebb");
+    },
+  },
   removed: { tone: "neutral", label: "Removed" },
 };
 
@@ -30,6 +37,8 @@ function formatFileSize(bytes?: number): string {
 }
 
 function DocumentRowActions({ document, onRemove }: { document: DocumentUpload; onRemove: (uid: string) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -53,7 +62,7 @@ function DocumentRowActions({ document, onRemove }: { document: DocumentUpload; 
           onClick={() => onRemove(document.uid)}
         >
           <Trash2 />
-          Remove
+          {uiT("ui.c3812fc4acb8")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -68,8 +77,14 @@ export const getDocumentsTableColumns = ({ onRemove }: DocumentsTableColumnsDeps
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Name" },
-    header: "Name",
+    meta: {
+      get title() {
+        return translateUi("ui.dcd1d5223f73");
+      },
+    },
+    get header() {
+      return translateUi("ui.dcd1d5223f73");
+    },
     enableSorting: false,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
@@ -85,8 +100,15 @@ export const getDocumentsTableColumns = ({ onRemove }: DocumentsTableColumnsDeps
   {
     id: "status",
     accessorKey: "status",
-    meta: { title: "Status", skeleton: "badge" },
-    header: "Status",
+    meta: {
+      get title() {
+        return translateUi("ui.920e413c7d41");
+      },
+      skeleton: "badge",
+    },
+    get header() {
+      return translateUi("ui.920e413c7d41");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -97,7 +119,7 @@ export const getDocumentsTableColumns = ({ onRemove }: DocumentsTableColumnsDeps
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

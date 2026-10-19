@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Plus, X } from "lucide-react";
 import React from "react";
@@ -77,6 +78,8 @@ const BoundedNumberInput: React.FC<BoundedNumberInputProps> = ({ control, min, m
 };
 
 const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, control }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { field } = useController({ control, name: "criteria", defaultValue: DEFAULT_CRITERIA });
   const criteria: GuardrailCriterion[] = Array.isArray(field.value) ? field.value : [];
   const setCriteria = field.onChange;
@@ -190,7 +193,7 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
                 control={control}
                 name={`criteria.${index}.weight`}
                 label={labelWithHint(
-                  <span className="text-xs text-muted-foreground">Weight</span>,
+                  <span className="text-xs text-muted-foreground">{uiT("ui.81d27ef6d503")}</span>,
                   "How much this criterion counts toward the final score. All weights must add up to 100%.",
                 )}
                 rules={requiredRule("Enter weight")}

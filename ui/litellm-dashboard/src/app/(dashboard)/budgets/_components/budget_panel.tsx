@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * The parent pane, showing list of budgets
  *
@@ -29,6 +31,8 @@ interface BudgetSettingsPageProps {
 }
 
 const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const syntaxTheme = useSyntaxTheme(prism);
   const [isCreateModelVisible, setIsCreateModelVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -85,7 +89,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
         <PageHeader>
           <PageHeaderTitle>
             <Wallet />
-            Budgets
+            {uiT("ui.a1a06e046b0b")}
           </PageHeaderTitle>
           <PageHeaderDescription>Spend, TPM and RPM limits you can assign to customers.</PageHeaderDescription>
           <PageHeaderControls>
@@ -99,7 +103,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
                   <ToolbarSeparator className="mx-0 h-6" />
                 </>
               )}
-              <PageTabsTrigger value="budgets">Budgets</PageTabsTrigger>
+              <PageTabsTrigger value="budgets">{uiT("ui.a1a06e046b0b")}</PageTabsTrigger>
               <PageTabsTrigger value="examples">Examples</PageTabsTrigger>
             </PageTabsList>
           </PageHeaderControls>
@@ -127,7 +131,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
               resourceInformationTitle="Budget Information"
               resourceInformation={[
                 { label: "Budget ID", value: selectedBudget?.budget_id, code: true },
-                { label: "Max Budget", value: selectedBudget?.max_budget },
+                { label: uiT("ui.3e20f0a04b21"), value: selectedBudget?.max_budget },
                 { label: "TPM", value: selectedBudget?.tpm_limit },
                 { label: "RPM", value: selectedBudget?.rpm_limit },
                 { label: "TPD (batch)", value: selectedBudget?.tpd_limit },

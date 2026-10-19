@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -18,15 +19,17 @@ interface UserPopoverCellProps {
 }
 
 export function UserPopoverCell({ userAlias, userEmail, userId, width }: UserPopoverCellProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const displayValue = userAlias || userEmail || userId;
   const isDefaultAdmin = userId === DEFAULT_PROXY_ADMIN_USER_ID;
 
   const popoverContent = (
     <div className="flex flex-col gap-2 text-xs min-w-[200px] max-w-[300px]">
       {[
-        { label: "User Alias", value: userAlias },
-        { label: "User Email", value: userEmail },
-        { label: "User ID", value: userId },
+        { label: uiT("ui.846f00988e00"), value: userAlias },
+        { label: uiT("ui.5809bbd8a352"), value: userEmail },
+        { label: uiT("ui.7967e089a7b9"), value: userId },
       ].map(({ label, value }) => (
         <div key={label} className="flex flex-col min-w-0">
           <span className="text-muted-foreground">{label}</span>

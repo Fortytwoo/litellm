@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { MultiSelect, type MultiSelectOption } from "@/components/shared/MultiSelect";
 import { getAgentsList } from "../networking";
@@ -29,6 +31,8 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
   placeholder = "Select agents",
   disabled = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [agents, setAgents] = useState<Agent[]>([]);
   const [accessGroups, setAccessGroups] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -70,7 +74,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
     ...agents.map((agent) => ({
       label: `${agent.agent_name || agent.agent_id}`,
       value: agent.agent_id,
-      description: "Agent",
+      description: uiT("ui.11b39c93777e"),
     })),
   ];
 

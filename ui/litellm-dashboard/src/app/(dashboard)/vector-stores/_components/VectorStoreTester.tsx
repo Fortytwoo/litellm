@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { toast } from "@/lib/toast";
 import { ChevronDown, ChevronRight, Database, Send } from "lucide-react";
@@ -34,6 +36,8 @@ interface VectorStoreTesterProps {
 }
 
 export const VectorStoreTester: React.FC<VectorStoreTesterProps> = ({ vectorStoreId, accessToken, className = "" }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState<
@@ -202,7 +206,9 @@ export const VectorStoreTester: React.FC<VectorStoreTesterProps> = ({ vectorStor
                                     {/* Metadata */}
                                     {(result.file_id || result.filename || result.attributes) && (
                                       <div className="mt-3 border-t pt-3">
-                                        <div className="mb-2 text-xs font-medium text-muted-foreground">Metadata</div>
+                                        <div className="mb-2 text-xs font-medium text-muted-foreground">
+                                          {uiT("ui.9eddf573cb50")}
+                                        </div>
                                         <div className="space-y-2 text-xs">
                                           {result.file_id && (
                                             <div className="rounded-sm bg-muted/50 p-2">
@@ -237,7 +243,7 @@ export const VectorStoreTester: React.FC<VectorStoreTesterProps> = ({ vectorStor
                             entry.error ? "text-sm break-words text-destructive" : "text-sm text-muted-foreground"
                           }
                         >
-                          {entry.error ? `Search failed: ${entry.error}` : "No results found"}
+                          {entry.error ? `Search failed: ${entry.error}` : uiT("ui.7d7e36058609")}
                         </div>
                       )}
                     </div>
@@ -272,7 +278,7 @@ export const VectorStoreTester: React.FC<VectorStoreTesterProps> = ({ vectorStor
             </div>
             <Button onClick={handleSearch} disabled={isLoading || !query.trim()}>
               {isLoading ? <UiLoadingSpinner className="size-4" /> : <Send className="size-4" />}
-              Search
+              {uiT("ui.49c266baaaa7")}
             </Button>
           </div>
         </div>

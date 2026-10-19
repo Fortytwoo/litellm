@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Settings, X } from "lucide-react";
 import { useId, useState } from "react";
 import { ComparisonInstance } from "../CompareUI";
@@ -35,6 +37,8 @@ export function ComparisonPanel({
   endpointConfig,
   apiKey,
 }: ComparisonPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isA2AMode = isAgentEndpoint(endpointConfig.id);
   const currentSelection = getComparisonSelection(comparison, endpointConfig.id);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -126,7 +130,7 @@ export function ComparisonPanel({
           <h4 className="text-xs font-semibold text-foreground mb-1.5 uppercase tracking-wide">General Settings</h4>
           <div className="space-y-2">
             <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-0.5">Tags</label>
+              <label className="text-xs font-medium text-muted-foreground block mb-0.5">{uiT("ui.1331275bc537")}</label>
               <TagSelector
                 value={comparison.tags}
                 onChange={(value) => handleSettingChange("tags", value)}
@@ -134,7 +138,7 @@ export function ComparisonPanel({
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-0.5">Vector Stores</label>
+              <label className="text-xs font-medium text-muted-foreground block mb-0.5">{uiT("ui.a6110d660e9b")}</label>
               <VectorStoreSelector
                 value={comparison.vectorStores}
                 onChange={(value) => handleSettingChange("vectorStores", value)}
@@ -142,7 +146,7 @@ export function ComparisonPanel({
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-0.5">Guardrails</label>
+              <label className="text-xs font-medium text-muted-foreground block mb-0.5">{uiT("ui.443f975eefe8")}</label>
               <GuardrailSelector
                 value={comparison.guardrails}
                 onChange={(value) => handleSettingChange("guardrails", value)}
@@ -169,7 +173,7 @@ export function ComparisonPanel({
             <div className="space-y-2 transition-opacity duration-200" style={{ opacity: disabledOpacity }}>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className={`text-xs font-medium ${disabledTextColor}`}>Temperature</label>
+                  <label className={`text-xs font-medium ${disabledTextColor}`}>{uiT("ui.b958ce8b871a")}</label>
                   <span className={`text-xs ${disabledTextColor}`}>{comparison.temperature.toFixed(2)}</span>
                 </div>
                 <Slider

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { Ban, Clock3, Cloud, Database, Info, LoaderCircle, RefreshCw, TriangleAlert } from "lucide-react";
 
@@ -154,6 +156,8 @@ const PriceDataReload: React.FC<PriceDataReloadProps> = ({
   type = "primary",
   className = "",
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isScheduling, setIsScheduling] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
@@ -464,7 +468,7 @@ const PriceDataReload: React.FC<PriceDataReloadProps> = ({
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setShowScheduleModal(false)}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button type="button" disabled={isScheduling} onClick={handleScheduleReload}>
                 {isScheduling && <LoaderCircle className="animate-spin" data-icon="inline-start" />}

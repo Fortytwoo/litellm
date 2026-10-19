@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
@@ -182,7 +184,9 @@ function submissionToTeamGuardrail(item: GuardrailSubmissionItem): TeamGuardrail
 
 const STATUS_CONFIG: Record<GuardrailStatus, { label: string; bg: string; text: string; dot: string }> = {
   active: {
-    label: "Active",
+    get label() {
+      return translateUi("ui.92340695899b");
+    },
     bg: "bg-success/10",
     text: "text-success",
     dot: "bg-success",
@@ -309,6 +313,8 @@ function GuardrailCard({
   onApprove,
   onReject,
 }: GuardrailCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const status = STATUS_CONFIG[g.status];
   const teamColor = TEAM_COLORS[g.team] ?? "bg-muted text-foreground";
   return (
@@ -354,7 +360,7 @@ function GuardrailCard({
               onClick={onSelect}
               className="text-xs border border-border text-muted-foreground hover:bg-muted px-3 py-1.5 rounded-md transition-colors font-medium"
             >
-              {isSelected ? "Close" : "Review"}
+              {isSelected ? uiT("ui.7d9eb7acb13e") : "Review"}
             </button>
             {isAdmin && g.status === "pending" && (
               <>
@@ -447,6 +453,8 @@ function DetailPanel({
   onUpdateCustomHeaders,
   onUpdateExtraHeaders,
 }: DetailPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [configExpanded, setConfigExpanded] = useState(false);
   const [newExtraHeader, setNewExtraHeader] = useState("");
   const [newStaticHeaderKey, setNewStaticHeaderKey] = useState("");
@@ -496,7 +504,7 @@ function DetailPanel({
               </a>
             </div>
           </ConfigRow>
-          <ConfigRow label="Method">
+          <ConfigRow label={uiT("ui.52a0f9b65b27")}>
             <span className="text-xs font-mono font-medium text-foreground bg-muted px-2 py-0.5 rounded-sm">
               {g.method}
             </span>
@@ -605,7 +613,7 @@ function DetailPanel({
                   }}
                   className="text-xs font-medium text-info border border-info/20 bg-info/10 hover:bg-info/15 px-2 py-1.5 rounded-sm transition-colors shrink-0"
                 >
-                  Add
+                  {uiT("ui.9fd728c66c9a")}
                 </button>
               </div>
             )}
@@ -676,7 +684,7 @@ function DetailPanel({
                   }}
                   className="text-xs font-medium text-info border border-info/20 bg-info/10 hover:bg-info/15 px-2 py-1.5 rounded-sm transition-colors"
                 >
-                  Add
+                  {uiT("ui.9fd728c66c9a")}
                 </button>
               </div>
             )}
@@ -759,6 +767,8 @@ type ConfirmDialogProps = {
 };
 
 function ConfirmDialog({ action, guardrailName, onConfirm, onCancel }: ConfirmDialogProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isApprove = action === "approve";
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-overlay">
@@ -790,7 +800,7 @@ function ConfirmDialog({ action, guardrailName, onConfirm, onCancel }: ConfirmDi
             onClick={onCancel}
             className="flex-1 border border-border text-foreground hover:bg-muted text-sm font-medium py-2 rounded-md transition-colors"
           >
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </button>
           <button
             type="button"
@@ -814,6 +824,8 @@ interface TeamGuardrailsTabProps {
 }
 
 export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { userRole } = useAuthorized();
   const isAdmin = userRole ? isProxyAdminRole(userRole) : false;
   const [guardrails, setGuardrails] = useState<TeamGuardrail[]>([]);
@@ -992,7 +1004,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
         <div className="grid grid-cols-4 gap-4 mb-6">
           <StatCard label="Total Submitted" value={totalCount} color="text-foreground" />
           <StatCard label="Pending Review" value={pendingCount} color="text-warning" />
-          <StatCard label="Active" value={activeCount} color="text-success" />
+          <StatCard label={uiT("ui.92340695899b")} value={activeCount} color="text-success" />
           <StatCard label="Rejected" value={rejectedCount} color="text-destructive" />
         </div>
         <div className="flex items-center gap-3 mb-5">
@@ -1014,7 +1026,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
           >
             <option value="all">All Status</option>
             <option value="pending">Pending Review</option>
-            <option value="active">Active</option>
+            <option value="active">{uiT("ui.92340695899b")}</option>
             <option value="rejected">Rejected</option>
           </select>
           <button
@@ -1092,7 +1104,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
           <TooltipProvider>
             <form onSubmit={handleSubmitGuardrail}>
               <FieldGroup>
-                <FormField control={submitForm.control} name="team_id" label="Team">
+                <FormField control={submitForm.control} name="team_id" label={uiT("ui.5985039f106d")}>
                   {({ id, value, onChange }) => <TeamDropdown id={id} value={value} onChange={onChange} />}
                 </FormField>
                 <FormField control={submitForm.control} name="guardrail_name" label="Guardrail Name">
@@ -1169,7 +1181,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
                 submitForm.reset();
               }}
             >
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleSubmitGuardrail}>Submit for Review</Button>
           </DialogFooter>

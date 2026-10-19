@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import type { ColumnDef, OnChangeFn, SortingState } from "@tanstack/react-table";
 import { CircleDollarSign, Download, HeartPulse, Settings, TrendingUp, TriangleAlert } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -118,6 +120,8 @@ export function GuardrailsOverview({
   onSelectGuardrail,
   dateRangeControl,
 }: GuardrailsOverviewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [sortBy, setSortBy] = useState<SortKey>("failRate");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [evaluationModalOpen, setEvaluationModalOpen] = useState(false);
@@ -158,7 +162,7 @@ export function GuardrailsOverview({
 
   const columns: ColumnDef<GuardrailUsageOverviewRow>[] = [
     {
-      header: "Status",
+      header: uiT("ui.920e413c7d41"),
       accessorKey: "status",
       enableSorting: false,
       cell: ({ row }) => (
@@ -177,7 +181,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: "Guardrail",
+      header: uiT("ui.ba3f7a9c79a7"),
       accessorKey: "name",
       enableSorting: false,
       cell: ({ row }) => (
@@ -191,7 +195,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: "Provider",
+      header: uiT("ui.472590ae974d"),
       accessorKey: "provider",
       enableSorting: false,
       cell: ({ row }) => (
@@ -205,7 +209,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: ({ column }) => <DataTableSortHeader column={column} title="Requests" />,
+      header: ({ column }) => <DataTableSortHeader column={column} title={uiT("ui.ada27592c957")} />,
       accessorKey: "requestsEvaluated",
       meta: { numeric: true },
       sortDescFirst: false,
@@ -261,7 +265,7 @@ export function GuardrailsOverview({
       cell: ({ row }) => <UsageUnitsCell units={row.original.usageUnits} />,
     },
     {
-      header: ({ column }) => <DataTableSortHeader column={column} title="Cost" />,
+      header: ({ column }) => <DataTableSortHeader column={column} title={uiT("ui.204a5eb2cd28")} />,
       accessorKey: "cost",
       meta: { numeric: true },
       sortDescFirst: false,
@@ -285,7 +289,7 @@ export function GuardrailsOverview({
       <PageHeader>
         <PageHeaderTitle>
           <HeartPulse />
-          Guardrails Monitor
+          {uiT("ui.896cc56be8d7")}
         </PageHeaderTitle>
         <PageHeaderDescription>Monitor guardrail performance across all requests</PageHeaderDescription>
         <PageHeaderControls className="justify-end">
@@ -337,7 +341,7 @@ export function GuardrailsOverview({
         {(isLoading || error) && (
           <div className="mb-2 flex items-center gap-2">
             {isLoading && (
-              <span role="status" aria-busy="true" aria-label="Loading" className="inline-flex">
+              <span role="status" aria-busy="true" aria-label={uiT("ui.dc380888c4e2")} className="inline-flex">
                 <UiLoadingSpinner className="size-4 text-primary" />
               </span>
             )}

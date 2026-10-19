@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
@@ -32,6 +34,8 @@ const readMcpLogoUrl = (metadata: Record<string, unknown> | undefined): string |
 };
 
 function RequestIdWithCallIdTooltip({ requestId, callId }: { requestId: string; callId: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <span className="flex flex-col gap-0.5">
       <span>{requestId}</span>
@@ -39,7 +43,7 @@ function RequestIdWithCallIdTooltip({ requestId, callId }: { requestId: string; 
         <span>x-litellm-call-id: {callId}</span>
         <button
           type="button"
-          aria-label="Copy x-litellm-call-id"
+          aria-label={uiT("ui.45046702fed9")}
           className="shrink-0 cursor-pointer opacity-70 hover:opacity-100"
           onClick={(event) => {
             event.stopPropagation();
@@ -79,14 +83,18 @@ export const getRequestLogsTableColumns = ({
   {
     id: "startTime",
     accessorKey: "startTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Time" variant="dropdown-tristate" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.33b93476cf59")} variant="dropdown-tristate" />
+    ),
     size: 200,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.startTime} />,
   },
   {
     id: "type",
-    header: "Type",
+    get header() {
+      return translateUi("ui.baaddf70fb5d");
+    },
     size: 90,
     enableSorting: false,
     meta: { skeleton: "badge" },
@@ -138,7 +146,9 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "status",
-    header: "Status",
+    get header() {
+      return translateUi("ui.920e413c7d41");
+    },
     size: 100,
     enableSorting: false,
     meta: { skeleton: "badge" },
@@ -156,13 +166,20 @@ export const getRequestLogsTableColumns = ({
           />
         );
       }
-      return <StatusBadge tone={isSuccess ? "success" : "error"} label={isSuccess ? "Success" : "Failure"} />;
+      return (
+        <StatusBadge
+          tone={isSuccess ? "success" : "error"}
+          label={isSuccess ? translateUi("ui.c88a0b907419") : translateUi("ui.7031edbcf9c4")}
+        />
+      );
     },
   },
   {
     id: "session_id",
     accessorKey: "session_id",
-    header: "Session ID",
+    get header() {
+      return translateUi("ui.cb9ac5c561da");
+    },
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.session_id} onClick={() => onSessionClick(row.original)} />,
@@ -170,7 +187,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_id",
     accessorKey: "request_id",
-    header: "Request ID",
+    get header() {
+      return translateUi("ui.d561f528baf7");
+    },
     enableSorting: false,
     cell: ({ row }) => {
       const log = row.original;
@@ -179,7 +198,7 @@ export const getRequestLogsTableColumns = ({
         return (
           <div className="flex flex-col">
             <IdCell value={batchId} variant="plain" copyable tooltip={`Batch ${batchId} (row: ${log.request_id})`} />
-            <span className="text-[10px] text-muted-foreground">batch cost</span>
+            <span className="text-[10px] text-muted-foreground">{translateUi("ui.ac147bbffdf3")}</span>
           </div>
         );
       }
@@ -196,7 +215,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Cost" variant="dropdown-tristate" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.204a5eb2cd28")} variant="dropdown-tristate" />
+    ),
     size: 110,
     enableSorting: true,
     meta: { numeric: true, skeleton: "twoLine" },
@@ -216,7 +237,9 @@ export const getRequestLogsTableColumns = ({
       return (
         <div className="flex flex-col items-end">
           {spend ? <CellTooltip content={`$${String(spend)}`} trigger={money} /> : money}
-          {sessionTotalSpend != null && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {sessionTotalSpend != null && (
+            <span className="text-[10px] text-muted-foreground">{translateUi("ui.cfa743224f18")}</span>
+          )}
           {mcpCount > 0 && mcpSpend > 0 && (
             <span className="text-[10px] text-warning">
               incl. {getSpendString(mcpSpend)} from {mcpCount} MCP
@@ -229,7 +252,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_duration_ms",
     accessorKey: "request_duration_ms",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Duration (s)" variant="dropdown-tristate" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.9484335f438d")} variant="dropdown-tristate" />
+    ),
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -244,7 +269,9 @@ export const getRequestLogsTableColumns = ({
             content={`${ms}ms`}
             trigger={<span className="max-w-[15ch] truncate inline-block">{(ms / 1000).toFixed(2)}</span>}
           />
-          {sessionTotalMs != null && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {sessionTotalMs != null && (
+            <span className="text-[10px] text-muted-foreground">{translateUi("ui.cfa743224f18")}</span>
+          )}
         </div>
       );
     },
@@ -252,7 +279,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "ttft_ms",
     accessorKey: "completionStartTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="TTFT (s)" variant="dropdown-tristate" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.5a1e79745b9e")} variant="dropdown-tristate" />
+    ),
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -272,14 +301,18 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "team_alias",
-    header: "Team Name",
+    get header() {
+      return translateUi("ui.6ed5a592c422");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_team_alias")} />,
   },
   {
     id: "key_hash",
-    header: "Key Hash",
+    get header() {
+      return translateUi("ui.415fd17d81f2");
+    },
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
@@ -288,7 +321,9 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "key_alias",
-    header: "Key Alias",
+    get header() {
+      return translateUi("ui.1e7044ffa52d");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_alias")} />,
@@ -296,7 +331,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "model",
     accessorKey: "model",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model" variant="dropdown-tristate" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.5e2c614c23f0")} variant="dropdown-tristate" />
+    ),
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -333,7 +370,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "total_tokens",
     accessorKey: "total_tokens",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tokens" variant="dropdown-tristate" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.a039dfb9628b")} variant="dropdown-tristate" />
+    ),
     size: 140,
     enableSorting: true,
     meta: { numeric: true },
@@ -351,7 +390,9 @@ export const getRequestLogsTableColumns = ({
               ({String(prompt || "0")}+{String(completion || "0")})
             </span>
           </span>
-          {showSessionTotal && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {showSessionTotal && (
+            <span className="text-[10px] text-muted-foreground">{translateUi("ui.cfa743224f18")}</span>
+          )}
         </div>
       );
     },
@@ -359,7 +400,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    header: "Internal User",
+    get header() {
+      return translateUi("ui.4a5a8d129e4b");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => (
@@ -372,7 +415,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "end_user",
     accessorKey: "end_user",
-    header: "End User",
+    get header() {
+      return translateUi("ui.34d41e71490a");
+    },
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={row.original.end_user} />,
@@ -380,7 +425,9 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_tags",
     accessorKey: "request_tags",
-    header: "Tags",
+    get header() {
+      return translateUi("ui.1331275bc537");
+    },
     size: 150,
     enableSorting: false,
     meta: { skeleton: "chips" },

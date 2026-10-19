@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -54,6 +56,8 @@ function ProbabilityMeter({
 }
 
 function AnswerDetails({ answer }: { answer: SystemOneAnswer }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (answer.type === "noul") {
     const percentage = Math.round(answer.noul * 100);
     return (
@@ -88,7 +92,7 @@ function AnswerDetails({ answer }: { answer: SystemOneAnswer }) {
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-muted-foreground">Score</span>
+        <span className="text-xs text-muted-foreground">{uiT("ui.38e5a46cbc5a")}</span>
         <Badge>{SCORE_FORMAT.format(answer.score)}</Badge>
         {answer.confidence !== undefined && (
           <Badge variant="outline">{Math.round(answer.confidence * 100)}% confidence</Badge>

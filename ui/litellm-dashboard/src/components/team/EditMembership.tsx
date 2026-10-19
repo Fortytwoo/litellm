@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -74,6 +76,8 @@ const MemberModal = <T extends BaseMember>({
   mode,
   config,
 }: MemberModalProps<T>) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const schema = useMemo(() => buildMemberSchema(config), [config]);
   const form = useZodForm(schema, { defaultValues: emptyMemberFormValues(config) });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -129,7 +133,7 @@ const MemberModal = <T extends BaseMember>({
                 step={field.step || 1}
                 min={field.min || 0}
                 style={{ width: "100%" }}
-                placeholder={field.placeholder || "Enter a numerical value"}
+                placeholder={field.placeholder || uiT("ui.3154bfe4269c")}
                 value={value ?? ""}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
               />
@@ -191,12 +195,12 @@ const MemberModal = <T extends BaseMember>({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[1000px]">
         <DialogHeader>
-          <DialogTitle>{config.title || (mode === "add" ? "Add Member" : "Edit Member")}</DialogTitle>
+          <DialogTitle>{config.title || (mode === "add" ? uiT("ui.e7d80d8f7fda") : "Edit Member")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
             {config.showEmail && (
-              <FormField control={form.control} name="user_email" label="Email">
+              <FormField control={form.control} name="user_email" label={uiT("ui.969ccbd3cf63")}>
                 {({ ref, value, onChange, ...rest }) => (
                   <Input
                     {...rest}
@@ -214,7 +218,7 @@ const MemberModal = <T extends BaseMember>({
             )}
 
             {config.showUserId && (
-              <FormField control={form.control} name="user_id" label="User ID">
+              <FormField control={form.control} name="user_id" label={uiT("ui.7967e089a7b9")}>
                 {({ ref, value, onChange, ...rest }) => (
                   <Input
                     {...rest}
@@ -232,7 +236,7 @@ const MemberModal = <T extends BaseMember>({
               name="role"
               label={
                 <span className="flex items-center gap-2">
-                  <span>Role</span>
+                  <span>{uiT("ui.14736a2eb9f4")}</span>
                   {mode === "edit" && initialData && (
                     <span className="text-sm text-muted-foreground">(Current: {getRoleLabel(initialData.role)})</span>
                   )}
@@ -264,17 +268,17 @@ const MemberModal = <T extends BaseMember>({
 
           <div className="mt-6 text-right">
             <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting} className="mr-2">
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="submit" variant="outline" disabled={isSubmitting}>
               {isSubmitting && <UiLoadingSpinner className="size-4" />}
               {mode === "add"
                 ? isSubmitting
-                  ? "Adding..."
-                  : "Add Member"
+                  ? uiT("ui.913a8849b60d")
+                  : uiT("ui.e7d80d8f7fda")
                 : isSubmitting
-                  ? "Saving..."
-                  : "Save Changes"}
+                  ? uiT("ui.dc85af8f2b1d")
+                  : uiT("ui.35322b5bb5a2")}
             </Button>
           </div>
         </form>

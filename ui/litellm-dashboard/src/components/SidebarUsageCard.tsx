@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { useLicenseInfo } from "@/app/(dashboard)/hooks/license/useLicenseInfo";
 import { formatExpirationStatus } from "@/utils/licenseUtils";
 import { Button } from "@/components/ui/button";
@@ -56,8 +59,28 @@ const remainingUsersQuery = (accessToken: string | null) => ({
 const buildMeters = (data: RemainingUsage | null): MeterData[] => {
   if (!data) return [];
   return [
-    ...(data.total_users != null ? [{ label: "Seats", used: data.total_users_used, total: data.total_users }] : []),
-    ...(data.total_teams != null ? [{ label: "Teams", used: data.total_teams_used, total: data.total_teams }] : []),
+    ...(data.total_users != null
+      ? [
+          {
+            get label() {
+              return translateUi("ui.f3b81325942e");
+            },
+            used: data.total_users_used,
+            total: data.total_users,
+          },
+        ]
+      : []),
+    ...(data.total_teams != null
+      ? [
+          {
+            get label() {
+              return translateUi("ui.1e1a1c078af2");
+            },
+            used: data.total_teams_used,
+            total: data.total_teams,
+          },
+        ]
+      : []),
   ];
 };
 
@@ -68,6 +91,8 @@ const buildMeters = (data: RemainingUsage | null): MeterData[] => {
  * design's Spend / API-request meters are intentionally omitted.
  */
 export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail }: SidebarUsageCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const licenseInfo = useLicenseInfo(accessToken).data ?? null;
   const { data: usageData, isLoading } = useQuery(remainingUsersQuery(accessToken));
   const data = usageData ?? null;
@@ -84,7 +109,7 @@ export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail 
       <Button
         variant="outline"
         onClick={onExpandRail}
-        title="Enterprise usage"
+        title={uiT("ui.7d3c4ad355c0")}
         className="h-9 w-full rounded-lg border-sidebar-border bg-sidebar text-sidebar-primary shadow-none hover:bg-sidebar-accent hover:text-sidebar-primary/80"
       >
         <Award className="size-[18px]" strokeWidth={1.75} />
@@ -102,7 +127,7 @@ export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail 
           <Award className="size-4" strokeWidth={1.75} />
         </span>
         <span className="min-w-0 flex-1 leading-tight">
-          <span className="block text-[13px] font-semibold text-foreground">Enterprise usage</span>
+          <span className="block text-[13px] font-semibold text-foreground">{uiT("ui.7d3c4ad355c0")}</span>
           <span className="block truncate text-[11px] text-muted-foreground">{subtitle}</span>
         </span>
         <ChevronDown className="size-4 flex-none -rotate-90 text-muted-foreground transition-transform group-data-[panel-open]/usage:rotate-0" />
@@ -111,7 +136,7 @@ export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail 
       <CollapsibleContent className="flex flex-col gap-3 px-3 pt-0.5 pb-3">
         {isLoading && meters.length === 0 ? (
           <div className="flex items-center gap-2 py-1 text-xs text-muted-foreground">
-            <Loader2 className="size-3.5 animate-spin" /> Loading…
+            <Loader2 className="size-3.5 animate-spin" /> {uiT("ui.ba3bbbe10d8b")}
           </div>
         ) : (
           meters.map((m) => <UsageMeter key={m.label} {...m} />)

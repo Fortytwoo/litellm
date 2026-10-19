@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useId } from "react";
 import { Save, Plus, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -108,6 +110,8 @@ interface AllowedClientDialogProps {
 }
 
 const AllowedClientDialog: React.FC<AllowedClientDialogProps> = ({ draft, onChange, onCommit, onRemove, onClose }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const aliasId = useId();
   const valueId = useId();
   if (draft === null) return null;
@@ -149,10 +153,10 @@ const AllowedClientDialog: React.FC<AllowedClientDialogProps> = ({ draft, onChan
             </Button>
           )}
           <Button type="button" variant="outline" onClick={onClose}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button type="button" disabled={isIncomplete(trimClient(draft))} onClick={onCommit}>
-            {draft.key === null ? "Add" : "Done"}
+            {draft.key === null ? uiT("ui.9fd728c66c9a") : "Done"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -161,6 +165,8 @@ const AllowedClientDialog: React.FC<AllowedClientDialogProps> = ({ draft, onChan
 };
 
 const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [privateRanges, setPrivateRanges] = useState<string[]>([]);
@@ -457,7 +463,7 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={saving}>
           <Save />
-          Save
+          {uiT("ui.1509f561f241")}
         </Button>
       </div>
 

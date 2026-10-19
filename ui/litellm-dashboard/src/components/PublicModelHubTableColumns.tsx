@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -284,7 +285,7 @@ export const getPublicModelHubColumns = ({ onModelClick }: PublicModelHubColumns
               <span className="capitalize">
                 <StatusBadge
                   tone={HEALTH_TONES[model.health_status ?? ""] || "neutral"}
-                  label={model.health_status ?? "Unknown"}
+                  label={model.health_status ?? translateUi("ui.b764cdc0eab7")}
                 />
               </span>
             }
@@ -334,8 +335,14 @@ export const getPublicAgentHubColumns = ({ onAgentClick }: PublicAgentHubColumns
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+    },
+    get header() {
+      return translateUi("ui.526e0087cc3f");
+    },
     size: 260,
     enableSorting: false,
     cell: ({ row }) => (
@@ -356,8 +363,14 @@ export const getPublicAgentHubColumns = ({ onAgentClick }: PublicAgentHubColumns
   },
   {
     id: "provider",
-    meta: { title: "Provider" },
-    header: "Provider",
+    meta: {
+      get title() {
+        return translateUi("ui.472590ae974d");
+      },
+    },
+    get header() {
+      return translateUi("ui.472590ae974d");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) =>
@@ -369,8 +382,15 @@ export const getPublicAgentHubColumns = ({ onAgentClick }: PublicAgentHubColumns
   },
   {
     id: "skills",
-    meta: { title: "Skills", skeleton: "chips" },
-    header: "Skills",
+    meta: {
+      get title() {
+        return translateUi("ui.66d0f523a379");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.66d0f523a379");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <OverflowChips items={(row.original.skills || []).map((skill) => skill.name)} />,
@@ -425,8 +445,14 @@ export const getPublicMCPHubColumns = ({ onServerClick }: PublicMCPHubColumnsDep
   },
   {
     id: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+    },
+    get header() {
+      return translateUi("ui.526e0087cc3f");
+    },
     size: 260,
     enableSorting: false,
     cell: ({ row }) => {

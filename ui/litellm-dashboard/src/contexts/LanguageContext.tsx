@@ -1,59 +1,79 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { ConfigProvider } from "antd";
-import enUS from "antd/locale/en_US";
-import zhCN from "antd/locale/zh_CN";
-import { Locale, DEFAULT_LOCALE, LOCALE_STORAGE_KEY, t as translate } from "@/i18n";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
+import moment from "moment";
+import "moment/locale/zh-cn";
+import {
+  DEFAULT_LOCALE,
+  LOCALE_STORAGE_KEY,
+  setActiveLocale,
+  getActiveLocale,
+  subscribeLocale,
+  translateText,
+  t as translate,
+  type Locale,
+  type TranslationValues,
+} from "@/i18n";
 
 interface LanguageContextValue {
   locale: Locale;
-  setLocale: (l: Locale) => void;
-  t: (key: string) => string;
+  setLocale: (locale: Locale) => void;
+  t: (key: string, values?: TranslationValues) => string;
 }
 
 const LanguageContext = createContext<LanguageContextValue>({
-  locale: DEFAULT_LOCALE,
-  setLocale: () => {},
-  t: (key) => key,
+  locale: "en",
+  setLocale: () => undefined,
+  t: (key, values) => translate(key, "en", values),
 });
 
-export function useLanguage() {
+export function useLanguage(): LanguageContextValue {
   return useContext(LanguageContext);
 }
 
-const antdLocales: Record<Locale, any> = {
-  en: enUS,
-  zh: zhCN,
-};
+export function LocalizedText({ id, text }: { id?: string; text?: string | null }) {
+  const { locale, t } = useLanguage();
+  return id ? t(id) : translateText(text ?? "", locale);
+}
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
-
-  useEffect(() => {
+export function LanguageProvider({
+  children,
+  initialLocale = DEFAULT_LOCALE,
+}: {
+  children: ReactNode;
+  initialLocale?: Locale;
+}) {
+  const subscribe = useCallback(
+    (listener: () => void) =>
+      subscribeLocale(() => {
+        moment.locale(getActiveLocale() === "zh" ? "zh-cn" : "en");
+        listener();
+      }, initialLocale),
+    [initialLocale],
+  );
+  const getServerSnapshot = useCallback(() => initialLocale, [initialLocale]);
+  const locale = useSyncExternalStore(subscribe, getActiveLocale, getServerSnapshot);
+  const setLocale = useCallback((next: Locale) => {
+    moment.locale(next === "zh" ? "zh-cn" : "en");
     try {
-      const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-      if (stored === "zh" || stored === "en") {
-        setLocaleState(stored);
-      }
+      localStorage.setItem(LOCALE_STORAGE_KEY, next);
     } catch {}
+    setActiveLocale(next);
   }, []);
 
-  // Sync <html lang> with locale (screen-reader detection)
   useEffect(() => {
-    document.documentElement.lang = locale;
+    document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
   }, [locale]);
 
-  const setLocale = useCallback((l: Locale) => {
-    try { localStorage.setItem(LOCALE_STORAGE_KEY, l); } catch {}
-    setLocaleState(l);
-  }, []);
-
-  const t = useCallback((key: string) => translate(key, locale), [locale]);
-
-  return (
-    <LanguageContext.Provider value={{ locale, setLocale, t }}>
-      <ConfigProvider locale={antdLocales[locale]}>{children}</ConfigProvider>
-    </LanguageContext.Provider>
-  );
+  const t = useCallback((key: string, values?: TranslationValues) => translate(key, locale, values), [locale]);
+  const value = useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

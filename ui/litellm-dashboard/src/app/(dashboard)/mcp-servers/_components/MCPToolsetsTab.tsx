@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useCallback } from "react";
 import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
@@ -154,6 +156,8 @@ interface CreateToolsetModalProps {
 }
 
 function CreateToolsetModal({ open, onClose, onSave, accessToken, initialToolset }: CreateToolsetModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(toolsetSchema, {
     defaultValues: {
       toolset_name: initialToolset?.toolset_name || "",
@@ -215,7 +219,7 @@ function CreateToolsetModal({ open, onClose, onSave, accessToken, initialToolset
             <FormField control={form.control} name="toolset_name" label="Toolset Name" className="flex-1">
               {(field) => <Input {...field} placeholder="e.g. github-linear-tools" />}
             </FormField>
-            <FormField control={form.control} name="description" label="Description" className="flex-1">
+            <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")} className="flex-1">
               {(field) => <Input {...field} placeholder="Optional description" />}
             </FormField>
           </FieldGroup>
@@ -301,11 +305,11 @@ function CreateToolsetModal({ open, onClose, onSave, accessToken, initialToolset
 
         <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-border">
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={() => void form.handleSubmit(handleSubmit)()} disabled={saving} aria-busy={saving}>
             {saving && <UiLoadingSpinner className="size-4" />}
-            {initialToolset ? "Save Changes" : "Create Toolset"}
+            {initialToolset ? uiT("ui.35322b5bb5a2") : "Create Toolset"}
           </Button>
         </div>
       </DialogContent>
@@ -376,6 +380,8 @@ function ToolsetUsageGuide() {
 }
 
 export function MCPToolsetsTab({ accessToken, userRole }: MCPToolsetsTabProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const { data: toolsets = [], isLoading } = useMCPToolsets();
   const { data: mcpServers = [] } = useMCPServers();
@@ -490,10 +496,10 @@ export function MCPToolsetsTab({ accessToken, userRole }: MCPToolsetsTabProps) {
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteId(null)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleDelete} variant="destructive" disabled={deleting} aria-busy={deleting}>
-              Delete
+              {uiT("ui.e2d0a54968ea")}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
 import {
@@ -34,6 +35,8 @@ const ModelChoiceCombobox: React.FC<ModelChoiceComboboxProps> = ({
   ariaInvalid,
   ariaDescribedBy,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const selected = value ? choices.find((choice) => choice.value === value) ?? { value, label: value } : null;
 
   return (
@@ -53,7 +56,7 @@ const ModelChoiceCombobox: React.FC<ModelChoiceComboboxProps> = ({
         showClear={value != null && value !== ""}
       />
       <ComboboxContent>
-        <ComboboxEmpty>No models found</ComboboxEmpty>
+        <ComboboxEmpty>{uiT("ui.a650c298cf44")}</ComboboxEmpty>
         <ComboboxList>
           {(choice: ModelChoice) => (
             <ComboboxItem key={choice.value} value={choice}>

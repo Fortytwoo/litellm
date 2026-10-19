@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import type { DateRangePickerValue } from "@/components/shared/date_picker_types";
 import React, { useEffect, useState } from "react";
 import { toast } from "@/lib/toast";
@@ -80,6 +82,8 @@ interface CachePageProps {
 // Helper function to deep-parse a JSON string if possible
 
 const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole, userID, premiumUser }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor1 = useComboboxAnchor();
   const anchor2 = useComboboxAnchor();
   const [selectedApiKeys, setSelectedApiKeys] = useState<string[]>([]);
@@ -172,7 +176,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
 
         <div className="flex items-center space-x-2">
           {lastRefreshed && <p className="text-sm text-muted-foreground">Last Refreshed: {lastRefreshed}</p>}
-          <Button variant="outline" size="icon-sm" onClick={handleRefreshClick} aria-label="Refresh">
+          <Button variant="outline" size="icon-sm" onClick={handleRefreshClick} aria-label={uiT("ui.0e9161011702")}>
             <RefreshCw />
           </Button>
         </div>
@@ -254,7 +258,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
                   <ComboboxChipsInput placeholder="Select Models" />
                 </ComboboxChips>
                 <ComboboxContent anchor={anchor2}>
-                  <ComboboxEmpty>No models found</ComboboxEmpty>
+                  <ComboboxEmpty>{uiT("ui.a650c298cf44")}</ComboboxEmpty>
                   <ComboboxList>
                     {(model: string) => (
                       <ComboboxItem key={model} value={model}>

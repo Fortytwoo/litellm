@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Trash2 } from "lucide-react";
@@ -22,6 +24,8 @@ interface AgentRowActionsProps {
 }
 
 function AgentRowActions({ agent, onDeleteClick }: AgentRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -38,7 +42,7 @@ function AgentRowActions({ agent, onDeleteClick }: AgentRowActionsProps) {
           onClick={() => onDeleteClick(agent.agent_id, agent.agent_name)}
         >
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -90,16 +94,27 @@ export const getAgentsTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend (USD)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Spend (USD)" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d1b5ad72df63");
+      },
+      numeric: true,
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d1b5ad72df63")} />,
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
   },
   {
     id: "model",
-    meta: { title: "Model" },
-    header: "Model",
+    meta: {
+      get title() {
+        return translateUi("ui.5e2c614c23f0");
+      },
+    },
+    get header() {
+      return translateUi("ui.5e2c614c23f0");
+    },
     size: 170,
     enableSorting: false,
     cell: ({ row }) => {
@@ -122,23 +137,33 @@ export const getAgentsTableColumns = ({
       const timestamp = agent.created_at ? new Date(agent.created_at).getTime() : 0;
       return Number.isNaN(timestamp) ? 0 : timestamp;
     },
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d70b9e24bca2");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d70b9e24bca2")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
   },
   {
     id: "status",
-    meta: { title: "Status" },
-    header: "Status",
+    meta: {
+      get title() {
+        return translateUi("ui.920e413c7d41");
+      },
+    },
+    get header() {
+      return translateUi("ui.920e413c7d41");
+    },
     size: 130,
     enableSorting: false,
     cell: ({ row }) => {
       const hasKeys = (row.original.keys?.length ?? 0) > 0;
       if (row.original.jwt_auth_configured) return <StatusBadge tone="success" label="JWT configured" />;
       return hasKeys ? (
-        <StatusBadge tone="success" label="Active" />
+        <StatusBadge tone="success" label={translateUi("ui.92340695899b")} />
       ) : (
         <StatusBadge tone="warning" label="Needs Setup" />
       );
@@ -149,7 +174,7 @@ export const getAgentsTableColumns = ({
         {
           id: "actions",
           meta: { className: "text-right", headerClassName: "text-right" },
-          header: () => <span className="sr-only">Actions</span>,
+          header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
           size: 64,
           enableSorting: false,
           enableHiding: false,

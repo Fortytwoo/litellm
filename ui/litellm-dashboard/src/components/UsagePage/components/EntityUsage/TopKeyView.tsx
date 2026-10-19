@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { BarChart } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -47,6 +49,8 @@ interface TopKeyViewProps {
 }
 
 const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = false, topKeysLimit, setTopKeysLimit }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -109,7 +113,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   // Define columns for the table view
   const baseColumns = [
     {
-      header: "Key ID",
+      header: uiT("ui.d54d56ee0a42"),
       accessorKey: "api_key",
       meta: QUIET_HEADER,
       cell: (info: any) =>
@@ -120,7 +124,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
         ),
     },
     {
-      header: "Key Alias",
+      header: uiT("ui.1e7044ffa52d"),
       accessorKey: "key_alias",
       meta: QUIET_HEADER,
       cell: (info: any) => info.getValue() || "-",
@@ -128,7 +132,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
     ...(topKeys.some((k) => k.user)
       ? [
           {
-            header: "User",
+            header: uiT("ui.b512d97e7cbf"),
             accessorKey: "user",
             meta: QUIET_HEADER,
             cell: (info: any) => info.getValue() || "-",
@@ -138,7 +142,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   ];
 
   const tagsColumn = {
-    header: "Tags",
+    header: uiT("ui.1331275bc537"),
     accessorKey: "tags",
     meta: QUIET_HEADER,
     cell: (info: any) => {
@@ -166,7 +170,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                       <span className="text-muted-foreground">Tag Name:</span> {tag.tag}
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Spend:</span>{" "}
+                      <span className="text-muted-foreground">{uiT("ui.158796225fc7")}</span>{" "}
                       {tag.usage > 0 && tag.usage < 0.01 ? "<$0.01" : `$${formatNumberWithCommas(tag.usage, 2)}`}
                     </div>
                   </div>
@@ -197,7 +201,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   };
 
   const spendColumn = {
-    header: "Spend (USD)",
+    header: uiT("ui.d1b5ad72df63"),
     accessorKey: "spend",
     meta: { ...QUIET_HEADER, numeric: true },
     cell: (info: any) => <MoneyCell value={info.getValue()} decimals={2} />,
@@ -219,7 +223,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
           options={LIMIT_OPTIONS}
           onChange={(limit) => setTopKeysLimit(Number(limit))}
         />
-        <Segmented label="View" value={viewMode} options={VIEW_OPTIONS} onChange={setViewMode} />
+        <Segmented label={uiT("ui.dcc839a4015c")} value={viewMode} options={VIEW_OPTIONS} onChange={setViewMode} />
       </div>
 
       {viewMode === "chart" ? (
@@ -252,7 +256,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                       <span className="break-all font-mono text-foreground">{item?.api_key}</span>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Spend: </span>
+                      <span className="text-muted-foreground">{uiT("ui.158796225fc7")} </span>
                       <span className="font-medium tabular-nums text-foreground">
                         ${formatNumberWithCommas(item?.spend, 2)}
                       </span>
@@ -277,7 +281,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
             <button
               onClick={handleClose}
               className="absolute top-4 right-4 text-muted-foreground hover:text-foreground focus:outline-hidden"
-              aria-label="Close"
+              aria-label={uiT("ui.7d9eb7acb13e")}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />

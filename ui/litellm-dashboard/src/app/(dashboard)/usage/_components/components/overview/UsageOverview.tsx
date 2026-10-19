@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 /**
  * Usage overview: a stat strip, the Model Leaderboard's stacked chart and
@@ -38,8 +39,18 @@ interface UsageOverviewProps {
 
 const METRIC_NOUN: Record<UsageMetric, string> = { spend: "spend", tokens: "tokens", requests: "requests" };
 const GRANULARITY_OPTIONS = [
-  { value: "day", label: "Daily" },
-  { value: "week", label: "Weekly" },
+  {
+    value: "day",
+    get label() {
+      return translateUi("ui.b36c2611dcdf");
+    },
+  },
+  {
+    value: "week",
+    get label() {
+      return translateUi("ui.2975132481a7");
+    },
+  },
 ] as const satisfies readonly { value: Granularity; label: string }[];
 const SCALE_OPTIONS = [
   { value: "linear", label: "Linear" },

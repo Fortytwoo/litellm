@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCanManageProjects } from "@/app/(dashboard)/hooks/projects/projectAccess";
 import { Page, PageContent } from "@/components/shared/Page";
 import { useProjects } from "@/app/(dashboard)/hooks/projects/useProjects";
@@ -16,6 +18,8 @@ import { ProjectsTable } from "./ProjectsTable";
 import { useClearProjectKeysTableState, useProjectsTableState } from "./useProjectsUrlState";
 
 export function ProjectsPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: projects, isLoading } = useProjects();
   const { data: teams, isLoading: isTeamsLoading } = useTeams();
   const { userId } = useAuthorized();
@@ -66,7 +70,7 @@ export function ProjectsPage() {
       <PageHeader>
         <PageHeaderTitle>
           <Folder />
-          Projects
+          {uiT("ui.04e2a9728af7")}
         </PageHeaderTitle>
         <PageHeaderDescription>Manage projects within your teams</PageHeaderDescription>
         {canCreateProject && (

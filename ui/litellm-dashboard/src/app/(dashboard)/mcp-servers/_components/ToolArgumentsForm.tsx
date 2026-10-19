@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { useForm, type Control } from "react-hook-form";
 import { CircleHelp } from "lucide-react";
@@ -151,6 +153,8 @@ const ToolArgumentFields: React.FC<{
   control: Control<ToolArgumentsFormValues>;
   singleInputFallback: boolean;
 }> = ({ fields, control, singleInputFallback }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   if (singleInputFallback) {
     return (
       <FieldGroup>
@@ -159,7 +163,7 @@ const ToolArgumentFields: React.FC<{
           name="args.0"
           label={
             <span>
-              Input <span className="text-destructive">*</span>
+              {uiT("ui.36ecb4f86691")} <span className="text-destructive">*</span>
             </span>
           }
         >

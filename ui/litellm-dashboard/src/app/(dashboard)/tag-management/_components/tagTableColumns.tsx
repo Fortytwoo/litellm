@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -41,9 +43,11 @@ function TagNameCell({ tag, onSelectTag }: { tag: Tag; onSelectTag: (tagName: st
 }
 
 function TagModelsCell({ tag }: { tag: Tag }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const models = tag.models ?? [];
   if (models.length === 0) {
-    return <Badge variant="secondary">All Models</Badge>;
+    return <Badge variant="secondary">{uiT("ui.77781174637c")}</Badge>;
   }
   return (
     <div className="flex flex-wrap items-center gap-1">
@@ -69,6 +73,8 @@ interface TagRowActionsProps {
 }
 
 function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const isDynamic = isDynamicSpendTag(tag);
 
   return (
@@ -88,7 +94,7 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
           onClick={() => onEdit(tag)}
         >
           <Pencil />
-          Edit
+          {uiT("ui.464c4ffd019e")}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
@@ -98,7 +104,7 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
           onClick={() => onDelete(tag.name)}
         >
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -125,8 +131,14 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: {
+      get title() {
+        return translateUi("ui.526e0087cc3f");
+      },
+    },
+    get header() {
+      return translateUi("ui.526e0087cc3f");
+    },
     size: 300,
     enableSorting: false,
     filterFn: "includesString",
@@ -151,8 +163,12 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d70b9e24bca2");
+      },
+    },
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d70b9e24bca2")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -160,7 +176,7 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

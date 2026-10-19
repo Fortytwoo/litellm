@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { CircleHelp } from "lucide-react";
 import React from "react";
@@ -49,6 +50,8 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
   onCancel,
   onSubmit,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const budget = accessGroup?.budget ?? null;
   const form = useZodForm(budgetSchema, { values: accessGroupBudgetFormValues(budget) });
 
@@ -57,7 +60,7 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle>
-            {budget ? "Edit" : "Set"} budget for &quot;{accessGroup?.access_group}&quot;
+            {budget ? uiT("ui.464c4ffd019e") : "Set"} budget for &quot;{accessGroup?.access_group}&quot;
           </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
@@ -113,10 +116,10 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
 
             <div className="mt-6 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={onCancel}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button type="submit" disabled={isSaving}>
-                {isSaving ? "Saving..." : "Save Budget"}
+                {isSaving ? uiT("ui.dc85af8f2b1d") : "Save Budget"}
               </Button>
             </div>
           </TooltipProvider>

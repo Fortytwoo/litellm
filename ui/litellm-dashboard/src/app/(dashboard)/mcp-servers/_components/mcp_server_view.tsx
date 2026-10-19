@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { mcpServersKeys } from "@/app/(dashboard)/hooks/mcpServers/useMCPServers";
@@ -67,6 +69,8 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
   initialTabIndex = 0,
   stdioEnabled = true,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   // Open the editing Settings tab on first render when returning from the edit OAuth
   // redirect, so the "token fetched" feedback shows where the user left off (Settings=2).
   const queryClient = useQueryClient();
@@ -154,14 +158,14 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
       <Tabs value={String(selectedTabIndex)} onValueChange={(v: unknown) => setSelectedTabIndex(Number(v))}>
         <TabsList variant="line" className="mb-4 h-auto w-full justify-start rounded-none border-b p-0">
           <TabsTrigger value="0" className="flex-none rounded-none px-4 py-2">
-            Overview
+            {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           <TabsTrigger value="1" className="flex-none rounded-none px-4 py-2">
             MCP Tools
           </TabsTrigger>
           {isProxyAdmin && (
             <TabsTrigger value="2" className="flex-none rounded-none px-4 py-2">
-              Settings
+              {uiT("ui.74a883a037bc")}
             </TabsTrigger>
           )}
           {canViewUserCredentials && (
@@ -242,7 +246,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
               <h2 className="text-lg font-medium">MCP Server Settings</h2>
               {editing && canEdit ? null : (
                 <Button variant="outline" disabled={!canEdit} onClick={() => setEditing(true)}>
-                  Edit Settings
+                  {uiT("ui.cddc5824575b")}
                 </Button>
               )}
             </div>
@@ -277,7 +281,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Description</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.526e0087cc3f")}</p>
                   <div className="col-span-2 text-sm">
                     {mcpServer.description || <span className="text-muted-foreground">—</span>}
                   </div>
@@ -324,10 +328,10 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                     {mcpServer.allow_all_keys ? (
                       <Badge variant="outline">
                         <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                        Enabled
+                        {uiT("ui.92c1cdfdf4cb")}
                       </Badge>
                     ) : (
-                      <Badge variant="outline">Disabled</Badge>
+                      <Badge variant="outline">{uiT("ui.75081b593d15")}</Badge>
                     )}
                   </div>
                 </div>
@@ -351,7 +355,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                           Enabled (PKCE passthrough)
                         </Badge>
                       ) : (
-                        <Badge variant="outline">Disabled</Badge>
+                        <Badge variant="outline">{uiT("ui.75081b593d15")}</Badge>
                       )}
                     </div>
                   </div>
@@ -365,16 +369,16 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                         {mcpServer.oauth_passthrough ? (
                           <Badge variant="outline">
                             <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                            Enabled
+                            {uiT("ui.92c1cdfdf4cb")}
                           </Badge>
                         ) : (
-                          <Badge variant="outline">Disabled</Badge>
+                          <Badge variant="outline">{uiT("ui.75081b593d15")}</Badge>
                         )}
                       </div>
                     </div>
                   )}
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Access Groups</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.b0252ccc6e86")}</p>
                   <div className="col-span-2">
                     {mcpServer.mcp_access_groups && mcpServer.mcp_access_groups.length > 0 ? (
                       <div className="flex flex-wrap gap-1.5">
@@ -406,7 +410,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Cost</p>
+                  <p className="text-sm font-medium text-muted-foreground">{uiT("ui.204a5eb2cd28")}</p>
                   <div className="col-span-2">
                     <MCPServerCostDisplay costConfig={mcpServer.mcp_info?.mcp_server_cost_info} />
                   </div>

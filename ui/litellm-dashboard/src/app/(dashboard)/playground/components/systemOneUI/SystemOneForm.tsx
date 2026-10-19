@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -137,6 +138,8 @@ function ChoiceOptions({ question, onChange }: QuestionEditorProps<ChoiceQuestio
 }
 
 function NoulCriteria({ question, onChange }: QuestionEditorProps<NoulQuestion>) {
+  const { t: uiT } = useDashboardLanguage();
+
   const yesId = useId();
   const noId = useId();
 
@@ -147,7 +150,7 @@ function NoulCriteria({ question, onChange }: QuestionEditorProps<NoulQuestion>)
         <Input
           id={yesId}
           value={question.criteria?.true ?? ""}
-          placeholder="Optional"
+          placeholder={uiT("ui.59be71333c96")}
           onChange={(event) => onChange(withNoulCriterion(question, "true", event.target.value))}
         />
       </div>
@@ -156,7 +159,7 @@ function NoulCriteria({ question, onChange }: QuestionEditorProps<NoulQuestion>)
         <Input
           id={noId}
           value={question.criteria?.false ?? ""}
-          placeholder="Optional"
+          placeholder={uiT("ui.59be71333c96")}
           onChange={(event) => onChange(withNoulCriterion(question, "false", event.target.value))}
         />
       </div>
@@ -209,6 +212,8 @@ interface QuestionCardProps extends QuestionEditorProps<FormQuestion> {
 }
 
 function QuestionCard({ name, question, taken, onChange, onRename, onRemove }: QuestionCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const instructionsId = useId();
 
   return (
@@ -233,7 +238,7 @@ function QuestionCard({ name, question, taken, onChange, onRename, onRemove }: Q
         <RemoveButton label={`Remove question ${name}`} onClick={onRemove} />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor={instructionsId}>Instructions</Label>
+        <Label htmlFor={instructionsId}>{uiT("ui.934652dce41d")}</Label>
         <Textarea
           id={instructionsId}
           rows={2}
@@ -248,6 +253,8 @@ function QuestionCard({ name, question, taken, onChange, onRename, onRemove }: Q
 }
 
 export default function SystemOneForm({ value, onChange, validation, onReset }: SystemOneFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const stateId = useId();
   const form = useMemo(() => readForm(value), [value]);
 
@@ -270,7 +277,7 @@ export default function SystemOneForm({ value, onChange, validation, onReset }: 
   return (
     <FormFrame validation={validation}>
       <div className="grid gap-1.5">
-        <Label htmlFor={stateId}>Input</Label>
+        <Label htmlFor={stateId}>{uiT("ui.36ecb4f86691")}</Label>
         <p className="text-xs text-muted-foreground">
           The text the model reads before it answers, such as a support ticket or a chat message.
         </p>

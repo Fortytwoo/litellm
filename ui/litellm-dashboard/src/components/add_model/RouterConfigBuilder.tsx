@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { ChevronDown, CircleHelp, Plus, Trash2, X } from "lucide-react";
 
@@ -128,6 +130,8 @@ const HelpTooltip = ({ content }: { content: string }) => (
 );
 
 const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [routes, setRoutes] = useState<Route[]>([]);
   const [showJsonPreview, setShowJsonPreview] = useState(false);
   const [expandedRoutes, setExpandedRoutes] = useState<string[]>([]);
@@ -262,7 +266,7 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
                     <Separator />
                     <div className="space-y-4 p-4">
                       <div className="space-y-2">
-                        <Label>Model</Label>
+                        <Label>{uiT("ui.5e2c614c23f0")}</Label>
                         <SearchSelect
                           value={route.model}
                           onValueChange={(model) => updateRoute(route.id, "model", model)}
@@ -272,7 +276,7 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`${route.id}-description`}>Description</Label>
+                        <Label htmlFor={`${route.id}-description`}>{uiT("ui.526e0087cc3f")}</Label>
                         <Textarea
                           id={`${route.id}-description`}
                           value={route.description}
@@ -326,7 +330,7 @@ const RouterConfigBuilder: React.FC<RouterConfigBuilderProps> = ({ modelInfo, va
         <div className="flex w-full items-center justify-between gap-3">
           <h3 className="text-lg font-semibold">JSON Preview</h3>
           <Button type="button" variant="link" onClick={() => setShowJsonPreview((visible) => !visible)}>
-            {showJsonPreview ? "Hide" : "Show"}
+            {showJsonPreview ? uiT("ui.ac20a57bfde0") : "Show"}
           </Button>
         </div>
 

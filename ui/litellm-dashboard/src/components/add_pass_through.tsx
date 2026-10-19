@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import { CircleHelp, Info, Plug } from "lucide-react";
@@ -97,6 +98,8 @@ const AddPassThroughEndpoint: React.FC<AddFallbacksProps> = ({
   passThroughItems,
   premiumUser = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [guardrails, setGuardrails] = useState<GuardrailSettings>({});
@@ -384,11 +387,11 @@ const AddPassThroughEndpoint: React.FC<AddFallbacksProps> = ({
 
                 <div className="flex items-center justify-end space-x-3 border-t border-border pt-6">
                   <Button type="button" variant="outline" onClick={handleCancel}>
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </Button>
                   <Button type="submit" disabled={isLoading} aria-busy={isLoading}>
                     {isLoading && <UiLoadingSpinner className="size-4" />}
-                    {isLoading ? "Creating..." : "Add Pass-Through Endpoint"}
+                    {isLoading ? uiT("ui.def70944c9bb") : "Add Pass-Through Endpoint"}
                   </Button>
                 </div>
               </form>

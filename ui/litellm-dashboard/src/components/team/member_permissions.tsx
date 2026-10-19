@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { getTeamPermissionsCall, teamPermissionsUpdateCall } from "@/components/networking";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,6 +17,8 @@ interface MemberPermissionsProps {
 }
 
 const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessToken, canEditTeam }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [permissions, setPermissions] = useState<string[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,16 +83,16 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
   return (
     <Card className="block bg-card shadow-md rounded-md p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
-        <h3 className="text-lg font-medium text-foreground mb-2 sm:mb-0">Member Permissions</h3>
+        <h3 className="text-lg font-medium text-foreground mb-2 sm:mb-0">{uiT("ui.fd64b3f7eb43")}</h3>
         {canEditTeam && hasChanges && (
           <div className="flex gap-3">
             <Button variant="outline" onClick={handleReset}>
               <RotateCw className="size-3.5" />
-              Reset
+              {uiT("ui.daee7606b339")}
             </Button>
             <Button onClick={handleSave} disabled={saving}>
               <Save className="size-3.5" />
-              Save Changes
+              {uiT("ui.35322b5bb5a2")}
             </Button>
           </div>
         )}
@@ -103,9 +107,9 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
           <Table className="min-w-full">
             <TableHeader>
               <TableRow>
-                <TableHead>Method</TableHead>
+                <TableHead>{uiT("ui.52a0f9b65b27")}</TableHead>
                 <TableHead>Endpoint</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead>{uiT("ui.526e0087cc3f")}</TableHead>
                 <TableHead className="sticky right-0 bg-card shadow-[-4px_0_4px_-4px_rgba(0,0,0,0.1)] text-center">
                   Allow Access
                 </TableHead>

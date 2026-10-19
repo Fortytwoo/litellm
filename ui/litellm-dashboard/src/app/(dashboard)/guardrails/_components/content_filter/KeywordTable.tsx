@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import React from "react";
@@ -20,13 +22,15 @@ interface KeywordTableProps {
 }
 
 const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, onRemove }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const columns: ColumnDef<BlockedWord>[] = [
     {
       header: "Keyword",
       accessorKey: "keyword",
     },
     {
-      header: "Action",
+      header: uiT("ui.64cff1319d2f"),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -35,7 +39,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
           value={row.original.action}
           onValueChange={(value: string | null) => value && onActionChange(row.original.id, "action", value)}
         >
-          <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+          <SelectTrigger size="sm" className="w-[120px]" aria-label={uiT("ui.64cff1319d2f")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -49,7 +53,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
       ),
     },
     {
-      header: "Description",
+      header: uiT("ui.526e0087cc3f"),
       accessorKey: "description",
       cell: ({ row }) => row.original.description || "-",
     },
@@ -60,7 +64,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
       cell: ({ row }) => (
         <Button variant="ghost" size="sm" onClick={() => onRemove(row.original.id)}>
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </Button>
       ),
     },

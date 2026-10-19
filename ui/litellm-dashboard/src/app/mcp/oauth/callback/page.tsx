@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Suspense, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
@@ -92,8 +93,10 @@ const McpOAuthCallbackContent = () => {
 };
 
 const McpOAuthCallbackPage = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{uiT("ui.47d2a515ef2f")}</div>}>
       <McpOAuthCallbackContent />
     </Suspense>
   );

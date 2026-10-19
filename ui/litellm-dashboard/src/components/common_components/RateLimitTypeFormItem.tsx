@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { CircleHelp } from "lucide-react";
 
@@ -36,7 +37,9 @@ const rateLimitTypeOptions = (type: RateLimitType): RateLimitTypeOption[] => {
   return [
     {
       value: "best_effort_throughput",
-      label: "Default",
+      get label() {
+        return translateUi("ui.21b111cbfe6e");
+      },
       description: `Best effort throughput - no error if we're overallocating ${lower} (Team/Key Limits checked at runtime).`,
     },
     {

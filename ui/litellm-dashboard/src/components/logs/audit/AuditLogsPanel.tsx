@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCallback, useState } from "react";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
@@ -39,6 +41,8 @@ export default function AuditLogsPanel({
   isActive,
   premiumUser,
 }: AuditLogsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: PAGE_SIZE });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchInput, setSearchInput] = useState("");
@@ -101,10 +105,8 @@ export default function AuditLogsPanel({
   if (!premiumUser) {
     return (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto text-center">
-        <h1 style={{ display: "block", marginBottom: "10px" }}>✨ Enterprise Feature.</h1>
-        <p style={{ display: "block", marginBottom: "10px" }}>
-          This is a LiteLLM Enterprise feature, and requires a valid key to use.
-        </p>
+        <h1 style={{ display: "block", marginBottom: "10px" }}>{uiT("ui.c4882f3a4b39")}</h1>
+        <p style={{ display: "block", marginBottom: "10px" }}>{uiT("ui.44176be32a16")}</p>
         <p style={{ display: "block", marginBottom: "20px", fontStyle: "italic" }}>
           Here&apos;s a preview of what Audit Logs offer:
         </p>

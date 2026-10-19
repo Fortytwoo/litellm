@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Bot, Layers, MoreHorizontal, Server, Trash2 } from "lucide-react";
@@ -32,10 +34,12 @@ const RESOURCE_TONES: Record<"models" | "mcpServers" | "agents", ResourceTone> =
 };
 
 function ResourcesCell({ group }: { group: AccessGroup }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const items = [
-    { key: "models" as const, label: "Models", count: group.modelIds.length },
-    { key: "mcpServers" as const, label: "MCP Servers", count: group.mcpServerIds.length },
-    { key: "agents" as const, label: "Agents", count: group.agentIds.length },
+    { key: "models" as const, label: uiT("ui.d17d2d78d76e"), count: group.modelIds.length },
+    { key: "mcpServers" as const, label: uiT("ui.aab669a72882"), count: group.mcpServerIds.length },
+    { key: "agents" as const, label: uiT("ui.279b44d2ab4b"), count: group.agentIds.length },
   ];
 
   return (
@@ -121,8 +125,12 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "name",
       accessorKey: "name",
-      meta: { title: "Name" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+      meta: {
+        get title() {
+          return translateUi("ui.dcd1d5223f73");
+        },
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.dcd1d5223f73")} />,
       size: 220,
       enableSorting: true,
       cell: ({ row }) => {
@@ -145,8 +153,12 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "createdAt",
       accessorKey: "createdAt",
-      meta: { title: "Created" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+      meta: {
+        get title() {
+          return translateUi("ui.d70b9e24bca2");
+        },
+      },
+      header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.d70b9e24bca2")} />,
       size: 150,
       enableSorting: true,
       sortingFn: "datetime",
@@ -155,8 +167,14 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "updatedAt",
       accessorKey: "updatedAt",
-      meta: { title: "Updated" },
-      header: "Updated",
+      meta: {
+        get title() {
+          return translateUi("ui.3a5ecca188c0");
+        },
+      },
+      get header() {
+        return translateUi("ui.3a5ecca188c0");
+      },
       size: 150,
       enableSorting: false,
       cell: ({ row }) => <DateCell value={row.original.updatedAt} precision="date" />,
@@ -172,7 +190,7 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
       size: 64,
       enableSorting: false,
       enableHiding: false,

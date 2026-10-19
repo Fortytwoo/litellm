@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil, Play, Trash2 } from "lucide-react";
@@ -50,6 +52,8 @@ interface CallbackRowActionsProps {
 }
 
 function CallbackRowActions({ callback, onTest, onEdit, onDelete }: CallbackRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (callback.read_only) {
     return (
       <span
@@ -76,12 +80,12 @@ function CallbackRowActions({ callback, onTest, onEdit, onDelete }: CallbackRowA
         </DropdownMenuItem>
         <DropdownMenuItem data-testid="callback-action-edit" onClick={() => onEdit(callback)}>
           <Pencil />
-          Edit
+          {uiT("ui.464c4ffd019e")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" data-testid="callback-action-delete" onClick={() => onDelete(callback)}>
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -131,7 +135,7 @@ export const getLoggingCallbacksTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

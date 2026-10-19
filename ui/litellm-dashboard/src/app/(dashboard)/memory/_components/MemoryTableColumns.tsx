@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -24,6 +26,8 @@ interface MemoryRowActionsProps {
 }
 
 function MemoryRowActions({ row, onViewClick, onEditClick, onDeleteClick }: MemoryRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -36,16 +40,16 @@ function MemoryRowActions({ row, onViewClick, onEditClick, onDeleteClick }: Memo
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuItem data-testid="memory-action-view" onClick={() => onViewClick(row)}>
           <Eye />
-          View
+          {uiT("ui.dcc839a4015c")}
         </DropdownMenuItem>
         <DropdownMenuItem data-testid="memory-action-edit" onClick={() => onEditClick(row)}>
           <Pencil />
-          Edit
+          {uiT("ui.464c4ffd019e")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" data-testid="memory-action-delete" onClick={() => onDeleteClick(row)}>
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -81,8 +85,14 @@ export const getMemoryTableColumns = ({
   {
     id: "key",
     accessorKey: "key",
-    meta: { title: "Name" },
-    header: "Name",
+    meta: {
+      get title() {
+        return translateUi("ui.dcd1d5223f73");
+      },
+    },
+    get header() {
+      return translateUi("ui.dcd1d5223f73");
+    },
     size: 200,
     enableSorting: false,
     cell: ({ row }) => (
@@ -106,8 +116,14 @@ export const getMemoryTableColumns = ({
   {
     id: "user_id",
     accessorKey: "user_id",
-    meta: { title: "User ID" },
-    header: "User ID",
+    meta: {
+      get title() {
+        return translateUi("ui.7967e089a7b9");
+      },
+    },
+    get header() {
+      return translateUi("ui.7967e089a7b9");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -118,8 +134,14 @@ export const getMemoryTableColumns = ({
   {
     id: "team_id",
     accessorKey: "team_id",
-    meta: { title: "Team ID" },
-    header: "Team ID",
+    meta: {
+      get title() {
+        return translateUi("ui.fa2758a6173a");
+      },
+    },
+    get header() {
+      return translateUi("ui.fa2758a6173a");
+    },
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -130,8 +152,14 @@ export const getMemoryTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated" },
-    header: "Updated",
+    meta: {
+      get title() {
+        return translateUi("ui.3a5ecca188c0");
+      },
+    },
+    get header() {
+      return translateUi("ui.3a5ecca188c0");
+    },
     size: 170,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.updated_at} />,
@@ -139,7 +167,7 @@ export const getMemoryTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

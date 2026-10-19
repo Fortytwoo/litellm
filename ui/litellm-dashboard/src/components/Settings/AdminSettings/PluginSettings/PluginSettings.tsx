@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,8 @@ interface Plugin {
 const BLANK_PLUGIN: PluginFormValues = { name: "", display_name: "", url: "", plugin_key: undefined };
 
 export default function PluginSettings() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [plugins, setPlugins] = useState<Plugin[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,7 +105,7 @@ export default function PluginSettings() {
       return (
         <TableRow>
           <TableCell colSpan={5} className="py-6 text-center text-sm text-muted-foreground">
-            No data
+            {uiT("ui.3b41ba9c7cb8")}
           </TableCell>
         </TableRow>
       );
@@ -167,11 +170,11 @@ export default function PluginSettings() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>{uiT("ui.dcd1d5223f73")}</TableHead>
               <TableHead>Display Name</TableHead>
               <TableHead>URL</TableHead>
               <TableHead>Plugin Key</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>{uiT("ui.ff8059dc6752")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>{renderRows()}</TableBody>
@@ -230,10 +233,10 @@ export default function PluginSettings() {
           </form>
           <DialogFooter>
             <Button variant="outline" onClick={() => setModalOpen(false)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={form.handleSubmit(handleOk)} disabled={saving} aria-busy={saving}>
-              Save
+              {uiT("ui.1509f561f241")}
             </Button>
           </DialogFooter>
         </DialogContent>

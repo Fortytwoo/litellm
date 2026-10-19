@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useDisableBlogPosts } from "@/app/(dashboard)/hooks/useDisableBlogPosts";
 import { useDisableBouncingIcon } from "@/app/(dashboard)/hooks/useDisableBouncingIcon";
@@ -67,6 +69,8 @@ interface UserDropdownProps {
 }
 
 const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar", collapsed = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     userId,
     userEmail,
@@ -100,16 +104,16 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
         {premiumUser ? (
           <Badge>
             <Crown className="size-3" />
-            Premium
+            {uiT("ui.de88c121a82a")}
           </Badge>
         ) : (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger render={<Badge variant="outline" />}>
                 <Crown className="size-3" />
-                Standard
+                {uiT("ui.ef6691545d2c")}
               </TooltipTrigger>
-              <TooltipContent side="left">Upgrade to Premium for advanced features</TooltipContent>
+              <TooltipContent side="left">{uiT("ui.336d719f6bcf")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
@@ -118,7 +122,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <User className="size-4" />
-          <span className="text-muted-foreground">User ID</span>
+          <span className="text-muted-foreground">{uiT("ui.7967e089a7b9")}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="max-w-[150px] truncate" title={userId || "-"}>
@@ -130,13 +134,13 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <ShieldCheck className="size-4" />
-          <span className="text-muted-foreground">Role</span>
+          <span className="text-muted-foreground">{uiT("ui.14736a2eb9f4")}</span>
         </div>
         <span>{userRole}</span>
       </div>
       <Separator className="my-2" />
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide New Feature Indicators</span>
+        <span className="text-muted-foreground">{uiT("ui.48f75644db39")}</span>
         <Switch
           size="sm"
           checked={disableShowNewBadge}
@@ -154,7 +158,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide All Prompts</span>
+        <span className="text-muted-foreground">{uiT("ui.f5be3ed6e14f")}</span>
         <Switch
           size="sm"
           checked={disableShowPrompts}
@@ -171,7 +175,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide Blog Posts</span>
+        <span className="text-muted-foreground">{uiT("ui.e53bc1935093")}</span>
         <Switch
           size="sm"
           checked={disableBlogPosts}
@@ -188,7 +192,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide Bouncing Icon</span>
+        <span className="text-muted-foreground">{uiT("ui.af83f908cb90")}</span>
         <Switch
           size="sm"
           checked={disableBouncingIcon}
@@ -206,12 +210,12 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
       </div>
       {premiumUser === true && canUseLiteAdmin && (
         <div className="flex w-full items-center justify-between gap-2">
-          <span className="text-muted-foreground">Hide LiteAdmin</span>
+          <span className="text-muted-foreground">{uiT("ui.d9b317e2590c")}</span>
           <Switch
             size="sm"
             checked={disableLiteAdmin}
             onCheckedChange={setDisableLiteAdmin}
-            aria-label="Toggle hide LiteAdmin"
+            aria-label={uiT("ui.ae09408600bf")}
           />
         </div>
       )}
@@ -295,7 +299,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
           >
             <KeyRound className="size-4" />
-            Change Password
+            {uiT("ui.a949f4623074")}
           </button>
         )}
         <button
@@ -304,7 +308,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
           className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
         >
           <LogOut className="size-4" />
-          Logout
+          {uiT("ui.d0527e4b3d65")}
         </button>
       </PopoverContent>
     </Popover>

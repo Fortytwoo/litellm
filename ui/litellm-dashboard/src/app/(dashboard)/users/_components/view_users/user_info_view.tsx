@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -88,6 +90,8 @@ export default function UserInfoView({
   initialTab = 0,
   startInEditMode = false,
 }: UserInfoViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { premiumUser, userId: signedInUserId } = useAuthorized();
   const canViewAutoRouterUsage = hasProxyWideSpendView(userRole);
   const canViewSavings = canViewAutoRouterUsage || (Boolean(userId.trim()) && userId === signedInUserId);
@@ -365,9 +369,9 @@ export default function UserInfoView({
       <div className="p-4">
         <Button variant="ghost" onClick={onClose} className="mb-4">
           <ArrowLeft />
-          Back to Users
+          {uiT("ui.7f739763bbe5")}
         </Button>
-        <p className="text-sm">Loading user data...</p>
+        <p className="text-sm">{uiT("ui.d84245a90844")}</p>
       </div>
     );
   }
@@ -377,9 +381,9 @@ export default function UserInfoView({
       <div className="p-4">
         <Button variant="ghost" onClick={onClose} className="mb-4">
           <ArrowLeft />
-          Back to Users
+          {uiT("ui.7f739763bbe5")}
         </Button>
-        <p className="text-sm">User not found</p>
+        <p className="text-sm">{uiT("ui.4a1793e9900c")}</p>
       </div>
     );
   }
@@ -420,9 +424,9 @@ export default function UserInfoView({
         <div>
           <Button variant="ghost" onClick={onClose} className="mb-4">
             <ArrowLeft />
-            Back to Users
+            {uiT("ui.7f739763bbe5")}
           </Button>
-          <h2 className="text-xl font-semibold">{userData.user_email || "User"}</h2>
+          <h2 className="text-xl font-semibold">{userData.user_email || uiT("ui.b512d97e7cbf")}</h2>
           <div className="flex items-center cursor-pointer">
             <span className="text-sm text-muted-foreground font-mono">{userData.user_id}</span>
             <Button
@@ -443,7 +447,7 @@ export default function UserInfoView({
           <div className="flex items-center space-x-2">
             <Button variant="secondary" onClick={handleResetPassword} className="flex items-center">
               <RefreshCw />
-              Reset Password
+              {uiT("ui.4e70f1fd24ba")}
             </Button>
             <Button
               variant="secondary"
@@ -451,7 +455,7 @@ export default function UserInfoView({
               className="flex items-center text-destructive border-destructive hover:bg-destructive/10"
             >
               <Trash2 />
-              Delete User
+              {uiT("ui.4e920cc9cc7c")}
             </Button>
           </div>
         )}
@@ -459,18 +463,18 @@ export default function UserInfoView({
 
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete User?"
+        title={uiT("ui.d241b1f23e19")}
         message="Are you sure you want to delete this user? This action cannot be undone."
         resourceInformationTitle="User Information"
         resourceInformation={[
-          { label: "Email", value: userData.user_email },
-          { label: "User ID", value: userData.user_id, code: true },
+          { label: uiT("ui.969ccbd3cf63"), value: userData.user_email },
+          { label: uiT("ui.7967e089a7b9"), value: userData.user_id, code: true },
           {
-            label: "Global Proxy Role",
+            label: uiT("ui.1720a0bdf895"),
             value: (userData.user_role && possibleUIRoles?.[userData.user_role]?.ui_label) || userData.user_role || "-",
           },
           {
-            label: "Total Spend (USD)",
+            label: uiT("ui.c33ab4e98f55"),
             value: userData.spend !== null && userData.spend !== undefined ? userData.spend.toFixed(2) : undefined,
           },
         ]}
@@ -486,19 +490,19 @@ export default function UserInfoView({
       >
         <TabsList variant="line" className="mb-4">
           <TabsTrigger value="overview" className="flex-none data-active:text-primary after:bg-primary">
-            Overview
+            {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           <TabsTrigger value="details" className="flex-none data-active:text-primary after:bg-primary">
-            Details
+            {uiT("ui.45989de49fb7")}
           </TabsTrigger>
           {canViewSavings && (
             <TabsTrigger value="savings" className="flex-none data-active:text-primary after:bg-primary">
-              Savings
+              {uiT("ui.ed46218066a7")}
             </TabsTrigger>
           )}
           {canViewAutoRouterUsage && (
             <TabsTrigger value="auto-router-usage" className="flex-none data-active:text-primary after:bg-primary">
-              Auto-router usage
+              {uiT("ui.88d5aa106c3e")}
             </TabsTrigger>
           )}
         </TabsList>
@@ -507,22 +511,25 @@ export default function UserInfoView({
         <TabsContent value="overview" keepMounted>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="block p-6">
-              <p>Spend</p>
+              <p>{uiT("ui.85f3d558db12")}</p>
               <div className="mt-2">
                 <h3 className="text-lg font-medium">${formatNumberWithCommas(userData.spend || 0, 2)}</h3>
                 <p>
-                  of {userData.max_budget !== null ? `$${formatNumberWithCommas(userData.max_budget, 2)}` : "Unlimited"}
+                  of{" "}
+                  {userData.max_budget !== null
+                    ? `$${formatNumberWithCommas(userData.max_budget, 2)}`
+                    : uiT("ui.11dde17d6c3e")}
                 </p>
               </div>
             </Card>
 
             <Card className="block p-6">
               <div className="flex justify-between items-center mb-2">
-                <p>Teams</p>
+                <p>{uiT("ui.1e1a1c078af2")}</p>
                 {isProxyAdmin && (
                   <Button variant="ghost" size="sm" onClick={handleOpenAddTeamModal}>
                     <Plus />
-                    Add Team
+                    {uiT("ui.ffbbac1184a1")}
                   </Button>
                 )}
               </div>
@@ -532,8 +539,8 @@ export default function UserInfoView({
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Team Name</TableHead>
-                          {isProxyAdmin && <TableHead className="text-right">Actions</TableHead>}
+                          <TableHead>{uiT("ui.6ed5a592c422")}</TableHead>
+                          {isProxyAdmin && <TableHead className="text-right">{uiT("ui.ff8059dc6752")}</TableHead>}
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -563,7 +570,7 @@ export default function UserInfoView({
                     </Table>
                   </div>
                 ) : (
-                  <p>No teams</p>
+                  <p>{uiT("ui.53c980451f58")}</p>
                 )}
                 {!isTeamsExpanded && teamDetails.length > 20 && (
                   <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsTeamsExpanded(true)}>
@@ -572,19 +579,19 @@ export default function UserInfoView({
                 )}
                 {isTeamsExpanded && teamDetails.length > 20 && (
                   <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsTeamsExpanded(false)}>
-                    Show Less
+                    {uiT("ui.0264d7b0ccb8")}
                   </Button>
                 )}
               </div>
             </Card>
 
             <Card className="block p-6">
-              <p>Personal Models</p>
+              <p>{uiT("ui.2457a28bcfaf")}</p>
               <div className="mt-2">
                 {userData.models?.length && userData.models?.length > 0 ? (
                   userData.models?.map((model, index) => <p key={index}>{model}</p>)
                 ) : (
-                  <p>All proxy models</p>
+                  <p>{uiT("ui.1fcb7b9aa888")}</p>
                 )}
               </div>
             </Card>
@@ -595,9 +602,9 @@ export default function UserInfoView({
         <TabsContent value="details" keepMounted>
           <Card className="block p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">User Settings</h3>
+              <h3 className="text-lg font-medium">{uiT("ui.818ed0c87562")}</h3>
               {!isEditing && userRole && rolesWithWriteAccess.includes(userRole) && (
-                <Button onClick={() => setIsEditing(true)}>Edit Settings</Button>
+                <Button onClick={() => setIsEditing(true)}>{uiT("ui.cddc5824575b")}</Button>
               )}
             </div>
 
@@ -618,7 +625,7 @@ export default function UserInfoView({
             ) : (
               <div className="space-y-4">
                 <div>
-                  <p className="font-medium">User ID</p>
+                  <p className="font-medium">{uiT("ui.7967e089a7b9")}</p>
                   <div className="flex items-center cursor-pointer">
                     <span className="font-mono">{userData.user_id}</span>
                     <Button
@@ -637,32 +644,32 @@ export default function UserInfoView({
                 </div>
 
                 <div>
-                  <p className="font-medium">Email</p>
-                  <p>{userData.user_email || "Not Set"}</p>
+                  <p className="font-medium">{uiT("ui.969ccbd3cf63")}</p>
+                  <p>{userData.user_email || uiT("ui.8290035d4cf4")}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">User Alias</p>
-                  <p>{userData.user_alias || "Not Set"}</p>
+                  <p className="font-medium">{uiT("ui.846f00988e00")}</p>
+                  <p>{userData.user_alias || uiT("ui.8290035d4cf4")}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Global Proxy Role</p>
-                  <p>{userData.user_role || "Not Set"}</p>
+                  <p className="font-medium">{uiT("ui.1720a0bdf895")}</p>
+                  <p>{userData.user_role || uiT("ui.8290035d4cf4")}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Created</p>
-                  <p>{userData.created_at ? new Date(userData.created_at).toLocaleString() : "Unknown"}</p>
+                  <p className="font-medium">{uiT("ui.d70b9e24bca2")}</p>
+                  <p>{userData.created_at ? new Date(userData.created_at).toLocaleString() : uiT("ui.b764cdc0eab7")}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Last Updated</p>
-                  <p>{userData.updated_at ? new Date(userData.updated_at).toLocaleString() : "Unknown"}</p>
+                  <p className="font-medium">{uiT("ui.048c7f2ef9aa")}</p>
+                  <p>{userData.updated_at ? new Date(userData.updated_at).toLocaleString() : uiT("ui.b764cdc0eab7")}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Personal Models</p>
+                  <p className="font-medium">{uiT("ui.2457a28bcfaf")}</p>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {userData.models?.length && userData.models?.length > 0 ? (
                       userData.models?.map((model, index) => (
@@ -671,34 +678,34 @@ export default function UserInfoView({
                         </span>
                       ))
                     ) : (
-                      <p>All proxy models</p>
+                      <p>{uiT("ui.1fcb7b9aa888")}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <p className="font-medium">Max Budget</p>
+                  <p className="font-medium">{uiT("ui.3e20f0a04b21")}</p>
                   <p>
                     {userData.max_budget !== null && userData.max_budget !== undefined
                       ? `$${formatNumberWithCommas(userData.max_budget, 4)}`
-                      : "Unlimited"}
+                      : uiT("ui.11dde17d6c3e")}
                   </p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Budget Reset</p>
+                  <p className="font-medium">{uiT("ui.26479c1937fc")}</p>
                   <p>{getBudgetDurationLabel(userData.budget_duration ?? null)}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Metadata</p>
+                  <p className="font-medium">{uiT("ui.9eddf573cb50")}</p>
                   <pre className="bg-muted p-2 rounded-sm text-xs overflow-auto mt-1">
                     {JSON.stringify(userData.metadata || {}, null, 2)}
                   </pre>
                 </div>
 
                 <div>
-                  <p className="font-medium mb-2">MCP Permissions</p>
+                  <p className="font-medium mb-2">{uiT("ui.73f99aa3d0d8")}</p>
                   <MCPServerPermissions
                     mcpServers={userData.object_permission?.mcp_servers || []}
                     mcpAccessGroups={userData.object_permission?.mcp_access_groups || []}
@@ -724,7 +731,7 @@ export default function UserInfoView({
                   scopeNote="Savings for this user across API keys and JWT-authenticated requests."
                 />
               ) : (
-                <p role="alert">Savings are unavailable because this user has no ID.</p>
+                <p role="alert">{uiT("ui.81d6ccc8592f")}</p>
               ))}
           </TabsContent>
         )}
@@ -739,7 +746,7 @@ export default function UserInfoView({
                   activity={activityDateRange}
                 />
               ) : (
-                <p role="alert">Auto-router usage is unavailable because this user has no ID.</p>
+                <p role="alert">{uiT("ui.d448871be312")}</p>
               ))}
           </TabsContent>
         )}
@@ -755,14 +762,14 @@ export default function UserInfoView({
       {/* Delete Team Member Modal */}
       <DeleteResourceModal
         isOpen={isRemoveTeamModalOpen}
-        title="Remove from Team"
+        title={uiT("ui.81af777fec78")}
         alertMessage="Removing this user from the team will also delete any keys the user created for this team."
         message="Are you sure you want to remove this user from the team? This action cannot be undone."
         resourceInformationTitle="Team Membership"
         resourceInformation={[
-          { label: "Team", value: teamToRemove?.team_alias || teamToRemove?.team_id },
-          { label: "User ID", value: userData?.user_id, code: true },
-          { label: "Email", value: userData?.user_email },
+          { label: uiT("ui.5985039f106d"), value: teamToRemove?.team_alias || teamToRemove?.team_id },
+          { label: uiT("ui.7967e089a7b9"), value: userData?.user_id, code: true },
+          { label: uiT("ui.969ccbd3cf63"), value: userData?.user_email },
         ]}
         onCancel={handleRemoveTeamCancel}
         onOk={handleRemoveTeamConfirm}
@@ -777,7 +784,7 @@ export default function UserInfoView({
       >
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Add User to Team</DialogTitle>
+            <DialogTitle>{uiT("ui.a799d883f9fd")}</DialogTitle>
           </DialogHeader>
           <form
             onSubmit={(event) => {
@@ -787,7 +794,7 @@ export default function UserInfoView({
           >
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor={ADD_TEAM_FIELD_ID}>Team</FieldLabel>
+                <FieldLabel htmlFor={ADD_TEAM_FIELD_ID}>{uiT("ui.5985039f106d")}</FieldLabel>
                 <Combobox
                   items={availableTeamsForAdd}
                   value={selectedTeamOption}
@@ -795,9 +802,9 @@ export default function UserInfoView({
                   itemToStringLabel={(team: TeamOption) => team.team_alias}
                   isItemEqualToValue={(team: TeamOption, value: TeamOption) => team.team_id === value.team_id}
                 >
-                  <ComboboxInput id={ADD_TEAM_FIELD_ID} placeholder="Select a team" className="w-full" />
+                  <ComboboxInput id={ADD_TEAM_FIELD_ID} placeholder={uiT("ui.f7f8b89b06a8")} className="w-full" />
                   <ComboboxContent>
-                    <ComboboxEmpty>No teams found</ComboboxEmpty>
+                    <ComboboxEmpty>{uiT("ui.c83a06f9875f")}</ComboboxEmpty>
                     <ComboboxList>
                       {(team: TeamOption) => (
                         <ComboboxItem key={team.team_id} value={team} title={team.team_alias}>
@@ -810,7 +817,7 @@ export default function UserInfoView({
               </Field>
 
               <Field>
-                <FieldLabel htmlFor={ADD_TEAM_ROLE_FIELD_ID}>Member Role</FieldLabel>
+                <FieldLabel htmlFor={ADD_TEAM_ROLE_FIELD_ID}>{uiT("ui.08cbc8cda5de")}</FieldLabel>
                 <Select value={selectedRole} onValueChange={(value) => value !== null && setSelectedRole(value)}>
                   <SelectTrigger id={ADD_TEAM_ROLE_FIELD_ID} className="w-full">
                     <SelectValue />
@@ -831,7 +838,7 @@ export default function UserInfoView({
 
             <div className="text-right mt-4">
               <Button type="submit" disabled={isAddingTeam || !selectedTeamId} aria-busy={isAddingTeam}>
-                {isAddingTeam ? "Adding..." : "Add to Team"}
+                {isAddingTeam ? uiT("ui.913a8849b60d") : uiT("ui.550e5c3a1a40")}
               </Button>
             </div>
           </form>

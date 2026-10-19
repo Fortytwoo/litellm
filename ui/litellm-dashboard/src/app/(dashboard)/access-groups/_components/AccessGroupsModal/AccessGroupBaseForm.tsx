@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { BotIcon, InfoIcon, LayersIcon, ServerIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
@@ -42,6 +43,8 @@ export function AccessGroupBaseForm({
   activeTab,
   onTabChange,
 }: AccessGroupBaseFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: agentsData } = useAgents();
   const { data: mcpServersData } = useMCPServers();
 
@@ -63,15 +66,15 @@ export function AccessGroupBaseForm({
         </TabsTrigger>
         <TabsTrigger value={MODELS_TAB}>
           <LayersIcon size={16} />
-          Models
+          {uiT("ui.d17d2d78d76e")}
         </TabsTrigger>
         <TabsTrigger value={MCP_SERVERS_TAB}>
           <ServerIcon size={16} />
-          MCP Servers
+          {uiT("ui.aab669a72882")}
         </TabsTrigger>
         <TabsTrigger value={AGENTS_TAB}>
           <BotIcon size={16} />
-          Agents
+          {uiT("ui.279b44d2ab4b")}
         </TabsTrigger>
       </TabsList>
 
@@ -82,7 +85,7 @@ export function AccessGroupBaseForm({
               <Input {...field} ref={ref} placeholder="e.g. Engineering Team" disabled={isNameDisabled} />
             )}
           </FormField>
-          <FormField control={form.control} name="description" label="Description">
+          <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
             {({ ref, ...field }) => (
               <Textarea {...field} ref={ref} rows={4} placeholder="Describe the purpose of this access group..." />
             )}

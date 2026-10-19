@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { z } from "zod";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -35,6 +37,8 @@ const ReuseCredentialsModal: React.FC<ReuseCredentialsModalProps> = ({
   existingCredential,
   setIsCredentialModalOpen,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const fieldIdPrefix = React.useId();
   const storedValues = storedValuesOf(existingCredential);
   const form = useZodForm(reuseCredentialsSchema, {
@@ -97,7 +101,7 @@ const ReuseCredentialsModal: React.FC<ReuseCredentialsModalProps> = ({
 
                 <div className="flex gap-2.5">
                   <Button type="button" variant="outline" onClick={handleCancel}>
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </Button>
                   <Button type="submit">Reuse Credentials</Button>
                 </div>

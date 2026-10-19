@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { CircleHelp } from "lucide-react";
 import { z } from "zod";
@@ -106,6 +108,8 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
   policies,
   createAttachment,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [scopeType, setScopeType] = useState<ScopeType>("global");
   const [availableTeams, setAvailableTeams] = useState<string[]>([]);
@@ -255,7 +259,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
             <FieldGroup>
-              <FormField control={form.control} name="policy_names" label="Policies">
+              <FormField control={form.control} name="policy_names" label={uiT("ui.d3ad1f1f8c9c")}>
                 {({
                   id,
                   value,
@@ -352,7 +356,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                         value={value}
                         onValueChange={onChange}
                         onBlur={onBlur}
-                        placeholder={isLoadingKeys ? "Loading keys..." : "Select or enter key aliases"}
+                        placeholder={isLoadingKeys ? uiT("ui.e0c65255e48f") : "Select or enter key aliases"}
                         options={availableKeys}
                         allowCustomValues
                         tokenSeparators={[","]}
@@ -477,7 +481,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
 
             <div className="flex justify-end space-x-2 mt-4">
               <Button type="button" variant="secondary" onClick={handleClose}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               {scopeType === "specific" && (
                 <Button

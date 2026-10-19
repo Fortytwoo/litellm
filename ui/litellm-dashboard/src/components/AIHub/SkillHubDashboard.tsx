@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useMemo, useState } from "react";
 import { SortingState } from "@tanstack/react-table";
 import { Inbox, Search, X } from "lucide-react";
@@ -43,6 +45,8 @@ const SkillHubDashboard: React.FC<SkillHubDashboardProps> = ({
   publicPage = false,
   onPublishSuccess,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [search, setSearch] = useState("");
   const [domainFilter, setDomainFilter] = useState<string | undefined>(undefined);
   const [selectedSkill, setSelectedSkill] = useState<Plugin | null>(null);
@@ -118,7 +122,10 @@ const SkillHubDashboard: React.FC<SkillHubDashboardProps> = ({
       {/* Search + filters + table */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-foreground">All {publicPage ? "Public " : ""}Skills</h3>
+          <h3 className="text-sm font-semibold text-foreground">
+            {uiT("ui.a52ace420f21")} {publicPage ? "Public " : ""}
+            {uiT("ui.66d0f523a379")}
+          </h3>
           <div className="flex items-center gap-2">
             <Select
               items={domainItems}
@@ -175,7 +182,7 @@ const SkillHubDashboard: React.FC<SkillHubDashboardProps> = ({
         />
         <div className="mt-3 text-center">
           <p className="text-sm text-muted-foreground">
-            Showing {filteredSkills.length} of {totalSkills} skill{totalSkills !== 1 ? "s" : ""}
+            {uiT("ui.d604310a789a")} {filteredSkills.length} of {totalSkills} skill{totalSkills !== 1 ? "s" : ""}
           </p>
         </div>
       </div>

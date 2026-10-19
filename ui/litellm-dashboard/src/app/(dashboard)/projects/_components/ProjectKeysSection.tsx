@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import { KeyIcon, SearchIcon, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +12,8 @@ interface ProjectKeysSectionProps {
 }
 
 export function ProjectKeysSection({ projectId }: ProjectKeysSectionProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     search: keyAlias,
     setSearch: setKeyAlias,
@@ -30,7 +34,7 @@ export function ProjectKeysSection({ projectId }: ProjectKeysSectionProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <KeyIcon className="size-4" />
-          Keys
+          {uiT("ui.f0d66a79c138")}
         </CardTitle>
       </CardHeader>
       <CardContent>

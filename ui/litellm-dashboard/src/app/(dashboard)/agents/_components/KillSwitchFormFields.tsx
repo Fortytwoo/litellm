@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
@@ -109,6 +111,8 @@ const TextField = ({
 );
 
 const KillSwitchAuthFields = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { control } = useFormContext<AgentFormValues>();
   const authType = useWatch({ control, name: "kill_switch.auth_type" });
 
@@ -126,7 +130,12 @@ const KillSwitchAuthFields = () => {
       return (
         <>
           <TextField name="kill_switch.auth_username" label="Username" required="Username required" />
-          <TextField name="kill_switch.auth_password" label="Password" required="Password required" secret />
+          <TextField
+            name="kill_switch.auth_password"
+            label={uiT("ui.e7cf3ef4f17c")}
+            required="Password required"
+            secret
+          />
         </>
       );
     default:
@@ -134,90 +143,93 @@ const KillSwitchAuthFields = () => {
   }
 };
 
-const KillSwitchFormFields = () => (
-  <>
-    <TextField
-      name="kill_switch.url"
-      label={labelWithHint(
-        "Webhook URL",
-        "Absolute http(s) URL LiteLLM calls when the kill switch is triggered. Leave empty to remove the kill switch.",
-      )}
-      placeholder="https://example.com/hooks/kill-agent"
-    />
-
-    <AgentFormField name="kill_switch.method" label="Method">
-      {({ value, onChange, ref: _ref, ...control }) => (
-        <Select value={typeof value === "string" ? value : "POST"} onValueChange={onChange}>
-          <SelectTrigger {...control} className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {KILL_SWITCH_METHODS.map((method) => (
-              <SelectItem key={method} value={method}>
-                {method}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
-    </AgentFormField>
-
-    <Field>
-      <FieldTitle>Headers</FieldTitle>
-      <KeyValueFieldArray
-        name="kill_switch.headers"
-        addLabel="Add Header"
-        keyPlaceholder="Header name"
-        valuePlaceholder="Header value"
+const KillSwitchFormFields = () => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <>
+      <TextField
+        name="kill_switch.url"
+        label={labelWithHint(
+          "Webhook URL",
+          "Absolute http(s) URL LiteLLM calls when the kill switch is triggered. Leave empty to remove the kill switch.",
+        )}
+        placeholder="https://example.com/hooks/kill-agent"
       />
-    </Field>
 
-    <Field>
-      <FieldTitle>Query Parameters</FieldTitle>
-      <KeyValueFieldArray
-        name="kill_switch.query_params"
-        addLabel="Add Query Parameter"
-        keyPlaceholder="Parameter name"
-        valuePlaceholder="Parameter value"
-      />
-    </Field>
+      <AgentFormField name="kill_switch.method" label={uiT("ui.52a0f9b65b27")}>
+        {({ value, onChange, ref: _ref, ...control }) => (
+          <Select value={typeof value === "string" ? value : "POST"} onValueChange={onChange}>
+            <SelectTrigger {...control} className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {KILL_SWITCH_METHODS.map((method) => (
+                <SelectItem key={method} value={method}>
+                  {method}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      </AgentFormField>
 
-    <AgentFormField
-      name="kill_switch.body"
-      label={labelWithHint("JSON Body", "Optional JSON object sent as the request body")}
-      rules={{ validate: (value) => validateKillSwitchBody(typeof value === "string" ? value : "") }}
-    >
-      {({ value, onChange, ref, ...control }) => (
-        <Textarea
-          {...control}
-          ref={ref}
-          rows={4}
-          placeholder='{"reason": "manual kill switch"}'
-          value={typeof value === "string" ? value : ""}
-          onChange={onChange}
+      <Field>
+        <FieldTitle>Headers</FieldTitle>
+        <KeyValueFieldArray
+          name="kill_switch.headers"
+          addLabel="Add Header"
+          keyPlaceholder="Header name"
+          valuePlaceholder="Header value"
         />
-      )}
-    </AgentFormField>
+      </Field>
 
-    <AgentFormField name="kill_switch.auth_type" label="Authentication">
-      {({ value, onChange, ref: _ref, ...control }) => (
-        <Select value={typeof value === "string" ? value : "none"} onValueChange={onChange}>
-          <SelectTrigger {...control} className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {KILL_SWITCH_AUTH_TYPES.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
-    </AgentFormField>
+      <Field>
+        <FieldTitle>Query Parameters</FieldTitle>
+        <KeyValueFieldArray
+          name="kill_switch.query_params"
+          addLabel="Add Query Parameter"
+          keyPlaceholder="Parameter name"
+          valuePlaceholder="Parameter value"
+        />
+      </Field>
 
-    <KillSwitchAuthFields />
-  </>
-);
+      <AgentFormField
+        name="kill_switch.body"
+        label={labelWithHint("JSON Body", "Optional JSON object sent as the request body")}
+        rules={{ validate: (value) => validateKillSwitchBody(typeof value === "string" ? value : "") }}
+      >
+        {({ value, onChange, ref, ...control }) => (
+          <Textarea
+            {...control}
+            ref={ref}
+            rows={4}
+            placeholder='{"reason": "manual kill switch"}'
+            value={typeof value === "string" ? value : ""}
+            onChange={onChange}
+          />
+        )}
+      </AgentFormField>
+
+      <AgentFormField name="kill_switch.auth_type" label="Authentication">
+        {({ value, onChange, ref: _ref, ...control }) => (
+          <Select value={typeof value === "string" ? value : "none"} onValueChange={onChange}>
+            <SelectTrigger {...control} className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {KILL_SWITCH_AUTH_TYPES.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      </AgentFormField>
+
+      <KillSwitchAuthFields />
+    </>
+  );
+};
 
 export default KillSwitchFormFields;

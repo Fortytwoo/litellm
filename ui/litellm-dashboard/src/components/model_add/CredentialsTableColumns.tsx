@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -54,6 +56,8 @@ interface CredentialRowActionsProps {
 }
 
 function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowActionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const configOwned = credential.source === "config";
   return (
     <DropdownMenu>
@@ -81,7 +85,7 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
           onClick={() => onEdit(credential)}
         >
           <Pencil />
-          Edit
+          {uiT("ui.464c4ffd019e")}
         </DropdownMenuItem>
         <DropdownMenuItem
           data-testid="credential-action-copy"
@@ -98,7 +102,7 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
           onClick={() => onDelete(credential)}
         >
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -136,8 +140,14 @@ export const getCredentialsTableColumns = ({
     {
       id: "provider",
       accessorKey: "credential_info.custom_llm_provider",
-      meta: { title: "Provider" },
-      header: "Provider",
+      meta: {
+        get title() {
+          return translateUi("ui.472590ae974d");
+        },
+      },
+      get header() {
+        return translateUi("ui.472590ae974d");
+      },
       size: 320,
       enableSorting: false,
       cell: ({ row }) => (
@@ -172,7 +182,7 @@ export const getCredentialsTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
       size: 64,
       enableSorting: false,
       enableHiding: false,

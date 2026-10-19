@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button } from "@/components/ui/button";
@@ -12,6 +14,8 @@ interface CreatedKeyDisplayProps {
  * Used on the Virtual Keys page and in the Add Agent wizard.
  */
 const CreatedKeyDisplay: React.FC<CreatedKeyDisplayProps> = ({ apiKey }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -34,7 +38,7 @@ const CreatedKeyDisplay: React.FC<CreatedKeyDisplayProps> = ({ apiKey }) => {
       </div>
 
       <CopyToClipboard text={apiKey} onCopy={handleCopy}>
-        <Button className="mt-3">{copied ? "Copied!" : "Copy Virtual Key"}</Button>
+        <Button className="mt-3">{copied ? uiT("ui.ea61bc15688d") : "Copy Virtual Key"}</Button>
       </CopyToClipboard>
     </div>
   );

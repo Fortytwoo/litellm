@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -30,6 +32,8 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
   onRemove,
   readOnly = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const columns: ColumnDef<ContentCategory>[] = [
     {
       header: "Category",
@@ -76,7 +80,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       },
     },
     {
-      header: "Action",
+      header: uiT("ui.64cff1319d2f"),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => {
@@ -90,7 +94,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
             value={action}
             onValueChange={(value: string | null) => value && onActionChange?.(id, value as "BLOCK" | "MASK")}
           >
-            <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+            <SelectTrigger size="sm" className="w-[120px]" aria-label={uiT("ui.64cff1319d2f")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -114,7 +118,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       cell: ({ row }) => (
         <Button variant="ghost" size="sm" onClick={() => onRemove?.(row.original.id)}>
           <Trash2 />
-          Delete
+          {uiT("ui.e2d0a54968ea")}
         </Button>
       ),
     });

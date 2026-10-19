@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Check, ChevronDown, ChevronRight, Clock, Copy } from "lucide-react";
 import { toast } from "@/lib/toast";
@@ -22,6 +24,8 @@ interface GuardrailTestResultsProps {
 }
 
 export function GuardrailTestResults({ results, errors }: GuardrailTestResultsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [collapsedResults, setCollapsedResults] = useState<Set<string>>(new Set());
 
   const toggleResultCollapse = (guardrailName: string) => {
@@ -109,7 +113,7 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                         }}
                       >
                         <Copy />
-                        Copy
+                        {uiT("ui.e21f935f11d7")}
                       </Button>
                     )}
                   </div>

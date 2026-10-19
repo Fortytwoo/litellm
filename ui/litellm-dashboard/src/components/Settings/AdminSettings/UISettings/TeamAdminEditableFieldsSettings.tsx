@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Controller } from "react-hook-form";
 import { z } from "zod";
@@ -77,6 +78,8 @@ function TeamAdminEditableFieldsForm({
   isPending,
   saveSettings,
 }: TeamAdminEditableFieldsFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(editableFieldsSchema, {
     defaultValues: { team_admin_editable_team_fields: [...enabledFields] },
   });
@@ -130,7 +133,7 @@ function TeamAdminEditableFieldsForm({
       />
       <div className="flex justify-end">
         <Button type="submit" disabled={isPending || !form.formState.isDirty}>
-          {isPending ? "Saving..." : "Save"}
+          {isPending ? uiT("ui.dc85af8f2b1d") : uiT("ui.1509f561f241")}
         </Button>
       </div>
     </form>

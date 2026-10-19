@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import React from "react";
@@ -21,6 +22,8 @@ interface CostOptimizationViewProps {
 }
 
 const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken, userId, userRole }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const activity = useDailyActivityRange(accessToken, userId, userRole);
   const canViewProxyWideCostData = useCan("viewProxyWideCostData");
   const [visitedTabs, setVisitedTabs] = React.useState<readonly string[]>(["usage"]);
@@ -39,7 +42,7 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
         <PageHeader>
           <PageHeaderTitle>
             <PiggyBank />
-            Cost Optimization
+            {uiT("ui.b32e75776536")}
           </PageHeaderTitle>
           <PageHeaderDescription>
             Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers
@@ -51,7 +54,7 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
               {canViewProxyWideCostData && (
                 <>
                   <PageTabsTrigger value="compression">Prompt Compression</PageTabsTrigger>
-                  <PageTabsTrigger value="caching">Prompt Caching</PageTabsTrigger>
+                  <PageTabsTrigger value="caching">{uiT("ui.1823d9572582")}</PageTabsTrigger>
                   <PageTabsTrigger value="autorouter-usage">Auto-Router</PageTabsTrigger>
                 </>
               )}

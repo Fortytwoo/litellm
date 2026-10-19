@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { Info } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -31,8 +32,18 @@ interface KeyStatus {
 }
 
 const SPEND_BUDGET_SORT_FIELDS: DataTableSortField[] = [
-  { id: "spend", label: "Spend" },
-  { id: "max_budget", label: "Budget" },
+  {
+    id: "spend",
+    get label() {
+      return translateUi("ui.85f3d558db12");
+    },
+  },
+  {
+    id: "max_budget",
+    get label() {
+      return translateUi("ui.1c6225ec7092");
+    },
+  },
 ];
 
 export const KEY_TABLE_SORT_FIELDS: readonly string[] = [
@@ -47,7 +58,9 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
   if (key.deleted_at) {
     return {
       tone: "neutral",
-      label: "Deleted",
+      get label() {
+        return translateUi("ui.b48ff39c2e0f");
+      },
       tooltip: `Deleted ${new Date(key.deleted_at).toLocaleString()}${key.deleted_by ? ` by ${key.deleted_by}` : ""}. Kept for audit and spend history; requests using this key are rejected.`,
     };
   }
@@ -55,7 +68,9 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
     const isScimBlocked = (key.metadata as Record<string, unknown> | null | undefined)?.scim_blocked === true;
     return {
       tone: "error",
-      label: "Blocked",
+      get label() {
+        return translateUi("ui.18f2a0947f9d");
+      },
       tooltip: isScimBlocked
         ? "Blocked by SCIM (external identity provider deactivated or deleted the owning user)."
         : "Blocked. Requests using this key will be rejected with 401.",
@@ -63,11 +78,19 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
   }
   const expiresAt = key.expires ? Date.parse(key.expires) : Number.NaN;
   if (!Number.isNaN(expiresAt) && expiresAt < Date.now()) {
-    return { tone: "warning", label: "Expired", tooltip: "This key has passed its expiry date." };
+    return {
+      tone: "warning",
+      get label() {
+        return translateUi("ui.424a2551d356");
+      },
+      tooltip: "This key has passed its expiry date.",
+    };
   }
   return {
     tone: "success",
-    label: "Active",
+    get label() {
+      return translateUi("ui.92340695899b");
+    },
     tooltip: "This key is not blocked and has not expired.",
   };
 };
@@ -99,7 +122,9 @@ export const getKeyTableColumns = ({
     id: "key_alias",
     accessorKey: "key_alias",
     meta: {
-      title: "Key",
+      get title() {
+        return translateUi("ui.99a52df3ff3d");
+      },
       renderSkeleton: () => (
         <div className="flex flex-col gap-1 py-1">
           <Skeleton className="h-4 w-32" />
@@ -110,7 +135,9 @@ export const getKeyTableColumns = ({
         </div>
       ),
     },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Key" variant="header-cycle" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.99a52df3ff3d")} variant="header-cycle" />
+    ),
     size: 260,
     enableSorting: true,
     cell: ({ row }) => {
@@ -135,8 +162,14 @@ export const getKeyTableColumns = ({
   {
     id: "token",
     accessorKey: "token",
-    meta: { title: "Key ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Key ID" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.d54d56ee0a42");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.d54d56ee0a42")} variant="header-cycle" />
+    ),
     size: 120,
     enableSorting: true,
     cell: (info) => <IdCell value={info.getValue() as string | null} onClick={() => onSelectKey(info.row.original)} />,
@@ -144,8 +177,14 @@ export const getKeyTableColumns = ({
   {
     id: "team_alias",
     accessorKey: "team_id",
-    meta: { title: "Team" },
-    header: "Team",
+    meta: {
+      get title() {
+        return translateUi("ui.5985039f106d");
+      },
+    },
+    get header() {
+      return translateUi("ui.5985039f106d");
+    },
     size: 120,
     enableSorting: false,
     cell: (info) => {
@@ -164,8 +203,14 @@ export const getKeyTableColumns = ({
   {
     id: "organization_alias",
     accessorKey: "org_id",
-    meta: { title: "Organization" },
-    header: "Organization",
+    meta: {
+      get title() {
+        return translateUi("ui.d764d42592fc");
+      },
+    },
+    get header() {
+      return translateUi("ui.d764d42592fc");
+    },
     size: 140,
     enableSorting: false,
     cell: (info) => {
@@ -184,9 +229,16 @@ export const getKeyTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    meta: { title: "User" },
+    meta: {
+      get title() {
+        return translateUi("ui.b512d97e7cbf");
+      },
+    },
     header: () => (
-      <InfoHeader label="User" tooltip="Displays the first available value: User Alias, User Email, or User ID." />
+      <InfoHeader
+        label={translateUi("ui.b512d97e7cbf")}
+        tooltip="Displays the first available value: User Alias, User Email, or User ID."
+      />
     ),
     size: 160,
     enableSorting: false,
@@ -205,8 +257,14 @@ export const getKeyTableColumns = ({
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.3d44337010bf");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.3d44337010bf")} variant="header-cycle" />
+    ),
     size: 120,
     enableSorting: true,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" />,
@@ -214,8 +272,14 @@ export const getKeyTableColumns = ({
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: "Created By" },
-    header: "Created By",
+    meta: {
+      get title() {
+        return translateUi("ui.dfd60b9aa5ca");
+      },
+    },
+    get header() {
+      return translateUi("ui.dfd60b9aa5ca");
+    },
     size: 160,
     enableSorting: false,
     cell: (info) => {
@@ -235,8 +299,14 @@ export const getKeyTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" variant="header-cycle" />,
+    meta: {
+      get title() {
+        return translateUi("ui.e35c8e4f5cb5");
+      },
+    },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={translateUi("ui.e35c8e4f5cb5")} variant="header-cycle" />
+    ),
     size: 120,
     enableSorting: true,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
@@ -244,10 +314,14 @@ export const getKeyTableColumns = ({
   {
     id: "last_active",
     accessorKey: "last_active",
-    meta: { title: "Last Active" },
+    meta: {
+      get title() {
+        return translateUi("ui.b6dc1b957942");
+      },
+    },
     header: () => (
       <InfoHeader
-        label="Last Active"
+        label={translateUi("ui.b6dc1b957942")}
         tooltip="This is a new field and is not backfilled. Only new key usage will update this value."
       />
     ),
@@ -258,8 +332,14 @@ export const getKeyTableColumns = ({
   {
     id: "expires",
     accessorKey: "expires",
-    meta: { title: "Expires" },
-    header: "Expires",
+    meta: {
+      get title() {
+        return translateUi("ui.f6725f3af08a");
+      },
+    },
+    get header() {
+      return translateUi("ui.f6725f3af08a");
+    },
     size: 120,
     enableSorting: false,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
@@ -291,10 +371,14 @@ export const getKeyTableColumns = ({
   {
     id: "total_spend",
     accessorKey: "total_spend",
-    meta: { title: "Lifetime Spend" },
+    meta: {
+      get title() {
+        return translateUi("ui.eac3d121beb3");
+      },
+    },
     header: () => (
       <InfoHeader
-        label="Lifetime Spend"
+        label={translateUi("ui.eac3d121beb3")}
         tooltip="Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade."
       />
     ),
@@ -305,8 +389,14 @@ export const getKeyTableColumns = ({
   {
     id: "budget_reset_at",
     accessorKey: "budget_reset_at",
-    meta: { title: "Budget Reset" },
-    header: "Budget Reset",
+    meta: {
+      get title() {
+        return translateUi("ui.26479c1937fc");
+      },
+    },
+    get header() {
+      return translateUi("ui.26479c1937fc");
+    },
     size: 130,
     enableSorting: false,
     cell: (info) => <DateCell value={info.getValue() as string | null} fallback="Never" />,
@@ -314,8 +404,15 @@ export const getKeyTableColumns = ({
   {
     id: "models",
     accessorKey: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: {
+      get title() {
+        return translateUi("ui.d17d2d78d76e");
+      },
+      skeleton: "chips",
+    },
+    get header() {
+      return translateUi("ui.d17d2d78d76e");
+    },
     size: 220,
     enableSorting: false,
     cell: (info) => (
@@ -328,16 +425,22 @@ export const getKeyTableColumns = ({
   },
   {
     id: "rate_limits",
-    meta: { title: "Rate Limits" },
-    header: "Rate Limits",
+    meta: {
+      get title() {
+        return translateUi("ui.ed129d234fd4");
+      },
+    },
+    get header() {
+      return translateUi("ui.ed129d234fd4");
+    },
     size: 140,
     enableSorting: false,
     cell: ({ row }) => {
       const key = row.original;
       return (
         <div className="text-xs">
-          <div>TPM: {key.tpm_limit !== null ? key.tpm_limit : "Unlimited"}</div>
-          <div>RPM: {key.rpm_limit !== null ? key.rpm_limit : "Unlimited"}</div>
+          <div>TPM: {key.tpm_limit !== null ? key.tpm_limit : translateUi("ui.11dde17d6c3e")}</div>
+          <div>RPM: {key.rpm_limit !== null ? key.rpm_limit : translateUi("ui.11dde17d6c3e")}</div>
         </div>
       );
     },

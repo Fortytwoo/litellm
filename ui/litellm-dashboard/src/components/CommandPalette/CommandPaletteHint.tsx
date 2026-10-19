@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Search, X } from "lucide-react";
 import { z } from "zod";
@@ -15,6 +16,8 @@ interface CommandPaletteHintProps {
 }
 
 export function CommandPaletteHint({ scope, onDismiss }: CommandPaletteHintProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { setOpen } = useCommandPalette();
   const shortcut = useShortcutLabel();
   const mounted = useClientMounted();
@@ -25,11 +28,11 @@ export function CommandPaletteHint({ scope, onDismiss }: CommandPaletteHintProps
     <div className="fixed bottom-4 left-1/2 z-overlay hidden -translate-x-1/2 items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur animate-in fade-in slide-in-from-bottom-2 duration-300 md:flex">
       <button type="button" className="flex items-center gap-1.5 hover:text-foreground" onClick={() => setOpen(true)}>
         <Search className="size-3.5" aria-hidden="true" />
-        <span>Press</span>
+        <span>{uiT("ui.9ed1273e9b5a")}</span>
         <kbd className="rounded-sm border border-border border-b-2 bg-muted px-[3px] font-mono text-xs text-muted-foreground">
           {shortcut}
         </kbd>
-        <span>{scope === "keys" ? "to search keys" : "to search or jump to a page"}</span>
+        <span>{scope === "keys" ? uiT("ui.08855ce9dcc6") : uiT("ui.6c6945776311")}</span>
       </button>
       <button
         type="button"

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * New Usage Page
  *
@@ -72,6 +74,8 @@ interface UsagePageProps {
 }
 
 const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userRole, userId: userID, premiumUser } = useAuthorized();
   const [gatewayActivityData, setGatewayActivityData] = useState<FetchedGatewayActivity | null>(null);
 
@@ -350,7 +354,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <TabsList variant="line">
                     <TabsTrigger value="cost" className="flex-none px-3">
-                      Overview
+                      {uiT("ui.d4b1ea5708dd")}
                     </TabsTrigger>
                     <TabsTrigger value="models" className="flex-none px-3">
                       Model Activity
@@ -405,7 +409,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                               Successful: row.successful_requests,
                               Failed: row.failed_requests,
                             }))}
-                            series={["Successful", "Failed"]}
+                            series={[uiT("ui.f3686bb328c6"), uiT("ui.031a8f0f659d")]}
                             colors={["#2b3fd6", "#ef4444"]}
                             xKey="route"
                             format={(value) => value.toLocaleString()}
@@ -560,7 +564,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                     <Button
                       variant="ghost"
                       size="icon-xs"
-                      aria-label="Close"
+                      aria-label={uiT("ui.7d9eb7acb13e")}
                       onClick={() => setShowCredentialBanner(false)}
                     >
                       <X />

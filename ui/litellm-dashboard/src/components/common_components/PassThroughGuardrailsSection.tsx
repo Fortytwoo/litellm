@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleHelp, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -35,6 +37,8 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
   onChange,
   disabled = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const selectedGuardrails = Object.keys(value);
 
   const emit = (next: GuardrailSettings) => {
@@ -61,7 +65,7 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
   return (
     <TooltipProvider>
       <Card className="block p-6">
-        <h3 className="mb-2 text-lg font-semibold text-foreground">Guardrails</h3>
+        <h3 className="mb-2 text-lg font-semibold text-foreground">{uiT("ui.443f975eefe8")}</h3>
         <p className="mb-6 text-sm text-muted-foreground">
           Configure guardrails to enforce policies on requests and responses. Guardrails are opt-in for passthrough
           endpoints.

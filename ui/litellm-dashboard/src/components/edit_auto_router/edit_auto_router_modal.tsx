@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { autoRouterListKey, fetchAllModelDeployments } from "@/app/(dashboard)/hooks/models/useModels";
@@ -285,6 +287,8 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
   userRole,
   isMemberManaged = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [loading, setLoading] = useState(false);
   const [modelAccessGroups, setModelAccessGroups] = useState<string[]>([]);
   const [modelInfo, setModelInfo] = useState<ModelGroup[]>([]);
@@ -779,19 +783,19 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
 
             <DialogFooter>
               <Button variant="outline" onClick={onCancel}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               {submitBlockedReason === null ? (
                 <Button disabled={loading} onClick={handleSubmit}>
                   {loading && <UiLoadingSpinner className="size-4" />}
-                  Save Changes
+                  {uiT("ui.35322b5bb5a2")}
                 </Button>
               ) : (
                 <Tooltip>
                   <TooltipTrigger
                     render={
                       <Button disabled onClick={handleSubmit}>
-                        Save Changes
+                        {uiT("ui.35322b5bb5a2")}
                       </Button>
                     }
                   />

@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import React from "react";
 import { Info, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,7 +42,12 @@ const DECISION_ITEMS = [
 ] as const;
 
 const ON_DISALLOWED_ITEMS = [
-  { value: "block", label: "Block" },
+  {
+    value: "block",
+    get label() {
+      return translateUi("ui.211d0bb8cf4f");
+    },
+  },
   { value: "rewrite", label: "Rewrite" },
 ] as const;
 
@@ -57,6 +65,8 @@ const ensureConfig = (config?: ToolPermissionConfig): ToolPermissionConfig => ({
 });
 
 const ToolPermissionRulesEditor: React.FC<ToolPermissionRulesEditorProps> = ({ value, onChange, disabled = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const config = ensureConfig(value);
 
   const updateConfig = (partial: Partial<ToolPermissionConfig>) => {
@@ -223,7 +233,7 @@ const ToolPermissionRulesEditor: React.FC<ToolPermissionRulesEditorProps> = ({ v
                     <p className="font-semibold">Rule {index + 1}</p>
                     <Button variant="ghost" disabled={disabled} onClick={() => removeRule(index)}>
                       <Trash2 />
-                      Remove
+                      {uiT("ui.c3812fc4acb8")}
                     </Button>
                   </div>
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { CircleHelp } from "lucide-react";
 import React, { type ReactNode } from "react";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
@@ -30,6 +32,8 @@ export function CalcPopover({ title, formula, children }: { title: string; formu
 }
 
 export function MathTable({ rows, total }: { rows: readonly MathRow[]; total: string }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const width = 1 + Math.max(...rows.map((row) => row.parts.length), 1);
   return (
     <table className="w-full text-xs">
@@ -57,7 +61,7 @@ export function MathTable({ rows, total }: { rows: readonly MathRow[]; total: st
       <tfoot>
         <tr className="border-t border-border font-medium">
           <td className="pt-1.5 pr-3" colSpan={width - 1}>
-            Total
+            {uiT("ui.c9b3c38247f7")}
           </td>
           <td className="pt-1.5 pl-3 text-right whitespace-nowrap tabular-nums">{total}</td>
         </tr>

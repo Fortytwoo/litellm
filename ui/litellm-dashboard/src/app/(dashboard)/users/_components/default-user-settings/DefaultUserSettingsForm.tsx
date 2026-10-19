@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
@@ -30,7 +32,12 @@ import {
 const NO_RESET = "never";
 
 const BUDGET_DURATION_OPTIONS = [
-  { value: NO_RESET, label: "No reset" },
+  {
+    value: NO_RESET,
+    get label() {
+      return translateUi("ui.c49ea0b73d1c");
+    },
+  },
   { value: "1h", label: "hourly" },
   { value: "24h", label: "daily" },
   { value: "7d", label: "weekly" },
@@ -38,8 +45,18 @@ const BUDGET_DURATION_OPTIONS = [
 ] as const;
 
 const TEAM_ROLE_OPTIONS = [
-  { value: "user", label: "User" },
-  { value: "admin", label: "Admin" },
+  {
+    value: "user",
+    get label() {
+      return translateUi("ui.b512d97e7cbf");
+    },
+  },
+  {
+    value: "admin",
+    get label() {
+      return translateUi("ui.c1c224b03cd9");
+    },
+  },
 ] as const;
 
 const MODEL_SENTINEL_LABELS: ReadonlyMap<string, string> = new Map(
@@ -71,6 +88,8 @@ interface RoleOption {
 type SettingsControl = Control<DefaultUserSettingsFormValues, unknown, DefaultUserSettingsSubmitValues>;
 
 const TeamPickerField = ({ control, index }: { control: SettingsControl; index: number }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [search, setSearch] = React.useState("");
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteTeams(
     TEAMS_PAGE_SIZE,
@@ -90,7 +109,7 @@ const TeamPickerField = ({ control, index }: { control: SettingsControl; index: 
   );
 
   return (
-    <FormField control={control} name={`teams.${index}.team_id`} label="Team">
+    <FormField control={control} name={`teams.${index}.team_id`} label={uiT("ui.5985039f106d")}>
       {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
         <PaginatedSearchSelect
           options={options}
@@ -101,8 +120,8 @@ const TeamPickerField = ({ control, index }: { control: SettingsControl; index: 
           hasNextPage={hasNextPage}
           isLoading={isLoading}
           isFetchingNextPage={isFetchingNextPage}
-          placeholder="Search a team"
-          emptyText="No teams found"
+          placeholder={uiT("ui.790c881f4e76")}
+          emptyText={uiT("ui.c83a06f9875f")}
           inputId={id}
           aria-invalid={ariaInvalid}
           aria-describedby={ariaDescribedBy}
@@ -113,36 +132,45 @@ const TeamPickerField = ({ control, index }: { control: SettingsControl; index: 
 };
 
 const TeamsField = ({ control }: { control: SettingsControl }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { fields, append, remove } = useFieldArray({ control, name: "teams" });
 
   return (
     <div className="flex w-full flex-col gap-3">
       <div>
-        <p className="text-sm font-medium">Default Teams</p>
-        <p className="text-sm text-muted-foreground">
-          New users are added to these teams. Only teams that already exist can be selected.
-        </p>
+        <p className="text-sm font-medium">{uiT("ui.05e6997e8076")}</p>
+        <p className="text-sm text-muted-foreground">{uiT("ui.c97870c862cc")}</p>
       </div>
 
       {fields.map((field, index) => (
         <div key={field.id} className="rounded-lg border border-border p-4">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm font-medium">Team {index + 1}</p>
+            <p className="text-sm font-medium">
+              {uiT("ui.5985039f106d")} {index + 1}
+            </p>
             <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
-              Remove
+              {uiT("ui.c3812fc4acb8")}
             </Button>
           </div>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <TeamPickerField control={control} index={index} />
 
-            <FormField control={control} name={`teams.${index}.max_budget_in_team`} label="Max Budget in Team (USD)">
+            <FormField control={control} name={`teams.${index}.max_budget_in_team`} label={uiT("ui.fff32eae19c4")}>
               {({ ref, ...budgetField }) => (
-                <Input {...budgetField} ref={ref} type="number" step="any" min={0} placeholder="Optional" />
+                <Input
+                  {...budgetField}
+                  ref={ref}
+                  type="number"
+                  step="any"
+                  min={0}
+                  placeholder={uiT("ui.59be71333c96")}
+                />
               )}
             </FormField>
 
-            <FormField control={control} name={`teams.${index}.user_role`} label="Team Role">
+            <FormField control={control} name={`teams.${index}.user_role`} label={uiT("ui.5c4e91007e9b")}>
               {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                 <Select
                   items={TEAM_ROLE_OPTIONS}
@@ -172,7 +200,7 @@ const TeamsField = ({ control }: { control: SettingsControl }) => {
       ))}
 
       <Button type="button" variant="outline" onClick={() => append(EMPTY_TEAM_ROW)}>
-        Add Team
+        {uiT("ui.ffbbac1184a1")}
       </Button>
     </div>
   );
@@ -191,6 +219,8 @@ interface SettingsViewProps {
 }
 
 const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const roleLabel = roleOptions.find((option) => option.value === values.user_role)?.label ?? values.user_role;
   const durationValue = values.budget_duration === "" ? NO_RESET : values.budget_duration;
   const durationLabel =
@@ -198,18 +228,20 @@ const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <ViewRow label="Default Role">{roleLabel === "" ? "Not set" : roleLabel}</ViewRow>
-      <ViewRow label="Max Budget (USD)">{values.max_budget === "" ? "Not set" : values.max_budget}</ViewRow>
-      <ViewRow label="Reset Budget">{durationLabel}</ViewRow>
-      <ViewRow label="Default Models">
+      <ViewRow label={uiT("ui.5bcfbd6bd78a")}>{roleLabel === "" ? uiT("ui.4895f73177ab") : roleLabel}</ViewRow>
+      <ViewRow label={uiT("ui.afa99ea4a8c3")}>
+        {values.max_budget === "" ? uiT("ui.4895f73177ab") : values.max_budget}
+      </ViewRow>
+      <ViewRow label={uiT("ui.66b0753db929")}>{durationLabel}</ViewRow>
+      <ViewRow label={uiT("ui.fbe494fbd195")}>
         {values.models.length === 0
-          ? "Not set"
+          ? uiT("ui.4895f73177ab")
           : values.models.map((model) => MODEL_SENTINEL_LABELS.get(model) ?? model).join(", ")}
       </ViewRow>
       <div>
-        <p className="text-sm font-medium">Default Teams</p>
+        <p className="text-sm font-medium">{uiT("ui.05e6997e8076")}</p>
         {values.teams.length === 0 ? (
-          <p className="text-sm text-muted-foreground">None</p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.dc937b598926")}</p>
         ) : (
           values.teams.map((team) => (
             <p key={team.team_id} className="text-sm text-muted-foreground">
@@ -233,6 +265,8 @@ interface SettingsFormProps {
 }
 
 const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, onSaved }: SettingsFormProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const form = useZodForm(defaultUserSettingsSchema, { defaultValues: initialValues });
   const { isDirty } = form.formState;
@@ -257,8 +291,8 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
         <FormField
           control={form.control}
           name="user_role"
-          label="Default Role"
-          description="Role assigned to new users"
+          label={uiT("ui.5bcfbd6bd78a")}
+          description={uiT("ui.a0e3f71045d7")}
         >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
@@ -267,7 +301,7 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
               onValueChange={(selected) => onChange(selected ?? "")}
             >
               <SelectTrigger id={id} className="w-full" aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy}>
-                <SelectValue placeholder="Not set" />
+                <SelectValue placeholder={uiT("ui.4895f73177ab")} />
               </SelectTrigger>
               <SelectContent>
                 {roleOptions.map((option) => (
@@ -286,8 +320,8 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
         <FormField
           control={form.control}
           name="max_budget"
-          label="Max Budget (USD)"
-          description="Default maximum budget for new users"
+          label={uiT("ui.afa99ea4a8c3")}
+          description={uiT("ui.ca105dd47c66")}
         >
           {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step="any" min={0} />}
         </FormField>
@@ -295,8 +329,8 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
         <FormField
           control={form.control}
           name="budget_duration"
-          label="Reset Budget"
-          description="How often the default budget resets"
+          label={uiT("ui.66b0753db929")}
+          description={uiT("ui.54d1100b3e00")}
         >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
@@ -321,8 +355,8 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
         <FormField
           control={form.control}
           name="models"
-          label="Default Models"
-          description="Models new users can access"
+          label={uiT("ui.fbe494fbd195")}
+          description={uiT("ui.274eefd21156")}
         >
           {(field) => (
             <ModelSelect
@@ -347,28 +381,29 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
           }}
           disabled={mutation.isPending}
         >
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
         <Button type="submit" disabled={!isDirty || mutation.isPending}>
-          {mutation.isPending ? "Saving..." : "Save Changes"}
+          {mutation.isPending ? uiT("ui.dc85af8f2b1d") : uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </form>
   );
 };
 
-const SettingsCard = ({ action, children }: { action?: React.ReactNode; children: React.ReactNode }) => (
-  <Card>
-    <CardHeader>
-      <CardTitle>Default User Settings</CardTitle>
-      <CardDescription>
-        Applied to every new internal user created through SSO or the user management APIs.
-      </CardDescription>
-      {action !== undefined && <CardAction>{action}</CardAction>}
-    </CardHeader>
-    <CardContent>{children}</CardContent>
-  </Card>
-);
+const SettingsCard = ({ action, children }: { action?: React.ReactNode; children: React.ReactNode }) => {
+  const { t: uiT } = useDashboardLanguage();
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{uiT("ui.021d7bfda9c4")}</CardTitle>
+        <CardDescription>{uiT("ui.340b3797a252")}</CardDescription>
+        {action !== undefined && <CardAction>{action}</CardAction>}
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
+};
 
 export interface DefaultUserSettingsFormProps {
   possibleUIRoles?: Record<string, Record<string, string>> | null;
@@ -381,6 +416,8 @@ export const DefaultUserSettingsForm = ({
   fetchSettings = defaultFetchSettings,
   updateSettings = defaultUpdateSettings,
 }: DefaultUserSettingsFormProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isEditing, setIsEditing] = React.useState(false);
   const { data, isPending, isError } = useQuery({ queryKey: SETTINGS_QUERY_KEY, queryFn: fetchSettings });
 
@@ -405,7 +442,7 @@ export const DefaultUserSettingsForm = ({
   if (isError || initialValues === undefined) {
     return (
       <SettingsCard>
-        <p role="alert">Could not load the default user settings.</p>
+        <p role="alert">{uiT("ui.ebfa97e3ab1d")}</p>
       </SettingsCard>
     );
   }
@@ -415,7 +452,7 @@ export const DefaultUserSettingsForm = ({
       action={
         isEditing ? undefined : (
           <Button type="button" onClick={() => setIsEditing(true)}>
-            Edit Settings
+            {uiT("ui.cddc5824575b")}
           </Button>
         )
       }

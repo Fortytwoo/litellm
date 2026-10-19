@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Info } from "lucide-react";
 import { SearchSelect } from "@/components/shared/SearchSelect";
@@ -18,6 +20,8 @@ const defaultModelPlaceholderFor = (derivedDefaultModel: string | undefined, isC
 };
 
 const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const defaultModelPlaceholder = defaultModelPlaceholderFor(
     resolveComplexityDefaultModel(value),
     Boolean(value.custom_tier_set),
@@ -41,7 +45,7 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
         value={value.default_model ?? ""}
         onValueChange={handleDefaultModelChange}
         placeholder={defaultModelPlaceholder}
-        emptyText="No models found"
+        emptyText={uiT("ui.a650c298cf44")}
         aria-label="Default model"
       />
       <span className="block mt-1 text-xs text-muted-foreground">

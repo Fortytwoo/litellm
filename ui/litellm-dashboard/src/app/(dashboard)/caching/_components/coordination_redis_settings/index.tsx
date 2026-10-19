@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,8 @@ import {
 } from "./coordinationRedisUtils";
 
 const CoordinationRedisSettings: React.FC = () => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<CoordinationFormValues>({ defaultValues: buildInitialValues({}) });
   const [selectedRedisType, setSelectedRedisType] = useState<CoordinationRedisType | null>(null);
 
@@ -162,7 +166,7 @@ const CoordinationRedisSettings: React.FC = () => {
         </Button>
         <Button onClick={handleSaveChanges} disabled={updateSettings.isPending}>
           {updateSettings.isPending && <UiLoadingSpinner className="size-4" />}
-          {updateSettings.isPending ? "Saving..." : "Save Changes"}
+          {updateSettings.isPending ? uiT("ui.dc85af8f2b1d") : uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </div>

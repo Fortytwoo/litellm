@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import React, { useState } from "react";
 import { PlusIcon, TrashIcon, GripVerticalIcon } from "lucide-react";
 import VariableTextArea from "../variable_textarea";
@@ -7,7 +8,12 @@ import { Card } from "@/components/ui/card";
 import { Select as ShadcnSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ROLE_ITEMS = [
-  { value: "user", label: "User" },
+  {
+    value: "user",
+    get label() {
+      return translateUi("ui.b512d97e7cbf");
+    },
+  },
   { value: "assistant", label: "Assistant" },
   { value: "system", label: "System" },
 ] as const;

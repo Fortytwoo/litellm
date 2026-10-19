@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
@@ -39,6 +40,8 @@ export function CommandPalette({ open, setOpen }: { open: boolean; setOpen: (ope
 }
 
 function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const pathname = usePathname();
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -90,7 +93,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         ...(searchKeysAction
           ? [
               {
-                label: "Actions",
+                label: uiT("ui.ff8059dc6752"),
                 entries: [
                   {
                     id: "action:search-keys",
@@ -129,7 +132,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       };
     });
     const keysGroup: PaletteGroup = {
-      label: trimmedQuery ? "Keys" : "Recent keys",
+      label: trimmedQuery ? uiT("ui.f0d66a79c138") : "Recent keys",
       entries: keyEntries,
       emptyMessage: trimmedQuery ? `No keys match “${trimmedQuery}”` : "No recent keys",
       isLoading: isLoadingKeys,
@@ -148,10 +151,10 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
 
     return [
       keysGroup,
-      { label: "Actions", entries: [filterEntry] },
+      { label: uiT("ui.ff8059dc6752"), entries: [filterEntry] },
       ...(pages.length > 0 ? [{ label: "Pages", entries: pages }] : []),
     ];
-  }, [isLoadingKeys, keyResults.data?.keys, navMatches, scope, teamAliases, trimmedQuery]);
+  }, [isLoadingKeys, keyResults.data?.keys, navMatches, scope, teamAliases, trimmedQuery, uiT]);
   const selectableEntries = useMemo(() => groups.flatMap((group) => group.entries), [groups]);
   const activeEntryId = activeSelection?.query === query && activeSelection.scope === scope ? activeSelection.id : null;
   const selectedIndex = selectableEntries.findIndex((entry) => entry.id === activeEntryId);
@@ -248,14 +251,14 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
           {scope === "keys" && (
             <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-muted px-2 py-1 text-xs font-medium">
               <KeyRound className="size-3.5" />
-              Virtual Keys
+              {uiT("ui.d1c0ad6c4bdd")}
             </span>
           )}
           <input
             autoFocus
             type="text"
             role="combobox"
-            aria-label="Search"
+            aria-label={uiT("ui.49c266baaaa7")}
             aria-expanded="true"
             aria-controls="command-palette-results"
             aria-activedescendant={activeOptionId}
@@ -299,17 +302,17 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         <div className="flex h-10 items-center justify-between border-t border-border bg-muted/30 px-3 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <span className="font-medium text-foreground">LiteLLM</span>
-            <span>{scope === "keys" ? "Virtual Keys" : "All pages"}</span>
+            <span>{scope === "keys" ? uiT("ui.d1c0ad6c4bdd") : uiT("ui.903542125c00")}</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className={shortcutChipClass}>↵</kbd> Open
+              <kbd className={shortcutChipClass}>↵</kbd> {uiT("ui.ed077f3d8125")}
             </span>
             <span className="flex items-center gap-1">
-              <kbd className={shortcutChipClass}>↑↓</kbd> Navigate
+              <kbd className={shortcutChipClass}>↑↓</kbd> {uiT("ui.5ea5fbe811db")}
             </span>
             <span className="flex items-center gap-1">
-              <kbd className={shortcutChipClass}>esc</kbd> Close
+              <kbd className={shortcutChipClass}>esc</kbd> {uiT("ui.7d9eb7acb13e")}
             </span>
           </div>
         </div>

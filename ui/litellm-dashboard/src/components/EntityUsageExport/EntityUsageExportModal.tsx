@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +20,8 @@ const EntityUsageExportModal: React.FC<EntityUsageExportModalProps> = ({
   selectedFilters = [],
   customTitle,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [exportFormat, setExportFormat] = useState<ExportFormat>("csv");
   const [exportType, setExportType] = useState<ExportType>("daily");
   const [isExporting, setIsExporting] = useState(false);
@@ -57,7 +61,7 @@ const EntityUsageExportModal: React.FC<EntityUsageExportModalProps> = ({
           <ExportFormatSelector value={exportFormat} onChange={setExportFormat} />
           <div className="flex items-center justify-end gap-2 pt-4 border-t">
             <Button variant="outline" onClick={onClose} disabled={isExporting}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleExport} disabled={isExporting}>
               {isExporting && <Loader2 className="animate-spin" />}

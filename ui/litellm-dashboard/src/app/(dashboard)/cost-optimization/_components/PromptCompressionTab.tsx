@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { CircleHelp } from "lucide-react";
@@ -51,6 +52,8 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
 );
 
 const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(compressionSchema, { defaultValues: EMPTY_VALUES });
   const [guardrails, setGuardrails] = useState<GuardrailListItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -117,7 +120,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
               Headroom setup docs
             </a>
           </p>
-          {isLoading && <p className="text-sm text-muted-foreground">Loading...</p>}
+          {isLoading && <p className="text-sm text-muted-foreground">{uiT("ui.47d2a515ef2f")}</p>}
           {!isLoading && guardrails.length === 0 && (
             <p className="text-sm text-muted-foreground">
               No prompt compression guardrails configured yet. Add one below to start saving on input tokens
@@ -155,7 +158,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
           <TooltipProvider>
             <form onSubmit={form.handleSubmit(handleAdd)} noValidate>
               <FieldGroup>
-                <FormField control={form.control} name="name" label="Name">
+                <FormField control={form.control} name="name" label={uiT("ui.dcd1d5223f73")}>
                   {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="headroom-compression" />}
                 </FormField>
                 <FormField

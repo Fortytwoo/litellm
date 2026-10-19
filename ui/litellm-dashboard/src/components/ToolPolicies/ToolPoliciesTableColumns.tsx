@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -104,16 +105,22 @@ export const getToolPoliciesTableColumns = ({
   {
     id: "team_id",
     accessorFn: (row) => row.team_id ?? "",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Team Name" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={translateUi("ui.6ed5a592c422")} />,
     size: 160,
     filterFn: "equalsString",
-    meta: { title: "Team Name" },
+    meta: {
+      get title() {
+        return translateUi("ui.6ed5a592c422");
+      },
+    },
     cell: ({ row }) => <IdCell value={row.original.team_id} variant="plain" />,
   },
   {
     id: "key_hash",
     accessorFn: (row) => row.key_hash ?? "",
-    header: "Key Hash",
+    get header() {
+      return translateUi("ui.415fd17d81f2");
+    },
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.key_hash} />,
@@ -133,7 +140,7 @@ export const getToolPoliciesTableColumns = ({
     header: () => (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger render={<span>User</span>} />
+          <TooltipTrigger render={<span>{translateUi("ui.b512d97e7cbf")}</span>} />
           <TooltipContent>
             The user who owns the key that discovered this tool. Displays the first available value: User Alias, User
             Email, or User ID.
@@ -143,7 +150,11 @@ export const getToolPoliciesTableColumns = ({
     ),
     size: 160,
     enableSorting: false,
-    meta: { title: "User" },
+    meta: {
+      get title() {
+        return translateUi("ui.b512d97e7cbf");
+      },
+    },
     cell: ({ row }) => (
       <UserPopoverCell
         userAlias={row.original.user?.user_alias ?? null}

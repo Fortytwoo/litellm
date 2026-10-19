@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { PlusCircleIcon, PencilIcon, TrashIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import { setCallbacksCall } from "./networking";
@@ -24,6 +26,8 @@ const ModelGroupAliasSettings: React.FC<ModelGroupAliasSettingsProps> = ({
   initialModelGroupAlias = {},
   onAliasUpdate,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [aliases, setAliases] = useState<AliasItem[]>([]);
   const [newAlias, setNewAlias] = useState({ aliasName: "", targetModelGroup: "" });
   const [editingAlias, setEditingAlias] = useState<AliasItem | null>(null);
@@ -223,7 +227,7 @@ const ModelGroupAliasSettings: React.FC<ModelGroupAliasSettingsProps> = ({
                   <TableRow>
                     <TableHead className="py-1 h-8">Alias Name</TableHead>
                     <TableHead className="py-1 h-8">Target Model Group</TableHead>
-                    <TableHead className="py-1 h-8">Actions</TableHead>
+                    <TableHead className="py-1 h-8">{uiT("ui.ff8059dc6752")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -263,13 +267,13 @@ const ModelGroupAliasSettings: React.FC<ModelGroupAliasSettingsProps> = ({
                                 onClick={handleUpdateAlias}
                                 className="text-xs bg-info/10 text-info px-2 py-1 rounded-sm hover:bg-info/15"
                               >
-                                Save
+                                {uiT("ui.1509f561f241")}
                               </button>
                               <button
                                 onClick={handleCancelEdit}
                                 className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-sm hover:bg-accent"
                               >
-                                Cancel
+                                {uiT("ui.19766ed6ccb2")}
                               </button>
                             </div>
                           </TableCell>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
@@ -54,6 +56,8 @@ const ComplianceCard = ({
   loading: boolean;
   error: string | null;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -88,12 +92,12 @@ const ComplianceCard = ({
                   : "bg-destructive/15 text-destructive border border-destructive/20"
               }`}
             >
-              {data.compliant ? "COMPLIANT" : "NON-COMPLIANT"}
+              {data.compliant ? uiT("ui.56511cb396ae") : uiT("ui.dbfa0409e211")}
             </span>
           )}
           {error && (
             <span className="px-2 py-0.5 rounded-sm text-[11px] font-medium bg-muted text-muted-foreground border border-border">
-              UNAVAILABLE
+              {uiT("ui.eb0be6d636d5")}
             </span>
           )}
           <svg
@@ -110,7 +114,7 @@ const ComplianceCard = ({
 
       {expanded && (
         <div className="border-t border-border px-4 py-3">
-          {loading && <p className="text-sm text-muted-foreground">Checking compliance...</p>}
+          {loading && <p className="text-sm text-muted-foreground">{uiT("ui.6b31c88e475b")}</p>}
           {error && <p className="text-sm text-destructive">{error}</p>}
           {data && (
             <div className="space-y-2">
@@ -137,6 +141,8 @@ const ComplianceCard = ({
 // -- Main Component --
 
 const CompliancePanel: React.FC<CompliancePanelProps> = ({ accessToken, logEntry }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [euAiActData, setEuAiActData] = useState<ComplianceResponse | null>(null);
   const [gdprData, setGdprData] = useState<ComplianceResponse | null>(null);
   const [euAiActLoading, setEuAiActLoading] = useState(false);
@@ -173,7 +179,7 @@ const CompliancePanel: React.FC<CompliancePanelProps> = ({ accessToken, logEntry
   return (
     <div>
       <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-        Regulatory Compliance
+        {uiT("ui.8aa0df2a573d")}
       </h4>
       <div className="space-y-3">
         <ComplianceCard title="EU AI Act" data={euAiActData} loading={euAiActLoading} error={euAiActError} />

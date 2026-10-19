@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useEffect } from "react";
 import { z } from "zod";
 
@@ -28,6 +30,8 @@ const createSchema = z.object({
 });
 
 export default function CloudZeroCreationModal({ open, onOk, onCancel }: CloudZeroCreationModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const form = useZodForm(createSchema, { defaultValues: EMPTY_CLOUDZERO_FORM_VALUES });
   const createMutation = useCloudZeroCreate(accessToken || "");
@@ -85,14 +89,14 @@ export default function CloudZeroCreationModal({ open, onOk, onCancel }: CloudZe
         </TooltipProvider>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel} disabled={createMutation.isPending}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button
             onClick={() => void form.handleSubmit(handleSubmit)()}
             disabled={createMutation.isPending}
             aria-busy={createMutation.isPending}
           >
-            {createMutation.isPending ? "Creating..." : "Create"}
+            {createMutation.isPending ? uiT("ui.def70944c9bb") : uiT("ui.4759498ac2a7")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import React, { useEffect, useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -46,7 +47,7 @@ const publicNameTooltipContent = (
       , and choose <code className={tooltipCodeClassName}>openai/qwen-plus-latest</code> as the LiteLLM model
     </div>
     <div>
-      <strong>Usage:</strong> You make an API call to the LiteLLM proxy with{" "}
+      <strong>{translateUi("ui.2bad3eeaf33c")}</strong> You make an API call to the LiteLLM proxy with{" "}
       <code className={tooltipCodeClassName}>model = &quot;example-name&quot;</code>
     </div>
     <div>

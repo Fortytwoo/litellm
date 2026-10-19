@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { copyToClipboard as utilCopyToClipboard } from "@/utils/dataUtils";
 import { ArrowLeft, Check, Copy } from "lucide-react";
 import React, { useState } from "react";
@@ -21,6 +23,8 @@ export const SearchToolView: React.FC<SearchToolViewProps> = ({
   accessToken,
   availableProviders,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
 
   const copyToClipboard = async (text: string | null | undefined, key: string) => {
@@ -76,7 +80,7 @@ export const SearchToolView: React.FC<SearchToolViewProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
           <CardContent>
-            <p className="text-sm text-muted-foreground">Provider</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.472590ae974d")}</p>
             <p className="mt-2 text-lg font-semibold text-foreground">
               {getProviderDisplayName(searchTool.litellm_params.search_provider)}
             </p>
@@ -85,16 +89,18 @@ export const SearchToolView: React.FC<SearchToolViewProps> = ({
 
         <Card>
           <CardContent>
-            <p className="text-sm text-muted-foreground">API Key</p>
-            <p className="mt-2 text-foreground">{searchTool.litellm_params.api_key ? "****" : "Not set"}</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.23189d55f697")}</p>
+            <p className="mt-2 text-foreground">
+              {searchTool.litellm_params.api_key ? "****" : uiT("ui.4895f73177ab")}
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent>
-            <p className="text-sm text-muted-foreground">Created At</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.3d44337010bf")}</p>
             <p className="mt-2 text-foreground">
-              {searchTool.created_at ? new Date(searchTool.created_at).toLocaleString() : "Unknown"}
+              {searchTool.created_at ? new Date(searchTool.created_at).toLocaleString() : uiT("ui.b764cdc0eab7")}
             </p>
           </CardContent>
         </Card>
@@ -103,7 +109,7 @@ export const SearchToolView: React.FC<SearchToolViewProps> = ({
       {searchTool.search_tool_info?.description && (
         <Card className="mt-6">
           <CardContent>
-            <p className="text-sm text-muted-foreground">Description</p>
+            <p className="text-sm text-muted-foreground">{uiT("ui.526e0087cc3f")}</p>
             <p className="mt-2 text-foreground">{searchTool.search_tool_info.description}</p>
           </CardContent>
         </Card>

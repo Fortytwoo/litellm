@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { Wrench } from "lucide-react";
@@ -76,6 +77,8 @@ export function ToolPoliciesTable({
   onInputPolicyChange,
   onOutputPolicyChange,
 }: ToolPoliciesTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -89,10 +92,10 @@ export function ToolPoliciesTable({
   const keyAliasOptions = useMemo(() => uniqueValues(data, (row) => row.key_alias), [data]);
   const teamFilterItems = useMemo(
     () => [
-      { value: ALL_VALUE, label: "All Teams" },
+      { value: ALL_VALUE, label: uiT("ui.487ece1ebfbd") },
       ...teamOptions.map((option) => ({ value: option, label: option })),
     ],
-    [teamOptions],
+    [teamOptions, uiT],
   );
   const keyAliasFilterItems = useMemo(
     () => [
@@ -136,7 +139,7 @@ export function ToolPoliciesTable({
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
+            title={uiT("ui.546ebb8eb993")}
             description="Narrow down discovered tools"
           >
             {({ get, set }) => (
@@ -179,17 +182,17 @@ export function ToolPoliciesTable({
                     </SelectContent>
                   </Select>
                 </DataTableFilterField>
-                <DataTableFilterField label="Team Name">
+                <DataTableFilterField label={uiT("ui.6ed5a592c422")}>
                   <Select
                     items={teamFilterItems}
                     value={(get("team_id") as string) ?? ALL_VALUE}
                     onValueChange={(value) => set("team_id", toFilterValue(value))}
                   >
                     <SelectTrigger className="w-full" data-testid="filter-team">
-                      <SelectValue placeholder="All Teams" />
+                      <SelectValue placeholder={uiT("ui.487ece1ebfbd")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={ALL_VALUE}>All Teams</SelectItem>
+                      <SelectItem value={ALL_VALUE}>{uiT("ui.487ece1ebfbd")}</SelectItem>
                       {teamOptions.map((option) => (
                         <SelectItem key={option} value={option}>
                           {option}

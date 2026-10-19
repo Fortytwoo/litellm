@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Route } from "lucide-react";
@@ -24,6 +26,8 @@ interface EndpointRow {
 }
 
 const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const calculateSuccessRate = (successful: number, total: number): number => {
     if (total === 0) return 0;
     return (successful / total) * 100;
@@ -83,7 +87,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       cell: ({ row }) => <span className="tabular-nums">{row.original.api_requests.toLocaleString()}</span>,
     },
     {
-      header: "Success Rate",
+      header: uiT("ui.5068c6c343ff"),
       accessorKey: "successRate",
       meta: { numeric: true },
       cell: ({ row }) => {
@@ -102,13 +106,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      header: "Total Tokens",
+      header: uiT("ui.cd41bf0d3e9a"),
       accessorKey: "total_tokens",
       meta: { numeric: true },
       cell: ({ row }) => <span className="tabular-nums">{row.original.total_tokens.toLocaleString()}</span>,
     },
     {
-      header: "Spend",
+      header: uiT("ui.85f3d558db12"),
       accessorKey: "spend",
       meta: { numeric: true },
       cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,

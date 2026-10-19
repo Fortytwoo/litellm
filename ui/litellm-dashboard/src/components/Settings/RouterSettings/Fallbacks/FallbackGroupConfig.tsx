@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * Component for configuring a single fallback group
  * Handles primary model selection and fallback chain configuration
@@ -29,6 +31,8 @@ export function FallbackGroupConfig({
   maxFallbacks,
   disablePrimaryModel = false,
 }: FallbackGroupConfigProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   // Filter available options for fallbacks (exclude primary only, allow already selected to be shown for deselection)
   const availableFallbackOptions = availableModels.filter((m) => m !== group.primaryModel);
 
@@ -75,7 +79,7 @@ export function FallbackGroupConfig({
           value={group.primaryModel}
           onValueChange={handlePrimaryChange}
           placeholder="Select primary model"
-          emptyText="No models found"
+          emptyText={uiT("ui.a650c298cf44")}
           disabled={disablePrimaryModel}
           className="h-12"
         />
@@ -116,7 +120,7 @@ export function FallbackGroupConfig({
               placeholder={
                 canAddMoreFallbacks ? "Select fallback models to add..." : `Maximum ${maxFallbacks} fallbacks reached`
               }
-              emptyText="No models found"
+              emptyText={uiT("ui.a650c298cf44")}
               disabled={!group.primaryModel}
               className="w-full"
             />

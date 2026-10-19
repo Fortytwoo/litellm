@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, Info, Pencil } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -50,6 +52,8 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
   isAdmin,
   getPolicy,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [policy, setPolicy] = useState<Policy | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [resolvedGuardrails, setResolvedGuardrails] = useState<string[]>([]);
@@ -125,14 +129,18 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
             <DetailRow label="Policy ID">
               <code className="rounded-sm bg-muted px-2 py-1 text-xs">{policy.policy_id}</code>
             </DetailRow>
-            <DetailRow label="Description">{policy.description || <Muted>No description</Muted>}</DetailRow>
+            <DetailRow label={uiT("ui.526e0087cc3f")}>{policy.description || <Muted>No description</Muted>}</DetailRow>
             <DetailRow label="Inherits From">
-              {policy.inherit ? <Badge variant="secondary">{policy.inherit}</Badge> : <Muted>None</Muted>}
+              {policy.inherit ? (
+                <Badge variant="secondary">{policy.inherit}</Badge>
+              ) : (
+                <Muted>{uiT("ui.dc937b598926")}</Muted>
+              )}
             </DetailRow>
-            <DetailRow label="Created At">
+            <DetailRow label={uiT("ui.3d44337010bf")}>
               {policy.created_at ? new Date(policy.created_at).toLocaleString() : "-"}
             </DetailRow>
-            <DetailRow label="Updated At">
+            <DetailRow label={uiT("ui.e35c8e4f5cb5")}>
               {policy.updated_at ? new Date(policy.updated_at).toLocaleString() : "-"}
             </DetailRow>
           </dl>
@@ -180,7 +188,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                     </Badge>
                   ))
                 ) : (
-                  <Muted>None</Muted>
+                  <Muted>{uiT("ui.dc937b598926")}</Muted>
                 )}
               </div>
             </DetailRow>
@@ -193,7 +201,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                     </Badge>
                   ))
                 ) : (
-                  <Muted>None</Muted>
+                  <Muted>{uiT("ui.dc937b598926")}</Muted>
                 )}
               </div>
             </DetailRow>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useAccessGroupDetails } from "@/app/(dashboard)/hooks/accessGroups/useAccessGroupDetails";
 import { ArrowLeftIcon, BotIcon, EditIcon, KeyIcon, LayersIcon, ServerIcon, UsersIcon } from "lucide-react";
 import { useState } from "react";
@@ -66,6 +68,8 @@ function ResourceBadge({
 }
 
 export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: accessGroup, isLoading } = useAccessGroupDetails(accessGroupId);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [showAllKeys, setShowAllKeys] = useState(false);
@@ -84,7 +88,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
   if (!accessGroup) {
     return (
       <div className="p-6 px-12">
-        <Button variant="ghost" size="icon" aria-label="Back" onClick={onBack} className="mb-4">
+        <Button variant="ghost" size="icon" aria-label={uiT("ui.76900f1bfd16")} onClick={onBack} className="mb-4">
           <ArrowLeftIcon className="size-4" />
         </Button>
         <p className="py-8 text-center text-sm text-muted-foreground">Access group not found</p>
@@ -105,7 +109,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
     <div className="p-6 px-12">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" aria-label="Back" onClick={onBack}>
+          <Button variant="ghost" size="icon" aria-label={uiT("ui.76900f1bfd16")} onClick={onBack}>
             <ArrowLeftIcon className="size-4" />
           </Button>
           <div>
@@ -128,9 +132,9 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
-            <dt className="text-muted-foreground">Description</dt>
+            <dt className="text-muted-foreground">{uiT("ui.526e0087cc3f")}</dt>
             <dd className="text-foreground">{accessGroup.description || "—"}</dd>
-            <dt className="text-muted-foreground">Created</dt>
+            <dt className="text-muted-foreground">{uiT("ui.d70b9e24bca2")}</dt>
             <dd className="flex items-center gap-1 text-foreground">
               {new Date(accessGroup.created_at).toLocaleString()}
               {accessGroup.created_by && (
@@ -140,7 +144,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
                 </>
               )}
             </dd>
-            <dt className="text-muted-foreground">Last Updated</dt>
+            <dt className="text-muted-foreground">{uiT("ui.048c7f2ef9aa")}</dt>
             <dd className="flex items-center gap-1 text-foreground">
               {new Date(accessGroup.updated_at).toLocaleString()}
               {accessGroup.updated_by && (
@@ -165,7 +169,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
             {keys.length > MAX_PREVIEW && (
               <CardAction>
                 <Button variant="link" size="sm" onClick={() => setShowAllKeys(!showAllKeys)}>
-                  {showAllKeys ? "Show Less" : `View All (${keys.length})`}
+                  {showAllKeys ? uiT("ui.0264d7b0ccb8") : `View All (${keys.length})`}
                 </Button>
               </CardAction>
             )}
@@ -193,7 +197,7 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
             {teams.length > MAX_PREVIEW && (
               <CardAction>
                 <Button variant="link" size="sm" onClick={() => setShowAllTeams(!showAllTeams)}>
-                  {showAllTeams ? "Show Less" : `View All (${teams.length})`}
+                  {showAllTeams ? uiT("ui.0264d7b0ccb8") : `View All (${teams.length})`}
                 </Button>
               </CardAction>
             )}
@@ -218,17 +222,17 @@ export function AccessGroupDetail({ accessGroupId, onBack }: AccessGroupDetailPr
             <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0">
               <TabsTrigger value="models" className="flex-none gap-2 rounded-none px-4 py-2">
                 <LayersIcon className="size-4" />
-                Models
+                {uiT("ui.d17d2d78d76e")}
                 <Badge variant="secondary">{models.length}</Badge>
               </TabsTrigger>
               <TabsTrigger value="mcp" className="flex-none gap-2 rounded-none px-4 py-2">
                 <ServerIcon className="size-4" />
-                MCP Servers
+                {uiT("ui.aab669a72882")}
                 <Badge variant="secondary">{mcpServers.length}</Badge>
               </TabsTrigger>
               <TabsTrigger value="agents" className="flex-none gap-2 rounded-none px-4 py-2">
                 <BotIcon className="size-4" />
-                Agents
+                {uiT("ui.279b44d2ab4b")}
                 <Badge variant="secondary">{agents.length}</Badge>
               </TabsTrigger>
             </TabsList>

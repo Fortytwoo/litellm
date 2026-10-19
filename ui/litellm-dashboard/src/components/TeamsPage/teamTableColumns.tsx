@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, KeyRound, Layers, MoreHorizontal, Pencil, Trash2, Users } from "lucide-react";
@@ -71,10 +73,12 @@ function ResourcesCell({ team }: { team: Team }) {
 }
 
 function RateLimitLine({ label, value }: { label: string; value: number | null }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div>
       <span className="text-[10px] font-semibold text-muted-foreground">{label} </span>
-      <span className="tabular-nums">{value != null ? formatNumberWithCommas(value) : "Unlimited"}</span>
+      <span className="tabular-nums">{value != null ? formatNumberWithCommas(value) : uiT("ui.11dde17d6c3e")}</span>
     </div>
   );
 }
@@ -147,7 +151,9 @@ export const getTeamTableColumns = ({
       id: "team_alias",
       accessorKey: "team_alias",
       meta: {
-        title: "Team",
+        get title() {
+          return translateUi("ui.5985039f106d");
+        },
         renderSkeleton: () => (
           <div className="flex flex-col gap-2 py-1">
             <Skeleton className="h-4 w-32" />
@@ -155,7 +161,9 @@ export const getTeamTableColumns = ({
           </div>
         ),
       },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Team" variant="header-cycle" />,
+      header: ({ column }) => (
+        <DataTableSortHeader column={column} title={translateUi("ui.5985039f106d")} variant="header-cycle" />
+      ),
       size: 260,
       enableSorting: true,
       cell: ({ row }) => {
@@ -173,8 +181,14 @@ export const getTeamTableColumns = ({
     {
       id: "organization_alias",
       accessorKey: "organization_id",
-      meta: { title: "Organization" },
-      header: "Organization",
+      meta: {
+        get title() {
+          return translateUi("ui.d764d42592fc");
+        },
+      },
+      get header() {
+        return translateUi("ui.d764d42592fc");
+      },
       size: 160,
       enableSorting: false,
       cell: (info) => {
@@ -226,32 +240,59 @@ export const getTeamTableColumns = ({
     {
       id: "created_at",
       accessorKey: "created_at",
-      meta: { title: "Created" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Created" variant="header-cycle" />,
+      meta: {
+        get title() {
+          return translateUi("ui.d70b9e24bca2");
+        },
+      },
+      header: ({ column }) => (
+        <DataTableSortHeader column={column} title={translateUi("ui.d70b9e24bca2")} variant="header-cycle" />
+      ),
       size: 130,
       enableSorting: true,
       cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" />,
     },
     {
       id: "members",
-      meta: { title: "Members", numeric: true },
-      header: "Members",
+      meta: {
+        get title() {
+          return translateUi("ui.1044a4c056d0");
+        },
+        numeric: true,
+      },
+      get header() {
+        return translateUi("ui.1044a4c056d0");
+      },
       size: 110,
       enableSorting: false,
       cell: ({ row }) => <span className="text-sm tabular-nums">{teamMemberCount(row.original)}</span>,
     },
     {
       id: "models",
-      meta: { title: "Models", numeric: true },
-      header: "Models",
+      meta: {
+        get title() {
+          return translateUi("ui.d17d2d78d76e");
+        },
+        numeric: true,
+      },
+      get header() {
+        return translateUi("ui.d17d2d78d76e");
+      },
       size: 100,
       enableSorting: false,
       cell: ({ row }) => <span className="text-sm tabular-nums">{teamModelCount(row.original)}</span>,
     },
     {
       id: "rate_limits",
-      meta: { title: "Rate Limits", skeleton: "twoLine" },
-      header: "Rate Limits",
+      meta: {
+        get title() {
+          return translateUi("ui.ed129d234fd4");
+        },
+        skeleton: "twoLine",
+      },
+      get header() {
+        return translateUi("ui.ed129d234fd4");
+      },
       size: 140,
       enableSorting: false,
       cell: ({ row }) => (
@@ -264,8 +305,14 @@ export const getTeamTableColumns = ({
     {
       id: "updated_at",
       accessorKey: "updated_at",
-      meta: { title: "Updated" },
-      header: "Updated",
+      meta: {
+        get title() {
+          return translateUi("ui.3a5ecca188c0");
+        },
+      },
+      get header() {
+        return translateUi("ui.3a5ecca188c0");
+      },
       size: 130,
       enableSorting: false,
       cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
@@ -273,7 +320,7 @@ export const getTeamTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">{translateUi("ui.ff8059dc6752")}</span>,
       size: 60,
       enableSorting: false,
       enableHiding: false,

@@ -1,11 +1,11 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/cva.config";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 export const DEFAULT_PAGE_SIZE_OPTIONS = [25, 50, 100];
 
@@ -30,7 +30,8 @@ export function DataTablePagination({
   isLoading = false,
   className,
 }: DataTablePaginationProps) {
-  const { t } = useLanguage();
+  const { t: uiT } = useDashboardLanguage();
+
   const pageCount = pageSize > 0 ? Math.ceil(rowCount / pageSize) : 0;
   const start = rowCount === 0 ? 0 : page * pageSize + 1;
   const end = Math.min((page + 1) * pageSize, rowCount);
@@ -41,7 +42,7 @@ export function DataTablePagination({
   return (
     <div className={cn("flex flex-wrap items-center justify-between gap-4 px-4 py-2.5", className)}>
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span>Rows per page</span>
+        <span>{uiT("ui.141b69f95916")}</span>
         <Select
           value={String(pageSize)}
           onValueChange={(value) => {
@@ -65,17 +66,17 @@ export function DataTablePagination({
 
       <div className="flex items-center gap-4">
         <span data-testid="pagination-range" className="text-sm text-muted-foreground tabular-nums">
-          {rowCount === 0 ? "No results" : `Showing ${start}-${end} of ${rowCount}`}
+          {rowCount === 0 ? uiT("ui.a43619f32117") : uiT("table.range", { start, end, total: rowCount })}
         </span>
         <span data-testid="pagination-page" className="text-sm text-muted-foreground tabular-nums">
-          Page {page + 1} of {Math.max(pageCount, 1)}
+          {uiT("table.page", { page: page + 1, total: Math.max(pageCount, 1) })}
         </span>
         <div className="flex items-center gap-1">
           <Button
             variant="outline"
             size="icon-sm"
             data-testid="pagination-first"
-            aria-label="Go to first page"
+            aria-label={uiT("ui.5f0497cf59ee")}
             disabled={!canPrev}
             onClick={() => onPageChange(0)}
           >
@@ -85,7 +86,7 @@ export function DataTablePagination({
             variant="outline"
             size="icon-sm"
             data-testid="pagination-prev"
-            aria-label={t("common.previous")}
+            aria-label={uiT("ui.2865e0f438b4")}
             disabled={!canPrev}
             onClick={() => onPageChange(page - 1)}
           >
@@ -95,7 +96,7 @@ export function DataTablePagination({
             variant="outline"
             size="icon-sm"
             data-testid="pagination-next"
-            aria-label={t("common.next")}
+            aria-label={uiT("ui.7e021afbf6ac")}
             disabled={!canNext}
             onClick={() => onPageChange(page + 1)}
           >
@@ -105,7 +106,7 @@ export function DataTablePagination({
             variant="outline"
             size="icon-sm"
             data-testid="pagination-last"
-            aria-label="Go to last page"
+            aria-label={uiT("ui.8db5b659bf92")}
             disabled={!canNext}
             onClick={() => onPageChange(lastPage)}
           >

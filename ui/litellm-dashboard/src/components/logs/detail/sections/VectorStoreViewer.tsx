@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -32,6 +34,8 @@ interface VectorStoreViewerProps {
 }
 
 export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [open, setOpen] = useState(true);
   const [expandedResults, setExpandedResults] = useState<Record<string, boolean>>({});
 
@@ -66,7 +70,7 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
           ) : (
             <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
           )}
-          <h3 className="text-lg font-medium text-foreground">Vector Store Requests</h3>
+          <h3 className="text-lg font-medium text-foreground">{uiT("ui.31bf9e397a59")}</h3>
         </CollapsibleTrigger>
         <CollapsibleContent>
           <div className="p-4">
@@ -76,15 +80,15 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <div className="flex">
-                        <span className="font-medium w-1/3">Query:</span>
+                        <span className="font-medium w-1/3">{uiT("ui.090940bae1e2")}</span>
                         <span className="font-mono">{request.query}</span>
                       </div>
                       <div className="flex">
-                        <span className="font-medium w-1/3">Vector Store ID:</span>
+                        <span className="font-medium w-1/3">{uiT("ui.6b25b4e7f343")}</span>
                         <span className="font-mono">{request.vector_store_id}</span>
                       </div>
                       <div className="flex">
-                        <span className="font-medium w-1/3">Provider:</span>
+                        <span className="font-medium w-1/3">{uiT("ui.672f1efd8b87")}</span>
                         <span className="flex items-center">
                           {(() => {
                             const { logo, displayName } = getProviderLogoAndName(request.custom_llm_provider);
@@ -100,22 +104,22 @@ export function VectorStoreViewer({ data }: VectorStoreViewerProps) {
                     </div>
                     <div className="space-y-2">
                       <div className="flex">
-                        <span className="font-medium w-1/3">Start Time:</span>
+                        <span className="font-medium w-1/3">{uiT("ui.dd2339d6ce4b")}</span>
                         <span>{formatTime(request.start_time)}</span>
                       </div>
                       <div className="flex">
-                        <span className="font-medium w-1/3">End Time:</span>
+                        <span className="font-medium w-1/3">{uiT("ui.54a4aa62f3ca")}</span>
                         <span>{formatTime(request.end_time)}</span>
                       </div>
                       <div className="flex">
-                        <span className="font-medium w-1/3">Duration:</span>
+                        <span className="font-medium w-1/3">{uiT("ui.298d6c7549e4")}</span>
                         <span>{calculateDuration(request.start_time, request.end_time)}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <h4 className="font-medium mb-2">Search Results</h4>
+                <h4 className="font-medium mb-2">{uiT("ui.39414102545e")}</h4>
                 <div className="space-y-2">
                   {request.vector_store_search_response.data.map((result, resultIndex) => {
                     const isExpanded = expandedResults[`${index}-${resultIndex}`] || false;

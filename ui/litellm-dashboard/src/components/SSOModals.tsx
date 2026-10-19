@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useWatch, type UseFormReturn } from "react-hook-form";
 import { getSSOSettings, updateSSOSettings } from "./networking";
@@ -55,6 +57,8 @@ const SSOModals: React.FC<SSOModalsProps> = ({
   accessToken,
   ssoConfigured = false, // Default to false if not provided
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isClearConfirmModalVisible, setIsClearConfirmModalVisible] = useState(false);
   const provider = useWatch({ control: form.control, name: "sso_provider" });
   const useRoleMappings = useWatch({ control: form.control, name: "use_role_mappings" });
@@ -275,10 +279,10 @@ const SSOModals: React.FC<SSOModalsProps> = ({
               <div className="mt-4 flex items-center justify-end gap-2">
                 {ssoConfigured && (
                   <Button type="button" variant="secondary" onClick={() => setIsClearConfirmModalVisible(true)}>
-                    Clear
+                    {uiT("ui.83b12c2216ef")}
                   </Button>
                 )}
-                <Button type="submit">Save</Button>
+                <Button type="submit">{uiT("ui.1509f561f241")}</Button>
               </div>
             </form>
           </FormProvider>
@@ -295,7 +299,7 @@ const SSOModals: React.FC<SSOModalsProps> = ({
           <p>Users will no longer be able to login using SSO after this change.</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsClearConfirmModalVisible(false)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleClearSSO} variant="destructive">
               Yes, Clear

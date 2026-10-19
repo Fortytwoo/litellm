@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import { CircleHelp, Minus, Plus } from "lucide-react";
 import React from "react";
 
@@ -33,7 +36,12 @@ export const NEW_CACHE_CONTROL_POINT: CacheControlInjectionPoint = { location: "
 const LOCATION_ITEMS = [{ value: "message", label: "Message" }] as const;
 
 const ROLE_ITEMS = [
-  { value: "user", label: "User" },
+  {
+    value: "user",
+    get label() {
+      return translateUi("ui.b512d97e7cbf");
+    },
+  },
   { value: "system", label: "System" },
   { value: "assistant", label: "Assistant" },
 ] as const;
@@ -71,6 +79,8 @@ interface CacheControlInjectionPointsProps {
  * independently; both hand a child exactly `value` and `onChange`.
  */
 const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = ({ value, onChange }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const points = value ?? [];
 
   const replaceAt = (index: number, point: CacheControlInjectionPoint) =>
@@ -83,7 +93,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
       {points.map((point, index) => (
         <div key={index} className="mb-4 flex items-end gap-4">
           <div className="w-[180px] space-y-1">
-            <Label>Type</Label>
+            <Label>{uiT("ui.baaddf70fb5d")}</Label>
             <Select items={LOCATION_ITEMS} value={point.location} disabled>
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -99,7 +109,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
           </div>
 
           <div className="w-[180px] space-y-1">
-            <LabelWithHint label="Role" hint={CACHE_CONTROL_ROLE_HINT} />
+            <LabelWithHint label={uiT("ui.14736a2eb9f4")} hint={CACHE_CONTROL_ROLE_HINT} />
             <Select
               items={ROLE_ITEMS}
               value={point.role ?? null}
@@ -111,7 +121,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={null}>None</SelectItem>
+                <SelectItem value={null}>{uiT("ui.dc937b598926")}</SelectItem>
                 {ROLE_ITEMS.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
                     {item.label}
@@ -125,7 +135,7 @@ const CacheControlInjectionPoints: React.FC<CacheControlInjectionPointsProps> = 
             <LabelWithHint label="Index" hint={CACHE_CONTROL_INDEX_HINT} />
             <NumericalInput
               type="number"
-              placeholder="Optional"
+              placeholder={uiT("ui.59be71333c96")}
               step={1}
               value={point.index ?? ""}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

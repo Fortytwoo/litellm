@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { MessageSquare, Sparkles, X } from "lucide-react";
@@ -106,6 +108,8 @@ const MarkdownContent: React.FC<{ content: string }> = ({ content }) => (
 );
 
 const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -254,7 +258,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
           </h3>
           <p className="mt-0.5 text-xs text-muted-foreground">Ask about your spend, models, keys, and trends</p>
         </div>
-        <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={handleClose}>
+        <Button variant="ghost" size="icon-sm" aria-label={uiT("ui.7d9eb7acb13e")} onClick={handleClose}>
           <X />
         </Button>
       </div>
@@ -274,7 +278,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
             showClear={selectedModel !== undefined}
           />
           <ComboboxContent>
-            <ComboboxEmpty>{isLoadingModels ? "Loading models…" : "No models found"}</ComboboxEmpty>
+            <ComboboxEmpty>{isLoadingModels ? "Loading models…" : uiT("ui.a650c298cf44")}</ComboboxEmpty>
             <ComboboxList>
               {(model: string) => (
                 <ComboboxItem key={model} value={model}>

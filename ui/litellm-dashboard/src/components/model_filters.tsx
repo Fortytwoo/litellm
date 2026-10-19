@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { matchesSearchTerm } from "@/utils/searchUtils";
@@ -33,6 +35,8 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
   showFiltersCard = true,
   className = "",
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<string>("");
   const [selectedMode, setSelectedMode] = useState<string>("");
@@ -136,7 +140,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
         />
       </div>
       <div>
-        <p className="text-sm font-medium mb-2">Provider:</p>
+        <p className="text-sm font-medium mb-2">{uiT("ui.672f1efd8b87")}</p>
         <select
           value={selectedProvider}
           onChange={(e) => setSelectedProvider(e.target.value)}

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ExternalLink, Search } from "lucide-react";
 import { toast } from "@/lib/toast";
@@ -24,6 +26,8 @@ interface SearchToolTesterProps {
 }
 
 export const SearchToolTester: React.FC<SearchToolTesterProps> = ({ searchToolName, accessToken, className = "" }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState<
@@ -113,7 +117,7 @@ export const SearchToolTester: React.FC<SearchToolTesterProps> = ({ searchToolNa
             </div>
             <Button onClick={handleSearch} disabled={isLoading || !query.trim()} className="h-12 px-6 text-[15px]">
               {isLoading ? <UiLoadingSpinner className="size-4" /> : <Search className="size-4" />}
-              Search
+              {uiT("ui.49c266baaaa7")}
             </Button>
           </div>
         </div>
@@ -212,7 +216,7 @@ export const SearchToolTester: React.FC<SearchToolTesterProps> = ({ searchToolNa
                                   className="mt-3 h-auto p-0"
                                   onClick={() => toggleResultExpansion(0, resultIndex)}
                                 >
-                                  {isResultExpanded ? "Show less" : "Show more"}
+                                  {isResultExpanded ? uiT("ui.94ea9b1d33a0") : uiT("ui.f5c9bd131486")}
                                 </Button>
                               )}
                             </div>
@@ -225,7 +229,7 @@ export const SearchToolTester: React.FC<SearchToolTesterProps> = ({ searchToolNa
                       <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted">
                         <Search className="size-6 text-muted-foreground" />
                       </div>
-                      <p className="font-medium text-foreground">No results found</p>
+                      <p className="font-medium text-foreground">{uiT("ui.7d7e36058609")}</p>
                       <p className="mt-1 text-sm text-muted-foreground">Try a different search query</p>
                     </div>
                   )}
@@ -237,7 +241,7 @@ export const SearchToolTester: React.FC<SearchToolTesterProps> = ({ searchToolNa
                   <div className="mb-4 flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">Previous Searches</p>
                     <Button variant="link" size="sm" className="h-auto p-0" onClick={clearHistory}>
-                      Clear All
+                      {uiT("ui.ddceb7adfdb8")}
                     </Button>
                   </div>
                   <div className="space-y-2">

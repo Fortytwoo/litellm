@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,10 +10,34 @@ export interface BudgetWindowEntry {
 }
 
 export const BUDGET_WINDOW_OPTIONS = [
-  { value: "1h", label: "Hourly", resetHint: "Resets every hour" },
-  { value: "24h", label: "Daily", resetHint: "Resets daily at midnight UTC" },
-  { value: "7d", label: "Weekly", resetHint: "Resets every Sunday at midnight UTC" },
-  { value: "30d", label: "Monthly", resetHint: "Resets on the 1st of every month at midnight UTC" },
+  {
+    value: "1h",
+    get label() {
+      return translateUi("ui.eab0cd8fdf9b");
+    },
+    resetHint: "Resets every hour",
+  },
+  {
+    value: "24h",
+    get label() {
+      return translateUi("ui.b36c2611dcdf");
+    },
+    resetHint: "Resets daily at midnight UTC",
+  },
+  {
+    value: "7d",
+    get label() {
+      return translateUi("ui.2975132481a7");
+    },
+    resetHint: "Resets every Sunday at midnight UTC",
+  },
+  {
+    value: "30d",
+    get label() {
+      return translateUi("ui.9b11f6b707d2");
+    },
+    resetHint: "Resets on the 1st of every month at midnight UTC",
+  },
 ];
 
 interface BudgetWindowsEditorProps {

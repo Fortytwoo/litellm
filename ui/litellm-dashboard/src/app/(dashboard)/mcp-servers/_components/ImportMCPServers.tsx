@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -24,6 +26,8 @@ const PLACEHOLDER = `{
 }`;
 
 const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, onClose, onImported }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [configText, setConfigText] = useState("");
   const [parseError, setParseError] = useState<string | null>(null);
   const [isImporting, setIsImporting] = useState(false);
@@ -119,7 +123,7 @@ const ImportMCPServers: React.FC<ImportMCPServersProps> = ({ accessToken, open, 
           )}
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={handleClose} disabled={isImporting}>
-              Close
+              {uiT("ui.7d9eb7acb13e")}
             </Button>
             <Button onClick={handleImport} disabled={isImporting}>
               {isImporting ? "Importing..." : "Import"}

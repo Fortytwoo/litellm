@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +36,8 @@ const SingleModelBreakdown: React.FC<{
   loading: boolean;
   timePeriod: "day" | "month";
 }> = ({ result, loading, timePeriod }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const periodLabel = timePeriod === "day" ? "Daily" : "Monthly";
   const periodCost = timePeriod === "day" ? result.daily_cost : result.monthly_cost;
   const periodInputCost = timePeriod === "day" ? result.daily_input_cost : result.monthly_input_cost;
@@ -84,11 +88,15 @@ const SingleModelBreakdown: React.FC<{
             </p>
           </div>
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground block">{periodLabel} Input</p>
+            <p className="text-xs text-muted-foreground block">
+              {periodLabel} {uiT("ui.36ecb4f86691")}
+            </p>
             <p className="text-sm break-words">{formatCost(periodInputCost)}</p>
           </div>
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground block">{periodLabel} Output</p>
+            <p className="text-xs text-muted-foreground block">
+              {periodLabel} {uiT("ui.b2439bcb8dee")}
+            </p>
             <p className="text-sm break-words">{formatCost(periodOutputCost)}</p>
           </div>
           <div className="min-w-0">
@@ -117,6 +125,8 @@ const SingleModelBreakdown: React.FC<{
 };
 
 const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePeriod }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [expandedModels, setExpandedModels] = useState<Set<string>>(new Set());
 
   const validEntries = multiResult.entries.filter((e) => e.result !== null);
@@ -221,7 +231,9 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
             </div>
           </div>
           <div className="min-w-0">
-            <span className="text-xs text-muted-foreground">Total {periodLabel}</span>
+            <span className="text-xs text-muted-foreground">
+              {uiT("ui.c9b3c38247f7")} {periodLabel}
+            </span>
             <div
               className={`text-lg font-mono break-words ${timePeriod === "day" ? "text-success" : "text-purple-600 dark:text-purple-300"}`}
             >
@@ -252,7 +264,7 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
         <Table className="border border-border rounded-lg">
           <TableHeader>
             <TableRow>
-              <TableHead>Model</TableHead>
+              <TableHead>{uiT("ui.5e2c614c23f0")}</TableHead>
               <TableHead className="text-right">Per Request</TableHead>
               <TableHead className="text-right">Margin Fee</TableHead>
               <TableHead className="text-right">{periodLabel}</TableHead>

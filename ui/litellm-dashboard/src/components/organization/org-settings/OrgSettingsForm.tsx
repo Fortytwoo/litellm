@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
@@ -25,7 +27,12 @@ import { orgSettingsSchema } from "./schema";
 export const NO_RESET = "never";
 
 export const BUDGET_DURATION_OPTIONS = [
-  { value: NO_RESET, label: "No reset" },
+  {
+    value: NO_RESET,
+    get label() {
+      return translateUi("ui.c49ea0b73d1c");
+    },
+  },
   { value: "24h", label: "daily" },
   { value: "7d", label: "weekly" },
   { value: "30d", label: "monthly" },
@@ -56,6 +63,8 @@ export const OrgSettingsForm = ({
   onSaved,
   patchOrganization = defaultPatchOrganization,
 }: OrgSettingsFormProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const form = useZodForm(orgSettingsSchema, { defaultValues: orgToForm(org) });
   const { isDirty } = form.formState;
@@ -82,7 +91,7 @@ export const OrgSettingsForm = ({
           {({ ref, ...field }) => <Input {...field} ref={ref} />}
         </FormField>
 
-        <FormField control={form.control} name="models" label="Models">
+        <FormField control={form.control} name="models" label={uiT("ui.d17d2d78d76e")}>
           {(field) => (
             <ModelSelect
               value={field.value}
@@ -93,11 +102,11 @@ export const OrgSettingsForm = ({
           )}
         </FormField>
 
-        <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+        <FormField control={form.control} name="max_budget" label={uiT("ui.afa99ea4a8c3")}>
           {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step="any" min={0} />}
         </FormField>
 
-        <FormField control={form.control} name="budget_duration" label="Reset Budget">
+        <FormField control={form.control} name="budget_duration" label={uiT("ui.66b0753db929")}>
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
               items={BUDGET_DURATION_OPTIONS}
@@ -126,13 +135,13 @@ export const OrgSettingsForm = ({
           {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step={1} min={0} />}
         </FormField>
 
-        <FormField control={form.control} name="vector_stores" label="Vector Stores">
+        <FormField control={form.control} name="vector_stores" label={uiT("ui.a6110d660e9b")}>
           {(field) => (
             <VectorStoreSelector
               value={field.value}
               onChange={field.onChange}
               accessToken={accessToken}
-              placeholder="Select vector stores"
+              placeholder={uiT("ui.9b0282c14af0")}
             />
           )}
         </FormField>
@@ -148,7 +157,7 @@ export const OrgSettingsForm = ({
           )}
         </FormField>
 
-        <FormField control={form.control} name="metadata" label="Metadata">
+        <FormField control={form.control} name="metadata" label={uiT("ui.9eddf573cb50")}>
           {({ ref, ...field }) => <Textarea {...field} ref={ref} rows={4} />}
         </FormField>
       </FieldGroup>
@@ -156,10 +165,10 @@ export const OrgSettingsForm = ({
       <div className="sticky z-chrome bg-card p-4 border-t border-border -bottom-6 -inset-x-6 mt-6">
         <div className="flex justify-end items-center gap-2">
           <Button type="button" variant="outline" onClick={onCancel} disabled={mutation.isPending}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button type="submit" disabled={!isDirty || mutation.isPending}>
-            {mutation.isPending ? "Saving..." : "Save Changes"}
+            {mutation.isPending ? uiT("ui.dc85af8f2b1d") : uiT("ui.35322b5bb5a2")}
           </Button>
         </div>
       </div>

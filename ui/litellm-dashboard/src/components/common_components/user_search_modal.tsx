@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useRef, useState } from "react";
 import { Info, UserPlus } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/shared/Alert";
@@ -64,6 +66,8 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
   defaultRole = "user",
   teamId,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const emptyValues: FormValues = { user_email: undefined, user_id: undefined, role: defaultRole };
   const form = useForm<FormValues>({ defaultValues: emptyValues });
   const selectedUserId = form.watch("user_id");
@@ -172,7 +176,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
           autoHighlight="always"
           isLoading={loading}
           placeholder={placeholder}
-          emptyText="No results"
+          emptyText={uiT("ui.a43619f32117")}
           loadingText="Loading..."
           inputId={controlProps.id}
         />
@@ -197,7 +201,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
             </Alert>
 
             <FieldGroup>
-              <FormField control={form.control} name="user_email" label="Email">
+              <FormField control={form.control} name="user_email" label={uiT("ui.969ccbd3cf63")}>
                 {({ id, value, onChange }) =>
                   renderUserSearch("user_email", "Search by email", { id, value, onChange }, "member-email-search")
                 }
@@ -205,11 +209,11 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
 
               <div className="text-center">OR</div>
 
-              <FormField control={form.control} name="user_id" label="User ID">
+              <FormField control={form.control} name="user_id" label={uiT("ui.7967e089a7b9")}>
                 {({ id, value, onChange }) => renderUserSearch("user_id", "Search by user ID", { id, value, onChange })}
               </FormField>
 
-              <FormField control={form.control} name="role" label="Member Role">
+              <FormField control={form.control} name="role" label={uiT("ui.08cbc8cda5de")}>
                 {({ id, value, onChange }) => (
                   <Select items={roles} value={value} onValueChange={(next) => onChange(next as string)}>
                     <SelectTrigger id={id}>
@@ -240,7 +244,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
             <div className="mt-4 text-right">
               <Button type="submit" disabled={isSubmitting || (!selectedUserId && !selectedUserEmail)}>
                 {isSubmitting ? <UiLoadingSpinner className="size-4" /> : <UserPlus />}
-                {isSubmitting ? "Adding..." : "Add Member"}
+                {isSubmitting ? uiT("ui.913a8849b60d") : uiT("ui.e7d80d8f7fda")}
               </Button>
             </div>
           </form>

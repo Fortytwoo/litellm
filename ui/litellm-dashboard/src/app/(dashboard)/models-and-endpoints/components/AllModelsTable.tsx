@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
 import { Search, Settings } from "lucide-react";
@@ -84,12 +85,14 @@ interface AllModelsTableProps {
 }
 
 function EmptyState() {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-11 items-center justify-center rounded-xl bg-muted">
         <Search className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-base font-semibold text-foreground">No models found</div>
+      <div className="text-base font-semibold text-foreground">{uiT("ui.a650c298cf44")}</div>
       <div className="max-w-80 text-sm text-muted-foreground">
         No models match your search or filters. Try resetting them.
       </div>
@@ -131,6 +134,8 @@ export function AllModelsTable({
   pausingModelId,
   credentialLabels,
 }: AllModelsTableProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const columns = useMemo(() => {
@@ -236,7 +241,7 @@ export function AllModelsTable({
                     selectedTeamValue === PERSONAL_TEAM_VALUE ? "bg-info" : "bg-success",
                   )}
                 />
-                <span className="text-muted-foreground">Team</span>
+                <span className="text-muted-foreground">{uiT("ui.5985039f106d")}</span>
                 <span className="truncate font-semibold">{selectedTeamLabel}</span>
               </SelectTrigger>
               <SelectContent>
@@ -256,8 +261,13 @@ export function AllModelsTable({
             </Select>
 
             <Select value={viewMode} onValueChange={(value) => onViewModeChange(value as ModelViewMode)}>
-              <SelectTrigger size="sm" aria-label="View" data-testid="models-view-select" className="gap-2">
-                <span className="text-muted-foreground">View</span>
+              <SelectTrigger
+                size="sm"
+                aria-label={uiT("ui.dcc839a4015c")}
+                data-testid="models-view-select"
+                className="gap-2"
+              >
+                <span className="text-muted-foreground">{uiT("ui.dcc839a4015c")}</span>
                 <span className="truncate">{VIEW_MODE_LABELS[viewMode]}</span>
               </SelectTrigger>
               <SelectContent>
@@ -283,7 +293,7 @@ export function AllModelsTable({
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
+            title={uiT("ui.546ebb8eb993")}
             description="Narrow down models + endpoints"
             resetLabel="Reset Filters"
             onReset={onResetFilters}
@@ -298,7 +308,7 @@ export function AllModelsTable({
                       set(MODEL_NAME_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
                     placeholder="Filter by Public Model Name"
-                    emptyText="No models found"
+                    emptyText={uiT("ui.a650c298cf44")}
                   />
                 </DataTableFilterField>
                 <DataTableFilterField label="Model Access Group">

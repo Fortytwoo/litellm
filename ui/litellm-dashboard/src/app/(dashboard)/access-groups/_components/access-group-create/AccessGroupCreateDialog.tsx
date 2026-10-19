@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BotIcon, InfoIcon, LayersIcon, ServerIcon } from "lucide-react";
@@ -41,6 +42,8 @@ export const AccessGroupCreateDialog = ({
   onOpenChange,
   createAccessGroup = defaultCreateAccessGroup,
 }: AccessGroupCreateDialogProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const form = useZodForm(accessGroupCreateSchema, { defaultValues: emptyAccessGroupFormValues });
   const [activeTab, setActiveTab] = React.useState(GENERAL_TAB);
@@ -108,15 +111,15 @@ export const AccessGroupCreateDialog = ({
               </TabsTrigger>
               <TabsTrigger value="models">
                 <LayersIcon />
-                Models
+                {uiT("ui.d17d2d78d76e")}
               </TabsTrigger>
               <TabsTrigger value="mcp-servers">
                 <ServerIcon />
-                MCP Servers
+                {uiT("ui.aab669a72882")}
               </TabsTrigger>
               <TabsTrigger value="agents">
                 <BotIcon />
-                Agents
+                {uiT("ui.279b44d2ab4b")}
               </TabsTrigger>
             </TabsList>
 
@@ -125,7 +128,7 @@ export const AccessGroupCreateDialog = ({
                 <FormField control={form.control} name="name" label="Group Name">
                   {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. Engineering Team" />}
                 </FormField>
-                <FormField control={form.control} name="description" label="Description">
+                <FormField control={form.control} name="description" label={uiT("ui.526e0087cc3f")}>
                   {({ ref, ...field }) => (
                     <Textarea
                       {...field}
@@ -180,10 +183,10 @@ export const AccessGroupCreateDialog = ({
               onClick={() => handleOpenChange(false)}
               disabled={mutation.isPending}
             >
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Creating..." : "Create Group"}
+              {mutation.isPending ? uiT("ui.def70944c9bb") : "Create Group"}
             </Button>
           </DialogFooter>
         </form>

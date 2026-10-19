@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 
@@ -146,6 +148,8 @@ export function AutoRouterConnectionTestDialog({
   testId,
   ...props
 }: AutoRouterConnectionTestProps & { open: boolean; onClose: () => void; testId: number }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
@@ -155,7 +159,7 @@ export function AutoRouterConnectionTestDialog({
         {open && <AutoRouterConnectionTest key={testId} {...props} />}
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Close
+            {uiT("ui.7d9eb7acb13e")}
           </Button>
         </DialogFooter>
       </DialogContent>

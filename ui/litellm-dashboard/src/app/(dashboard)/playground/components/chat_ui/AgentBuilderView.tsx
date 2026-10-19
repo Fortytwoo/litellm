@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Bot, FlaskConical, Link as LinkIcon, MessageSquare, Plus, Save, Trash2 } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -194,6 +195,8 @@ export default function AgentBuilderView({
   apiKey,
   customProxyBaseUrl,
 }: AgentBuilderViewProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [agentModels, setAgentModels] = useState<AgentModel[]>([]);
   const [modelGroups, setModelGroups] = useState<ModelGroup[]>([]);
   const [loadingAgents, setLoadingAgents] = useState(true);
@@ -484,7 +487,9 @@ export default function AgentBuilderView({
         {/* Roster */}
         <div className="w-60 shrink-0 border-r border-border bg-card flex flex-col">
           <div className="flex items-center justify-between border-b border-border p-3">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Agents</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {uiT("ui.279b44d2ab4b")}
+            </span>
             <Button variant="ghost" size="icon-sm" onClick={handleAddAgent} aria-label="Add agent">
               <Plus />
             </Button>
@@ -609,7 +614,9 @@ export default function AgentBuilderView({
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="mb-1 block text-sm font-medium text-foreground">Temperature</label>
+                            <label className="mb-1 block text-sm font-medium text-foreground">
+                              {uiT("ui.b958ce8b871a")}
+                            </label>
                             <Input
                               type="number"
                               min={0}
@@ -663,7 +670,7 @@ export default function AgentBuilderView({
                                 </Button>
                                 <Button variant="destructive" onClick={handleDeleteAgent} disabled={deleting}>
                                   <Trash2 />
-                                  Delete
+                                  {uiT("ui.e2d0a54968ea")}
                                 </Button>
                               </>
                             )}
@@ -751,9 +758,9 @@ export default function AgentBuilderView({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction variant="outline">Cancel</AlertDialogAction>
+            <AlertDialogAction variant="outline">{uiT("ui.19766ed6ccb2")}</AlertDialogAction>
             <Button variant="destructive" onClick={handleConfirmDelete} disabled={deleting}>
-              Delete
+              {uiT("ui.e2d0a54968ea")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import type { components } from "@/lib/http/schema";
 import { useQuery } from "@tanstack/react-query";
@@ -22,6 +24,8 @@ export const AgentIdentityDetails = ({
   accessToken: string | null;
   isAdmin: boolean;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const identity = readAgentIdentity(value);
   const { data, isError, isFetching, refetch } = useQuery({
     queryKey: ["agent-identity", agentId, identity],
@@ -50,7 +54,8 @@ export const AgentIdentityDetails = ({
         <p className="text-sm">Enterprise application Object ID: {identity.service_principal_id || "Not configured"}</p>
       </>
       <p className="text-sm">
-        Execution: {data ? executionLabel : "Loading"} · Mode: {data?.execution_mode ?? "Loading"}
+        Execution: {data ? executionLabel : uiT("ui.dc380888c4e2")} · Mode:{" "}
+        {data?.execution_mode ?? uiT("ui.dc380888c4e2")}
       </p>
       <p className="text-sm">
         {data?.identity?.active === false

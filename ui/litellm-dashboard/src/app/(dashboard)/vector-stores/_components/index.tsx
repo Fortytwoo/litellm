@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import {
@@ -28,6 +30,8 @@ interface VectorStoreProps {
 }
 
 const VectorStoreManagement: React.FC<VectorStoreProps> = ({ accessToken, userID, userRole, isViewOnly }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [vectorStores, setVectorStores] = useState<VectorStore[]>([]);
   const [isLoadingVectorStores, setIsLoadingVectorStores] = useState(true);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
@@ -146,7 +150,7 @@ const VectorStoreManagement: React.FC<VectorStoreProps> = ({ accessToken, userID
           <h1 className="text-xl font-semibold tracking-tight text-foreground">Vector Store Management</h1>
           <div className="flex items-center space-x-2">
             {lastRefreshed && <p className="text-sm text-muted-foreground">Last Refreshed: {lastRefreshed}</p>}
-            <Button variant="outline" size="icon-sm" aria-label="Refresh" onClick={handleRefreshClick}>
+            <Button variant="outline" size="icon-sm" aria-label={uiT("ui.0e9161011702")} onClick={handleRefreshClick}>
               <RefreshCw className="size-4" />
             </Button>
           </div>

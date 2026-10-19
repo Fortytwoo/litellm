@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,8 @@ import CredentialsTable from "./CredentialsTable";
 import { buildCredential, type CredentialSubmission } from "./credential_form_helpers";
 
 export default function CredentialsPanel() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userRole } = useAuthorized();
   // Admin Viewer follows the read-parity rule: see credentials, do not modify.
   const canModifyCredentials = isProxyAdminRole(userRole ?? "");
@@ -151,7 +154,7 @@ export default function CredentialsPanel() {
         resourceInformationTitle="Credential Information"
         resourceInformation={[
           { label: "Credential Name", value: credentialToDelete?.credential_name },
-          { label: "Provider", value: credentialToDelete?.credential_info?.custom_llm_provider || "-" },
+          { label: uiT("ui.472590ae974d"), value: credentialToDelete?.credential_info?.custom_llm_provider || "-" },
         ]}
         confirmLoading={isCredentialDeleting}
         requiredConfirmation={credentialToDelete?.credential_name}

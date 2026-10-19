@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { KeyRound, Search, X } from "lucide-react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
@@ -118,6 +120,8 @@ interface KeySummaryStripProps {
 }
 
 const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hidePromptCachingMetrics }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const daily = useMemo(() => summarySeries(summary), [summary]);
   const trend = (dataKey: string) =>
     loading || daily.length < 2 ? undefined : (
@@ -137,10 +141,10 @@ const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hid
         <h3 className="sr-only">Overall Usage</h3>
       )}
       <StatCell trend={trend("spend")}>
-        <Stat label="Spend" value={formatUsd(summary.total_spend)} pending={loading} />
+        <Stat label={uiT("ui.85f3d558db12")} value={formatUsd(summary.total_spend)} pending={loading} />
       </StatCell>
       <StatCell trend={trend("requests")}>
-        <Stat label="Requests" value={summary.total_requests.toLocaleString()} pending={loading} />
+        <Stat label={uiT("ui.ada27592c957")} value={summary.total_requests.toLocaleString()} pending={loading} />
         {!loading && (
           <div className="mt-0.5 flex gap-3 text-xs text-muted-foreground">
             <span>
@@ -157,7 +161,7 @@ const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hid
       </StatCell>
       <StatCell trend={trend("tokens")}>
         <Stat
-          label="Tokens"
+          label={uiT("ui.a039dfb9628b")}
           value={summary.total_tokens.toLocaleString()}
           pending={loading}
           hint={
@@ -192,6 +196,8 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   teams,
   hidePromptCachingMetrics = false,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [queryState, setQueryState] = useState<{ scope: FetchKeyPage; value: string } | null>(null);
   const query = queryState?.scope === fetchKeyPage ? queryState.value : "";
   const updateQuery = useCallback((value: string) => setQueryState({ scope: fetchKeyPage, value }), [fetchKeyPage]);
@@ -392,7 +398,7 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   const emptyListBody = (() => {
     if (failed) return firstPageError;
     if (!loading) return null;
-    return <p className="px-4 py-8 text-center text-sm text-muted-foreground">Loading keys...</p>;
+    return <p className="px-4 py-8 text-center text-sm text-muted-foreground">{uiT("ui.e0c65255e48f")}</p>;
   })();
   const maxSpend = Math.max(0, ...Object.values(filteredMetrics).map((metrics) => metrics.total_spend));
   const keyList = Object.entries(filteredMetrics).map(([apiKey, metrics]) => {
@@ -521,9 +527,9 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
             aria-hidden="true"
             className={`${KEY_ROW_GRID} border-y bg-muted/40 py-2 pr-4 pl-10 text-xs font-medium text-muted-foreground`}
           >
-            <span>Key</span>
-            <span className="text-right">Spend</span>
-            <span className="text-right">Requests</span>
+            <span>{uiT("ui.99a52df3ff3d")}</span>
+            <span className="text-right">{uiT("ui.85f3d558db12")}</span>
+            <span className="text-right">{uiT("ui.ada27592c957")}</span>
           </div>
         )}
         <div className={showColumnHeaders ? undefined : "border-t"}>{noMatches ? emptyFilterBody : listBody}</div>

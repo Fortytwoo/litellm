@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 import { STACKED_USAGE_PALETTE } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
@@ -30,7 +31,9 @@ const QUIET_HEADER = { headerClassName: "font-normal" };
 
 const columns: ColumnDef<ProviderSpendData>[] = [
   {
-    header: "Provider",
+    get header() {
+      return translateUi("ui.472590ae974d");
+    },
     accessorKey: "provider",
     meta: QUIET_HEADER,
     cell: ({ row }) => (
@@ -45,25 +48,33 @@ const columns: ColumnDef<ProviderSpendData>[] = [
     ),
   },
   {
-    header: "Spend",
+    get header() {
+      return translateUi("ui.85f3d558db12");
+    },
     accessorKey: "spend",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
   },
   {
-    header: "Successful",
+    get header() {
+      return translateUi("ui.f3686bb328c6");
+    },
     accessorKey: "successful_requests",
     meta: { numeric: true, className: "text-success", ...QUIET_HEADER },
     cell: ({ row }) => row.original.successful_requests.toLocaleString(),
   },
   {
-    header: "Failed",
+    get header() {
+      return translateUi("ui.031a8f0f659d");
+    },
     accessorKey: "failed_requests",
     meta: { numeric: true, className: "text-destructive", ...QUIET_HEADER },
     cell: ({ row }) => row.original.failed_requests.toLocaleString(),
   },
   {
-    header: "Tokens",
+    get header() {
+      return translateUi("ui.a039dfb9628b");
+    },
     accessorKey: "tokens",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => row.original.tokens.toLocaleString(),

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useCallback, useState } from "react";
 import { TriangleAlert } from "lucide-react";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -24,6 +26,8 @@ const ClassifierPromptEditor: React.FC<ClassifierPromptEditorProps> = ({
   tierLabels,
   classificationRubric,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [isOpen, setIsOpen] = useState(false);
   const [defaultPrompt, setDefaultPrompt] = useState("");
@@ -138,7 +142,7 @@ const ClassifierPromptEditor: React.FC<ClassifierPromptEditorProps> = ({
 
           <DialogFooter className="mt-4">
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button type="button" onClick={handleSave} disabled={isLoading || !draft.trim()}>
               Save prompt

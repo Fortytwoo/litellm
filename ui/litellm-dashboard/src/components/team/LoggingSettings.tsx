@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -72,6 +74,8 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
   disabledCallbacks = [],
   onDisabledCallbacksChange,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   // Get callbacks that support team and key logging
   const supportedCallbacks = Object.entries(callbackInfo)
     .filter(([_, info]) => info.supports_key_team_logging)
@@ -256,14 +260,14 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
           <BanIcon className="w-5 h-5 text-destructive" />
-          <span className="text-base font-semibold text-foreground">Disabled Callbacks</span>
+          <span className="text-base font-semibold text-foreground">{uiT("ui.0394db0d5502")}</span>
           <SimpleTooltip content="Select callbacks to disable for this key. Disabled callbacks will not receive any logging data.">
             <Info className="size-4 text-muted-foreground cursor-help" />
           </SimpleTooltip>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Disabled Callbacks</label>
+          <label className="text-sm font-medium text-foreground">{uiT("ui.0394db0d5502")}</label>
           <Select multiple value={disabledCallbacks} onValueChange={handleDisabledCallbacksChange}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select callbacks to disable">
@@ -302,7 +306,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <CogIcon className="w-5 h-5 text-foreground" />
-          <span className="text-base font-semibold text-foreground">Logging Integrations</span>
+          <span className="text-base font-semibold text-foreground">{uiT("ui.4267c017a8f6")}</span>
           <SimpleTooltip content="Configure callback logging integrations for this team.">
             <Info className="size-4 text-muted-foreground cursor-help" />
           </SimpleTooltip>
@@ -343,7 +347,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
                   type="button"
                 >
                   <Trash2 />
-                  Remove
+                  {uiT("ui.c3812fc4acb8")}
                 </Button>
               </div>
               <div className="space-y-4">
@@ -414,7 +418,7 @@ const LoggingSettings: React.FC<LoggingSettingsProps> = ({
       {value.length === 0 && (
         <div className="text-center py-12 text-muted-foreground border-2 border-dashed border-border rounded-lg bg-muted/30">
           <CogIcon className="w-12 h-12 text-muted-foreground mb-3 mx-auto" />
-          <div className="text-base font-medium mb-1">No logging integrations configured</div>
+          <div className="text-base font-medium mb-1">{uiT("ui.baab64189c19")}</div>
           <div className="text-sm text-muted-foreground">
             Click "Add Integration" to configure logging for this team
           </div>

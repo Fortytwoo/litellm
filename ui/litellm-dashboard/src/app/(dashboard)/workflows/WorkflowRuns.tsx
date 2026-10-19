@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ArrowLeft, ChevronDown, RefreshCw } from "lucide-react";
 import type { ColumnDef, ColumnFiltersState } from "@tanstack/react-table";
@@ -379,6 +381,8 @@ const DetailSection: React.FC<{
 // ── main component ────────────────────────────────────────────────────────────
 
 const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [runs, setRuns] = useState<WorkflowRun[]>([]);
   const [loadingRuns, setLoadingRuns] = useState(false);
   const [selectedRun, setSelectedRun] = useState<WorkflowRun | null>(null);
@@ -472,8 +476,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       },
       {
         accessorKey: "workflow_type",
-        header: "Type",
-        meta: { title: "Type" },
+        header: uiT("ui.baaddf70fb5d"),
+        meta: { title: uiT("ui.baaddf70fb5d") },
         filterFn: "includesString",
         cell: ({ row }) => (
           <span className="font-mono text-xs text-muted-foreground">{row.original.workflow_type}</span>
@@ -482,8 +486,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       {
         id: "status",
         accessorKey: "status",
-        header: "Status",
-        meta: { title: "Status" },
+        header: uiT("ui.920e413c7d41"),
+        meta: { title: uiT("ui.920e413c7d41") },
         filterFn: "equalsString",
         cell: ({ row }) => {
           const run = row.original;
@@ -497,19 +501,19 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       },
       {
         accessorKey: "created_at",
-        header: "Created",
-        meta: { title: "Created" },
+        header: uiT("ui.d70b9e24bca2"),
+        meta: { title: uiT("ui.d70b9e24bca2") },
         cell: ({ row }) => <span className="text-xs text-muted-foreground">{timeAgo(row.original.created_at)}</span>,
       },
     ],
-    [],
+    [uiT],
   );
 
   return (
     <div className="w-full px-8 py-6">
       {/* page header */}
       <div className="mb-5">
-        <div className="text-lg font-semibold text-foreground">Workflow Runs</div>
+        <div className="text-lg font-semibold text-foreground">{uiT("ui.a444842d2c72")}</div>
         <div className="mt-0.5 text-[13px] text-muted-foreground">
           Durable state tracking for agents and automated workflows
         </div>
@@ -546,12 +550,12 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               table={table}
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
-              title="Filters"
+              title={uiT("ui.546ebb8eb993")}
               description="Narrow down workflow runs"
             >
               {({ get, set }) => (
                 <>
-                  <DataTableFilterField label="Status">
+                  <DataTableFilterField label={uiT("ui.920e413c7d41")}>
                     <Select
                       items={STATUS_LABELS}
                       value={(get("status") as string) || null}
@@ -570,7 +574,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                       </SelectContent>
                     </Select>
                   </DataTableFilterField>
-                  <DataTableFilterField label="Type">
+                  <DataTableFilterField label={uiT("ui.baaddf70fb5d")}>
                     <Input
                       value={(get("workflow_type") as string) ?? ""}
                       onChange={(event) => set("workflow_type", event.target.value)}
@@ -613,7 +617,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => fetchRunDetail(selectedRun)}>
                   <RefreshCw />
-                  Refresh
+                  {uiT("ui.0e9161011702")}
                 </Button>
               </div>
 
@@ -633,7 +637,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                 >
                   <GanttTimeline run={selectedRun} events={events} />
                 </DetailSection>
-                <DetailSection title="Messages" meta={messages.length}>
+                <DetailSection title={uiT("ui.04d7b4833927")} meta={messages.length}>
                   {messages.length === 0 ? (
                     <div className="py-3 font-mono text-xs text-muted-foreground">No messages</div>
                   ) : (

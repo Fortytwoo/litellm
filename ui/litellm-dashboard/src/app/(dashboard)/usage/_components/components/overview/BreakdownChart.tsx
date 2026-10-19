@@ -1,4 +1,5 @@
 "use client";
+import { t as translateUi } from "@/i18n";
 
 import React, { useMemo } from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
@@ -20,15 +21,40 @@ import { Segmented } from "./Primitives";
 import { providerForModel } from "./modelProvider";
 
 const METRIC_OPTIONS = [
-  { value: "spend", label: "Spend" },
-  { value: "tokens", label: "Tokens" },
-  { value: "requests", label: "Requests" },
+  {
+    value: "spend",
+    get label() {
+      return translateUi("ui.85f3d558db12");
+    },
+  },
+  {
+    value: "tokens",
+    get label() {
+      return translateUi("ui.a039dfb9628b");
+    },
+  },
+  {
+    value: "requests",
+    get label() {
+      return translateUi("ui.ada27592c957");
+    },
+  },
 ] as const satisfies readonly { value: UsageMetric; label: string }[];
 
 const DIMENSION_OPTIONS = [
-  { value: "model_groups", label: "Model" },
+  {
+    value: "model_groups",
+    get label() {
+      return translateUi("ui.5e2c614c23f0");
+    },
+  },
   { value: "models", label: "Deployment" },
-  { value: "providers", label: "Provider" },
+  {
+    value: "providers",
+    get label() {
+      return translateUi("ui.472590ae974d");
+    },
+  },
 ] as const satisfies readonly { value: BreakdownDimension; label: string }[];
 
 export interface BreakdownState {

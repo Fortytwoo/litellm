@@ -1,7 +1,13 @@
+import { t as translateUi } from "@/i18n";
 import type { SearchSelectOption } from "@/components/shared/SearchSelect";
 import type { CredentialItem } from "@/components/networking";
 
-export const NO_CREDENTIAL_OPTION: SearchSelectOption = { label: "None", value: "" };
+export const NO_CREDENTIAL_OPTION: SearchSelectOption = {
+  get label() {
+    return translateUi("ui.dc937b598926");
+  },
+  value: "",
+};
 
 export const credentialLabel = (credential: CredentialItem): string =>
   credential.display_name || credential.credential_name;

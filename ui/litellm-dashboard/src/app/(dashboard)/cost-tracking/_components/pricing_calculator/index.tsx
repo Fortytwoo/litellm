@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useCallback } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,8 @@ const createDefaultEntry = (): ModelEntry => ({
 });
 
 const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, models }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [entries, setEntries] = useState<ModelEntry[]>([createDefaultEntry()]);
   const [timePeriod, setTimePeriod] = useState<TimePeriod>("month");
   const { debouncedFetchForEntry, removeEntry, getMultiModelResult } = useMultiCostEstimate(accessToken);
@@ -92,12 +96,14 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[35%]">Model</TableHead>
-            <TableHead className="w-[18%]">Input Tokens</TableHead>
-            <TableHead className="w-[18%]">Output Tokens</TableHead>
-            <TableHead className="w-[20%]">Requests/{timePeriod === "day" ? "Day" : "Month"}</TableHead>
+            <TableHead className="w-[35%]">{uiT("ui.5e2c614c23f0")}</TableHead>
+            <TableHead className="w-[18%]">{uiT("ui.c54a41f6d626")}</TableHead>
+            <TableHead className="w-[18%]">{uiT("ui.a0a1074faa44")}</TableHead>
+            <TableHead className="w-[20%]">
+              Requests/{timePeriod === "day" ? uiT("ui.8f2364e11b8b") : uiT("ui.310ca503ef36")}
+            </TableHead>
             <TableHead className="w-[50px]">
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">{uiT("ui.ff8059dc6752")}</span>
             </TableHead>
           </TableRow>
         </TableHeader>

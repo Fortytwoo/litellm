@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCanManageProjects } from "@/app/(dashboard)/hooks/projects/projectAccess";
 import { useProjectDetails } from "@/app/(dashboard)/hooks/projects/useProjectDetails";
 import { useTeam } from "@/app/(dashboard)/hooks/teams/useTeams";
@@ -25,6 +27,8 @@ interface ProjectDetailProps {
 const utilisationTone = (percent: number) => (percent >= 90 ? "over" : percent >= 70 ? "warning" : "default");
 
 export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: project, isLoading } = useProjectDetails(projectId);
   const { data: teamInfo } = useTeam(project?.team_id ?? undefined);
   const { userId } = useAuthorized();
@@ -51,7 +55,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         <div
           role="status"
           aria-busy="true"
-          aria-label="Loading"
+          aria-label={uiT("ui.dc380888c4e2")}
           className="flex min-h-[300px] items-center justify-center"
         >
           <UiLoadingSpinner className="size-8 text-primary" />
@@ -63,7 +67,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
   if (!project) {
     return (
       <div className="p-6 px-12">
-        <Button variant="ghost" size="icon" aria-label="Back" onClick={onBack} className="mb-4">
+        <Button variant="ghost" size="icon" aria-label={uiT("ui.76900f1bfd16")} onClick={onBack} className="mb-4">
           <ArrowLeftIcon className="size-4" />
         </Button>
         <p className="py-8 text-center text-sm text-muted-foreground">Project not found</p>
@@ -75,7 +79,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
     <div className="p-6 px-12">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" aria-label="Back" onClick={onBack}>
+          <Button variant="ghost" size="icon" aria-label={uiT("ui.76900f1bfd16")} onClick={onBack}>
             <ArrowLeftIcon className="size-4" />
           </Button>
           <div>
@@ -85,7 +89,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               </h1>
               <StatusBadge
                 tone={project.blocked ? "error" : "success"}
-                label={project.blocked ? "Blocked" : "Active"}
+                label={project.blocked ? uiT("ui.18f2a0947f9d") : uiT("ui.92340695899b")}
               />
             </div>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -108,9 +112,9 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
-            <dt className="text-muted-foreground">Description</dt>
+            <dt className="text-muted-foreground">{uiT("ui.526e0087cc3f")}</dt>
             <dd className="text-foreground">{project.description || "—"}</dd>
-            <dt className="text-muted-foreground">Created</dt>
+            <dt className="text-muted-foreground">{uiT("ui.d70b9e24bca2")}</dt>
             <dd className="flex items-center gap-1 text-foreground">
               {new Date(project.created_at).toLocaleString()}
               {project.created_by && (
@@ -120,7 +124,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                 </>
               )}
             </dd>
-            <dt className="text-muted-foreground">Last Updated</dt>
+            <dt className="text-muted-foreground">{uiT("ui.048c7f2ef9aa")}</dt>
             <dd className="flex items-center gap-1 text-foreground">
               {new Date(project.updated_at).toLocaleString()}
               {project.updated_by && (
@@ -139,7 +143,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <DollarSignIcon className="size-4" />
-              Budget
+              {uiT("ui.1c6225ec7092")}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -166,7 +170,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
 
         <Card className="h-full lg:col-span-2">
           <CardHeader>
-            <CardTitle>Spend by Model</CardTitle>
+            <CardTitle>{uiT("ui.e5f94d085c60")}</CardTitle>
           </CardHeader>
           <CardContent>
             {modelSpendData.length > 0 ? (
@@ -195,7 +199,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <UsersIcon className="size-4" />
-              Team
+              {uiT("ui.5985039f106d")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -217,7 +221,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                     </div>
 
                     <div>
-                      <p className="mb-1 text-xs text-muted-foreground">Models</p>
+                      <p className="mb-1 text-xs text-muted-foreground">{uiT("ui.d17d2d78d76e")}</p>
                       {(teamInfo.models?.length ?? 0) > 0 ? (
                         <div className="flex max-h-[60px] flex-wrap gap-1 overflow-hidden">
                           {teamInfo.models?.map((m: string) => (
@@ -233,7 +237,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
 
                     <div>
                       <div className="mb-0.5 flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">Spend</span>
+                        <span className="text-xs text-muted-foreground">{uiT("ui.85f3d558db12")}</span>
                         <span className="text-xs text-foreground">
                           ${teamSpend.toFixed(2)}
                           <span className="text-muted-foreground">
@@ -251,7 +255,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Members</span>
+                      <span className="text-xs text-muted-foreground">{uiT("ui.1044a4c056d0")}</span>
                       <span className="text-xs text-foreground">{teamInfo.members_with_roles?.length ?? 0}</span>
                     </div>
                   </div>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { isAdminRole, isProxyAdminRole, isProxyAdminTierRole } from "@/utils/roles";
 import { CircleHelp, Plug, Search } from "lucide-react";
 import Link from "next/link";
@@ -129,6 +131,8 @@ function DeleteServerDialog({
   isDeleting: boolean;
   onConfirm: () => Promise<void>;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -144,7 +148,7 @@ function DeleteServerDialog({
             <dl className="mt-3 space-y-1 rounded-lg border border-border bg-muted p-4">
               {server.server_name && (
                 <div className="flex gap-2">
-                  <dt className="text-sm text-muted-foreground">Name</dt>
+                  <dt className="text-sm text-muted-foreground">{uiT("ui.dcd1d5223f73")}</dt>
                   <dd className="text-sm font-semibold">{server.server_name}</dd>
                 </div>
               )}
@@ -162,9 +166,9 @@ function DeleteServerDialog({
           )}
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>{uiT("ui.19766ed6ccb2")}</AlertDialogCancel>
           <Button variant="destructive" disabled={isDeleting} onClick={onConfirm}>
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? "Deleting..." : uiT("ui.e2d0a54968ea")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -173,6 +177,8 @@ function DeleteServerDialog({
 }
 
 const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, isViewOnly = false }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { data: mcpServers, isLoading: isLoadingServers, refetch } = useMCPServers();
 
   // Fetch health status for all servers
@@ -503,7 +509,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl font-semibold">MCP Servers</h1>
+              <h1 className="text-xl font-semibold">{uiT("ui.aab669a72882")}</h1>
               {filteredServers.length > 0 && <Badge variant="secondary">{filteredServers.length}</Badge>}
             </div>
             <p className="mt-1 text-sm text-muted-foreground">Configure and manage your MCP servers</p>
@@ -616,13 +622,15 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center gap-6 rounded-lg border border-border bg-card px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">Team</p>
+                        <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">
+                          {uiT("ui.5985039f106d")}
+                        </p>
                         <Select
                           items={teamSelectItems}
                           value={selectedTeam}
                           onValueChange={(v: string | null) => handleTeamChange(v ?? "all")}
                         >
-                          <SelectTrigger className="w-55" aria-label="Team">
+                          <SelectTrigger className="w-55" aria-label={uiT("ui.5985039f106d")}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>

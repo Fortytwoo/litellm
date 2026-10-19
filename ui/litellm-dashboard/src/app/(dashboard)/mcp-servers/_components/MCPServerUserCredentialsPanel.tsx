@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -43,6 +44,8 @@ function CredentialsBody({
   isLoading: boolean;
   onRevoke: ((item: MCPServerUserCredentialListItem) => void) | null;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (isLoading) {
     return (
       <div
@@ -75,12 +78,12 @@ function CredentialsBody({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>User</TableHead>
-            <TableHead>Type</TableHead>
+            <TableHead>{uiT("ui.b512d97e7cbf")}</TableHead>
+            <TableHead>{uiT("ui.baaddf70fb5d")}</TableHead>
             <TableHead>Connected</TableHead>
-            <TableHead>Expires</TableHead>
-            <TableHead>Updated</TableHead>
-            {onRevoke ? <TableHead className="text-right">Actions</TableHead> : null}
+            <TableHead>{uiT("ui.f6725f3af08a")}</TableHead>
+            <TableHead>{uiT("ui.3a5ecca188c0")}</TableHead>
+            {onRevoke ? <TableHead className="text-right">{uiT("ui.ff8059dc6752")}</TableHead> : null}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -125,6 +128,8 @@ export function MCPServerUserCredentialsPanel({
   accessToken,
   canRevoke,
 }: MCPServerUserCredentialsPanelProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const queryClient = useQueryClient();
   const [pendingItem, setPendingItem] = useState<MCPServerUserCredentialListItem | null>(null);
   const queryKey = mcpServerUserCredentialKeys.detail(serverId);
@@ -162,7 +167,7 @@ export function MCPServerUserCredentialsPanel({
           aria-label="Refresh user credentials"
         >
           <RefreshCw className={`size-4 ${isFetching ? "animate-spin" : ""}`} />
-          Refresh
+          {uiT("ui.0e9161011702")}
         </Button>
       </div>
 
@@ -197,7 +202,7 @@ export function MCPServerUserCredentialsPanel({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button variant="outline" onClick={() => setPendingItem(null)}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button variant="destructive" onClick={confirmRevoke} disabled={revoke.isPending}>
               Revoke

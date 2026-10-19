@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { toast } from "@/lib/toast";
 import { parseErrorMessage } from "@/components/shared/errorUtils";
@@ -22,6 +23,8 @@ interface AddSSOSettingsModalProps {
 }
 
 const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, onCancel, onSuccess }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useSSOSettingsForm("sso-settings");
   const { mutateAsync, isPending } = useEditSSOSettings();
 
@@ -54,7 +57,7 @@ const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, on
         <DialogFooter>
           <div className="flex items-center justify-end gap-2">
             <Button type="button" variant="outline" onClick={handleCancel} disabled={isPending}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button
               type="button"
@@ -62,7 +65,7 @@ const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, on
               onClick={submitMountedSSOValues(form, "sso-settings", handleFormSubmit)}
             >
               {isPending && <UiLoadingSpinner className="size-4 mr-1" />}
-              {isPending ? "Adding..." : "Add SSO"}
+              {isPending ? uiT("ui.913a8849b60d") : "Add SSO"}
             </Button>
           </div>
         </DialogFooter>

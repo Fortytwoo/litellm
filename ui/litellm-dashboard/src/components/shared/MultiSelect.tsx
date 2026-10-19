@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useState } from "react";
 import {
@@ -63,6 +64,8 @@ export function MultiSelect({
   allowCustomValues = false,
   className,
 }: MultiSelectProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [query, setQuery] = useState("");
   const safeOptions = options.filter(
@@ -119,11 +122,13 @@ export function MultiSelect({
               ))}
               <ComboboxChipsInput
                 id={id}
-                placeholder={loading ? "Loading..." : placeholder}
+                placeholder={loading ? uiT("ui.47d2a515ef2f") : placeholder}
                 className="min-w-24"
                 aria-label={placeholder || undefined}
               />
-              {canClear(selected) && <ComboboxClear className="ml-auto self-center" aria-label="Clear all" />}
+              {canClear(selected) && (
+                <ComboboxClear className="ml-auto self-center" aria-label={uiT("ui.29a390f9237e")} />
+              )}
             </>
           )}
         </ComboboxValue>

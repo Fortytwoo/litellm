@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { Alert, AlertTitle } from "@/components/shared/Alert";
 import { Button } from "@/components/ui/button";
@@ -64,6 +66,8 @@ interface RegenerateKeyModalProps {
 }
 
 export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdate }: RegenerateKeyModalProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken } = useAuthorized();
   const [regeneratedKey, setRegeneratedKey] = useState<string | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -151,22 +155,22 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()} disablePointerDismissal>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Regenerate Virtual Key</DialogTitle>
+          <DialogTitle>{uiT("ui.fbf309db0fa8")}</DialogTitle>
         </DialogHeader>
         {regeneratedKey ? (
           <div className="flex flex-col gap-4">
             <Alert variant="warning">
               <TriangleAlert />
-              <AlertTitle>Save it now, you will not see it again</AlertTitle>
+              <AlertTitle>{uiT("ui.f72545f0d740")}</AlertTitle>
             </Alert>
 
             <div className="flex flex-col gap-0.5">
-              <span className="text-xs text-muted-foreground">Key Alias</span>
-              <span className="text-sm text-foreground">{selectedToken?.key_alias || "No alias set"}</span>
+              <span className="text-xs text-muted-foreground">{uiT("ui.1e7044ffa52d")}</span>
+              <span className="text-sm text-foreground">{selectedToken?.key_alias || uiT("ui.2867fababae6")}</span>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-xs text-muted-foreground">Virtual Key</span>
+              <span className="text-xs text-muted-foreground">{uiT("ui.3af334745cdc")}</span>
               <div className="rounded-md border border-border bg-muted px-4 py-3.5 font-mono text-base break-all text-foreground">
                 {regeneratedKey}
               </div>
@@ -176,12 +180,12 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
           <TooltipProvider>
             <form onSubmit={(event) => event.preventDefault()} noValidate className="mt-1">
               <FieldGroup>
-                <FormField control={form.control} name="key_alias" label="Key Alias">
+                <FormField control={form.control} name="key_alias" label={uiT("ui.1e7044ffa52d")}>
                   {({ ref, value, ...field }) => <Input {...field} ref={ref} value={value ?? ""} disabled />}
                 </FormField>
 
                 <div className="grid grid-cols-3 gap-3">
-                  <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+                  <FormField control={form.control} name="max_budget" label={uiT("ui.afa99ea4a8c3")}>
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}
@@ -194,7 +198,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="tpm_limit" label="TPM Limit">
+                  <FormField control={form.control} name="tpm_limit" label={uiT("ui.703406a2fc47")}>
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}
@@ -206,7 +210,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="rpm_limit" label="RPM Limit">
+                  <FormField control={form.control} name="rpm_limit" label={uiT("ui.e543e799b809")}>
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}
@@ -223,11 +227,12 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                   <FormField
                     control={form.control}
                     name="duration"
-                    label="Expire Key"
+                    label={uiT("ui.a3cb65a58ff2")}
                     description={
                       <span className="flex flex-col gap-0.5 text-xs">
                         <span className={keyIsExpired ? "text-destructive" : "text-muted-foreground"}>
-                          Current expiry: {selectedToken?.expires ? formatExpiresUtc(selectedToken.expires) : "Never"}
+                          Current expiry:{" "}
+                          {selectedToken?.expires ? formatExpiresUtc(selectedToken.expires) : uiT("ui.6300ef800bb8")}
                           {keyIsExpired && " (expired)"}
                         </span>
                         {newExpiryTime && <span className="text-success">New expiry: {newExpiryTime}</span>}
@@ -244,7 +249,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                       "Grace Period",
                       "Keep the old key valid for this duration after rotation. Both keys work during this period for seamless cutover. Empty = immediate revoke.",
                     )}
-                    description={<span className="text-xs">Recommended: 24h to 72h for production keys</span>}
+                    description={<span className="text-xs">{uiT("ui.ecc2aeb6410e")}</span>}
                   >
                     {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. 24h, 2d" />}
                   </FormField>
@@ -257,23 +262,23 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
           {regeneratedKey ? (
             <>
               <Button variant="outline" onClick={handleClose}>
-                Close
+                {uiT("ui.7d9eb7acb13e")}
               </Button>
               <CopyToClipboard text={regeneratedKey} onCopy={handleCopyKey}>
                 <Button>
                   {copied ? <Check /> : <Copy />}
-                  {copied ? "Copied" : "Copy Key"}
+                  {copied ? uiT("ui.8d525e5f158b") : uiT("ui.71b1acec4d27")}
                 </Button>
               </CopyToClipboard>
             </>
           ) : (
             <>
               <Button variant="outline" onClick={handleClose}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button onClick={handleRegenerateKey} disabled={isRegenerating} aria-busy={isRegenerating}>
                 <RefreshCw />
-                Regenerate
+                {uiT("ui.1651031bf58d")}
               </Button>
             </>
           )}

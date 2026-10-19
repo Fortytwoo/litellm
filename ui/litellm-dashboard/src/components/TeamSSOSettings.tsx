@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Edit, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -70,7 +72,10 @@ const SettingRow: React.FC<SettingRowProps> = ({ label, description, isEditing, 
   </div>
 );
 
-const NotSet = () => <span className="italic text-muted-foreground">Not set</span>;
+const NotSet = () => {
+  const { t: uiT } = useDashboardLanguage();
+  return <span className="italic text-muted-foreground">{uiT("ui.4895f73177ab")}</span>;
+};
 
 const renderTags = (values: string[], displayFn?: (v: string) => string) => {
   if (!values || values.length === 0) return <NotSet />;
@@ -111,6 +116,8 @@ const DEFAULT_VALUES: SettingsValues = {
 };
 
 const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const anchor = useComboboxAnchor();
   const [loading, setLoading] = useState<boolean>(true);
   const [values, setValues] = useState<SettingsValues>(DEFAULT_VALUES);
@@ -205,7 +212,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
           {isEditing ? (
             <div className="flex gap-3">
               <Button type="button" variant="outline" onClick={handleCancel} disabled={saving}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button type="button" onClick={handleSave} disabled={saving}>
                 {saving ? (
@@ -213,13 +220,13 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
                 ) : (
                   <Save data-icon="inline-start" />
                 )}
-                Save Changes
+                {uiT("ui.35322b5bb5a2")}
               </Button>
             </div>
           ) : (
             <Button type="button" variant="outline" onClick={() => setIsEditing(true)}>
               <Edit data-icon="inline-start" />
-              Edit Settings
+              {uiT("ui.cddc5824575b")}
             </Button>
           )}
         </CardAction>
@@ -232,7 +239,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
           </h4>
           <div className="border-t border-border">
             <SettingRow
-              label="Max Budget"
+              label={uiT("ui.3e20f0a04b21")}
               description="Maximum budget (in USD) for new automatically created teams."
               isEditing={isEditing}
               viewContent={
@@ -249,8 +256,8 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
                     onChange={(event) =>
                       update("max_budget", event.target.value === "" ? null : Number(event.target.value))
                     }
-                    placeholder="Not set"
-                    aria-label="Max Budget"
+                    placeholder={uiT("ui.4895f73177ab")}
+                    aria-label={uiT("ui.3e20f0a04b21")}
                   />
                 </InputGroup>
               }
@@ -273,7 +280,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
             />
 
             <SettingRow
-              label="TPM Limit"
+              label={uiT("ui.703406a2fc47")}
               description="Maximum tokens per minute allowed across all models."
               isEditing={isEditing}
               viewContent={values.tpm_limit != null ? <span>{values.tpm_limit.toLocaleString()}</span> : <NotSet />}
@@ -286,15 +293,15 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
                   onChange={(event) =>
                     update("tpm_limit", event.target.value === "" ? null : Number(event.target.value))
                   }
-                  placeholder="Not set"
+                  placeholder={uiT("ui.4895f73177ab")}
                   min={0}
-                  aria-label="TPM Limit"
+                  aria-label={uiT("ui.703406a2fc47")}
                 />
               }
             />
 
             <SettingRow
-              label="RPM Limit"
+              label={uiT("ui.e543e799b809")}
               description="Maximum requests per minute allowed across all models."
               isEditing={isEditing}
               viewContent={values.rpm_limit != null ? <span>{values.rpm_limit.toLocaleString()}</span> : <NotSet />}
@@ -307,9 +314,9 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
                   onChange={(event) =>
                     update("rpm_limit", event.target.value === "" ? null : Number(event.target.value))
                   }
-                  placeholder="Not set"
+                  placeholder={uiT("ui.4895f73177ab")}
                   min={0}
-                  aria-label="RPM Limit"
+                  aria-label={uiT("ui.e543e799b809")}
                 />
               }
             />
@@ -346,7 +353,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
             />
 
             <SettingRow
-              label="Models"
+              label={uiT("ui.d17d2d78d76e")}
               description="Default list of models that new teams can access."
               isEditing={isEditing}
               viewContent={renderTags(values.models, getModelDisplayName)}

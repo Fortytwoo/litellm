@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export const ALL_PROXY_MODELS = "all-proxy-models";
 export const NO_DEFAULT_MODELS = "no-default-models";
 
@@ -44,7 +45,9 @@ export function computeTeamModelBadges(
   );
 
   const allProxyBadge: TeamModelBadge = {
-    label: "All proxy models",
+    get label() {
+      return translateUi("ui.1fcb7b9aa888");
+    },
     kind: "all-proxy",
     tooltip: models.includes(ALL_PROXY_MODELS)
       ? "Granted by the All Proxy Models entry in the team's model list"

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -24,6 +26,8 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
   accessToken,
   isAdmin,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [confirmationInput, setConfirmationInput] = useState("");
   const [isFiring, setIsFiring] = useState(false);
@@ -108,7 +112,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
             </Alert>
             <div>
               <p className="mb-2 text-base font-medium text-foreground">
-                Type <span className="font-semibold text-destructive">{agentName}</span> to confirm:
+                {uiT("ui.baaddf70fb5d")} <span className="font-semibold text-destructive">{agentName}</span> to confirm:
               </p>
               <InputGroup className="rounded-md">
                 <InputGroupAddon>
@@ -126,7 +130,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsConfirmOpen(false)} disabled={isFiring}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button
               variant="destructive"

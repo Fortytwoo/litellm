@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
 import type { ColumnDef, OnChangeFn, PaginationState } from "@tanstack/react-table";
 import { BarChart } from "@/components/shared/charts";
@@ -31,6 +33,8 @@ interface PerUserUsageProps {
 }
 
 const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, formatAbbreviatedNumber }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   // Maximum number of user agent categories to show in charts to prevent color palette overflow
   const MAX_USER_AGENTS = 8;
   const [perUserData, setPerUserData] = useState<PerUserAnalyticsResponse>({
@@ -79,12 +83,12 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
 
   const columns: ColumnDef<PerUserMetrics>[] = [
     {
-      header: "User ID",
+      header: uiT("ui.7967e089a7b9"),
       accessorKey: "user_id",
       cell: ({ row }) => <span className="font-medium">{row.original.user_id}</span>,
     },
     {
-      header: "User Email",
+      header: uiT("ui.5809bbd8a352"),
       accessorKey: "user_email",
       cell: ({ row }) => row.original.user_email || "N/A",
     },
@@ -100,19 +104,19 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
       cell: ({ row }) => formatAbbreviatedNumber(row.original.successful_requests),
     },
     {
-      header: "Total Tokens",
+      header: uiT("ui.cd41bf0d3e9a"),
       accessorKey: "total_tokens",
       meta: { numeric: true },
       cell: ({ row }) => formatAbbreviatedNumber(row.original.total_tokens),
     },
     {
-      header: "Failed Requests",
+      header: uiT("ui.e2886352d535"),
       accessorKey: "failed_requests",
       meta: { numeric: true },
       cell: ({ row }) => formatAbbreviatedNumber(row.original.failed_requests),
     },
     {
-      header: "Total Cost",
+      header: uiT("ui.dfa5cc738da2"),
       accessorKey: "spend",
       meta: { numeric: true },
       cell: ({ row }) => `$${formatAbbreviatedNumber(row.original.spend, 4)}`,
@@ -127,7 +131,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
       <Tabs defaultValue="details">
         <TabsList variant="line" className="mb-6 h-auto w-full justify-start rounded-none border-b p-0">
           <TabsTrigger value="details" className="flex-none rounded-none px-4 py-2">
-            User Details
+            {uiT("ui.dfff6effe97d")}
           </TabsTrigger>
           <TabsTrigger value="distribution" className="flex-none rounded-none px-4 py-2">
             Usage Distribution

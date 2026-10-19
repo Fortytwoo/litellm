@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -125,6 +126,8 @@ interface QuestionCardProps extends QuestionEditorProps {
 }
 
 function QuestionCard({ question, index, onChange, onRemove }: QuestionCardProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const instructionsId = useId();
 
   return (
@@ -158,7 +161,7 @@ function QuestionCard({ question, index, onChange, onRemove }: QuestionCardProps
         <RemoveButton label={`Remove question ${index + 1}`} onClick={onRemove} />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor={instructionsId}>Instructions</Label>
+        <Label htmlFor={instructionsId}>{uiT("ui.934652dce41d")}</Label>
         <Textarea
           id={instructionsId}
           rows={2}
@@ -181,6 +184,8 @@ interface OpenAIDecisionsFormProps {
 }
 
 export default function OpenAIDecisionsForm({ value, onChange, validation, onReset }: OpenAIDecisionsFormProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const inputId = useId();
   const safetyId = useId();
   const form = useMemo(() => readDecisionsForm(value), [value]);
@@ -209,7 +214,7 @@ export default function OpenAIDecisionsForm({ value, onChange, validation, onRes
           </>
         ) : (
           <>
-            <Label htmlFor={inputId}>Input</Label>
+            <Label htmlFor={inputId}>{uiT("ui.36ecb4f86691")}</Label>
             <Textarea
               id={inputId}
               rows={4}
@@ -251,7 +256,7 @@ export default function OpenAIDecisionsForm({ value, onChange, validation, onRes
         <Input
           id={safetyId}
           value={form.safety_identifier ?? ""}
-          placeholder="Optional"
+          placeholder={uiT("ui.59be71333c96")}
           onChange={(event) => write({ ...form, safety_identifier: event.target.value || undefined })}
         />
       </div>

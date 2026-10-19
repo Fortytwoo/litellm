@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "next-themes";
 import { JsonView, darkStyles, defaultStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
@@ -13,9 +15,11 @@ interface JsonViewerProps {
  * Uses an interactive tree component for easy navigation.
  */
 export function JsonViewer({ data }: JsonViewerProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const { resolvedTheme } = useTheme();
 
-  if (!data) return <span className="text-muted-foreground">No data</span>;
+  if (!data) return <span className="text-muted-foreground">{uiT("ui.3b41ba9c7cb8")}</span>;
 
   return (
     <div

@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 /** A single MCP tool event emitted by the LiteLLM proxy during a Responses API turn. */
 export interface MCPEvent {
   type: string;
@@ -47,8 +48,18 @@ export const AUTH_TYPE = {
 };
 
 export const AUTH_TYPE_ITEMS = [
-  { value: AUTH_TYPE.NONE, label: "None" },
-  { value: AUTH_TYPE.API_KEY, label: "API Key" },
+  {
+    value: AUTH_TYPE.NONE,
+    get label() {
+      return translateUi("ui.dc937b598926");
+    },
+  },
+  {
+    value: AUTH_TYPE.API_KEY,
+    get label() {
+      return translateUi("ui.23189d55f697");
+    },
+  },
   { value: AUTH_TYPE.BEARER_TOKEN, label: "Bearer Token" },
   { value: AUTH_TYPE.TOKEN, label: "Token" },
   { value: AUTH_TYPE.BASIC, label: "Basic Auth" },

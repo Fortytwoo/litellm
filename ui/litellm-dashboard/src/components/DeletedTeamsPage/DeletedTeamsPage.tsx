@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import { PaginationState } from "@tanstack/react-table";
 import { Info } from "lucide-react";
 import { PageContent } from "@/components/shared/Page";
@@ -10,6 +12,8 @@ import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { DeletedTeamsTable } from "./DeletedTeamsTable/DeletedTeamsTable";
 
 export default function DeletedTeamsPage() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { premiumUser } = useAuthorized();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -22,7 +26,7 @@ export default function DeletedTeamsPage() {
       {!premiumUser && (
         <Alert className="shrink-0">
           <Info />
-          <AlertTitle>Coming soon to Enterprise</AlertTitle>
+          <AlertTitle>{uiT("ui.04ed5d8219ac")}</AlertTitle>
           <AlertDescription>
             Deleted team auditing is graduating from beta into our Enterprise audit &amp; compliance suite.
           </AlertDescription>

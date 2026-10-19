@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import type { ColumnDef, Row, RowData, Table } from "@tanstack/react-table";
 
@@ -9,12 +11,14 @@ interface SelectionColumnOptions<TData> {
 }
 
 function SelectAllCheckbox<TData>({ table }: { table: Table<TData> }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const allSelected = table.getIsAllPageRowsSelected();
   const someSelected = table.getIsSomePageRowsSelected();
 
   return (
     <Checkbox
-      aria-label="Select all rows"
+      aria-label={uiT("ui.9cf6c2bf95fb")}
       data-testid="datatable-select-all"
       checked={allSelected}
       indeterminate={someSelected && !allSelected}
@@ -48,6 +52,6 @@ export function createSelectionColumn<TData extends RowData>(
     enableResizing: false,
     meta: { title: "Select", className: "w-11", headerClassName: "w-11" },
     header: ({ table }) => <SelectAllCheckbox table={table} />,
-    cell: ({ row }) => <SelectRowCheckbox row={row} label={rowAriaLabel?.(row) ?? "Select row"} />,
+    cell: ({ row }) => <SelectRowCheckbox row={row} label={rowAriaLabel?.(row) ?? translateUi("ui.e87f968a3216")} />,
   };
 }

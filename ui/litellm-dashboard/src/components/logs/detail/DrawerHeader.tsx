@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { type ReactNode, useState } from "react";
 import { ArrowLeft, Check, ChevronDown, ChevronUp, Copy, X } from "lucide-react";
 import moment from "moment";
@@ -53,6 +55,8 @@ export function DrawerHeader({
   onToggleSidebar,
   backTo,
 }: DrawerHeaderProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const provider = log.custom_llm_provider || "";
   const providerInfo = provider ? getProviderLogoAndName(provider) : null;
   const showToggleWithProvider = isSidebarCollapsed && Boolean(providerInfo || log.model);
@@ -102,7 +106,7 @@ export function DrawerHeader({
       >
         {showToggleWithRequestId && <SidebarToggle isCollapsed onToggle={onToggleSidebar} />}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <CopyableId value={log.request_id} label="Request ID" fontSize={FONT_SIZE_HEADER} />
+          <CopyableId value={log.request_id} label={uiT("ui.d561f528baf7")} fontSize={FONT_SIZE_HEADER} />
           {callId && (
             <div className="flex items-center gap-1">
               <span
@@ -140,12 +144,14 @@ function ModelProviderSection({
   providerLogo?: string;
   providerName?: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="flex min-w-0 items-center gap-2">
       {providerLogo && (
         <img
           src={providerLogo}
-          alt={providerName || "Provider"}
+          alt={providerName || uiT("ui.472590ae974d")}
           style={{ width: 24, height: 24 }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -180,6 +186,8 @@ function CopyableId({
   fontSize: number;
   muted?: boolean;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -213,7 +221,7 @@ function CopyableId({
           {value}
           <button
             type="button"
-            aria-label={copied ? "Copied!" : `Copy ${label}`}
+            aria-label={copied ? uiT("ui.ea61bc15688d") : `Copy ${label}`}
             onClick={handleCopy}
             className="ml-1 align-middle text-muted-foreground hover:text-foreground"
           >
@@ -239,6 +247,8 @@ function NavigationSection({
   onNext: () => void;
   onClose: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const keyboardShortcutStyle = {
     border: "1px solid var(--color-border)",
     borderRadius: 4,
@@ -267,7 +277,7 @@ function NavigationSection({
           <TooltipTrigger render={<Button variant="ghost" size="icon-sm" onClick={onClose} />}>
             <X className="size-4" />
           </TooltipTrigger>
-          <TooltipContent>ESC to close</TooltipContent>
+          <TooltipContent>{uiT("ui.cd22241455a4")}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </div>
@@ -288,13 +298,14 @@ function StatusBar({
   statusColor: "error" | "success";
   environment: string;
 }) {
+  const { t, locale } = useDashboardLanguage();
   return (
     <div className="flex items-center gap-3">
       <Badge variant={statusColor === "error" ? "destructive" : "secondary"}>{statusLabel}</Badge>
-      <Badge variant="outline">Env: {environment}</Badge>
+      <Badge variant="outline">{t("logs.environment", { environment })}</Badge>
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground" style={{ fontSize: FONT_SIZE_MEDIUM }}>
-          {moment(log.startTime).format("MMM D, YYYY h:mm:ss A")}
+          {moment(log.startTime).format(locale === "zh" ? "YYYY-MM-DD HH:mm:ss" : "MMM D, YYYY h:mm:ss A")}
         </span>
         <span className="text-muted-foreground" style={{ fontSize: FONT_SIZE_MEDIUM }}>
           ({moment(log.startTime).fromNow()})

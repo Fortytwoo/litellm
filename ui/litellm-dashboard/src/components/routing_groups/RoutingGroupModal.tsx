@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useEffect, useMemo } from "react";
 import { useWatch } from "react-hook-form";
@@ -65,6 +66,8 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
   onSubmit,
   saving,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const modelsAnchor = useComboboxAnchor();
   const selectableStrategies =
     mode === "edit" && initialValue
@@ -142,7 +145,7 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
             <FormField
               control={form.control}
               name="models"
-              label="Models"
+              label={uiT("ui.d17d2d78d76e")}
               description={
                 selectedStrategy === "priority"
                   ? "Models from your model list that this group routes between. Models can belong to multiple priority groups."
@@ -172,14 +175,14 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
                             id={id}
                             aria-invalid={ariaInvalid}
                             aria-describedby={ariaDescribedBy}
-                            placeholder="Select models"
+                            placeholder={uiT("ui.9fcdcf02670c")}
                           />
                         </>
                       )}
                     </ComboboxValue>
                   </ComboboxChips>
                   <ComboboxContent anchor={modelsAnchor}>
-                    <ComboboxEmpty>No models found</ComboboxEmpty>
+                    <ComboboxEmpty>{uiT("ui.a650c298cf44")}</ComboboxEmpty>
                     <ComboboxList>
                       {(model: string) => (
                         <ComboboxItem key={model} value={model}>
@@ -272,7 +275,7 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
                             aria-label={`Remove priority for ${entry.model}`}
                             onClick={() => onChange(value.filter((_, itemIndex) => itemIndex !== index))}
                           >
-                            Remove
+                            {uiT("ui.c3812fc4acb8")}
                           </Button>
                         )}
                       </div>
@@ -304,10 +307,10 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
         </form>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {uiT("ui.19766ed6ccb2")}
           </Button>
           <Button onClick={() => void form.handleSubmit(handleSubmit)()} disabled={saving} aria-busy={saving}>
-            {mode === "create" ? "Create Group" : "Save Changes"}
+            {mode === "create" ? "Create Group" : uiT("ui.35322b5bb5a2")}
           </Button>
         </DialogFooter>
       </DialogContent>

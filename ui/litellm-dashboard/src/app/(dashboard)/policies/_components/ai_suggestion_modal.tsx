@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -62,6 +64,8 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
   accessToken,
   allTemplates,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [attackExamples, setAttackExamples] = useState<string[]>([""]);
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -652,8 +656,8 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
             />
             <div className="mt-1">
               <span className="text-xs text-muted-foreground">
-                Press <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Enter</kbd> to
-                submit
+                {uiT("ui.9ed1273e9b5a")}{" "}
+                <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Enter</kbd> to submit
               </span>
             </div>
           </div>
@@ -684,7 +688,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
                     {blockedCount > 0 && (
                       <div className="flex-1 rounded-md bg-destructive/10 border border-destructive/20 px-3 py-2 text-center">
                         <div className="text-lg font-bold text-destructive">{blockedCount}</div>
-                        <div className="text-[10px] font-medium text-destructive">Blocked</div>
+                        <div className="text-[10px] font-medium text-destructive">{uiT("ui.18f2a0947f9d")}</div>
                       </div>
                     )}
                     {maskedCount > 0 && (
@@ -695,7 +699,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
                     )}
                     <div className="flex-1 rounded-md bg-success/10 border border-success/20 px-3 py-2 text-center">
                       <div className="text-lg font-bold text-success">{passedCount}</div>
-                      <div className="text-[10px] font-medium text-success">Passed</div>
+                      <div className="text-[10px] font-medium text-success">{uiT("ui.436fe71bb956")}</div>
                     </div>
                     {otherCount > 0 && (
                       <div className="flex-1 rounded-md bg-muted border border-border px-3 py-2 text-center">
@@ -785,7 +789,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
                             {isBlocked && result.details && (
                               <div className="bg-card border border-destructive/20 rounded-sm p-2">
                                 <label className="text-[10px] font-medium text-muted-foreground mb-1 block">
-                                  Details
+                                  {uiT("ui.45989de49fb7")}
                                 </label>
                                 <p className="text-xs text-destructive">{result.details}</p>
                               </div>
@@ -831,7 +835,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
             {/* Model selector */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-1.5">
-                Model
+                {uiT("ui.5e2c614c23f0")}
                 <span className="text-destructive ml-0.5">*</span>
               </label>
               <SearchSelect
@@ -839,7 +843,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
                 value={selectedModel}
                 onValueChange={setSelectedModel}
                 placeholder={isLoadingModels ? "Loading models..." : "Select a model to analyze your requirements"}
-                emptyText="No models found"
+                emptyText={uiT("ui.a650c298cf44")}
                 disabled={isLoadingModels}
               />
             </div>
@@ -944,7 +948,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
             {/* Footer */}
             <div className="flex justify-end gap-3 pt-2">
               <Button variant="secondary" onClick={handleCancel} disabled={isLoading}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button onClick={handleSuggest} disabled={!hasInput || !selectedModel || isLoading}>
                 {isLoading ? "Analyzing..." : "Suggest Policies"}
@@ -970,7 +974,7 @@ const AiSuggestionModal: React.FC<AiSuggestionModalProps> = ({
             {/* Footer */}
             <div className="flex justify-end gap-3 pt-6 border-t border-border mt-4">
               <Button variant="secondary" onClick={handleBack}>
-                Back
+                {uiT("ui.76900f1bfd16")}
               </Button>
               {suggestions && suggestions.length > 0 && selectedIds.size > 0 && !showTestPanel && (
                 <Button variant="secondary" onClick={() => setShowTestPanel(true)}>

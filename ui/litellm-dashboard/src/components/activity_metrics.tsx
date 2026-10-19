@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import {
   AreaChart,
   BarChart,
@@ -246,11 +248,16 @@ export const ModelSection = ({
   hidePromptCachingMetrics?: boolean;
   fetchTopApiKeys?: (model: string) => Promise<ModelTopKeysResponse>;
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   return (
     <div className="grid gap-3">
       <StatStrip columns={5}>
         <StatCell>
-          <Stat label="Total Requests" value={<StatValue>{metrics.total_requests.toLocaleString()}</StatValue>} />
+          <Stat
+            label={uiT("ui.37e751d178cb")}
+            value={<StatValue>{metrics.total_requests.toLocaleString()}</StatValue>}
+          />
         </StatCell>
         <StatCell>
           <Stat
@@ -260,14 +267,14 @@ export const ModelSection = ({
         </StatCell>
         <StatCell>
           <Stat
-            label="Total Tokens"
+            label={uiT("ui.cd41bf0d3e9a")}
             value={<StatValue>{metrics.total_tokens.toLocaleString()}</StatValue>}
             hint={`${Math.round(metrics.total_tokens / metrics.total_successful_requests)} avg per successful request`}
           />
         </StatCell>
         <StatCell>
           <Stat
-            label="Total Spend"
+            label={uiT("ui.00c71c737b6c")}
             value={<StatValue>${formatNumberWithCommas(metrics.total_spend, 2)}</StatValue>}
             hint={`$${formatNumberWithCommas(metrics.total_spend / metrics.total_successful_requests, 3)} per successful request`}
           />
@@ -300,7 +307,10 @@ export const ModelSection = ({
       </Panel>
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <Panel title="Total Tokens" action={<SeriesKey categories={TOKEN_CATEGORIES} colors={TOKEN_COLORS} />}>
+        <Panel
+          title={uiT("ui.cd41bf0d3e9a")}
+          action={<SeriesKey categories={TOKEN_CATEGORIES} colors={TOKEN_COLORS} />}
+        >
           <AreaChart
             className={CHART_CLASS}
             data={metrics.daily_data}
@@ -440,6 +450,8 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
   hidePromptCachingMetrics = false,
   fetchTopApiKeys,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const modelNames = Object.keys(modelMetrics).sort((a, b) => {
     if (a === "") return 1;
     if (b === "") return -1;
@@ -528,7 +540,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
         </h3>
         <StatStrip columns={4}>
           <StatCell>
-            <Stat label="Total Requests" value={<StatValue>{totalRequests.toLocaleString()}</StatValue>} />
+            <Stat label={uiT("ui.37e751d178cb")} value={<StatValue>{totalRequests.toLocaleString()}</StatValue>} />
           </StatCell>
           <StatCell>
             <Stat
@@ -537,10 +549,13 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
             />
           </StatCell>
           <StatCell>
-            <Stat label="Total Tokens" value={<StatValue>{totalTokens.toLocaleString()}</StatValue>} />
+            <Stat label={uiT("ui.cd41bf0d3e9a")} value={<StatValue>{totalTokens.toLocaleString()}</StatValue>} />
           </StatCell>
           <StatCell>
-            <Stat label="Total Spend" value={<StatValue>${formatNumberWithCommas(totalSpend, 2)}</StatValue>} />
+            <Stat
+              label={uiT("ui.00c71c737b6c")}
+              value={<StatValue>${formatNumberWithCommas(totalSpend, 2)}</StatValue>}
+            />
           </StatCell>
         </StatStrip>
 

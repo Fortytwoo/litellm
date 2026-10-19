@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +39,8 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
   onDelete,
   onEdit,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [promptData, setPromptData] = useState<PromptSpec | null>(null);
   const [promptTemplate, setPromptTemplate] = useState<PromptTemplateBase | null>(null);
   const [rawApiResponse, setRawApiResponse] = useState<any>(null);
@@ -118,7 +122,7 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
   }, [selectedEnv]);
 
   if (loading && !promptData) {
-    return <div className="p-4">Loading...</div>;
+    return <div className="p-4">{uiT("ui.47d2a515ef2f")}</div>;
   }
 
   if (!promptData) {
@@ -293,7 +297,7 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
       <Tabs defaultValue="overview">
         <TabsList variant="line" className="mb-4 h-auto w-full justify-start rounded-none border-b p-0">
           <TabsTrigger value="overview" className="flex-none rounded-none px-4 py-2">
-            Overview
+            {uiT("ui.d4b1ea5708dd")}
           </TabsTrigger>
           {promptTemplate && (
             <TabsTrigger value="prompt-template" className="flex-none rounded-none px-4 py-2">
@@ -327,14 +331,14 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
               </Card>
 
               <Card className="block p-6">
-                <p>Created By</p>
+                <p>{uiT("ui.dfd60b9aa5ca")}</p>
                 <div className="mt-2">
                   <h3 className="text-sm font-medium">{promptData.created_by || "-"}</h3>
                 </div>
               </Card>
 
               <Card className="block p-6">
-                <p>Created At</p>
+                <p>{uiT("ui.3d44337010bf")}</p>
                 <div className="mt-2">
                   <h3 className="text-sm font-medium">{formatDate(promptData.created_at)}</h3>
                   <p className="text-xs">Updated: {formatDate(promptData.updated_at)}</p>
@@ -352,9 +356,9 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
                   <TableHeader>
                     <TableRow>
                       <TableHead>Version</TableHead>
-                      <TableHead>Created By</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>{uiT("ui.dfd60b9aa5ca")}</TableHead>
+                      <TableHead>{uiT("ui.99c40ab40592")}</TableHead>
+                      <TableHead>{uiT("ui.ff8059dc6752")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -403,7 +407,7 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
                               }}
                             >
                               <Pencil />
-                              Edit
+                              {uiT("ui.464c4ffd019e")}
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -434,7 +438,7 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
                     }`}
                   >
                     {copiedStates["prompt-content"] ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
-                    {copiedStates["prompt-content"] ? "Copied!" : "Copy Content"}
+                    {copiedStates["prompt-content"] ? uiT("ui.ea61bc15688d") : "Copy Content"}
                   </Button>
                 </div>
 
@@ -482,7 +486,7 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
                   }`}
                 >
                   {copiedStates["raw-json"] ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
-                  {copiedStates["raw-json"] ? "Copied!" : "Copy JSON"}
+                  {copiedStates["raw-json"] ? uiT("ui.ea61bc15688d") : uiT("ui.7708c6e2ae9c")}
                 </Button>
               </div>
 
@@ -508,10 +512,10 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
           <p>This action cannot be undone.</p>
           <DialogFooter>
             <Button variant="outline" onClick={handleDeleteCancel}>
-              Cancel
+              {uiT("ui.19766ed6ccb2")}
             </Button>
             <Button onClick={handleDeleteConfirm} variant="destructive" disabled={isDeleting} aria-busy={isDeleting}>
-              Delete
+              {uiT("ui.e2d0a54968ea")}
             </Button>
           </DialogFooter>
         </DialogContent>

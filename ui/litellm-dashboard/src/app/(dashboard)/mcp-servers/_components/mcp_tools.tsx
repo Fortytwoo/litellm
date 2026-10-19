@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useCallback, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { ToolTestPanel } from "./ToolTestPanel";
@@ -39,6 +41,8 @@ const MCPToolsViewer = ({
   serverAlias,
   extraHeaders,
 }: MCPToolsViewerProps) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [selectedTool, setSelectedTool] = useState<MCPTool | null>(null);
   const [toolResult, setToolResult] = useState<MCPContent[] | null>(null);
   const [toolError, setToolError] = useState<Error | null>(null);
@@ -306,7 +310,7 @@ const MCPToolsViewer = ({
                       <p className="text-sm font-medium">Additional Headers</p>
                     </div>
                     <Button variant="link" size="sm" onClick={() => setShowHeaderInput(!showHeaderInput)}>
-                      {showHeaderInput ? "Hide" : "Configure"}
+                      {showHeaderInput ? uiT("ui.ac20a57bfde0") : "Configure"}
                     </Button>
                   </div>
 

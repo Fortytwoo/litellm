@@ -1,3 +1,6 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 import type { ColumnDef } from "@tanstack/react-table";
 import { CircleDollarSign } from "lucide-react";
 import React from "react";
@@ -76,7 +79,9 @@ const counterColumns: ColumnDef<CounterRow>[] = [
     cell: ({ row }) => row.original.units.toLocaleString(),
   },
   {
-    header: "Cost",
+    get header() {
+      return translateUi("ui.204a5eb2cd28");
+    },
     accessorKey: "cost",
     meta: { numeric: true },
     cell: ({ row }) => <MoneyCell value={row.original.cost} emptyText="—" showZero />,
@@ -102,7 +107,9 @@ const groupColumns = (label: string, emptyLabel: string): ColumnDef<GroupRow>[] 
     cell: ({ row }) => row.original.units.toLocaleString(),
   },
   {
-    header: "Cost",
+    get header() {
+      return translateUi("ui.204a5eb2cd28");
+    },
     accessorKey: "cost",
     meta: { numeric: true },
     cell: ({ row }) => <MoneyCell value={row.original.cost} emptyText="—" showZero />,
@@ -135,6 +142,8 @@ const TableHeading = ({ title }: { title: string }) => (
 );
 
 export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDetail }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const counters = counterRows(detail);
   const unpriced = unpricedSummary(detail.untracked_usage_units);
 
@@ -153,7 +162,7 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
         <>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
             <MetricCard
-              label="Cost"
+              label={uiT("ui.204a5eb2cd28")}
               value={formatCost(detail.cost)}
               valueColor={detail.cost != null ? "text-foreground" : "text-muted-foreground"}
               icon={<CircleDollarSign className="size-4" />}

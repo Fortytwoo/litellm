@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+
 import React, { useEffect, useState } from "react";
 import { modelAvailableCall } from "./networking";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -11,6 +13,8 @@ interface ViewUserSpendProps {
   selectedTeam: any | null;
 }
 const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget, selectedTeam }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { accessToken, userRole, userId: userID } = useAuthorized();
   let [spend, setSpend] = useState(userSpend !== null ? userSpend : 0.0);
   const [maxBudget, setMaxBudget] = useState(
@@ -115,11 +119,11 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
     <div className="flex items-center">
       <div className="flex justify-between gap-x-6">
         <div>
-          <p className="text-sm text-muted-foreground">Total Spend</p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.00c71c737b6c")}</p>
           <p className="text-2xl font-semibold text-foreground">${roundedSpend}</p>
         </div>
         <div>
-          <p className="text-sm text-muted-foreground">Max Budget</p>
+          <p className="text-sm text-muted-foreground">{uiT("ui.3e20f0a04b21")}</p>
           <p className="text-2xl font-semibold text-foreground">{displayMaxBudget}</p>
         </div>
       </div>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { ChevronDown, Info } from "lucide-react";
@@ -117,6 +119,8 @@ const CreateMCPServer: React.FC<CreateMCPServerProps> = ({
   onBackToDiscovery,
   stdioEnabled = true,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useForm<MountedFormValues>({ mode: "onChange", defaultValues: CREATE_DEFAULTS });
   const registry = useMountRegistry();
   const [isLoading, setIsLoading] = useState(false);
@@ -705,7 +709,7 @@ const CreateMCPServer: React.FC<CreateMCPServerProps> = ({
                   </MountedFormField>
 
                   <MountedFormField
-                    label={<span className="text-sm font-medium text-foreground">Description</span>}
+                    label={<span className="text-sm font-medium text-foreground">{uiT("ui.526e0087cc3f")}</span>}
                     name="description"
                   >
                     {(control) => (
@@ -1000,11 +1004,11 @@ const CreateMCPServer: React.FC<CreateMCPServerProps> = ({
 
                 <div className="flex items-center justify-end space-x-3 pt-6 border-t border-border">
                   <Button variant="secondary" onClick={handleCancel}>
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </Button>
                   <Button type="submit" disabled={isLoading} aria-busy={isLoading}>
                     {isLoading && <UiLoadingSpinner className="size-4" />}
-                    {isLoading ? "Creating..." : "Add MCP Server"}
+                    {isLoading ? uiT("ui.def70944c9bb") : "Add MCP Server"}
                   </Button>
                 </div>
               </form>

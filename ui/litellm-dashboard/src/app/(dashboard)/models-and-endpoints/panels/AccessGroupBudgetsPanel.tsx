@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { SortingState } from "@tanstack/react-table";
 import { Inbox } from "lucide-react";
@@ -35,6 +36,8 @@ function EmptyState() {
 }
 
 export default function AccessGroupBudgetsPanel() {
+  const { t: uiT } = useDashboardLanguage();
+
   const { userRole } = useAuthorized();
   const { data: accessGroups, isLoading } = useModelAccessGroups();
   const setBudget = useSetModelAccessGroupBudget();
@@ -110,7 +113,7 @@ export default function AccessGroupBudgetsPanel() {
         resourceInformationTitle="Access Group"
         resourceInformation={[
           { label: "Access Group", value: clearing?.access_group ?? null, code: true },
-          { label: "Max Budget", value: clearing?.budget?.max_budget?.toString() ?? null },
+          { label: uiT("ui.3e20f0a04b21"), value: clearing?.budget?.max_budget?.toString() ?? null },
         ]}
         onCancel={() => setClearing(null)}
         onOk={handleConfirmClear}

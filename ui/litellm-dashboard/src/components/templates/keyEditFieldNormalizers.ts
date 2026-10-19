@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 const WORD_FORM_BUDGET_DURATIONS: Record<string, string> = {
   hourly: "1h",
   daily: "24h",
@@ -30,8 +31,25 @@ export const modelSentinelOptions = (
   keyTeamId: string | null | undefined,
   teamLoaded: boolean,
 ): { value: string; label: string }[] => {
-  if (keyTeamId == null) return [{ value: "all-proxy-models", label: "All Proxy Models" }];
-  return teamLoaded ? [{ value: "all-team-models", label: "All Team Models" }] : [];
+  if (keyTeamId == null)
+    return [
+      {
+        value: "all-proxy-models",
+        get label() {
+          return translateUi("ui.72d4bf586944");
+        },
+      },
+    ];
+  return teamLoaded
+    ? [
+        {
+          value: "all-team-models",
+          get label() {
+            return translateUi("ui.48f6183707a2");
+          },
+        },
+      ]
+    : [];
 };
 
 export type MovedMetadataTags = {

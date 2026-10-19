@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
@@ -58,6 +60,8 @@ export const tierEffortRows = ({
     .filter(({ model, options }) => options.length > 0 || canEditFastMode(model, fastModeByModel, paramsByModel));
 
 const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { tierLabel, paramsByModel, onEffortChange, fastModeByModel, onFastModeChange } = props;
   const rows = tierEffortRows(props);
   if (rows.length === 0) return null;
@@ -82,7 +86,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
             {options.length > 0 && (
               <Select
                 items={[
-                  { value: PROVIDER_DEFAULT, label: "Default" },
+                  { value: PROVIDER_DEFAULT, label: uiT("ui.21b111cbfe6e") },
                   ...options.map((option) => ({ value: option, label: option })),
                 ]}
                 value={effort ?? PROVIDER_DEFAULT}
@@ -98,7 +102,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={PROVIDER_DEFAULT}>Default</SelectItem>
+                  <SelectItem value={PROVIDER_DEFAULT}>{uiT("ui.21b111cbfe6e")}</SelectItem>
                   {options.map((option) => (
                     <SelectItem key={option} value={option}>
                       {option}

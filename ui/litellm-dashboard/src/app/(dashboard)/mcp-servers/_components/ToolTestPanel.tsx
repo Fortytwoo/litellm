@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { CircleHelp, X } from "lucide-react";
 
@@ -24,6 +26,8 @@ export function ToolTestPanel({
   error: Error | null;
   onClose: () => void;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [viewMode, setViewMode] = React.useState<"formatted" | "json">("formatted");
   const [startTime, setStartTime] = React.useState<number | null>(null);
   const [duration, setDuration] = React.useState<number | null>(null);
@@ -171,14 +175,16 @@ export function ToolTestPanel({
               </div>
             </div>
             <p className="text-xs text-muted-foreground">{tool.description}</p>
-            <p className="text-xs text-muted-foreground">Provider: {tool.mcp_info.server_name}</p>
+            <p className="text-xs text-muted-foreground">
+              {uiT("ui.672f1efd8b87")} {tool.mcp_info.server_name}
+            </p>
           </div>
         </div>
         <Button
           onClick={onClose}
           variant="ghost"
           size="icon-sm"
-          aria-label="Close"
+          aria-label={uiT("ui.7d9eb7acb13e")}
           className="text-muted-foreground hover:text-foreground"
         >
           <X className="size-4" />
@@ -278,7 +284,7 @@ export function ToolTestPanel({
                                 : "text-success hover:text-success/80"
                             }`}
                           >
-                            Formatted
+                            {uiT("ui.2bf44931f908")}
                           </button>
                           <button
                             onClick={() => setViewMode("json")}

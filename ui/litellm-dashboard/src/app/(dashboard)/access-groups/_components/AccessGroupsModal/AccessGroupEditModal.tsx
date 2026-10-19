@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
 
@@ -35,6 +36,8 @@ const toFormValues = (accessGroup: AccessGroupResponse): AccessGroupFormValues =
 });
 
 function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGroupEditModalProps, "visible">) {
+  const { t: uiT } = useDashboardLanguage();
+
   const form = useZodForm(accessGroupFormSchema, { defaultValues: toFormValues(accessGroup) });
   const editMutation = useEditAccessGroup();
   const [activeTab, setActiveTab] = useState(GENERAL_TAB);
@@ -75,10 +78,10 @@ function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGr
 
       <div className="mt-6 flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={onCancel} disabled={editMutation.isPending}>
-          Cancel
+          {uiT("ui.19766ed6ccb2")}
         </Button>
         <Button type="button" onClick={() => void handleOk()} disabled={editMutation.isPending}>
-          Save Changes
+          {uiT("ui.35322b5bb5a2")}
         </Button>
       </div>
     </form>

@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowRight, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +14,8 @@ interface TransformRequestPanelProps {
 }
 
 const TransformRequestPanel: React.FC<TransformRequestPanelProps> = ({ accessToken }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [originalRequestJSON, setOriginalRequestJSON] = useState(`{
   "model": "openai/gpt-4o",
   "messages": [
@@ -126,7 +130,7 @@ ${formattedBody}
 
   return (
     <div className="p-2">
-      <h1 className="text-lg font-medium text-foreground">Playground</h1>
+      <h1 className="text-lg font-medium text-foreground">{uiT("ui.a6273fb551f2")}</h1>
       <p className="text-sm text-muted-foreground">
         See how LiteLLM transforms your request for the specified provider.
       </p>

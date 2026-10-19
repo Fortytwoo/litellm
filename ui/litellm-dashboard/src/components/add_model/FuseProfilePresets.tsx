@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { $api } from "@/lib/http/api";
 import { SearchSelect } from "@/components/shared/SearchSelect";
@@ -61,6 +63,8 @@ function FuseProfilePresetField({
   customWithoutPreview,
   setCustomWithoutPreview,
 }: FieldProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const label = profileLabels[field];
   const presetId = value[`${field}_preset`];
   const preset = presets?.find((entry) => entry.id === presetId);
@@ -105,7 +109,7 @@ function FuseProfilePresetField({
         value={custom ? "custom" : presetId}
         allowClear={false}
         options={[
-          { value: "custom", label: "Custom" },
+          { value: "custom", label: uiT("ui.494ca78f7374") },
           ...(presets ?? []).map((entry) => ({ value: entry.id, label: entry.label, sublabel: entry.id })),
         ]}
         onValueChange={chooseProfile}

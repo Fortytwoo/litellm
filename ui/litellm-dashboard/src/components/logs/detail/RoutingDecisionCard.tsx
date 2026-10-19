@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { Waypoints } from "lucide-react";
 
@@ -186,6 +187,8 @@ function PercentageRow({ label, value, unit = "%" }: { label: string; value?: nu
 }
 
 function CapabilityForecast({ decision }: { decision: RoutingDecision }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const {
     classifier_p_solve: raw,
     classifier_calibrated_p_solve: calibrated,
@@ -202,7 +205,7 @@ function CapabilityForecast({ decision }: { decision: RoutingDecision }) {
       <div className="mb-2 text-xs text-muted-foreground">Efficient model solve chance</div>
       <PercentageRow label="Raw" value={raw} />
       <PercentageRow label="Calibrated" value={calibrated} />
-      <PercentageRow label="Threshold" value={threshold} />
+      <PercentageRow label={uiT("ui.0da627ada476")} value={threshold} />
       {boundary && <Row label="Boundary">{boundary}</Row>}
       {rule && <Row label="Rule">{rule}</Row>}
       {version && <Row label="Calibration">{version}</Row>}
@@ -248,6 +251,8 @@ export function RoutingDecisionCard({
   decision?: RoutingDecision | null;
   className?: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   if (!decision || !decision.cause) return null;
 
   const {
@@ -290,7 +295,7 @@ export function RoutingDecisionCard({
         )}
 
         {tier && (
-          <Row label="Tier">
+          <Row label={uiT("ui.cb9e8664edea")}>
             <Badge variant="secondary" className="font-normal">
               {tierLabel ?? tier}
             </Badge>
@@ -302,7 +307,7 @@ export function RoutingDecisionCard({
         <Row label="Decided by">{describeCause(decision)}</Row>
         {decision.classifier_model && <Row label="Classifier model">{decision.classifier_model}</Row>}
         {decision.classifier_confidence != null && (
-          <Row label="Confidence">{(decision.classifier_confidence * 100).toFixed(1)}%</Row>
+          <Row label={uiT("ui.6422e3e78f5e")}>{(decision.classifier_confidence * 100).toFixed(1)}%</Row>
         )}
         {decision.classifier_probabilities && (
           <Row label="Probabilities">
@@ -316,7 +321,7 @@ export function RoutingDecisionCard({
         {decision.classifier_cost != null && <Row label="Classifier cost">${decision.classifier_cost.toFixed(8)}</Row>}
 
         {score !== undefined && (
-          <Row label="Score">
+          <Row label={uiT("ui.38e5a46cbc5a")}>
             <span className="tabular-nums">{score.toFixed(2)}</span>
             {scoreExplanation && <span className="ml-2 text-muted-foreground">({scoreExplanation})</span>}
           </Row>
@@ -338,7 +343,7 @@ export function RoutingDecisionCard({
                 ))}
               </span>
             </Row>
-            <Row label="Threshold">
+            <Row label={uiT("ui.0da627ada476")}>
               <span className="tabular-nums">{(forecast.threshold * 100).toFixed(1)}%</span>
             </Row>
             <Row label="Predicted tier">{forecast.predicted_tier}</Row>

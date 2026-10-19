@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import type { components } from "@/lib/http/schema";
 import useCan from "@/app/(dashboard)/hooks/useCan";
@@ -585,6 +587,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
   premiumUser = false,
   onUpdate,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const teamUpdateSchema = useMemo(
     () =>
       teamUpdateFieldsSchema.superRefine((values, ctx) => {
@@ -1252,7 +1256,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
   };
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return <div className="p-4">{uiT("ui.47d2a515ef2f")}</div>;
   }
 
   if (!teamData?.team_info) {
@@ -1309,7 +1313,10 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
             <p>Budget Status</p>
             <div className="mt-2">
               <h3 className="text-lg font-medium">${formatNumberWithCommas(info.spend, 2)}</h3>
-              <p>of {info.max_budget === null ? "Unlimited" : `$${formatNumberWithCommas(info.max_budget, 2)}`}</p>
+              <p>
+                of{" "}
+                {info.max_budget === null ? uiT("ui.11dde17d6c3e") : `$${formatNumberWithCommas(info.max_budget, 2)}`}
+              </p>
               {info.budget_duration && <p className="text-muted-foreground">Reset: {info.budget_duration}</p>}
               <br />
               {info.team_member_budget_table && (
@@ -1321,12 +1328,16 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           </Card>
 
           <Card className="block p-6">
-            <p>Rate Limits</p>
+            <p>{uiT("ui.ed129d234fd4")}</p>
             <div className="mt-2">
-              <p>TPM: {info.tpm_limit ?? "Unlimited"}</p>
-              <p>RPM: {info.rpm_limit ?? "Unlimited"}</p>
-              <p>TPD (batch): {info.tpd_limit ?? "Unlimited"}</p>
-              {info.max_parallel_requests && <p>Max Parallel Requests: {info.max_parallel_requests}</p>}
+              <p>TPM: {info.tpm_limit ?? uiT("ui.11dde17d6c3e")}</p>
+              <p>RPM: {info.rpm_limit ?? uiT("ui.11dde17d6c3e")}</p>
+              <p>TPD (batch): {info.tpd_limit ?? uiT("ui.11dde17d6c3e")}</p>
+              {info.max_parallel_requests && (
+                <p>
+                  {uiT("ui.ee5508890a86")} {info.max_parallel_requests}
+                </p>
+              )}
               {(() => {
                 const modelTpm = (info.metadata?.model_tpm_limit ?? {}) as Record<string, number>;
                 const modelRpm = (info.metadata?.model_rpm_limit ?? {}) as Record<string, number>;
@@ -1343,18 +1354,18 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </div>
                 );
               })()}
-              <p>Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? "Default"}</p>
+              <p>Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? uiT("ui.21b111cbfe6e")}</p>
               <p>
                 Estimated Output Tokens Per Model:{" "}
                 {info.metadata?.default_estimated_output_tokens_per_model
                   ? JSON.stringify(info.metadata.default_estimated_output_tokens_per_model)
-                  : "Default"}
+                  : uiT("ui.21b111cbfe6e")}
               </p>
             </div>
           </Card>
 
           <Card className="block p-6">
-            <p>Models</p>
+            <p>{uiT("ui.d17d2d78d76e")}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {computeTeamModelBadges(info.models, info.access_group_models || [], info.access_group_details).map(
                 (badge, index) => (
@@ -1373,11 +1384,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           </Card>
 
           <Card className="block p-6">
-            <p className="font-semibold text-foreground">Virtual Keys</p>
+            <p className="font-semibold text-foreground">{uiT("ui.d1c0ad6c4bdd")}</p>
             <div className="mt-2">
               <p>User Keys: {teamData.keys.filter((key) => key.user_id).length}</p>
               <p>Service Account Keys: {teamData.keys.filter((key) => !key.user_id).length}</p>
-              <p className="text-muted-foreground">Total: {teamData.keys.length}</p>
+              <p className="text-muted-foreground">
+                {uiT("ui.18e872be2359")} {teamData.keys.length}
+              </p>
             </div>
           </Card>
 
@@ -1404,14 +1417,14 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           </Card>
 
           <Card className="block p-6">
-            <p className="font-semibold text-foreground mb-3">Policies</p>
+            <p className="font-semibold text-foreground mb-3">{uiT("ui.d3ad1f1f8c9c")}</p>
             {info.policies && info.policies.length > 0 ? (
               <div className="space-y-4">
                 {info.policies.map((policy: string, index: number) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Badge variant="secondary">{policy}</Badge>
-                      {loadingPolicies && <p className="text-xs text-muted-foreground">Loading guardrails...</p>}
+                      {loadingPolicies && <p className="text-xs text-muted-foreground">{uiT("ui.d9dd86513316")}</p>}
                     </div>
                     {!loadingPolicies && policyGuardrails[policy] && policyGuardrails[policy].length > 0 && (
                       <div className="ml-4 pl-3 border-l-2 border-border">
@@ -1429,7 +1442,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">No policies configured</p>
+              <p className="text-muted-foreground">{uiT("ui.3ff1bc9f5720")}</p>
             )}
           </Card>
 
@@ -1481,25 +1494,25 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 onClick={() => openSettingsEditor(info.litellm_model_table?.model_aliases ?? {})}
               >
                 <Pencil />
-                Edit Settings
+                {uiT("ui.cddc5824575b")}
               </Button>
             )}
           </div>
 
           {isEditing && (teamAdminSettingsEditor !== null || isGuardrailsLoading) ? (
-            teamAdminSettingsEditor ?? <div className="p-4">Loading...</div>
+            teamAdminSettingsEditor ?? <div className="p-4">{uiT("ui.47d2a515ef2f")}</div>
           ) : isEditing ? (
             <TooltipProvider>
               <form onSubmit={(event) => void form.handleSubmit(onTeamUpdateSubmit)(event)}>
                 <FieldGroup>
-                  <FormField control={form.control} name="team_alias" label="Team Name">
+                  <FormField control={form.control} name="team_alias" label={uiT("ui.6ed5a592c422")}>
                     {({ ref, value, ...field }) => <UIInput {...field} ref={ref} value={value ?? ""} />}
                   </FormField>
 
                   <FormField
                     control={form.control}
                     name="models"
-                    label="Models"
+                    label={uiT("ui.d17d2d78d76e")}
                     description="Leave empty to grant no models directly. The team keeps any models granted through its access groups"
                   >
                     {({ id, value, onChange }) => (
@@ -1536,13 +1549,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     />
                   </Field>
 
-                  <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+                  <FormField control={form.control} name="max_budget" label={uiT("ui.afa99ea4a8c3")}>
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} />
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="soft_budget" label="Soft Budget (USD)">
+                  <FormField control={form.control} name="soft_budget" label={uiT("ui.fbb27b919c3a")}>
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} />
                     )}
@@ -1741,11 +1754,11 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <FormField control={form.control} name="budget_duration" label="Reset Budget">
+                  <FormField control={form.control} name="budget_duration" label={uiT("ui.66b0753db929")}>
                     {({ id, value, onChange }) => (
                       <BudgetDurationDropdown
                         id={id}
-                        placeholder="Never resets"
+                        placeholder={uiT("ui.f95c8af3735c")}
                         value={value}
                         onChange={(next) => onChange(next ?? null)}
                       />
@@ -1781,7 +1794,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </FormField>
 
                   <Field>
-                    <FieldLabel>Metadata</FieldLabel>
+                    <FieldLabel>{uiT("ui.9eddf573cb50")}</FieldLabel>
                     <MetadataKeyValueFields
                       control={form.control}
                       getValues={form.getValues}
@@ -1826,7 +1839,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 onChange(event.target.value === "" ? null : Number(event.target.value))
                               }
-                              placeholder="TPM Limit"
+                              placeholder={uiT("ui.703406a2fc47")}
                               min={0}
                               step={1}
                             />
@@ -1841,7 +1854,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 onChange(event.target.value === "" ? null : Number(event.target.value))
                               }
-                              placeholder="RPM Limit"
+                              placeholder={uiT("ui.e543e799b809")}
                               min={0}
                               step={1}
                             />
@@ -1905,7 +1918,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </FormField>
 
                   <Field>
-                    <FieldLabel>Router Settings</FieldLabel>
+                    <FieldLabel>{uiT("ui.c4b306b8f296")}</FieldLabel>
                     <RouterSettingsAccordion
                       ref={routerSettingsRef}
                       accessToken={accessToken || ""}
@@ -1994,21 +2007,17 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     )}
                   >
                     {({ value, onChange }) => (
-                      <AccessGroupSelector
-                        value={value}
-                        onChange={onChange}
-                        placeholder="Select access groups (optional)"
-                      />
+                      <AccessGroupSelector value={value} onChange={onChange} placeholder={uiT("ui.0241d89497da")} />
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="vector_stores" label="Vector Stores">
+                  <FormField control={form.control} name="vector_stores" label={uiT("ui.a6110d660e9b")}>
                     {({ value, onChange }) => (
                       <VectorStoreSelector
                         onChange={onChange}
                         value={value}
                         accessToken={accessToken || ""}
-                        placeholder="Select vector stores"
+                        placeholder={uiT("ui.9b0282c14af0")}
                       />
                     )}
                   </FormField>
@@ -2027,7 +2036,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                               "Allowed Pass Through Routes",
                               "Only proxy admins can set allowed pass through routes",
                             )
-                          : "Allowed Pass Through Routes"
+                          : uiT("ui.c46eae929e67")
                     }
                   >
                     {({ value, onChange }) => (
@@ -2041,13 +2050,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="mcp_servers_and_groups" label="MCP Servers / Access Groups">
+                  <FormField control={form.control} name="mcp_servers_and_groups" label={uiT("ui.e1ea1a8da50e")}>
                     {({ value, onChange }) => (
                       <MCPServerSelector
                         onChange={onChange}
                         value={value}
                         accessToken={accessToken || ""}
-                        placeholder="Select MCP servers or access groups (optional)"
+                        placeholder={uiT("ui.932feda2a896")}
                         allowAllProxyMcpServers={is_proxy_admin}
                       />
                     )}
@@ -2064,13 +2073,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     />
                   </div>
 
-                  <FormField control={form.control} name="agents_and_groups" label="Agents / Access Groups">
+                  <FormField control={form.control} name="agents_and_groups" label={uiT("ui.c51b5b533820")}>
                     {({ value, onChange }) => (
                       <AgentSelector
                         onChange={onChange}
                         value={value}
                         accessToken={accessToken || ""}
-                        placeholder="Select agents or access groups (optional)"
+                        placeholder={uiT("ui.3c8350c1d0ba")}
                       />
                     )}
                   </FormField>
@@ -2123,7 +2132,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="organization_id" label="Organization">
+                  <FormField control={form.control} name="organization_id" label={uiT("ui.d764d42592fc")}>
                     {({ id, value, onChange }) => (
                       <SearchSelect
                         inputId={id}
@@ -2139,7 +2148,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="logging_settings" label="Logging Settings">
+                  <FormField control={form.control} name="logging_settings" label={uiT("ui.f5d87a5328ff")}>
                     {({ value, onChange }) => (
                       <EditLoggingSettings value={(value as unknown[]) ?? []} onChange={onChange} />
                     )}
@@ -2171,11 +2180,11 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 <div className="sticky z-chrome -inset-x-6 -bottom-6 border-t border-border bg-card p-4 pr-0">
                   <div className="flex items-center justify-end gap-2">
                     <Button type="button" variant="outline" onClick={() => setIsEditing(false)} disabled={isTeamSaving}>
-                      Cancel
+                      {uiT("ui.19766ed6ccb2")}
                     </Button>
                     <Button type="submit" disabled={isTeamSaving}>
                       {isTeamSaving ? <UiLoadingSpinner className="size-4" /> : <Save className="size-4" />}
-                      Save Changes
+                      {uiT("ui.35322b5bb5a2")}
                     </Button>
                   </div>
                 </div>
@@ -2184,19 +2193,19 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           ) : (
             <div className="space-y-4">
               <div>
-                <p className="font-medium">Team Name</p>
+                <p className="font-medium">{uiT("ui.6ed5a592c422")}</p>
                 <div>{info.team_alias}</div>
               </div>
               <div>
-                <p className="font-medium">Team ID</p>
+                <p className="font-medium">{uiT("ui.fa2758a6173a")}</p>
                 <div className="font-mono">{info.team_id}</div>
               </div>
               <div>
-                <p className="font-medium">Created At</p>
+                <p className="font-medium">{uiT("ui.3d44337010bf")}</p>
                 <div>{new Date(info.created_at).toLocaleString()}</div>
               </div>
               <div>
-                <p className="font-medium">Models</p>
+                <p className="font-medium">{uiT("ui.d17d2d78d76e")}</p>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {info.models.map((model, index) => (
                     <BadgeLink key={index} href={modelOrAccessGroupHref(model, accessGroupNames)}>
@@ -2238,10 +2247,10 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 })()}
               </div>
               <div>
-                <p className="font-medium">Rate Limits</p>
-                <div>TPM: {info.tpm_limit ?? "Unlimited"}</div>
-                <div>RPM: {info.rpm_limit ?? "Unlimited"}</div>
-                <div>TPD (batch): {info.tpd_limit ?? "Unlimited"}</div>
+                <p className="font-medium">{uiT("ui.ed129d234fd4")}</p>
+                <div>TPM: {info.tpm_limit ?? uiT("ui.11dde17d6c3e")}</div>
+                <div>RPM: {info.rpm_limit ?? uiT("ui.11dde17d6c3e")}</div>
+                <div>TPD (batch): {info.tpd_limit ?? uiT("ui.11dde17d6c3e")}</div>
                 {(() => {
                   const modelTpm = (info.metadata?.model_tpm_limit ?? {}) as Record<string, number>;
                   const modelRpm = (info.metadata?.model_rpm_limit ?? {}) as Record<string, number>;
@@ -2258,18 +2267,21 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     </div>
                   );
                 })()}
-                <div>Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? "Default"}</div>
+                <div>
+                  Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? uiT("ui.21b111cbfe6e")}
+                </div>
                 <div>
                   Estimated Output Tokens Per Model:{" "}
                   {info.metadata?.default_estimated_output_tokens_per_model
                     ? JSON.stringify(info.metadata.default_estimated_output_tokens_per_model)
-                    : "Default"}
+                    : uiT("ui.21b111cbfe6e")}
                 </div>
               </div>
               <div>
                 <p className="font-medium">Team Budget</p>
                 <div>
-                  Max Budget: {info.max_budget !== null ? `$${formatNumberWithCommas(info.max_budget, 4)}` : "No Limit"}
+                  {uiT("ui.c67a6747bda3")}{" "}
+                  {info.max_budget !== null ? `$${formatNumberWithCommas(info.max_budget, 4)}` : "No Limit"}
                 </div>
                 <div>
                   Soft Budget:{" "}
@@ -2277,7 +2289,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     ? `$${formatNumberWithCommas(info.soft_budget, 4)}`
                     : "No Limit"}
                 </div>
-                <div>Budget Reset: {info.budget_duration || "Never"}</div>
+                <div>Budget Reset: {info.budget_duration || uiT("ui.6300ef800bb8")}</div>
                 {modelMaxBudgetToEntries(info.model_max_budget as ModelMaxBudget | null | undefined).map(
                   ({ model, budgetLimit, timePeriod }) => {
                     const spent = model === null ? undefined : info.model_max_budget_usage?.[model]?.current_spend;
@@ -2302,15 +2314,20 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
                 </p>
-                <div>Max Budget: {info.team_member_budget_table?.max_budget ?? "No Limit"}</div>
+                <div>
+                  {uiT("ui.c67a6747bda3")} {info.team_member_budget_table?.max_budget ?? "No Limit"}
+                </div>
                 <div>Budget Duration: {info.team_member_budget_table?.budget_duration || "No Limit"}</div>
                 <div>Key Duration: {info.metadata?.team_member_key_duration || "No Limit"}</div>
                 <div>TPM Limit: {info.team_member_budget_table?.tpm_limit ?? "No Limit"}</div>
                 <div>RPM Limit: {info.team_member_budget_table?.rpm_limit ?? "No Limit"}</div>
-                <div>Budget Alert Thresholds: {teamMemberBudgetAlertSummary(info.metadata).join("; ") || "None"}</div>
+                <div>
+                  Budget Alert Thresholds:{" "}
+                  {teamMemberBudgetAlertSummary(info.metadata).join("; ") || uiT("ui.dc937b598926")}
+                </div>
               </div>
               <div>
-                <p className="font-medium">Router Settings</p>
+                <p className="font-medium">{uiT("ui.c4b306b8f296")}</p>
                 {info.router_settings &&
                 Object.values(info.router_settings).some(
                   (v) => v !== null && v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0),
@@ -2350,9 +2367,9 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 <div>{info.organization_id}</div>
               </div>
               <div>
-                <p className="font-medium">Status</p>
+                <p className="font-medium">{uiT("ui.920e413c7d41")}</p>
                 <Badge variant={info.blocked ? "destructive" : "secondary"}>
-                  {info.blocked ? "Blocked" : "Active"}
+                  {info.blocked ? uiT("ui.18f2a0947f9d") : uiT("ui.92340695899b")}
                 </Badge>
               </div>
 
@@ -2453,8 +2470,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           showEmail: true,
           showUserId: true,
           roleOptions: [
-            { label: "Admin", value: "admin" },
-            { label: "User", value: "user" },
+            { label: uiT("ui.c1c224b03cd9"), value: "admin" },
+            { label: uiT("ui.b512d97e7cbf"), value: "user" },
           ],
           additionalFields: [
             {
@@ -2575,9 +2592,9 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
         message="Are you sure you want to remove this member from the team? This action cannot be undone."
         resourceInformationTitle="Team Member Information"
         resourceInformation={[
-          { label: "User ID", value: memberToDelete?.user_id, code: true },
-          { label: "Email", value: memberToDelete?.user_email },
-          { label: "Role", value: memberToDelete?.role },
+          { label: uiT("ui.7967e089a7b9"), value: memberToDelete?.user_id, code: true },
+          { label: uiT("ui.969ccbd3cf63"), value: memberToDelete?.user_email },
+          { label: uiT("ui.14736a2eb9f4"), value: memberToDelete?.role },
         ]}
         onCancel={handleDeleteCancel}
         onOk={handleDeleteConfirm}

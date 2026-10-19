@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { AgentHubData, getAgentHubTableColumns } from "@/components/AIHub/AgentHubTableColumns";
 import MakeAgentPublicForm from "@/components/AIHub/forms/MakeAgentPublicForm";
 import MakeMCPPublicForm from "@/components/AIHub/forms/MakeMCPPublicForm";
@@ -77,6 +79,8 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
   userRole,
   canOpenPlayground,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const syntaxTheme = useSyntaxTheme(prism);
   // Admin Viewer follows the read-parity rule: see the AI Hub catalog, but
   // cannot toggle public visibility (write).
@@ -416,7 +420,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
           {/* Header with Title, Description and URL */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex flex-col items-start">
-              <h2 className="text-center text-xl font-semibold">AI Hub</h2>
+              <h2 className="text-center text-xl font-semibold">{uiT("ui.dc459287898f")}</h2>
               {isAdminRole(userRole || "") ? (
                 <p className="text-sm text-muted-foreground">
                   Make models, agents, and MCP servers public for developers to know what&apos;s available.
@@ -453,7 +457,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
           <Tabs defaultValue="models">
             <TabsList variant="line" className="mb-4 h-auto w-full justify-start rounded-none border-b p-0">
               <TabsTrigger value="models" className="flex-none rounded-none px-4 py-2">
-                Model Hub
+                {uiT("ui.378755ff1951")}
               </TabsTrigger>
               <TabsTrigger value="agents" className="flex-none rounded-none px-4 py-2">
                 Agent Hub
@@ -508,7 +512,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
                 <div className="mt-4 text-center space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Showing {filteredData.length} of {modelHubData?.length || 0} models
+                    {uiT("ui.d604310a789a")} {filteredData.length} of {modelHubData?.length || 0} models
                   </p>
                 </div>
               </TabsContent>
@@ -575,7 +579,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
                 <div className="mt-4 text-center space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Showing {filteredAgentData.length} of {agentHubData?.length || 0} agents
+                    {uiT("ui.d604310a789a")} {filteredAgentData.length} of {agentHubData?.length || 0} agents
                   </p>
                 </div>
               </TabsContent>
@@ -618,7 +622,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
                 <div className="mt-4 text-center space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Showing {mcpHubData?.length || 0} MCP server{mcpHubData?.length !== 1 ? "s" : ""}
+                    {uiT("ui.d604310a789a")} {mcpHubData?.length || 0} MCP server{mcpHubData?.length !== 1 ? "s" : ""}
                   </p>
                 </div>
               </TabsContent>
@@ -742,7 +746,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
               {/* Rate Limits */}
               {(selectedModel.tpm || selectedModel.rpm) && (
                 <div>
-                  <p className="text-lg font-semibold mb-4">Rate Limits</p>
+                  <p className="text-lg font-semibold mb-4">{uiT("ui.ed129d234fd4")}</p>
                   <div className="grid grid-cols-2 gap-4">
                     {selectedModel.tpm && (
                       <div>
@@ -843,7 +847,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                   </div>
                 </div>
                 <div>
-                  <p className="font-medium">Description:</p>
+                  <p className="font-medium">{uiT("ui.0cf2814604b4")}</p>
                   <p className="mt-1">{selectedAgent.description}</p>
                 </div>
               </div>
@@ -894,7 +898,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
               {/* Skills */}
               {selectedAgent.skills && selectedAgent.skills.length > 0 && (
                 <div>
-                  <p className="text-lg font-semibold mb-4">Skills</p>
+                  <p className="text-lg font-semibold mb-4">{uiT("ui.66d0f523a379")}</p>
                   <div className="space-y-4">
                     {selectedAgent.skills.map((skill) => (
                       <div key={skill.id} className="border border-border rounded-sm p-4">
@@ -1003,7 +1007,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                 </div>
                 {selectedMcpServer.description && (
                   <div className="mt-2">
-                    <p className="font-medium">Description:</p>
+                    <p className="font-medium">{uiT("ui.0cf2814604b4")}</p>
                     <p className="mt-1">{selectedMcpServer.description}</p>
                   </div>
                 )}
@@ -1039,7 +1043,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
               {/* Teams */}
               {selectedMcpServer.teams && selectedMcpServer.teams.length > 0 && (
                 <div>
-                  <p className="text-lg font-semibold mb-4">Teams</p>
+                  <p className="text-lg font-semibold mb-4">{uiT("ui.1e1a1c078af2")}</p>
                   <div className="flex flex-wrap gap-2">
                     {selectedMcpServer.teams.map((team, idx) => (
                       <Badge key={idx} variant="secondary">
@@ -1053,7 +1057,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
               {/* Access Groups */}
               {selectedMcpServer.mcp_access_groups && selectedMcpServer.mcp_access_groups.length > 0 && (
                 <div>
-                  <p className="text-lg font-semibold mb-4">Access Groups</p>
+                  <p className="text-lg font-semibold mb-4">{uiT("ui.b0252ccc6e86")}</p>
                   <div className="flex flex-wrap gap-2">
                     {selectedMcpServer.mcp_access_groups.map((group, idx) => (
                       <Badge key={idx} variant="default">
@@ -1066,7 +1070,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
               {/* Metadata */}
               <div>
-                <p className="text-lg font-semibold mb-4">Metadata</p>
+                <p className="text-lg font-semibold mb-4">{uiT("ui.9eddf573cb50")}</p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="font-medium">Created By:</p>

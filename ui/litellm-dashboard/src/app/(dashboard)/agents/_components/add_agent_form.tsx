@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { AgentIdentityFields } from "./AgentIdentityFields";
 import { withAgentIdentity } from "./agent_identity";
 import React, { useState, useEffect } from "react";
@@ -132,6 +134,8 @@ interface AddAgentFormProps {
 }
 
 const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessToken, onSuccess, teams }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const { userId, userRole } = useAuthorized();
   const form = useForm<AgentFormValues>({ defaultValues: buildInitialValues("a2a") });
   const panels = useCollapsiblePanels([AGENT_FORM_CONFIG.basic.key]);
@@ -514,7 +518,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
             <AccessGroupSelector
               value={Array.isArray(value) ? (value as string[]) : []}
               onChange={onChange}
-              placeholder="Select access groups (optional)"
+              placeholder={uiT("ui.0241d89497da")}
             />
           )}
         </AgentFormField>
@@ -536,7 +540,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
                 accessGroups: (value as McpServerSelection | undefined)?.accessGroups ?? [],
               }}
               accessToken={accessToken ?? ""}
-              placeholder="Select MCP servers or access groups (optional)"
+              placeholder={uiT("ui.932feda2a896")}
             />
           )}
         </AgentFormField>
@@ -684,7 +688,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
       <Separator />
 
       <div>
-        <h4 className="mb-3 text-sm font-medium text-foreground">Guardrails</h4>
+        <h4 className="mb-3 text-sm font-medium text-foreground">{uiT("ui.443f975eefe8")}</h4>
         <p className="mb-3 text-xs text-muted-foreground">
           Apply guardrails to this agent. Selected guardrails will run on all calls made by this agent.
         </p>
@@ -821,7 +825,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
                 />
               )}
             </AgentFormField>
-            <AgentFormField name="description" label="Description">
+            <AgentFormField name="description" label={uiT("ui.526e0087cc3f")}>
               {({ value, onChange, ref, ...control }) => (
                 <Textarea
                   {...control}
@@ -842,7 +846,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
             {selectedAgentTypeInfo.credential_fields.length > 0 && (
               <div className="mt-4 rounded-lg border border-border p-4">
                 <h4 className="mb-3 text-sm font-medium text-foreground">
-                  {selectedAgentTypeInfo.agent_type_display_name} Settings
+                  {selectedAgentTypeInfo.agent_type_display_name} {uiT("ui.74a883a037bc")}
                 </h4>
                 <FieldGroup>
                   {selectedAgentTypeInfo.credential_fields.map((field) => (
@@ -1041,7 +1045,8 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
       )}
       {assignedKeyAlias && (
         <p className="mt-2 text-sm text-muted-foreground">
-          Key <span className="font-medium">{assignedKeyAlias}</span> has been assigned to this agent.
+          {uiT("ui.99a52df3ff3d")} <span className="font-medium">{assignedKeyAlias}</span> has been assigned to this
+          agent.
         </p>
       )}
       {!createdKeyValue && !assignedKeyAlias && keyAssignOption === "skip" && (
@@ -1060,7 +1065,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
         <DialogHeader>
           <div className="flex items-center space-x-3 border-b border-border pb-4">
             {selectedLogo && currentStep < 1 && (
-              <Logo src={selectedLogo} label="Agent" className="h-6 w-6 object-contain" />
+              <Logo src={selectedLogo} label={uiT("ui.11b39c93777e")} className="h-6 w-6 object-contain" />
             )}
             <DialogTitle className="text-xl font-semibold text-foreground">Add New Agent</DialogTitle>
           </div>
@@ -1090,14 +1095,14 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
               <div className="flex gap-3">
                 {currentStep < 4 && (
                   <Button variant="secondary" onClick={handleClose}>
-                    Cancel
+                    {uiT("ui.19766ed6ccb2")}
                   </Button>
                 )}
                 {currentStep < 3 && <Button onClick={handleNext}>Next →</Button>}
                 {currentStep === 3 && (
                   <Button disabled={isSubmitting} aria-busy={isSubmitting} onClick={handleCreateAgent}>
                     {isSubmitting && <UiLoadingSpinner className="size-4" />}
-                    {isSubmitting ? "Creating..." : "Create Agent →"}
+                    {isSubmitting ? uiT("ui.def70944c9bb") : "Create Agent →"}
                   </Button>
                 )}
                 {currentStep === 4 && <Button onClick={handleClose}>Done</Button>}

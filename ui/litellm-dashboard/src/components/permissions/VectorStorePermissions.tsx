@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { DatabaseIcon } from "@heroicons/react/outline";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +16,8 @@ interface VectorStorePermissionsProps {
 }
 
 export function VectorStorePermissions({ vectorStores, accessToken }: VectorStorePermissionsProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [vectorStoreDetails, setVectorStoreDetails] = useState<VectorStoreDetails[]>([]);
 
   // Fetch vector store details when component mounts
@@ -52,7 +56,7 @@ export function VectorStorePermissions({ vectorStores, accessToken }: VectorStor
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <DatabaseIcon className="h-4 w-4 text-info" />
-        <p className="text-sm font-semibold text-foreground">Vector Stores</p>
+        <p className="text-sm font-semibold text-foreground">{uiT("ui.a6110d660e9b")}</p>
         <Badge variant="secondary">{vectorStores.length}</Badge>
       </div>
 

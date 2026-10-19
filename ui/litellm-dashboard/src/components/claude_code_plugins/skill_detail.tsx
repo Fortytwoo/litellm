@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ArrowLeft, Check, Copy, Link2 } from "lucide-react";
 import { cn } from "@/lib/cva.config";
@@ -43,6 +45,8 @@ interface SkillDetailProps {
 }
 
 const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const [activeTab, setActiveTab] = useState("overview");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -68,7 +72,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
   ];
 
   const tabs = [
-    { key: "overview", label: "Overview" },
+    { key: "overview", label: uiT("ui.d4b1ea5708dd") },
     { key: "usage", label: "How to Use" },
   ];
 
@@ -80,7 +84,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
         className="mb-6 inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted-foreground"
       >
         <ArrowLeft className="size-3" />
-        <span>Skills</span>
+        <span>{uiT("ui.66d0f523a379")}</span>
       </div>
 
       {/* Header */}
@@ -139,7 +143,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
           {/* Right sidebar */}
           <div className="w-60 shrink-0">
             <div className="mb-6">
-              <div className="mb-1 text-xs text-muted-foreground">Status</div>
+              <div className="mb-1 text-xs text-muted-foreground">{uiT("ui.920e413c7d41")}</div>
               <span
                 className={cn(
                   "rounded-xl px-2.5 py-[3px] text-xs font-medium",
@@ -154,7 +158,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
 
             {skill.keywords && skill.keywords.length > 0 && (
               <div className="mb-6">
-                <div className="mb-2 text-xs text-muted-foreground">Tags</div>
+                <div className="mb-2 text-xs text-muted-foreground">{uiT("ui.1331275bc537")}</div>
                 <div className="flex flex-wrap gap-1.5">
                   {skill.keywords.map((kw) => (
                     <span
@@ -196,7 +200,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
                 )}
               >
                 {copiedKey === "install" ? <Check className="size-3" /> : <Copy className="size-3" />}
-                {copiedKey === "install" ? "Copied" : "Copy"}
+                {copiedKey === "install" ? uiT("ui.8d525e5f158b") : uiT("ui.e21f935f11d7")}
               </button>
             </div>
             <pre className="m-0 bg-card px-4 py-3.5 font-mono text-sm text-foreground">{installCommand}</pre>
@@ -244,7 +248,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
                 )}
               >
                 {copiedKey === "marketplace-cmd" ? <Check className="size-3" /> : <Copy className="size-3" />}
-                {copiedKey === "marketplace-cmd" ? "Copied" : "Copy"}
+                {copiedKey === "marketplace-cmd" ? uiT("ui.8d525e5f158b") : uiT("ui.e21f935f11d7")}
               </button>
             </div>
             <pre className="m-0 bg-card px-4 py-3.5 font-mono text-[13px] text-foreground">
@@ -269,7 +273,7 @@ const SkillDetail: React.FC<SkillDetailProps> = ({ skill, onBack }) => {
                 )}
               >
                 {copiedKey === "settings" ? <Check className="size-3" /> : <Copy className="size-3" />}
-                {copiedKey === "settings" ? "Copied" : "Copy"}
+                {copiedKey === "settings" ? uiT("ui.8d525e5f158b") : uiT("ui.e21f935f11d7")}
               </button>
             </div>
             <pre className="m-0 bg-card px-4 py-3.5 font-mono text-[13px] text-foreground">{settingsSnippet}</pre>

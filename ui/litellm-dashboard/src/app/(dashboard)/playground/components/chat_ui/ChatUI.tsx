@@ -1,4 +1,5 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import {
   ArrowDown,
@@ -130,6 +131,8 @@ const ChatUI: React.FC<ChatUIProps> = ({
   simplified = false,
   fixedModel,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const syntaxTheme = useSyntaxTheme(coy);
   const canViewPolicies = useCan("viewPolicies");
   const [mcpServers, setMCPServers] = useState<MCPServer[]>([]);
@@ -1267,11 +1270,13 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     }}
                   >
                     <SelectTrigger className="w-full" size="sm" aria-label="Virtual Key Source">
-                      <SelectValue>{apiKeySource === "custom" ? "Virtual Key" : "Current UI Session"}</SelectValue>
+                      <SelectValue>
+                        {apiKeySource === "custom" ? uiT("ui.3af334745cdc") : "Current UI Session"}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="session">Current UI Session</SelectItem>
-                      <SelectItem value="custom">Virtual Key</SelectItem>
+                      <SelectItem value="custom">{uiT("ui.3af334745cdc")}</SelectItem>
                     </SelectContent>
                   </ShadcnSelect>
                   {apiKeySource === "custom" && (
@@ -1320,7 +1325,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                         }}
                       >
                         <Eraser className="size-3" />
-                        Clear
+                        {uiT("ui.83b12c2216ef")}
                       </Button>
                     )}
                   </div>
@@ -1357,14 +1362,14 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     <div className="mb-4">
                       <label className="mb-2 flex items-center text-sm font-medium text-foreground">
                         <Volume2 className="mr-2 size-4" aria-hidden="true" />
-                        Voice
+                        {uiT("ui.87bf2bc08589")}
                       </label>
                       <ShadcnSelect
                         items={OPEN_AI_VOICE_SELECT_OPTIONS}
                         value={selectedVoice}
                         onValueChange={handleVoiceChange}
                       >
-                        <SelectTrigger className="w-full" size="sm" aria-label="Voice">
+                        <SelectTrigger className="w-full" size="sm" aria-label={uiT("ui.87bf2bc08589")}>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -1497,7 +1502,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
                 <div>
                   <label className="mb-2 flex items-center text-sm font-medium text-foreground">
-                    <Tags className="mr-2 size-4" aria-hidden="true" /> Tags
+                    <Tags className="mr-2 size-4" aria-hidden="true" /> {uiT("ui.1331275bc537")}
                   </label>
                   <TagSelector
                     value={selectedTags}
@@ -1522,7 +1527,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                 <div>
                   <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
                     <Wrench className="mr-1 size-4" aria-hidden="true" />
-                    {endpointType === EndpointType.MCP ? "MCP Server" : "MCP Servers"}
+                    {endpointType === EndpointType.MCP ? "MCP Server" : uiT("ui.aab669a72882")}
                     <Tooltip>
                       <TooltipTrigger
                         render={
@@ -1551,7 +1556,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           : undefined
                       }
                       placeholder="Select MCP server"
-                      emptyText={isLoadingMCPServers ? "Loading..." : "No MCP servers"}
+                      emptyText={isLoadingMCPServers ? uiT("ui.47d2a515ef2f") : "No MCP servers"}
                       disabled={!MCP_SUPPORTED_ENDPOINTS.has(endpointType as EndpointType) || isLoadingMCPServers}
                       onValueChange={(value) => handleMcpServersChange(value ? [value] : [])}
                       options={mcpServerOptions}
@@ -1562,7 +1567,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                       value={selectedMCPServers}
                       onValueChange={handleMcpServersChange}
                       placeholder="Select MCP servers"
-                      emptyText={isLoadingMCPServers ? "Loading..." : "No MCP servers"}
+                      emptyText={isLoadingMCPServers ? uiT("ui.47d2a515ef2f") : "No MCP servers"}
                       disabled={!MCP_SUPPORTED_ENDPOINTS.has(endpointType as EndpointType)}
                       loading={isLoadingMCPServers}
                       options={mcpServerOptions}
@@ -1714,7 +1719,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
                 <div>
                   <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
-                    <Shield className="mr-1 size-4" aria-hidden="true" /> Guardrails
+                    <Shield className="mr-1 size-4" aria-hidden="true" /> {uiT("ui.443f975eefe8")}
                     <Tooltip>
                       <TooltipTrigger aria-label="About guardrails">
                         <Info className="size-3.5 text-muted-foreground" />
@@ -1739,7 +1744,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                 {canViewPolicies && (
                   <div>
                     <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
-                      <Shield className="mr-1 size-4" aria-hidden="true" /> Policies
+                      <Shield className="mr-1 size-4" aria-hidden="true" /> {uiT("ui.d3ad1f1f8c9c")}
                       <Tooltip>
                         <TooltipTrigger aria-label="About policies">
                           <Info className="size-3.5 text-muted-foreground" />
@@ -1849,7 +1854,10 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
                     {isLoading && (
                       <div className="my-4 flex items-center justify-center">
-                        <Loader2 className="size-6 animate-spin text-muted-foreground" aria-label="Loading" />
+                        <Loader2
+                          className="size-6 animate-spin text-muted-foreground"
+                          aria-label={uiT("ui.dc380888c4e2")}
+                        />
                       </div>
                     )}
                     {chatHistory.length > 0 && <div aria-hidden className="h-[calc(100%-3rem)]" />}
@@ -1988,7 +1996,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                             onClick={handleRemoveAudio}
                           >
                             <Trash2 className="size-3" />
-                            Remove
+                            {uiT("ui.c3812fc4acb8")}
                           </Button>
                         </div>
                       )}
@@ -2248,7 +2256,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsToolsetsInfoModalVisible(false)}>
-              Close
+              {uiT("ui.7d9eb7acb13e")}
             </Button>
           </DialogFooter>
         </DialogContent>

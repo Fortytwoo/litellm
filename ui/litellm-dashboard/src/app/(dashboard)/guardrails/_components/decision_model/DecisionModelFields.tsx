@@ -1,4 +1,6 @@
 "use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
+import { t as translateUi } from "@/i18n";
 
 import { Info, Plus, X } from "lucide-react";
 import React from "react";
@@ -37,7 +39,12 @@ export interface DecisionModelFieldsProps {
 }
 
 const ACTION_ITEMS = [
-  { label: "Block", value: "block" },
+  {
+    get label() {
+      return translateUi("ui.211d0bb8cf4f");
+    },
+    value: "block",
+  },
   { label: "Log only", value: "log" },
 ];
 
@@ -93,6 +100,8 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
   onChecksChange,
   control,
 }) => {
+  const { t: uiT } = useDashboardLanguage();
+
   const selectedModel = asText(useWatch({ control, name: "decision_model" }));
   const duplicateNames = duplicateDecisionCheckNames(checks);
   const providerByModel = new Map(decisionModels.map((option) => [option.model, option.provider]));
@@ -178,7 +187,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
                 <X className="size-4" />
               </button>
               <div>
-                <span className="mb-1 block text-xs font-medium text-muted-foreground">Name</span>
+                <span className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.dcd1d5223f73")}</span>
                 <Input
                   aria-label={`Question ${position} name`}
                   placeholder="Name (e.g. invoice_policy)"
@@ -203,7 +212,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
               </div>
               <div className="flex items-end gap-6">
                 <div className="w-32">
-                  <span className="mb-1 block text-xs font-medium text-muted-foreground">Action</span>
+                  <span className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.64cff1319d2f")}</span>
                   <Select
                     items={ACTION_ITEMS}
                     value={check.action}
@@ -224,7 +233,7 @@ const DecisionModelFields: React.FC<DecisionModelFieldsProps> = ({
                   </Select>
                 </div>
                 <div className="w-56">
-                  <span className="mb-1 block text-xs font-medium text-muted-foreground">Threshold</span>
+                  <span className="mb-1 block text-xs font-medium text-muted-foreground">{uiT("ui.0da627ada476")}</span>
                   <div className="flex h-9 items-center">
                     <ThresholdSlider
                       aria-label={`Question ${position} threshold`}

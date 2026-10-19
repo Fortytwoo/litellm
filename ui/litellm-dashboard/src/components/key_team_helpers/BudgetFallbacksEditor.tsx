@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,8 @@ const dictToEntries = (dict: Record<string, string[]>): FallbackEntry[] => {
 };
 
 export function BudgetFallbacksEditor({ value, onChange, availableModels }: BudgetFallbacksEditorProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const [entries, setEntries] = useState<FallbackEntry[]>(() => dictToEntries(value));
 
   const emitChange = (updated: FallbackEntry[]) => {
@@ -102,7 +106,7 @@ export function BudgetFallbacksEditor({ value, onChange, availableModels }: Budg
                   updateEntry(entry.id, { primaryModel: v, fallbackModels: newFallbacks });
                 }}
                 placeholder="Select model"
-                emptyText="No models found"
+                emptyText={uiT("ui.a650c298cf44")}
               />
             </div>
 
@@ -120,7 +124,7 @@ export function BudgetFallbacksEditor({ value, onChange, availableModels }: Budg
                 value={entry.fallbackModels}
                 onValueChange={(values) => updateEntry(entry.id, { fallbackModels: values })}
                 placeholder={entry.primaryModel ? "Select fallback models" : "Select a primary model first"}
-                emptyText="No models found"
+                emptyText={uiT("ui.a650c298cf44")}
                 disabled={!entry.primaryModel}
                 className="w-full"
               />

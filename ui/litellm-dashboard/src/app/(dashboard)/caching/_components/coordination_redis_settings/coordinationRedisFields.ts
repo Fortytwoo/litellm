@@ -1,3 +1,4 @@
+import { t as translateUi } from "@/i18n";
 export type CoordinationFieldType = "string" | "password" | "integer" | "boolean" | "list";
 
 export type CoordinationRedisType = "node" | "cluster" | "sentinel";
@@ -97,7 +98,9 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   },
   {
     name: "password",
-    label: "Password",
+    get label() {
+      return translateUi("ui.e7cf3ef4f17c");
+    },
     type: "password",
     section: "connection",
     helpText: "Redis server password",

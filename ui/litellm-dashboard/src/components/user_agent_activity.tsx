@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Bot, Users } from "lucide-react";
 import {
@@ -576,10 +578,12 @@ function SummaryCell({
   totalTokens: string;
   totalCost: string;
 }) {
+  const { t: uiT } = useDashboardLanguage();
+
   const rows = [
     { label: "Success Requests", value: successRequests },
-    { label: "Total Tokens", value: totalTokens },
-    { label: "Total Cost", value: totalCost },
+    { label: uiT("ui.cd41bf0d3e9a"), value: totalTokens },
+    { label: uiT("ui.dfa5cc738da2"), value: totalCost },
   ];
   return (
     <div className="min-w-0 border-b px-4 py-3.5 last:border-b-0 lg:border-b-0">

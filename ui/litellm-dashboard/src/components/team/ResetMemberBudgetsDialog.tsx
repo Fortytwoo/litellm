@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -20,6 +22,8 @@ export default function ResetMemberBudgetsDialog({
   onKeep,
   onDismiss,
 }: ResetMemberBudgetsDialogProps) {
+  const { t: uiT } = useDashboardLanguage();
+
   const open = state.phase !== "idle";
   const busy = state.phase === "resetting";
   const failed = state.phase === "resetFailed";
@@ -47,14 +51,14 @@ export default function ResetMemberBudgetsDialog({
           {failed ? (
             <>
               <Button variant="outline" onClick={onDismiss}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button onClick={onRetry}>Retry reset</Button>
             </>
           ) : (
             <>
               <Button variant="ghost" onClick={onDismiss} disabled={busy}>
-                Cancel
+                {uiT("ui.19766ed6ccb2")}
               </Button>
               <Button variant="outline" onClick={onKeep} disabled={busy}>
                 Keep custom {pluralize(memberCount, "budget", "budgets")}
