@@ -1,4 +1,13 @@
 {
+  "nativeLoad": {
+    "groups": "Unable to load access groups. Previously loaded data may be outdated.",
+    "runs": "Unable to load workflow runs. Previously loaded data may be outdated.",
+    "runsUnavailable": "Workflow runs are unavailable",
+    "details": "Unable to load workflow details",
+    "configFetch": "Failed to fetch {{kind}} configuration",
+    "configSave": "Failed to update {{kind}} configuration",
+    "reloadBeforeSave": "Reload the stored configuration before saving"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

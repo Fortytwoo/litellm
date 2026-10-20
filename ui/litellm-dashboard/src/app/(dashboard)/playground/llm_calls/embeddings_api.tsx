@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { toast } from "@/lib/toast";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import {
@@ -35,7 +36,7 @@ export async function makeOpenAIEmbeddingsRequest(
     const normalizedBaseUrl = proxyBaseUrl.endsWith("/") ? proxyBaseUrl.slice(0, -1) : proxyBaseUrl;
     const requestUrl = `${normalizedBaseUrl}/embeddings`;
 
-    const response = await fetch(requestUrl, {
+    const response = await managedFetch(requestUrl, {
       method: "POST",
       headers,
       body: JSON.stringify({

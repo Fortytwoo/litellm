@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { useMutation } from "@tanstack/react-query";
 
@@ -15,7 +16,7 @@ const performCloudZeroCreate = async (accessToken: string, params: CreateParams)
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/cloudzero/init` : `/cloudzero/init`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "POST",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

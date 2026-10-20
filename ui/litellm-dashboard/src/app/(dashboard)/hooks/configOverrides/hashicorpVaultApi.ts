@@ -1,9 +1,10 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName, deriveErrorMessage } from "@/components/networking";
 
 export const getHashicorpVaultConfig = async (accessToken: string) => {
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/config_overrides/hashicorp_vault` : `/config_overrides/hashicorp_vault`;
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "GET",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -21,7 +22,7 @@ export const getHashicorpVaultConfig = async (accessToken: string) => {
 export const updateHashicorpVaultConfig = async (accessToken: string, config: Record<string, any>) => {
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/config_overrides/hashicorp_vault` : `/config_overrides/hashicorp_vault`;
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "POST",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -41,7 +42,7 @@ export const updateHashicorpVaultConfig = async (accessToken: string, config: Re
 export const deleteHashicorpVaultConfig = async (accessToken: string) => {
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/config_overrides/hashicorp_vault` : `/config_overrides/hashicorp_vault`;
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "DELETE",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -61,7 +62,7 @@ export const testHashicorpVaultConnection = async (accessToken: string) => {
   const url = proxyBaseUrl
     ? `${proxyBaseUrl}/config_overrides/hashicorp_vault/test_connection`
     : `/config_overrides/hashicorp_vault/test_connection`;
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "POST",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

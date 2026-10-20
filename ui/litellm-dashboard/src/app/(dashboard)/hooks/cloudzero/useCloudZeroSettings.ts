@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { CloudZeroSettings } from "@/components/CloudZeroCostTracking/types";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,7 +10,7 @@ const getCloudZeroSettings = async (accessToken: string): Promise<CloudZeroSetti
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/cloudzero/settings` : `/cloudzero/settings`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "GET",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -79,7 +80,7 @@ const updateCloudZeroSettings = async (accessToken: string, params: UpdateParams
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/cloudzero/settings` : `/cloudzero/settings`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "PUT",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -137,7 +138,7 @@ const deleteCloudZeroSettings = async (accessToken: string): Promise<DeleteRespo
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/cloudzero/delete` : `/cloudzero/delete`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "DELETE",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

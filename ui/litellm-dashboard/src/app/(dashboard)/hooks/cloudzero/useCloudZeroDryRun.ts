@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { useMutation } from "@tanstack/react-query";
 
@@ -13,7 +14,7 @@ const performCloudZeroDryRun = async (accessToken: string, params: DryRunParams 
   const proxyBaseUrl = getProxyBaseUrl();
   const url = proxyBaseUrl ? `${proxyBaseUrl}/cloudzero/dry-run` : `/cloudzero/dry-run`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "POST",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

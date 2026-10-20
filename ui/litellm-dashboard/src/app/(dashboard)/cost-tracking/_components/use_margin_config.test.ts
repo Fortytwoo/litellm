@@ -308,3 +308,71 @@ describe("useMarginConfig", () => {
     });
   });
 });
+
+describe("stored margin configuration failures", () => {
+  it("blocks replacement saves after a failed read and preserves last known values", async () => {
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ values: { openai: 0.1 } }) } as Response)
+      .mockResolvedValueOnce({ ok: false, status: 503 } as Response);
+    const { result } = renderHook(() => useMarginConfig({ accessToken: "fixture" }));
+    await act(async () => {
+      await result.current.fetchMarginConfig();
+    });
+    await act(async () => {
+      await result.current.fetchMarginConfig();
+    });
+    expect(result.current.loadError).toBeTruthy();
+    expect(result.current.isLoaded).toBe(false);
+    expect(result.current.marginConfig).toEqual({ openai: 0.1 });
+    const count = fetchSpy.mock.calls.length;
+    await act(async () => {
+      expect(
+        await result.current.handleAddMargin({
+          selectedProvider: "Anthropic",
+          marginType: "percentage",
+          percentageValue: "5",
+          fixedAmountValue: "",
+        }),
+      ).toBe(false);
+    });
+    expect(fetchSpy).toHaveBeenCalledTimes(count);
+  });
+
+  it("keeps stored values and reports false when a save is rejected", async () => {
+    vi.spyOn(global, "fetch")
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ values: { openai: 0.1 } }) } as Response)
+      .mockResolvedValueOnce({ ok: false, status: 403, json: async () => ({ detail: "denied" }) } as Response);
+    const { result } = renderHook(() => useMarginConfig({ accessToken: "fixture" }));
+    await act(async () => {
+      await result.current.fetchMarginConfig();
+    });
+    await act(async () => {
+      expect(
+        await result.current.handleAddMargin({
+          selectedProvider: "Anthropic",
+          marginType: "percentage",
+          percentageValue: "5",
+          fixedAmountValue: "",
+        }),
+      ).toBe(false);
+    });
+    expect(result.current.marginConfig).toEqual({ openai: 0.1 });
+  });
+
+  it("hides stored values immediately when the account changes", async () => {
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ values: { openai: 0.1 } }),
+    } as Response);
+    const { result, rerender } = renderHook(({ token }) => useMarginConfig({ accessToken: token }), {
+      initialProps: { token: "first" },
+    });
+    await act(async () => {
+      await result.current.fetchMarginConfig();
+    });
+    rerender({ token: "second" });
+    expect(result.current.marginConfig).toEqual({});
+    expect(result.current.isLoaded).toBe(false);
+  });
+});

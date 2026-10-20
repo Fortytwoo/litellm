@@ -1,4 +1,5 @@
 "use client";
+import { managedFetch } from "@/lib/http/managedSession";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -398,9 +399,11 @@ const DetailSection: React.FC<{
 
 // ── main component ────────────────────────────────────────────────────────────
 
-const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
+const WorkflowRunsContent: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
   const { t: uiT } = useDashboardLanguage();
 
+  const [runsError, setRunsError] = useState(false);
+  const [detailError, setDetailError] = useState(false);
   const [runs, setRuns] = useState<WorkflowRun[]>([]);
   const [loadingRuns, setLoadingRuns] = useState(false);
   const [selectedRun, setSelectedRun] = useState<WorkflowRun | null>(null);
@@ -415,15 +418,16 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
   const fetchRuns = useCallback(async () => {
     if (!accessToken) return;
     setLoadingRuns(true);
+    setRunsError(false);
     try {
-      const res = await fetch(`${proxyBaseUrl ?? ""}/v1/workflows/runs?limit=100`, {
+      const res = await managedFetch(`${proxyBaseUrl ?? ""}/v1/workflows/runs?limit=100`, {
         headers: { [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}` },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setRuns(data.runs ?? []);
     } catch (err) {
-      console.error("workflow runs fetch failed:", err);
+      setRunsError(true);
     } finally {
       setLoadingRuns(false);
     }
@@ -435,6 +439,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       setSelectedRun(run);
       setDrawerOpen(true);
       setLoadingDetail(true);
+      setDetailError(false);
       setEvents([]);
       setMessages([]);
       try {
@@ -447,8 +452,9 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
             headers: { [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}` },
           }),
         ]);
-        const evData = evRes.ok ? await evRes.json() : { events: [] };
-        const msgData = msgRes.ok ? await msgRes.json() : { messages: [] };
+        if (!evRes.ok || !msgRes.ok) throw new Error("Workflow detail read failed");
+        const evData = await evRes.json();
+        const msgData = await msgRes.json();
         setEvents(
           [...(evData.events ?? [])].sort(
             (a: WorkflowRunEvent, b: WorkflowRunEvent) => a.sequence_number - b.sequence_number,
@@ -460,7 +466,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
           ),
         );
       } catch (err) {
-        console.error("workflow run detail fetch failed:", err);
+        setDetailError(true);
       } finally {
         setLoadingDetail(false);
       }
@@ -535,6 +541,14 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
         <div className="mt-0.5 text-[13px] text-muted-foreground">{uiT("ui.8942d58bb9db5c35")}</div>
       </div>
 
+      {runsError && (
+        <div role="alert" className="mb-4 rounded border border-destructive p-4">
+          <p>{uiT("nativeLoad.runs")}</p>
+          <Button variant="outline" onClick={fetchRuns}>
+            {uiT("ui.942087cc2d41e013")}
+          </Button>
+        </div>
+      )}
       <DataTable
         data={runs}
         columns={columns}
@@ -542,7 +556,11 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
         isLoading={loadingRuns}
         loadingMessage={uiT("ui.c436c1b01163772b")}
         noDataMessage={
-          <div className="py-6 text-center text-[13px] text-muted-foreground">{uiT("ui.878dcecd1b25367f")}</div>
+          runsError ? (
+            <span>{uiT("nativeLoad.runsUnavailable")}</span>
+          ) : (
+            <div className="py-6 text-center text-[13px] text-muted-foreground">{uiT("ui.878dcecd1b25367f")}</div>
+          )
         }
         paginationMode="client"
         pageSizeOptions={[50, 100]}
@@ -614,11 +632,20 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
         >
           <SheetTitle className="sr-only">{uiT("ui.926ab37ef975270d")}</SheetTitle>
           <SheetDescription className="sr-only">{uiT("ui.c37c8add140d2c34")}</SheetDescription>
-          {!selectedRun ? null : loadingDetail ? (
+          {selectedRun && loadingDetail && (
             <div className="flex justify-center py-20">
               <UiLoadingSpinner className="size-8 text-muted-foreground" />
             </div>
-          ) : (
+          )}
+          {selectedRun && !loadingDetail && detailError && (
+            <div role="alert" className="p-7">
+              <p>{uiT("nativeLoad.details")}</p>
+              <Button variant="outline" onClick={() => fetchRunDetail(selectedRun)}>
+                {uiT("ui.942087cc2d41e013")}
+              </Button>
+            </div>
+          )}
+          {selectedRun && !loadingDetail && !detailError && (
             <div className="px-7 py-6">
               {/* drawer close + refresh */}
               <div className="mb-4 flex items-center justify-between">
@@ -672,5 +699,9 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
     </div>
   );
 };
+
+const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => (
+  <WorkflowRunsContent key={accessToken} accessToken={accessToken} />
+);
 
 export default WorkflowRuns;

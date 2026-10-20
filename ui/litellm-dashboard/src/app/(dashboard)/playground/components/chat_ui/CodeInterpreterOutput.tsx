@@ -1,4 +1,5 @@
 "use client";
+import { managedFetch } from "@/lib/http/managedSession";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
 import { Code, Download, FileImage, FileText, Loader2 } from "lucide-react";
@@ -60,7 +61,7 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
         }
 
         try {
-          const response = await fetch(
+          const response = await managedFetch(
             `${proxyBaseUrl}/v1/containers/${annotation.container_id}/files/${annotation.file_id}/content`,
             {
               headers: {
@@ -101,7 +102,7 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
 
   const handleDownload = async (annotation: ContainerFileCitation) => {
     try {
-      const response = await fetch(
+      const response = await managedFetch(
         `${proxyBaseUrl}/v1/containers/${annotation.container_id}/files/${annotation.file_id}/content`,
         {
           headers: {

@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName, deriveErrorMessage, handleError } from "@/components/networking";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -28,7 +29,7 @@ const registerGuardrail = async (
   const baseUrl = getProxyBaseUrl();
   const url = `${baseUrl}/guardrails/register`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "POST",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

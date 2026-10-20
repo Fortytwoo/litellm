@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createQueryKeys } from "../common/queryKeysFactory";
@@ -35,7 +36,7 @@ const getRouterFields = async (accessToken: string): Promise<RouterFieldsRespons
   try {
     const url = proxyBaseUrl ? `${proxyBaseUrl}/router/fields` : `/router/fields`;
 
-    const response = await fetch(url, {
+    const response = await managedFetch(url, {
       method: "GET",
       headers: {
         [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

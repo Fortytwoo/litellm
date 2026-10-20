@@ -26,11 +26,32 @@ const stableMarginCallbacks = {
 };
 
 vi.mock("./use_discount_config", () => ({
-  useDiscountConfig: () => ({ discountConfig: mockDiscountConfig(), ...stableDiscountCallbacks }),
+  useDiscountConfig: () => ({
+    discountConfig: mockDiscountConfig(),
+    isLoaded: true,
+    loadError: null,
+    ...stableDiscountCallbacks,
+  }),
 }));
 
 vi.mock("./use_margin_config", () => ({
-  useMarginConfig: () => ({ marginConfig: mockMarginConfig(), ...stableMarginCallbacks }),
+  useMarginConfig: () => ({
+    marginConfig: mockMarginConfig(),
+    isLoaded: true,
+    loadError: null,
+    ...stableMarginCallbacks,
+  }),
+}));
+
+vi.mock("./use_block_unpriced_config", () => ({
+  useBlockUnpricedConfig: () => ({
+    blockUnpriced: false,
+    isUpdating: false,
+    isLoaded: true,
+    loadError: false,
+    fetchBlockUnpriced: stableDiscountCallbacks.fetchDiscountConfig,
+    setBlockUnpriced: vi.fn(),
+  }),
 }));
 
 vi.mock("./pricing_calculator/index", () => ({

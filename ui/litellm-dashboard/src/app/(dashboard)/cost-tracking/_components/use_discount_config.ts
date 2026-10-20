@@ -2,8 +2,8 @@
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
-import { useState, useCallback } from "react";
-import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
+import { useCallback } from "react";
+import { useStoredCostConfig } from "./use_stored_cost_config";
 import { toast } from "@/lib/toast";
 import { DiscountConfig } from "./types";
 import { getProviderBackendValue } from "./provider_display_helpers";
@@ -15,74 +15,36 @@ export interface UseDiscountConfigProps {
 
 export interface UseDiscountConfigReturn {
   discountConfig: DiscountConfig;
-  setDiscountConfig: React.Dispatch<React.SetStateAction<DiscountConfig>>;
-  fetchDiscountConfig: () => Promise<void>;
-  saveDiscountConfig: (config: DiscountConfig) => Promise<void>;
+  isLoaded: boolean;
+  loadError: string | null;
+  fetchDiscountConfig: () => Promise<boolean>;
+  saveDiscountConfig: (config: DiscountConfig) => Promise<boolean>;
   handleAddProvider: (selectedProvider: string | undefined, newDiscount: string) => Promise<boolean>;
   handleRemoveProvider: (provider: string) => Promise<void>;
   handleDiscountChange: (provider: string, value: string) => Promise<void>;
 }
 
+function validConfig(value: unknown): value is DiscountConfig {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  return Object.values(value).every((item) => typeof item === "number" && Number.isFinite(item));
+}
+
 export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseDiscountConfigReturn {
   useDashboardLanguage();
 
-  const [discountConfig, setDiscountConfig] = useState<DiscountConfig>({});
-
-  const fetchDiscountConfig = useCallback(async () => {
-    try {
-      const proxyBaseUrl = getProxyBaseUrl();
-      const url = proxyBaseUrl ? `${proxyBaseUrl}/config/cost_discount_config` : "/config/cost_discount_config";
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setDiscountConfig(data.values || {});
-      } else {
-        console.error("Failed to fetch discount config");
-      }
-    } catch (error) {
-      console.error("Error fetching discount config:", error);
-      toast.fromError("Failed to fetch discount configuration");
-    }
-  }, [accessToken]);
-
-  const saveDiscountConfig = useCallback(
-    async (config: DiscountConfig) => {
-      try {
-        const proxyBaseUrl = getProxyBaseUrl();
-        const url = proxyBaseUrl ? `${proxyBaseUrl}/config/cost_discount_config` : "/config/cost_discount_config";
-
-        const response = await fetch(url, {
-          method: "PATCH",
-          headers: {
-            [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(config),
-        });
-
-        if (response.ok) {
-          toast.success(translateUi("ui.d67eb4bce0f40efd"));
-          await fetchDiscountConfig();
-        } else {
-          const errorData = await response.json();
-          const errorMessage = errorData.detail?.error || errorData.detail || "Failed to update settings";
-          toast.fromError(errorMessage);
-        }
-      } catch (error) {
-        console.error("Error updating discount config:", error);
-        toast.fromError("Failed to update discount configuration");
-      }
-    },
-    [accessToken, fetchDiscountConfig],
-  );
+  const {
+    config,
+    isLoaded,
+    loadError,
+    load: fetchDiscountConfig,
+    save: saveDiscountConfig,
+  } = useStoredCostConfig<DiscountConfig>(accessToken, {
+    path: "/config/cost_discount_config",
+    validate: validConfig,
+    label: "discount",
+    successMessage: translateUi("ui.d67eb4bce0f40efd"),
+  });
+  const discountConfig = config ?? {};
 
   const handleAddProvider = useCallback(
     async (selectedProvider: string | undefined, newDiscount: string): Promise<boolean> => {
@@ -104,7 +66,7 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
         return false;
       }
 
-      if (discountConfig[providerValue]) {
+      if (providerValue in discountConfig) {
         toast.fromError(
           `Discount for ${Providers[selectedProvider as keyof typeof Providers]} already exists. Edit it in the table above.`,
         );
@@ -117,9 +79,7 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
         [providerValue]: discountValue,
       };
 
-      setDiscountConfig(updatedConfig);
-      await saveDiscountConfig(updatedConfig);
-      return true;
+      return saveDiscountConfig(updatedConfig);
     },
     [discountConfig, saveDiscountConfig],
   );
@@ -128,7 +88,6 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
     async (provider: string) => {
       const updatedConfig = { ...discountConfig };
       delete updatedConfig[provider];
-      setDiscountConfig(updatedConfig);
       await saveDiscountConfig(updatedConfig);
     },
     [discountConfig, saveDiscountConfig],
@@ -142,7 +101,6 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
           ...discountConfig,
           [provider]: discountValue,
         };
-        setDiscountConfig(updatedConfig);
         await saveDiscountConfig(updatedConfig);
       }
     },
@@ -151,7 +109,8 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
 
   return {
     discountConfig,
-    setDiscountConfig,
+    isLoaded,
+    loadError,
     fetchDiscountConfig,
     saveDiscountConfig,
     handleAddProvider,

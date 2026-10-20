@@ -1,4 +1,13 @@
 {
+  "nativeLoad": {
+    "groups": "无法加载访问组。已加载的数据可能不是最新结果，请重试",
+    "runs": "无法加载工作流记录。已加载的数据可能不是最新结果，请重试",
+    "runsUnavailable": "工作流记录暂时无法读取",
+    "details": "无法加载工作流详情",
+    "configFetch": "费用配置读取失败，请重试",
+    "configSave": "费用配置保存失败，已保留原配置",
+    "reloadBeforeSave": "请先重新加载已保存的配置，再进行修改"
+  },
   "common": {
     "save": "保存",
     "cancel": "取消",

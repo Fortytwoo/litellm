@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { useQuery } from "@tanstack/react-query";
 import { createQueryKeys } from "../common/queryKeysFactory";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName, deriveErrorMessage, handleError } from "@/components/networking";
@@ -48,7 +49,7 @@ const fetchProjects = async (accessToken: string): Promise<ProjectResponse[]> =>
   const baseUrl = getProxyBaseUrl();
   const url = `${baseUrl}/project/list`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "GET",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

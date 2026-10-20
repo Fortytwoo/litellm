@@ -1,4 +1,5 @@
 "use client";
+import { managedFetch } from "@/lib/http/managedSession";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -94,7 +95,7 @@ export const useConversation = (prompt: any, accessToken: string | null) => {
         ];
       }
 
-      const response = await fetch(`${proxyBaseUrl}/prompts/test`, {
+      const response = await managedFetch(`${proxyBaseUrl}/prompts/test`, {
         method: "POST",
         headers: {
           [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

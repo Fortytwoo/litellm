@@ -1,6 +1,7 @@
 // a2a_send_message.tsx
 // A2A Protocol (JSON-RPC 2.0) implementation for sending messages to agents
 
+import { managedFetch } from "@/lib/http/managedSession";
 import { v4 as uuidv4 } from "uuid";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { type CustomHeaders, withRequiredHeaders } from "@/components/llm_calls/request_headers";
@@ -146,7 +147,7 @@ export const makeA2ASendMessageRequest = async (
   const startTime = performance.now();
 
   try {
-    const response = await fetch(url, {
+    const response = await managedFetch(url, {
       method: "POST",
       headers: withRequiredHeaders(customHeaders ?? {}, {
         [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -276,7 +277,7 @@ export const makeA2AStreamMessageRequest = async (
   let accumulatedText = "";
 
   try {
-    const response = await fetch(url, {
+    const response = await managedFetch(url, {
       method: "POST",
       headers: {
         [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

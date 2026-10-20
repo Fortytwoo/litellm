@@ -1,4 +1,5 @@
 "use client";
+import { managedFetch } from "@/lib/http/managedSession";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -62,7 +63,7 @@ export function useMultiCostEstimate(accessToken: string | null) {
           num_requests_per_month: entry.num_requests_per_month || null,
         };
 
-        const response = await fetch(url, {
+        const response = await managedFetch(url, {
           method: "POST",
           headers: {
             [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

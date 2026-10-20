@@ -2,8 +2,8 @@
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
-import { useState, useCallback } from "react";
-import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
+import { useCallback } from "react";
+import { useStoredCostConfig } from "./use_stored_cost_config";
 import { toast } from "@/lib/toast";
 import { MarginConfig } from "./types";
 import { getProviderBackendValue } from "./provider_display_helpers";
@@ -15,9 +15,10 @@ export interface UseMarginConfigProps {
 
 export interface UseMarginConfigReturn {
   marginConfig: MarginConfig;
-  setMarginConfig: React.Dispatch<React.SetStateAction<MarginConfig>>;
-  fetchMarginConfig: () => Promise<void>;
-  saveMarginConfig: (config: MarginConfig) => Promise<void>;
+  isLoaded: boolean;
+  loadError: string | null;
+  fetchMarginConfig: () => Promise<boolean>;
+  saveMarginConfig: (config: MarginConfig) => Promise<boolean>;
   handleAddMargin: (params: AddMarginParams) => Promise<boolean>;
   handleRemoveMargin: (provider: string) => Promise<void>;
   handleMarginChange: (
@@ -33,66 +34,37 @@ export interface AddMarginParams {
   fixedAmountValue: string;
 }
 
+function validConfig(value: unknown): value is MarginConfig {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  return Object.values(value).every((item) =>
+    typeof item === "number"
+      ? Number.isFinite(item)
+      : item !== null &&
+        typeof item === "object" &&
+        !Array.isArray(item) &&
+        Object.entries(item).every(
+          ([key, amount]) =>
+            ["percentage", "fixed_amount"].includes(key) && typeof amount === "number" && Number.isFinite(amount),
+        ),
+  );
+}
+
 export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMarginConfigReturn {
   useDashboardLanguage();
 
-  const [marginConfig, setMarginConfig] = useState<MarginConfig>({});
-
-  const fetchMarginConfig = useCallback(async () => {
-    try {
-      const proxyBaseUrl = getProxyBaseUrl();
-      const url = proxyBaseUrl ? `${proxyBaseUrl}/config/cost_margin_config` : "/config/cost_margin_config";
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setMarginConfig(data.values || {});
-      } else {
-        console.error("Failed to fetch margin config");
-      }
-    } catch (error) {
-      console.error("Error fetching margin config:", error);
-      toast.fromError("Failed to fetch margin configuration");
-    }
-  }, [accessToken]);
-
-  const saveMarginConfig = useCallback(
-    async (config: MarginConfig) => {
-      try {
-        const proxyBaseUrl = getProxyBaseUrl();
-        const url = proxyBaseUrl ? `${proxyBaseUrl}/config/cost_margin_config` : "/config/cost_margin_config";
-
-        const response = await fetch(url, {
-          method: "PATCH",
-          headers: {
-            [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(config),
-        });
-
-        if (response.ok) {
-          toast.success(translateUi("ui.65e88328f972f58b"));
-          await fetchMarginConfig();
-        } else {
-          const errorData = await response.json();
-          const errorMessage = errorData.detail?.error || errorData.detail || "Failed to update settings";
-          toast.fromError(errorMessage);
-        }
-      } catch (error) {
-        console.error("Error updating margin config:", error);
-        toast.fromError("Failed to update margin configuration");
-      }
-    },
-    [accessToken, fetchMarginConfig],
-  );
+  const {
+    config,
+    isLoaded,
+    loadError,
+    load: fetchMarginConfig,
+    save: saveMarginConfig,
+  } = useStoredCostConfig<MarginConfig>(accessToken, {
+    path: "/config/cost_margin_config",
+    validate: validConfig,
+    label: "margin",
+    successMessage: translateUi("ui.65e88328f972f58b"),
+  });
+  const marginConfig = config ?? {};
 
   const handleAddMargin = useCallback(
     async (params: AddMarginParams): Promise<boolean> => {
@@ -115,7 +87,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
         providerValue = backendValue;
       }
 
-      if (marginConfig[providerValue]) {
+      if (providerValue in marginConfig) {
         const displayName =
           providerValue === "global" ? "Global" : Providers[selectedProvider as keyof typeof Providers];
         toast.fromError(`Margin for ${displayName} already exists. Edit it in the table above.`);
@@ -144,9 +116,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
         [providerValue]: marginValue,
       };
 
-      setMarginConfig(updatedConfig);
-      await saveMarginConfig(updatedConfig);
-      return true;
+      return saveMarginConfig(updatedConfig);
     },
     [marginConfig, saveMarginConfig],
   );
@@ -155,7 +125,6 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
     async (provider: string) => {
       const updatedConfig = { ...marginConfig };
       delete updatedConfig[provider];
-      setMarginConfig(updatedConfig);
       await saveMarginConfig(updatedConfig);
     },
     [marginConfig, saveMarginConfig],
@@ -167,7 +136,6 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
         ...marginConfig,
         [provider]: value,
       };
-      setMarginConfig(updatedConfig);
       await saveMarginConfig(updatedConfig);
     },
     [marginConfig, saveMarginConfig],
@@ -175,7 +143,8 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
 
   return {
     marginConfig,
-    setMarginConfig,
+    isLoaded,
+    loadError,
     fetchMarginConfig,
     saveMarginConfig,
     handleAddMargin,

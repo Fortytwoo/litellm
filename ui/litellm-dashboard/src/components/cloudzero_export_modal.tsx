@@ -1,4 +1,5 @@
 "use client";
+import { managedFetch } from "@/lib/http/managedSession";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -61,7 +62,7 @@ const CloudZeroExportModal: React.FC<CloudZeroExportModalProps> = ({ isOpen, onC
   const loadExistingSettings = async () => {
     setSettingsLoading(true);
     try {
-      const response = await fetch("/cloudzero/settings", {
+      const response = await managedFetch("/cloudzero/settings", {
         method: "GET",
         headers: {
           [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -104,7 +105,7 @@ const CloudZeroExportModal: React.FC<CloudZeroExportModalProps> = ({ isOpen, onC
         timezone: "UTC",
       };
 
-      const response = await fetch(endpoint, {
+      const response = await managedFetch(endpoint, {
         method,
         headers: {
           [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,
@@ -144,7 +145,7 @@ const CloudZeroExportModal: React.FC<CloudZeroExportModalProps> = ({ isOpen, onC
 
     setExportLoading(true);
     try {
-      const response = await fetch("/cloudzero/export", {
+      const response = await managedFetch("/cloudzero/export", {
         method: "POST",
         headers: {
           [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

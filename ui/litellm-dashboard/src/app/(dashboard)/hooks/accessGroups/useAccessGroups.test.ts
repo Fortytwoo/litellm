@@ -1,7 +1,7 @@
 /* @vitest-environment jsdom */
 import React from "react";
 import { renderHook, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAccessGroups, AccessGroupResponse } from "./useAccessGroups";
 import * as networking from "@/components/networking";
@@ -243,4 +243,21 @@ describe("useAccessGroups", () => {
     expect(result.current.error).toEqual(networkError);
     expect(result.current.data).toBeUndefined();
   });
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
+it("uses same-origin cookie transport for a managed access-group query", async () => {
+  vi.stubEnv("NEXT_PUBLIC_MANAGED_GATEWAY", "1");
+  vi.mocked(networking.getProxyBaseUrl).mockReturnValue(window.location.origin);
+  fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(mockAccessGroups)));
+  const { result } = renderHook(() => useAccessGroups(), { wrapper });
+  await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  const request = fetchMock.mock.calls.at(-1)![0] as Request;
+  expect(request.url).toBe(window.location.origin + "/admin/native/v1/access_group");
+  expect(request.credentials).toBe("same-origin");
+  expect(request.headers.has("authorization")).toBe(false);
+  expect(result.current.data).toEqual(mockAccessGroups);
 });

@@ -277,3 +277,23 @@ describe("AccessGroupsPage", () => {
     expect(screen.getByText("Admin Group")).toBeInTheDocument();
   });
 });
+
+it("shows failed access-group reads with retry instead of a verified empty table", async () => {
+  const refetch = vi.fn();
+  mockUseAuthorized.mockReturnValue({ userRole: "Admin", accessToken: "fixture" });
+  mockUseDeleteAccessGroup.mockReturnValue({ mutate: mockMutate, isPending: false });
+  mockUseAccessGroups.mockReturnValue({ data: undefined, isLoading: false, isError: true, refetch });
+  renderWithProviders(<AccessGroupsPage />);
+  expect(screen.getByRole("alert")).toHaveTextContent("Unable to load access groups");
+  expect(screen.queryByRole("table")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /create access group/i })).toBeDisabled();
+  await userEvent.click(screen.getByRole("button", { name: "Retry" }));
+  expect(refetch).toHaveBeenCalledOnce();
+});
+
+it("keeps last successful access groups visible after a refresh error", () => {
+  mockUseAccessGroups.mockReturnValue({ data: mockAccessGroups, isLoading: false, isError: true, refetch: vi.fn() });
+  renderWithProviders(<AccessGroupsPage />);
+  expect(screen.getByRole("alert")).toBeInTheDocument();
+  expect(screen.getByText("ag-1")).toBeInTheDocument();
+});

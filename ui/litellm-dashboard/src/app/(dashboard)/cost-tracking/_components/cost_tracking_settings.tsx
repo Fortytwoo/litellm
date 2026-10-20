@@ -100,6 +100,8 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
   // Use custom hooks for discount and margin config
   const {
     discountConfig,
+    isLoaded: discountLoaded,
+    loadError: discountError,
     fetchDiscountConfig,
     handleAddProvider: addProvider,
     handleRemoveProvider: removeProvider,
@@ -108,6 +110,8 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
 
   const {
     marginConfig,
+    isLoaded: marginLoaded,
+    loadError: marginError,
     fetchMarginConfig,
     handleAddMargin: addMargin,
     handleRemoveMargin: removeMargin,
@@ -117,6 +121,8 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
   const {
     blockUnpriced,
     isUpdating: isUpdatingBlockUnpriced,
+    isLoaded: blockUnpricedLoaded,
+    loadError: blockUnpricedError,
     fetchBlockUnpriced,
     setBlockUnpriced,
   } = useBlockUnpricedConfig({ accessToken });
@@ -238,19 +244,41 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
                 <TabsContent value="discounts" keepMounted>
                   <div className="p-6">
                     <div className="flex justify-end mb-4">
-                      <Button onClick={() => setIsModalVisible(true)}>{uiT("ui.4dab8f8738b0a762")}</Button>
+                      <Button disabled={!discountLoaded} onClick={() => setIsModalVisible(true)}>
+                        {uiT("ui.4dab8f8738b0a762")}
+                      </Button>
                     </div>
-                    {isFetching ? (
+                    {discountError && (
+                      <div role="alert" className="mb-4 rounded border border-destructive p-4">
+                        <p>{discountError}</p>
+                        <Button variant="outline" onClick={fetchDiscountConfig}>
+                          {uiT("ui.942087cc2d41e013")}
+                        </Button>
+                      </div>
+                    )}
+                    {marginError && (
+                      <div role="alert" className="mb-4 rounded border border-destructive p-4">
+                        <p>{marginError}</p>
+                        <Button variant="outline" onClick={fetchMarginConfig}>
+                          {uiT("ui.942087cc2d41e013")}
+                        </Button>
+                      </div>
+                    )}
+                    {isFetching && (
                       <div className="py-12 text-center">
                         <p className="text-muted-foreground">{uiT("ui.457bcd55bcceba8d")}</p>
                       </div>
-                    ) : Object.keys(discountConfig).length > 0 ? (
-                      <ProviderDiscountTable
-                        discountConfig={discountConfig}
-                        onDiscountChange={handleDiscountChange}
-                        onRemoveProvider={handleRemoveProvider}
-                      />
-                    ) : (
+                    )}
+                    {!isFetching && Object.keys(discountConfig).length > 0 && (
+                      <fieldset disabled={!discountLoaded}>
+                        <ProviderDiscountTable
+                          discountConfig={discountConfig}
+                          onDiscountChange={handleDiscountChange}
+                          onRemoveProvider={handleRemoveProvider}
+                        />
+                      </fieldset>
+                    )}
+                    {!isFetching && discountLoaded && Object.keys(discountConfig).length === 0 && (
                       <div className="py-16 px-6 text-center">
                         <svg
                           className="mx-auto h-12 w-12 text-muted-foreground mb-4"
@@ -288,19 +316,25 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
             <CollapsibleContent className="px-0">
               <div className="p-6">
                 <div className="flex justify-end mb-4">
-                  <Button onClick={() => setIsMarginModalVisible(true)}>{uiT("ui.4f461d0f35259040")}</Button>
+                  <Button disabled={!marginLoaded} onClick={() => setIsMarginModalVisible(true)}>
+                    {uiT("ui.4f461d0f35259040")}
+                  </Button>
                 </div>
-                {isFetching ? (
+                {isFetching && (
                   <div className="py-12 text-center">
                     <p className="text-muted-foreground">{uiT("ui.457bcd55bcceba8d")}</p>
                   </div>
-                ) : Object.keys(marginConfig).length > 0 ? (
-                  <ProviderMarginTable
-                    marginConfig={marginConfig}
-                    onMarginChange={handleMarginChange}
-                    onRemoveProvider={handleRemoveMargin}
-                  />
-                ) : (
+                )}
+                {!isFetching && Object.keys(marginConfig).length > 0 && (
+                  <fieldset disabled={!marginLoaded}>
+                    <ProviderMarginTable
+                      marginConfig={marginConfig}
+                      onMarginChange={handleMarginChange}
+                      onRemoveProvider={handleRemoveMargin}
+                    />
+                  </fieldset>
+                )}
+                {!isFetching && marginLoaded && Object.keys(marginConfig).length === 0 && (
                   <div className="py-16 px-6 text-center">
                     <svg
                       className="mx-auto h-12 w-12 text-muted-foreground mb-4"
@@ -330,6 +364,14 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
             <SectionHeader title={uiT("ui.da723f2dc00576ae")} description={uiT("ui.fd921e39ef2752db")} />
             <CollapsibleContent className="px-0">
               <div className="p-6">
+                {blockUnpricedError && (
+                  <div role="alert" className="mb-4 rounded border border-destructive p-4">
+                    <p>{uiT("nativeLoad.configFetch", { kind: "pricing" })}</p>
+                    <Button variant="outline" onClick={fetchBlockUnpriced}>
+                      {uiT("ui.942087cc2d41e013")}
+                    </Button>
+                  </div>
+                )}
                 <div className="flex items-center justify-between">
                   <div className="pr-6">
                     <p className="text-foreground font-medium">{uiT("ui.5d0fb815f540d2dd")}</p>
@@ -337,7 +379,7 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
                   </div>
                   <Switch
                     checked={blockUnpriced}
-                    disabled={isUpdatingBlockUnpriced || isFetching}
+                    disabled={isUpdatingBlockUnpriced || isFetching || !blockUnpricedLoaded}
                     onCheckedChange={(checked) => setBlockUnpriced(checked)}
                   />
                 </div>

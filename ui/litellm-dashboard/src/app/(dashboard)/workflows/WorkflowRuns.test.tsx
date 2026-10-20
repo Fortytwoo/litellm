@@ -244,3 +244,25 @@ describe("WorkflowRuns detail drawer", () => {
     await waitFor(() => expect(screen.queryAllByRole("dialog")).toHaveLength(0));
   });
 });
+
+it("shows a failed workflow read and retries without claiming there are no runs", async () => {
+  const fetchSpy = mockFetch(RUNS);
+  fetchSpy.mockImplementationOnce(() => Promise.resolve({ ok: false, status: 503, json: async () => ({}) }));
+  vi.stubGlobal("fetch", fetchSpy);
+  render(<WorkflowRuns accessToken="fixture" />);
+  expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load workflow runs");
+  expect(screen.queryByText("No workflow runs yet")).not.toBeInTheDocument();
+  await userEvent.click(screen.getByRole("button", { name: "Retry" }));
+  expect(await screen.findByText("First run")).toBeInTheDocument();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+});
+
+it("reports failed workflow details instead of empty events and messages", async () => {
+  const fetchSpy = mockFetch(RUNS);
+  vi.stubGlobal("fetch", fetchSpy);
+  render(<WorkflowRuns accessToken="fixture" />);
+  await screen.findByText("First run");
+  fetchSpy.mockImplementation(() => Promise.resolve({ ok: false, status: 503, json: async () => ({}) }));
+  await userEvent.click(screen.getByText("First run"));
+  expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load workflow details");
+});

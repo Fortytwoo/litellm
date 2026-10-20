@@ -236,3 +236,57 @@ describe("useDiscountConfig", () => {
     });
   });
 });
+
+describe("stored discount configuration failures", () => {
+  it("blocks replacement saves after a failed read and preserves last known values", async () => {
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ values: { openai: 0.05 } }) } as Response)
+      .mockResolvedValueOnce({ ok: false, status: 503 } as Response);
+    const { result } = renderHook(() => useDiscountConfig({ accessToken: "fixture" }));
+    await act(async () => {
+      await result.current.fetchDiscountConfig();
+    });
+    await act(async () => {
+      await result.current.fetchDiscountConfig();
+    });
+    expect(result.current.loadError).toBeTruthy();
+    expect(result.current.isLoaded).toBe(false);
+    expect(result.current.discountConfig).toEqual({ openai: 0.05 });
+    const count = fetchSpy.mock.calls.length;
+    await act(async () => {
+      expect(await result.current.handleAddProvider("Anthropic", "5")).toBe(false);
+    });
+    expect(fetchSpy).toHaveBeenCalledTimes(count);
+  });
+
+  it("keeps stored values and reports false when a save is rejected", async () => {
+    vi.spyOn(global, "fetch")
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ values: { openai: 0.05 } }) } as Response)
+      .mockResolvedValueOnce({ ok: false, status: 403, json: async () => ({ detail: "denied" }) } as Response);
+    const { result } = renderHook(() => useDiscountConfig({ accessToken: "fixture" }));
+    await act(async () => {
+      await result.current.fetchDiscountConfig();
+    });
+    await act(async () => {
+      expect(await result.current.handleAddProvider("Anthropic", "5")).toBe(false);
+    });
+    expect(result.current.discountConfig).toEqual({ openai: 0.05 });
+  });
+
+  it("hides stored values immediately when the account changes", async () => {
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ values: { openai: 0.05 } }),
+    } as Response);
+    const { result, rerender } = renderHook(({ token }) => useDiscountConfig({ accessToken: token }), {
+      initialProps: { token: "first" },
+    });
+    await act(async () => {
+      await result.current.fetchDiscountConfig();
+    });
+    rerender({ token: "second" });
+    expect(result.current.discountConfig).toEqual({});
+    expect(result.current.isLoaded).toBe(false);
+  });
+});

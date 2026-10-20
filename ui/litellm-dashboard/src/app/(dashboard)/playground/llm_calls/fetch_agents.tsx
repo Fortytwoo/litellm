@@ -1,5 +1,6 @@
 // fetch_agents.tsx
 
+import { managedFetch } from "@/lib/http/managedSession";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName, modelInfoCall } from "@/components/networking";
 
 export interface Agent {
@@ -43,7 +44,7 @@ export const fetchAvailableAgents = async (accessToken: string, customBaseUrl?: 
     const proxyBaseUrl = customBaseUrl || getProxyBaseUrl();
     const url = proxyBaseUrl ? `${proxyBaseUrl}/v1/agents` : `/v1/agents`;
 
-    const response = await fetch(url, {
+    const response = await managedFetch(url, {
       method: "GET",
       headers: {
         [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

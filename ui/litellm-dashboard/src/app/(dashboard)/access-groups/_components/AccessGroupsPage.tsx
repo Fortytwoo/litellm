@@ -38,8 +38,8 @@ export function AccessGroupsPage() {
 
   const { userRole } = useAuthorized();
   // Admin Viewer follows the read-parity rule: see access groups, no writes.
-  const canModify = isProxyAdminRole(userRole ?? "");
-  const { data: groupsData, isLoading } = useAccessGroups();
+  const { data: groupsData, isLoading, isError, refetch } = useAccessGroups();
+  const canModify = isProxyAdminRole(userRole ?? "") && !isError;
   const groups = useMemo(() => (groupsData ?? []).map(mapResponseToAccessGroup), [groupsData]);
 
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
@@ -71,9 +71,9 @@ export function AccessGroupsPage() {
           {uiT("ui.b0252ccc6e86")}
         </PageHeaderTitle>
         <PageHeaderDescription>{uiT("ui.7abb38c480e32aaa")}</PageHeaderDescription>
-        {canModify && (
+        {isProxyAdminRole(userRole ?? "") && (
           <PageHeaderControls>
-            <Button onClick={() => setIsCreateModalVisible(true)}>
+            <Button disabled={isError || isLoading} onClick={() => setIsCreateModalVisible(true)}>
               <Plus className="size-4" />
               {uiT("ui.e30f3886e51cb79c")}
             </Button>
@@ -82,6 +82,14 @@ export function AccessGroupsPage() {
       </PageHeader>
 
       <PageContent className="gap-3">
+        {isError && (
+          <div role="alert" className="rounded border border-destructive p-4">
+            <p>{uiT("nativeLoad.groups")}</p>
+            <Button variant="outline" onClick={() => refetch()}>
+              {uiT("ui.942087cc2d41e013")}
+            </Button>
+          </div>
+        )}
         <div className="flex items-center">
           <InputGroup className="max-w-[400px]">
             <InputGroupAddon>
@@ -106,14 +114,16 @@ export function AccessGroupsPage() {
           </InputGroup>
         </div>
 
-        <AccessGroupsTable
-          groups={filteredGroups}
-          isLoading={isLoading}
-          isFiltered={searchText.trim().length > 0}
-          canModify={canModify}
-          onGroupClick={setSelectedGroupId}
-          onDeleteClick={setGroupToDelete}
-        />
+        {(!isError || groupsData !== undefined) && (
+          <AccessGroupsTable
+            groups={filteredGroups}
+            isLoading={isLoading}
+            isFiltered={searchText.trim().length > 0}
+            canModify={canModify}
+            onGroupClick={setSelectedGroupId}
+            onDeleteClick={setGroupToDelete}
+          />
+        )}
       </PageContent>
 
       <AccessGroupCreateDialog open={isCreateModalVisible} onOpenChange={setIsCreateModalVisible} />

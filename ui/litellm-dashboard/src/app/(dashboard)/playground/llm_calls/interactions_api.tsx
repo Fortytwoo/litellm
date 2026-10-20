@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { toast } from "@/lib/toast";
 import { getGlobalLitellmHeaderName, getProxyBaseUrl } from "@/components/networking";
 import {
@@ -45,7 +46,7 @@ export async function makeInteractionsRequest(
   }
 
   try {
-    const response = await fetch(requestUrl, {
+    const response = await managedFetch(requestUrl, {
       method: "POST",
       headers,
       body: JSON.stringify(body),

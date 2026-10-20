@@ -1,3 +1,4 @@
+import { managedFetch } from "@/lib/http/managedSession";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { deriveErrorMessage, getGlobalLitellmHeaderName, getProxyBaseUrl } from "@/components/networking";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -31,7 +32,7 @@ const fetchMyTeamMember = async (accessToken: string, teamId: string): Promise<T
     ? `${proxyBaseUrl}/team/${encodeURIComponent(teamId)}/members/me`
     : `/team/${encodeURIComponent(teamId)}/members/me`;
 
-  const response = await fetch(url, {
+  const response = await managedFetch(url, {
     method: "GET",
     headers: {
       [getGlobalLitellmHeaderName()]: `Bearer ${accessToken}`,

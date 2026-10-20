@@ -63,6 +63,11 @@ describe("useBlockUnpricedConfig", () => {
 
       const { result } = renderHook(() => useBlockUnpricedConfig({ accessToken: "test-token" }));
 
+      vi.mocked(apiClient.get).mockResolvedValueOnce({ enabled: false });
+      await act(async () => {
+        await result.current.fetchBlockUnpriced();
+      });
+
       await act(async () => {
         await result.current.setBlockUnpriced(true);
       });
@@ -81,6 +86,11 @@ describe("useBlockUnpricedConfig", () => {
 
       const { result } = renderHook(() => useBlockUnpricedConfig({ accessToken: "test-token" }));
 
+      vi.mocked(apiClient.get).mockResolvedValueOnce({ enabled: false });
+      await act(async () => {
+        await result.current.fetchBlockUnpriced();
+      });
+
       await act(async () => {
         await result.current.setBlockUnpriced(false);
       });
@@ -95,6 +105,11 @@ describe("useBlockUnpricedConfig", () => {
 
       const { result } = renderHook(() => useBlockUnpricedConfig({ accessToken: "test-token" }));
 
+      vi.mocked(apiClient.get).mockResolvedValueOnce({ enabled: false });
+      await act(async () => {
+        await result.current.fetchBlockUnpriced();
+      });
+
       await act(async () => {
         await result.current.setBlockUnpriced(true);
       });
@@ -105,4 +120,19 @@ describe("useBlockUnpricedConfig", () => {
       expect(result.current.isUpdating).toBe(false);
     });
   });
+});
+
+it("keeps a failed pricing-policy read unknown and blocks dependent saves", async () => {
+  vi.mocked(apiClient.get).mockRejectedValueOnce(new Error("unavailable"));
+  const { result } = renderHook(() => useBlockUnpricedConfig({ accessToken: "fixture" }));
+  await act(async () => {
+    await result.current.fetchBlockUnpriced();
+  });
+  expect(result.current.isLoaded).toBe(false);
+  expect(result.current.loadError).toBe(true);
+  const writes = vi.mocked(apiClient.patch).mock.calls.length;
+  await act(async () => {
+    await result.current.setBlockUnpriced(true);
+  });
+  expect(apiClient.patch).toHaveBeenCalledTimes(writes);
 });
