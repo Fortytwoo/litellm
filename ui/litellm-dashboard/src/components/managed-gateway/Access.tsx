@@ -244,6 +244,7 @@ export function Accounts() {
           )}
         />
       </div>
+      {canAdmin && <AccountBindings catalog={catalog} directory={directory} />}
       {canAdmin && (
         <div className="space-y-3">
           <h2 className="text-lg font-semibold">{t("managedAccounts")}</h2>
@@ -290,6 +291,80 @@ export function Accounts() {
         />
       )}
     </div>
+  );
+}
+
+function AccountBindings({
+  catalog,
+  directory,
+}: {
+  catalog: ReturnType<typeof useGatewayQuery>;
+  directory: ReturnType<typeof useGatewayQuery>;
+}) {
+  const t = useCopy();
+  const members = rows(directory.data?.members);
+  const bindings = rows(catalog.data?.bindings);
+  function bindingStatus(binding: Row): string {
+    if (!binding.grant_enabled) return t("bindingRevoked");
+    if (!binding.account_enabled) return t("accountDisabled");
+    return t("enabled");
+  }
+  const memberNames = new Map(members.map((member) => [str(member.subject), str(member.label)]));
+  const boundSubjects = new Set(bindings.map((binding) => str(binding.subject)));
+  const entries = [
+    ...bindings.map((binding) => ({
+      subject: str(binding.subject),
+      member: memberNames.get(str(binding.subject)) || t("unknownMember"),
+      account: str(binding.label),
+      source: t(binding.source === "self_login" ? "selfLogin" : "adminGrant"),
+      status: bindingStatus(binding),
+      default: t(binding.is_default ? "defaultAccount" : "notDefault"),
+    })),
+    ...members
+      .filter((member) => !boundSubjects.has(str(member.subject)))
+      .map((member) => ({
+        subject: str(member.subject),
+        member: str(member.label),
+        account: t("unbound"),
+        source: "",
+        status: t("unbound"),
+        default: "",
+      })),
+  ];
+  const isLoading = catalog.isPending || directory.isPending;
+  const complete = Array.isArray(catalog.data?.bindings) && Array.isArray(directory.data?.members);
+  const failed = Boolean(catalog.error || directory.error) || (!isLoading && !complete);
+  return (
+    <section aria-label={t("accountBindings")} className="space-y-3">
+      <h2 className="text-lg font-semibold">{t("accountBindings")}</h2>
+      {isLoading && <p>{t("loading")}</p>}
+      {!isLoading && failed && (
+        <>
+          <Notice error={t("bindingReadError")} />
+          <Button
+            variant="outline"
+            onClick={() => {
+              void catalog.refetch();
+              void directory.refetch();
+            }}
+          >
+            {t("retry")}
+          </Button>
+        </>
+      )}
+      {!isLoading && !failed && (
+        <Grid
+          data={entries}
+          columns={[
+            { key: "member", label: t("owner") },
+            { key: "account", label: t("yuntuAccount") },
+            { key: "source", label: t("bindingSource") },
+            { key: "status", label: t("status") },
+            { key: "default", label: t("currentDefault") },
+          ]}
+        />
+      )}
+    </section>
   );
 }
 
