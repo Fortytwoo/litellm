@@ -33,6 +33,7 @@ function renderAccounts({ administrator = true, directoryFails = false, missingB
               bindings: [
                 {
                   subject: "alice",
+                  account_ref: "shared",
                   label: "Shared account",
                   source: "admin_grant",
                   grant_enabled: true,
@@ -40,19 +41,21 @@ function renderAccounts({ administrator = true, directoryFails = false, missingB
                   is_default: true,
                 },
                 {
-                  subject: "bob",
-                  label: "Shared account",
-                  source: "admin_grant",
-                  grant_enabled: false,
-                  account_enabled: true,
-                  is_default: false,
-                },
-                {
                   subject: "alice",
+                  account_ref: "personal",
                   label: "Personal account",
                   source: "self_login",
                   grant_enabled: true,
                   account_enabled: false,
+                  is_default: false,
+                },
+                {
+                  subject: "bob",
+                  account_ref: "shared",
+                  label: "Shared account",
+                  source: "admin_grant",
+                  grant_enabled: false,
+                  account_enabled: true,
                   is_default: false,
                 },
               ],
@@ -99,9 +102,15 @@ it("shows member names, shared accounts, ownership, revoked access, disabled acc
     }),
   ).toBeVisible();
   expect(within(overview).getByRole("row", { name: "Carol Not bound Not bound" })).toBeVisible();
+  fireEvent.change(within(overview).getByRole("textbox"), { target: { value: "Bob" } });
+  expect(within(overview).getAllByRole("row")).toHaveLength(2);
   fireEvent.change(within(overview).getByRole("textbox"), { target: { value: "Shared account" } });
   expect(within(overview).getAllByRole("row")).toHaveLength(3);
   expect(within(overview).queryByRole("cell", { name: "Carol" })).not.toBeInTheDocument();
+  fireEvent.change(within(overview).getByRole("textbox"), { target: { value: "Bob" } });
+  expect(within(overview).getAllByRole("row")).toHaveLength(2);
+  fireEvent.change(within(overview).getByRole("textbox"), { target: { value: "" } });
+  expect(within(overview).getAllByRole("row")).toHaveLength(5);
   expect(fetch).toHaveBeenCalledTimes(3);
   client.clear();
 });

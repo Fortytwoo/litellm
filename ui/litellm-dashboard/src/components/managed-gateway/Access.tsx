@@ -313,6 +313,7 @@ function AccountBindings({
   const boundSubjects = new Set(bindings.map((binding) => str(binding.subject)));
   const entries = [
     ...bindings.map((binding) => ({
+      id: `${str(binding.subject)}:${str(binding.account_ref)}`,
       subject: str(binding.subject),
       member: memberNames.get(str(binding.subject)) || t("unknownMember"),
       account: str(binding.label),
@@ -323,6 +324,7 @@ function AccountBindings({
     ...members
       .filter((member) => !boundSubjects.has(str(member.subject)))
       .map((member) => ({
+        id: `unbound:${str(member.subject)}`,
         subject: str(member.subject),
         member: str(member.label),
         account: t("unbound"),
