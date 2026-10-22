@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney, usdToCny, cnyToUsd } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { Info, DollarSign, Wrench } from "lucide-react";
@@ -30,18 +31,18 @@ interface CostInputProps {
  */
 const CostInput: React.FC<CostInputProps> = ({ value, placeholder, disabled, className, onChange }) => {
   const [draft, setDraft] = useState<string | null>(null);
-  const display = draft ?? (value === null || value === undefined ? "" : value.toFixed(4));
+  const display = draft ?? (value === null || value === undefined ? "" : usdToCny(value).toFixed(4));
 
   const handleChange = (next: string) => {
     setDraft(next);
     const parsed = Number(next);
-    onChange(next.trim() === "" || Number.isNaN(parsed) ? null : parsed);
+    onChange(next.trim() === "" || Number.isNaN(parsed) ? null : cnyToUsd(parsed));
   };
 
   return (
     <InputGroup className={className}>
       <InputGroupAddon>
-        <InputGroupText>$</InputGroupText>
+        <InputGroupText>¥</InputGroupText>
       </InputGroupAddon>
       <InputGroupInput
         type="text"
@@ -49,7 +50,7 @@ const CostInput: React.FC<CostInputProps> = ({ value, placeholder, disabled, cla
         placeholder={placeholder}
         disabled={disabled}
         value={display}
-        onFocus={() => setDraft(value === null || value === undefined ? "" : String(value))}
+        onFocus={() => setDraft(value === null || value === undefined ? "" : String(usdToCny(value)))}
         onBlur={() => setDraft(null)}
         onChange={(e) => handleChange(e.target.value)}
       />
@@ -187,7 +188,7 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                 {value.default_cost_per_query && (
                   <p className="text-sm text-muted-foreground">
                     {uiT("ui.699a39484a7e7f2b")}
-                    {value.default_cost_per_query.toFixed(4)} {uiT("ui.7a64c050c433c0b9")}
+                    {formatMoney(value.default_cost_per_query, 4)} {uiT("ui.7a64c050c433c0b9")}
                   </p>
                 )}
                 {value.tool_name_to_cost_per_query &&
@@ -196,7 +197,7 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                       cost !== null &&
                       cost !== undefined && (
                         <p key={toolName} className="text-sm text-muted-foreground">
-                          • {toolName}: ${cost.toFixed(4)} {uiT("ui.7a64c050c433c0b9")}
+                          • {toolName}: {formatMoney(Number(cost), 4)} {uiT("ui.7a64c050c433c0b9")}
                         </p>
                       ),
                   )}

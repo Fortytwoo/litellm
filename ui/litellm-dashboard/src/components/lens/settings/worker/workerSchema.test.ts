@@ -18,7 +18,7 @@ it("requires a model and converts an accepted analysis budget to a number", () =
   expect(analysisAccessSchema.safeParse({ model: null, budget: "100" }).success).toBe(false);
   expect(analysisAccessSchema.parse({ model: "analysis", budget: "0.01" })).toEqual({
     model: "analysis",
-    budget: 0.01,
+    budget: (0.01 / 6.8),
   });
 });
 

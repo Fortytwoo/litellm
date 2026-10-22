@@ -452,7 +452,7 @@ describe("ActivityMetrics", () => {
     render(<ActivityMetrics modelMetrics={mockModelMetrics} />);
     const avgSpendElements = screen.getAllByText(/per successful request/);
     expect(avgSpendElements.length).toBeGreaterThan(0);
-    expect(avgSpendElements.some((el) => el.textContent?.includes("1.058"))).toBe(true);
+    expect(avgSpendElements.some((el) => el.textContent?.includes("7.194"))).toBe(true);
   });
 
   it("should handle zero successful requests without division error", () => {
@@ -641,7 +641,7 @@ describe("ActivityMetrics charts", () => {
     render(<ActivityMetrics modelMetrics={twoDayModelMetrics} />);
 
     const spendTicks = tickTexts(chartTitled("Spend per day"));
-    expect(spendTicks.some((text) => text.startsWith("$"))).toBe(true);
+    expect(spendTicks.some((text) => text.startsWith("¥"))).toBe(true);
 
     const tokenTicks = tickTexts(chartTitled("Total Tokens"));
     expect(tokenTicks.some((text) => text.endsWith("k"))).toBe(true);

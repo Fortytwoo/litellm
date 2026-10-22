@@ -1,4 +1,6 @@
 "use client";
+import { CurrencyFieldContext } from "@/components/shared/form/CurrencyFieldContext";
+import { formatMoney, usdToCny, cnyToUsd } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { translateText } from "@/i18n";
 import { t as translateUi } from "@/i18n";
@@ -192,25 +194,27 @@ export function ModelMaxBudgetEditor({
             </div>
 
             <div className="flex gap-2 items-center">
-              <InputGroup className="w-40">
-                <InputGroupAddon>
-                  <InputGroupText>$</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput
-                  type="number"
-                  // A per-model cap is often a fraction of a cent, so a 0.01
-                  // step would make the browser refuse the value on submit.
-                  step="any"
-                  min={0}
-                  value={entry.budgetLimit ?? ""}
-                  onChange={(event) => {
-                    const typed = event.target.valueAsNumber;
-                    updateEntry(entry.id, { budgetLimit: Number.isNaN(typed) ? null : typed });
-                  }}
-                  placeholder={uiT("ui.2f181638c14378b3")}
-                  disabled={!premiumUser}
-                />
-              </InputGroup>
+              <CurrencyFieldContext.Provider value={true}>
+                <InputGroup className="w-40">
+                  <InputGroupAddon>
+                    <InputGroupText>¥</InputGroupText>
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    type="number"
+                    // A per-model cap is often a fraction of a cent, so a 0.01
+                    // step would make the browser refuse the value on submit.
+                    step="any"
+                    min={0}
+                    value={entry.budgetLimit === null ? "" : usdToCny(entry.budgetLimit)}
+                    onChange={(event) => {
+                      const typed = event.target.valueAsNumber;
+                      updateEntry(entry.id, { budgetLimit: Number.isNaN(typed) ? null : cnyToUsd(typed) });
+                    }}
+                    placeholder={uiT("ui.2f181638c14378b3")}
+                    disabled={!premiumUser}
+                  />
+                </InputGroup>
+              </CurrencyFieldContext.Provider>
               <Select
                 items={MODEL_BUDGET_PERIOD_OPTIONS}
                 value={entry.timePeriod}
@@ -232,8 +236,8 @@ export function ModelMaxBudgetEditor({
             {spent !== undefined && (
               <div className="text-[11px] text-muted-foreground mt-2 ml-1">
                 {uiT("ui.fd3977686bdc0a5f")}
-                {spent}
-                {entry.budgetLimit !== null && ` of $${entry.budgetLimit}`}
+                {formatMoney(spent, 4)}
+                {entry.budgetLimit !== null && ` of ${formatMoney(Number(entry.budgetLimit), 4)}`}
               </div>
             )}
           </div>

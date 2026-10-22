@@ -124,15 +124,15 @@ const HowItWorks: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">{uiT("ui.a584cbe22f182b5a")}</p>
-                <code className="font-mono text-xs text-foreground">${calculatedDiscount.originalCost}</code>
+                <code className="font-mono text-xs text-foreground">{`¥${calculatedDiscount.originalCost}`}</code>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">{uiT("ui.4ef35972d654b59d")}</p>
-                <code className="font-mono text-xs text-foreground">${calculatedDiscount.finalCost}</code>
+                <code className="font-mono text-xs text-foreground">{`¥${calculatedDiscount.finalCost}`}</code>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">{uiT("ui.2443bfe02939")}</p>
-                <code className="font-mono text-xs text-foreground">${calculatedDiscount.discountAmount}</code>
+                <code className="font-mono text-xs text-foreground">{`¥${calculatedDiscount.discountAmount}`}</code>
               </div>
               <div className="flex items-center justify-between border-t border-border pt-2">
                 <p className="text-xs font-semibold text-foreground">{uiT("ui.b4aee4c4dfebdf4c")}</p>

@@ -1,5 +1,6 @@
 import { t as translateUi } from "@/i18n";
 import { z } from "zod";
+import { cnyToUsd } from "@/utils/currency";
 
 const analysisAccessFields = { model: z.string().nullable(), budget: z.string() };
 const workerFormFields = {
@@ -18,7 +19,7 @@ export const analysisAccessSchema = z
         },
       });
   })
-  .transform((access) => ({ model: access.model ?? "", budget: Number(access.budget) }));
+  .transform((access) => ({ model: access.model ?? "", budget: cnyToUsd(Number(access.budget)) }));
 
 export type AnalysisAccess = z.input<typeof analysisAccessSchema>;
 

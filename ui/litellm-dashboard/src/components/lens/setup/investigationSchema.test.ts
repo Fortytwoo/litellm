@@ -32,6 +32,12 @@ function expectIssue(
 }
 
 describe("investigation validation", () => {
+  it("loads a dollar budget in yuan and saves it back without changing the limit", () => {
+    expect(defaults.budget).toBe(680);
+    const saved = investigationSettings(investigationSchema.parse({ ...defaults, budget: 68 }), undefined, "analysis");
+    expect(saved.monthly_budget).toBe(10);
+    expect(investigationDefaults(saved, "edit", "traces").budget).toBe(68);
+  });
   it("attaches incomplete metadata errors to the missing filter field", () => {
     expectIssue(
       { selection: { filters: [{ key: "swarm", value: " " }] } },

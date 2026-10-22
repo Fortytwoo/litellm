@@ -87,14 +87,14 @@ describe("SpendByProvider", () => {
     render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={mockProviderSpend} />);
     expect(screen.getAllByText("openai").length).toBeGreaterThan(0);
     expect(screen.getAllByText("anthropic").length).toBeGreaterThan(0);
-    expect(screen.getByText("$150.50")).toBeInTheDocument();
-    expect(screen.getByText("$200.75")).toBeInTheDocument();
+    expect(screen.getByText("¥1,023.40")).toBeInTheDocument();
+    expect(screen.getByText("¥1,365.10")).toBeInTheDocument();
   });
 
   it("should display formatted spend values with two decimal places", () => {
     render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={mockProviderSpend} />);
-    expect(screen.getByText("$150.50")).toBeInTheDocument();
-    expect(screen.getByText("$200.75")).toBeInTheDocument();
+    expect(screen.getByText("¥1,023.40")).toBeInTheDocument();
+    expect(screen.getByText("¥1,365.10")).toBeInTheDocument();
   });
 
   it("should display successful requests with locale formatting", () => {
@@ -167,7 +167,7 @@ describe("SpendByProvider", () => {
       },
     ];
     render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={providerSpendWithNull} />);
-    expect(screen.getAllByText("$100.00").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("¥680.00").length).toBeGreaterThan(0);
   });
 
   it("should handle provider with empty string provider name", () => {
@@ -182,7 +182,7 @@ describe("SpendByProvider", () => {
       },
     ];
     render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={providerSpendWithEmpty} />);
-    expect(screen.getAllByText("$100.00").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("¥680.00").length).toBeGreaterThan(0);
   });
 
   it("should display large token numbers with comma formatting", () => {
@@ -205,7 +205,7 @@ describe("SpendByProvider", () => {
     fireEvent.click(screen.getAllByRole("switch")[0]);
     expect(screen.getAllByText("google").length).toBeGreaterThan(0);
     expect(screen.getByText("-")).toBeInTheDocument();
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
   });
 
   it("should filter data correctly when both toggles are off", () => {
@@ -225,7 +225,7 @@ describe("SpendByProvider", () => {
     expect(segments.map((segment) => segment.getAttribute("title"))).toEqual(["anthropic · 57.2%", "openai · 42.8%"]);
     expect(segments[0]).toHaveStyle({ backgroundColor: "rgb(236, 72, 153)" });
     expect(segments[1]).toHaveStyle({ backgroundColor: "rgb(168, 85, 247)" });
-    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("$351.25");
+    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("¥2,388.50");
   });
 
   it("adds the unknown provider segment and updates the total when Show Unknown is on", () => {
@@ -250,12 +250,12 @@ describe("SpendByProvider", () => {
     render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={providerSpendWithUnknown} />);
 
     expect(screen.getAllByTestId("provider-share-segment")).toHaveLength(1);
-    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("$150.50");
+    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("¥1,023.40");
 
     fireEvent.click(screen.getAllByRole("switch")[1]);
 
     expect(screen.getAllByTestId("provider-share-segment")).toHaveLength(2);
-    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("$200.50");
+    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("¥1,363.40");
   });
 
   it("should include all providers with spend greater than zero by default", () => {

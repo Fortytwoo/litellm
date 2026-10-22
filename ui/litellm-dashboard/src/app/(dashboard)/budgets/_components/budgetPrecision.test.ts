@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { applyBudgetPrecision } from "./budgetPrecision";
 
 describe("applyBudgetPrecision", () => {
-  it("rounds each precision field to two decimals, matching antd InputNumber precision={2}", () => {
+  it("rounds rate limits while preserving converted budget precision", () => {
     const typed = { budget_id: "b", tpm_limit: 500.567, rpm_limit: 7.005, max_budget: 42.567 };
-    const rounded = { budget_id: "b", tpm_limit: 500.57, rpm_limit: 7.01, max_budget: 42.57 };
+    const rounded = { budget_id: "b", tpm_limit: 500.57, rpm_limit: 7.01, max_budget: 42.567 };
 
     expect(applyBudgetPrecision(typed)).toEqual(rounded);
   });
@@ -25,12 +25,12 @@ describe("applyBudgetPrecision", () => {
     expect(applyBudgetPrecision({ tpm_limit: null, rpm_limit: undefined, max_budget: 1.005 })).toEqual({
       tpm_limit: null,
       rpm_limit: undefined,
-      max_budget: 1.01,
+      max_budget: 1.005,
     });
   });
 
-  it("rounds negatives away from zero the way antd does", () => {
-    expect(applyBudgetPrecision({ max_budget: -1.005 })).toEqual({ max_budget: -1.01 });
+  it("preserves negative budget precision", () => {
+    expect(applyBudgetPrecision({ max_budget: -1.005 })).toEqual({ max_budget: -1.005 });
   });
 
   it("returns non-finite values unchanged rather than emitting NaN", () => {

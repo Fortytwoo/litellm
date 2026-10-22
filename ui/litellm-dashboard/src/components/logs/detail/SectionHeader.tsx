@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 /**
  * SectionHeader - Datadog-style header with icon, label, metrics, and copy
@@ -61,7 +62,7 @@ export function SectionHeader({
       {cost !== undefined && (
         <span className="text-xs text-muted-foreground">
           {uiT("ui.564970ae3734")}
-          {cost.toFixed(6)}
+          {formatMoney(cost, 6)}
         </span>
       )}
 

@@ -1,4 +1,5 @@
 import { toast } from "@/lib/toast";
+import { usdToCny } from "./currency";
 
 export function updateExistingKeys<Source extends object>(target: Source, source: object): Source {
   const clonedTarget = structuredClone(target);
@@ -52,19 +53,19 @@ export const getSpendString = (value: number | null | undefined, decimals: numbe
     return "-";
   }
 
-  const formatted = formatNumberWithCommas(value, decimals, false, false);
+  const formatted = formatNumberWithCommas(usdToCny(value), decimals, false, false);
   const numericFormatted = Number(formatted.replace(/,/g, ""));
 
   if (numericFormatted === 0) {
     const threshold = (1 / 10 ** decimals).toFixed(decimals);
-    return `< $${threshold}`;
+    return `< ¥${threshold}`;
   }
 
-  return `$${formatted}`;
+  return `¥${formatted}`;
 };
 
 export const formatPerSecondCost = (cost: number): string =>
-  `$${cost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}/s`;
+  `¥${usdToCny(cost).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}/s`;
 
 export const copyToClipboard = async (
   text: string | null | undefined,

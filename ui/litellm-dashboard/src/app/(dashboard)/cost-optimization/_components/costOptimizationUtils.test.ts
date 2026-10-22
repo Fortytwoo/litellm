@@ -388,7 +388,7 @@ describe("withStartAnchor", () => {
     "Auto-router": autorouter,
   });
 
-  it("lifts a single-day cumulative off a floating dot by prepending a $0 origin", () => {
+  it("lifts a single-day cumulative off a floating dot by prepending a ¥0 origin", () => {
     const anchored = withStartAnchor([point("Jul 24", 12, 30)], "Jul 24");
     expect(anchored).toEqual([point("Jul 24", 0, 0), point("Jul 24", 12, 30)]);
   });
@@ -422,34 +422,34 @@ describe("formatRangeLabel", () => {
 
 describe("usd", () => {
   it("keeps four decimals for sub-dollar amounts so small savings stay visible", () => {
-    expect(usd(0.05)).toBe("$0.0500");
-    expect(usd(1.5)).toBe("$1.50");
-    expect(usd(0)).toBe("$0.00");
+    expect(usd(0.05)).toBe("¥0.3400");
+    expect(usd(1.5)).toBe("¥10.20");
+    expect(usd(0)).toBe("¥0.00");
   });
 
   it("signs a loss ahead of the symbol and keeps its precision", () => {
     // A driver can be negative once a model switch is charged for its cold cache.
     // Sizing decimals off the raw value would render this as "$-0.00".
-    expect(usd(-0.05)).toBe("-$0.0500");
-    expect(usd(-0.0004)).toBe("-$0.0004");
-    expect(usd(-12.4)).toBe("-$12.40");
+    expect(usd(-0.05)).toBe("-¥0.3400");
+    expect(usd(-0.0004)).toBe("-¥0.0027");
+    expect(usd(-12.4)).toBe("-¥84.32");
   });
 });
 
 describe("classificationRatePer1kTurns", () => {
   it("normalizes total classification cost to one thousand turns", () => {
-    expect(classificationRatePer1kTurns(342.18, 140815)).toBe("($2.43 / 1K turns)");
-    expect(classificationRatePer1kTurns(0.0004, 100)).toBe("($0.0040 / 1K turns)");
+    expect(classificationRatePer1kTurns(342.18, 140815)).toBe("(¥16.52 / 1K turns)");
+    expect(classificationRatePer1kTurns(0.0004, 100)).toBe("(¥0.0272 / 1K turns)");
   });
 
   it("shows a floor instead of rounding a real cost down to zero", () => {
-    expect(classificationRatePer1kTurns(0.00001, 1000)).toBe("(<$0.0001 / 1K turns)");
-    expect(classificationRatePer1kTurns(0.0001, 1000)).toBe("($0.0001 / 1K turns)");
+    expect(classificationRatePer1kTurns(0.00001, 1000)).toBe("(<¥0.0001 / 1K turns)");
+    expect(classificationRatePer1kTurns(0.0001, 1000)).toBe("(¥0.0007 / 1K turns)");
   });
 
   it("reports zero when there are no turns or no classification cost", () => {
-    expect(classificationRatePer1kTurns(0, 0)).toBe("($0.00 / 1K turns)");
-    expect(classificationRatePer1kTurns(0, 100)).toBe("($0.00 / 1K turns)");
+    expect(classificationRatePer1kTurns(0, 0)).toBe("(¥0.00 / 1K turns)");
+    expect(classificationRatePer1kTurns(0, 100)).toBe("(¥0.00 / 1K turns)");
   });
 });
 

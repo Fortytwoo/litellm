@@ -1,4 +1,6 @@
 "use client";
+import { CurrencyFieldContext } from "@/components/shared/form/CurrencyFieldContext";
+import { formatMoney, usdToCny, cnyToUsd } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -242,24 +244,24 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
               label={uiT("ui.3e20f0a04b21")}
               description={uiT("ui.6ede4b326fadb16e")}
               isEditing={isEditing}
-              viewContent={
-                values.max_budget != null ? <span>${Number(values.max_budget).toLocaleString()}</span> : <NotSet />
-              }
+              viewContent={values.max_budget != null ? <span>{formatMoney(values.max_budget, null)}</span> : <NotSet />}
               editContent={
-                <InputGroup className="max-w-80">
-                  <InputGroupAddon>$</InputGroupAddon>
-                  <InputGroupInput
-                    type="number"
-                    step="any"
-                    min={0}
-                    value={editedValues.max_budget ?? ""}
-                    onChange={(event) =>
-                      update("max_budget", event.target.value === "" ? null : Number(event.target.value))
-                    }
-                    placeholder={uiT("ui.4895f73177ab")}
-                    aria-label={uiT("ui.3e20f0a04b21")}
-                  />
-                </InputGroup>
+                <CurrencyFieldContext.Provider value={true}>
+                  <InputGroup className="max-w-80">
+                    <InputGroupAddon>¥</InputGroupAddon>
+                    <InputGroupInput
+                      type="number"
+                      step="any"
+                      min={0}
+                      value={editedValues.max_budget == null ? "" : usdToCny(editedValues.max_budget)}
+                      onChange={(event) =>
+                        update("max_budget", event.target.value === "" ? null : cnyToUsd(Number(event.target.value)))
+                      }
+                      placeholder={uiT("ui.4895f73177ab")}
+                      aria-label={uiT("ui.3e20f0a04b21")}
+                    />
+                  </InputGroup>
+                </CurrencyFieldContext.Provider>
               }
             />
 

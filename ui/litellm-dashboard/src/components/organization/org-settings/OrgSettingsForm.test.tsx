@@ -109,9 +109,9 @@ describe("OrgSettingsForm", () => {
     const user = userEvent.setup();
     const { patchOrganization } = renderForm();
 
-    const budget: HTMLInputElement = screen.getByLabelText("Max Budget (USD)");
+    const budget: HTMLInputElement = screen.getByLabelText("Max Budget (CNY)");
     await user.clear(budget);
-    fireEvent.change(budget, { target: { value: "0.001" } });
+    fireEvent.change(budget, { target: { value: "0.0068" } });
 
     // jsdom never blocks the submit itself, so assert the constraint the real browser
     // enforces before handleSubmit ever runs

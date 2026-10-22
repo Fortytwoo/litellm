@@ -356,7 +356,7 @@ const AddPassThroughEndpoint: React.FC<AddFallbacksProps> = ({
                     control={form.control}
                     name="cost_per_request"
                     label={labelWithHint(
-                      "Cost Per Request (USD)",
+                      "Cost Per Request (CNY)",
                       "Optional: Track costs for requests to this endpoint",
                     )}
                     description={uiT("ui.7134ebed2bbc1cc5")}

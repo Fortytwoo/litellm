@@ -20,6 +20,7 @@ const displayKeys = new Map(
   [...Object.entries(en.ui), ...Object.entries(zh.ui)].flatMap(([key, value]) => [
     [value, "ui." + key] as const,
     [value.trim(), "ui." + key] as const,
+    [value.replace(/\bCNY\b/g, "USD").replace(/\(¥\)/g, "($)"), "ui." + key] as const,
   ]),
 );
 

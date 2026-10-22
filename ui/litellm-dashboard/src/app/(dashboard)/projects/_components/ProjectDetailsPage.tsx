@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney, usdToCny } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useCanManageProjects } from "@/app/(dashboard)/hooks/projects/projectAccess";
 import { useProjectDetails } from "@/app/(dashboard)/hooks/projects/useProjectDetails";
@@ -150,10 +151,10 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div>
-              <p className="text-[28px] leading-none font-medium text-foreground">${spend.toFixed(2)}</p>
+              <p className="text-[28px] leading-none font-medium text-foreground">{formatMoney(Number(spend), 2)}</p>
               <p className="mt-1 text-sm text-muted-foreground">
                 {hasLimit
-                  ? uiT("ui.f63dadaca4defc5c", { v0: String(maxBudget.toFixed(2)) })
+                  ? uiT("ui.f63dadaca4defc5c", { v0: usdToCny(maxBudget).toFixed(2) })
                   : uiT("ui.040a32701c9e3474")}
               </p>
             </div>
@@ -185,7 +186,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                 categories={["spend"]}
                 colors={["cyan"]}
                 layout="vertical"
-                valueFormatter={(value) => `$${value.toFixed(4)}`}
+                valueFormatter={(value) => formatMoney(value, 4)}
                 yAxisWidth={140}
                 showLegend={false}
                 style={{ height: Math.max(modelSpendData.length * 40, 120) }}
@@ -246,9 +247,9 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                       <div className="mb-0.5 flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{uiT("ui.85f3d558db12")}</span>
                         <span className="text-xs text-foreground">
-                          ${teamSpend.toFixed(2)}
+                          {formatMoney(Number(teamSpend), 2)}
                           <span className="text-muted-foreground">
-                            {teamHasLimit ? ` / $${teamBudget.toFixed(2)}` : uiT("ui.25e23cdb69791d31")}
+                            {teamHasLimit ? ` / ${formatMoney(teamBudget, 2)}` : uiT("ui.25e23cdb69791d31")}
                           </span>
                         </span>
                       </div>

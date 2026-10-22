@@ -1,5 +1,6 @@
 "use client";
 import { translateText } from "@/i18n";
+import { usdToCny } from "@/utils/currency";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
@@ -22,7 +23,7 @@ function defaultWorkerFormValues(): WorkerFormInput {
   return {
     useExisting: false,
     analysisKey: null,
-    access: { model: null, budget: "100" },
+    access: { model: null, budget: String(usdToCny(100)) },
   };
 }
 

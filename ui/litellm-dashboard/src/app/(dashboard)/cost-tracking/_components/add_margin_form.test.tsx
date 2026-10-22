@@ -119,7 +119,7 @@ describe("AddMarginForm", () => {
     );
 
     await user.type(screen.getByPlaceholderText("0.001"), "1");
-    expect(onFixedAmountChange).toHaveBeenCalledWith("0.001");
+    expect(onFixedAmountChange).toHaveBeenCalledWith(String(1 / 6.8));
   });
 
   it("should call onMarginTypeChange when the Fixed Amount radio is clicked", async () => {

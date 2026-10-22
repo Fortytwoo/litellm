@@ -1,10 +1,10 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { STACKED_USAGE_PALETTE } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { Info, Server } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Switch } from "@/components/ui/switch";
@@ -103,7 +103,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
           <div className="flex items-baseline justify-between gap-3">
             <span className="text-xs text-muted-foreground">{uiT("ui.6c06865cf39e6412")}</span>
             <span data-testid="provider-spend-total" className="text-sm font-semibold tabular-nums">
-              ${formatNumberWithCommas(total, 2)}
+              {formatMoney(total, 2)}
             </span>
           </div>
           <div className="flex h-2 w-full overflow-hidden rounded-full bg-muted">

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { MCPServerCostInfo } from "@/components/mcp_tools/types";
@@ -36,7 +37,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
           costConfig?.default_cost_per_query !== null && (
             <div>
               <p className="text-sm font-medium">{uiT("ui.2f7631876f0ffb9e")}</p>
-              <div className="font-mono text-sm">${costConfig.default_cost_per_query.toFixed(4)}</div>
+              <div className="font-mono text-sm">{formatMoney(Number(costConfig.default_cost_per_query), 4)}</div>
             </div>
           )}
 
@@ -51,7 +52,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
                     <div key={toolName} className="flex items-center justify-between rounded-lg bg-muted p-3">
                       <p className="text-sm font-medium">{toolName}</p>
                       <p className="font-mono text-sm">
-                        ${cost.toFixed(4)} {uiT("ui.7a64c050c433c0b9")}
+                        {formatMoney(Number(cost), 4)} {uiT("ui.7a64c050c433c0b9")}
                       </p>
                     </div>
                   ),
@@ -68,7 +69,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
               costConfig?.default_cost_per_query !== null && (
                 <p className="text-sm text-muted-foreground">
                   {uiT("ui.699a39484a7e7f2b")}
-                  {costConfig.default_cost_per_query.toFixed(4)} {uiT("ui.7a64c050c433c0b9")}
+                  {formatMoney(costConfig.default_cost_per_query, 4)} {uiT("ui.7a64c050c433c0b9")}
                 </p>
               )}
             {hasToolCosts && costConfig?.tool_name_to_cost_per_query && (

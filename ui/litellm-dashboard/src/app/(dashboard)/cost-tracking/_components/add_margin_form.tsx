@@ -1,4 +1,5 @@
 "use client";
+import { CnyInput } from "@/components/shared/CnyInput";
 import { LocalizedText } from "@/contexts/LanguageContext";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -166,15 +167,15 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
         {marginType === "fixed" && (
           <Field>
             <FieldLabel htmlFor="margin-fixed-amount">
-              {labelWithHint("Fixed Margin Amount", "Enter a fixed amount in USD (e.g., 0.001 for $0.001 per request)")}
+              {labelWithHint("Fixed Margin Amount", "Enter a fixed amount in CNY (e.g., 0.001 for ¥0.001 per request)")}
             </FieldLabel>
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">$</span>
-              <Input
+              <span className="text-muted-foreground">¥</span>
+              <CnyInput
                 id="margin-fixed-amount"
                 placeholder="0.001"
-                value={fixedAmountValue}
-                onChange={(event) => onFixedAmountChange(event.target.value)}
+                usdValue={fixedAmountValue}
+                onUsdChange={(value) => onFixedAmountChange(value === null ? "" : String(value))}
                 className="rounded-lg flex-1"
               />
             </div>

@@ -230,12 +230,6 @@
     },
     "max-lines": {
       "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    },
-    "react/no-unescaped-entities": {
-      "count": 2
     }
   },
   "src/app/(dashboard)/guardrails/_components/content_filter/CompetitorIntentConfiguration.tsx": {
@@ -653,9 +647,6 @@
     "max-lines": {
       "count": 1
     },
-    "prefer-const": {
-      "count": 6
-    },
     "react-hooks/immutability": {
       "count": 1
     },
@@ -1049,9 +1040,6 @@
     },
     "no-nested-ternary": {
       "count": 1
-    },
-    "prefer-const": {
-      "count": 1
     }
   },
   "src/app/(dashboard)/search-tools/_components/SearchTools.tsx": {
@@ -1154,9 +1142,6 @@
     "local/filename-pascal-case": {
       "count": 1
     },
-    "prefer-const": {
-      "count": 1
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
     }
@@ -1230,9 +1215,6 @@
     },
     "no-nested-ternary": {
       "count": 1
-    },
-    "prefer-const": {
-      "count": 4
     }
   },
   "src/components/AIHub/UsefulLinksManagement.tsx": {
@@ -1346,9 +1328,6 @@
       "count": 1
     },
     "no-nested-ternary": {
-      "count": 2
-    },
-    "prefer-const": {
       "count": 2
     }
   },
@@ -1775,11 +1754,6 @@
       "count": 1
     }
   },
-  "src/components/molecules/cost_optimization_feedback_banner.tsx": {
-    "local/filename-pascal-case": {
-      "count": 1
-    }
-  },
   "src/components/navbar.tsx": {
     "local/filename-pascal-case": {
       "count": 1
@@ -1821,9 +1795,6 @@
     },
     "max-lines": {
       "count": 1
-    },
-    "prefer-const": {
-      "count": 2
     },
     "react-hooks/set-state-in-effect": {
       "count": 4
@@ -1905,9 +1876,6 @@
   },
   "src/components/routing_groups/index.tsx": {
     "local/filename-pascal-case": {
-      "count": 1
-    },
-    "react-hooks/preserve-manual-memoization": {
       "count": 1
     }
   },
@@ -2294,9 +2262,6 @@
   "src/components/view_user_spend.tsx": {
     "local/filename-pascal-case": {
       "count": 1
-    },
-    "prefer-const": {
-      "count": 3
     },
     "react-hooks/set-state-in-effect": {
       "count": 2

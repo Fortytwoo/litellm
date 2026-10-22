@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -233,8 +234,8 @@ function CostsCell({ model }: { model: ModelData }) {
       content={hasPerSecond ? uiT("ui.93bc86e4114b9aa0") : uiT("ui.e74169336302a9b7")}
       trigger={
         <div className="flex flex-col gap-0.5 whitespace-nowrap">
-          {showInput && <CostRow label={uiT("ui.fed1d872f6d540f4")} value={`$${inputCost}`} />}
-          {showOutput && <CostRow label={uiT("ui.c57929ed14088114")} value={`$${outputCost}`} />}
+          {showInput && <CostRow label={uiT("ui.fed1d872f6d540f4")} value={formatMoney(Number(inputCost), 2)} />}
+          {showOutput && <CostRow label={uiT("ui.c57929ed14088114")} value={formatMoney(Number(outputCost), 2)} />}
           {hasPerSecond && <CostRow label={uiT("ui.c57929ed14088114")} value={formatPerSecondCost(perSecond)} />}
         </div>
       }

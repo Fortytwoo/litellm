@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { LocalizedText } from "@/contexts/LanguageContext";
 
 import { t as translateUi } from "@/i18n";
@@ -105,14 +106,14 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
         <Card>
           <CardContent>
             {labelWithTooltip(
-              "Current Cycle Spend (USD)",
-              "Spend for the current budget cycle. Resets to $0 when the budget window rolls over.",
+              "Current Cycle Spend (CNY)",
+              "Spend for the current budget cycle. Resets to ¥0 when the budget window rolls over.",
             )}
             <div className="mt-2">
-              <h3 className="text-2xl font-semibold">${formatNumber(spend, 4)}</h3>
+              <h3 className="text-2xl font-semibold">{formatMoney(spend, 4)}</h3>
               <span className="text-muted-foreground">
                 {uiT("ui.28391d3bc64ec15c")}{" "}
-                {maxBudget === null ? uiT("ui.11dde17d6c3e") : `$${formatNumber(maxBudget, 4)}`}
+                {maxBudget === null ? uiT("ui.11dde17d6c3e") : formatMoney(maxBudget, 4)}
               </span>
             </div>
             {budgetReset && (
@@ -140,8 +141,8 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
 
         <Card>
           <CardContent>
-            {labelWithTooltip("Total Spend (USD)", "Cumulative spend across all budget cycles within this team.")}
-            <h4 className="mt-2 text-xl font-semibold">${formatNumber(totalSpend, 4)}</h4>
+            {labelWithTooltip("Total Spend (CNY)", "Cumulative spend across all budget cycles within this team.")}
+            <h4 className="mt-2 text-xl font-semibold">{formatMoney(totalSpend, 4)}</h4>
           </CardContent>
         </Card>
 

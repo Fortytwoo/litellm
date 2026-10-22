@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
@@ -544,7 +545,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               </DescriptionItem>
             )}
             <DescriptionItem label={uiT("ui.204a5eb2cd28")}>
-              ${formatNumberWithCommas(logEntry.spend || 0, 8)}
+              {formatMoney(logEntry.spend || 0, 8)}
             </DescriptionItem>
             <DescriptionItem label={uiT("ui.4fc52a3c4c55")}>
               {logEntry.request_duration_ms != null ? (logEntry.request_duration_ms / 1000).toFixed(3) : "-"} s

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -37,7 +38,7 @@ import { teamDetailHref } from "@/utils/entityLinks";
 import { BadgeLink } from "@/components/shared/BadgeLink";
 import { UserEditView } from "../user_edit_view";
 import OnboardingModal, { InvitationLink } from "@/components/onboarding_link";
-import { formatNumberWithCommas, copyToClipboard as utilCopyToClipboard } from "@/utils/dataUtils";
+import { copyToClipboard as utilCopyToClipboard } from "@/utils/dataUtils";
 import { ArrowLeft, CheckIcon, CopyIcon, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { toast } from "@/lib/toast";
 import { getBudgetDurationLabel } from "@/components/common_components/budget_duration_dropdown";
@@ -487,7 +488,7 @@ export default function UserInfoView({
           },
           {
             label: uiT("ui.c33ab4e98f55"),
-            value: userData.spend !== null && userData.spend !== undefined ? userData.spend.toFixed(2) : undefined,
+            value: userData.spend !== null && userData.spend !== undefined ? formatMoney(userData.spend, 2) : undefined,
           },
         ]}
         onCancel={cancelDelete}
@@ -525,11 +526,11 @@ export default function UserInfoView({
             <Card className="block p-6">
               <p>{uiT("ui.85f3d558db12")}</p>
               <div className="mt-2">
-                <h3 className="text-lg font-medium">${formatNumberWithCommas(userData.spend || 0, 2)}</h3>
+                <h3 className="text-lg font-medium">{formatMoney(userData.spend || 0, 2)}</h3>
                 <p>
                   {uiT("supplement.budgetFraction")}{" "}
                   {userData.max_budget !== null
-                    ? `$${formatNumberWithCommas(userData.max_budget, 2)}`
+                    ? formatMoney(userData.max_budget, 2)
                     : uiT("ui.11dde17d6c3e")}
                 </p>
               </div>
@@ -699,7 +700,7 @@ export default function UserInfoView({
                   <p className="font-medium">{uiT("ui.3e20f0a04b21")}</p>
                   <p>
                     {userData.max_budget !== null && userData.max_budget !== undefined
-                      ? `$${formatNumberWithCommas(userData.max_budget, 4)}`
+                      ? formatMoney(userData.max_budget, 4)
                       : uiT("ui.11dde17d6c3e")}
                   </p>
                 </div>

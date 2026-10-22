@@ -92,7 +92,7 @@ const input = (overrides: Partial<SituationInput> & { jobPatch?: Partial<Job> })
 };
 const failed = { status: "failed", error: "Model request failed" } as const;
 const insufficientBudget =
-  "Model request failed (HTTP 402): This model request needs up to $9.600, but $5.000 remains in the investigation budget. Use a smaller deployment output allowance or increase the limit.";
+  "Model request failed (HTTP 402): This model request needs up to ¥65.280, but ¥34.000 remains in the investigation budget. Use a smaller deployment output allowance or increase the limit.";
 const watching = { ...lens, settings: { ...settings, enabled: true } };
 
 describe("runSituation", () => {

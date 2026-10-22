@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
@@ -48,9 +49,9 @@ interface AgentTracesTableProps {
 }
 
 export const formatCost = (cost: number): string => {
-  if (cost === 0) return "$0.00";
-  if (cost < 0.01) return `$${cost.toFixed(4)}`;
-  return `$${cost.toFixed(2)}`;
+  if (cost === 0) return "¥0.00";
+  if (cost < 0.01) return formatMoney(cost, 4);
+  return formatMoney(cost, 2);
 };
 
 type RunCost = { label: string; partial: { short: string; long: string } | null };

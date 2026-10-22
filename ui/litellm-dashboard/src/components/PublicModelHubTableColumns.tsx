@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
 import { t as translateUi } from "@/i18n";
@@ -82,7 +83,7 @@ const formatCapabilityName = (key: string) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-const formatCost = (cost: number) => `$${(cost * 1_000_000).toFixed(4)}`;
+const formatCost = (cost: number) => formatMoney((cost * 1_000_000), 4);
 
 const formatTokens = (tokens: number | undefined) => {
   if (!tokens) return "N/A";

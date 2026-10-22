@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { Check, Copy } from "lucide-react";
 import { useState, useCallback } from "react";
@@ -157,14 +158,14 @@ function DiffSection({ log }: { log: AuditLogEntry }) {
               )}
               {value.spend !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">{uiT("ui.158796225fc7")}</span> $
-                  {Number(value.spend).toFixed(6)}
+                  <span className="text-muted-foreground">{uiT("ui.158796225fc7")}</span>
+                  {formatMoney(Number(Number(value.spend)), 6)}
                 </p>
               )}
               {value.max_budget !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">{uiT("ui.c67a6747bda3")}</span> $
-                  {Number(value.max_budget).toFixed(6)}
+                  <span className="text-muted-foreground">{uiT("ui.c67a6747bda3")}</span>
+                  {formatMoney(Number(Number(value.max_budget)), 6)}
                 </p>
               )}
             </div>

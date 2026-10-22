@@ -1,3 +1,4 @@
+import { formatMoney, usdToCny } from "@/utils/currency";
 import { getFormattingLocale } from "@/i18n";
 import type { KeySpendActivityRow } from "@/components/UsagePage/dailyActivityApi";
 import { DailyData, SpendMetrics } from "@/components/UsagePage/types";
@@ -9,13 +10,13 @@ export const usd = (value: number): string => {
   // loss rendered at two decimals would read as "$-0.00"
   const magnitude = Math.abs(value);
   const decimals = magnitude > 0 && magnitude < 1 ? 4 : 2;
-  return `${value < 0 ? "-" : ""}$${formatNumberWithCommas(magnitude, decimals)}`;
+  return `${value < 0 ? "-" : ""}${formatMoney(magnitude, decimals)}`;
 };
 
 export const classificationRatePer1kTurns = (classifierCost: number, turns: number): string => {
   if (turns <= 0) return `(${usd(0)} / 1K turns)`;
   const rate = (classifierCost * 1000) / turns;
-  if (rate > 0 && rate < 0.0001) return "(<$0.0001 / 1K turns)";
+  if (rate > 0 && usdToCny(rate) < 0.0001) return "(<¥0.0001 / 1K turns)";
   return `(${usd(rate)} / 1K turns)`;
 };
 

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -120,7 +121,7 @@ const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
 
   const statCards: Array<{ label: string; value: string; sub?: string; subVariant?: "error" }> = meta
     ? [
-        { label: uiT("ui.00c71c737b6c"), value: `$${meta.total_spend.toFixed(2)}` },
+        { label: uiT("ui.00c71c737b6c"), value: formatMoney(meta.total_spend, 2) },
         { label: uiT("ui.270d1d225b64"), value: formatNumber(meta.total_api_requests) },
         {
           label: uiT("ui.9583b7f6965236c7"),

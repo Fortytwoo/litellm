@@ -1,9 +1,23 @@
+"use client";
+
 import * as React from "react";
+import { CurrencyFieldContext } from "@/components/shared/form/CurrencyFieldContext";
 
 import { cn } from "@/lib/cva.config";
 
+const numericValue = (value: React.ComponentProps<"input">["value"]) => {
+  if (typeof value !== "string" || value.trim() === "") return value;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : value;
+};
+
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {
+    const currencyField = React.useContext(CurrencyFieldContext);
+    const [draft, setDraft] = React.useState<string | null>(null);
+    const currencyNumber = currencyField && type === "number";
+    const displayValue = currencyField ? draft ?? props.value : props.value;
+    const value = currencyNumber ? numericValue(displayValue) : displayValue;
     return (
       <input
         type={type}
@@ -16,6 +30,16 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         )}
         ref={ref}
         {...props}
+        value={value}
+        step={currencyNumber ? "any" : props.step}
+        onChange={(event) => {
+          if (currencyField) setDraft(event.target.value);
+          props.onChange?.(event);
+        }}
+        onBlur={(event) => {
+          setDraft(null);
+          props.onBlur?.(event);
+        }}
       />
     );
   },

@@ -292,8 +292,8 @@ describe("KeyInfoView", () => {
       />,
     );
 
-    expect(await screen.findByText("$0.2500")).toBeInTheDocument();
-    expect(screen.getByTestId("key-lifetime-spend")).toHaveTextContent("Lifetime spend: $340.5000");
+    expect(await screen.findByText("¥1.7000")).toBeInTheDocument();
+    expect(screen.getByTestId("key-lifetime-spend")).toHaveTextContent("Lifetime spend: ¥2,315.4000");
   });
 
   it("shows the backfill hint when lifetime spend trails the period spend", async () => {
@@ -311,7 +311,7 @@ describe("KeyInfoView", () => {
 
     expect(await screen.findByTestId("key-lifetime-spend-backfill-hint")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /lifetime spend is below/i })).toBeInTheDocument();
-    expect(screen.getByTestId("key-lifetime-spend")).toHaveTextContent("Lifetime spend: $4.0000");
+    expect(screen.getByTestId("key-lifetime-spend")).toHaveTextContent("Lifetime spend: ¥27.2000");
   });
 
   it("hides the backfill hint when lifetime spend covers the period spend", async () => {

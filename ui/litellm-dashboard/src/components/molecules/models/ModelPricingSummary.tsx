@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { ModelData, ModelInfo } from "@/components/model_dashboard/types";
 import { Badge } from "@/components/ui/badge";
@@ -43,13 +44,13 @@ export function ModelPricingSummary({ model }: { model: PricingFields }) {
       {showInput && (
         <p className="text-sm">
           {uiT("ui.53563c2227887046")}
-          {model.input_cost}/1M tokens
+          {formatMoney(Number(model.input_cost), 2)}/1M tokens
         </p>
       )}
       {showOutput && (
         <p className="text-sm">
           {uiT("ui.747816c49f418221")}
-          {model.output_cost}/1M tokens
+          {formatMoney(Number(model.output_cost), 2)}/1M tokens
         </p>
       )}
       {hasPerSecond && (

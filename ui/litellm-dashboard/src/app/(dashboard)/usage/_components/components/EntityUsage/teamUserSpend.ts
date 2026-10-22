@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import { usdToCny } from "@/utils/currency";
 
 import type { TeamUserSpendResponse } from "@/components/networking";
 
@@ -28,7 +29,7 @@ export const buildTeamUserSpendCsv = (response: TeamUserSpendResponse): string =
       User: userLabel(row),
       "User ID": row.user_id,
       "User Email": row.user_email ?? "",
-      "Spend (USD)": row.spend,
+      "Spend (CNY)": usdToCny(row.spend),
       Requests: row.api_requests,
       Successful: row.successful_requests,
       Failed: row.failed_requests,

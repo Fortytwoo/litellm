@@ -472,7 +472,7 @@ export function KeyEditView({
             <FieldLabel>
               {labelWithHint(
                 "Budget Windows",
-                "Set multiple independent budget windows (e.g., hourly $10 AND monthly $200). Each window tracks spend separately and resets on its own schedule.",
+                "Set multiple independent budget windows (e.g., hourly ¥68 AND monthly ¥1360). Each window tracks spend separately and resets on its own schedule.",
               )}
             </FieldLabel>
             <BudgetWindowsEditor value={budgetLimits} onChange={setBudgetLimits} />

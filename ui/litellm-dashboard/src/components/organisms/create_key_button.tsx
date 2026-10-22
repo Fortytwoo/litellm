@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -9,7 +10,6 @@ import { useTags } from "@/app/(dashboard)/hooks/tags/useTags";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import useCan from "@/app/(dashboard)/hooks/useCan";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -205,7 +205,7 @@ export const fetchTeamModels = async (
 
     if (accessToken !== null) {
       const model_available = await modelAvailableCall(accessToken, userID, userRole, true, teamID, true);
-      let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+      const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
       return available_model_names;
     }
     return [];
@@ -228,7 +228,7 @@ export const fetchUserModels = async (
 
     if (accessToken !== null) {
       const model_available = await modelAvailableCall(accessToken, userID, userRole);
-      let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+      const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
       setUserModels(available_model_names);
     }
   } catch (error) {
@@ -1013,10 +1013,10 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                           </span>
                         }
                         name="max_budget"
-                        help={`Budget cannot exceed team max budget: $${team?.max_budget !== null && team?.max_budget !== undefined ? team?.max_budget : "unlimited"}`}
+                        help={`Budget cannot exceed team max budget: ${team?.max_budget != null ? formatMoney(team.max_budget, 4) : "unlimited"}`}
                         rules={ceilingRule(
                           team?.max_budget,
-                          (limit) => `Budget cannot exceed team max budget: $${formatNumberWithCommas(limit, 4)}`,
+                          (limit) => `Budget cannot exceed team max budget: ${formatMoney(limit, 4)}`,
                         )}
                       >
                         {(control) => (

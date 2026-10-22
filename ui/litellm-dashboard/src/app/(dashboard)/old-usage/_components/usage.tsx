@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 
@@ -133,8 +134,8 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
   const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 
-  let startTime = formatDate(firstDay);
-  let endTime = formatDate(lastDay);
+  const startTime = formatDate(firstDay);
+  const endTime = formatDate(lastDay);
 
   const selectableKeys: { token: string; alias: string }[] = (keys ?? [])
     .filter((key: any) => key && typeof key["key_alias"] === "string" && key["key_alias"].length > 0)
@@ -188,7 +189,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
       return;
     }
 
-    let newTopUserData = await adminTopEndUsersCall(
+    const newTopUserData = await adminTopEndUsersCall(
       accessToken,
       uiSelectedKey,
       startTime.toISOString(),
@@ -209,7 +210,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
       return; // Don't run expensive DB queries - return out when SpendLogs has more than 1M rows
     }
 
-    let top_tags = await tagsSpendLogsCall(
+    const top_tags = await tagsSpendLogsCall(
       accessToken,
       startTime.toISOString(),
       endTime.toISOString(),
@@ -220,8 +221,8 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
 
   function formatDate(date: Date) {
     const year = date.getFullYear();
-    let month = date.getMonth() + 1; // JS month index starts from 0
-    let day = date.getDate();
+    const month = date.getMonth() + 1; // JS month index starts from 0
+    const day = date.getDate();
 
     // Pad with 0 if month or day is less than 10
     const monthStr = month < 10 ? "0" + month : month;
@@ -632,7 +633,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                         layout="vertical"
                         showXAxis={false}
                         showLegend={false}
-                        valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+                        valueFormatter={(value) => formatMoney(value, 2)}
                       />
                     </CardContent>
                   </Card>
@@ -653,7 +654,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                             index="provider"
                             category="spend"
                             colors={["cyan"]}
-                            valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+                            valueFormatter={(value) => formatMoney(value, 2)}
                           />
                         </div>
                         <div className="col-span-1">

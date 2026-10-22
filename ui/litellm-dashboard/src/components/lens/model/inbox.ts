@@ -1,3 +1,4 @@
+import { formatMoney } from "@/utils/currency";
 import type { Finding, Job, Lens } from "./types";
 
 export type Step = Job["steps"][number];
@@ -126,7 +127,7 @@ export function stepLine(step: Step): string {
   if (step.kind !== "model") return step.label;
   const tokens = step.prompt_tokens + step.completion_tokens;
   const size = tokens >= 1000 ? `${(tokens / 1000).toFixed(1)}k tok` : `${tokens} tok`;
-  return `${step.label} · ${size} · $${step.cost.toFixed(4)}`;
+  return `${step.label} · ${size} · ${formatMoney(step.cost, 4)}`;
 }
 
 export function modelsUsed(steps: readonly Step[]): string[] {

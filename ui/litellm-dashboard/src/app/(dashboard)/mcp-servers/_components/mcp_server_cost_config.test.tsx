@@ -13,14 +13,14 @@ describe("MCPServerCostConfig", () => {
     render(<MCPServerCostConfig value={{ default_cost_per_query: 0.02 }} tools={[]} />);
 
     expect(screen.getByText("Cost Configuration")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("0.0000")).toHaveValue("0.0200");
+    expect(screen.getByPlaceholderText("0.0000")).toHaveValue("0.1360");
   });
 
   it("reports the edited default cost as a number", async () => {
     const onChange = vi.fn();
     render(<MCPServerCostConfig value={{}} tools={[]} onChange={onChange} />);
 
-    fireEvent.change(screen.getByPlaceholderText("0.0000"), { target: { value: "0.5" } });
+    fireEvent.change(screen.getByPlaceholderText("0.0000"), { target: { value: "3.4" } });
 
     expect(onChange).toHaveBeenLastCalledWith({ default_cost_per_query: 0.5 });
   });
@@ -59,7 +59,7 @@ describe("MCPServerCostConfig", () => {
     );
 
     await userEvent.click(screen.getByText("Available Tools"));
-    fireEvent.change(screen.getAllByPlaceholderText("Use default")[0], { target: { value: "3" } });
+    fireEvent.change(screen.getAllByPlaceholderText("Use default")[0], { target: { value: "20.4" } });
 
     expect(onChange).toHaveBeenLastCalledWith({
       default_cost_per_query: 0.01,
@@ -75,8 +75,8 @@ describe("MCPServerCostConfig", () => {
       />,
     );
 
-    expect(screen.getByText("• Default cost: $0.0100 per query")).toBeInTheDocument();
-    expect(screen.getByText("• search: $0.2500 per query")).toBeInTheDocument();
+    expect(screen.getByText("• Default cost: ¥0.0680 per query")).toBeInTheDocument();
+    expect(screen.getByText("• search: ¥1.7000 per query")).toBeInTheDocument();
   });
 
   it("shows no summary when nothing is configured", () => {

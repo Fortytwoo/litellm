@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -7,7 +8,6 @@ import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
 import { ProviderLogo } from "@/components/molecules/models/ProviderLogo";
 import { useState } from "react";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { Segmented } from "../overview/Primitives";
 import { providerForModel } from "../overview/modelProvider";
 
@@ -127,7 +127,7 @@ export default function TopModelView({ topModels, topModelsLimit, setTopModelsLi
             index="key"
             categories={["spend"]}
             colors={[BAR_COLOR]}
-            valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+            valueFormatter={(value) => formatMoney(value, 2)}
             layout="vertical"
             yAxisWidth={200}
             tickGap={5}

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
@@ -242,7 +243,7 @@ export const getRequestLogsTableColumns = ({
 
       return (
         <div className="flex flex-col items-end">
-          {spend ? <CellTooltip content={`$${String(spend)}`} trigger={money} /> : money}
+          {spend ? <CellTooltip content={formatMoney(spend, 8)} trigger={money} /> : money}
           {sessionTotalSpend != null && (
             <span className="text-[10px] text-muted-foreground">{translateUi("ui.cfa743224f18")}</span>
           )}

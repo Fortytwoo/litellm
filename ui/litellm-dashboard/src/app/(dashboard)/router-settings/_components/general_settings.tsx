@@ -1,4 +1,6 @@
 "use client";
+import { CurrencyFieldContext } from "@/components/shared/form/CurrencyFieldContext";
+import { cnyToUsd, usdToCny } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -95,16 +97,20 @@ const SettingValueEditor: React.FC<{
   }
   if (setting.field_type === "Dollar") {
     return (
-      <InputGroup className={NUMERIC_INPUT_WIDTH}>
-        <InputGroupAddon>$</InputGroupAddon>
-        <InputGroupInput
-          type="number"
-          min={0.01}
-          step={0.25}
-          value={setting.field_value ?? ""}
-          onChange={(event) => onChange(setting.field_name, toNumericValue(event.target.value))}
-        />
-      </InputGroup>
+      <CurrencyFieldContext.Provider value={true}>
+        <InputGroup className={NUMERIC_INPUT_WIDTH}>
+          <InputGroupAddon>¥</InputGroupAddon>
+          <InputGroupInput
+            type="number"
+            min={0.01}
+            step={0.25}
+            value={setting.field_value == null ? "" : usdToCny(Number(setting.field_value))}
+            onChange={(event) =>
+              onChange(setting.field_name, event.target.value === "" ? null : cnyToUsd(Number(event.target.value)))
+            }
+          />
+        </InputGroup>
+      </CurrencyFieldContext.Provider>
     );
   }
   if (setting.field_type === "List") {
@@ -235,7 +241,7 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
       return;
     }
     getGeneralSettingsCall(accessToken).then((data) => {
-      let general_settings = data;
+      const general_settings = data;
       setGeneralSettings(general_settings);
     });
   }, [accessToken]);

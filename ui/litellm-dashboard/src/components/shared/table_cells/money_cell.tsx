@@ -1,6 +1,7 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 
-import { formatNumberWithCommas, getSpendString } from "@/utils/dataUtils";
+import { getSpendString } from "@/utils/dataUtils";
 
 interface MoneyCellProps {
   value: number | null | undefined;
@@ -21,7 +22,7 @@ export function MoneyCell({ value, decimals = 4, emptyText = "-", showZero = fal
   }
 
   const formattedValue =
-    value === 0 ? `$${formatNumberWithCommas(0, decimals, false, true)}` : getSpendString(value, decimals);
+    value === 0 ? formatMoney(0, decimals) : getSpendString(value, decimals);
 
   return (
     <span data-slot="money-cell" className={moneyClassName}>

@@ -1,5 +1,7 @@
 "use client";
 import { LocalizedText } from "@/contexts/LanguageContext";
+import { currencyControl, isMoneyField } from "@/utils/currency";
+import { CurrencyFieldContext } from "./CurrencyFieldContext";
 
 import * as React from "react";
 import {
@@ -56,7 +58,7 @@ export const FormField = <TFieldValues extends FieldValues, TName extends FieldP
             .filter((id): id is string => id !== undefined)
             .join(" ") || undefined;
         const controlProps: FormFieldControlProps<TFieldValues, TName> = {
-          ...field,
+          ...currencyControl(field),
           id: controlId,
           "aria-invalid": invalid || undefined,
           "aria-describedby": describedBy,
@@ -69,7 +71,9 @@ export const FormField = <TFieldValues extends FieldValues, TName extends FieldP
                 <LocalizedText>{label}</LocalizedText>
               </FieldLabel>
             )}
-            {children(controlProps)}
+            <CurrencyFieldContext.Provider value={isMoneyField(name)}>
+              {children(controlProps)}
+            </CurrencyFieldContext.Provider>
             {description !== undefined && (
               <FieldDescription id={descriptionId}>
                 <LocalizedText>{description}</LocalizedText>

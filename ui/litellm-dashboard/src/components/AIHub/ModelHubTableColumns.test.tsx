@@ -48,10 +48,10 @@ describe("getModelHubTableColumns", () => {
   it("formats token limits and per-million costs", () => {
     renderTable([mockModel]);
     expect(screen.getByText("128.0K / 16.4K")).toBeInTheDocument();
-    expect(screen.getByText("$2.50")).toBeInTheDocument();
-    expect(screen.getByText("$10.00")).toBeInTheDocument();
+    expect(screen.getByText("¥17.00")).toBeInTheDocument();
+    expect(screen.getByText("¥68.00")).toBeInTheDocument();
     expect(screen.getByRole("cell", { name: "128.0K / 16.4K" })).toHaveClass("text-right");
-    expect(screen.getByRole("cell", { name: /\$2\.50/ })).toHaveClass("text-right");
+    expect(screen.getByRole("cell", { name: /¥17\.00/ })).toHaveClass("text-right");
     expect(screen.getByRole("cell", { name: "gpt-4o" })).not.toHaveClass("text-right");
   });
 

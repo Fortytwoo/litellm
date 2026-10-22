@@ -46,7 +46,7 @@ describe("CustomTooltip", () => {
   it("formats spend values as dollars with two decimals", () => {
     render(<CustomTooltip active={true} payload={[metricsPayload("metrics.spend", 1234.567)]} label="2026-01-15" />);
 
-    expect(screen.getByText("$1,234.57")).toBeInTheDocument();
+    expect(screen.getByText("¥8,395.06")).toBeInTheDocument();
   });
 
   it("shows N/A for metrics missing from the row payload", () => {

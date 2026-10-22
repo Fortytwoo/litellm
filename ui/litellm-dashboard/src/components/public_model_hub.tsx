@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 import { translateText } from "@/i18n";
 
@@ -269,7 +270,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
   };
 
   const formatCost = (cost: number) => {
-    return `$${(cost * 1_000_000).toFixed(4)}`;
+    return formatMoney((cost * 1_000_000), 4);
   };
 
   const models = usePublicModelHubList(proxyConfigured);
@@ -1266,7 +1267,7 @@ async def main():
 
         # Call a tool
         response = await client.call_tool(
-            name="tool_name", 
+            name="tool_name",
             arguments={"arg": "value"}
         )
         print(f"Response: {response}")

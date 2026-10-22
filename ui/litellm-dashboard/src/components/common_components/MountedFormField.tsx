@@ -1,5 +1,7 @@
 "use client";
 import { LocalizedText } from "@/contexts/LanguageContext";
+import { currencyControl, isMoneyField } from "@/utils/currency";
+import { CurrencyFieldContext } from "@/components/shared/form/CurrencyFieldContext";
 
 import * as React from "react";
 import {
@@ -146,11 +148,12 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
 
   const renderField: ControllerProps<MountedFormValues, string>["render"] = ({ field, fieldState }) => {
     const invalid = fieldState.error !== undefined;
+    const displayField = currencyControl(field);
     const controlProps: MountedFieldControlProps = {
       id: path,
       name: field.name,
-      value: field.value,
-      onChange: field.onChange,
+      value: displayField.value,
+      onChange: displayField.onChange,
       onBlur: field.onBlur,
       "aria-required": required ? "true" : undefined,
       "aria-invalid": invalid ? "true" : undefined,
@@ -158,7 +161,11 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
     };
 
     if (bare) {
-      return <>{children(controlProps)}</>;
+      return (
+        <CurrencyFieldContext.Provider value={isMoneyField(field.name)}>
+          {children(controlProps)}
+        </CurrencyFieldContext.Provider>
+      );
     }
 
     return (
@@ -168,7 +175,9 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
             <LocalizedText>{label}</LocalizedText>
           </FieldLabel>
         )}
-        {children(controlProps)}
+        <CurrencyFieldContext.Provider value={isMoneyField(field.name)}>
+          {children(controlProps)}
+        </CurrencyFieldContext.Provider>
         {hasHelp ? (
           <FieldDescription id={helpId}>{help}</FieldDescription>
         ) : (
