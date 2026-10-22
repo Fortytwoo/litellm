@@ -1,4 +1,6 @@
 "use client";
+import { t as translateUi } from "@/i18n";
+import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
 import { PTU_EDIT_FIELDS } from "./ModelInfoEditFormData";
@@ -43,6 +45,9 @@ import { isMaskedSecret } from "../utils/maskedSecretUtils";
 import {
   MAX_COST_PER_PTU_PER_HOUR,
   MAX_PTU_COUNT,
+  PTU_RATE_FIELD,
+  PTU_START_FIELD,
+  PTU_END_FIELD,
   isFilledPtuValue,
   isNonNegativePtuRate,
   isPositiveWholePtuCount,
@@ -163,7 +168,7 @@ const buildSchema = (ptuEnabled: boolean, isFieldTouched: (field: TouchedPricing
     if (!isNonNegativePtuRate(values.cost_per_ptu_per_hour)) {
       reject(
         "cost_per_ptu_per_hour",
-        `Cost per PTU / Hour must be between 0 and ${MAX_COST_PER_PTU_PER_HOUR.toLocaleString()}`,
+        `Cost per PTU / Hour must be between 0 and ${formatMoney(MAX_COST_PER_PTU_PER_HOUR, 0)}`,
       );
     }
     if (isFilledPtuValue(values.ptu_count) !== isFilledPtuValue(values.cost_per_ptu_per_hour)) {
@@ -259,7 +264,16 @@ export const toModelEditFormValues = (localModelData: any, isWildcardModel: bool
 const displayCost = (localModelData: any, field: TouchedPricingField): string => {
   const { param, info } = COST_SOURCES[field];
   const rate = localModelData?.litellm_params?.[param] ?? localModelData?.model_info?.[info];
-  return rate != null ? (Number(rate) * 1_000_000).toFixed(4) : "Not Set";
+  return rate != null ? formatMoney(Number(rate) * 1_000_000, 4) : "Not Set";
+};
+
+const displayPtuField = (name: string, value: unknown): string => {
+  if (value == null) return translateUi("ui.8290035d4cf4");
+  if (name === PTU_RATE_FIELD) return formatMoney(Number(value), null);
+  if (name === PTU_START_FIELD || name === PTU_END_FIELD) {
+    return formatPtuUtcDisplay(String(value)) ?? translateUi("ui.8290035d4cf4");
+  }
+  return String(value);
 };
 
 interface ModelInfoEditFormProps {
@@ -497,9 +511,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
                     </FormField>
                   ) : (
                     <Display>
-                      {(ptuField.input === "datetime"
-                        ? formatPtuUtcDisplay(localModelData?.model_info?.[ptuField.name])
-                        : localModelData?.model_info?.[ptuField.name]) ?? uiT("ui.8290035d4cf4")}
+                      {displayPtuField(ptuField.name, localModelData?.model_info?.[ptuField.name])}
                     </Display>
                   )}
                 </div>

@@ -83,7 +83,7 @@ export function RunFields({ models, gate }: AnalysisModelFieldProps) {
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="grid content-start gap-2 text-sm font-medium">
               {uiT("ui.4d4578b6f9235495")}
-              <Input {...register("budget", { valueAsNumber: true })} type="number" min="0.01" step="1" />
+              <Input {...register("budget", { valueAsNumber: true })} type="number" min="0.01" step="any" />
               {errors.budget?.message && (
                 <p role="alert" className="text-sm text-destructive">
                   {errors.budget.message}

@@ -1,6 +1,16 @@
 import { transformModelData } from "./modelDataTransformer";
 import { describe, it, expect } from "vitest";
+import { formatMoney } from "@/utils/currency";
 describe("transformModelData", () => {
+  it("keeps fractional dollar prices until after currency conversion", () => {
+    const result = transformModelData({ data: [{
+      model_name: "priced-model",
+      litellm_params: { model: "provider/model" },
+      model_info: { input_cost_per_token: 0.0000001234567 },
+    }] }, () => "provider");
+    expect(Number(result.data[0].input_cost)).toBeCloseTo(0.1234567, 10);
+    expect(formatMoney(Number(result.data[0].input_cost), 6)).toBe("¥0.839506");
+  });
   const mockGetProviderFromModel = (model: string) => {
     if (model.includes("gpt")) return "openai";
     if (model.includes("claude")) return "anthropic";

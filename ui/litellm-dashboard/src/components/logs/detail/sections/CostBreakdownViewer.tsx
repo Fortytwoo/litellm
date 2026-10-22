@@ -1,9 +1,9 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 
 export interface CostBreakdown {
   input_cost?: number;
@@ -34,7 +34,7 @@ interface CostBreakdownViewerProps {
 
 const formatCost = (cost: number | undefined): string => {
   if (cost === undefined || cost === null) return "-";
-  return `$${formatNumberWithCommas(cost, 8)}`;
+  return formatMoney(cost, 8);
 };
 
 const formatPercent = (percent: number | undefined): string => {

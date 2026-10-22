@@ -1,3 +1,4 @@
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 import { CostEstimateResponse } from "../types";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -5,10 +6,10 @@ import { MultiModelResult } from "./types";
 
 const formatCostForExport = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return "-";
-  if (value === 0) return "$0.00";
-  if (value < 0.01) return `$${value.toFixed(6)}`;
-  if (value < 1) return `$${value.toFixed(4)}`;
-  return `$${formatNumberWithCommas(value, 2)}`;
+  if (value === 0) return "¥0.00";
+  if (value < 0.01) return formatMoney(value, 6);
+  if (value < 1) return formatMoney(value, 4);
+  return formatMoney(value, 2);
 };
 
 const formatRequestsForExport = (value: number | null | undefined): string => {
@@ -20,7 +21,7 @@ const generateModelSection = (result: CostEstimateResponse): string => {
   return `
     <div class="model-section">
       <h3>${result.model} ${result.provider ? `<span class="provider">(${result.provider})</span>` : ""}</h3>
-      
+
       <div class="meta">
         <p><strong>Input Tokens per Request:</strong> ${formatRequestsForExport(result.input_tokens)}</p>
         <p><strong>Output Tokens per Request:</strong> ${formatRequestsForExport(result.output_tokens)}</p>
@@ -196,7 +197,7 @@ export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
     <body>
       <h1>LLM Cost Estimate Report</h1>
       <p style="color: #666; margin-top: -20px; margin-bottom: 30px;">${modelCount} model${modelCount !== 1 ? "s" : ""} configured</p>
-      
+
       <div class="summary-box">
         <h2>Combined Totals</h2>
         <div class="summary-grid">

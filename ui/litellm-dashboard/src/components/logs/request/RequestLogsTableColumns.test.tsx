@@ -49,22 +49,22 @@ function renderRows(rows: LogEntry[], deps = noopDeps) {
 }
 
 describe("Cost column", () => {
-  it("renders '-' for zero spend with no tooltip, so hovering never shows a contradictory $0", async () => {
+  it("renders '-' for zero spend with no tooltip, so hovering never shows a contradictory ¥0", async () => {
     const user = userEvent.setup();
     renderRows([logEntry({ request_id: "req-zero", spend: 0 })]);
 
     for (const dash of screen.getAllByText("-")) {
       await user.hover(dash);
     }
-    expect(screen.queryByText("$0")).not.toBeInTheDocument();
+    expect(screen.queryByText("¥0")).not.toBeInTheDocument();
   });
 
   it("shows the full-precision raw value in the tooltip for a real spend", async () => {
     const user = userEvent.setup();
     renderRows([logEntry({ request_id: "req-spend", spend: 0.00012345678 })]);
 
-    await user.hover(screen.getByText("$0.000123"));
-    expect(await screen.findByText("$0.00012345678")).toBeInTheDocument();
+    await user.hover(screen.getByText("¥0.000840"));
+    expect(await screen.findByText("¥0.00083951")).toBeInTheDocument();
   });
 
   it("shows the summed session total, not the representative call's spend, for a multi-round session", () => {
@@ -78,8 +78,8 @@ describe("Cost column", () => {
       }),
     ]);
 
-    expect(screen.getByText("$0.060000")).toBeInTheDocument();
-    expect(screen.queryByText("$0.010000")).not.toBeInTheDocument();
+    expect(screen.getByText("¥0.408000")).toBeInTheDocument();
+    expect(screen.queryByText("¥0.068000")).not.toBeInTheDocument();
     expect(screen.getByText("session total")).toBeInTheDocument();
   });
 
@@ -92,7 +92,7 @@ describe("Cost column", () => {
     };
     renderRows([logEntry(rowWithoutAggregate)]);
 
-    expect(screen.getByText("$0.010000")).toBeInTheDocument();
+    expect(screen.getByText("¥0.068000")).toBeInTheDocument();
     expect(screen.queryByText("session total")).not.toBeInTheDocument();
   });
 });

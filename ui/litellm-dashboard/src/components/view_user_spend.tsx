@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -18,7 +19,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
   const { t: uiT } = useDashboardLanguage();
 
   const { accessToken, userRole, userId: userID } = useAuthorized();
-  let [spend, setSpend] = useState(userSpend !== null ? userSpend : 0.0);
+  const [spend, setSpend] = useState(userSpend !== null ? userSpend : 0.0);
   const [maxBudget, setMaxBudget] = useState(
     selectedTeam ? Number(formatNumberWithCommas(selectedTeam.max_budget, 4)) : null,
   );
@@ -80,7 +81,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
 
         if (accessToken !== null) {
           const model_available = await modelAvailableCall(accessToken, userID, userRole);
-          let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+          const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
           setUserModels(available_model_names);
         }
       } catch (error) {
@@ -113,16 +114,16 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
     modelsToDisplay = userModels;
   }
 
-  const displayMaxBudget = maxBudget !== null ? `$${formatNumberWithCommas(Number(maxBudget), 4)} limit` : "No limit";
+  const displayMaxBudget = maxBudget !== null ? `${formatMoney(Number(maxBudget), 4)} limit` : "No limit";
 
-  const roundedSpend = spend !== undefined ? formatNumberWithCommas(spend, 4) : null;
+
 
   return (
     <div className="flex items-center">
       <div className="flex justify-between gap-x-6">
         <div>
           <p className="text-sm text-muted-foreground">{uiT("ui.00c71c737b6c")}</p>
-          <p className="text-2xl font-semibold text-foreground">${roundedSpend}</p>
+          <p className="text-2xl font-semibold text-foreground">{formatMoney(spend, 4)}</p>
         </div>
         <div>
           <p className="text-sm text-muted-foreground">{uiT("ui.3e20f0a04b21")}</p>

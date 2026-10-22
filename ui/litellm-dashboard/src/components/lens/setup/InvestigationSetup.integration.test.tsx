@@ -172,7 +172,7 @@ describe("Investigation setup", () => {
     expect(screen.getByText("1 matching run")).toBeInTheDocument();
     expect(screen.getByText("Research report")).toBeInTheDocument();
     expect(screen.getByTitle("2026-09-30 18:00:00.000")).toBeVisible();
-    expect(screen.getByRole("spinbutton", { name: "Monthly limit (USD)" })).not.toBeVisible();
+    expect(screen.getByRole("spinbutton", { name: "Monthly limit (CNY)" })).not.toBeVisible();
     await user.click(screen.getByRole("button", { name: "Run and monitor" }));
     const expected = {
       name: "Research follow-up",
@@ -361,7 +361,7 @@ it("keeps a duplicated investigation's schedule off and saves the interval once 
   await waitFor(() => expect(screen.getByRole("button", { name: "Run investigation" })).toBeEnabled());
   expect(screen.getByRole("checkbox", { name: "Keep watching for new traces" })).not.toBeChecked();
   await user.click(screen.getByText("Advanced options"));
-  fireEvent.change(screen.getByRole("spinbutton", { name: "Monthly limit (USD)" }), { target: { value: "8" } });
+  fireEvent.change(screen.getByRole("spinbutton", { name: "Monthly limit (CNY)" }), { target: { value: "54.4" } });
   await user.click(screen.getByRole("checkbox", { name: "Keep watching for new traces" }));
   fireEvent.change(screen.getByRole("spinbutton", { name: "Check every" }), { target: { value: "120" } });
   await user.click(screen.getByRole("button", { name: "Run and monitor" }));

@@ -1,4 +1,6 @@
 "use client";
+import { CurrencyFieldContext } from "@/components/shared/form/CurrencyFieldContext";
+import { usdToCny, cnyToUsd } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -86,28 +88,24 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
                   ))}
                 </SelectContent>
               </Select>
-              <InputGroup className="w-40">
-                <InputGroupAddon>
-                  <InputGroupText>$</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput
-                  type="number"
-                  step={0.01}
-                  min={0}
-                  value={window.max_budget ?? ""}
-                  onChange={(event) => {
-                    const typed = event.target.valueAsNumber;
-                    updateWindow(idx, "max_budget", Number.isNaN(typed) ? null : typed);
-                  }}
-                  onBlur={(event) => {
-                    const typed = event.target.valueAsNumber;
-                    if (!Number.isNaN(typed)) {
-                      updateWindow(idx, "max_budget", Number(typed.toFixed(2)));
-                    }
-                  }}
-                  placeholder={uiT("ui.2f181638c14378b3")}
-                />
-              </InputGroup>
+              <CurrencyFieldContext.Provider value={true}>
+                <InputGroup className="w-40">
+                  <InputGroupAddon>
+                    <InputGroupText>¥</InputGroupText>
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    type="number"
+                    step="any"
+                    min={0}
+                    value={window.max_budget === null ? "" : usdToCny(window.max_budget)}
+                    onChange={(event) => {
+                      const typed = event.target.valueAsNumber;
+                      updateWindow(idx, "max_budget", Number.isNaN(typed) ? null : cnyToUsd(typed));
+                    }}
+                    placeholder={uiT("ui.2f181638c14378b3")}
+                  />
+                </InputGroup>
+              </CurrencyFieldContext.Provider>
               <Button
                 variant="ghost"
                 size="sm"

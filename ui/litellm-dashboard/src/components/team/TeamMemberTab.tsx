@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { translateText } from "@/i18n";
@@ -33,7 +34,7 @@ const BUDGET_SOURCE_LABELS: Record<Exclude<TeamMemberBudgetSource, "none">, stri
 };
 
 const formatBudget = (value: number | null): string =>
-  value === null ? "Unlimited" : `$${formatNumberWithCommas(value, 2)}`;
+  value === null ? "Unlimited" : formatMoney(value, 2);
 
 export const seedMemberBudgetFields = (
   record: Member,
@@ -341,11 +342,11 @@ export default function TeamMemberTab({
           <p>
             {uiT("ui.9fc9ceeeff2ab00f")}{" "}
             <strong>{memberToResetSpend?.user_email || memberToResetSpend?.user_id}</strong>{" "}
-            {uiT("ui.760d12382f4b41ab")} <strong>$0</strong>?
+            {uiT("ui.760d12382f4b41ab")} <strong>¥0</strong>?
           </p>
           <p className="text-sm text-muted-foreground">
             {uiT("ui.1e3ffcea4c611430")}{" "}
-            <strong>${formatNumberWithCommas(getUserCurrentCycleSpend(memberToResetSpend?.user_id ?? null), 4)}</strong>
+            <strong>{formatMoney(getUserCurrentCycleSpend(memberToResetSpend?.user_id ?? null), 4)}</strong>
             {uiT("ui.71676fb9330ef42a")}
           </p>
           <DialogFooter>

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
@@ -21,7 +22,7 @@ interface EndUserBudgetSelectProps {
 
 const budgetSublabel = (budget: budgetItem): string | undefined => {
   const parts = [
-    budget.max_budget != null ? `$${budget.max_budget}` : null,
+    budget.max_budget != null ? formatMoney(budget.max_budget, null) : null,
     budget.budget_duration ? `resets ${budget.budget_duration}` : null,
   ].filter((part): part is string => part !== null);
   return parts.length > 0 ? parts.join(", ") : undefined;

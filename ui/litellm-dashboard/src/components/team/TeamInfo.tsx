@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -22,7 +23,6 @@ import {
   teamUpdateCall,
 } from "@/components/networking";
 import { useGuardrails, GuardrailListItem } from "@/app/(dashboard)/hooks/guardrails/useGuardrails";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { numberOrNull } from "@/lib/forms/numberOrNull";
 import type { ObjectPermission } from "@/components/object_permission_types";
 import { isProxyAdminRole } from "@/utils/roles";
@@ -1338,10 +1338,10 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           <Card className="block p-6">
             <p>{uiT("ui.d29bae05649668aa")}</p>
             <div className="mt-2">
-              <h3 className="text-lg font-medium">${formatNumberWithCommas(info.spend, 2)}</h3>
+              <h3 className="text-lg font-medium">{formatMoney(info.spend, 2)}</h3>
               <p>
                 {uiT("ui.28391d3bc64ec15c")}{" "}
-                {info.max_budget === null ? uiT("ui.11dde17d6c3e") : `$${formatNumberWithCommas(info.max_budget, 2)}`}
+                {info.max_budget === null ? uiT("ui.11dde17d6c3e") : formatMoney(info.max_budget, 2)}
               </p>
               {info.budget_duration && (
                 <p className="text-muted-foreground">
@@ -1352,7 +1352,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               {info.team_member_budget_table && (
                 <p className="text-muted-foreground">
                   {uiT("ui.bd19e2be3cbc4010")}
-                  {formatNumberWithCommas(info.team_member_budget_table.max_budget, 2)}
+                  {formatMoney(info.team_member_budget_table.max_budget, 2)}
                 </p>
               )}
             </div>
@@ -1661,7 +1661,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                           control={form.control}
                           name="team_member_budget"
                           label={labelWithHint(
-                            "Default Budget (USD)",
+                            "Default Budget (CNY)",
                             "Default spend budget for each member in this team.",
                           )}
                         >
@@ -2341,13 +2341,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 <div>
                   {uiT("ui.c67a6747bda3")}{" "}
                   {info.max_budget !== null
-                    ? `$${formatNumberWithCommas(info.max_budget, 4)}`
+                    ? formatMoney(info.max_budget, 4)
                     : uiT("ui.366c2707df5c3c52")}
                 </div>
                 <div>
                   {uiT("ui.1063de5e66a9fd3c")}{" "}
                   {info.soft_budget !== null && info.soft_budget !== undefined
-                    ? `$${formatNumberWithCommas(info.soft_budget, 4)}`
+                    ? formatMoney(info.soft_budget, 4)
                     : uiT("ui.366c2707df5c3c52")}
                 </div>
                 <div>
@@ -2359,8 +2359,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     return (
                       <div key={model}>
                         {uiT("ui.b16e2649bda03ad6")}
-                        {model}): ${budgetLimit ?? "?"} {uiT("ui.b427c3dec9045990")} {timePeriod}
-                        {spent !== undefined && `, spent $${spent}`}
+                        {model}): {formatMoney(budgetLimit, null)} {uiT("ui.b427c3dec9045990")} {timePeriod}
+                        {spent !== undefined && `, spent ${formatMoney(spent, 2)}`}
                       </div>
                     );
                   },
@@ -2381,7 +2381,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </SimpleTooltip>
                 </p>
                 <div>
-                  {uiT("ui.c67a6747bda3")} {info.team_member_budget_table?.max_budget ?? uiT("ui.366c2707df5c3c52")}
+                  {uiT("ui.c67a6747bda3")} {info.team_member_budget_table?.max_budget == null ? uiT("ui.366c2707df5c3c52") : formatMoney(info.team_member_budget_table.max_budget, 2)}
                 </div>
                 <div>
                   {uiT("ui.24f5d3fd7c95caa3")}{" "}

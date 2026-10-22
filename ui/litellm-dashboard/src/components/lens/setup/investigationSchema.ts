@@ -1,4 +1,5 @@
 import { t as translateUi } from "@/i18n";
+import { cnyToUsd, usdToCny } from "@/utils/currency";
 import { z } from "zod";
 import type { Settings } from "../model/types";
 import { normalizeFilters } from "./filters";
@@ -232,7 +233,7 @@ export function investigationDefaults(
     watching: [...initialWatches(initial?.checks)],
     questions: (initial?.checks ?? []).filter((check) => !isWatch(check)),
     selectedModel: initial?.model ?? null,
-    budget: initial?.monthly_budget ?? 100,
+    budget: usdToCny(initial?.monthly_budget ?? 100),
     repeat: mode === "new" || (mode === "edit" && !!initial?.enabled),
     interval: initial?.interval_minutes ?? 15,
     manualSelection: !!initial?.execution_ids?.length,
@@ -251,7 +252,7 @@ export function investigationSettings(
     name: draft.name.trim() || suggestedName,
     context: draft.context,
     model,
-    monthly_budget: draft.budget,
+    monthly_budget: cnyToUsd(draft.budget),
     enabled: draft.repeat,
     interval_minutes: draft.interval,
     concurrency: initial?.concurrency ?? 8,

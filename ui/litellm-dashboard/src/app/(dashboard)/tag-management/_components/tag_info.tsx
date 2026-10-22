@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -334,7 +335,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                     tagDetails.litellm_budget_table.max_budget !== null && (
                       <div>
                         <p className="font-medium">{uiT("ui.3e20f0a04b21")}</p>
-                        <p>${tagDetails.litellm_budget_table.max_budget}</p>
+                        <p>{formatMoney(Number(tagDetails.litellm_budget_table.max_budget), 4)}</p>
                       </div>
                     )}
                   {tagDetails.litellm_budget_table.budget_duration && (

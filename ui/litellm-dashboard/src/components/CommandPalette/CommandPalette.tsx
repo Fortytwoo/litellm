@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
@@ -113,7 +114,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
 
     const keyEntries: PaletteEntry[] = (isLoadingKeys ? [] : keyResults.data?.keys ?? []).map((key) => {
       const teamAlias = key.team_alias || (key.team_id ? teamAliases.get(key.team_id) : undefined);
-      const spend = typeof key.spend === "number" && Number.isFinite(key.spend) ? `$${key.spend.toFixed(2)}` : null;
+      const spend = typeof key.spend === "number" && Number.isFinite(key.spend) ? formatMoney(key.spend, 2) : null;
       const details = [teamAlias, spend].filter((detail): detail is string => Boolean(detail));
       const subtitle: ReactNode = (
         <>

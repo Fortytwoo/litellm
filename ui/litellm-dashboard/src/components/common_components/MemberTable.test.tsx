@@ -219,13 +219,13 @@ describe("MemberTable numeric columns", () => {
     renderTable({
       members: [MEMBERS[0]],
       extraColumns: [
-        { title: "Spend (USD)", key: "spend", numeric: true, render: () => <span>$1.50</span> },
+        { title: "Spend (CNY)", key: "spend", numeric: true, render: () => <span>¥10.20</span> },
         { title: "Joined", key: "joined", render: () => <span>Aug 1</span> },
       ],
     });
 
-    expect(screen.getByRole("columnheader", { name: "Spend (USD)" })).toHaveClass("text-right", "tabular-nums");
-    expect(screen.getByRole("cell", { name: "$1.50" })).toHaveClass("text-right", "tabular-nums");
+    expect(screen.getByRole("columnheader", { name: "Spend (CNY)" })).toHaveClass("text-right", "tabular-nums");
+    expect(screen.getByRole("cell", { name: "¥10.20" })).toHaveClass("text-right", "tabular-nums");
     expect(screen.getByRole("columnheader", { name: "Joined" })).not.toHaveClass("text-right");
     expect(screen.getByRole("cell", { name: "Aug 1" })).not.toHaveClass("text-right");
   });

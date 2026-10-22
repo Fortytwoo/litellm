@@ -130,7 +130,7 @@ describe("ProviderMarginTable", () => {
         onRemoveProvider={onRemoveProvider}
       />,
     );
-    expect(screen.getByText("$0.001000")).toBeInTheDocument();
+    expect(screen.getByText("¥0.006800")).toBeInTheDocument();
   });
 
   it("should display a combined percentage and fixed margin", () => {
@@ -141,7 +141,7 @@ describe("ProviderMarginTable", () => {
         onRemoveProvider={onRemoveProvider}
       />,
     );
-    expect(screen.getByText(/10\.0%.*\$0\.001000/)).toBeInTheDocument();
+    expect(screen.getByText(/10\.0%.*¥0\.006800/)).toBeInTheDocument();
   });
 
   it("should show edit inputs when the pencil icon is clicked", async () => {
@@ -210,7 +210,7 @@ describe("ProviderMarginTable", () => {
     await user.click(rowAction("edit"));
 
     await user.clear(screen.getByPlaceholderText("10"));
-    fireEvent.change(screen.getByPlaceholderText("0.001"), { target: { value: "0.002" } });
+    fireEvent.change(screen.getByPlaceholderText("0.001"), { target: { value: "0.0136" } });
 
     await user.click(rowAction("save"));
 
@@ -321,7 +321,7 @@ describe("ProviderMarginTable", () => {
       fireEvent.change(percentInput, { target: { value: "5" } });
 
       const fixedInput = screen.getByPlaceholderText("0.001");
-      fireEvent.change(fixedInput, { target: { value: "0.002" } });
+      fireEvent.change(fixedInput, { target: { value: "0.0136" } });
 
       await user.click(rowAction("save"));
 

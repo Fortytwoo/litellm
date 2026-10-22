@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -321,7 +322,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                     <div>
                       <p className="text-sm">
                         {uiT("ui.1f47188042fd97be")}
-                        {endpointData.cost_per_request}
+                        {formatMoney(endpointData.cost_per_request, null)}
                       </p>
                     </div>
                   )}
@@ -469,7 +470,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                           step={0.01}
                           precision={2}
                           placeholder="0.00"
-                          prefix="$"
+                          prefix="¥"
                           value={value}
                           onValueChange={onChange}
                         />
@@ -539,7 +540,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                     {endpointData.cost_per_request !== undefined && (
                       <div>
                         <p className="text-sm font-medium">{uiT("ui.d51cdd5f65da3fa7")}</p>
-                        <div>${endpointData.cost_per_request}</div>
+                        <div>{formatMoney(Number(endpointData.cost_per_request), 4)}</div>
                       </div>
                     )}
                     {endpointData.timeout !== undefined && endpointData.timeout !== null && (

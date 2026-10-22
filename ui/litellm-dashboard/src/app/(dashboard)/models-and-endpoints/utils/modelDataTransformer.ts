@@ -28,8 +28,12 @@ export interface RawModel {
   [key: string]: unknown;
 }
 
-const costPerMillionTokens = (costPerToken: number | null | undefined): string | null =>
-  costPerToken == null ? null : (Number(costPerToken) * 1000000).toFixed(2);
+const costPerMillionTokens = (costPerToken: number | null | undefined): string | null => {
+  if (costPerToken == null) return null;
+  const amount = Number(costPerToken) * 1_000_000;
+  const fixed = amount.toFixed(2);
+  return Number(fixed) === amount ? fixed : String(amount);
+};
 
 const resolveProvider = (
   litellmModelName: string | null | undefined,

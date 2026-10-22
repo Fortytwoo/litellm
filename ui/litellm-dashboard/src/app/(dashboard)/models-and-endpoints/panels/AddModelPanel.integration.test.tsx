@@ -341,8 +341,8 @@ describe("AddModelPanel submit payload contract", () => {
     await fillRequired();
     await openAdvanced();
     await user.click(screen.getByRole("switch", { name: "Custom Pricing" }));
-    await user.type(await screen.findByLabelText("Input Cost (per 1M tokens)"), "3");
-    await user.type(screen.getByLabelText("Output Cost (per 1M tokens)"), "9");
+    await user.type(await screen.findByLabelText("Input Cost (per 1M tokens)"), "20.4");
+    await user.type(screen.getByLabelText("Output Cost (per 1M tokens)"), "61.2");
     await submit();
 
     expect(lastCreatedModel()).toStrictEqual({
@@ -460,7 +460,7 @@ describe("AddModelPanel validation gates", () => {
     await fillRequired();
     await openAdvanced();
     await user.type(screen.getByLabelText("PTU Count"), "15");
-    await user.type(screen.getByLabelText("Calculated Cost per PTU / Hour (USD)"), "2");
+    await user.type(screen.getByLabelText("Calculated Cost per PTU / Hour (CNY)"), "13.6");
     await submitExpectingRejection("PTU Effective From is required when PTU Count is set");
 
     expect(modelCreateCall).not.toHaveBeenCalled();
@@ -525,11 +525,11 @@ describe("AddModelPanel behaviours the removed Advanced Settings form instance n
     await fillRequired();
     await openAdvanced();
     await user.click(screen.getByRole("switch", { name: "Custom Pricing" }));
-    await user.type(await screen.findByLabelText("Input Cost (per 1M tokens)"), "3");
+    await user.type(await screen.findByLabelText("Input Cost (per 1M tokens)"), "20.4");
     await user.click(screen.getByRole("switch", { name: "Custom Pricing" }));
     await waitFor(() => expect(screen.queryByLabelText("Input Cost (per 1M tokens)")).not.toBeInTheDocument());
     await user.click(screen.getByRole("switch", { name: "Custom Pricing" }));
-    expect(await screen.findByLabelText("Input Cost (per 1M tokens)")).toHaveValue("3");
+    expect(await screen.findByLabelText("Input Cost (per 1M tokens)")).toHaveValue("20.4");
 
     await submit();
 

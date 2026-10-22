@@ -437,13 +437,13 @@ describe("ModelInfoView", () => {
     await user.click(await screen.findByRole("button", { name: /edit settings/i }));
     const costInput = screen.getByPlaceholderText("Enter input cost") as HTMLInputElement;
     await user.clear(costInput);
-    await user.type(costInput, "5");
+    await user.type(costInput, "34");
 
     await user.click(screen.getByRole("tab", { name: /raw json/i }));
     await user.click(screen.getByRole("tab", { name: /overview/i }));
 
     expect(screen.getByPlaceholderText("Enter input cost")).toBe(costInput);
-    expect(Number(costInput.value)).toBe(5);
+    expect(Number(costInput.value)).toBe(34);
     await user.click(screen.getByRole("button", { name: /save changes/i }));
 
     await waitFor(() => {
@@ -461,7 +461,7 @@ describe("ModelInfoView", () => {
     });
   });
 
-  it("shows per-second pricing with resolution tiers instead of $0.00 per 1M tokens for a video model", async () => {
+  it("shows per-second pricing with resolution tiers instead of ¥0.00 per 1M tokens for a video model", async () => {
     mockUseModelsInfo.mockReturnValue({
       data: {
         data: [
@@ -486,10 +486,10 @@ describe("ModelInfoView", () => {
 
     render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} />, { wrapper });
 
-    expect(await screen.findByText("Output: $0.10/s")).toBeInTheDocument();
-    expect(screen.getByText("Output (1080p): $0.12/s")).toBeInTheDocument();
-    expect(screen.getByText("Output (4k): $0.30/s")).toBeInTheDocument();
-    expect(screen.queryByText(/\$0\.00\/1M tokens/)).not.toBeInTheDocument();
+    expect(await screen.findByText("Output: ¥0.68/s")).toBeInTheDocument();
+    expect(screen.getByText("Output (1080p): ¥0.816/s")).toBeInTheDocument();
+    expect(screen.getByText("Output (4k): ¥2.04/s")).toBeInTheDocument();
+    expect(screen.queryByText(/¥0\.00\/1M tokens/)).not.toBeInTheDocument();
   });
 
   it("should display edit settings button when user can edit model", async () => {
@@ -747,7 +747,7 @@ describe("ModelInfoView", () => {
       });
 
       expect(screen.queryByText("PTU Count")).not.toBeInTheDocument();
-      expect(screen.queryByText("Cost per PTU / Hour (USD)")).not.toBeInTheDocument();
+      expect(screen.queryByText("Cost per PTU / Hour (CNY)")).not.toBeInTheDocument();
       expect(screen.queryByText("PTU Effective From (UTC)")).not.toBeInTheDocument();
       expect(screen.queryByText("PTU Effective To (UTC)")).not.toBeInTheDocument();
     });
@@ -759,7 +759,7 @@ describe("ModelInfoView", () => {
       await waitFor(() => {
         expect(screen.getByText("PTU Count")).toBeInTheDocument();
       });
-      expect(screen.getByText("Cost per PTU / Hour (USD)")).toBeInTheDocument();
+      expect(screen.getByText("Cost per PTU / Hour (CNY)")).toBeInTheDocument();
       expect(screen.getByText("PTU Effective From (UTC)")).toBeInTheDocument();
       expect(screen.getByText("PTU Effective To (UTC)")).toBeInTheDocument();
     });
@@ -815,7 +815,7 @@ describe("ModelInfoView", () => {
         expect(screen.getByPlaceholderText("Enter input cost")).toBeInTheDocument();
       });
       await user.clear(screen.getByPlaceholderText("Enter input cost"));
-      fireEvent.change(screen.getByPlaceholderText("Enter input cost"), { target: { value: "2.5" } });
+      fireEvent.change(screen.getByPlaceholderText("Enter input cost"), { target: { value: "17" } });
       await user.click(screen.getByRole("button", { name: /save changes/i }));
 
       await waitFor(() => {
@@ -902,9 +902,9 @@ describe("ModelInfoView", () => {
       await enterPtuEdit(user);
 
       await user.clear(screen.getByPlaceholderText("e.g. 2.00"));
-      await user.type(screen.getByPlaceholderText("e.g. 2.00"), "2000000");
+      await user.type(screen.getByPlaceholderText("e.g. 2.00"), "13600000");
 
-      await expectBlocked(user, /Cost per PTU \/ Hour must be between 0 and 1,000,000/i);
+      await expectBlocked(user, /Cost per PTU \/ Hour must be between 0 and ¥6,800,000/i);
     });
 
     it("blocks a half-set PTU count and rate pair", async () => {
@@ -981,7 +981,7 @@ describe("ModelInfoView", () => {
       await user.clear(screen.getByPlaceholderText("e.g. 15"));
       await user.type(screen.getByPlaceholderText("e.g. 15"), "20");
       await user.clear(screen.getByPlaceholderText("e.g. 2.00"));
-      await user.type(screen.getByPlaceholderText("e.g. 2.00"), "3.5");
+      await user.type(screen.getByPlaceholderText("e.g. 2.00"), "23.8");
 
       const from = screen.getByLabelText("PTU Effective From (UTC)");
       const to = screen.getByLabelText("PTU Effective To (UTC)");
@@ -1691,10 +1691,10 @@ describe("ModelInfoView", () => {
       await enterEditMode(user);
 
       await user.clear(screen.getByPlaceholderText("Enter output cost"));
-      await user.type(screen.getByPlaceholderText("Enter output cost"), "12");
+      await user.type(screen.getByPlaceholderText("Enter output cost"), "81.6");
       const [cacheRead, cacheWrite] = screen.getAllByPlaceholderText("Defaults to Input Cost if blank");
-      await user.type(cacheRead, "5");
-      await user.type(cacheWrite, "9");
+      await user.type(cacheRead, "34");
+      await user.type(cacheWrite, "61.2");
 
       const payload = await save(user);
 
@@ -2008,10 +2008,10 @@ describe("ModelInfoView", () => {
 
       const inputCost = screen.getByPlaceholderText("Enter input cost") as HTMLInputElement;
       const seeded = inputCost.value;
-      expect(seeded).toBe("30");
+      expect(seeded).toBe("204");
 
       await user.clear(inputCost);
-      await user.type(inputCost, "7");
+      await user.type(inputCost, "47.6");
       await user.clear(inputCost);
       await user.type(inputCost, seeded);
 
@@ -2100,7 +2100,7 @@ describe("ModelInfoView", () => {
     it("carries an edited input cost and the model identifier onto the wire", async () => {
       const user = userEvent.setup();
       await enterEditMode(user);
-      setInputCost("5");
+      setInputCost("34");
       const payload = await save(user);
 
       expect(mockModelPatchUpdateCall.mock.calls[0][2]).toBe("123");

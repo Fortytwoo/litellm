@@ -6,6 +6,12 @@ const messages = translations.en.ui as Readonly<Record<string, string>>;
 const keyFor = (message: string) => "ui." + Object.keys(messages).find((id) => messages[id] === message);
 
 describe("display-only translation", () => {
+  it("labels legacy dollar amount fields in the dashboard currency", () => {
+    expect(translateText("Spend (USD)", "en")).toBe("Spend (CNY)");
+    expect(translateText("Max spend ($)", "en")).toBe("Max spend (¥)");
+    expect(translateText("Cost Per Query ($)", "zh")).toContain("¥");
+    expect(translateText("user text with USD", "zh")).toBe("user text with USD");
+  });
   it("preserves unknown values, user text, identifiers and whitespace", () => {
     expect(translateText("Success / Request Logs / user-authored text", "zh")).toBe("Success / Request Logs / user-authored text");
     expect(translateText("deepseek-flash", "zh")).toBe("deepseek-flash");

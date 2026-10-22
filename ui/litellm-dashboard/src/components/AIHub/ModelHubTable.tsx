@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -197,8 +198,8 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
       try {
         setAgentLoading(true);
         const response = await getAgentsList(accessToken);
-        let agents = response.agents;
-        let agent_card_list = agents.map((agent: any) => ({
+        const agents = response.agents;
+        const agent_card_list = agents.map((agent: any) => ({
           agent_id: agent.agent_id,
           ...agent.agent_card_params,
           is_public: agent.litellm_params.is_public,
@@ -336,7 +337,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
   };
 
   const formatCost = (cost: number) => {
-    return `$${(cost * 1_000_000).toFixed(2)}`;
+    return formatMoney((cost * 1_000_000), 2);
   };
 
   const handleMakePublicSuccess = () => {
@@ -360,8 +361,8 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
       const fetchAgentData = async () => {
         try {
           const response = await getAgentsList(accessToken);
-          let agents = response.agents;
-          let agent_card_list = agents.map((agent: any) => ({
+          const agents = response.agents;
+          const agent_card_list = agents.map((agent: any) => ({
             agent_id: agent.agent_id,
             ...agent.agent_card_params,
             is_public: agent.is_public,

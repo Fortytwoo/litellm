@@ -3,7 +3,7 @@ import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext"
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
+import { formatMoney } from "@/utils/currency";
 import type { MemberBudgetResetState } from "./useMemberBudgetReset";
 
 interface ResetMemberBudgetsDialogProps {
@@ -43,7 +43,7 @@ export default function ResetMemberBudgetsDialog({
         <p className="text-sm text-muted-foreground">
           {uiT(memberCount === 1 ? "supplement.resetMemberBudgetOne" : "supplement.resetMemberBudgetMany", {
             count: memberCount,
-            budget: formatNumberWithCommas(newBudget, 2),
+            budget: formatMoney(newBudget, 2),
           })}
         </p>
         <DialogFooter>
@@ -64,7 +64,7 @@ export default function ResetMemberBudgetsDialog({
               </Button>
               <Button onClick={onReset} disabled={busy}>
                 {uiT(memberCount === 1 ? "supplement.resetMemberOne" : "supplement.resetMemberMany", {
-                  budget: formatNumberWithCommas(newBudget, 2),
+                  budget: formatMoney(newBudget, 2),
                 })}
               </Button>
             </>

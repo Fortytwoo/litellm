@@ -83,7 +83,7 @@ describe("TopKeyView", () => {
     render(<TopKeyView {...baseProps} />);
     expect(screen.getByText("Key ID")).toBeInTheDocument();
     expect(screen.getByText("Key Alias")).toBeInTheDocument();
-    expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+    expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
   });
 
   it("should display Tags column when showTags is true", () => {
@@ -118,7 +118,7 @@ describe("TopKeyView", () => {
     expect(screen.getByText("Test Key")).toBeInTheDocument();
     expect(screen.getByText(/tag-1/)).toBeInTheDocument();
     expect(screen.getByText(/tag-2/)).toBeInTheDocument();
-    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.getByText("¥680.00")).toBeInTheDocument();
   });
 
   it("should render User column only when a row has user attribution", () => {
@@ -297,10 +297,10 @@ describe("TopKeyView", () => {
         ]}
       />,
     );
-    expect(screen.getByText("$123.46")).toBeInTheDocument();
+    expect(screen.getByText("¥839.50")).toBeInTheDocument();
   });
 
-  it("should display sub-cent spend as < $0.01", () => {
+  it("should display sub-cent spend in yuan below one cent", () => {
     render(
       <TopKeyView
         {...baseProps}
@@ -309,12 +309,12 @@ describe("TopKeyView", () => {
             api_key: "key-123",
             key_alias: "Test Key",
             user: null,
-            spend: 0.004,
+            spend: 0.0004,
           },
         ]}
       />,
     );
-    expect(screen.getByText("< $0.01")).toBeInTheDocument();
+    expect(screen.getByText("< ¥0.01")).toBeInTheDocument();
   });
 
   it("should display zero spend as a dash", () => {
@@ -332,7 +332,7 @@ describe("TopKeyView", () => {
       />,
     );
     expect(screen.getAllByText("-")).toHaveLength(1);
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
   });
 
   it("should display dash for empty tags", () => {

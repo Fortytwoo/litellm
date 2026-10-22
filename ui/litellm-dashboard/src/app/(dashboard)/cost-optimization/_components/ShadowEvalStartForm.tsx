@@ -1,4 +1,5 @@
 "use client";
+import { cnyToUsd, usdToCny } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -263,7 +264,7 @@ const buildStartBody = (inputs: StartBodyInputs) => ({
   ...(inputs.direction === "reverse" ? { baseline_model: inputs.baselineModel ?? undefined } : {}),
   shadow_percentage: inputs.shadowPercentage,
   duration_days: inputs.durationDays,
-  max_budget: inputs.maxBudget,
+  max_budget: cnyToUsd(inputs.maxBudget),
   judge_model: inputs.judgeModel,
 });
 
@@ -281,7 +282,7 @@ export const StartForm: React.FC = () => {
   const [percentage, setPercentage] = useState("10");
   const [durationDays, setDurationDays] = useState("7");
   const [judgeModel, setJudgeModel] = useState<string | null>(null);
-  const [maxBudget, setMaxBudget] = useState("10");
+  const [maxBudget, setMaxBudget] = useState(String(usdToCny(10)));
   const { data: autoRouters } = useAutoRouters();
   const configuredGroups = usePlainModelGroups();
   const chatGroups = usePlainChatModelGroups();
@@ -444,7 +445,7 @@ export const StartForm: React.FC = () => {
           </Field>
           <Field label={uiT("ui.3c54f765f71ffae6")}>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">$</span>
+              <span className="text-sm text-muted-foreground">¥</span>
               <Input
                 type="number"
                 min={0.01}

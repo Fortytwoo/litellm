@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { getFormattingLocale } from "@/i18n";
 
 import { t as translateUi } from "@/i18n";
@@ -14,7 +15,6 @@ import CopyButton from "@/components/shared/CopyButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { teamDetailHref } from "@/utils/entityLinks";
 import { createTeamAliasMap } from "@/utils/teamUtils";
 import { BadgeLink } from "@/components/shared/BadgeLink";
@@ -211,12 +211,12 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
               <CardContent>
                 <p className="text-sm text-muted-foreground">{uiT("ui.d29bae05649668aa")}</p>
                 <div className="mt-2 text-sm text-foreground">
-                  <p className="text-xl font-semibold">${formatNumberWithCommas(orgData.spend, 4)}</p>
+                  <p className="text-xl font-semibold">{formatMoney(orgData.spend, 4)}</p>
                   <p>
                     {uiT("ui.28391d3bc64ec15c")}{" "}
                     {orgData.litellm_budget_table.max_budget === null
                       ? uiT("ui.11dde17d6c3e")
-                      : `$${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`}
+                      : formatMoney(orgData.litellm_budget_table.max_budget, 4)}
                   </p>
                   {orgData.litellm_budget_table.budget_duration && (
                     <p className="text-muted-foreground">
@@ -358,7 +358,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                     <div>
                       {uiT("ui.ef2840cc402ef492")}{" "}
                       {orgData.litellm_budget_table.max_budget !== null
-                        ? `$${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`
+                        ? formatMoney(orgData.litellm_budget_table.max_budget, 4)
                         : uiT("ui.366c2707df5c3c52")}
                     </div>
                     <div>

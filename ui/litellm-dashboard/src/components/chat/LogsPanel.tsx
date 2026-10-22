@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React, { useState } from "react";
@@ -67,9 +68,9 @@ function formatTokens(n: number): string {
 
 function formatCost(spend: number): string {
   const value = spend ?? 0;
-  if (value === 0) return "$0";
-  if (value < 0.01) return `$${value.toFixed(6)}`;
-  return `$${value.toFixed(4)}`;
+  if (value === 0) return "¥0";
+  if (value < 0.01) return formatMoney(value, 6);
+  return formatMoney(value, 4);
 }
 
 function durationMs(row: LogRow): number | null {

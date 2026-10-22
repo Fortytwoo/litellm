@@ -1,3 +1,4 @@
+import { formatMoney, usdToCny } from "@/utils/currency";
 import { getFormattingLocale, t as translateUi } from "@/i18n";
 import type { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import { stackedUsageColor } from "@/components/shared/charts";
@@ -212,13 +213,14 @@ export const dailyTotals = (results: readonly DailyData[]): SeriesDay[] =>
   }));
 
 export const formatUsd = (value: number, digits = 2): string =>
-  `$${value.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
+  formatMoney(value, digits);
 
 export const formatCompactUsd = (value: number): string => {
-  if (value === 0) return "$0";
-  if (Math.abs(value) < 100) return `$${value.toFixed(2)}`;
-  if (Math.abs(value) < 1000) return `$${value.toFixed(0)}`;
-  return `$${Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value)}`;
+  const amount = Math.abs(usdToCny(value));
+  if (amount === 0) return "¥0";
+  if (amount < 100) return formatMoney(value, 2);
+  if (amount < 1000) return formatMoney(value, 0);
+  return formatMoney(value, 1, true);
 };
 
 export const formatCompact = (value: number): string =>

@@ -1,3 +1,4 @@
+import { cnyToUsd } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 import type { ColumnFilter, ColumnFiltersState } from "@tanstack/react-table";
 
@@ -87,8 +88,8 @@ const maxBudgetParams = (value: unknown): QueryEntry[] => {
     return [["filter[max_budget][is_null]", "true"]];
   }
   return [
-    ...entries("filter[max_budget][gte]", asTrimmed(draft.min)),
-    ...entries("filter[max_budget][lte]", asTrimmed(draft.max)),
+    ...entries("filter[max_budget][gte]", asTrimmed(draft.min) === "" ? "" : String(cnyToUsd(Number(draft.min)))),
+    ...entries("filter[max_budget][lte]", asTrimmed(draft.max) === "" ? "" : String(cnyToUsd(Number(draft.max)))),
   ];
 };
 

@@ -58,7 +58,7 @@ const formatFilterValue = (columnId: string, value: unknown): string => {
   }
   if (columnId === "max_budget") {
     const { min, max, unlimitedOnly } = (value ?? {}) as MaxBudgetFilterValue;
-    return unlimitedOnly === true ? "Unlimited only" : `${min ? `$${min}` : "any"} to ${max ? `$${max}` : "any"}`;
+    return unlimitedOnly === true ? "Unlimited only" : `${min ? `${`¥${min}`}` : "any"} to ${max ? `${`¥${max}`}` : "any"}`;
   }
   if (columnId === "created_at") {
     const { from, to } = (value ?? {}) as CreatedAtFilterValue;

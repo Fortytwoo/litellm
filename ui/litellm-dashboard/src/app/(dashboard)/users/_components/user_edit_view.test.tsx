@@ -167,7 +167,7 @@ describe("UserEditView", () => {
     renderWithProviders(<UserEditView {...defaultProps} />);
 
     await waitFor(() => {
-      expect(screen.getByText("Max Budget (USD)")).toBeInTheDocument();
+      expect(screen.getByText("Max Budget (CNY)")).toBeInTheDocument();
     });
   });
 
@@ -353,7 +353,7 @@ describe("UserEditView", () => {
     renderWithProviders(<UserEditView {...defaultProps} />);
 
     await waitFor(() => {
-      expect(screen.getByText("Max Budget (USD)")).toBeInTheDocument();
+      expect(screen.getByText("Max Budget (CNY)")).toBeInTheDocument();
     });
 
     const budgetInput = screen.getByRole("spinbutton", { name: /max budget/i });
@@ -678,7 +678,7 @@ describe("UserEditView", () => {
 
       const budgetInput = await screen.findByRole("spinbutton", { name: /max budget/i });
       await userEvent.clear(budgetInput);
-      await userEvent.type(budgetInput, "42.57");
+      await userEvent.type(budgetInput, "289.476");
       await userEvent.click(screen.getByRole("button", { name: /save changes/i }));
 
       await waitFor(() => {
@@ -724,7 +724,7 @@ describe("UserEditView", () => {
       expect(onSubmit.mock.calls[0][0]).toMatchObject(expectedPayload);
     });
 
-    it("should keep the budget input's native step constraint armed", async () => {
+    it("accepts fractional converted budgets without disabling native validation", async () => {
       renderWithProviders(<UserEditView {...defaultProps} />);
 
       const budgetInput = await screen.findByRole("spinbutton", { name: /max budget/i });
@@ -733,7 +733,8 @@ describe("UserEditView", () => {
       if (!form) {
         throw new Error("User edit form was not rendered");
       }
-      expect(budgetInput).toHaveAttribute("step", "0.01");
+      fireEvent.change(budgetInput, { target: { value: "42.567" } });
+      expect(budgetInput).toBeValid();
       expect(budgetInput).not.toHaveAttribute("min");
       expect(form).not.toHaveAttribute("novalidate");
     });
@@ -852,10 +853,10 @@ describe("UserEditView", () => {
           />,
         );
 
-        const [aliasRow, canonicalRow] = await screen.findAllByPlaceholderText("Max spend ($)");
-        expect(aliasRow).toHaveValue(5);
+        const [aliasRow, canonicalRow] = await screen.findAllByPlaceholderText("Max spend (¥)");
+        expect(aliasRow).toHaveValue(34);
 
-        fireEvent.change(canonicalRow, { target: { value: "3" } });
+        fireEvent.change(canonicalRow, { target: { value: "20.4" } });
         await userEvent.click(screen.getByRole("button", { name: /save changes/i }));
 
         await waitFor(() => {
@@ -884,11 +885,11 @@ describe("UserEditView", () => {
         const { rerender } = renderWithProviders(
           <UserEditView {...defaultProps} premiumUser={true} userData={withBudget(5, "user-a")} />,
         );
-        expect(await screen.findByPlaceholderText("Max spend ($)")).toHaveValue(5);
+        expect(await screen.findByPlaceholderText("Max spend (¥)")).toHaveValue(34);
 
         rerender(<UserEditView {...defaultProps} premiumUser={true} userData={withBudget(99, "user-b")} />);
 
-        expect(await screen.findByPlaceholderText("Max spend ($)")).toHaveValue(99);
+        expect(await screen.findByPlaceholderText("Max spend (¥)")).toHaveValue(673.2);
       });
 
       // BulkEditUsers copies a fixed field list into its payload and never reads
@@ -912,19 +913,19 @@ describe("UserEditView", () => {
         );
 
         await screen.findByRole("button", { name: /save changes/i });
-        expect(screen.queryByPlaceholderText("Max spend ($)")).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText("Max spend (¥)")).not.toBeInTheDocument();
       });
 
       it("should lock the editor when the proxy has no enterprise license", async () => {
         renderWithProviders(<UserEditView {...defaultProps} userData={withStoredBudgets} />);
 
-        expect(await screen.findByPlaceholderText("Max spend ($)")).toBeDisabled();
+        expect(await screen.findByPlaceholderText("Max spend (¥)")).toBeDisabled();
       });
 
       it("should leave the editor usable when the proxy has one", async () => {
         renderWithProviders(<UserEditView {...defaultProps} userData={withStoredBudgets} premiumUser={true} />);
 
-        expect(await screen.findByPlaceholderText("Max spend ($)")).toBeEnabled();
+        expect(await screen.findByPlaceholderText("Max spend (¥)")).toBeEnabled();
       });
     });
 

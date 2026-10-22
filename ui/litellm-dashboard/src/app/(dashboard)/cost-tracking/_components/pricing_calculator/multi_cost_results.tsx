@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney, usdToCny } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -22,10 +23,10 @@ interface MultiCostResultsProps {
 
 const formatCost = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return "-";
-  if (value === 0) return "$0";
-  if (value < 0.0001) return `$${value.toExponential(2)}`;
-  if (value < 1) return `$${value.toFixed(4)}`;
-  return `$${formatNumberWithCommas(value, 2, true)}`;
+  if (value === 0) return "¥0";
+  if (value < 0.0001) return `¥${usdToCny(value).toExponential(2)}`;
+  if (value < 1) return formatMoney(value, 4);
+  return formatMoney(value, 2, true);
 };
 
 const formatRequests = (value: number | null | undefined): string => {
@@ -119,14 +120,14 @@ const SingleModelBreakdown: React.FC<{
           {result.input_cost_per_token && (
             <span>
               {uiT("ui.9dbb216a72ad7174")}
-              {formatNumberWithCommas(result.input_cost_per_token * 1_000_000, 2)}/1M
+              {formatMoney(result.input_cost_per_token * 1_000_000, 2)}/1M
             </span>
           )}
           {result.input_cost_per_token && result.output_cost_per_token && " | "}
           {result.output_cost_per_token && (
             <span>
               {uiT("ui.4123d1a946f5b9d7")}
-              {formatNumberWithCommas(result.output_cost_per_token * 1_000_000, 2)}/1M
+              {formatMoney(result.output_cost_per_token * 1_000_000, 2)}/1M
             </span>
           )}
         </div>

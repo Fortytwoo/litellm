@@ -1,3 +1,4 @@
+import { formatMoney } from "./currency";
 interface ValidatorRule {
   validator: (rule: unknown, value: unknown) => Promise<void>;
 }
@@ -53,7 +54,7 @@ export const ptuRateRules: ValidatorRule[] = [
       isNonNegativePtuRate(value)
         ? Promise.resolve()
         : Promise.reject(
-            new Error(`Cost per PTU / Hour must be between 0 and ${MAX_COST_PER_PTU_PER_HOUR.toLocaleString()}`),
+            new Error(`Cost per PTU / Hour must be between 0 and ${formatMoney(MAX_COST_PER_PTU_PER_HOUR, 0)}`),
           ),
   },
 ];

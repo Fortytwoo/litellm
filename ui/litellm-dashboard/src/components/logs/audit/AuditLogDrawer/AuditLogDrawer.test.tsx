@@ -115,8 +115,8 @@ describe("AuditLogDrawer", () => {
         }}
       />,
     );
-    expect(within(blockNamed("Before")).getByText("$1.000000")).toBeInTheDocument();
-    expect(within(blockNamed("After")).getByText("$2.000000")).toBeInTheDocument();
+    expect(within(blockNamed("Before")).getByText("¥6.800000")).toBeInTheDocument();
+    expect(within(blockNamed("After")).getByText("¥13.600000")).toBeInTheDocument();
     expect(screen.queryByText(/"spend"/)).not.toBeInTheDocument();
   });
 

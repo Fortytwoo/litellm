@@ -1,10 +1,11 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { translateText } from "@/i18n";
 
 import { InheritedBudgetHint, type InheritedBudgetGate } from "@/components/shared/InheritedBudgetHint";
 import { Meter, MeterIndicator, MeterTrack } from "@/components/shared/Meter";
-import { formatNumberWithCommas, getSpendString } from "@/utils/dataUtils";
+import { getSpendString } from "@/utils/dataUtils";
 
 interface SpendBudgetCellProps {
   spend: number | null | undefined;
@@ -34,8 +35,8 @@ export function SpendBudgetCell({
   const hasBudget = typeof budget === "number" && budget > 0;
   const pct = hasBudget ? (spendValue / budget) * 100 : 0;
 
-  const spendText = spendValue > 0 ? getSpendString(spendValue, spendDecimals) : "$0.00";
-  const budgetLabel = budget === null ? "· Unlimited" : `of $${formatNumberWithCommas(budget, budgetDecimals)}`;
+  const spendText = spendValue > 0 ? getSpendString(spendValue, spendDecimals) : "¥0.00";
+  const budgetLabel = budget === null ? "· Unlimited" : `of ${formatMoney(budget, budgetDecimals)}`;
 
   return (
     <div className="flex min-w-[130px] flex-col gap-1">
@@ -48,7 +49,7 @@ export function SpendBudgetCell({
         <Meter
           value={spendValue}
           max={budget}
-          aria-valuetext={`${spendText} of $${formatNumberWithCommas(budget, budgetDecimals)}`}
+          aria-valuetext={`${spendText} of ${formatMoney(budget, budgetDecimals)}`}
         >
           <MeterTrack>
             <MeterIndicator tone={meterTone(pct)} />

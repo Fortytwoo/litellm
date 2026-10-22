@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { rows, str, strings, type Row } from "@/lib/http/managedGateway";
 import { Enabled, Field, Grid, Modal, Notice, TextField, useAction, useGateway, useGatewayQuery } from "./Shared";
 import { useCopy } from "./locale";
+import { formatMoney } from "@/utils/currency";
+import { CnyInput } from "@/components/shared/CnyInput";
+
+const money = (value: unknown): string => formatMoney(typeof value === "number" ? value : null);
 
 export function Models({ kind }: { kind: "apis" | "models" | "users" }) {
   const t = useCopy();
@@ -43,8 +47,8 @@ export function Models({ kind }: { kind: "apis" | "models" | "users" }) {
       { key: "label", label: t("owner") },
       { key: "subject", label: t("subject") },
       { key: "models", label: t("models"), render: (r: Row) => strings(r.models).join(", ") },
-      { key: "max_budget", label: t("budget") },
-      { key: "spend", label: t("spend") },
+      { key: "max_budget", label: t("budget"), render: (row: Row) => money(row.max_budget) },
+      { key: "spend", label: t("spend"), render: (row: Row) => money(row.spend) },
       { key: "enabled", label: t("enabled") },
     ],
   };
@@ -293,10 +297,16 @@ function ModelForm({
                 </label>
               ))}
             </fieldset>
-            {["max_budget", "rpm_limit", "tpm_limit"].map((name, i) => (
+            <Field label={`${t("budget")} (¥)`}>
+              <CnyInput
+                usdValue={typeof data.max_budget === "number" ? data.max_budget : null}
+                onUsdChange={(value) => change("max_budget", value ?? "")}
+              />
+            </Field>
+            {["rpm_limit", "tpm_limit"].map((name, i) => (
               <TextField
                 key={name}
-                label={t((["budget", "rpm", "tpm"] as const)[i])}
+                label={t((["rpm", "tpm"] as const)[i])}
                 type="number"
                 value={str(data[name])}
                 onChange={(v) => change(name, v === "" ? "" : Number(v))}
@@ -333,8 +343,8 @@ export function Workspace({ usage = false }: { usage?: boolean }) {
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           [t("modelList"), rows(self.data?.models).length],
-          [t("spend"), self.data?.spend ?? ""],
-          [t("budget"), self.data?.max_budget ?? ""],
+          [t("spend"), money(self.data?.spend)],
+          [t("budget"), money(self.data?.max_budget)],
         ].map(([label, value]) => (
           <div key={str(label)} className="rounded-lg border bg-card p-5">
             <p className="text-sm text-muted-foreground">{str(label)}</p>
@@ -353,7 +363,7 @@ export function Workspace({ usage = false }: { usage?: boolean }) {
             columns={[
               { key: "startTime", label: t("time") },
               { key: "model", label: t("models") },
-              { key: "spend", label: t("spend") },
+              { key: "spend", label: t("spend"), render: (row: Row) => money(row.spend) },
               { key: "total_tokens", label: t("tokens") },
               { key: "status", label: t("status") },
             ]}

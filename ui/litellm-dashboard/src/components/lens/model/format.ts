@@ -1,3 +1,4 @@
+import { usdToCny } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 import { formatActivityTimestamp as runTime } from "@/utils/activityTimestamp";
 import { translateText } from "@/i18n";
@@ -40,7 +41,7 @@ export function agoLabel(thenMs: number, nowMs: number): string {
 }
 
 export const money = (n: number) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 3 }).format(n);
+  `¥${usdToCny(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 3 })}`;
 export const when = (value?: string | null) => (value ? runTime(value) : translateText("Not yet"));
 
 export const sourceLabels = {

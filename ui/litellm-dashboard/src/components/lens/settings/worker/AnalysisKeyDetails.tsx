@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -17,11 +18,7 @@ function budgetLabel(amount: number | null, duration?: string | null): string {
     "7d": "week",
     "1h": "hour",
   };
-  const dollars = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 2,
-  }).format(amount);
+  const dollars = formatMoney(amount, 2);
   return duration ? `${dollars} / ${periods[duration] ?? duration}` : `${dollars} total`;
 }
 

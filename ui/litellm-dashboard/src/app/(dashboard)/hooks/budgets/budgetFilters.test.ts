@@ -26,20 +26,20 @@ describe("serializeBudgetFilters", () => {
   });
 
   it("maps a max budget range onto gte and lte", () => {
-    expect(serializeBudgetFilters([{ id: "max_budget", value: { min: "10", max: "250.5" } }])).toEqual({
+    expect(serializeBudgetFilters([{ id: "max_budget", value: { min: "68", max: "1703.4" } }])).toEqual({
       "filter[max_budget][gte]": "10",
       "filter[max_budget][lte]": "250.5",
     });
   });
 
   it("sends only the bound that was filled in", () => {
-    expect(serializeBudgetFilters([{ id: "max_budget", value: { min: "10", max: "" } }])).toEqual({
+    expect(serializeBudgetFilters([{ id: "max_budget", value: { min: "68", max: "" } }])).toEqual({
       "filter[max_budget][gte]": "10",
     });
   });
 
   it("maps 'Unlimited only' onto is_null and drops the range", () => {
-    const params = serializeBudgetFilters([{ id: "max_budget", value: { min: "10", unlimitedOnly: true } }]);
+    const params = serializeBudgetFilters([{ id: "max_budget", value: { min: "68", unlimitedOnly: true } }]);
     expect(params).toEqual({ "filter[max_budget][is_null]": "true" });
   });
 

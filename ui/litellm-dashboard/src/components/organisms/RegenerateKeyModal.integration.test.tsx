@@ -70,13 +70,13 @@ describe("RegenerateKeyModal submit payload", () => {
     );
   });
 
-  it("rounds max_budget to two decimals and sends the other numbers unrounded", async () => {
+  it("keeps converted budgets and other numbers unrounded", async () => {
     const user = userEvent.setup();
     renderModal();
 
-    const budget = screen.getByLabelText("Max Budget (USD)");
+    const budget = screen.getByLabelText("Max Budget (CNY)");
     await user.clear(budget);
-    await user.type(budget, "42.567");
+    await user.type(budget, "289.4556");
     const tpm = screen.getByLabelText("TPM Limit");
     await user.clear(tpm);
     await user.type(tpm, "1234");
@@ -93,7 +93,7 @@ describe("RegenerateKeyModal submit payload", () => {
     await waitFor(() => expect(mockRegenerateKeyCall).toHaveBeenCalledOnce());
     expect(submittedPayload()).toStrictEqual({
       key_alias: "my-test-key",
-      max_budget: 42.57,
+      max_budget: 42.567,
       tpm_limit: 1234,
       rpm_limit: 56,
       duration: "7d",
@@ -101,24 +101,18 @@ describe("RegenerateKeyModal submit payload", () => {
     });
   });
 
-  it.each([
-    ["1.005", 1.01],
-    ["2.675", 2.68],
-    ["1.0049999", 1],
-    ["0.125", 0.13],
-    ["7", 7],
-  ])("rounds a typed max_budget of %s to %s", async (typed, expected) => {
+  it.each(["1.005", "2.675", "1.0049999", "0.125", "7"])("converts CNY budget %s without rounding USD cents", async (typed) => {
     const user = userEvent.setup();
     renderModal();
 
-    const budget = screen.getByLabelText("Max Budget (USD)");
+    const budget = screen.getByLabelText("Max Budget (CNY)");
     await user.clear(budget);
     await user.type(budget, typed);
 
     await regenerate(user);
 
     await waitFor(() => expect(mockRegenerateKeyCall).toHaveBeenCalledOnce());
-    expect(submittedPayload().max_budget).toBe(expected);
+    expect(submittedPayload().max_budget).toBeCloseTo(Number(typed) / 6.8, 14);
   });
 
   it.each([
@@ -142,7 +136,7 @@ describe("RegenerateKeyModal submit payload", () => {
     const user = userEvent.setup();
     renderModal();
 
-    await user.clear(screen.getByLabelText("Max Budget (USD)"));
+    await user.clear(screen.getByLabelText("Max Budget (CNY)"));
     await user.clear(screen.getByLabelText("TPM Limit"));
     await user.clear(screen.getByLabelText("RPM Limit"));
     await user.clear(screen.getByPlaceholderText("e.g. 30s, 30h, 30d"));

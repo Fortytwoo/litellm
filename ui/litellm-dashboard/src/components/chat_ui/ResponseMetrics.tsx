@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import {
@@ -172,7 +173,7 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
           label={uiT("ui.204a5eb2cd28")}
           tooltip={uiT("ui.204a5eb2cd28")}
           icon={<DollarSign className="size-3" aria-hidden="true" />}
-          value={`$${usage.cost.toFixed(6)}`}
+          value={formatMoney(usage.cost, 6)}
         />
       )}
 

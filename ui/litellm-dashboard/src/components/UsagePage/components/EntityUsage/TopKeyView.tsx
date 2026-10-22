@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney, usdToCny } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -10,7 +11,6 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import { Segmented } from "@/app/(dashboard)/usage/_components/components/overview/Primitives";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import React, { useState } from "react";
-import { formatNumberWithCommas } from "../../../../utils/dataUtils";
 import { transformKeyInfo } from "../../../key_team_helpers/transform_key_info";
 import { keyInfoV1Call } from "../../../networking";
 import KeyInfoView from "../../../templates/key_info_view";
@@ -183,7 +183,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                     </div>
                     <div>
                       <span className="text-muted-foreground">{uiT("ui.158796225fc7")}</span>{" "}
-                      {tag.usage > 0 && tag.usage < 0.01 ? "<$0.01" : `$${formatNumberWithCommas(tag.usage, 2)}`}
+                      {tag.usage > 0 && usdToCny(tag.usage) < 0.01 ? "<¥0.01" : formatMoney(tag.usage, 2)}
                     </div>
                   </div>
                 }
@@ -251,7 +251,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
             tickGap={5}
             layout="vertical"
             showLegend={false}
-            valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+            valueFormatter={(value) => formatMoney(value, 2)}
             onValueChange={(item) => handleKeyClick(item)}
             showTooltip={true}
             customTooltip={(props) => {
@@ -270,7 +270,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                     <div>
                       <span className="text-muted-foreground">{uiT("ui.158796225fc7")} </span>
                       <span className="font-medium tabular-nums text-foreground">
-                        ${formatNumberWithCommas(item?.spend, 2)}
+                        {formatMoney(item?.spend, 2)}
                       </span>
                     </div>
                   </div>

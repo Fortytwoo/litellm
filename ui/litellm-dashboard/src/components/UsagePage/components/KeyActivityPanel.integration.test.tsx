@@ -201,7 +201,7 @@ describe("KeyActivityPanel", () => {
 
     expect(await screen.findByRole("button", { name: /key-49/ })).toBeInTheDocument();
     expect(screen.getByText("52 keys")).toBeInTheDocument();
-    expect(screen.getByText("$500.00")).toBeInTheDocument();
+    expect(screen.getByText("¥3,400.00")).toBeInTheDocument();
     expect(fetchKeyPage).toHaveBeenCalledWith(0, 50);
     expect(screen.queryByText(/limit|truncat|highest-spend|load top/i)).not.toBeInTheDocument();
 
@@ -290,13 +290,13 @@ describe("KeyActivityPanel", () => {
     expect(await screen.findByRole("button", { name: /key-local/ })).toBeInTheDocument();
     expect(screen.getByText("Loading chart data...")).toBeInTheDocument();
     expect(screen.queryByText("Overall Usage")).not.toBeInTheDocument();
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
 
     rerender(<KeyActivityPanel summary={summary} summaryLoading={false} {...props} />);
 
     expect(screen.queryByText("Loading chart data...")).not.toBeInTheDocument();
     expect(screen.getByText("Overall Usage")).toBeInTheDocument();
-    expect(screen.getAllByText("$500.00").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("¥3,400.00").length).toBeGreaterThan(0);
   });
 
   it("loads details for remote search results and merges local matches", async () => {

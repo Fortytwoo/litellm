@@ -512,13 +512,14 @@ describe("TeamInfoView", () => {
       await waitFor(() => {
         expect(screen.getByText("Budget Status")).toBeInTheDocument();
       });
-      expect(screen.getByText("$250.50")).toBeInTheDocument();
-      expect(screen.getByText(/of \$1,000\.00/)).toBeInTheDocument();
+      expect(screen.getByText("¥1,703.40")).toBeInTheDocument();
+      expect(screen.getByText(/of ¥6,800\.00/)).toBeInTheDocument();
     });
 
     it("renders a tpm/rpm/budget limit of 0 as 0 in the overview and settings tabs, never as Unlimited or No Limit", async () => {
       vi.mocked(networking.teamInfoCall).mockResolvedValue(
         createMockTeamData({
+          max_budget: 0,
           tpm_limit: 0,
           rpm_limit: 0,
           team_member_budget_table: { max_budget: 0, budget_duration: null, tpm_limit: 0, rpm_limit: 0 },
@@ -537,7 +538,7 @@ describe("TeamInfoView", () => {
       expect(within(settings).getByText("RPM: 0")).toBeInTheDocument();
       expect(within(settings).getByText("TPM Limit: 0")).toBeInTheDocument();
       expect(within(settings).getByText("RPM Limit: 0")).toBeInTheDocument();
-      expect(within(settings).getByText("Max Budget: 0")).toBeInTheDocument();
+      expect(within(settings).getByText("Max Budget: ¥0.0000")).toBeInTheDocument();
       expect(screen.queryByText("TPM: Unlimited")).not.toBeInTheDocument();
       expect(screen.queryByText("RPM: Unlimited")).not.toBeInTheDocument();
       expect(screen.queryByText("TPM Limit: No Limit")).not.toBeInTheDocument();
@@ -594,7 +595,7 @@ describe("TeamInfoView", () => {
       await waitFor(() => {
         expect(screen.getByText("Budget Status")).toBeInTheDocument();
       });
-      expect(screen.getByText("Team Member Budget: $500.00")).toBeInTheDocument();
+      expect(screen.getByText("Team Member Budget: ¥3,400.00")).toBeInTheDocument();
     });
 
     it("should display virtual keys information", async () => {
@@ -1099,7 +1100,7 @@ describe("TeamInfoView", () => {
 
       await waitFor(() => {
         expect(screen.getByText(/Soft Budget:/)).toBeInTheDocument();
-        expect(screen.getByText(/\$500\.75/)).toBeInTheDocument();
+        expect(screen.getByText(/¥3,405\.10/)).toBeInTheDocument();
       });
     });
 
@@ -1705,7 +1706,7 @@ describe("TeamInfoView", () => {
       });
       await user.click(screen.getByRole("tab", { name: "Settings" }));
 
-      expect(await screen.findByText("Per-Model Budget (gpt-4): $5 per 1d, spent $1.25")).toBeInTheDocument();
+      expect(await screen.findByText("Per-Model Budget (gpt-4): ¥34 per 1d, spent ¥8.50")).toBeInTheDocument();
     });
 
     it("seeds the editor from the stored budget and keeps it read-only without an enterprise license", async () => {
@@ -1716,8 +1717,8 @@ describe("TeamInfoView", () => {
 
       await openSettingsEditor(user);
 
-      expect(screen.getByPlaceholderText("Max spend ($)")).toHaveValue(5);
-      expect(screen.getByPlaceholderText("Max spend ($)")).toBeDisabled();
+      expect(screen.getByPlaceholderText("Max spend (¥)")).toHaveValue(34);
+      expect(screen.getByPlaceholderText("Max spend (¥)")).toBeDisabled();
       expect(screen.getByRole("button", { name: /Add Model Budget/i })).toBeDisabled();
     });
 
@@ -1742,7 +1743,7 @@ describe("TeamInfoView", () => {
       renderWithProviders(<TeamInfoView {...defaultProps} premiumUser={true} />);
 
       await openSettingsEditor(user);
-      fireEvent.change(screen.getByPlaceholderText("Max spend ($)"), { target: { value: "2.5" } });
+      fireEvent.change(screen.getByPlaceholderText("Max spend (¥)"), { target: { value: "17" } });
       await user.click(screen.getByRole("button", { name: /save changes/i }));
 
       expect((await savedPayload()).model_max_budget).toEqual({ "gpt-4": { budget_limit: 2.5, time_period: "1d" } });
@@ -1995,7 +1996,7 @@ describe("TeamInfoView", () => {
       await user.click(await screen.findByRole("button", { name: /edit settings/i }));
 
       expect(await screen.findByLabelText("Requests per minute Limit (RPM)")).toHaveValue(50);
-      expect(screen.getByLabelText("Max Budget (USD)")).toHaveValue(20);
+      expect(screen.getByLabelText("Max Budget (CNY)")).toHaveValue(136);
       expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled();
     });
 
@@ -2102,7 +2103,7 @@ describe("TeamInfoView - which team member fields reach the update payload depen
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     const payload = await save(user);
 
     expect(payload.team_member_budget_duration).toBe("30d");
@@ -2117,7 +2118,7 @@ describe("TeamInfoView - which team member fields reach the update payload depen
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     await chooseSelectOption(user, screen.getByLabelText("Default Budget Duration"), "Never resets");
 
     const payload = await save(user);
@@ -2144,7 +2145,7 @@ describe("TeamInfoView - which team member fields reach the update payload depen
     const durationSelect = await screen.findByLabelText("Default Budget Duration");
     expect(durationSelect).toHaveTextContent("Inherit team reset period");
     expect(durationSelect).not.toHaveTextContent("Never resets");
-    await user.type(screen.getByLabelText("Default Budget (USD)"), "100");
+    await user.type(screen.getByLabelText("Default Budget (CNY)"), "680");
 
     const payload = await save(user);
 
@@ -2152,12 +2153,12 @@ describe("TeamInfoView - which team member fields reach the update payload depen
     expect(JSON.parse(JSON.stringify(payload))).not.toHaveProperty("team_member_budget_duration");
   });
 
-  it("sends a null team_member_budget when Default Budget is cleared, instead of a $0 cap", async () => {
+  it("sends a null team_member_budget when Default Budget is cleared, instead of a ¥0 cap", async () => {
     const user = userEvent.setup({ delay: null });
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    fireEvent.change(await screen.findByLabelText("Default Budget (USD)"), { target: { value: "" } });
+    fireEvent.change(await screen.findByLabelText("Default Budget (CNY)"), { target: { value: "" } });
     const payload = await save(user);
 
     expect(JSON.parse(JSON.stringify(payload))).toMatchObject({
@@ -2172,7 +2173,7 @@ describe("TeamInfoView - which team member fields reach the update payload depen
     await openEditor(user, { max_budget: null, budget_duration: "30d", tpm_limit: null, rpm_limit: 60 });
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     const payload = await save(user);
 
     expect(JSON.parse(JSON.stringify(payload))).toMatchObject({ team_member_budget: null, team_member_rpm_limit: 60 });
@@ -2183,7 +2184,7 @@ describe("TeamInfoView - which team member fields reach the update payload depen
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    fireEvent.change(await screen.findByLabelText("Default Budget (USD)"), { target: { value: "12.5" } });
+    fireEvent.change(await screen.findByLabelText("Default Budget (CNY)"), { target: { value: "85" } });
     const payload = await save(user);
 
     expect(payload.team_member_budget).toBe(12.5);
@@ -2411,7 +2412,7 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     await user.click(screen.getByText("Search Tool Settings"));
     await screen.findByPlaceholderText("Select search tools (optional, empty = all allowed)");
 
@@ -2464,7 +2465,7 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditorWithMemberBudgetAlerts(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     const thresholds = screen.getAllByPlaceholderText("% of budget");
     const recipients = screen.getAllByPlaceholderText(/Additional recipients/);
     expect(thresholds.map((input) => (input as HTMLInputElement).value)).toStrictEqual(["50", "100"]);
@@ -2489,7 +2490,7 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditorWithMemberBudgetAlerts(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     const removeButtons = screen.getAllByRole("button", { name: "Remove budget alert threshold" });
     await user.click(removeButtons[1]);
     await user.click(removeButtons[0]);
@@ -2504,7 +2505,7 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditorWithMemberBudgetAlerts(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     const threshold = screen.getAllByPlaceholderText("% of budget")[0] as HTMLInputElement;
     fireEvent.change(threshold, { target: { value: "150" } });
     expect(threshold.validity.rangeOverflow).toBe(true);
@@ -2519,7 +2520,7 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditorWithMemberBudgetAlerts(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    await screen.findByLabelText("Default Budget (USD)");
+    await screen.findByLabelText("Default Budget (CNY)");
     await user.click(screen.getByRole("button", { name: "Add Budget Alert Threshold" }));
     await user.click(screen.getByRole("button", { name: /save changes/i }));
 
@@ -2535,9 +2536,9 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await user.clear(alias);
     await user.type(alias, "Renamed Team");
 
-    const softBudget = screen.getByLabelText("Soft Budget (USD)");
+    const softBudget = screen.getByLabelText("Soft Budget (CNY)");
     await user.clear(softBudget);
-    await user.type(softBudget, "9.5");
+    await user.type(softBudget, "64.6");
 
     const emails = screen.getByLabelText(/Soft Budget Alerting Emails/);
     await user.clear(emails);
@@ -2590,15 +2591,15 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    const budgetInput = await screen.findByLabelText("Default Budget (USD)");
+    const budgetInput = await screen.findByLabelText("Default Budget (CNY)");
     await user.clear(budgetInput);
-    await user.type(budgetInput, "77");
+    await user.type(budgetInput, "523.6");
 
     await user.click(screen.getByText("Team Member Settings"));
-    await waitFor(() => expect(screen.queryByLabelText("Default Budget (USD)")).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByLabelText("Default Budget (CNY)")).not.toBeInTheDocument());
 
     await user.click(screen.getByText("Team Member Settings"));
-    expect(await screen.findByLabelText("Default Budget (USD)")).toHaveValue(77);
+    expect(await screen.findByLabelText("Default Budget (CNY)")).toHaveValue(523.6);
 
     const payload = await save(user);
     expect(payload.team_member_budget).toBe(77);
@@ -2609,12 +2610,12 @@ describe("TeamInfoView - the exact bytes the update call sends", () => {
     await openEditor(user);
 
     await user.click(screen.getByText("Team Member Settings"));
-    const budgetInput = await screen.findByLabelText("Default Budget (USD)");
+    const budgetInput = await screen.findByLabelText("Default Budget (CNY)");
     await user.clear(budgetInput);
-    await user.type(budgetInput, "77");
+    await user.type(budgetInput, "523.6");
 
     await user.click(screen.getByText("Team Member Settings"));
-    await waitFor(() => expect(screen.queryByLabelText("Default Budget (USD)")).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByLabelText("Default Budget (CNY)")).not.toBeInTheDocument());
 
     const payload = await save(user);
 

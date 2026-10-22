@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -547,7 +548,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
                   }
                   successRequests={formatAbbreviatedNumber(tag.successful_requests)}
                   totalTokens={formatAbbreviatedNumber(tag.total_tokens)}
-                  totalCost={`$${formatAbbreviatedNumber(tag.total_spend, 4)}`}
+                  totalCost={formatMoney(tag.total_spend, 4)}
                 />
               );
             })}

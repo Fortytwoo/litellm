@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { getFormattingLocale } from "@/i18n";
 
 import { t as translateUi } from "@/i18n";
@@ -13,7 +14,6 @@ import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings"
 import { useApplyUserBudgetToTeamKeys } from "@/app/(dashboard)/hooks/uiSettings/useApplyUserBudgetToTeamKeys";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { mapEmptyStringToNull } from "@/utils/keyUpdateUtils";
 import { ArrowLeft, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -543,7 +543,7 @@ export default function KeyInfoView({
   const parentOrg = orgId ? organizations?.find((org) => org.organization_id === orgId) : null;
 
   const hasOwnBudget = currentKeyData.max_budget !== null;
-  const budgetDisplay = hasOwnBudget ? `$${formatNumberWithCommas(currentKeyData.max_budget, 2)}` : "Unlimited";
+  const budgetDisplay = hasOwnBudget ? formatMoney(currentKeyData.max_budget, 2) : "Unlimited";
   const ownerUser = keyOwnerBudgetSource(currentKeyData, applyUserBudgetToTeamKeys);
   const inheritedGates = hasOwnBudget ? [] : inheritedBudgetGates(parentTeam, parentOrg, ownerUser);
 
@@ -615,7 +615,7 @@ export default function KeyInfoView({
           },
           {
             label: uiT("ui.85f3d558db12"),
-            value: currentKeyData?.spend ? `$${formatNumberWithCommas(currentKeyData.spend, 4)}` : "$0.0000",
+            value: currentKeyData?.spend ? formatMoney(currentKeyData.spend, 4) : "¥0.0000",
           },
         ]}
         onCancel={() => {
@@ -635,10 +635,10 @@ export default function KeyInfoView({
           <p>
             {uiT("ui.a2ccee16b0910a36")}{" "}
             <strong>{currentKeyData?.key_alias || currentKeyData?.token_id || uiT("ui.c9e64db2715f38a5")}</strong>{" "}
-            {uiT("ui.663ea1bfffe5")} <strong>$0</strong>?
+            {uiT("ui.663ea1bfffe5")} <strong>¥0</strong>?
           </p>
           <p style={{ color: "#666", fontSize: "0.875rem", marginTop: 8 }}>
-            {uiT("ui.a56b5bae4770c46f")} <strong>${formatNumberWithCommas(currentKeyData.spend, 4)}</strong>
+            {uiT("ui.a56b5bae4770c46f")} <strong>{formatMoney(currentKeyData.spend, 4)}</strong>
             {uiT("ui.2e7f247f6bb38c93")}
           </p>
           <DialogFooter>
@@ -704,7 +704,7 @@ export default function KeyInfoView({
               <Card className="block p-6">
                 <p className="text-sm">{uiT("ui.85f3d558db12")}</p>
                 <div className="mt-2">
-                  <h3 className="text-lg font-medium">${formatNumberWithCommas(currentKeyData.spend, 4)}</h3>
+                  <h3 className="text-lg font-medium">{formatMoney(currentKeyData.spend, 4)}</h3>
                   <p className="text-sm">
                     {uiT("ui.28391d3bc64ec15c")} {translateText(budgetDisplay)}
                     <InheritedBudgetHint gates={inheritedGates} />
@@ -716,7 +716,7 @@ export default function KeyInfoView({
                   )}
                   <p className="text-sm mt-2" data-testid="key-lifetime-spend">
                     {uiT("ui.dee36f20ae21")}
-                    {formatNumberWithCommas(currentKeyData.total_spend ?? 0, 4)}
+                    {formatMoney(currentKeyData.total_spend ?? 0, 4)}
                     {needsLifetimeSpendBackfill(currentKeyData.spend, currentKeyData.total_spend) && (
                       <HoverCard>
                         <HoverCardTrigger
@@ -999,14 +999,14 @@ export default function KeyInfoView({
                   <div>
                     <p className="text-sm font-medium">{uiT("ui.85f3d558db12")}</p>
                     <p className="text-sm">
-                      ${formatNumberWithCommas(currentKeyData.spend, 4)} {uiT("ui.a26cdf3a6e709124")}
+                      {formatMoney(currentKeyData.spend, 4)} {uiT("ui.a26cdf3a6e709124")}
                     </p>
                   </div>
 
                   <div>
                     <p className="text-sm font-medium">{uiT("ui.eac3d121beb3")}</p>
                     <p className="text-sm">
-                      ${formatNumberWithCommas(currentKeyData.total_spend ?? 0, 4)} {uiT("ui.a26cdf3a6e709124")}
+                      {formatMoney(currentKeyData.total_spend ?? 0, 4)} {uiT("ui.a26cdf3a6e709124")}
                     </p>
                   </div>
 
@@ -1014,7 +1014,7 @@ export default function KeyInfoView({
                     <p className="text-sm font-medium">{uiT("ui.1c6225ec7092")}</p>
                     <p className="text-sm">
                       {currentKeyData.max_budget !== null
-                        ? `$${formatNumberWithCommas(currentKeyData.max_budget, 2)}`
+                        ? formatMoney(currentKeyData.max_budget, 2)
                         : uiT("ui.11dde17d6c3e")}
                     </p>
                   </div>

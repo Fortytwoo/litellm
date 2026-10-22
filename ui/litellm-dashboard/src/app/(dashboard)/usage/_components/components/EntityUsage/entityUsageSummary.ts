@@ -1,5 +1,5 @@
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
 
 export interface SummaryTile {
   title: string;
@@ -37,7 +37,7 @@ export const buildSummaryTiles = (metadata: SpendSummaryMetadata, showFlatCost: 
           get title() {
             return translateUi("ui.dfa5cc738da2");
           },
-          value: `$${formatNumberWithCommas(metadata.total_spend + flatCost, 2)}`,
+          value: formatMoney(metadata.total_spend + flatCost, 2),
           tooltip: TOTAL_COST_TOOLTIP,
           expandable: true,
         }
@@ -45,7 +45,7 @@ export const buildSummaryTiles = (metadata: SpendSummaryMetadata, showFlatCost: 
           get title() {
             return translateUi("ui.00c71c737b6c");
           },
-          value: `$${formatNumberWithCommas(metadata.total_spend, 2)}`,
+          value: formatMoney(metadata.total_spend, 2),
         },
     {
       get title() {
@@ -81,7 +81,7 @@ export const buildCostBreakdownTiles = (metadata: SpendSummaryMetadata): Summary
     get title() {
       return translateUi("ui.9e579bd69d156ee0");
     },
-    value: `$${formatNumberWithCommas(metadata.total_spend, 2)}`,
+    value: formatMoney(metadata.total_spend, 2),
     className: "text-info",
     tooltip: REQUEST_COST_TOOLTIP,
   },
@@ -89,7 +89,7 @@ export const buildCostBreakdownTiles = (metadata: SpendSummaryMetadata): Summary
     get title() {
       return translateUi("ui.b5a82c86b929e176");
     },
-    value: `$${formatNumberWithCommas(metadata.total_flat_cost ?? 0, 2)}`,
+    value: formatMoney(metadata.total_flat_cost ?? 0, 2),
     className: "text-violet-600",
     tooltip: FLAT_COST_TOOLTIP,
   },

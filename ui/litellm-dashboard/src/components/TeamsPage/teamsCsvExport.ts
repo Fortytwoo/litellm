@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import { usdToCny } from "@/utils/currency";
 
 import { TeamListCallOptions, TeamsResponse, teamListCall } from "@/app/(dashboard)/hooks/teams/useTeams";
 
@@ -37,6 +38,7 @@ export const collectTeamMemberBudgetIds = (teams: Team[]): string[] =>
   Array.from(new Set(teams.map(teamMemberBudgetId).filter((id): id is string => id !== null)));
 
 const cell = (value: string | number | boolean | null | undefined): string | number | boolean => value ?? "";
+const money = (value: number | null | undefined): number | string => value == null ? "" : usdToCny(value);
 
 export const buildTeamsCsvRows = (
   teams: Team[],
@@ -51,13 +53,13 @@ export const buildTeamsCsvRows = (
       "Team ID": cell(team.team_id),
       "Organization ID": cell(team.organization_id),
       Models: (team.models ?? []).join(", "),
-      "Max Budget (USD)": cell(team.max_budget),
+      "Max Budget (CNY)": money(team.max_budget),
       "Budget Duration": cell(team.budget_duration),
       "Budget Reset At": cell(team.budget_reset_at),
-      "Spend (USD)": cell(team.spend),
+      "Spend (CNY)": money(team.spend),
       "TPM Limit": cell(team.tpm_limit),
       "RPM Limit": cell(team.rpm_limit),
-      "Team Member Budget (USD)": cell(memberBudget?.max_budget),
+      "Team Member Budget (CNY)": money(memberBudget?.max_budget),
       "Team Member Budget Duration": cell(memberBudget?.budget_duration),
       "Team Member TPM Limit": cell(memberBudget?.tpm_limit),
       "Team Member RPM Limit": cell(memberBudget?.rpm_limit),

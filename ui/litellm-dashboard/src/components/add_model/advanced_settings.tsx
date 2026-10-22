@@ -246,7 +246,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                 <MountedFormField
                   name={PTU_RATE_FIELD}
                   label={labelWithHint(
-                    "Calculated Cost per PTU / Hour (USD)",
+                    "Calculated Cost per PTU / Hour (CNY)",
                     "Flat cost = PTU count * this rate * active hours, attributed to the deployment's team.",
                   )}
                   rules={{

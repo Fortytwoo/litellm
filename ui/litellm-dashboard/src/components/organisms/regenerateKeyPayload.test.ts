@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildRegenerateKeyPayload, roundToPrecision, type RegenerateKeyFormValues } from "./regenerateKeyPayload";
+import { buildRegenerateKeyPayload, type RegenerateKeyFormValues } from "./regenerateKeyPayload";
 
 const values = (overrides: Partial<RegenerateKeyFormValues> = {}): RegenerateKeyFormValues => ({
   key_alias: "my-test-key",
@@ -11,50 +11,11 @@ const values = (overrides: Partial<RegenerateKeyFormValues> = {}): RegenerateKey
   ...overrides,
 });
 
-describe("roundToPrecision", () => {
-  it.each([
-    [42.567, 42.57],
-    [1.005, 1.01],
-    [2.675, 2.68],
-    [0.125, 0.13],
-    [1.0049999, 1],
-    [7, 7],
-    [1000, 1000],
-    [0, 0],
-    [0.004, 0],
-    [0.005, 0.01],
-    [1e-7, 0],
-  ])("rounds %s to %s", (input, expected) => {
-    expect(roundToPrecision(input, 2)).toBe(expected);
-  });
-
-  it("rounds the magnitude of a negative away from zero", () => {
-    expect(roundToPrecision(-3.456, 2)).toBe(-3.46);
-    expect(roundToPrecision(-1.005, 2)).toBe(-1.01);
-  });
-
-  it("does not reintroduce binary floating point noise", () => {
-    expect(roundToPrecision(1.1 + 2.2, 2)).toBe(3.3);
-    expect(String(roundToPrecision(8.165, 2))).toBe("8.17");
-  });
-
-  it("honours a precision other than two", () => {
-    expect(roundToPrecision(1.2345, 3)).toBe(1.235);
-    expect(roundToPrecision(1.5, 0)).toBe(2);
-  });
-
-  it("returns unroundable values untouched", () => {
-    expect(roundToPrecision(Number.POSITIVE_INFINITY, 2)).toBe(Number.POSITIVE_INFINITY);
-    expect(roundToPrecision(Number.NaN, 2)).toBeNaN();
-    expect(roundToPrecision(Number.MAX_VALUE, 2)).toBe(Number.MAX_VALUE);
-  });
-});
-
 describe("buildRegenerateKeyPayload", () => {
-  it("rounds max_budget and leaves every other field alone", () => {
+  it("preserves converted budget precision and every other field", () => {
     expect(buildRegenerateKeyPayload(values({ max_budget: 42.567, tpm_limit: 12.7, rpm_limit: 9.99 }))).toStrictEqual({
       key_alias: "my-test-key",
-      max_budget: 42.57,
+      max_budget: 42.567,
       tpm_limit: 12.7,
       rpm_limit: 9.99,
       duration: "30d",

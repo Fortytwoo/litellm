@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React from "react";
 import { Agent } from "@/components/agents/types";
@@ -31,7 +32,7 @@ const AgentCostView: React.FC<AgentCostViewProps> = ({ agent }) => {
         {rows.map(([label, value]) => (
           <div key={label} className="grid grid-cols-1 sm:grid-cols-3">
             <dt className="bg-muted/50 px-4 py-3 text-sm font-medium text-foreground">{label}</dt>
-            <dd className="px-4 py-3 text-sm text-foreground sm:col-span-2">${value}</dd>
+            <dd className="px-4 py-3 text-sm text-foreground sm:col-span-2">{formatMoney(Number(value), null)}</dd>
           </div>
         ))}
       </dl>

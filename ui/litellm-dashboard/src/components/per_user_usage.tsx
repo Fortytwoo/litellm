@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
 import type { ColumnDef, OnChangeFn, PaginationState } from "@tanstack/react-table";
@@ -119,7 +120,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
       header: uiT("ui.dfa5cc738da2"),
       accessorKey: "spend",
       meta: { numeric: true },
-      cell: ({ row }) => `$${formatAbbreviatedNumber(row.original.spend, 4)}`,
+      cell: ({ row }) => formatMoney(row.original.spend, 4),
     },
   ];
 

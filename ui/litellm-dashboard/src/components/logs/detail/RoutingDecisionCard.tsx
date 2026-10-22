@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
 import { translateText } from "@/i18n";
@@ -371,7 +372,7 @@ export function RoutingDecisionCard({
           </Row>
         )}
         {decision.classifier_cost != null && (
-          <Row label={uiT("ui.0882e3784ecd")}>${decision.classifier_cost.toFixed(8)}</Row>
+          <Row label={uiT("ui.0882e3784ecd")}>{formatMoney(Number(decision.classifier_cost), 8)}</Row>
         )}
 
         {score !== undefined && (

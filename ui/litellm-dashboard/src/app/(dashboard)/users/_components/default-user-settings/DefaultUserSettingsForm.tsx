@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "@/utils/currency";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
@@ -267,7 +268,7 @@ const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
               {team.max_budget_in_team !== "" && (
                 <>
                   {" "}
-                  · ${team.max_budget_in_team} {uiT("ui.b31eb1f9a652")}
+                  · {formatMoney(Number(team.max_budget_in_team), 4)} {uiT("ui.b31eb1f9a652")}
                 </>
               )}
               <> · {team.user_role}</>
