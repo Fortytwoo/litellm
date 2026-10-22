@@ -5,17 +5,19 @@ import { afterEach, expect, it, vi } from "vitest";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Models, Workspace } from "./Models";
 import { GatewaySession } from "./Shared";
+import { cnyToUsd } from "@/utils/currency";
+import type { Locale } from "@/i18n";
 
 afterEach(() => vi.unstubAllGlobals());
 
-function setup(workspace = false) {
+function setup(workspace = false, locale: Locale = "en") {
   const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(async (input) => {
     const path = new URL(input instanceof Request ? input.url : String(input), "http://localhost").pathname;
     if (path.endsWith("/model-config"))
       return Response.json({
         revision: "r1",
-        models: [],
-        users: [{ subject: "operator", label: "Operator", max_budget: 100, spend: 0.025, models: [], enabled: true }],
+        models: [{ id: "chat", label: "Chat" }],
+        users: [{ subject: "operator", label: "Operator", max_budget: 100, spend: 0.025, models: ["chat"], enabled: true, rpm_limit: 100 }],
       });
     if (path.endsWith("/model-members"))
       return Response.json({ members: [{ subject: "operator", label: "Operator" }] });
@@ -29,7 +31,7 @@ function setup(workspace = false) {
   render(
     <QueryClientProvider client={client}>
       <GatewaySession.Provider value={{ me: {}, snapshot: { permissions: ["models.write"] }, write }}>
-        <LanguageProvider initialLocale="en">{workspace ? <Workspace /> : <Models kind="users" />}</LanguageProvider>
+        <LanguageProvider initialLocale={locale}>{workspace ? <Workspace /> : <Models kind="users" />}</LanguageProvider>
       </GatewaySession.Provider>
     </QueryClientProvider>,
   );
@@ -41,7 +43,7 @@ it("shows CNY grants and saves a typed CNY budget as USD", async () => {
   expect(await screen.findByText("¥680.00")).toBeVisible();
   expect(screen.getByText("¥0.17")).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-  const input = screen.getByLabelText(/¥/);
+  const input = screen.getByLabelText("Budget (CNY)");
   expect(input).toHaveValue("680");
   fireEvent.change(input, { target: { value: "" } });
   await userEvent.setup().type(input, "0.068");
@@ -57,6 +59,24 @@ it("shows CNY grants and saves a typed CNY budget as USD", async () => {
       "PUT",
     ),
   );
+  client.clear();
+});
+
+it.each([
+  { locale: "en", budget: "Budget (CNY)", spend: "Spend (CNY)", edit: "Edit", save: "Save" },
+  { locale: "zh", budget: "预算上限（人民币）", spend: "已用金额（人民币）", edit: "编辑", save: "保存" },
+] as const)("keeps $locale budget labels and edits consistent with CNY amounts", async ({ locale, budget, spend, edit, save }) => {
+  const { write, client } = setup(false, locale);
+  expect(await screen.findByRole("button", { name: budget, exact: true })).toBeVisible();
+  expect(screen.getByRole("button", { name: spend, exact: true })).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: edit, exact: true }));
+  const input = screen.getByLabelText(budget);
+  fireEvent.change(input, { target: { value: "100" } });
+  fireEvent.click(screen.getByRole("button", { name: save, exact: true }));
+  const expected = { max_budget: cnyToUsd(100), models: ["chat"], enabled: true, rpm_limit: 100 };
+  await waitFor(() => expect(write).toHaveBeenCalledWith("model-config", expect.objectContaining({
+    data: expect.objectContaining(expected),
+  }), "PUT"));
   client.clear();
 });
 

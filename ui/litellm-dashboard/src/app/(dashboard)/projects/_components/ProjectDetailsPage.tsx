@@ -7,7 +7,7 @@ import { useTeam } from "@/app/(dashboard)/hooks/teams/useTeams";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { isUserTeamAdminForSingleTeam } from "@/utils/roles";
 import { BarChart } from "@/components/shared/charts";
-import { ArrowLeftIcon, DollarSignIcon, EditIcon, UsersIcon } from "lucide-react";
+import { ArrowLeftIcon, JapaneseYen, EditIcon, UsersIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import CopyButton from "@/components/shared/CopyButton";
@@ -145,7 +145,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         <Card className="h-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <DollarSignIcon className="size-4" />
+              <JapaneseYen className="size-4" />
               {uiT("ui.1c6225ec7092")}
             </CardTitle>
           </CardHeader>

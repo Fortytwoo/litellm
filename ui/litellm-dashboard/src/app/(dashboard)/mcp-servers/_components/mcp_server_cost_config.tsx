@@ -2,7 +2,7 @@
 import { formatMoney, usdToCny, cnyToUsd } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
-import { Info, DollarSign, Wrench } from "lucide-react";
+import { Info, JapaneseYen, Wrench } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -90,7 +90,7 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
       <Card className="p-6">
         <div className="space-y-6">
           <div className="mb-4 flex items-center gap-2">
-            <DollarSign className="size-4 text-muted-foreground" />
+            <JapaneseYen className="size-4 text-muted-foreground" />
             <h3 className="text-lg font-medium">{uiT("ui.20a90e67e23542a2")}</h3>
             <Tooltip>
               <TooltipTrigger

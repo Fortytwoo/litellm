@@ -8,7 +8,7 @@ import {
   Clock,
   Database,
   DatabaseBackup,
-  DollarSign,
+  JapaneseYen,
   Hash,
   History,
   Lightbulb,
@@ -172,7 +172,7 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
         <MetricItem
           label={uiT("ui.204a5eb2cd28")}
           tooltip={uiT("ui.204a5eb2cd28")}
-          icon={<DollarSign className="size-3" aria-hidden="true" />}
+          icon={<JapaneseYen className="size-3" aria-hidden="true" />}
           value={formatMoney(usage.cost, 6)}
         />
       )}

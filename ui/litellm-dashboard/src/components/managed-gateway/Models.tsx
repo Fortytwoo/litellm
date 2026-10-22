@@ -297,7 +297,7 @@ function ModelForm({
                 </label>
               ))}
             </fieldset>
-            <Field label={`${t("budget")} (¥)`}>
+            <Field label={t("budget")}>
               <CnyInput
                 usdValue={typeof data.max_budget === "number" ? data.max_budget : null}
                 onUsdChange={(value) => change("max_budget", value ?? "")}

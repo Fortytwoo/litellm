@@ -3,7 +3,7 @@ import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import type { ColumnDef, OnChangeFn, SortingState } from "@tanstack/react-table";
-import { CircleDollarSign, Download, HeartPulse, Settings, TrendingUp, TriangleAlert } from "lucide-react";
+import { JapaneseYen, Download, HeartPulse, Settings, TrendingUp, TriangleAlert } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { DataTable, DataTableSortHeader } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells/money_cell";
@@ -332,7 +332,7 @@ export function GuardrailsOverview({
           label={uiT("ui.90b841d5d23ed6a2")}
           value={formatCost(metrics.totalCost)}
           valueColor={metrics.totalCost != null ? "text-foreground" : "text-muted-foreground"}
-          icon={<CircleDollarSign className="size-4" />}
+          icon={<JapaneseYen className="size-4" />}
           subtitle={unpricedSummary(metrics.untracked) ?? undefined}
           hint={<TotalCostMath rows={activeData} total={metrics.totalCost} untracked={metrics.untracked} />}
         />

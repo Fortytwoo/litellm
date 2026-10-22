@@ -2,7 +2,7 @@
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import type { ColumnDef } from "@tanstack/react-table";
-import { CircleDollarSign } from "lucide-react";
+import { JapaneseYen } from "lucide-react";
 import React from "react";
 import type { GuardrailUsageDetail } from "@/app/(dashboard)/hooks/guardrails/useGuardrailsUsage";
 import { CalcPopover, MathTable } from "@/components/GuardrailsMonitor/CalcPopover";
@@ -179,7 +179,7 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
               label={uiT("ui.204a5eb2cd28")}
               value={formatCost(detail.cost)}
               valueColor={detail.cost != null ? "text-foreground" : "text-muted-foreground"}
-              icon={<CircleDollarSign className="size-4" />}
+              icon={<JapaneseYen className="size-4" />}
               subtitle={unpriced ?? undefined}
               hint={<CostMath counters={counters} detail={detail} />}
             />

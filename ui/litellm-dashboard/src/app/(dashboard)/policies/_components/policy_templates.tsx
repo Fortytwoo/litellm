@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/lib/toast";
-import { ShieldCheck, ShieldAlert, FlaskConical, CircleDollarSign, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, ShieldAlert, FlaskConical, JapaneseYen, CheckCircle2 } from "lucide-react";
 import { getPolicyTemplates } from "@/components/networking";
 
 interface PolicyTemplateCardProps {
@@ -104,7 +104,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   ShieldCheckIcon: ShieldCheck,
   ShieldExclamationIcon: ShieldAlert,
   BeakerIcon: FlaskConical,
-  CurrencyDollarIcon: CircleDollarSign,
+  CurrencyDollarIcon: JapaneseYen,
   CheckCircleIcon: CheckCircle2,
 };
 
