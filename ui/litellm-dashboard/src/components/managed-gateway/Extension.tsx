@@ -7,9 +7,11 @@ import { GatewaySession, Notice, useGatewayQuery, useWriter } from "./Shared";
 import { str, strings } from "@/lib/http/managedGateway";
 import { useCopy } from "./locale";
 import { Audit } from "./Audit";
+import { RequestCache } from "./RequestCache";
 
 export type ExtensionPage =
   | "services"
+  | "request-cache"
   | "tools"
   | "members"
   | "departments"
@@ -21,6 +23,7 @@ export type ExtensionPage =
   | "usage";
 const permissions = {
   services: "services.read",
+  "request-cache": "services.read",
   tools: "tools.read",
   members: "policy.write",
   departments: "policy.write",
@@ -43,6 +46,7 @@ export function GatewayExtension({ page }: { page: ExtensionPage }) {
   if (!strings(snapshot.data?.permissions).includes(permissions[page])) return <Notice error={t("noAccess")} />;
   const views = {
     services: <Tools services />,
+    "request-cache": <RequestCache />,
     tools: <Tools />,
     members: <Access />,
     departments: <Access departments />,
