@@ -1,5 +1,17 @@
 # MCP 请求缓存原生页面交付
 
+## 生产验收补充：2026-10-24
+
+主代理已将原生页面发布到正式入口 `https://mcp-service.midi.lizhijian.xyz/ui/gateway-request-cache/`，并使用原有 Chrome 登录会话完成验收。UI 源码仍为 `7c86ceee72cb20299a6542ba3e076d10eba23a56`，850 个静态文件 hash 全部匹配交付 manifest，没有重新构建前端
+
+第四个 AI 入口 BFF 镜像为 `sha256:b6fd90914243048acb413b8f6bc6fbd4b1677502669e45d7b66c166609c0ceef`。本线程已独立只读回读 `ai-gateway-e2e-gateway-1`，结果为该 image ID、running、healthy，实际 `MCP_CONSOLE_REACT_ROOT` 仍为 `/app/e2e/ui`
+
+主代理确认真实导航、十条来源策略及 48 小时有效期、五条商品分析规则筛选、详情与 Escape、刷新、窄屏以及浏览器 console 零 warning/error 均通过。仅替换 Gateway，保留原有四文件 BFF 补丁范围外逻辑和 132 个其他容器的 ID/image，现有会话延续，无强杀。浏览器与容器保留结论来源为主代理对话 `01a16816-7e98-7e50-a15b-c32e28642972` 的生产验收回报，完整 MCP 发布回执由主代理整理
+
+本 UI 任务的生产发布与已登录页面验收已通过；真实业务缓存命中仍为 `not_run`。以下保留原交付与发布方案记录，其中版本化静态目录仅为候选方案示例，本次实际根目录以以上只读回读为准
+
+## 原始源码交付
+
 源码提交 `7c86ceee72cb20299a6542ba3e076d10eba23a56`，分支 `litellm_request_cache_admin_20261024`，父提交为线上前端标记的 `222d68212e23e31c154c5df58e5cb6b85b950a71`。相对该基线仅改动十个 UI、语言与测试文件，未引入后续文案修正，也未修改依赖、模型配置或 Python 服务
 
 入口位于现有「MCP 服务 / 请求缓存」，路径 `/ui/gateway-request-cache/`，沿用原生 React 页面布局，不跳转旧控制台。通过已有 `gateway()` 客户端读取同源 `GET /admin/api/request-cache`，继续使用 HttpOnly 会话，不传模型 Key、身份签名或 owner 查询参数。页面要求 `services.read`，后端仍负责最终会话和工具范围检查

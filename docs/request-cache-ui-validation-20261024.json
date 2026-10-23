@@ -112,8 +112,38 @@
       "compose.business.private.json"
     ]
   },
-  "overlay_installation": "root_owned_not_run_here",
-  "production_deployment": "root_owned_not_run_here",
-  "production_authenticated_browser": "root_owned_not_run_here",
+  "overlay_installation": "passed_by_root",
+  "production_deployment": "passed_by_root",
+  "production_authenticated_browser": "passed_by_root",
+  "production_acceptance": {
+    "date": "2026-10-24",
+    "url": "https://mcp-service.midi.lizhijian.xyz/ui/gateway-request-cache/",
+    "image_id": "sha256:b6fd90914243048acb413b8f6bc6fbd4b1677502669e45d7b66c166609c0ceef",
+    "ui_source_commit": "7c86ceee72cb20299a6542ba3e076d10eba23a56",
+    "matched_ui_files": 850,
+    "reporting_thread": "01a16816-7e98-7e50-a15b-c32e28642972",
+    "browser_evidence_source": "Root production acceptance using the existing authenticated Chrome session",
+    "checks": [
+      "MCP services navigation to native request cache page",
+      "10 source policies with 48-hour lifetime",
+      "5 shop goods analysis policy filters",
+      "Rule details and Escape",
+      "Manual refresh",
+      "Narrow viewport",
+      "Zero console warnings and errors"
+    ],
+    "other_containers_preserved": 132,
+    "container_preservation_evidence": "Reported by root production release audit",
+    "session_preserved": true,
+    "forced_kill": false,
+    "independent_readonly_container_check": {
+      "container": "ai-gateway-e2e-gateway-1",
+      "image_id": "sha256:b6fd90914243048acb413b8f6bc6fbd4b1677502669e45d7b66c166609c0ceef",
+      "state": "running",
+      "health": "healthy",
+      "static_root": "/app/e2e/ui"
+    },
+    "complete_mcp_release_receipt": "being prepared by root"
+  },
   "real_business_cache_hit": "not_run"
 }
