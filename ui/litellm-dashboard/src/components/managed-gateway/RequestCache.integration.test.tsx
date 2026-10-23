@@ -1,6 +1,10 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
+import userEvent from "@testing-library/user-event";
+import { chooseSelectOption } from "../../../tests/test-utils";
+import { cacheHistoryFixture } from "../../../tests/fixtures/requestCacheHistory";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { cacheReportFixture } from "../../../tests/fixtures/requestCache";
 import { GatewaySession } from "./Shared";
@@ -16,19 +20,21 @@ const response = (value: object, status = 200) =>
 function renderCache() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const view = render(
-    <QueryClientProvider client={client}>
-      <LanguageProvider initialLocale="zh">
-        <GatewaySession.Provider
-          value={{
-            me: { subject: "synthetic-admin" },
-            snapshot: { revision: 1, permissions: ["services.read"] },
-            write: async () => ({}),
-          }}
-        >
-          <RequestCache />
-        </GatewaySession.Provider>
-      </LanguageProvider>
-    </QueryClientProvider>,
+    <NuqsTestingAdapter hasMemory>
+      <QueryClientProvider client={client}>
+        <LanguageProvider initialLocale="zh">
+          <GatewaySession.Provider
+            value={{
+              me: { subject: "synthetic-admin" },
+              snapshot: { revision: 1, permissions: ["services.read"] },
+              write: async () => ({}),
+            }}
+          >
+            <RequestCache />
+          </GatewaySession.Provider>
+        </LanguageProvider>
+      </QueryClientProvider>
+    </NuqsTestingAdapter>,
   );
   return { client, view };
 }
@@ -42,6 +48,7 @@ it("renders installed policies and filters shared tool mappings without treating
   vi.stubGlobal("fetch", vi.fn<typeof fetch>().mockResolvedValue(response(cacheReportFixture)));
   renderCache();
   expect(await screen.findByRole("cell", { name: /^品牌日趋势/ })).toBeVisible();
+  fireEvent.click(screen.getByText("查看运行进程与配置详情"));
   const runtime = screen.getByRole("region", { name: "飞瓜 / BigDataVoice" });
   expect(screen.getByRole("combobox", { name: "平台" })).toHaveTextContent("全部平台");
   expect(screen.getByRole("combobox", { name: "状态" })).toHaveTextContent("全部状态");
@@ -69,7 +76,7 @@ it("closes an opened rule on a successful background refresh even when the respo
     await client.refetchQueries({ queryKey: ["gateway", "request-cache"] });
   });
   await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
-  expect(fetch).toHaveBeenCalledTimes(2);
+  expect(fetch).toHaveBeenCalledTimes(4);
 });
 
 it("hides process totals for restricted scopes even when all catalog tools and unsafe totals are present", async () => {
@@ -97,6 +104,8 @@ it("hides process totals for restricted scopes even when all catalog tools and u
   };
   vi.stubGlobal("fetch", vi.fn<typeof fetch>().mockResolvedValue(response(restricted)));
   renderCache();
+  await screen.findByText("查看运行进程与配置详情");
+  fireEvent.click(screen.getByText("查看运行进程与配置详情"));
   expect(await screen.findByText("工具范围受限，运行进程总计与容量已隐藏")).toBeVisible();
   expect(screen.queryByText("12,345")).not.toBeInTheDocument();
   expect(screen.queryByText(/98,765/)).not.toBeInTheDocument();
@@ -107,7 +116,10 @@ it("retains old samples on an unavailable gateway and clears them with the open 
   const fetch = vi
     .fn<typeof globalThis.fetch>()
     .mockResolvedValueOnce(response(cacheReportFixture))
+    .mockResolvedValueOnce(response(cacheHistoryFixture))
     .mockResolvedValueOnce(response({ error: "unavailable" }, 503))
+    .mockResolvedValueOnce(response({ error: "unavailable" }, 503))
+    .mockResolvedValueOnce(response({ error: "permission_denied" }, 403))
     .mockResolvedValueOnce(response({ error: "permission_denied" }, 403));
   vi.stubGlobal("fetch", fetch);
   renderCache();
@@ -120,6 +132,41 @@ it("retains old samples on an unavailable gateway and clears them with the open 
   await waitFor(() => expect(screen.queryByRole("region", { name: "飞瓜 / BigDataVoice" })).not.toBeInTheDocument());
   expect(screen.queryByRole("cell", { name: /^品牌日趋势/ })).not.toBeInTheDocument();
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+});
+
+it("renders stored totals, writes the window to the URL and clears all data after a history-only permission rejection", async () => {
+  const onUrlUpdate = vi.fn();
+  const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(async (input) => {
+    if (!String(input).includes("history")) return response(cacheReportFixture);
+    return response(cacheHistoryFixture);
+  });
+  vi.stubGlobal("fetch", fetch);
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  render(
+    <NuqsTestingAdapter hasMemory onUrlUpdate={onUrlUpdate}>
+      <QueryClientProvider client={client}>
+        <LanguageProvider initialLocale="zh">
+          <GatewaySession.Provider
+            value={{ me: { subject: "synthetic-admin" }, snapshot: { revision: 1 }, write: async () => ({}) }}
+          >
+            <RequestCache />
+          </GatewaySession.Provider>
+        </LanguageProvider>
+      </QueryClientProvider>
+    </NuqsTestingAdapter>,
+  );
+  expect(await screen.findByRole("heading", { name: "缓存概览" })).toBeVisible();
+  expect(within(screen.getByRole("region", { name: "飞瓜 / BigDataVoice 缓存概览" })).getByText("66.7%")).toBeVisible();
+  expect(screen.getByRole("combobox", { name: "时间范围" })).toHaveTextContent("最近 24 小时");
+  await chooseSelectOption(userEvent.setup(), screen.getByRole("combobox", { name: "时间范围" }), "最近 7 天");
+  await waitFor(() => expect(onUrlUpdate).toHaveBeenCalled());
+  await waitFor(() => expect(fetch).toHaveBeenCalledWith(expect.stringContaining("window=7d"), expect.any(Object)));
+  fetch.mockImplementation(async (input) =>
+    String(input).includes("history") ? response({ error: "permission_denied" }, 403) : response(cacheReportFixture),
+  );
+  fireEvent.click(screen.getByRole("button", { name: "刷新", exact: true }));
+  await waitFor(() => expect(screen.queryByRole("heading", { name: "缓存概览" })).not.toBeInTheDocument());
+  expect(screen.queryByRole("cell", { name: /^品牌日趋势/ })).not.toBeInTheDocument();
 });
 
 it("denies the native route before reading cache status when the console session lacks services.read", async () => {

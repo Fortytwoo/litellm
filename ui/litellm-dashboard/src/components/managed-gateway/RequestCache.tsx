@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,6 @@ import { auditTime, str } from "@/lib/http/managedGateway";
 import {
   filterRequestCachePolicies,
   currentCacheSelection,
-  readRequestCache,
   requestCachePolicies,
   runtimeIsStale,
   type RequestCacheSelection,
@@ -32,6 +32,8 @@ import {
   type RequestCacheRuntime,
   type RequestCacheToolRule,
 } from "@/lib/http/requestCache";
+import { cacheWindows, readCacheView, type CacheView } from "@/lib/http/requestCacheHistory";
+import { RequestCacheOverview } from "./RequestCacheOverview";
 import { Modal, Notice, useGateway } from "./Shared";
 import { useCopy, type CopyKey } from "./locale";
 
@@ -45,6 +47,7 @@ const metrics = [
   ["coalesced", "cacheCoalesced"],
   ["error", "cacheErrors"],
 ] as const;
+const windowParser = parseAsStringLiteral(cacheWindows).withDefault("24h");
 const reasonLabels: Readonly<Record<string, CopyKey>> = {
   timeout: "cacheTimeout",
   unreachable: "cacheUnreachable",
@@ -212,9 +215,10 @@ export function RequestCache() {
   const t = useCopy();
   const { me, snapshot } = useGateway();
   const subject = str(me.subject);
-  const options: UseQueryOptions<RequestCacheReport> = {
-    queryKey: ["gateway", "request-cache", subject, str(snapshot.revision)],
-    queryFn: ({ signal }) => readRequestCache(signal),
+  const [window, setWindow] = useQueryState("cacheWindow", windowParser);
+  const options: UseQueryOptions<CacheView> = {
+    queryKey: ["gateway", "request-cache", subject, str(snapshot.revision), window],
+    queryFn: ({ signal }) => readCacheView(window, signal),
     enabled: Boolean(subject),
     retry: false,
     staleTime: 0,
@@ -292,15 +296,29 @@ export function RequestCache() {
             </Alert>
           )}
           {report && (
-            <div className="grid min-w-0 gap-5 xl:grid-cols-2">
-              {report.runtimes.map((runtime) => (
-                <RuntimeCard
-                  key={runtime.platform}
-                  runtime={runtime}
-                  stale={runtimeIsStale(runtime, report.stale_after_seconds, failed)}
-                />
-              ))}
-            </div>
+            <RequestCacheOverview
+              report={report}
+              window={window}
+              onWindow={(value) => {
+                setSelection(null);
+                void setWindow(value);
+              }}
+              stale={stale}
+            />
+          )}
+          {report && (
+            <details className="rounded-lg border p-4">
+              <summary className="cursor-pointer text-sm font-medium">{t("cacheRuntimeDetails")}</summary>
+              <div className="mt-4 grid min-w-0 gap-5 xl:grid-cols-2">
+                {report.runtimes.map((runtime) => (
+                  <RuntimeCard
+                    key={runtime.platform}
+                    runtime={runtime}
+                    stale={runtimeIsStale(runtime, report.stale_after_seconds, failed)}
+                  />
+                ))}
+              </div>
+            </details>
           )}
           <p className="text-sm text-muted-foreground">{t("cacheMetricHelp")}</p>
           <section aria-labelledby="cache-rules-title" className="flex min-w-0 flex-col gap-4">

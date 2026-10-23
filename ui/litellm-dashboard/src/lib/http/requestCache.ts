@@ -52,6 +52,14 @@ const memoryFields = {
   max_bytes: count,
   inflight: count,
 };
+const inventoryFields = {
+  scope: z.enum(["runtime_process", "redis_namespace"]),
+  coverage: z.enum(["complete", "tracked_only", "unavailable"]),
+  sampled_at: timestamp,
+  tracking_since: timestamp.nullable().optional().default(null),
+  entries: count,
+  bytes: count,
+};
 const metadataFields = {
   schema_version: z.literal(1),
   platform,
@@ -78,6 +86,7 @@ const metadataFields = {
   tool_rules: z.array(toolRule).max(32),
   metrics: z.object(metricFields).readonly(),
   memory: z.object(memoryFields).nullable().optional().default(null),
+  inventory: z.object(inventoryFields).readonly().nullable().optional().default(null),
   entry_metadata_available: z.boolean().optional().default(false),
 };
 const metadata = z.object(metadataFields).readonly();
