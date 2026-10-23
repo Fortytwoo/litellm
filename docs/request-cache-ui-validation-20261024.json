@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "source_commit": "7c86ceee72cb20299a6542ba3e076d10eba23a56",
+  "branch": "litellm_request_cache_admin_20261024",
+  "production_ui_baseline": "222d68212e23e31c154c5df58e5cb6b85b950a71",
+  "artifact": {
+    "source_commit": "7c86ceee72cb20299a6542ba3e076d10eba23a56",
+    "baseline": "222d68212e23e31c154c5df58e5cb6b85b950a71",
+    "archive": "C:\\Users\\fortytwo\\Downloads\\litellm-request-cache-ui-7c86ceee72cb.tar.gz",
+    "sha256": "b26c6243ff002ceb40ba0ad219dea3ad1ee4cfc99fae5140524ffacd48f3572c",
+    "archive_bytes": 7105926,
+    "manifest": "C:\\Users\\fortytwo\\Downloads\\litellm-request-cache-ui-7c86ceee72cb.manifest.json",
+    "checksum": "C:\\Users\\fortytwo\\Downloads\\litellm-request-cache-ui-7c86ceee72cb.sha256",
+    "file_count": 850,
+    "tree_sha256": "c1895512729402a02bf637de050a632ee0e9738e65ee28c8818e59108ab33e26",
+    "readback": "all files matched"
+  },
+  "tests": {
+    "command": "npx vitest run src/lib/http/requestCache.test.ts src/lib/http/managedGateway.test.ts src/lib/http/managedSession.test.ts src/components/managed-gateway/RequestCache.integration.test.tsx src/components/managed-gateway/Tools.integration.test.tsx",
+    "files": 5,
+    "passed": 20,
+    "typescript": "passed",
+    "changed_file_eslint": "passed",
+    "changed_file_prettier": "passed"
+  },
+  "build": {
+    "command": "NEXT_PUBLIC_MANAGED_GATEWAY=1 npm run build",
+    "status": "passed",
+    "pages": 67,
+    "log": "C:\\Users\\fortytwo\\AppData\\Local\\Temp\\litellm-request-cache-20261024\\next-build-final.log",
+    "warning": "Existing AVIF metadata warning outside changed files"
+  },
+  "browser": {
+    "status": "passed",
+    "scope": "local production build with production static adapter; same-origin signed synthetic session and synthetic runtime metrics",
+    "entry": "http://127.0.0.1:18767/ui/gateway-services/",
+    "route": "http://127.0.0.1:18767/ui/gateway-request-cache/",
+    "viewports": [
+      "1440x1100",
+      "390x844"
+    ],
+    "checks": [
+      "native MCP navigation",
+      "10 policies and dynamic shared tool associations",
+      "translated initial filter values",
+      "refresh and rule details",
+      "background refresh closes details",
+      "partial stale readback",
+      "zero denominator",
+      "403 clears old data",
+      "tool scope hides totals",
+      "polling pauses during simulated hidden visibility",
+      "narrow viewport"
+    ],
+    "pageErrors": [],
+    "initialConsole": [],
+    "allConsole": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "url": "http://127.0.0.1:18767/admin/api/request-cache"
+      }
+    ],
+    "requests": [
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      },
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      },
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      },
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      },
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      },
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      },
+      {
+        "path": "/admin/api/request-cache",
+        "authorization": false
+      }
+    ],
+    "screenshots": [
+      "native-desktop.png",
+      "native-partial.png",
+      "native-mobile.png"
+    ]
+  },
+  "production_observation": {
+    "container": "ai-gateway-e2e-gateway-1",
+    "image": "managed-gateway-e2e:cny-222d68212e23",
+    "image_id": "sha256:00cea76699d9c2af90b990538cf4d9fe034967e9e3b299473728519d6faf557c",
+    "source_label": "222d68212e23e31c154c5df58e5cb6b85b950a71",
+    "static_root": "/app/e2e/ui",
+    "ui_bind_mount": false,
+    "compose_project": "ai-gateway-e2e",
+    "compose_directory": "/mnt/BaseService/mediec-ai-gateway-e2e",
+    "compose_files": [
+      "compose.yml",
+      "compose.gateway.yml",
+      "compose.business.private.json"
+    ]
+  },
+  "overlay_installation": "root_owned_not_run_here",
+  "production_deployment": "root_owned_not_run_here",
+  "production_authenticated_browser": "root_owned_not_run_here",
+  "real_business_cache_hit": "not_run"
+}
