@@ -137,7 +137,15 @@ describe("Duration column", () => {
 
 describe("Internal User column", () => {
   const emailById: Record<string, string> = { "106514937785257944828": "alice@example.com" };
-  const deps = { ...noopDeps, resolveUserEmail: (userId: string) => emailById[userId] };
+  const deps = { ...noopDeps, resolveUserName: (userId: string) => emailById[userId] };
+
+  it("shows a resolved real name while preserving the user id in the tooltip", async () => {
+    const user = userEvent.setup();
+    renderRows([logEntry({ user: "audit-user" })], { ...noopDeps, resolveUserName: () => "Audit Reviewer" });
+
+    await user.hover(screen.getByText("Audit Reviewer"));
+    expect(await screen.findByText("Audit Reviewer (audit-user)")).toBeInTheDocument();
+  });
 
   it("shows the user's email instead of the raw id, with both in the tooltip", async () => {
     const user = userEvent.setup();

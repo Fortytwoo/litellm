@@ -52,6 +52,17 @@ function renderTable(overrides: Partial<React.ComponentProps<typeof AuditLogsTab
 }
 
 describe("AuditLogsTable", () => {
+  it("shows actor and target user names while keeping target ids and original audit rows", async () => {
+    const user = userEvent.setup();
+    const names: Record<string, string> = { "user-42": "Audit Reviewer", "user-obj-456": "Account Owner" };
+    const props = renderTable({ resolveUserName: (id) => names[id] });
+
+    expect(screen.getByText("Audit Reviewer")).toHaveAttribute("title", "user-42");
+    expect(screen.getByText("user-obj-456")).toBeInTheDocument();
+    await user.click(screen.getByText("Account Owner"));
+    expect(props.onViewLog).toHaveBeenCalledWith(ROWS[1]);
+  });
+
   it("renders each audit column with the migrated shared cells", () => {
     renderTable();
 

@@ -5,10 +5,6 @@ import moment from "moment";
 import { AuditLogDrawer } from "./AuditLogDrawer";
 import { AuditLogEntry } from "../AuditLogsTableColumns";
 
-vi.mock("../../../common_components/DefaultProxyAdminTag", () => ({
-  default: ({ userId }: { userId: string }) => <span>{userId}</span>,
-}));
-
 const baseLog: AuditLogEntry = {
   id: "audit-1",
   updated_at: "2026-07-20T10:30:00Z",
@@ -31,6 +27,21 @@ function blockNamed(label: string) {
 }
 
 describe("AuditLogDrawer", () => {
+  it("shows the actor name and target user name without changing the copied object id", () => {
+    const names: Record<string, string> = { "user-1": "Audit Reviewer", "user-target": "Account Owner" };
+    render(
+      <AuditLogDrawer
+        {...defaultProps}
+        log={{ ...baseLog, table_name: "LiteLLM_UserTable", object_id: "user-target" }}
+        resolveUserName={(id) => names[id]}
+      />,
+    );
+
+    expect(screen.getByText("Audit Reviewer")).toHaveAttribute("title", "user-1");
+    expect(screen.getByText("Account Owner")).toBeInTheDocument();
+    expect(screen.getByText("user-target")).toBeInTheDocument();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
   });

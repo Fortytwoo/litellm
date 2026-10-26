@@ -8,6 +8,7 @@ import { ColumnFiltersState, OnChangeFn, PaginationState } from "@tanstack/react
 import { resolveLogoSrc } from "@/lib/assetPaths";
 import { DEBOUNCE_WAIT_MS } from "@/utils/debounceConstants";
 import { uiAuditLogsCall } from "../../networking";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { AuditLogEntry } from "./AuditLogsTableColumns";
 import { AuditLogsTable } from "./AuditLogsTable";
 import { AuditLogDrawer } from "./AuditLogDrawer/AuditLogDrawer";
@@ -88,6 +89,12 @@ export default function AuditLogsPanel({
     placeholderData: keepPreviousData,
   });
 
+  const userIds = [...(query.data?.audit_logs ?? []), ...(selectedLog ? [selectedLog] : [])].flatMap((log) =>
+    log.table_name === "LiteLLM_UserTable" ? [log.changed_by, log.object_id] : [log.changed_by],
+  );
+  const { data: displayNames } = useUserDisplayLookup(canQueryAuditLogs ? userIds : []);
+  const resolveUserName = useCallback((id: string) => displayNames?.[id], [displayNames]);
+
   const handleColumnFiltersChange = useCallback<OnChangeFn<ColumnFiltersState>>((updaterOrValue) => {
     setColumnFilters(updaterOrValue);
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
@@ -142,9 +149,15 @@ export default function AuditLogsPanel({
         onSearchChange={handleSearchChange}
         onRefresh={() => query.refetch()}
         onViewLog={handleViewLog}
+        resolveUserName={resolveUserName}
       />
 
-      <AuditLogDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} log={selectedLog} />
+      <AuditLogDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        log={selectedLog}
+        resolveUserName={resolveUserName}
+      />
     </>
   );
 }
