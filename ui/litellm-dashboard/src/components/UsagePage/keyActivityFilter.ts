@@ -4,7 +4,7 @@ export function keyActivityMatches(apiKey: string, data: ModelActivityData, quer
   const needle = query.trim().toLowerCase();
   if (needle === "") return true;
   const meta = data.key_metadata;
-  return [apiKey, data.label, meta?.key_alias, meta?.user_id, meta?.user_email].some(
+  return [apiKey, data.label, meta?.key_alias, meta?.user_id, meta?.user_email, meta?.user_alias].some(
     (field) => field?.toLowerCase().includes(needle) ?? false,
   );
 }

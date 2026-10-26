@@ -101,6 +101,22 @@ it("leaves the default_user_id placeholder unlinked", () => {
   const placeholderKey = makeDeletedKey({ user_id: "default_user_id", created_by: "default_user_id" });
   renderWithProviders(<DeletedKeysTable {...defaultProps} keys={[placeholderKey]} />);
 
-  expect(screen.getAllByText("default_user_id")).toHaveLength(2);
+  expect(screen.getByText("default_user_id")).toBeInTheDocument();
+  expect(screen.getByText("Default Proxy Admin")).toBeInTheDocument();
   expect(screen.queryByRole("link", { name: "default_user_id" })).not.toBeInTheDocument();
+});
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({
+  useUserDisplayLookup: () => ({ data: { "named-actor": "Audit Reviewer" } }),
+}));
+
+it("keeps the explicit User ID column raw while resolving the creator name", () => {
+  renderWithProviders(
+    <DeletedKeysTable
+      {...defaultProps}
+      keys={[makeDeletedKey({ user_id: "named-actor", created_by: "named-actor" })]}
+    />,
+  );
+  expect(screen.getByRole("link", { name: "named-actor" })).toHaveAttribute("href", "/ui/users?user=named-actor");
+  expect(screen.getByRole("link", { name: "Audit Reviewer" })).toHaveAttribute("href", "/ui/users?user=named-actor");
 });

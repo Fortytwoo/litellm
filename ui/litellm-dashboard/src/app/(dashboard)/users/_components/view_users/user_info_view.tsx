@@ -439,7 +439,9 @@ export default function UserInfoView({
             <ArrowLeft />
             {uiT("ui.7f739763bbe5")}
           </Button>
-          <h2 className="text-xl font-semibold">{userData.user_email || uiT("ui.b512d97e7cbf")}</h2>
+          <h2 className="text-xl font-semibold">
+            {userData.user_alias?.trim() || userData.user_email || uiT("ui.b512d97e7cbf")}
+          </h2>
           <div className="flex items-center cursor-pointer">
             <span className="text-sm text-muted-foreground font-mono">{userData.user_id}</span>
             <Button
@@ -529,9 +531,7 @@ export default function UserInfoView({
                 <h3 className="text-lg font-medium">{formatMoney(userData.spend || 0, 2)}</h3>
                 <p>
                   {uiT("supplement.budgetFraction")}{" "}
-                  {userData.max_budget !== null
-                    ? formatMoney(userData.max_budget, 2)
-                    : uiT("ui.11dde17d6c3e")}
+                  {userData.max_budget !== null ? formatMoney(userData.max_budget, 2) : uiT("ui.11dde17d6c3e")}
                 </p>
               </div>
             </Card>

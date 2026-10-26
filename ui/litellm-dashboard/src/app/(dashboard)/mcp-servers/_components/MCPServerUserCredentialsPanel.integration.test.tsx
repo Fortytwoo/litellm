@@ -100,3 +100,13 @@ describe("MCPServerUserCredentialsPanel", () => {
     expect(alert).toHaveTextContent("Admin access required");
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({
+  useUserDisplayLookup: () => ({ data: { "named-user": "Audit Reviewer" } }),
+}));
+
+it("shows a credential owner's resolved name and keeps the ID inspectable", async () => {
+  vi.mocked(networking.fetchMCPServerUserCredentials).mockResolvedValue([{ ...ITEMS[0], user_id: "named-user" }]);
+  renderPanel();
+  expect(await screen.findByText("Audit Reviewer")).toHaveAttribute("title", "named-user");
+});

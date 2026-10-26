@@ -111,3 +111,5 @@ describe("PromptInfoView tabs", () => {
     expect(screen.getByText(/"prompt_id": "support-reply"/)).toBeVisible();
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({ useUserDisplayLookup: () => ({ data: {} }) }));

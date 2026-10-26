@@ -323,6 +323,7 @@ class _FakeRepository:
                 team_id="team-a",
                 user_id="user-a",
                 user_email="user@example.test",
+                user_alias="Audit Reviewer",
                 key_exists=True,
                 tags=(),
             )
@@ -614,6 +615,7 @@ def test_search_folds_each_entity_key_across_days(
                     "team_id": "team-a",
                     "user_id": "user-a",
                     "user_email": "user@example.test",
+                    "user_alias": "Audit Reviewer",
                     "key_exists": True,
                 },
             }
@@ -693,6 +695,7 @@ def test_key_page_routes_map_ranked_rows_and_totals(
                     "team_id": "team-a",
                     "user_id": "user-a",
                     "user_email": "user@example.test",
+                    "user_alias": "Audit Reviewer",
                     "key_exists": True,
                 },
             },
@@ -714,6 +717,7 @@ def test_key_page_routes_map_ranked_rows_and_totals(
                     "team_id": "team-a",
                     "user_id": "user-a",
                     "user_email": "user@example.test",
+                    "user_alias": "Audit Reviewer",
                     "key_exists": True,
                 },
             },

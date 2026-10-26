@@ -288,3 +288,5 @@ describe("PerUserUsage", () => {
     expect(tickTexts.some((tick) => / users$/.test(tick))).toBe(true);
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({ useUserDisplayLookup: () => ({ data: {} }) }));

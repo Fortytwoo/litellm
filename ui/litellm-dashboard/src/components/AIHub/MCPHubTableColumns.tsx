@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { t as translateUi } from "@/i18n";
@@ -245,7 +246,7 @@ export const getMCPHubTableColumns = ({ onServerClick }: MCPHubTableColumnsDeps)
     sortingFn: "alphanumeric",
     cell: ({ row }) => (
       <span className="block max-w-60 truncate text-xs" title={row.original.created_by || undefined}>
-        {row.original.created_by || "-"}
+        {row.original.created_by ? <DefaultProxyAdminTag userId={row.original.created_by} /> : "-"}
       </span>
     ),
   },

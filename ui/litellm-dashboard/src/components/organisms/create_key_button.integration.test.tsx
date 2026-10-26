@@ -1,3 +1,4 @@
+import { usdToCny } from "@/utils/currency";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, renderWithProviders, screen, testQueryClient, waitFor } from "../../../tests/test-utils";
@@ -364,7 +365,7 @@ describe("CreateKey", () => {
       await openModal();
       await nameTheKey();
       await openSection(/Optional Settings/i);
-      await userEvent.type(await screen.findByLabelText(/Max Budget \(USD\)/), "150.75");
+      await userEvent.type(await screen.findByLabelText(/Max Budget \(CNY\)/), String(usdToCny(150.75)));
       await openSection(/Optional Settings/i);
       await submit();
 
@@ -377,11 +378,11 @@ describe("CreateKey", () => {
       await openModal();
       await nameTheKey();
       await openSection(/Optional Settings/i);
-      await userEvent.type(await screen.findByLabelText(/Max Budget \(USD\)/), "150.75");
+      await userEvent.type(await screen.findByLabelText(/Max Budget \(CNY\)/), String(usdToCny(150.75)));
       await openSection(/Optional Settings/i);
       await openSection(/Optional Settings/i);
 
-      expect(await screen.findByLabelText(/Max Budget \(USD\)/)).toHaveValue(150.75);
+      expect(await screen.findByLabelText(/Max Budget \(CNY\)/)).toHaveValue(usdToCny(150.75));
 
       await submit();
 
@@ -392,7 +393,7 @@ describe("CreateKey", () => {
       await openModal();
       await nameTheKey();
       await openSection(/Optional Settings/i);
-      await userEvent.type(await screen.findByLabelText(/Max Budget \(USD\)/), "150.75");
+      await userEvent.type(await screen.findByLabelText(/Max Budget \(CNY\)/), String(usdToCny(150.75)));
       await submit();
 
       const payload = await createdPayload();
@@ -503,7 +504,7 @@ describe("CreateKey", () => {
       await nameTheKey();
       await openSection(/Optional Settings/i);
       await openSection(SECTIONS.advanced);
-      await userEvent.type(await screen.findByLabelText("Soft Budget"), "12");
+      await userEvent.type(await screen.findByLabelText("Soft Budget"), String(usdToCny(12)));
       await submit();
 
       const payload = await createdPayload();
@@ -756,11 +757,11 @@ describe("CreateKey", () => {
       await openModal({ team: { team_id: "team-1", max_budget: 10 } as unknown as Team });
       await nameTheKey();
       await openSection(/Optional Settings/i);
-      await userEvent.type(await screen.findByLabelText(/Max Budget \(USD\)/), "50");
+      await userEvent.type(await screen.findByLabelText(/Max Budget \(CNY\)/), String(usdToCny(50)));
       await submit();
 
       await waitFor(() => {
-        expect(screen.getByLabelText(/Max Budget \(USD\)/)).toHaveAttribute("aria-invalid", "true");
+        expect(screen.getByLabelText(/Max Budget \(CNY\)/)).toHaveAttribute("aria-invalid", "true");
       });
       expect(vi.mocked(keyCreateCall)).not.toHaveBeenCalled();
     });
@@ -1291,7 +1292,7 @@ describe("CreateKey", () => {
       await openModal({ team: { team_id: "team-1", max_budget: 10 } as unknown as Team });
       await nameTheKey();
       await openSection(/Optional Settings/i);
-      await userEvent.type(await screen.findByLabelText(/Max Budget \(USD\)/), "50");
+      await userEvent.type(await screen.findByLabelText(/Max Budget \(CNY\)/), String(usdToCny(50)));
       await openSection(/Optional Settings/i);
       await submit();
 

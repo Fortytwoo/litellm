@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -19,13 +20,17 @@ function TruncatedTextCell({ value }: { value: string | null | undefined }) {
   );
 }
 
-function UserLinkCell({ userId }: { userId: string | null | undefined }) {
+function UserLinkCell({ userId, showName = true }: { userId: string | null | undefined; showName?: boolean }) {
   if (!userId) {
     return <span className="text-muted-foreground">-</span>;
   }
   return (
     <span className="block max-w-60" title={userId}>
-      <IdentityCell title={userId} titleClassName="font-normal" href={userDetailHref(userId)} />
+      <IdentityCell
+        title={showName ? <DefaultProxyAdminTag userId={userId} /> : userId}
+        titleClassName="font-normal"
+        href={userDetailHref(userId)}
+      />
     </span>
   );
 }
@@ -146,7 +151,7 @@ export const getDeletedKeysTableColumns = (): ColumnDef<DeletedKeyResponse>[] =>
     },
     size: 120,
     enableSorting: false,
-    cell: ({ row }) => <UserLinkCell userId={row.original.user_id} />,
+    cell: ({ row }) => <UserLinkCell userId={row.original.user_id} showName={false} />,
   },
   {
     id: "created_at",

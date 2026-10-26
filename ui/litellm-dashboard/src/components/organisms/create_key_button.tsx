@@ -1,4 +1,5 @@
 "use client";
+import { userSelectionLabel } from "@/utils/userDisplay";
 import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
@@ -189,6 +190,7 @@ interface CreateKeyProps {
 interface User {
   user_id: string;
   user_email: string | null;
+  user_alias?: string | null;
   role?: string;
 }
 
@@ -608,7 +610,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
 
       const data: User[] = response;
       const options: SearchSelectOption[] = data.map((user) => ({
-        label: user.user_email ? `${user.user_email} (${user.user_id})` : user.user_id,
+        label: userSelectionLabel(user),
         value: user.user_id,
       }));
 

@@ -1,4 +1,5 @@
 "use client";
+import { userSelectionLabel } from "@/utils/userDisplay";
 
 import { t as translateUi } from "@/i18n";
 
@@ -19,7 +20,8 @@ import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 
 interface User {
   user_id: string;
-  user_email: string;
+  user_email: string | null;
+  user_alias?: string | null;
   role?: string;
 }
 
@@ -95,7 +97,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      params.append(fieldName, searchText);
+      params.append(fieldName === "user_email" ? "search" : fieldName, searchText);
       if (teamId) {
         params.append("team_id", teamId);
       }
@@ -107,8 +109,8 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
 
       const data: User[] = response;
       const options: UserOption[] = data.map((user) => ({
-        label: fieldName === "user_email" ? `${user.user_email}` : `${user.user_id}`,
-        value: fieldName === "user_email" ? user.user_email : user.user_id,
+        label: userSelectionLabel(user),
+        value: user.user_id,
         user,
       }));
       setUserOptions(options);
@@ -166,14 +168,14 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
         form.setValue("user_id", null);
         return;
       }
-      controlProps.onChange(value);
+
       handleSelect(items.find((option) => option.value === value) ?? null);
     };
     return (
       <div data-testid={testId} onKeyDown={swallowEnter}>
         <PaginatedSearchSelect
           options={items}
-          value={controlProps.value}
+          value={selectedUserId}
           onValueChange={handleValueChange}
           onSearchChange={(query: string) => handleSearch(query, fieldName)}
           autoHighlight="always"
@@ -201,9 +203,14 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
             </Alert>
 
             <FieldGroup>
-              <FormField control={form.control} name="user_email" label={uiT("ui.969ccbd3cf63")}>
+              <FormField control={form.control} name="user_email" label={uiT("ui.b512d97e7cbf")}>
                 {({ id, value, onChange }) =>
-                  renderUserSearch("user_email", "Search by email", { id, value, onChange }, "member-email-search")
+                  renderUserSearch(
+                    "user_email",
+                    "Search by name, email or user ID",
+                    { id, value, onChange },
+                    "member-email-search",
+                  )
                 }
               </FormField>
 

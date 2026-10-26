@@ -18848,7 +18848,7 @@ export interface paths {
         };
         /**
          * Ui View Users
-         * @description Filter users based on partial match of user_id or email, or combined ``search``, with pagination.
+         * @description Filter users based on partial match of user_id or email, or a name in combined ``search``, with pagination.
          *
          *     Behaviour depends on the ``scope_user_search_to_org`` UI-setting flag
          *     (stored in the ``litellm_uisettings`` table):
@@ -18923,7 +18923,7 @@ export interface paths {
          *         user_email: Optional[str]
          *             Filter users by partial email match
          *         search: Optional[str]
-         *             Combined search: matches users whose user_id or user_email contains the value (case-insensitive)
+         *             Combined search: matches users whose user_id, user_email or user_alias contains the value (case-insensitive)
          *         team: Optional[str]
          *             Filter users by team id. Will match if user has this team in their teams array.
          *         page: int
@@ -34535,6 +34535,8 @@ export interface components {
             key_exists?: boolean | null;
             /** Team Id */
             team_id?: string | null;
+            /** User Alias */
+            user_alias?: string | null;
             /** User Email */
             user_email?: string | null;
             /** User Id */
@@ -36928,6 +36930,8 @@ export interface components {
         };
         /** LiteLLM_UserTableFiltered */
         LiteLLM_UserTableFiltered: {
+            /** User Alias */
+            user_alias?: string | null;
             /** User Email */
             user_email?: string | null;
             /** User Id */
@@ -77571,7 +77575,7 @@ export interface operations {
                 user_id?: string | null;
                 /** @description User email in the request parameters */
                 user_email?: string | null;
-                /** @description Combined search: matches users whose 'user_id' or 'user_email' contains the value (case-insensitive). */
+                /** @description Search user IDs, email addresses and names (case-insensitive partial match). */
                 search?: string | null;
                 /** @description Team ID — used when a team admin searches for users to add to their team */
                 team_id?: string | null;
@@ -77649,7 +77653,7 @@ export interface operations {
                 sso_user_ids?: string | null;
                 /** @description Filter users by partial email match */
                 user_email?: string | null;
-                /** @description Combined search: matches users whose 'user_id' or 'user_email' contains the value (case-insensitive). */
+                /** @description Search user IDs, email addresses and names (case-insensitive partial match). */
                 search?: string | null;
                 /** @description Filter users by team id */
                 team?: string | null;

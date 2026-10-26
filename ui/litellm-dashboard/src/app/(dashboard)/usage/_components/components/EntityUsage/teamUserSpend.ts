@@ -8,7 +8,7 @@ export type TeamUserSpendRow = TeamUserSpendResponse["results"][number];
 export const NO_USER_LABEL = "(no user)";
 
 export const userLabel = (row: TeamUserSpendRow): string => {
-  const identity = row.user_email || row.user_alias;
+  const identity = row.user_alias?.trim() || row.user_email?.trim();
   return identity || row.user_id || NO_USER_LABEL;
 };
 

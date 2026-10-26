@@ -892,6 +892,7 @@ def test_key_metadata_includes_recovered_user_email():
                 team_id="team-1",
                 user_id="alice",
                 user_email="alice@example.com",
+                user_alias="Audit Reviewer",
                 key_exists=True,
                 tags=(),
             )
@@ -902,6 +903,7 @@ def test_key_metadata_includes_recovered_user_email():
     assert meta.key_alias == "batch-worker"
     assert meta.user_id == "alice"
     assert meta.user_email == "alice@example.com"
+    assert meta.user_alias == "Audit Reviewer"
 
 
 def test_key_metadata_includes_user_id_without_user_email():
