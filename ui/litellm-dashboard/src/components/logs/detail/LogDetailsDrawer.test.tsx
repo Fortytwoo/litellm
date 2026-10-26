@@ -20,7 +20,11 @@ vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({
 }));
 
 vi.mock("./LogDetailContent", () => ({
-  LogDetailContent: ({ userEmail }: { userEmail?: string }) => <span>user-email:{userEmail ?? "none"}</span>,
+  LogDetailContent: ({ userEmail, userName }: { userEmail?: string; userName?: string }) => (
+    <span>
+      user-name:{userName ?? "none"};user-email:{userEmail ?? "none"}
+    </span>
+  ),
   GuardrailJumpLink: () => null,
 }));
 
@@ -149,7 +153,7 @@ describe("LogDetailsDrawer internal user email", () => {
     renderSingleLog("u-1");
 
     expect(mockUseUserLookup).toHaveBeenCalledWith("u-1");
-    expect(screen.getByText("user-email:alice@example.com")).toBeInTheDocument();
+    expect(screen.getByText(/user-email:alice@example.com/)).toBeInTheDocument();
   });
 
   it("skips the lookup and passes no email when the log has no internal user", () => {
@@ -157,7 +161,14 @@ describe("LogDetailsDrawer internal user email", () => {
     renderSingleLog(undefined);
 
     expect(mockUseUserLookup).toHaveBeenCalledWith(null);
-    expect(screen.getByText("user-email:none")).toBeInTheDocument();
+    expect(screen.getByText(/user-email:none/)).toBeInTheDocument();
+  });
+
+  it("passes the real name for a user without email", () => {
+    mockUseUserLookup.mockReturnValue({ data: { user_id: "u-1", user_alias: "Audit Reviewer", user_email: null } });
+    renderSingleLog("u-1");
+
+    expect(screen.getByText(/user-name:Audit Reviewer/)).toBeInTheDocument();
   });
 });
 

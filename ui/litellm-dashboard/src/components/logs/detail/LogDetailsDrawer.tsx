@@ -478,6 +478,7 @@ export function LogDetailsDrawer({
                 isLoadingDetails={isLoadingDetails}
                 accessToken={accessToken ?? null}
                 userEmail={logUser?.user_email || undefined}
+                userName={logUser?.user_alias?.trim() || undefined}
               />
             </div>
           </div>

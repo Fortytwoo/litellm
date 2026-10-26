@@ -43,9 +43,13 @@ export const auditActionLabel = (action: string): string => {
 
 interface AuditLogsTableColumnsDeps {
   onViewLog: (log: AuditLogEntry) => void;
+  resolveUserName?: (id: string) => string | undefined;
 }
 
-export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDeps): ColumnDef<AuditLogEntry>[] => [
+export const getAuditLogsTableColumns = ({
+  onViewLog,
+  resolveUserName,
+}: AuditLogsTableColumnsDeps): ColumnDef<AuditLogEntry>[] => [
   {
     id: "updated_at",
     accessorKey: "updated_at",
@@ -90,7 +94,16 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
     enableSorting: false,
     cell: ({ row }) => (
       <IdentityCell
-        title={row.original.object_id}
+        title={
+          row.original.table_name === "LiteLLM_UserTable"
+            ? resolveUserName?.(row.original.object_id) || row.original.object_id
+            : row.original.object_id
+        }
+        subtitle={
+          row.original.table_name === "LiteLLM_UserTable" && resolveUserName?.(row.original.object_id)
+            ? row.original.object_id
+            : undefined
+        }
         titleClassName="font-mono text-xs font-normal text-primary"
         className="max-w-72"
         onClick={() => onViewLog(row.original)}
@@ -105,7 +118,9 @@ export const getAuditLogsTableColumns = ({ onViewLog }: AuditLogsTableColumnsDep
     },
     size: 200,
     enableSorting: false,
-    cell: ({ row }) => <DefaultProxyAdminTag userId={row.original.changed_by} />,
+    cell: ({ row }) => (
+      <DefaultProxyAdminTag userId={row.original.changed_by} displayName={resolveUserName?.(row.original.changed_by)} />
+    ),
   },
   {
     id: "changed_by_api_key",

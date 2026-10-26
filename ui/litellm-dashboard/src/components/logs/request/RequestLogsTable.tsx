@@ -5,7 +5,7 @@ import type { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } fr
 import { ScrollText } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 
-import { useUserEmailLookup } from "@/app/(dashboard)/hooks/users/useUsers";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { DataTable, DataTableFilterDrawer, DataTableToolbar } from "@/components/shared/DataTable";
 
 import type { Team } from "../../key_team_helpers/key_list";
@@ -91,12 +91,12 @@ export function RequestLogsTable({
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const userIds = useMemo(() => data.flatMap((log) => (log.user ? [log.user] : [])), [data]);
-  const { data: emailByUserId } = useUserEmailLookup(userIds);
+  const { data: nameByUserId } = useUserDisplayLookup(userIds);
 
   const columns = useMemo(() => {
-    const resolveUserEmail = (userId: string) => emailByUserId?.[userId];
-    return getRequestLogsTableColumns({ onKeyHashClick, onSessionClick, resolveUserEmail });
-  }, [onKeyHashClick, onSessionClick, emailByUserId]);
+    const resolveUserName = (userId: string) => nameByUserId?.[userId];
+    return getRequestLogsTableColumns({ onKeyHashClick, onSessionClick, resolveUserName });
+  }, [onKeyHashClick, onSessionClick, nameByUserId]);
 
   const isFiltered = columnFilters.length > 0 || searchValue !== "";
 

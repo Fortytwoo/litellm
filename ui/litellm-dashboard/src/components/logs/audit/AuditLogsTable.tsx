@@ -31,6 +31,7 @@ interface AuditLogsTableProps {
   onSearchChange?: (value: string) => void;
   onRefresh: () => void;
   onViewLog: (log: AuditLogEntry) => void;
+  resolveUserName?: (id: string) => string | undefined;
 }
 
 const ALL_VALUE = "all";
@@ -200,11 +201,12 @@ export function AuditLogsTable({
   onSearchChange,
   onRefresh,
   onViewLog,
+  resolveUserName,
 }: AuditLogsTableProps) {
   const { t: uiT } = useDashboardLanguage();
 
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const columns = useMemo(() => getAuditLogsTableColumns({ onViewLog }), [onViewLog]);
+  const columns = useMemo(() => getAuditLogsTableColumns({ onViewLog, resolveUserName }), [onViewLog, resolveUserName]);
   const hasActiveSearch = Boolean(searchValue?.trim());
 
   return (

@@ -20,7 +20,7 @@ import { AgentBadge, AgentIcon, BatchBadge, LlmBadge, McpBadge, SparkleIcon, Wre
 export interface RequestLogsTableColumnsDeps {
   onKeyHashClick: (keyHash: string) => void;
   onSessionClick: (log: LogEntry) => void;
-  resolveUserEmail?: (userId: string) => string | undefined;
+  resolveUserName?: (userId: string) => string | undefined;
 }
 
 const readMetaString = (metadata: Record<string, unknown> | undefined, key: string): string | undefined => {
@@ -72,15 +72,15 @@ function TruncatedText({ value, tooltip }: { value: string | undefined; tooltip?
   );
 }
 
-function UserCell({ userId, email }: { userId: string | undefined; email: string | undefined }) {
-  if (!userId || !email || email === userId) return <TruncatedText value={userId} />;
-  return <TruncatedText value={email} tooltip={`${email} (${userId})`} />;
+function UserCell({ userId, name }: { userId: string | undefined; name: string | undefined }) {
+  if (!userId || !name || name === userId) return <TruncatedText value={userId} />;
+  return <TruncatedText value={name} tooltip={`${name} (${userId})`} />;
 }
 
 export const getRequestLogsTableColumns = ({
   onKeyHashClick,
   onSessionClick,
-  resolveUserEmail = () => undefined,
+  resolveUserName = () => undefined,
 }: RequestLogsTableColumnsDeps): ColumnDef<LogEntry>[] => [
   {
     id: "startTime",
@@ -413,10 +413,7 @@ export const getRequestLogsTableColumns = ({
     size: 150,
     enableSorting: false,
     cell: ({ row }) => (
-      <UserCell
-        userId={row.original.user}
-        email={row.original.user ? resolveUserEmail(row.original.user) : undefined}
-      />
+      <UserCell userId={row.original.user} name={row.original.user ? resolveUserName(row.original.user) : undefined} />
     ),
   },
   {
