@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -233,7 +234,7 @@ export const getPromptTableColumns = ({
       return (
         <span className="block max-w-60" title={createdBy}>
           <IdentityCell
-            title={createdBy}
+            title={<DefaultProxyAdminTag userId={createdBy} />}
             titleClassName="font-normal text-muted-foreground"
             href={userDetailHref(createdBy)}
           />

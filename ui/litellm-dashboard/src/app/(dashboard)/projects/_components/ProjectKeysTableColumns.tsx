@@ -9,14 +9,18 @@ import { CellTooltip, DateCell, IdentityCell } from "@/components/shared/table_c
 import { keyDetailHref } from "@/utils/entityLinks";
 
 function OwnerCell({ record }: { record: KeyResponse }) {
-  const email = record.user?.user_email ?? record.user_id ?? null;
+  const email = record.user?.user_alias?.trim() || record.user?.user_email || record.user_id || null;
   if (!email) return <span className="text-sm">—</span>;
   return (
     <CellTooltip
       content={email}
       trigger={
         <span className="inline-flex max-w-60 truncate">
-          <DefaultProxyAdminTag userId={email} />
+          <DefaultProxyAdminTag
+            userId={record.user_id}
+            displayName={record.user?.user_alias?.trim()}
+            fallbackLabel={record.user?.user_email}
+          />
         </span>
       }
     />

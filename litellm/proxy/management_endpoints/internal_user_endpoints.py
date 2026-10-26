@@ -2217,13 +2217,14 @@ _NO_SEARCH_WHERE: Final[Mapping[str, object]] = MappingProxyType({})
 
 
 def _user_search_where(search: str | None) -> Mapping[str, object]:
-    """Prisma predicate for `/user/list?search=`: user_id or user_email contains it, case-insensitive."""
+    """Prisma predicate for `/user/list?search=`: user_id, user_email or user_alias contains it, case-insensitive."""
     if not search:
         return _NO_SEARCH_WHERE
     search_where: Final[UserSearchWhere] = {
         "OR": (
             {"user_id": {"contains": search, "mode": "insensitive"}},
             {"user_email": {"contains": search, "mode": "insensitive"}},
+            {"user_alias": {"contains": search, "mode": "insensitive"}},
         )
     }
     return search_where
@@ -2242,7 +2243,7 @@ async def get_users(
     user_email: str | None = fastapi.Query(default=None, description="Filter users by partial email match"),
     search: str | None = fastapi.Query(
         default=None,
-        description="Combined search: matches users whose 'user_id' or 'user_email' contains the value (case-insensitive).",
+        description="Search user IDs, email addresses and names (case-insensitive partial match).",
     ),
     team: str | None = fastapi.Query(default=None, description="Filter users by team id"),
     page: int = fastapi.Query(default=1, ge=1, description="Page number"),
@@ -2275,7 +2276,7 @@ async def get_users(
         user_email: Optional[str]
             Filter users by partial email match
         search: Optional[str]
-            Combined search: matches users whose user_id or user_email contains the value (case-insensitive)
+            Combined search: matches users whose user_id, user_email or user_alias contains the value (case-insensitive)
         team: Optional[str]
             Filter users by team id. Will match if user has this team in their teams array.
         page: int
@@ -2782,7 +2783,7 @@ async def ui_view_users(
     user_email: str | None = fastapi.Query(default=None, description="User email in the request parameters"),
     search: str | None = fastapi.Query(
         default=None,
-        description="Combined search: matches users whose 'user_id' or 'user_email' contains the value (case-insensitive).",
+        description="Search user IDs, email addresses and names (case-insensitive partial match).",
     ),
     team_id: str | None = fastapi.Query(
         default=None,
@@ -2793,7 +2794,7 @@ async def ui_view_users(
     user_api_key_dict: UserAPIKeyAuth = Depends(user_api_key_auth),
 ):
     """
-    Filter users based on partial match of user_id or email, or combined ``search``, with pagination.
+    Filter users based on partial match of user_id or email, or a name in combined ``search``, with pagination.
 
     Behaviour depends on the ``scope_user_search_to_org`` UI-setting flag
     (stored in the ``litellm_uisettings`` table):

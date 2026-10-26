@@ -1,4 +1,5 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { formatMoney } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import React, { useState, useEffect, useCallback } from "react";
@@ -82,7 +83,15 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
     });
   }, []);
 
+  const { data: userNames = {} } = useUserDisplayLookup(perUserData.results.map((row) => row.user_id));
   const columns: ColumnDef<PerUserMetrics>[] = [
+    {
+      id: "user_name",
+      header: uiT("ui.b512d97e7cbf"),
+      cell: ({ row }) => (
+        <span title={row.original.user_id}>{userNames[row.original.user_id] || row.original.user_email || "-"}</span>
+      ),
+    },
     {
       header: uiT("ui.7967e089a7b9"),
       accessorKey: "user_id",

@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { PaginatedSearchSelect } from "@/components/shared/PaginatedSearchSelect";
 import type { SearchSelectOption } from "@/components/shared/SearchSelect";
 import { useInfiniteUsers, useUserLookup } from "@/app/(dashboard)/hooks/users/useUsers";
-import type { UserInfo } from "@/components/networking";
+import { userSelectionLabel } from "@/utils/userDisplay";
 
 interface UserDropdownProps {
   value?: string | null;
@@ -14,11 +14,7 @@ interface UserDropdownProps {
   id?: string;
 }
 
-export const userOptionLabel = (user: Pick<UserInfo, "user_id" | "user_alias" | "user_email">): string => {
-  if (user.user_alias) return `${user.user_alias} (${user.user_id})`;
-  if (user.user_email) return `${user.user_email} (${user.user_id})`;
-  return user.user_id;
-};
+export const userOptionLabel = userSelectionLabel;
 
 const UserDropdown: React.FC<UserDropdownProps> = ({ value, onChange, disabled, pageSize = 50, id }) => {
   const { t: uiT } = useDashboardLanguage();

@@ -1,3 +1,4 @@
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -59,6 +60,7 @@ describe("TopKeyView", () => {
 
   beforeEach(() => {
     mockUseAuthorized.mockReturnValue(mockAuth);
+    vi.mocked(useUserDisplayLookup).mockReturnValue({ data: {} } as ReturnType<typeof useUserDisplayLookup>);
     mockSetTopKeysLimit.mockClear();
     mockKeyInfoV1Call.mockClear();
     mockTransformKeyInfo.mockClear();
@@ -772,4 +774,21 @@ describe("TopKeyView", () => {
     );
     expect(screen.getAllByText("-")).toHaveLength(1);
   });
+});
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({ useUserDisplayLookup: vi.fn(() => ({ data: {} })) }));
+
+it("resolves top-key owner names while preserving the owner ID", () => {
+  vi.mocked(useUserDisplayLookup).mockReturnValue({ data: { "owner-id": "Audit Reviewer" } } as ReturnType<
+    typeof useUserDisplayLookup
+  >);
+  render(
+    <TopKeyView
+      topKeys={[{ api_key: "key-id", key_alias: "Test Key", user: "owner-id", user_id: "owner-id", spend: 1 }]}
+      teams={null}
+      topKeysLimit={5}
+      setTopKeysLimit={vi.fn()}
+    />,
+  );
+  expect(screen.getByText("Audit Reviewer")).toHaveAttribute("title", "owner-id");
 });

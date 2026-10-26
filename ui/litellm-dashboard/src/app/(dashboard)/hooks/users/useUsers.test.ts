@@ -104,7 +104,20 @@ describe("useInfiniteUsers", () => {
 
     expect(result.current.data?.pages).toHaveLength(1);
     expect(result.current.data?.pages[0]).toEqual(mockResponse);
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should use the default page size of 50", async () => {
@@ -117,7 +130,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should use a custom page size when provided", async () => {
@@ -133,7 +159,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, customPageSize, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      customPageSize,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should pass searchEmail to userListCall when provided", async () => {
@@ -149,7 +188,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, searchEmail);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      searchEmail,
+    );
   });
 
   it("should pass null for searchEmail when not provided", async () => {
@@ -164,7 +216,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should fetch the next page when more pages are available", async () => {
@@ -193,7 +258,20 @@ describe("useInfiniteUsers", () => {
 
     expect(result.current.data?.pages[1]).toEqual(page2);
     expect(userListCall).toHaveBeenCalledTimes(2);
-    expect(userListCall).toHaveBeenLastCalledWith("test-access-token", null, 2, 50, null);
+    expect(userListCall).toHaveBeenLastCalledWith(
+      "test-access-token",
+      null,
+      2,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should not have a next page when on the last page", async () => {
@@ -300,7 +378,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 });
 
@@ -484,5 +575,26 @@ describe("useUserEmailLookup", () => {
     expect(result.current.fetchStatus).toBe("idle");
     expect(userListCall).not.toHaveBeenCalled();
     expect(userGetInfoV2).not.toHaveBeenCalled();
+  });
+  it("resolves only the current member without listing other users", async () => {
+    mockUseAuthorized.mockReturnValue({ ...DEFAULT_AUTH, userRole: "Internal User" });
+    vi.mocked(userGetInfoV2).mockResolvedValue({ ...userDetail(DEFAULT_AUTH.userId), user_alias: "Current Member" });
+    const { result } = renderHook(() => useUserDisplayLookup([DEFAULT_AUTH.userId, "other-member"]), { wrapper });
+    await waitFor(() => expect(result.current.data).toEqual({ [DEFAULT_AUTH.userId]: "Current Member" }));
+    expect(userGetInfoV2).toHaveBeenCalledWith(DEFAULT_AUTH.accessToken, DEFAULT_AUTH.userId);
+    expect(userListCall).not.toHaveBeenCalled();
+  });
+
+  it("retains successful batches when a deleted singleton is unavailable", async () => {
+    const response = buildUserListResponse(1, 1, 101);
+    vi.mocked(userListCall).mockImplementation(async (_token, ids) => ({
+      ...response,
+      users: response.users.filter((user) => ids?.includes(user.user_id)),
+    }));
+    vi.mocked(userGetInfoV2).mockRejectedValue(new Error("User not found"));
+    const { result } = renderHook(() => useUserDisplayLookup(response.users.map((user) => user.user_id)), { wrapper });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(Object.keys(result.current.data ?? {})).toHaveLength(100);
+    expect(result.current.data?.["user-1-0"]).toBe("user-1-0@example.com");
   });
 });

@@ -1,4 +1,7 @@
 "use client";
+import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
+import { useInfiniteUsers, useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
+import { userSelectionLabel } from "@/utils/userDisplay";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 
@@ -253,16 +256,37 @@ function UserIdFilterField({
     emptyToUndefined(search),
   );
 
+  const { userId: viewerId } = useAuthorized();
+  const directory = useInfiniteUsers(PAGE_SIZE, search, Boolean(search.trim()));
+  const loggedUserIds = (data?.pages ?? []).flatMap((page) => page.data);
+  const { data: userNames = {} } = useUserDisplayLookup(
+    [...loggedUserIds, value, ...(viewerId ? [viewerId] : [])].filter(Boolean),
+  );
   const options = useMemo<SearchSelectOption[]>(() => {
     const seen = new Set<string>();
-    return (data?.pages ?? []).flatMap((page) =>
+    const logged = (data?.pages ?? []).flatMap((page) =>
       page.data.flatMap((userId) => {
         if (!userId || seen.has(userId)) return [];
         seen.add(userId);
-        return [{ label: userId, value: userId }];
+        return [{ label: userSelectionLabel({ user_id: userId, user_alias: userNames[userId] }), value: userId }];
       }),
     );
-  }, [data]);
+    const matches = search.trim() ? (directory.data?.pages ?? []).flatMap((page) => page.users) : [];
+    const extra = matches
+      .filter((user) => !seen.has(user.user_id))
+      .map((user) => ({ value: user.user_id, label: userSelectionLabel(user) }));
+    const ownName = viewerId ? userNames[viewerId] : undefined;
+    const includeSelf =
+      viewerId &&
+      ownName &&
+      ownName.toLowerCase().includes(search.trim().toLowerCase()) &&
+      !seen.has(viewerId) &&
+      !extra.some((option) => option.value === viewerId);
+    const own = includeSelf
+      ? [{ value: viewerId, label: userSelectionLabel({ user_id: viewerId, user_alias: ownName }) }]
+      : [];
+    return [...logged, ...extra, ...own];
+  }, [data, directory.data, search, userNames, viewerId]);
 
   return (
     <DataTableFilterField label={uiT("ui.7967e089a7b9")}>
@@ -271,10 +295,13 @@ function UserIdFilterField({
         value={value}
         onValueChange={(next) => onChange(next ?? undefined)}
         onSearchChange={setSearch}
-        onLoadMore={() => void fetchNextPage()}
-        hasNextPage={hasNextPage}
-        isLoading={isLoading}
-        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => {
+          void fetchNextPage();
+          if (search.trim()) void directory.fetchNextPage();
+        }}
+        hasNextPage={hasNextPage || (Boolean(search.trim()) && directory.hasNextPage)}
+        isLoading={isLoading || (Boolean(search.trim()) && directory.isLoading)}
+        isFetchingNextPage={isFetchingNextPage || directory.isFetchingNextPage}
         placeholder={uiT("ui.15fe649e4207")}
         emptyText={uiT("ui.bf1e104fb3c8")}
       />

@@ -218,3 +218,7 @@ describe("MCPGatewaySessionsTab", () => {
     expect(screen.getByRole("region", { name: "Live sessions" })).toBeInTheDocument();
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({
+  useUserDisplayLookup: () => ({ data: { "named-user": "Audit Reviewer" } }),
+}));

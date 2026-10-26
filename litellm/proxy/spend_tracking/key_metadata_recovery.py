@@ -116,6 +116,7 @@ class KeyMetadataDict(TypedDict, total=False):
     team_id: ReadOnly[str | None]
     user_id: ReadOnly[str | None]
     user_email: ReadOnly[str | None]
+    user_alias: ReadOnly[str | None]
     key_exists: ReadOnly[bool]
 
 
@@ -250,6 +251,7 @@ async def recover_key_owner_from_daily_spend(
 class _UserDetails:
     email: str | None
     only_team: str | None
+    alias: str | None = None
 
 
 _EMPTY_USER_DETAILS: Final[Mapping[str, _UserDetails]] = MappingProxyType({})
@@ -276,6 +278,7 @@ async def _details_for_user_ids(
         {
             user.user_id: _UserDetails(
                 email=getattr(user, "user_email", None) or None,
+                alias=getattr(user, "user_alias", None) or None,
                 only_team=_only_team(getattr(user, "teams", None)),
             )
             for user in users
@@ -307,6 +310,7 @@ def _meta_with_user_details(
     updated: Final[KeyMetadataDict] = {
         **meta,
         **({"user_email": email} if email else {}),
+        **({"user_alias": user.alias} if user.alias else {}),
         **({"team_id": team_id} if team_id else {}),
     }
     return updated
@@ -316,7 +320,11 @@ def _user_id_needing_details(api_key: str, meta: KeyMetadataDict) -> str | None:
     user_id: Final = meta.get("user_id")
     if not isinstance(user_id, str) or not user_id:
         return None
-    if meta.get("user_email") and not (_is_cli_session_key(api_key) and not meta.get("team_id")):
+    if (
+        meta.get("user_email")
+        and meta.get("user_alias")
+        and not (_is_cli_session_key(api_key) and not meta.get("team_id"))
+    ):
         return None
     return user_id
 

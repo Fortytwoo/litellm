@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { formatMoney } from "@/utils/currency";
 import { translateText } from "@/i18n";
 
@@ -201,7 +202,7 @@ function CreatedByCell({ model }: { model: ModelData }) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
       <span className="max-w-44 truncate text-sm text-foreground" title={primary}>
-        {translateText(primary)}
+        {isConfigModel ? translateText(primary) : <DefaultProxyAdminTag userId={model.model_info.created_by} />}
       </span>
       <span className="truncate text-xs text-muted-foreground">{isConfigModel ? "-" : secondaryForDbModel}</span>
     </div>

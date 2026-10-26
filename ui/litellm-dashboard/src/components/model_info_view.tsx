@@ -1,8 +1,6 @@
 "use client";
-import { getFormattingLocale } from "@/i18n";
-
-import { t as translateUi } from "@/i18n";
-import { translateText } from "@/i18n";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
+import { getFormattingLocale, t as translateUi, translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
@@ -717,7 +715,8 @@ export default function ModelInfoView({
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                {uiT("ui.dfd60b9aa5ca")} {modelData.model_info.created_by || uiT("ui.8290035d4cf4")}
+                {uiT("ui.dfd60b9aa5ca")}{" "}
+                <DefaultProxyAdminTag userId={modelData.model_info.created_by} fallbackLabel={uiT("ui.8290035d4cf4")} />
               </div>
             </div>
 

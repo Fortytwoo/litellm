@@ -1,4 +1,5 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import { useKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
@@ -101,6 +102,9 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
     }));
   }, [keys?.keys, organization?.organization_id]);
 
+  const { data: userNames = {} } = useUserDisplayLookup(
+    displayKeys.flatMap((key) => (key.user_id ? [key.user_id] : [])),
+  );
   const rowCount = keys?.total_count ?? 0;
   const [expandedAccordions, setExpandedAccordions] = useState<Record<string, boolean>>({});
 
@@ -196,12 +200,16 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
       {
         id: "user_email",
         accessorKey: "user",
-        header: uiT("ui.5809bbd8a352"),
+        header: uiT("ui.b512d97e7cbf"),
         size: 160,
         enableSorting: false,
         cell: (info) => {
-          const user = info.getValue() as { user_email?: string } | undefined;
-          const value = user?.user_email;
+          const user = info.getValue() as { user_alias?: string; user_email?: string } | undefined;
+          const value =
+            user?.user_alias?.trim() ||
+            (info.row.original.user_id && userNames[info.row.original.user_id]) ||
+            user?.user_email ||
+            info.row.original.user_id;
           const userId = info.row.original.user_id;
           return (
             <SimpleTooltip content={value}>
@@ -448,7 +456,7 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
         },
       },
     ],
-    [expandedAccordions, uiT],
+    [expandedAccordions, uiT, userNames],
   );
 
   const handleSortingChange = useCallback((updaterOrValue: React.SetStateAction<SortingState>) => {

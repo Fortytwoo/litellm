@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
@@ -337,7 +338,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
   };
 
   const formatCost = (cost: number) => {
-    return formatMoney((cost * 1_000_000), 2);
+    return formatMoney(cost * 1_000_000, 2);
   };
 
   const handleMakePublicSuccess = () => {
@@ -1068,11 +1069,15 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="font-medium">{uiT("ui.b9a6204c897efd6d")}</p>
-                    <p>{selectedMcpServer.created_by}</p>
+                    <p>
+                      <DefaultProxyAdminTag userId={selectedMcpServer.created_by} />
+                    </p>
                   </div>
                   <div>
                     <p className="font-medium">{uiT("ui.92f3bd46caecb1d4")}</p>
-                    <p>{selectedMcpServer.updated_by}</p>
+                    <p>
+                      <DefaultProxyAdminTag userId={selectedMcpServer.updated_by} />
+                    </p>
                   </div>
                   <div>
                     <p className="font-medium">{uiT("ui.8fd7542a821729b1")}</p>

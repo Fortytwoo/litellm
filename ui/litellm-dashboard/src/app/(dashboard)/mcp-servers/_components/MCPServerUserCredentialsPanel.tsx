@@ -1,4 +1,6 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
+import { userSelectionLabel } from "@/utils/userDisplay";
 import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -40,11 +42,13 @@ function CredentialsBody({
   error,
   isLoading,
   onRevoke,
+  userNames,
 }: {
   items: MCPServerUserCredentialListItem[] | undefined;
   error: Error | null;
   isLoading: boolean;
   onRevoke: ((item: MCPServerUserCredentialListItem) => void) | null;
+  userNames: Readonly<Record<string, string>>;
 }) {
   const { t: uiT } = useDashboardLanguage();
 
@@ -91,7 +95,9 @@ function CredentialsBody({
         <TableBody>
           {items.map((item) => (
             <TableRow key={item.user_id}>
-              <TableCell className="font-mono text-xs">{item.user_id}</TableCell>
+              <TableCell className="font-mono text-xs">
+                <span title={item.user_id}>{userNames[item.user_id] || item.user_id}</span>
+              </TableCell>
               <TableCell>
                 <Badge variant="secondary">{translateText(credentialTypeLabel(item.credential_type))}</Badge>
               </TableCell>
@@ -104,7 +110,9 @@ function CredentialsBody({
                     variant="outline"
                     size="sm"
                     onClick={() => onRevoke(item)}
-                    aria-label={uiT("ui.6b29236deb077664", { v0: String(item.user_id) })}
+                    aria-label={uiT("ui.6b29236deb077664", {
+                      v0: userSelectionLabel({ user_id: item.user_id, user_alias: userNames[item.user_id] }),
+                    })}
                   >
                     <ShieldOff className="size-4" />
                     {uiT("ui.87e6d00bbf53ec5a")}
@@ -140,6 +148,7 @@ export function MCPServerUserCredentialsPanel({
     queryFn: () => fetchMCPServerUserCredentials(accessToken!, serverId),
     enabled: !!accessToken,
   });
+  const { data: userNames = {} } = useUserDisplayLookup((data ?? []).map((item) => item.user_id));
   const revoke = useMutation<void, Error, MCPServerUserCredentialListItem>({
     mutationFn: (item) => revokeMCPServerUserCredential(accessToken!, serverId, item.user_id, item.credential_type),
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
@@ -180,12 +189,20 @@ export function MCPServerUserCredentialsPanel({
           <AlertTitle>{uiT("ui.f77929c62ac1ddb4")}</AlertTitle>
           <AlertDescription>
             {uiT("ui.943db9ddce8d3d1a")} {translateText(credentialTypeLabel(revoke.variables.credential_type))}{" "}
-            {uiT("ui.28e72cd030a775f1")} {revoke.variables.user_id} {uiT("ui.b005db2faf9e79c4")}
+            {uiT("ui.28e72cd030a775f1")}{" "}
+            {userSelectionLabel({ user_id: revoke.variables.user_id, user_alias: userNames[revoke.variables.user_id] })}{" "}
+            {uiT("ui.b005db2faf9e79c4")}
           </AlertDescription>
         </Alert>
       ) : null}
 
-      <CredentialsBody items={data} error={error} isLoading={isLoading} onRevoke={canRevoke ? setPendingItem : null} />
+      <CredentialsBody
+        items={data}
+        error={error}
+        isLoading={isLoading}
+        onRevoke={canRevoke ? setPendingItem : null}
+        userNames={userNames}
+      />
 
       <AlertDialog open={pendingItem !== null} onOpenChange={(open) => !open && setPendingItem(null)}>
         <AlertDialogContent>
@@ -195,7 +212,10 @@ export function MCPServerUserCredentialsPanel({
               {pendingItem
                 ? uiT("ui.b98bed01f6f7bd12", {
                     v0: String(credentialTypeLabel(pendingItem.credential_type)),
-                    v1: String(pendingItem.user_id),
+                    v1: userSelectionLabel({
+                      user_id: pendingItem.user_id,
+                      user_alias: userNames[pendingItem.user_id],
+                    }),
                   })
                 : ""}
               {uiT("ui.da50f1f2238a08ed")}

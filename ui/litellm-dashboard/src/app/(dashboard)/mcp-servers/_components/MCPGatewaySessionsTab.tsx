@@ -1,4 +1,6 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
+import { userSelectionLabel } from "@/utils/userDisplay";
 import { translateText } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -44,8 +46,12 @@ function groupLabel(label: string | null): string {
   return label === "" ? '""' : label;
 }
 
-export function describeSelector(selector: MCPGatewaySessionSelector): string {
-  if (selector.user_id !== undefined) return `every live session opened by user ${groupLabel(selector.user_id)}`;
+export function describeSelector(
+  selector: MCPGatewaySessionSelector,
+  userNames: Readonly<Record<string, string>> = {},
+): string {
+  if (selector.user_id !== undefined)
+    return `every live session opened by user ${userSelectionLabel({ user_id: selector.user_id, user_alias: userNames[selector.user_id] })}`;
   return `session ${selector.session_id_prefix}`;
 }
 
@@ -91,11 +97,13 @@ function GroupCountTable({
   groups,
   labelHeader,
   onDisconnectUser,
+  userNames = {},
 }: {
   title: string;
   groups: MCPGatewaySessionGroupCount[];
   labelHeader: string;
   onDisconnectUser?: (userId: string) => void;
+  userNames?: Readonly<Record<string, string>>;
 }) {
   const { t: uiT } = useDashboardLanguage();
 
@@ -113,7 +121,11 @@ function GroupCountTable({
         <TableBody>
           {groups.map((group) => (
             <TableRow key={group.label ?? "__unknown__"}>
-              <TableCell className="font-mono text-xs">{groupLabel(group.label)}</TableCell>
+              <TableCell className="font-mono text-xs">
+                <span title={group.label || undefined}>
+                  {(group.label && userNames[group.label]) || groupLabel(group.label)}
+                </span>
+              </TableCell>
               <TableCell className="text-right">{group.count}</TableCell>
               {onDisconnectUser ? (
                 <TableCell className="text-right">
@@ -133,11 +145,13 @@ function SessionsBody({
   error,
   isLoading,
   onDisconnect,
+  userNames,
 }: {
   data: MCPGatewaySessionsResponse | undefined;
   error: Error | null;
   isLoading: boolean;
   onDisconnect: ((selector: MCPGatewaySessionSelector) => void) | null;
+  userNames: Readonly<Record<string, string>>;
 }) {
   const { t: uiT } = useDashboardLanguage();
 
@@ -184,6 +198,7 @@ function SessionsBody({
           title={uiT("ui.84a06f355e5f5319")}
           labelHeader="User"
           groups={data.by_user}
+          userNames={userNames}
           onDisconnectUser={onDisconnect ? (userId) => onDisconnect({ user_id: userId }) : undefined}
         />
       </div>
@@ -226,7 +241,7 @@ function SessionsBody({
                     <span className="text-muted-foreground">{translateText(UNKNOWN_LABEL)}</span>
                   ) : (
                     <>
-                      <span className="font-mono text-xs">{session.user_id}</span>
+                      <span className="font-mono text-xs">{userNames[session.user_id] || session.user_id}</span>
                       {session.user_email ? (
                         <span className="ml-1 text-xs text-muted-foreground">{session.user_email}</span>
                       ) : null}
@@ -277,6 +292,9 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
     refetchInterval: REFETCH_INTERVAL_MS,
   };
   const { data, error, isLoading, isFetching, refetch } = useQuery<MCPGatewaySessionsResponse, Error>(queryOptions);
+  const { data: userNames = {} } = useUserDisplayLookup(
+    (data?.by_user ?? []).flatMap((group) => (group.label ? [group.label] : [])),
+  );
   const terminate = useMutation<MCPGatewaySessionsTerminateResponse, Error, MCPGatewaySessionSelector>({
     mutationFn: (selector) => terminateMCPGatewaySessions(accessToken!, selector),
     onSettled: () => queryClient.invalidateQueries({ queryKey: mcpGatewaySessionKeys.lists() }),
@@ -326,6 +344,7 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
         error={error}
         isLoading={isLoading}
         onDisconnect={canTerminate ? setPendingSelector : null}
+        userNames={userNames}
       />
 
       <AlertDialog open={pendingSelector !== null} onOpenChange={(open) => !open && setPendingSelector(null)}>
@@ -333,7 +352,9 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
           <AlertDialogHeader>
             <AlertDialogTitle>{uiT("ui.40b47d07646751a3")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {pendingSelector ? uiT("ui.26500094baddbe7f", { v0: String(describeSelector(pendingSelector)) }) : ""}
+              {pendingSelector
+                ? uiT("ui.26500094baddbe7f", { v0: String(describeSelector(pendingSelector, userNames)) })
+                : ""}
               {uiT("ui.e3630eee032a97c3")}
             </AlertDialogDescription>
           </AlertDialogHeader>

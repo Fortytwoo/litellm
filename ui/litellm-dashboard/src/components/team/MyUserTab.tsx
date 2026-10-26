@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { formatMoney } from "@/utils/currency";
 import { LocalizedText } from "@/contexts/LanguageContext";
 
@@ -87,7 +88,9 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <div>
               <span className="text-muted-foreground">{uiT("ui.b512d97e7cbf")}</span>
-              <div className="mt-1 font-semibold">{data.user_email || data.user_id}</div>
+              <div className="mt-1 font-semibold">
+                <DefaultProxyAdminTag userId={data.user_id} fallbackLabel={data.user_email} />
+              </div>
               <span className="font-mono text-xs text-muted-foreground">{data.user_id}</span>
             </div>
             <div>
@@ -112,8 +115,7 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
             <div className="mt-2">
               <h3 className="text-2xl font-semibold">{formatMoney(spend, 4)}</h3>
               <span className="text-muted-foreground">
-                {uiT("ui.28391d3bc64ec15c")}{" "}
-                {maxBudget === null ? uiT("ui.11dde17d6c3e") : formatMoney(maxBudget, 4)}
+                {uiT("ui.28391d3bc64ec15c")} {maxBudget === null ? uiT("ui.11dde17d6c3e") : formatMoney(maxBudget, 4)}
               </span>
             </div>
             {budgetReset && (

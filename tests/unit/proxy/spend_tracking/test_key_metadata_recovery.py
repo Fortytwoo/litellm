@@ -683,7 +683,11 @@ async def test_fill_missing_api_key_aliases_resolves_cli_session_keys_without_a_
     mock_prisma = MagicMock()
     mock_prisma.db.query_raw = AsyncMock(side_effect=AssertionError("no reverse-hash lookup expected"))
     mock_prisma.db.litellm_usertable.find_many = AsyncMock(
-        return_value=[SimpleNamespace(user_id="alice", user_email="alice@example.com", teams=["team-a"])]
+        return_value=[
+            SimpleNamespace(
+                user_id="alice", user_email="alice@example.com", user_alias="Audit Reviewer", teams=["team-a"]
+            )
+        ]
     )
     rows = ({"api_key": "cli-session-alice", "api_key_alias": None, "team_id": None, "user_email": None, "spend": 2.0},)
 
@@ -700,7 +704,11 @@ async def test_fill_missing_api_key_aliases_resolves_cli_session_keys_without_a_
 async def test_attach_user_details_gives_the_login_team_only_to_cli_session_keys():
     mock_prisma = MagicMock()
     mock_prisma.db.litellm_usertable.find_many = AsyncMock(
-        return_value=[SimpleNamespace(user_id="alice", user_email="alice@example.com", teams=["team-a"])]
+        return_value=[
+            SimpleNamespace(
+                user_id="alice", user_email="alice@example.com", user_alias="Audit Reviewer", teams=["team-a"]
+            )
+        ]
     )
     personal_key = hash_token("sk-personal")
 
@@ -716,6 +724,8 @@ async def test_attach_user_details_gives_the_login_team_only_to_cli_session_keys
     assert attached["cli-session-alice"]["user_email"] == "alice@example.com"
     assert "team_id" not in attached[personal_key]
     assert attached[personal_key]["user_email"] == "alice@example.com"
+    assert attached[personal_key]["user_alias"] == "Audit Reviewer"
+    assert attached["cli-session-alice"]["user_alias"] == "Audit Reviewer"
 
 
 @pytest.mark.asyncio
@@ -873,3 +883,22 @@ async def test_reverse_hash_recovery_renders_a_postgres_select_span_for_the_tabl
     await recover_double_hashed_key_metadata(mock_prisma, {double_hashed})
 
     assert await postgres_span_names() == ("postgres.select LiteLLM_VerificationToken",)
+
+
+@pytest.mark.asyncio
+async def test_attach_user_details_adds_a_name_when_email_is_already_present() -> None:
+    prisma: Final = MagicMock()
+    prisma.db.litellm_usertable.find_many = AsyncMock(
+        return_value=[
+            SimpleNamespace(
+                user_id="member-id", user_email="member@example.test", user_alias="Reviewer", teams=[]
+            )
+        ]
+    )
+    result: Final = await attach_user_details(
+        prisma,
+        {"key-id": {"user_id": "member-id", "user_email": "member@example.test"}},
+    )
+    assert result["key-id"]["user_alias"] == "Reviewer"
+    assert result["key-id"]["user_id"] == "member-id"
+    assert result["key-id"]["user_email"] == "member@example.test"

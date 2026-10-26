@@ -1,4 +1,5 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import { t as translateUi } from "@/i18n";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
@@ -272,7 +273,14 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
     }
   };
 
+  const { data: userNames = {} } = useUserDisplayLookup(
+    entityType === "user" ? spendData.results.flatMap((day) => Object.keys(day.breakdown.entities || {})) : [],
+  );
   const getEntityLabel = (entity: string, metadata?: Record<string, any>): string => {
+    if (entityType === "user") {
+      const name = metadata?.user_alias?.trim() || userNames[entity];
+      if (name) return name;
+    }
     if (entityList) {
       const entityItem = entityList.find((item) => item.value === entity);
       if (entityItem) {
@@ -283,14 +291,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
     if (metadata?.team_alias) {
       return metadata.team_alias;
     }
-    // Resolve user_id to email/alias so the Spend Per User chart never shows a raw UUID
-    // when an email is on file (the entityList is paginated and may miss spenders)
-    if (metadata?.user_email) {
-      return metadata.user_email;
-    }
-    if (metadata?.user_alias) {
-      return metadata.user_alias;
-    }
+    if (entityType === "user" && metadata?.user_email) return metadata.user_email;
     return entity;
   };
 

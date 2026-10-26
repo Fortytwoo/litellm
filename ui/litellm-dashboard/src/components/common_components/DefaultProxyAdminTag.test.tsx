@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import DefaultProxyAdminTag from "./DefaultProxyAdminTag";
@@ -24,4 +25,13 @@ describe("DefaultProxyAdminTag", () => {
     expect(screen.queryByText("Default Proxy Admin")).not.toBeInTheDocument();
     expect(container).toHaveTextContent("");
   });
+});
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({
+  useUserDisplayLookup: () => ({ data: { "named-user": "Audit Reviewer" } }),
+}));
+
+it("displays a resolved name with the exact ID retained for inspection", () => {
+  render(<DefaultProxyAdminTag userId="named-user" />);
+  expect(screen.getByText("Audit Reviewer")).toHaveAttribute("title", "named-user");
 });

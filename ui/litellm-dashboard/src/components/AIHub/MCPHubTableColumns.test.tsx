@@ -115,3 +115,5 @@ describe("getMCPHubTableColumns", () => {
     expect(await window.navigator.clipboard.readText()).toBe("exa_test");
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({ useUserDisplayLookup: () => ({ data: {} }) }));

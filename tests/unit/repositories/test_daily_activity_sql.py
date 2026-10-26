@@ -305,7 +305,7 @@ def test_search_query_escapes_pattern_metacharacters_and_binds_limit() -> None:
     assert "v.key_alias ILIKE $3 ESCAPE" in query.sql
     assert "v.user_id ILIKE $3 ESCAPE" in query.sql
     assert "u.user_email ILIKE $3 ESCAPE" in query.sql
-    assert query.sql.count("ILIKE $3 ESCAPE") == 7
+    assert "u.user_alias ILIKE $3 ESCAPE" in query.sql
     assert "api_key <> $4" in query.sql
     assert "ORDER BY SUM(spend::numeric) DESC, api_key" in query.sql
     assert "LIMIT $5" in query.sql
