@@ -7,6 +7,8 @@ import { isJwtExpired } from "@/utils/jwtUtils";
 import { effectiveSessionRole } from "@/utils/roles";
 import { getUiConfig, setGlobalLitellmHeaderName } from "@/components/networking";
 import { gateway, str, strings } from "@/lib/http/managedGateway";
+import { ApiError } from "@/lib/http/client";
+import { useLanguage } from "./LanguageContext";
 import { COOKIE_SESSION, setManagedCsrf } from "@/lib/http/managedSession";
 
 function deleteCookie(name: string, path = "/") {
@@ -48,6 +50,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 function CentralAuthProvider({ children }: { children: React.ReactNode }) {
+  const { t } = useLanguage();
+  const [authError, setAuthError] = useState<"denied" | "unavailable" | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [authLoading, setAuthLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
   const [userID, setUserID] = useState<string | null>(null);
@@ -61,27 +66,35 @@ function CentralAuthProvider({ children }: { children: React.ReactNode }) {
     async function load() {
       try {
         const me = await gateway("me", { signal: controller.signal });
-        setManagedCsrf(str(me.csrf_token));
-        const snapshot = await gateway("snapshot", { signal: controller.signal });
-        await getUiConfig();
         if (controller.signal.aborted) return;
+        setManagedCsrf(str(me.csrf_token));
         setUserID(str(me.subject));
-        setUserRole(strings(snapshot.permissions).includes("models.write") ? "Admin" : "Internal User");
         setToken(COOKIE_SESSION);
         setAccessToken(COOKIE_SESSION);
+        const snapshot = await gateway("snapshot", { signal: controller.signal });
+        if (controller.signal.aborted) return;
+        await getUiConfig();
+        if (controller.signal.aborted) return;
+        setUserRole(strings(snapshot.permissions).includes("models.write") ? "Admin" : "Internal User");
       } catch (error) {
         if (!controller.signal.aborted) {
-          setToken(null);
-          setAccessToken(null);
+          setUserRole("");
+          if (error instanceof ApiError && error.status === 401) {
+            setManagedCsrf("");
+            setToken(null);
+            setAccessToken(null);
+            setUserID(null);
+          } else {
+            setAuthError(error instanceof ApiError && error.status === 403 ? "denied" : "unavailable");
+          }
         }
-        void error;
       } finally {
         if (!controller.signal.aborted) setAuthLoading(false);
       }
     }
     void load();
     return () => controller.abort();
-  }, []);
+  }, [attempt]);
   const value: AuthContextValue = {
     authLoading,
     token,
@@ -101,6 +114,20 @@ function CentralAuthProvider({ children }: { children: React.ReactNode }) {
     setPremiumUser,
     setShowSSOBanner,
   };
+  function retry() {
+    setAuthLoading(true);
+    setAuthError(null);
+    setAttempt((previous) => previous + 1);
+  }
+  if (authLoading) return <div role="status">{t("common.loading")}</div>;
+  if (authError) {
+    return (
+      <div role="alert" className="mx-auto max-w-xl space-y-4 p-6">
+        <p>{t("managedAuth." + authError)}</p>
+        <button type="button" onClick={retry}>{t("common.refresh")}</button>
+      </div>
+    );
+  }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

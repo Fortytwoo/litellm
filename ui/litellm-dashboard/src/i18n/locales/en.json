@@ -1,4 +1,8 @@
 {
+  "managedAuth": {
+    "denied": "Your current permissions do not allow this page. Ask an administrator to check console access, then refresh",
+    "unavailable": "Unable to load access settings. Refresh to retry; if this continues, ask an administrator to check the service"
+  },
   "nativeLoad": {
     "groups": "Unable to load access groups. Previously loaded data may be outdated.",
     "runs": "Unable to load workflow runs. Previously loaded data may be outdated.",

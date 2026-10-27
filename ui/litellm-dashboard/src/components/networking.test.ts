@@ -9,6 +9,37 @@ vi.mock("@/utils/cookieUtils", () => ({
   storeLoginToken: vi.fn(),
 }));
 
+describe("managed UI configuration", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it.each([401, 403, 503])("preserves HTTP %i before changing runtime URLs", async (status) => {
+    vi.stubEnv("NEXT_PUBLIC_MANAGED_GATEWAY", "1");
+    vi.stubGlobal("location", { origin: "https://console.test" });
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>().mockResolvedValue(new Response("{}", { status })));
+    const before = Networking.getProxyBaseUrl();
+    await expect(Networking.getUiConfig()).rejects.toMatchObject({ name: "ApiError", status });
+    expect(Networking.getProxyBaseUrl()).toBe(before);
+  });
+
+  it("loads managed configuration through the cookie-authenticated BFF", async () => {
+    vi.stubEnv("NEXT_PUBLIC_MANAGED_GATEWAY", "1");
+    vi.stubGlobal("location", { origin: "https://console.test" });
+    const config = { server_root_path: "", proxy_base_url: "" };
+    const request = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify(config), { status: 200 }));
+    vi.stubGlobal("fetch", request);
+    await expect(Networking.getUiConfig()).resolves.toEqual(config);
+    const sent = request.mock.calls[0][0];
+    expect(sent).toBeInstanceOf(Request);
+    if (!(sent instanceof Request)) throw new Error("Expected a managed request");
+    expect(new URL(sent.url).pathname).toBe("/admin/native/litellm/.well-known/litellm-ui-config");
+    expect(sent.credentials).toBe("same-origin");
+    expect(sent.headers.has("authorization")).toBe(false);
+  });
+});
+
 describe("networking - expired session handling", () => {
   const originalFetch = global.fetch;
 

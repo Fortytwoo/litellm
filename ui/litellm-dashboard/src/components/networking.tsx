@@ -131,6 +131,7 @@ import type {
 } from "./lens/traces/types";
 import { COOKIE_SESSION, managedFetch as fetch } from "@/lib/http/managedSession";
 import {
+  ApiError,
   createApiClient,
   deriveErrorMessage,
   extractProxyErrorMessage,
@@ -535,6 +536,9 @@ export const getUiConfig = async () => {
     ? `${defaultProxyBaseUrl}/litellm/.well-known/litellm-ui-config`
     : `/litellm/.well-known/litellm-ui-config`;
   const response = await fetch(url);
+  if (process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1" && !response.ok) {
+    throw new ApiError("Unable to load UI configuration", response.status, null);
+  }
   const jsonData: LiteLLMWellKnownUiConfig = await response.json();
   /**
    * Update the proxy base url and server root path
