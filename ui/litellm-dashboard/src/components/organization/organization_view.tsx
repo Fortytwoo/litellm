@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { formatMoney } from "@/utils/currency";
 import { getFormattingLocale } from "@/i18n";
 
@@ -201,7 +202,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                     {new Date(orgData.updated_at).toLocaleDateString(getFormattingLocale())}
                   </p>
                   <p>
-                    {uiT("ui.b9a6204c897efd6d")} {orgData.created_by}
+                    {uiT("ui.b9a6204c897efd6d")} <DefaultProxyAdminTag userId={orgData.created_by} />
                   </p>
                 </div>
               </CardContent>

@@ -1,4 +1,5 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 
 import React from "react";
@@ -27,6 +28,9 @@ function formatTimestamp(ts?: string): string {
 
 export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
   const { t: uiT } = useDashboardLanguage();
+  const { data: userNames = {} } = useUserDisplayLookup(
+    [row?.created_by, row?.updated_by].filter((id): id is string => Boolean(id)),
+  );
 
   return (
     <Sheet
@@ -70,14 +74,14 @@ export function MemoryDetailDrawer({ row, onClose }: MemoryDetailDrawerProps) {
               </div>
             )}
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <span>
+              <span title={row.created_by || undefined}>
                 {uiT("ui.d70b9e24bca2")} {formatTimestamp(row.created_at)}
-                {row.created_by ? uiT("ui.c66bf4d522a7d8fc", { v0: String(row.created_by) }) : ""}
+                {row.created_by ? uiT("ui.c66bf4d522a7d8fc", { v0: userNames[row.created_by] || row.created_by }) : ""}
               </span>
               <span aria-hidden="true">·</span>
-              <span>
+              <span title={row.updated_by || undefined}>
                 {uiT("ui.3a5ecca188c0")} {formatTimestamp(row.updated_at)}
-                {row.updated_by ? uiT("ui.c66bf4d522a7d8fc", { v0: String(row.updated_by) }) : ""}
+                {row.updated_by ? uiT("ui.c66bf4d522a7d8fc", { v0: userNames[row.updated_by] || row.updated_by }) : ""}
               </span>
             </div>
           </div>

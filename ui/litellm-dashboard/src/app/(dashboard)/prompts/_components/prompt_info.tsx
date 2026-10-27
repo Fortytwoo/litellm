@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { t as translateUi } from "@/i18n";
 
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
@@ -337,7 +338,9 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
               <Card className="block p-6">
                 <p>{uiT("ui.dfd60b9aa5ca")}</p>
                 <div className="mt-2">
-                  <h3 className="text-sm font-medium">{promptData.created_by || "-"}</h3>
+                  <h3 className="text-sm font-medium">
+                    {promptData.created_by ? <DefaultProxyAdminTag userId={promptData.created_by} /> : "-"}
+                  </h3>
                 </div>
               </Card>
 
@@ -391,7 +394,9 @@ const PromptInfoView: React.FC<PromptInfoProps> = ({
                             )}
                           </TableCell>
                           <TableCell>
-                            <span className="text-sm">{v.created_by || "-"}</span>
+                            <span className="text-sm">
+                              {v.created_by ? <DefaultProxyAdminTag userId={v.created_by} /> : "-"}
+                            </span>
                           </TableCell>
                           <TableCell>
                             <span className="text-sm">{formatDate(v.created_at)}</span>

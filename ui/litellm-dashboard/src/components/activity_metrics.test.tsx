@@ -1545,3 +1545,5 @@ describe("formatKeyLabel", () => {
     expect(result).toBe("my-key (team_id: team1)");
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({ useUserDisplayLookup: () => ({ data: {} }) }));

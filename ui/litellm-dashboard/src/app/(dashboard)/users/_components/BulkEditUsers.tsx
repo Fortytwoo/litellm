@@ -263,6 +263,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>{uiT("common.name")}</TableHead>
                     <TableHead className="w-[30%]">{uiT("ui.7967e089a7b9")}</TableHead>
                     <TableHead className="w-[25%]">{uiT("ui.969ccbd3cf63")}</TableHead>
                     <TableHead className="w-[25%]">{uiT("ui.be48b7b43b87")}</TableHead>
@@ -272,6 +273,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                 <TableBody>
                   {selectedUsers.map((user) => (
                     <TableRow key={user.user_id}>
+                      <TableCell>{user.user_alias?.trim() || "-"}</TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
                         {user.user_id.length > 20 ? `${user.user_id.slice(0, 20)}...` : user.user_id}
                       </TableCell>

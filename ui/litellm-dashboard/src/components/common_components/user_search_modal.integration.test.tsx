@@ -48,7 +48,7 @@ describe("UserSearchModal", () => {
 
     expect(userFilterUICall).toHaveBeenCalledTimes(1);
     const params = vi.mocked(userFilterUICall).mock.calls[0][1];
-    expect(params.get("user_email")).toBe("abc");
+    expect(params.get("search")).toBe("abc");
   });
 
   it("does not fire the search when unmounted mid-wait", () => {
@@ -99,7 +99,7 @@ describe("UserSearchModal submit payload", () => {
     await user.click(input);
     await user.type(input, text);
     await waitFor(() => expect(userFilterUICall).toHaveBeenCalled(), { timeout: 3000 });
-    await user.click(await screen.findByRole("option", { name: "picked@example.com" }));
+    await user.click(await screen.findByRole("option", { name: /^picked@example\.com \(/ }));
   };
 
   it("should block submission without a selected user and after clearing the paired identity", async () => {
@@ -108,7 +108,7 @@ describe("UserSearchModal submit payload", () => {
     expect(save()).toBeDisabled();
     await searchByEmail(user, "pick");
     await user.click(screen.getAllByRole("button", { name: "Clear" })[0]);
-    expect(screen.getByLabelText("Email")).toHaveValue("");
+    expect(getEmailSearchInput()).toHaveValue("");
     expect(screen.getByLabelText("User ID")).toHaveValue("");
     expect(save()).toBeDisabled();
     await user.click(save());
@@ -154,8 +154,8 @@ describe("UserSearchModal submit payload", () => {
     await user.type(idInput, "zzz");
     await waitFor(() => expect(userFilterUICall).toHaveBeenCalledTimes(2), { timeout: 3000 });
 
-    await user.click(screen.getByPlaceholderText("Search by email"));
-    await user.click(await screen.findByRole("option", { name: "picked@example.com" }));
+    await user.click(screen.getByPlaceholderText("Search by name, email or user ID"));
+    await user.click(await screen.findByRole("option", { name: /^picked@example\.com \(/ }));
 
     await user.click(save());
 
@@ -173,7 +173,7 @@ describe("UserSearchModal submit payload", () => {
     await user.click(input);
     await user.type(input, "pick");
     await waitFor(() => expect(userFilterUICall).toHaveBeenCalled(), { timeout: 3000 });
-    await screen.findByRole("option", { name: "picked@example.com" });
+    await screen.findByRole("option", { name: /^picked@example\.com \(/ });
 
     await user.keyboard("{Enter}");
     await user.click(save());
@@ -215,15 +215,15 @@ describe("UserSearchModal search lifecycle", () => {
   beforeEach(() => {
     vi.mocked(userFilterUICall).mockReset();
     vi.mocked(userFilterUICall).mockImplementation((_accessToken, params) => {
-      const query = params.get("user_email") ?? "";
+      const query = params.get("search") ?? "";
       return Promise.resolve(directory.filter((user) => user.user_email.includes(query))) as never;
     });
   });
 
   const searchedFor = (): string[] =>
     vi.mocked(userFilterUICall).mock.calls.map((call) => {
-      const email = call[1].get("user_email");
-      return email === null ? `user_id=${call[1].get("user_id")}` : `user_email=${email}`;
+      const email = call[1].get("search");
+      return email === null ? `user_id=${call[1].get("user_id")}` : `search=${email}`;
     });
 
   const settleDebounce = () =>
@@ -238,16 +238,16 @@ describe("UserSearchModal search lifecycle", () => {
     const input = getEmailSearchInput();
     await user.click(input);
     await user.type(input, "ali");
-    await user.click(await screen.findByRole("option", { name: "alice.jones@example.com" }));
+    await user.click(await screen.findByRole("option", { name: /^alice\.jones@example\.com \(/ }));
 
     await settleDebounce();
-    expect(searchedFor()).toEqual(["user_email=ali"]);
+    expect(searchedFor()).toEqual(["search=ali"]);
 
     await user.click(input);
     await user.type(input, "bob");
 
-    expect(await screen.findByRole("option", { name: "bob@example.com" })).toBeInTheDocument();
-    expect(searchedFor()).toEqual(["user_email=ali", "user_email=bob"]);
+    expect(await screen.findByRole("option", { name: /^bob@example\.com \(/ })).toBeInTheDocument();
+    expect(searchedFor()).toEqual(["search=ali", "search=bob"]);
   });
 });
 
@@ -260,7 +260,7 @@ describe("UserSearchModal out-of-order search results", () => {
     vi.mocked(userFilterUICall).mockImplementation(
       (_accessToken, params) =>
         new Promise((resolve) => {
-          answers.set(params.get("user_email") ?? "", resolve);
+          answers.set(params.get("search") ?? "", resolve);
         }) as never,
     );
   });
@@ -287,7 +287,7 @@ describe("UserSearchModal out-of-order search results", () => {
     await waitFor(() => expect(answers.has("alice.smith@example.com")).toBe(true), { timeout: 3000 });
 
     await answerFor("alice.smith@example.com", [{ user_id: "u-smith", user_email: "alice.smith@example.com" }]);
-    await screen.findByRole("option", { name: "alice.smith@example.com" });
+    await screen.findByRole("option", { name: /^alice\.smith@example\.com \(/ });
 
     await answerFor("ali", [
       { user_id: "u-jones", user_email: "alice.jones@example.com" },
@@ -342,6 +342,20 @@ describe("UserSearchModal out-of-order search results", () => {
     expect(screen.queryByText("No results")).not.toBeInTheDocument();
 
     await answerFor("alice.smith@example.com", [{ user_id: "u-smith", user_email: "alice.smith@example.com" }]);
-    await screen.findByRole("option", { name: "alice.smith@example.com" });
+    await screen.findByRole("option", { name: /^alice\.smith@example\.com \(/ });
   });
+});
+
+it("selects a named user without an email and submits the exact user ID", async () => {
+  vi.mocked(userFilterUICall).mockResolvedValue([
+    { user_id: "member-id", user_email: null, user_alias: "Audit Reviewer" },
+  ] as never);
+  const onSubmit = vi.fn();
+  const user = userEvent.setup();
+  render(<UserSearchModal isVisible onCancel={vi.fn()} onSubmit={onSubmit} accessToken="sk-test" />);
+  await user.click(getEmailSearchInput());
+  await user.type(getEmailSearchInput(), "Reviewer");
+  await user.click(await screen.findByRole("option", { name: "Audit Reviewer (member-id)" }));
+  await user.click(screen.getByRole("button", { name: /add member/i }));
+  await waitFor(() => expect(onSubmit).toHaveBeenCalledWith({ user_id: "member-id", user_email: null, role: "user" }));
 });

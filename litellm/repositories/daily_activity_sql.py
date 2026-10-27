@@ -326,12 +326,14 @@ def build_key_search_sql(scope: DailyActivityScope, *, search: str, limit: int) 
                 WHERE v.key_alias ILIKE ${search_param} ESCAPE '\\'
                    OR v.user_id ILIKE ${search_param} ESCAPE '\\'
                    OR u.user_email ILIKE ${search_param} ESCAPE '\\'
+                   OR u.user_alias ILIKE ${search_param} ESCAPE '\\'
                 UNION
                 SELECT d.token FROM "LiteLLM_DeletedVerificationToken" d
                 LEFT JOIN "LiteLLM_UserTable" u ON u.user_id = d.user_id
                 WHERE d.key_alias ILIKE ${search_param} ESCAPE '\\'
                    OR d.user_id ILIKE ${search_param} ESCAPE '\\'
                    OR u.user_email ILIKE ${search_param} ESCAPE '\\'
+                   OR u.user_alias ILIKE ${search_param} ESCAPE '\\'
             )
           )
         GROUP BY api_key

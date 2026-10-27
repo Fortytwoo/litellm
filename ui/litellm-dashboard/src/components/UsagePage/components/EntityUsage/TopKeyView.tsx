@@ -1,4 +1,5 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { formatMoney, usdToCny } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
@@ -42,6 +43,7 @@ export interface TopKeyItem {
   api_key: string;
   key_alias: string | null;
   user?: string | null;
+  user_id?: string | null;
   key_exists?: boolean | null;
   tags?: TagUsage[] | null;
   spend: number;
@@ -64,6 +66,11 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   const { t: uiT } = useDashboardLanguage();
 
   const { accessToken } = useAuthorized();
+  const { data: userNames = {} } = useUserDisplayLookup(topKeys.flatMap((key) => (key.user_id ? [key.user_id] : [])));
+  const displayTopKeys = topKeys.map((key) => ({
+    ...key,
+    user: (key.user_id && userNames[key.user_id]) || key.user,
+  }));
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [keyData, setKeyData] = useState<any | undefined>(undefined);
@@ -147,7 +154,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
             header: uiT("ui.b512d97e7cbf"),
             accessorKey: "user",
             meta: QUIET_HEADER,
-            cell: (info: any) => info.getValue() || "-",
+            cell: (info: any) => <span title={info.row.original.user_id || undefined}>{info.getValue() || "-"}</span>,
           },
         ]
       : []),
@@ -221,7 +228,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
 
   const columns = showTags ? [...baseColumns, tagsColumn, spendColumn] : [...baseColumns, spendColumn];
 
-  const processedTopKeys = topKeys.map((k) => ({
+  const processedTopKeys = displayTopKeys.map((k) => ({
     ...k,
     display_key_alias: k.key_alias && k.key_alias.length > 10 ? `${k.key_alias.slice(0, 10)}...` : k.key_alias || "-",
   }));
@@ -269,9 +276,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                     </div>
                     <div>
                       <span className="text-muted-foreground">{uiT("ui.158796225fc7")} </span>
-                      <span className="font-medium tabular-nums text-foreground">
-                        {formatMoney(item?.spend, 2)}
-                      </span>
+                      <span className="font-medium tabular-nums text-foreground">{formatMoney(item?.spend, 2)}</span>
                     </div>
                   </div>
                 </div>
@@ -280,7 +285,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
           />
         </div>
       ) : (
-        <DataTable columns={columns} data={topKeys} isLoading={false} maxBodyHeight={600} size="compact" />
+        <DataTable columns={columns} data={displayTopKeys} isLoading={false} maxBodyHeight={600} size="compact" />
       )}
 
       {isModalOpen && selectedKey && keyData && (

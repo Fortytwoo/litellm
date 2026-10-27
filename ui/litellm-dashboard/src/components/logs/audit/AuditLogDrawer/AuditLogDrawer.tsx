@@ -16,6 +16,7 @@ interface AuditLogDrawerProps {
   open: boolean;
   onClose: () => void;
   log: AuditLogEntry | null;
+  resolveUserName?: (id: string) => string | undefined;
 }
 
 const ACTION_TONE: Record<string, StatusTone> = {
@@ -185,7 +186,7 @@ function DiffSection({ log }: { log: AuditLogEntry }) {
   );
 }
 
-export function AuditLogDrawer({ open, onClose, log }: AuditLogDrawerProps) {
+export function AuditLogDrawer({ open, onClose, log, resolveUserName }: AuditLogDrawerProps) {
   const { t: uiT } = useDashboardLanguage();
 
   if (!log) return null;
@@ -210,6 +211,9 @@ export function AuditLogDrawer({ open, onClose, log }: AuditLogDrawerProps) {
               {uiT("ui.45989de49fb7")}
             </p>
             <MetadataRow label={uiT("ui.16d1c9050a0b")} value={tableDisplay} />
+            {log.table_name === "LiteLLM_UserTable" && resolveUserName?.(log.object_id) && (
+              <MetadataRow label={uiT("ui.846f00988e00")} value={resolveUserName(log.object_id)} />
+            )}
             <MetadataRow
               label={uiT("ui.f79ceb0b0078")}
               value={
@@ -219,7 +223,10 @@ export function AuditLogDrawer({ open, onClose, log }: AuditLogDrawerProps) {
                 </span>
               }
             />
-            <MetadataRow label={uiT("ui.02b8ac805184")} value={<DefaultProxyAdminTag userId={log.changed_by} />} />
+            <MetadataRow
+              label={uiT("ui.02b8ac805184")}
+              value={<DefaultProxyAdminTag userId={log.changed_by} displayName={resolveUserName?.(log.changed_by)} />}
+            />
             <MetadataRow
               label={uiT("ui.fce4ec3d2dcf")}
               value={

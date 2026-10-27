@@ -450,7 +450,7 @@ describe("TeamVirtualKeysTable", () => {
       };
       const row = await renderRow(createMockKey(ownedAndCreatedByPlaceholder));
       expect(within(row).getByText("Default Proxy Admin")).toBeInTheDocument();
-      expect(within(row).getByText("Proxy Admin")).toBeInTheDocument();
+      expect(within(row).getAllByText("Proxy Admin")).toHaveLength(2);
       expect(within(row).queryByRole("link", { name: "Proxy Admin" })).not.toBeInTheDocument();
       expect(within(row).queryByRole("link", { name: placeholder.user_email })).not.toBeInTheDocument();
       expect(within(row).queryByRole("link", { name: "Default Proxy Admin" })).not.toBeInTheDocument();

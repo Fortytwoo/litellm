@@ -2,12 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { ReactNode } from "react";
-import { useInfiniteUsers, useUserEmailLookup, useUserLookup } from "./useUsers";
-import { userListCall } from "@/components/networking";
+import { useInfiniteUsers, useUserDisplayLookup, useUserEmailLookup, useUserLookup } from "./useUsers";
+import { userGetInfoV2, userListCall } from "@/components/networking";
 import type { UserListResponse } from "@/components/networking";
 
 vi.mock("@/components/networking", () => ({
   userListCall: vi.fn(),
+  userGetInfoV2: vi.fn(),
 }));
 
 vi.mock("../common/queryKeysFactory", () => ({
@@ -56,6 +57,23 @@ const buildUserListResponse = (page: number, totalPages: number, userCount = 2):
   })),
 });
 
+const userDetail = (id: string) => ({
+  user_id: id,
+  user_alias: null,
+  user_email: `${id}@example.com`,
+  user_role: "Internal User",
+  spend: 0,
+  max_budget: null,
+  models: [],
+  budget_duration: null,
+  budget_reset_at: null,
+  metadata: null,
+  created_at: null,
+  updated_at: null,
+  sso_user_id: null,
+  teams: [],
+});
+
 describe("useInfiniteUsers", () => {
   let queryClient: QueryClient;
 
@@ -86,7 +104,20 @@ describe("useInfiniteUsers", () => {
 
     expect(result.current.data?.pages).toHaveLength(1);
     expect(result.current.data?.pages[0]).toEqual(mockResponse);
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should use the default page size of 50", async () => {
@@ -99,7 +130,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should use a custom page size when provided", async () => {
@@ -115,7 +159,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, customPageSize, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      customPageSize,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should pass searchEmail to userListCall when provided", async () => {
@@ -131,7 +188,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, searchEmail);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      searchEmail,
+    );
   });
 
   it("should pass null for searchEmail when not provided", async () => {
@@ -146,7 +216,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should fetch the next page when more pages are available", async () => {
@@ -175,7 +258,20 @@ describe("useInfiniteUsers", () => {
 
     expect(result.current.data?.pages[1]).toEqual(page2);
     expect(userListCall).toHaveBeenCalledTimes(2);
-    expect(userListCall).toHaveBeenLastCalledWith("test-access-token", null, 2, 50, null);
+    expect(userListCall).toHaveBeenLastCalledWith(
+      "test-access-token",
+      null,
+      2,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 
   it("should not have a next page when on the last page", async () => {
@@ -282,7 +378,20 @@ describe("useInfiniteUsers", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", null, 1, 50, null);
+    expect(userListCall).toHaveBeenCalledWith(
+      "test-access-token",
+      null,
+      1,
+      50,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   });
 });
 
@@ -299,17 +408,18 @@ describe("useUserLookup", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("fetches exactly the requested user by id", async () => {
-    vi.mocked(userListCall).mockResolvedValue(buildUserListResponse(1, 1, 1));
+    vi.mocked(userGetInfoV2).mockResolvedValue(userDetail("user-1-0"));
 
     const { result } = renderHook(() => useUserLookup("user-1-0"), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(userListCall).toHaveBeenCalledWith("test-access-token", ["user-1-0"], 1, 1);
+    expect(userGetInfoV2).toHaveBeenCalledWith("test-access-token", "user-1-0");
+    expect(userListCall).not.toHaveBeenCalled();
     expect(result.current.data?.user_id).toBe("user-1-0");
   });
 
   it("resolves to null when the proxy returns a different user than requested", async () => {
-    vi.mocked(userListCall).mockResolvedValue(buildUserListResponse(1, 1, 1));
+    vi.mocked(userGetInfoV2).mockResolvedValue(userDetail("user-1-0"));
 
     const { result } = renderHook(() => useUserLookup("someone-else"), { wrapper });
 
@@ -323,6 +433,7 @@ describe("useUserLookup", () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(result.current.fetchStatus).toBe("idle");
     expect(userListCall).not.toHaveBeenCalled();
+    expect(userGetInfoV2).not.toHaveBeenCalled();
   });
 
   it("does not query for a non-admin role", async () => {
@@ -333,6 +444,7 @@ describe("useUserLookup", () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(result.current.fetchStatus).toBe("idle");
     expect(userListCall).not.toHaveBeenCalled();
+    expect(userGetInfoV2).not.toHaveBeenCalled();
   });
 });
 
@@ -343,6 +455,7 @@ describe("useUserEmailLookup", () => {
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     vi.clearAllMocks();
     mockUseAuthorized.mockReturnValue(DEFAULT_AUTH);
+    vi.mocked(userGetInfoV2).mockImplementation(async (_token, id) => userDetail(id!));
   });
 
   const wrapper = ({ children }: { children: ReactNode }) =>
@@ -382,6 +495,65 @@ describe("useUserEmailLookup", () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(result.current.fetchStatus).toBe("idle");
     expect(userListCall).not.toHaveBeenCalled();
+    expect(userGetInfoV2).not.toHaveBeenCalled();
+  });
+
+  it("prefers the real name even when email is absent and falls back to email for blank names", async () => {
+    const response = buildUserListResponse(1, 1, 3);
+    vi.mocked(userListCall).mockResolvedValue({
+      ...response,
+      users: [
+        { ...response.users[0], user_alias: "  Audit Reviewer  ", user_email: null },
+        { ...response.users[1], user_alias: "  " },
+        { ...response.users[2], user_alias: "", user_email: null },
+      ],
+    });
+    const { result } = renderHook(() => useUserDisplayLookup(["user-1-0", "user-1-1", "user-1-2"]), { wrapper });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data).toEqual({ "user-1-0": "Audit Reviewer", "user-1-1": "user-1-1@example.com" });
+    expect(userListCall).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps name lookups separate from email lookups", async () => {
+    vi.mocked(userGetInfoV2).mockResolvedValue({ ...userDetail("user-1-0"), user_alias: "Reviewer" });
+    const { result: email } = renderHook(() => useUserEmailLookup(["user-1-0"]), { wrapper });
+    const { result: name } = renderHook(() => useUserDisplayLookup(["user-1-0"]), { wrapper });
+
+    await waitFor(() => expect(name.current.data).toEqual({ "user-1-0": "Reviewer" }));
+    expect(email.current.data).toEqual({ "user-1-0": "user-1-0@example.com" });
+  });
+
+  it("resolves every user when an audit page and its open drawer exceed one user-list page", async () => {
+    const response = buildUserListResponse(1, 1, 101);
+    vi.mocked(userListCall).mockImplementation(async (_token, ids) => ({
+      ...response,
+      users: response.users.filter((user) => ids?.includes(user.user_id)),
+    }));
+    const { result } = renderHook(() => useUserDisplayLookup(response.users.map((user) => user.user_id)), { wrapper });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(Object.keys(result.current.data ?? {})).toHaveLength(response.users.length);
+    expect(userListCall).toHaveBeenCalledTimes(1);
+    expect(userGetInfoV2).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(userListCall).mock.calls.every((call) => (call[1]?.length ?? 0) <= 100)).toBe(true);
+  });
+
+  it("uses exact lookup for a single user instead of a similarly named technical account", async () => {
+    const response = buildUserListResponse(1, 1, 1);
+    vi.mocked(userListCall).mockResolvedValue({
+      ...response,
+      users: [{ ...response.users[0], user_id: "ui-owner-id", user_alias: null }],
+    });
+    vi.mocked(userGetInfoV2).mockResolvedValue({
+      ...userDetail("owner-id"),
+      user_alias: "Account Owner",
+      user_email: null,
+    });
+    const { result } = renderHook(() => useUserDisplayLookup(["owner-id"]), { wrapper });
+
+    await waitFor(() => expect(result.current.data).toEqual({ "owner-id": "Account Owner" }));
+    expect(userListCall).not.toHaveBeenCalled();
   });
 
   it("queries for the formatted Org Admin session role", async () => {
@@ -402,5 +574,27 @@ describe("useUserEmailLookup", () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(result.current.fetchStatus).toBe("idle");
     expect(userListCall).not.toHaveBeenCalled();
+    expect(userGetInfoV2).not.toHaveBeenCalled();
+  });
+  it("resolves only the current member without listing other users", async () => {
+    mockUseAuthorized.mockReturnValue({ ...DEFAULT_AUTH, userRole: "Internal User" });
+    vi.mocked(userGetInfoV2).mockResolvedValue({ ...userDetail(DEFAULT_AUTH.userId), user_alias: "Current Member" });
+    const { result } = renderHook(() => useUserDisplayLookup([DEFAULT_AUTH.userId, "other-member"]), { wrapper });
+    await waitFor(() => expect(result.current.data).toEqual({ [DEFAULT_AUTH.userId]: "Current Member" }));
+    expect(userGetInfoV2).toHaveBeenCalledWith(DEFAULT_AUTH.accessToken, DEFAULT_AUTH.userId);
+    expect(userListCall).not.toHaveBeenCalled();
+  });
+
+  it("retains successful batches when a deleted singleton is unavailable", async () => {
+    const response = buildUserListResponse(1, 1, 101);
+    vi.mocked(userListCall).mockImplementation(async (_token, ids) => ({
+      ...response,
+      users: response.users.filter((user) => ids?.includes(user.user_id)),
+    }));
+    vi.mocked(userGetInfoV2).mockRejectedValue(new Error("User not found"));
+    const { result } = renderHook(() => useUserDisplayLookup(response.users.map((user) => user.user_id)), { wrapper });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(Object.keys(result.current.data ?? {})).toHaveLength(100);
+    expect(result.current.data?.["user-1-0"]).toBe("user-1-0@example.com");
   });
 });

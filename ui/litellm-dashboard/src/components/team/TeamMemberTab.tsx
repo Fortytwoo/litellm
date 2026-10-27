@@ -1,4 +1,5 @@
 "use client";
+import { userDisplayLabel } from "@/utils/userDisplay";
 import { formatMoney } from "@/utils/currency";
 import { t as translateUi } from "@/i18n";
 
@@ -33,8 +34,7 @@ const BUDGET_SOURCE_LABELS: Record<Exclude<TeamMemberBudgetSource, "none">, stri
   },
 };
 
-const formatBudget = (value: number | null): string =>
-  value === null ? "Unlimited" : formatMoney(value, 2);
+const formatBudget = (value: number | null): string => (value === null ? "Unlimited" : formatMoney(value, 2));
 
 export const seedMemberBudgetFields = (
   record: Member,
@@ -341,7 +341,7 @@ export default function TeamMemberTab({
           </DialogHeader>
           <p>
             {uiT("ui.9fc9ceeeff2ab00f")}{" "}
-            <strong>{memberToResetSpend?.user_email || memberToResetSpend?.user_id}</strong>{" "}
+            <strong>{memberToResetSpend ? userDisplayLabel(memberToResetSpend) : ""}</strong>{" "}
             {uiT("ui.760d12382f4b41ab")} <strong>¥0</strong>?
           </p>
           <p className="text-sm text-muted-foreground">
@@ -366,7 +366,7 @@ export default function TeamMemberTab({
           </DialogHeader>
           <p>
             {uiT("ui.d8d9a18a18585e5e")}{" "}
-            <strong>{memberToResetBudget?.user_email || memberToResetBudget?.user_id}</strong>{" "}
+            <strong>{memberToResetBudget ? userDisplayLabel(memberToResetBudget) : ""}</strong>{" "}
             {uiT("ui.ad1019646e8d8d4a")} <strong>{translateText(formatBudget(teamDefaultBudget))}</strong>?
           </p>
           <p className="text-sm text-muted-foreground">

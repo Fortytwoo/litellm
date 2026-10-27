@@ -526,6 +526,14 @@ if (process.env.NEXT_PUBLIC_MANAGED_GATEWAY === "1") {
           },
           icon: <Search {...ICON} />,
         },
+        {
+          key: "gateway-request-cache",
+          page: "gateway-request-cache",
+          get label() {
+            return gatewayText("request-cache");
+          },
+          icon: <Database {...ICON} />,
+        },
       ],
     },
     {

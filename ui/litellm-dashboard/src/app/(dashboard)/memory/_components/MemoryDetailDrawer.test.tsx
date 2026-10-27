@@ -86,3 +86,5 @@ describe("MemoryDetailDrawer", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });
+
+vi.mock("@/app/(dashboard)/hooks/users/useUsers", () => ({ useUserDisplayLookup: () => ({ data: {} }) }));

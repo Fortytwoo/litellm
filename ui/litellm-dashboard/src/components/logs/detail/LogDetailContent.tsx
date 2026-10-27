@@ -62,6 +62,7 @@ export interface LogDetailContentProps {
   isLoadingDetails?: boolean;
   accessToken?: string | null;
   userEmail?: string;
+  userName?: string;
 }
 
 /**
@@ -77,6 +78,7 @@ export function LogDetailContent({
   isLoadingDetails = false,
   accessToken,
   userEmail,
+  userName,
 }: LogDetailContentProps) {
   const { t: uiT } = useDashboardLanguage();
 
@@ -157,7 +159,7 @@ export function LogDetailContent({
               <DescriptionItem label={uiT("ui.4c00cd672209")}>{logEntry.call_type}</DescriptionItem>
               {logEntry.user && (
                 <DescriptionItem label={uiT("ui.b512d97e7cbf")}>
-                  <UserIdentity userId={logEntry.user} email={userEmail} />
+                  <UserIdentity userId={logEntry.user} email={userEmail} name={userName} />
                 </DescriptionItem>
               )}
               <DescriptionItem label={uiT("ui.089ef2b6dbb3")}>
@@ -360,11 +362,12 @@ function TagsSection({ tags }: { tags: Record<string, any> }) {
   );
 }
 
-function UserIdentity({ userId, email }: { userId: string; email?: string }) {
-  if (!email || email === userId) return <TruncatedValue value={userId} />;
+function UserIdentity({ userId, email, name }: { userId: string; email?: string; name?: string }) {
+  const label = name || email;
+  if (!label || label === userId) return <TruncatedValue value={userId} />;
   return (
     <span className="inline-flex items-center gap-2">
-      <span>{email}</span>
+      <span>{label}</span>
       <TruncatedValue value={userId} />
     </span>
   );
@@ -544,9 +547,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
                 {formatNumberWithCommas(reasoningTokens)}
               </DescriptionItem>
             )}
-            <DescriptionItem label={uiT("ui.204a5eb2cd28")}>
-              {formatMoney(logEntry.spend || 0, 8)}
-            </DescriptionItem>
+            <DescriptionItem label={uiT("ui.204a5eb2cd28")}>{formatMoney(logEntry.spend || 0, 8)}</DescriptionItem>
             <DescriptionItem label={uiT("ui.4fc52a3c4c55")}>
               {logEntry.request_duration_ms != null ? (logEntry.request_duration_ms / 1000).toFixed(3) : "-"} s
             </DescriptionItem>

@@ -8,7 +8,7 @@ import AuditLogsPanel from "./AuditLogsPanel";
 
 vi.mock("../../networking", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../networking")>();
-  return { ...actual, uiAuditLogsCall: vi.fn() };
+  return { ...actual, uiAuditLogsCall: vi.fn(), userListCall: vi.fn() };
 });
 
 // Resolve the debounced search synchronously so typed input reaches the query within the test tick.
@@ -16,7 +16,7 @@ vi.mock("@tanstack/react-pacer/debouncer", () => ({
   useDebouncedValue: (value: unknown) => [value, { cancel: vi.fn(), flush: vi.fn() }],
 }));
 
-import { uiAuditLogsCall } from "../../networking";
+import { uiAuditLogsCall, userListCall } from "../../networking";
 
 type AuditLogsParams = NonNullable<Parameters<typeof uiAuditLogsCall>[0]["params"]>;
 
@@ -80,6 +80,57 @@ describe("AuditLogsPanel", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     respondWith(0);
+  });
+
+  it("resolves names in one batch and carries them into the audit drawer", async () => {
+    const user = userEvent.setup();
+    const auditResponse = {
+      audit_logs: [
+        {
+          id: "audit-name",
+          updated_at: "2026-07-20T10:30:00Z",
+          changed_by: "actor-id",
+          changed_by_api_key: "",
+          action: "updated",
+          table_name: "LiteLLM_UserTable",
+          object_id: "owner-id",
+          before_value: {},
+          updated_values: {},
+        },
+      ],
+      total: 1,
+      page: 1,
+      page_size: PAGE_SIZE,
+      total_pages: 1,
+    };
+    vi.mocked(uiAuditLogsCall).mockResolvedValue(auditResponse);
+    const userResponse = {
+      users: ["actor-id", "owner-id"].map((id, index) => ({
+        user_id: id,
+        user_alias: index === 0 ? "Audit Reviewer" : "Account Owner",
+        user_email: null,
+        user_role: "Internal User",
+        spend: 0,
+        max_budget: null,
+        key_count: 0,
+        created_at: "2026-07-20T10:00:00Z",
+        updated_at: "2026-07-20T10:00:00Z",
+        sso_user_id: null,
+        budget_duration: null,
+      })),
+      total: 2,
+      page: 1,
+      page_size: 2,
+      total_pages: 1,
+    };
+    vi.mocked(userListCall).mockResolvedValue(userResponse);
+    renderPanel();
+
+    expect(await screen.findByText("Audit Reviewer")).toBeInTheDocument();
+    expect(userListCall).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByText("Account Owner"));
+    expect(screen.getAllByText("Audit Reviewer")).toHaveLength(2);
+    expect(screen.getAllByText("owner-id")).toHaveLength(2);
   });
 
   it("sends the typed search as params.search and returns to the first page", async () => {

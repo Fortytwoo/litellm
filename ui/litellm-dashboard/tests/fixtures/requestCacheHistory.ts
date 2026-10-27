@@ -1,0 +1,40 @@
+export const cacheHistoryFixture = {
+  schema_version: 1,
+  status: "available",
+  scope: "runtime_process",
+  window: "24h",
+  generated_at: "2026-01-01T00:06:00Z",
+  sample_seconds: 60,
+  retention_days: 30,
+  bucket_seconds: 300,
+  start_at: "2025-12-31T00:10:00Z",
+  end_at: "2026-01-01T00:10:00Z",
+  series: [
+    {
+      platform: "feigua",
+      first_sample_at: "2026-01-01T00:00:00Z",
+      last_sample_at: "2026-01-01T00:06:00Z",
+      observed_seconds: 420,
+      counters: { hit: 14, miss: 7, bypass: 2, coalesced: 1, error: 0 },
+      hit_ratio: 14 / 21,
+      points: [
+        {
+          timestamp: "2026-01-01T00:00:00Z",
+          entries: 14,
+          bytes: 1400,
+          inventory_coverage: "tracked_only",
+          counters: { hit: 10, miss: 5, bypass: 2, coalesced: 1, error: 0 },
+          hit_ratio: 10 / 15,
+        },
+        {
+          timestamp: "2026-01-01T00:05:00Z",
+          entries: null,
+          bytes: null,
+          inventory_coverage: "unavailable",
+          counters: null,
+          hit_ratio: null,
+        },
+      ],
+    },
+  ],
+} as const;

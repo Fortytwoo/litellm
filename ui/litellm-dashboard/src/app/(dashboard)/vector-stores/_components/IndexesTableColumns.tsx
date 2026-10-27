@@ -1,4 +1,5 @@
 "use client";
+import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { t as translateUi } from "@/i18n";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -106,7 +107,7 @@ export const getIndexesTableColumns = ({
       if (createdBy) {
         return (
           <IdentityCell
-            title={createdBy}
+            title={<DefaultProxyAdminTag userId={createdBy} />}
             titleClassName="font-normal"
             className="max-w-48"
             href={userDetailHref(createdBy)}

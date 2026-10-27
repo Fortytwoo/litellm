@@ -26,6 +26,7 @@ const aliceMeta: KeyMetadata = {
   team_id: "team-research",
   user_id: "user-alice-1234",
   user_email: "alice@example.com",
+  user_alias: "Audit Reviewer",
 };
 const bobMeta: KeyMetadata = {
   key_alias: null,
@@ -87,4 +88,9 @@ describe("filterKeyActivity", () => {
   it("returns an empty record when nothing matches", () => {
     expect(filterKeyActivity(keyMetrics, "nobody")).toEqual({});
   });
+});
+
+it("searches user names without replacing stable key hashes", () => {
+  expect(filterKeyActivity(keyMetrics, "REVIEWER")).toEqual({ "hash-alice": alice });
+  expect(filterKeyActivity(keyMetrics, "missing name")).toEqual({});
 });

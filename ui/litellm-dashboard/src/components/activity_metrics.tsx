@@ -1,4 +1,5 @@
 "use client";
+import { useUserDisplayLookup } from "@/app/(dashboard)/hooks/users/useUsers";
 import { formatMoney, usdToCny } from "@/utils/currency";
 import { useLanguage as useDashboardLanguage } from "@/contexts/LanguageContext";
 import {
@@ -140,6 +141,7 @@ const ModelTopKeys = ({
     key_alias: string | null;
     team_id: string | null;
     user: string | null;
+    user_id?: string | null;
     spend: number;
     requests: number;
     tokens: number;
@@ -164,7 +166,8 @@ const ModelTopKeys = ({
             api_key: row.api_key,
             key_alias: row.metadata.key_alias ?? null,
             team_id: row.metadata.team_id ?? null,
-            user: row.metadata.user_email ?? row.metadata.user_id ?? null,
+            user: row.metadata.user_alias?.trim() || row.metadata.user_email || row.metadata.user_id || null,
+            user_id: row.metadata.user_id,
             spend: row.metrics.spend,
             requests: row.metrics.api_requests,
             tokens: row.metrics.total_tokens,
@@ -183,6 +186,10 @@ const ModelTopKeys = ({
   }, [modelName, fetchTopApiKeys, retryToken]);
 
   const current = settled?.modelName === modelName && settled.fetchTopApiKeys === fetchTopApiKeys ? settled : null;
+
+  const { data: userNames = {} } = useUserDisplayLookup(
+    (current?.rows ?? []).flatMap((key) => (key.user_id ? [key.user_id] : [])),
+  );
 
   if (current === null) {
     return (
@@ -230,8 +237,8 @@ const ModelTopKeys = ({
                   </p>
                 )}
                 {keyData.user && keyData.user !== keyLabel && (
-                  <p className="truncate text-xs text-muted-foreground">
-                    {uiT("ui.93d6b3e9b86ec660")} {keyData.user}
+                  <p className="truncate text-xs text-muted-foreground" title={keyData.user_id || undefined}>
+                    {uiT("ui.93d6b3e9b86ec660")} {(keyData.user_id && userNames[keyData.user_id]) || keyData.user}
                   </p>
                 )}
               </div>
@@ -580,10 +587,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
             <Stat label={uiT("ui.cd41bf0d3e9a")} value={<StatValue>{totalTokens.toLocaleString()}</StatValue>} />
           </StatCell>
           <StatCell>
-            <Stat
-              label={uiT("ui.00c71c737b6c")}
-              value={<StatValue>{formatMoney(totalSpend, 2)}</StatValue>}
-            />
+            <Stat label={uiT("ui.00c71c737b6c")} value={<StatValue>{formatMoney(totalSpend, 2)}</StatValue>} />
           </StatCell>
         </StatStrip>
 

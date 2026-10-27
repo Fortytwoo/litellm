@@ -133,7 +133,7 @@ def _matches_user_where(row: LiteLLM_UserTableFiltered, where: Mapping[str, User
     def matches(field: str, condition: UserWhereCondition) -> bool:
         if not isinstance(condition, Mapping):
             return any(_matches_user_where(row, branch) for branch in condition)
-        value: Final = {"user_id": row.user_id, "user_email": row.user_email}[field]
+        value: Final = {"user_id": row.user_id, "user_email": row.user_email, "user_alias": row.user_alias}[field]
         return value is not None and condition["contains"].lower() in value.lower()
 
     return all(matches(field, condition) for field, condition in where.items())
@@ -146,6 +146,8 @@ def _matches_user_where(row: LiteLLM_UserTableFiltered, where: Mapping[str, User
         ({"search": "ali"}, ["alice-admin"]),
         ({"search": "example.com"}, ["alice-admin"]),
         ({"search": "admin"}, ["alice-admin"]),
+        ({"search": "REVIEWER"}, ["alice-admin"]),
+        ({"search": "测试"}, ["bob"]),
         ({"user_email": "svc"}, []),
         ({"user_id": "svc"}, ["svc-bot"]),
         ({"search": "ali", "user_id": "svc"}, []),
@@ -161,9 +163,9 @@ def test_ui_view_users_search_matches_user_id_or_email(
     from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 
     users = (
-        LiteLLM_UserTableFiltered(user_id="alice-admin", user_email="alice@example.com"),
+        LiteLLM_UserTableFiltered(user_id="alice-admin", user_email="alice@example.com", user_alias="Audit Reviewer"),
         LiteLLM_UserTableFiltered(user_id="svc-bot", user_email=None),
-        LiteLLM_UserTableFiltered(user_id="bob", user_email="bob@corp.io"),
+        LiteLLM_UserTableFiltered(user_id="bob", user_email="bob@corp.io", user_alias="测试用户"),
     )
 
     async def mock_find_many(*, where: Mapping[str, UserWhereCondition], **_: object):
@@ -188,6 +190,8 @@ def test_ui_view_users_search_matches_user_id_or_email(
 
     assert response.status_code == 200, response.text
     assert [user["user_id"] for user in response.json()] == expected_user_ids
+    labels: Final = {user.user_id: user.user_alias for user in users}
+    assert all(user["user_alias"] == labels[user["user_id"]] for user in response.json())
 
 
 @pytest.mark.asyncio
@@ -2190,6 +2194,7 @@ def test_get_users_search_matches_user_id_or_email(mocker):
         expected_or = (
             {"user_id": {"contains": "A6F5C02B-0163", "mode": "insensitive"}},
             {"user_email": {"contains": "A6F5C02B-0163", "mode": "insensitive"}},
+            {"user_alias": {"contains": "A6F5C02B-0163", "mode": "insensitive"}},
         )
         assert find_many_wheres == [{"OR": expected_or}]
         assert count_wheres == [{"OR": expected_or}]
